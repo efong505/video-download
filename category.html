@@ -133,7 +133,7 @@
         </div>
 
         <div class="category-filter">
-            <span style="font-weight: bold;">Filter by tag:</span>
+            <span style="font-weight: bold;">Filter by tags (click multiple):</span>
             <button class="tag-button active" onclick="filterByTag('all')">All</button>
             <div id="tagButtons"></div>
         </div>
@@ -150,7 +150,7 @@
         
         let allVideos = [];
         let allTags = new Set();
-        let currentFilter = 'all';
+        let selectedTags = new Set();
 
         // Check authentication
         function checkAuth() {
@@ -212,16 +212,41 @@
             const sortedTags = Array.from(allTags).sort();
             
             tagButtonsContainer.innerHTML = sortedTags.map(tag => 
-                `<button class="tag-button" onclick="filterByTag('${tag}')">${tag}</button>`
+                `<button class="tag-button" data-tag="${tag}">${tag}</button>`
             ).join('');
+            
+            // Add event listeners to tag buttons
+            tagButtonsContainer.querySelectorAll('.tag-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const tag = this.getAttribute('data-tag');
+                    filterByTag(tag, this);
+                });
+            });
         }
 
-        function filterByTag(tag) {
-            currentFilter = tag;
-            
-            // Update active button
-            document.querySelectorAll('.tag-button').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
+        function filterByTag(tag, buttonElement = null) {
+            if (tag === 'all') {
+                selectedTags.clear();
+                document.querySelectorAll('.tag-button').forEach(btn => btn.classList.remove('active'));
+                if (buttonElement) buttonElement.classList.add('active');
+            } else {
+                // Toggle tag selection
+                if (selectedTags.has(tag)) {
+                    selectedTags.delete(tag);
+                    if (buttonElement) buttonElement.classList.remove('active');
+                } else {
+                    selectedTags.add(tag);
+                    if (buttonElement) buttonElement.classList.add('active');
+                }
+                
+                // Update 'All' button state
+                const allButton = document.querySelector('.tag-button[onclick="filterByTag(\'all\')"]');
+                if (selectedTags.size > 0) {
+                    if (allButton) allButton.classList.remove('active');
+                } else {
+                    if (allButton) allButton.classList.add('active');
+                }
+            }
             
             renderVideos();
         }
@@ -232,8 +257,10 @@
             const noVideos = document.getElementById('noVideos');
             
             let filteredVideos = allVideos;
-            if (currentFilter !== 'all') {
-                filteredVideos = allVideos.filter(video => video.tags.includes(currentFilter));
+            if (selectedTags.size > 0) {
+                filteredVideos = allVideos.filter(video => 
+                    Array.from(selectedTags).some(tag => video.tags.includes(tag))
+                );
             }
 
             loading.style.display = 'none';

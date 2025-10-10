@@ -128,11 +128,28 @@ def lambda_handler(event, context):
     Routes video download or checks status based on path.
     """
     try:
+        # Handle CORS preflight
+        if event.get('httpMethod') == 'OPTIONS':
+            return {
+                'statusCode': 200,
+                'headers': {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+                    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS'
+                },
+                'body': ''
+            }
+        
         # Check if this is a status request
         path = event.get('path', '')
+        query_params = event.get('queryStringParameters') or {}
+        action = query_params.get('action')
+        
         if '/status/' in path:
             task_id = path.split('/status/')[-1]
             return get_download_status(task_id)
+        elif action == 'status':
+            return get_all_download_status()
         
         # Parse request body for download
         body = json.loads(event.get('body', '{}'))
@@ -147,8 +164,8 @@ def lambda_handler(event, context):
                 'statusCode': 400,
                 'headers': {
                     'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Headers': 'Content-Type',
-                    'Access-Control-Allow-Methods': 'POST, OPTIONS'
+                    'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+                    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS'
                 },
                 'body': json.dumps({'error': 'Missing url parameter'})
             }
@@ -182,8 +199,8 @@ def lambda_handler(event, context):
             'statusCode': 200,
             'headers': {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Allow-Methods': 'POST, OPTIONS'
+                'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+                'Access-Control-Allow-Methods': 'GET,POST,OPTIONS'
             },
             'body': json.dumps({
                 'message': 'Download initiated',
@@ -216,8 +233,8 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'headers': {
                 'Access-Control-Allow-Origin': '*',
-                'Access-Control-Allow-Headers': 'Content-Type',
-                'Access-Control-Allow-Methods': 'POST, OPTIONS'
+                'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+                'Access-Control-Allow-Methods': 'GET,POST,OPTIONS'
             },
             'body': json.dumps({'error': str(e)})
         }
@@ -318,7 +335,9 @@ def get_download_status(task_id):
         return {
             'statusCode': 200,
             'headers': {
-                'Access-Control-Allow-Origin': '*'
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+                'Access-Control-Allow-Methods': 'GET,POST,OPTIONS'
             },
             'body': json.dumps({
                 'task_id': task_id,
@@ -335,7 +354,70 @@ def get_download_status(task_id):
         return {
             'statusCode': 500,
             'headers': {
-                'Access-Control-Allow-Origin': '*'
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+                'Access-Control-Allow-Methods': 'GET,POST,OPTIONS'
+            },
+            'body': json.dumps({'error': str(e)})
+        }
+
+def get_all_download_status():
+    """Get status of all recent downloads"""
+    try:
+        # Get recent tasks from ECS cluster
+        response = ecs_client.list_tasks(
+            cluster='video-downloader-cluster',
+            maxResults=20
+        )
+        
+        active_downloads = []
+        recent_downloads = []
+        
+        if response['taskArns']:
+            # Get detailed task info
+            tasks_response = ecs_client.describe_tasks(
+                cluster='video-downloader-cluster',
+                tasks=response['taskArns']
+            )
+            
+            for task in tasks_response['tasks']:
+                task_id = task['taskArn'].split('/')[-1]
+                status = task['lastStatus']
+                created_at = task['createdAt'].isoformat()
+                
+                task_info = {
+                    'task_id': task_id,
+                    'status': status,
+                    'started_at': created_at,
+                    'filename': 'Unknown'
+                }
+                
+                if status in ['PENDING', 'RUNNING']:
+                    active_downloads.append(task_info)
+                else:
+                    task_info['completed_at'] = task.get('stoppedAt', task['createdAt']).isoformat()
+                    recent_downloads.append(task_info)
+        
+        return {
+            'statusCode': 200,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+                'Access-Control-Allow-Methods': 'GET,POST,OPTIONS'
+            },
+            'body': json.dumps({
+                'active': active_downloads,
+                'recent': recent_downloads[:10]  # Limit to 10 recent
+            })
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+                'Access-Control-Allow-Methods': 'GET,POST,OPTIONS'
             },
             'body': json.dumps({'error': str(e)})
         }

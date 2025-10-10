@@ -61,11 +61,9 @@
     </div>
 
     <div id="info-box" class="mt-12">
-        <p class="text-yellow-400 font-bold">Otherwise, Click or Tap Anywhere to Launch a Firework!</p>
-        <p class="text-sm mt-1 text-gray-300">JUst for fun... Enjoy the show.</p>
+        <p class="text-yellow-400 font-bold">Click or Tap Anywhere to Launch a Firework!</p>
+        <p class="text-sm mt-1 text-gray-300">Just for fun... Enjoy the show.</p>
     </div>
-
-    <div class="text-center mt-12">test</div>
     
     <canvas id="fireworksCanvas"></canvas>
 
@@ -317,18 +315,28 @@
 
         // Start the application
         window.onload = function () {
-            // Check if user is admin and add admin link
+            // Check authentication and update navigation
+            const token = localStorage.getItem('auth_token');
             const userData = localStorage.getItem('user_data');
-            if (userData) {
+            const navLinks = document.getElementById('nav-links');
+            
+            if (token && userData) {
                 try {
                     const user = JSON.parse(userData);
+                    // User is logged in - show logout and admin link if admin
+                    let newNav = navLinks.innerHTML.replace(
+                        '<a href="login.html" rel="noopener noreferrer" class="ml-8">Login</a>',
+                        '<a href="#" onclick="logout()" rel="noopener noreferrer" class="ml-8">Logout</a>'
+                    );
+                    
                     if (user.role === 'admin') {
-                        const navLinks = document.getElementById('nav-links');
-                        navLinks.innerHTML = navLinks.innerHTML.replace(
+                        newNav = newNav.replace(
                             'Go To My Videos</a>',
                             'Go To My Videos</a>\n            <a href="admin.html" rel="noopener noreferrer" class="mr-8">Admin Dashboard</a>'
                         );
                     }
+                    
+                    navLinks.innerHTML = newNav;
                 } catch (error) {
                     console.log('Error parsing user data');
                 }
@@ -336,6 +344,12 @@
             
             resizeCanvas();
             animate();
+        }
+        
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.reload();
         }
 
     </script>

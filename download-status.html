@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download Status - Video Downloader</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header h1 { display: inline-block; }
+        .nav-links {
+            float: right;
+            margin-top: 5px;
+        }
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 15px;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 4px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .status-card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .status-item:last-child { border-bottom: none; }
+        .status-info h3 { margin: 0 0 5px 0; }
+        .status-info p { margin: 0; color: #666; font-size: 14px; }
+        .status-badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-processing { background: #d1ecf1; color: #0c5460; }
+        .status-completed { background: #d4edda; color: #155724; }
+        .status-failed { background: #f8d7da; color: #721c24; }
+        .progress-bar {
+            width: 200px;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 5px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #667eea;
+            transition: width 0.3s;
+        }
+        .refresh-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+        .refresh-btn:hover { opacity: 0.9; }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📊 Download Status</h1>
+        <div class="nav-links">
+            <a href="admin.html">Admin Dashboard</a>
+            <a href="videos.html">Videos</a>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+
+    <div class="container">
+        <button class="refresh-btn" onclick="loadDownloadStatus()">🔄 Refresh Status</button>
+        
+        <div id="status-message"></div>
+        <div id="status-loading" class="loading">Loading download status...</div>
+        
+        <div id="status-container" style="display: none;">
+            <div class="status-card">
+                <h2>Active Downloads</h2>
+                <div id="active-downloads">
+                    <p style="text-align: center; color: #666; padding: 20px;">No active downloads</p>
+                </div>
+            </div>
+            
+            <div class="status-card">
+                <h2>Recent Downloads</h2>
+                <div id="recent-downloads">
+                    <p style="text-align: center; color: #666; padding: 20px;">No recent downloads</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DOWNLOAD_API = 'https://wfeds5lejb.execute-api.us-east-1.amazonaws.com/prod/download';
+        
+        let refreshInterval;
+
+        window.addEventListener('load', function() {
+            loadDownloadStatus();
+            // Auto-refresh every 10 seconds
+            refreshInterval = setInterval(loadDownloadStatus, 10000);
+        });
+
+        window.addEventListener('beforeunload', function() {
+            if (refreshInterval) {
+                clearInterval(refreshInterval);
+            }
+        });
+
+        async function loadDownloadStatus() {
+            document.getElementById('status-loading').style.display = 'block';
+            document.getElementById('status-container').style.display = 'none';
+            
+            try {
+                const response = await fetch(`${DOWNLOAD_API}?action=status`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayDownloadStatus(data);
+                } else {
+                    throw new Error(data.error || 'Failed to load status');
+                }
+            } catch (error) {
+                document.getElementById('status-message').innerHTML = 
+                    `<div class="error">Failed to load download status: ${error.message}</div>`;
+            } finally {
+                document.getElementById('status-loading').style.display = 'none';
+            }
+        }
+
+        function displayDownloadStatus(data) {
+            const activeContainer = document.getElementById('active-downloads');
+            const recentContainer = document.getElementById('recent-downloads');
+            
+            // Display active downloads
+            if (data.active && data.active.length > 0) {
+                activeContainer.innerHTML = '';
+                data.active.forEach(download => {
+                    const statusItem = createStatusItem(download, true);
+                    activeContainer.appendChild(statusItem);
+                });
+            } else {
+                activeContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No active downloads</p>';
+            }
+            
+            // Display recent downloads
+            if (data.recent && data.recent.length > 0) {
+                recentContainer.innerHTML = '';
+                data.recent.forEach(download => {
+                    const statusItem = createStatusItem(download, false);
+                    recentContainer.appendChild(statusItem);
+                });
+            } else {
+                recentContainer.innerHTML = '<p style="text-align: center; color: #666; padding: 20px;">No recent downloads</p>';
+            }
+            
+            document.getElementById('status-container').style.display = 'block';
+        }
+
+        function createStatusItem(download, showProgress) {
+            const item = document.createElement('div');
+            item.className = 'status-item';
+            
+            const statusClass = getStatusClass(download.status);
+            const progress = download.progress || 0;
+            
+            item.innerHTML = `
+                <div class="status-info">
+                    <h3>${download.filename || download.url}</h3>
+                    <p>Started: ${new Date(download.started_at).toLocaleString()}</p>
+                    ${download.completed_at ? `<p>Completed: ${new Date(download.completed_at).toLocaleString()}</p>` : ''}
+                    ${download.error ? `<p style="color: #dc3545;">Error: ${download.error}</p>` : ''}
+                    ${showProgress && progress > 0 ? `
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: ${progress}%"></div>
+                        </div>
+                        <p>${progress}% complete</p>
+                    ` : ''}
+                </div>
+                <div>
+                    <span class="status-badge ${statusClass}">${download.status}</span>
+                    ${download.size ? `<p style="margin-top: 5px; font-size: 12px; color: #666;">${formatFileSize(download.size)}</p>` : ''}
+                </div>
+            `;
+            
+            return item;
+        }
+
+        function getStatusClass(status) {
+            switch (status?.toLowerCase()) {
+                case 'pending': return 'status-pending';
+                case 'processing': case 'downloading': return 'status-processing';
+                case 'completed': case 'success': return 'status-completed';
+                case 'failed': case 'error': return 'status-failed';
+                default: return 'status-pending';
+            }
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+    </script>
+</body>
+</html>

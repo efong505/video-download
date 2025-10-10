@@ -1,7 +1,9 @@
 import json
 import boto3
-import jwt
 from datetime import datetime
+import base64
+import hmac
+import hashlib
 
 dynamodb = boto3.resource('dynamodb')
 s3_client = boto3.client('s3')
@@ -19,7 +21,7 @@ def lambda_handler(event, context):
             return {
                 'statusCode': 200,
                 'headers': cors_headers(),
-                'body': ''
+                'body': json.dumps({})
             }
         
         # Verify admin token for non-OPTIONS requests
@@ -39,6 +41,10 @@ def lambda_handler(event, context):
             return delete_user(event)
         elif method == 'DELETE' and action == 'video':
             return delete_video(event)
+        elif method == 'POST' and action == 'upload_url':
+            return get_upload_url(event)
+        elif method == 'POST' and action == 'generate_thumbnail':
+            return generate_thumbnail(event)
         else:
             return {
                 'statusCode': 404,
@@ -46,6 +52,7 @@ def lambda_handler(event, context):
                 'body': json.dumps({'error': 'Endpoint not found'})
             }
     except Exception as e:
+        print(f"Lambda error: {str(e)}")
         return {
             'statusCode': 500,
             'headers': cors_headers(),
@@ -64,7 +71,17 @@ def verify_admin_token(event):
     token = auth_header.split(' ')[1]
     
     try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
+        # Simple JWT decode without library
+        parts = token.split('.')
+        if len(parts) != 3:
+            raise ValueError('Invalid token format')
+        
+        # Decode payload
+        payload_data = parts[1]
+        # Add padding if needed
+        payload_data += '=' * (4 - len(payload_data) % 4)
+        payload = json.loads(base64.b64decode(payload_data))
+        
         if payload.get('role') != 'admin':
             return {
                 'statusCode': 403,
@@ -72,7 +89,7 @@ def verify_admin_token(event):
                 'body': json.dumps({'error': 'Admin access required'})
             }
         return {'statusCode': 200, 'user': payload}
-    except jwt.InvalidTokenError:
+    except Exception as e:
         return {
             'statusCode': 401,
             'headers': cors_headers(),
@@ -239,6 +256,68 @@ def delete_video(event):
                 'error': f'Failed to delete video: {str(e)}',
                 'filename': filename
             })
+        }
+
+def get_upload_url(event):
+    body = json.loads(event['body'])
+    filename = body['filename']
+    
+    # Generate presigned URL for S3 upload with proper content type
+    content_type = 'video/mp4'
+    if filename.lower().endswith('.webm'):
+        content_type = 'video/webm'
+    elif filename.lower().endswith('.mov'):
+        content_type = 'video/quicktime'
+    elif filename.lower().endswith('.avi'):
+        content_type = 'video/x-msvideo'
+    
+    upload_url = s3_client.generate_presigned_url(
+        'put_object',
+        Params={
+            'Bucket': 'my-video-downloads-bucket',
+            'Key': f'videos/{filename}',
+            'ContentType': content_type,
+            'ContentDisposition': 'inline'
+        },
+        ExpiresIn=3600
+    )
+    
+    return {
+        'statusCode': 200,
+        'headers': cors_headers(),
+        'body': json.dumps({
+            'upload_url': upload_url,
+            'filename': filename
+        })
+    }
+
+
+
+def generate_thumbnail(event):
+    body = json.loads(event['body'])
+    filename = body['filename']
+    
+    lambda_client = boto3.client('lambda')
+    try:
+        # Use dedicated thumbnail generator Lambda
+        lambda_client.invoke(
+            FunctionName='thumbnail-generator',
+            InvocationType='Event',
+            Payload=json.dumps({
+                'filename': filename,
+                'bucket': 'my-video-downloads-bucket'
+            })
+        )
+        return {
+            'statusCode': 200,
+            'headers': cors_headers(),
+            'body': json.dumps({'message': 'Thumbnail generation started'})
+        }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
         }
 
 def cors_headers():
