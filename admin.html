@@ -187,6 +187,7 @@
             <div class="tab active" onclick="showTab('overview')">Overview</div>
             <div class="tab" onclick="showTab('users')">Users</div>
             <div class="tab" onclick="showTab('videos')">Videos</div>
+            <div class="tab" onclick="showTab('tags')">Tags</div>
         </div>
 
         <div class="tab-content">
@@ -253,6 +254,30 @@
                     </thead>
                     <tbody id="videos-tbody"></tbody>
                 </table>
+            </div>
+
+            <!-- Tags Tab -->
+            <div id="tags" class="tab-pane">
+                <h2>Tag Management</h2>
+                <div id="tags-message"></div>
+                <div id="tags-loading" class="loading">Loading tags...</div>
+                <div id="tags-container" style="display: none;">
+                    <div style="margin-bottom: 20px;">
+                        <input type="text" id="new-tag-name" placeholder="New tag name" style="padding: 8px; margin-right: 10px;">
+                        <button class="btn btn-primary" onclick="createTag()">Create Tag</button>
+                    </div>
+                    <table id="tags-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Tag Name</th>
+                                <th>Video Count</th>
+                                <th>Videos Using This Tag</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tags-tbody"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -323,6 +348,24 @@
         </div>
     </div>
 
+    <!-- Edit Tag Videos Modal -->
+    <div id="edit-tag-videos-modal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span class="close" onclick="closeModal('edit-tag-videos-modal')">&times;</span>
+            <h3 id="edit-tag-videos-title">Edit Videos for Tag</h3>
+            <div style="margin-bottom: 20px;">
+                <p>Select which videos should have this tag:</p>
+            </div>
+            <div id="tag-videos-list" style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
+                <!-- Video checkboxes will be populated here -->
+            </div>
+            <div style="margin-top: 20px;">
+                <button class="btn btn-primary" onclick="saveTagVideoAssociations()">Save Changes</button>
+                <button class="btn" onclick="closeModal('edit-tag-videos-modal')" style="margin-left: 10px;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Upload Video Modal -->
     <div id="upload-video-modal" class="modal">
         <div class="modal-content">
@@ -364,6 +407,10 @@
             <div class="form-group">
                 <label>Output Filename:</label>
                 <input type="text" id="download-video-filename" placeholder="my-video.mp4">
+            </div>
+            <div class="form-group">
+                <label>Title:</label>
+                <input type="text" id="download-video-title" placeholder="Video title">
             </div>
             <div class="form-group">
                 <label>Tags (comma-separated):</label>
@@ -435,6 +482,7 @@
             // Load data for tab
             if (tabName === 'users') loadUsers();
             if (tabName === 'videos') loadVideos();
+            if (tabName === 'tags') loadTags();
             if (tabName === 'overview') loadOverview();
         }
 
@@ -730,6 +778,7 @@
         function showDownloadModal() {
             document.getElementById('download-video-url').value = '';
             document.getElementById('download-video-filename').value = '';
+            document.getElementById('download-video-title').value = '';
             document.getElementById('download-video-tags').value = '';
             document.getElementById('download-force-fargate').checked = false;
             document.getElementById('download-video-modal').style.display = 'block';
@@ -851,6 +900,7 @@
         async function startDownload() {
             const url = document.getElementById('download-video-url').value;
             const filename = document.getElementById('download-video-filename').value;
+            const title = document.getElementById('download-video-title').value;
             const tags = document.getElementById('download-video-tags').value.split(',').map(t => t.trim()).filter(t => t);
             const forceFargate = document.getElementById('download-force-fargate').checked;
             
@@ -867,6 +917,7 @@
                     body: JSON.stringify({
                         url: url,
                         output_name: filename,
+                        title: title,
                         force_fargate: forceFargate,
                         tags: tags
                     })
@@ -993,6 +1044,276 @@
             }
             
             input.focus();
+        }
+
+        async function loadTags() {
+            document.getElementById('tags-loading').style.display = 'block';
+            document.getElementById('tags-container').style.display = 'none';
+            
+            try {
+                // Get all tags and videos
+                const [tagsRes, videosRes] = await Promise.all([
+                    fetch(`${TAG_API}?action=get_all_tags`),
+                    fetch(`${ADMIN_API}?action=videos`, {
+                        headers: { 'Authorization': `Bearer ${authToken}` }
+                    })
+                ]);
+                
+                const tagsData = await tagsRes.json();
+                const videosData = await videosRes.json();
+                
+                if (tagsRes.ok && videosRes.ok) {
+                    displayTagsWithVideos(tagsData.tags || [], videosData.videos || []);
+                } else {
+                    throw new Error('Failed to load tag data');
+                }
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="error">Failed to load tags: ${error.message}</div>`;
+            } finally {
+                document.getElementById('tags-loading').style.display = 'none';
+            }
+        }
+
+        function displayTagsWithVideos(tags, videos) {
+            const tbody = document.getElementById('tags-tbody');
+            tbody.innerHTML = '';
+            
+            // Create tag usage map
+            const tagUsage = {};
+            tags.forEach(tag => {
+                tagUsage[tag] = videos.filter(video => video.tags.includes(tag));
+            });
+            
+            // Display each tag
+            Object.entries(tagUsage).forEach(([tag, tagVideos]) => {
+                const row = document.createElement('tr');
+                const videoList = tagVideos.map(v => v.title || v.filename).join(', ');
+                
+                row.innerHTML = `
+                    <td><strong>${tag}</strong></td>
+                    <td>${tagVideos.length}</td>
+                    <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;" title="${videoList}">${videoList || 'No videos'}</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="editTagVideos('${tag}')" style="font-size: 12px; margin-right: 5px;">Edit Videos</button>
+                        <button class="btn btn-warning" onclick="renameTag('${tag}')" style="font-size: 12px; margin-right: 5px;">Rename</button>
+                        <button class="btn btn-danger" onclick="deleteTag('${tag}', ${tagVideos.length})" style="font-size: 12px;">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            document.getElementById('tags-container').style.display = 'block';
+        }
+
+        async function createTag() {
+            const tagName = document.getElementById('new-tag-name').value.trim();
+            if (!tagName) {
+                document.getElementById('tags-message').innerHTML = 
+                    '<div class="error">Please enter a tag name</div>';
+                return;
+            }
+            
+            // Create a dummy video entry with just the tag to add it to the system
+            try {
+                await fetch(`${TAG_API}?action=add_video`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        video_id: `_tag_placeholder_${Date.now()}`,
+                        filename: `_tag_placeholder_${Date.now()}`,
+                        title: 'Tag Placeholder',
+                        tags: [tagName]
+                    })
+                });
+                
+                document.getElementById('new-tag-name').value = '';
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="success">Tag "${tagName}" created successfully</div>`;
+                loadTags();
+                loadAllTags(); // Refresh autocomplete
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="error">Failed to create tag: ${error.message}</div>`;
+            }
+        }
+
+        async function renameTag(oldTag) {
+            const newTag = prompt(`Rename tag "${oldTag}" to:`, oldTag);
+            if (!newTag || newTag === oldTag) return;
+            
+            try {
+                // Get all videos with this tag
+                const response = await fetch(`${TAG_API}?action=get_videos_by_tag&tag=${encodeURIComponent(oldTag)}`);
+                const data = await response.json();
+                
+                if (response.ok && data.videos) {
+                    // Update each video to replace old tag with new tag
+                    for (const video of data.videos) {
+                        const updatedTags = video.tags.map(tag => tag === oldTag ? newTag : tag);
+                        await fetch(`${TAG_API}?action=add_video`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                video_id: video.video_id,
+                                filename: video.filename,
+                                title: video.title,
+                                tags: updatedTags
+                            })
+                        });
+                    }
+                    
+                    document.getElementById('tags-message').innerHTML = 
+                        `<div class="success">Tag "${oldTag}" renamed to "${newTag}"</div>`;
+                    loadTags();
+                    loadAllTags(); // Refresh autocomplete
+                } else {
+                    throw new Error('Failed to get videos for tag');
+                }
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="error">Failed to rename tag: ${error.message}</div>`;
+            }
+        }
+
+        async function deleteTag(tag, videoCount) {
+            if (!confirm(`Are you sure you want to delete tag "${tag}"? This will remove it from ${videoCount} video(s).`)) return;
+            
+            try {
+                // Get all videos with this tag
+                const response = await fetch(`${TAG_API}?action=get_videos_by_tag&tag=${encodeURIComponent(tag)}`);
+                const data = await response.json();
+                
+                if (response.ok && data.videos) {
+                    // Update each video to remove the tag
+                    for (const video of data.videos) {
+                        const updatedTags = video.tags.filter(t => t !== tag);
+                        await fetch(`${TAG_API}?action=add_video`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                video_id: video.video_id,
+                                filename: video.filename,
+                                title: video.title,
+                                tags: updatedTags
+                            })
+                        });
+                    }
+                    
+                    document.getElementById('tags-message').innerHTML = 
+                        `<div class="success">Tag "${tag}" deleted successfully</div>`;
+                    loadTags();
+                    loadAllTags(); // Refresh autocomplete
+                } else {
+                    throw new Error('Failed to get videos for tag');
+                }
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="error">Failed to delete tag: ${error.message}</div>`;
+            }
+        }
+
+        let currentEditingTag = '';
+        let allVideosForTagEdit = [];
+
+        async function editTagVideos(tag) {
+            currentEditingTag = tag;
+            document.getElementById('edit-tag-videos-title').textContent = `Edit Videos for Tag: "${tag}"`;
+            
+            try {
+                // Get all videos
+                const response = await fetch(`${ADMIN_API}?action=videos`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const data = await response.json();
+                
+                if (response.ok && data.videos) {
+                    allVideosForTagEdit = data.videos;
+                    displayVideoCheckboxes(tag, data.videos);
+                    document.getElementById('edit-tag-videos-modal').style.display = 'block';
+                } else {
+                    throw new Error('Failed to load videos');
+                }
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="error">Failed to load videos: ${error.message}</div>`;
+            }
+        }
+
+        function displayVideoCheckboxes(tag, videos) {
+            const container = document.getElementById('tag-videos-list');
+            container.innerHTML = '';
+            
+            videos.forEach(video => {
+                const isChecked = video.tags.includes(tag);
+                const checkboxDiv = document.createElement('div');
+                checkboxDiv.style.cssText = 'margin-bottom: 10px; padding: 8px; border-bottom: 1px solid #eee;';
+                
+                checkboxDiv.innerHTML = `
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" ${isChecked ? 'checked' : ''} 
+                               data-video-id="${video.filename}" 
+                               style="margin-right: 10px;">
+                        <div>
+                            <strong>${video.title || video.filename}</strong>
+                            <br><small style="color: #666;">${video.filename}</small>
+                        </div>
+                    </label>
+                `;
+                
+                container.appendChild(checkboxDiv);
+            });
+        }
+
+        async function saveTagVideoAssociations() {
+            const checkboxes = document.querySelectorAll('#tag-videos-list input[type="checkbox"]');
+            const updates = [];
+            
+            try {
+                for (const checkbox of checkboxes) {
+                    const videoId = checkbox.dataset.videoId;
+                    const video = allVideosForTagEdit.find(v => v.filename === videoId);
+                    const isChecked = checkbox.checked;
+                    const hasTag = video.tags.includes(currentEditingTag);
+                    
+                    // Only update if there's a change
+                    if (isChecked !== hasTag) {
+                        let updatedTags;
+                        if (isChecked) {
+                            // Add tag
+                            updatedTags = [...video.tags, currentEditingTag];
+                        } else {
+                            // Remove tag
+                            updatedTags = video.tags.filter(t => t !== currentEditingTag);
+                        }
+                        
+                        updates.push({
+                            video_id: video.filename,
+                            filename: video.filename,
+                            title: video.title,
+                            tags: updatedTags
+                        });
+                    }
+                }
+                
+                // Apply all updates
+                for (const update of updates) {
+                    await fetch(`${TAG_API}?action=add_video`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(update)
+                    });
+                }
+                
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="success">Updated ${updates.length} video(s) for tag "${currentEditingTag}"</div>`;
+                closeModal('edit-tag-videos-modal');
+                loadTags();
+                
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="error">Failed to update video associations: ${error.message}</div>`;
+            }
         }
 
         // Close modals when clicking outside

@@ -98,6 +98,7 @@ def lambda_handler(event, context):
         url = event['url']
         format_id = event.get('format', None)
         output_name = event['output_name']
+        title = event.get('title', '')
         tags = event.get('tags', [])
         bucket = os.environ['S3_BUCKET']
         
@@ -166,21 +167,25 @@ def lambda_handler(event, context):
         print(f"Successfully uploaded to s3://{bucket}/{video_key}")
         
         # Save metadata to DynamoDB
-        if tags:
-            try:
-                table = dynamodb.Table('video-metadata')
-                table.put_item(
-                    Item={
-                        'video_id': output_name,
-                        'tags': tags,
-                        'upload_date': datetime.now().isoformat(),
-                        's3_key': video_key,
-                        'url': url
-                    }
-                )
-                print(f"Saved metadata for {output_name} with tags: {tags}")
-            except Exception as e:
-                print(f"Failed to save metadata: {e}")
+        try:
+            table = dynamodb.Table('video-metadata')
+            # Use custom title if provided, otherwise use filename without extension
+            display_title = title if title else output_name.rsplit('.', 1)[0]
+            
+            table.put_item(
+                Item={
+                    'video_id': output_name,
+                    'filename': output_name,
+                    'title': display_title,
+                    'tags': tags,
+                    'upload_date': datetime.now().isoformat(),
+                    's3_key': video_key,
+                    'url': url
+                }
+            )
+            print(f"Saved metadata for {output_name} with title: '{display_title}' and tags: {tags}")
+        except Exception as e:
+            print(f"Failed to save metadata: {e}")
         
         # Generate presigned URL with inline disposition
         presigned_url = s3_client.generate_presigned_url(

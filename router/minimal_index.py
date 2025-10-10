@@ -46,6 +46,7 @@ def lambda_handler(event, context):
                 'url': url,
                 'format': 'best',
                 'output_name': body.get('output_name', 'video.mp4'),
+                'title': body.get('title', ''),
                 'tags': body.get('tags', [])
             })
         )
