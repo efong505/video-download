@@ -42,6 +42,13 @@ def process_video(bucket, filename):
     base_name = filename.replace('.mp4', '')
     thumb_key = f"thumbnails/{base_name}_thumb_2.jpg"
     
+    # Check if video file exists first
+    try:
+        s3_client.head_object(Bucket=bucket, Key=f"videos/{filename}")
+    except s3_client.exceptions.NoSuchKey:
+        print(f"Video file not found: videos/{filename}")
+        return
+    
     # Check if thumbnail already exists
     try:
         s3_client.head_object(Bucket=bucket, Key=thumb_key)
