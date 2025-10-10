@@ -13,9 +13,17 @@ JWT_SECRET = 'your-jwt-secret-key'  # In production, use AWS Secrets Manager
 def lambda_handler(event, context):
     try:
         method = event.get('httpMethod', 'POST')
+        
+        # Handle OPTIONS request first, before any other processing
+        if method == 'OPTIONS':
+            return {
+                'statusCode': 200,
+                'headers': cors_headers(),
+                'body': ''
+            }
+        
         query_params = event.get('queryStringParameters') or {}
         action = query_params.get('action')
-        
         if method == 'POST' and action == 'register':
             return register_user(event)
         elif method == 'POST' and action == 'login':
@@ -173,6 +181,7 @@ def verify_token(event):
 def cors_headers():
     return {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Amz-Date, X-Api-Key, X-Amz-Security-Token',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Max-Age': '86400'
     }

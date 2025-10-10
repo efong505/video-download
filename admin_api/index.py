@@ -12,15 +12,23 @@ JWT_SECRET = 'your-jwt-secret-key'
 
 def lambda_handler(event, context):
     try:
-        # Verify admin token
+        method = event.get('httpMethod', 'GET')
+        
+        # Handle OPTIONS request first, before token verification
+        if method == 'OPTIONS':
+            return {
+                'statusCode': 200,
+                'headers': cors_headers(),
+                'body': ''
+            }
+        
+        # Verify admin token for non-OPTIONS requests
         auth_result = verify_admin_token(event)
         if auth_result['statusCode'] != 200:
             return auth_result
         
-        method = event.get('httpMethod', 'GET')
         query_params = event.get('queryStringParameters') or {}
         action = query_params.get('action')
-        
         if method == 'GET' and action == 'users':
             return get_all_users(event)
         elif method == 'GET' and action == 'videos':
@@ -225,6 +233,7 @@ def delete_video(event):
 def cors_headers():
     return {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'
+        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Amz-Date, X-Api-Key, X-Amz-Security-Token',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+        'Access-Control-Max-Age': '86400'
     }
