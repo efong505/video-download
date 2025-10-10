@@ -65,6 +65,9 @@ Downloader/
 
 # Specify format
 .\download.ps1 "https://youtube.com/watch?v=VIDEO_ID" "my_video.mp4" -Format "hls-720"
+
+# Download with tags (Phase 1 feature)
+.\download.ps1 "https://youtube.com/watch?v=VIDEO_ID" "my_video.mp4" -Tags "news","politics","2024"
 ```
 
 ```bash
@@ -375,3 +378,217 @@ See `video-commands.md` for complete API usage examples including:
 - CloudFront provides DDoS protection
 
 This system provides a complete, production-ready video downloading and gallery solution with enterprise-grade reliability and cost optimization.
+
+## 📚 Implementation Tutorials
+
+### Phase 1: Video Tagging System Implementation
+
+This tutorial shows how to add video tagging capabilities to the existing downloader system.
+
+#### Prerequisites
+- Working AWS Video Downloader System (baseline)
+- AWS CLI configured
+- Git for version control
+
+#### Step 1: Set Up Version Control
+```powershell
+# Create backup of working system
+cd c:\Users\Ed\Documents\Programming\AWS
+Copy-Item -Recurse Downloader Downloader_backup_working
+
+# Initialize Git repository
+cd Downloader
+git init
+git add .
+git commit -m "Initial commit: Working video downloader system"
+
+# Create feature branch
+git checkout -b feature/video-tagging
+```
+
+#### Step 2: Create DynamoDB Table
+```powershell
+# Create video metadata table
+aws dynamodb create-table \
+    --table-name video-metadata \
+    --attribute-definitions \
+        AttributeName=video_id,AttributeType=S \
+    --key-schema \
+        AttributeName=video_id,KeyType=HASH \
+    --billing-mode PAY_PER_REQUEST
+```
+
+#### Step 3: Create Tag Management API
+```powershell
+# Create directory structure
+mkdir tag_api
+```
+
+Create `tag_api/index.py` with CRUD operations:
+- `add_video_metadata()` - Store video tags
+- `get_videos_by_tag()` - Filter videos by tag
+- `get_all_tags()` - List all available tags
+- `update_video_tags()` - Modify video tags
+
+#### Step 4: Deploy Tag API
+```powershell
+# Package and deploy Lambda function
+Compress-Archive -Path tag_api\* -DestinationPath tag_api.zip -Force
+aws lambda create-function \
+    --function-name video-tag-api \
+    --runtime python3.9 \
+    --role arn:aws:iam::ACCOUNT_ID:role/lambda-execution-role \
+    --handler index.lambda_handler \
+    --zip-file fileb://tag_api.zip \
+    --timeout 30
+
+# Create API Gateway
+aws apigateway create-rest-api --name video-tag-api
+aws apigateway create-resource --rest-api-id API_ID --parent-id ROOT_ID --path-part tags
+aws apigateway put-method --rest-api-id API_ID --resource-id RESOURCE_ID --http-method ANY --authorization-type NONE
+aws apigateway put-integration --rest-api-id API_ID --resource-id RESOURCE_ID --http-method ANY --type AWS_PROXY --integration-http-method POST --uri LAMBDA_URI
+aws lambda add-permission --function-name video-tag-api --statement-id apigateway-invoke --action lambda:InvokeFunction --principal apigateway.amazonaws.com
+aws apigateway create-deployment --rest-api-id API_ID --stage-name prod
+```
+
+#### Step 5: Update Download Scripts
+Add `-Tags` parameter to `download.ps1`:
+```powershell
+param(
+    [Parameter(Mandatory=$true)]
+    [string]$Url,
+    [string]$OutputName = "video.mp4",
+    [switch]$ForceFargate,
+    [string]$Format = "best",
+    [string[]]$Tags = @()  # New parameter
+)
+
+# Add tags to request body
+$requestBody = @{
+    url = $Url
+    output_name = $OutputName
+    format = $Format
+    force_fargate = $ForceFargate.IsPresent
+    tags = $Tags  # Include tags
+} | ConvertTo-Json
+```
+
+#### Step 6: Update Lambda Downloader
+Add DynamoDB integration to `downloader/index.py`:
+```python
+import boto3
+from datetime import datetime
+
+dynamodb = boto3.resource('dynamodb')
+
+def lambda_handler(event, context):
+    # Extract tags from event
+    tags = event.get('tags', [])
+    
+    # After successful upload, save metadata
+    if tags:
+        table = dynamodb.Table('video-metadata')
+        table.put_item(
+            Item={
+                'video_id': output_name,
+                'tags': tags,
+                'upload_date': datetime.now().isoformat(),
+                's3_key': video_key,
+                'url': url
+            }
+        )
+```
+
+#### Step 7: Update Fargate Downloader
+Add similar DynamoDB integration to `fargate_downloader.py`:
+```python
+# Get tags from environment
+tags = os.environ.get('TAGS', '').split(',') if os.environ.get('TAGS') else []
+
+# Save metadata after upload
+if tags:
+    table = dynamodb.Table('video-metadata')
+    table.put_item(Item={...})
+```
+
+#### Step 8: Update Router
+Modify `router/index.py` to pass tags to downloaders:
+```python
+def lambda_handler(event, context):
+    # Parse tags from request
+    tags = body.get('tags', [])
+    
+    # Pass tags to both Lambda and Fargate
+    if route_to_lambda:
+        response = invoke_lambda_downloader(url, format_id, output_name, tags)
+    else:
+        response = start_fargate_task(url, format_id, output_name, tags)
+```
+
+#### Step 9: Deploy Updates
+```powershell
+# Update Lambda downloader
+Compress-Archive -Path downloader\* -DestinationPath downloader.zip -Force
+aws lambda update-function-code --function-name video-downloader --zip-file fileb://downloader.zip
+
+# Update router
+Compress-Archive -Path router\* -DestinationPath router.zip -Force
+aws lambda update-function-code --function-name video-download-router --zip-file fileb://router.zip
+
+# Rebuild Fargate container (requires Docker)
+docker build -t video-downloader .
+docker tag video-downloader:latest ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/video-downloader:latest
+docker push ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/video-downloader:latest
+```
+
+#### Step 10: Test the System
+```powershell
+# Test download with tags
+.\download.ps1 "https://youtube.com/watch?v=VIDEO_ID" "test-video.mp4" -Tags "test","demo","phase1"
+
+# Test tag API
+Invoke-RestMethod -Uri "https://API_GATEWAY_URL/prod/tags/all" -Method GET
+```
+
+#### Step 11: Commit Changes
+```powershell
+git add .
+git commit -m "Phase 1: Video Tagging System - Complete Implementation
+
+✅ DynamoDB table 'video-metadata' created
+✅ Tag management API deployed
+✅ Download scripts enhanced with -Tags parameter
+✅ Lambda and Fargate downloaders updated
+✅ Router updated to pass tags
+✅ Test download with tags successful"
+```
+
+#### Usage Examples
+```powershell
+# Download with tags
+.\download.ps1 "video-url" "filename.mp4" -Tags "news","politics","2024"
+
+# Get all tags
+GET https://API_GATEWAY_URL/prod/tags/all
+
+# Get videos by tag
+GET https://API_GATEWAY_URL/prod/tags/videos?tag=news
+
+# Add video metadata
+POST https://API_GATEWAY_URL/prod/tags/video
+{
+  "filename": "video.mp4",
+  "tags": ["news", "politics"],
+  "title": "Video Title"
+}
+```
+
+#### Key Benefits
+- ✅ **Non-breaking**: All existing functionality preserved
+- ✅ **Backward Compatible**: Tags parameter is optional
+- ✅ **Scalable**: DynamoDB handles any number of videos/tags
+- ✅ **API-driven**: RESTful interface for tag management
+- ✅ **Version Controlled**: Safe rollback if issues arise
+
+#### Next Phase
+Phase 2 will add user authentication and admin dashboard, building on this tagging foundation.
