@@ -7,6 +7,7 @@ from datetime import datetime
 s3_client = boto3.client('s3')
 dynamodb = boto3.resource('dynamodb')
 sns_client = boto3.client('sns')
+jobs_table = dynamodb.Table('download-jobs')
 
 SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:371751795928:video-download-notifications'
 
@@ -21,6 +22,41 @@ def send_notification(subject, message):
         print(f"SNS notification sent: {subject}")
     except Exception as e:
         print(f"Failed to send SNS notification: {e}")
+
+def update_job_status(job_id, status, progress=None, error=None):
+    """Update job status in DynamoDB"""
+    if not job_id:
+        return
+    
+    try:
+        update_expr = 'SET #status = :status, updated_at = :updated'
+        expr_values = {
+            ':status': status,
+            ':updated': datetime.now().isoformat()
+        }
+        expr_names = {'#status': 'status'}
+        
+        if progress is not None:
+            update_expr += ', progress = :progress'
+            expr_values[':progress'] = progress
+        
+        if error:
+            update_expr += ', error_message = :error'
+            expr_values[':error'] = error
+        
+        if status == 'completed':
+            update_expr += ', completed_at = :completed'
+            expr_values[':completed'] = datetime.now().isoformat()
+        
+        jobs_table.update_item(
+            Key={'job_id': job_id},
+            UpdateExpression=update_expr,
+            ExpressionAttributeValues=expr_values,
+            ExpressionAttributeNames=expr_names
+        )
+        print(f"Updated job {job_id} status to {status}")
+    except Exception as e:
+        print(f"Failed to update job status: {e}")
 
 def generate_thumbnails(video_path, output_name, bucket):
     """Generate thumbnails at 10%, 50%, 90% of video duration"""
@@ -110,12 +146,16 @@ def lambda_handler(event, context):
     Downloads video using yt-dlp and uploads to S3.
     """
     try:
+        job_id = event.get('job_id')
         url = event['url']
         format_id = event.get('format', None)
         output_name = event['output_name']
         title = event.get('title', '')
         tags = event.get('tags', [])
         bucket = os.environ['S3_BUCKET']
+        
+        # Update job status to processing
+        update_job_status(job_id, 'processing', 10)
         
         # Download to /tmp (Lambda's writable directory)
         output_path = f"/tmp/{output_name}"
@@ -138,6 +178,9 @@ def lambda_handler(event, context):
         print(f"Executing: {' '.join(cmd)}")
         print(f"Using format: {format_id}")
         
+        # Update job status to downloading
+        update_job_status(job_id, 'downloading', 30)
+        
         result = subprocess.run(
             cmd,
             capture_output=True,
@@ -146,9 +189,11 @@ def lambda_handler(event, context):
         )
         
         if result.returncode != 0:
+            update_job_status(job_id, 'failed', error=f"Download failed: {result.stderr}")
             raise Exception(f"Download failed: {result.stderr}")
         
         print("Download complete, uploading to S3...")
+        update_job_status(job_id, 'processing', 70)
         
         # Detect content type based on file extension
         if output_name.endswith('.mp4'):
@@ -180,6 +225,9 @@ def lambda_handler(event, context):
         os.remove(output_path)
         
         print(f"Successfully uploaded to s3://{bucket}/{video_key}")
+        
+        # Update job status to completed
+        update_job_status(job_id, 'completed', 100)
         
         # Send success notification
         send_notification(
@@ -236,6 +284,7 @@ def lambda_handler(event, context):
         
     except subprocess.TimeoutExpired:
         print("Lambda timeout approaching, download took too long")
+        update_job_status(event.get('job_id'), 'failed', error='Download timeout - Lambda time limit exceeded')
         send_notification(
             "⏰ Video Download Taking Too Long",
             f"Video download is taking longer than expected and may have timed out.\n\n"
@@ -250,6 +299,7 @@ def lambda_handler(event, context):
         }
     except Exception as e:
         print(f"Error: {e}")
+        update_job_status(event.get('job_id'), 'failed', error=str(e))
         send_notification(
             "❌ Video Download Failed",
             f"Video download has failed with an error.\n\n"

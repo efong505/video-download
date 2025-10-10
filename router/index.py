@@ -1,9 +1,13 @@
 import json
 import boto3
 import os
+import uuid
 from datetime import datetime
+from decimal import Decimal
 
 sns_client = boto3.client('sns')
+dynamodb = boto3.resource('dynamodb')
+jobs_table = dynamodb.Table('download-jobs')
 SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:371751795928:video-download-notifications'
 
 def lambda_handler(event, context):
@@ -24,11 +28,8 @@ def lambda_handler(event, context):
         if event.get('httpMethod') == 'GET':
             query_params = event.get('queryStringParameters') or {}
             if query_params.get('action') == 'status':
-                return {
-                    'statusCode': 200,
-                    'headers': {'Access-Control-Allow-Origin': '*'},
-                    'body': json.dumps({'active': [], 'recent': []})
-                }
+                return get_job_status()
+        
         
         # Parse request body (POST)
         body = json.loads(event.get('body', '{}'))
@@ -41,14 +42,35 @@ def lambda_handler(event, context):
                 'body': json.dumps({'error': 'Missing url parameter'})
             }
         
+        # Create job entry
+        job_id = str(uuid.uuid4())
+        output_name = body.get('output_name', 'video.mp4')
+        
+        try:
+            jobs_table.put_item(
+                Item={
+                    'job_id': job_id,
+                    'url': url,
+                    'filename': output_name,
+                    'title': body.get('title', ''),
+                    'tags': body.get('tags', []),
+                    'status': 'pending',
+                    'started_at': datetime.now().isoformat(),
+                    'progress': 0
+                }
+            )
+        except Exception as e:
+            print(f"Failed to create job entry: {e}")
+        
         # Send initiation notification
         try:
             sns_client.publish(
                 TopicArn=SNS_TOPIC_ARN,
                 Subject="🚀 Video Download Started",
                 Message=f"A new video download has been initiated.\n\n"
+                       f"Job ID: {job_id}\n"
                        f"URL: {url}\n"
-                       f"Output: {body.get('output_name', 'video.mp4')}\n"
+                       f"Output: {output_name}\n"
                        f"Title: {body.get('title', 'Not specified')}\n"
                        f"Tags: {', '.join(body.get('tags', [])) or 'None'}\n"
                        f"Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}"
@@ -62,9 +84,10 @@ def lambda_handler(event, context):
             FunctionName='video-downloader',
             InvocationType='Event',
             Payload=json.dumps({
+                'job_id': job_id,
                 'url': url,
                 'format': 'best',
-                'output_name': body.get('output_name', 'video.mp4'),
+                'output_name': output_name,
                 'title': body.get('title', ''),
                 'tags': body.get('tags', [])
             })
@@ -73,7 +96,10 @@ def lambda_handler(event, context):
         return {
             'statusCode': 200,
             'headers': {'Access-Control-Allow-Origin': '*'},
-            'body': json.dumps({'message': 'Download started'})
+            'body': json.dumps({
+                'message': 'Download started',
+                'job_id': job_id
+            })
         }
         
     except Exception as e:
@@ -81,4 +107,58 @@ def lambda_handler(event, context):
             'statusCode': 500,
             'headers': {'Access-Control-Allow-Origin': '*'},
             'body': json.dumps({'error': str(e)})
+        }
+
+def get_job_status():
+    try:
+        # Get all jobs (scan without filter)
+        response = jobs_table.scan()
+        jobs = response.get('Items', [])
+        
+        # Filter jobs from last 24 hours in Python
+        from datetime import timedelta
+        cutoff_time = datetime.now() - timedelta(hours=24)
+        
+        recent_jobs_filtered = []
+        for job in jobs:
+            try:
+                job_time = datetime.fromisoformat(job.get('started_at', ''))
+                if job_time > cutoff_time:
+                    recent_jobs_filtered.append(job)
+            except:
+                # Include jobs with invalid timestamps
+                recent_jobs_filtered.append(job)
+        
+        # Separate active and completed jobs
+        active_jobs = [job for job in recent_jobs_filtered if job.get('status') in ['pending', 'processing', 'downloading']]
+        recent_jobs = [job for job in recent_jobs_filtered if job.get('status') in ['completed', 'failed']]
+        
+        # Sort by started_at (most recent first)
+        active_jobs.sort(key=lambda x: x.get('started_at', ''), reverse=True)
+        recent_jobs.sort(key=lambda x: x.get('started_at', ''), reverse=True)
+        
+        # Convert Decimal objects to int/float for JSON serialization
+        def convert_decimals(obj):
+            if isinstance(obj, list):
+                return [convert_decimals(item) for item in obj]
+            elif isinstance(obj, dict):
+                return {key: convert_decimals(value) for key, value in obj.items()}
+            elif isinstance(obj, Decimal):
+                return int(obj) if obj % 1 == 0 else float(obj)
+            return obj
+        
+        return {
+            'statusCode': 200,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({
+                'active': convert_decimals(active_jobs[:10]),
+                'recent': convert_decimals(recent_jobs[:20])
+            })
+        }
+    except Exception as e:
+        print(f"Error getting job status: {e}")
+        return {
+            'statusCode': 200,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'active': [], 'recent': []})
         }
