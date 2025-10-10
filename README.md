@@ -48,6 +48,8 @@ Downloader/
 │   └── index.py         # Lambda downloader (fast downloads)
 ├── video_list_api/
 │   └── index.py        # API to list videos dynamically
+├── tag_api/            # Phase 1: Video tagging system
+│   └── index.py       # Tag management CRUD API
 ├── fargate_downloader.py # Fargate container (long downloads)
 ├── cookie_manager.py    # YouTube cookie management
 └── Dockerfile          # Fargate container definition
@@ -83,6 +85,42 @@ Downloader/
 
 ### 2. View Your Videos
 Visit your CloudFront URL: `https://your-domain.cloudfront.net/videos.html`
+
+### 3. Tag API Usage (Phase 1 Feature)
+**Base URL**: `https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags`
+
+#### Get All Tags
+```powershell
+Invoke-RestMethod -Uri "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags?action=get_all_tags" -Method GET
+
+# Response: { "tags": ["news", "demo", "test"], "count": 3 }
+```
+
+#### Add Video Metadata
+```powershell
+$body = @{
+    filename = "my-video.mp4"
+    tags = @("news", "politics", "2024")
+    title = "My Video Title"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags?action=add_video" -Method POST -ContentType "application/json" -Body $body
+```
+
+#### Get Videos by Tag
+```powershell
+Invoke-RestMethod -Uri "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags?action=get_videos_by_tag&tag=news" -Method GET
+```
+
+#### Update Video Tags
+```powershell
+$body = @{
+    video_id = "video-id-here"
+    tags = @("updated", "news", "politics")
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags?action=update_video" -Method PUT -ContentType "application/json" -Body $body
+```
 
 ## 📋 Script Reference
 
@@ -179,6 +217,34 @@ Visit your CloudFront URL: `https://your-domain.cloudfront.net/videos.html`
 - Returns metadata (size, upload date, filename)
 - Sorts by newest first
 - CORS enabled for web access
+
+#### `tag_api/index.py` - Tag Management API (Phase 1)
+**Purpose**: Video tagging and metadata management
+**Features**:
+- Add video metadata with tags
+- Get all available tags
+- Filter videos by specific tags
+- Update existing video tags
+- DynamoDB integration for metadata storage
+- CORS enabled for web access
+
+**Key Functions**:
+- `add_video_metadata()`: Store video tags and metadata
+- `get_all_tags()`: List all unique tags in system
+- `get_videos_by_tag()`: Filter videos by tag
+- `update_video_tags()`: Modify existing video tags
+
+**Database Schema**:
+```json
+{
+  "video_id": "unique-id",
+  "filename": "video.mp4",
+  "title": "Video Title",
+  "tags": ["news", "politics"],
+  "upload_date": "2025-01-10T04:30:00.000Z",
+  "created_at": "2025-01-10T04:30:00.000Z"
+}
+```
 
 #### `cookie_manager.py` - Cookie Management
 **Purpose**: Handle authentication for restricted videos
@@ -345,12 +411,33 @@ foreach ($url in $urls) {
 }
 ```
 
+### Tag API Integration (Phase 1)
+```powershell
+# Get all available tags
+$tags = Invoke-RestMethod -Uri "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags?action=get_all_tags" -Method GET
+Write-Host "Available tags: $($tags.tags -join ', ')"
+
+# Find videos with specific tag
+$newsVideos = Invoke-RestMethod -Uri "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags?action=get_videos_by_tag&tag=news" -Method GET
+Write-Host "Found $($newsVideos.count) news videos"
+
+# Add metadata for existing video
+$metadata = @{
+    filename = "existing-video.mp4"
+    tags = @("archive", "important")
+    title = "Important Archive Video"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags?action=add_video" -Method POST -ContentType "application/json" -Body $metadata
+```
+
 ### API Integration
 See `video-commands.md` for complete API usage examples including:
 - Direct REST API calls
 - Progress monitoring
 - Batch operations
 - Custom integrations
+- Tag management workflows
 
 ## 📈 System Limits
 
