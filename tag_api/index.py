@@ -40,6 +40,8 @@ def lambda_handler(event, context):
             return get_all_tags(event)
         elif method == 'PUT' and action == 'update_video':
             return update_video_tags(event)
+        elif method == 'GET' and action == 'list':
+            return list_all_videos(event)
         else:
             return {
                 'statusCode': 404,
@@ -215,6 +217,28 @@ def update_video_metadata(event, filename):
             'filename': filename,
             'title': title,
             'tags': tags
+        })
+    }
+
+def list_all_videos(event):
+    """List all videos with metadata"""
+    response = table.scan()
+    
+    # Format videos to match admin API format
+    videos = []
+    for item in response['Items']:
+        videos.append({
+            'filename': item.get('filename', ''),
+            'title': item.get('title', item.get('filename', '').replace('.mp4', '')),
+            'tags': item.get('tags', [])
+        })
+    
+    return {
+        'statusCode': 200,
+        'headers': cors_headers(),
+        'body': json.dumps({
+            'videos': videos,
+            'count': len(videos)
         })
     }
 

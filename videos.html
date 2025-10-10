@@ -280,9 +280,55 @@
                                     };
                                 });
                             }
+                        } else {
+                            // Fallback to TAG API for regular users
+                            const tagResponse = await fetch(`${TAG_API}?action=list`);
+                            if (tagResponse.ok) {
+                                const tagData = await tagResponse.json();
+                                
+                                if (tagData.videos) {
+                                    const tagVideoMap = new Map();
+                                    tagData.videos.forEach(tagVideo => {
+                                        tagVideoMap.set(tagVideo.filename, tagVideo);
+                                    });
+                                    
+                                    videosWithMetadata = data.videos.map(video => {
+                                        const tagVideo = tagVideoMap.get(video.filename);
+                                        return {
+                                            ...video,
+                                            title: tagVideo ? tagVideo.title : video.filename.replace('.mp4', '').replace(/_/g, ' '),
+                                            tags: tagVideo ? tagVideo.tags : []
+                                        };
+                                    });
+                                }
+                            }
                         }
                     } catch (error) {
-                        console.log('Admin API not accessible, using basic titles:', error);
+                        // Fallback to TAG API for regular users
+                        try {
+                            const tagResponse = await fetch(`${TAG_API}?action=list`);
+                            if (tagResponse.ok) {
+                                const tagData = await tagResponse.json();
+                                
+                                if (tagData.videos) {
+                                    const tagVideoMap = new Map();
+                                    tagData.videos.forEach(tagVideo => {
+                                        tagVideoMap.set(tagVideo.filename, tagVideo);
+                                    });
+                                    
+                                    videosWithMetadata = data.videos.map(video => {
+                                        const tagVideo = tagVideoMap.get(video.filename);
+                                        return {
+                                            ...video,
+                                            title: tagVideo ? tagVideo.title : video.filename.replace('.mp4', '').replace(/_/g, ' '),
+                                            tags: tagVideo ? tagVideo.tags : []
+                                        };
+                                    });
+                                }
+                            }
+                        } catch (tagError) {
+                            // Use basic titles if both APIs fail
+                        }
                     }
                     // Calculate statistics
                     const totalSize = videosWithMetadata.reduce((sum, video) => sum + (video.size || 0), 0);
