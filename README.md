@@ -46,14 +46,17 @@ This system automatically downloads videos from various platforms (YouTube, Rumb
 
 ### ✅ Admin Dashboard (Phase 2)
 - **User Management**: Create, edit, delete users and change roles
-- **Video Management**: Edit video titles, tags, and metadata
-- **System Overview**: Real-time statistics and system health
+- **Video Management**: Edit video titles, tags, and metadata with bulk operations
+- **Tag Management**: Complete tag CRUD with video association editing
+- **System Overview**: Real-time statistics including tag analytics
 - **Video Editing**: In-place title and tag editing with live updates
 
 ### ✅ Video Tagging & Organization (Phase 1)
-- **Tag Management**: Add, edit, and organize videos with custom tags
+- **Advanced Tag Management**: Complete CRUD operations for tags with video association editing
+- **Tag Analytics**: View tag usage statistics and video associations
+- **Bulk Tag Operations**: Rename/delete tags with automatic video updates
 - **Category Browsing**: Filter videos by tags with dynamic tag buttons
-- **Custom Titles**: Set custom display titles different from filenames
+- **Custom Titles**: Set custom display titles for downloads and uploads
 - **Metadata Storage**: DynamoDB-backed video metadata system
 
 ### ✅ Advanced Web Interface
@@ -342,24 +345,31 @@ S3 Bucket (my-video-downloads-bucket):
 - **S3 bucket policies**: Restricted access to video content
 - **CloudFront protection**: DDoS protection and SSL termination
 
-## 🔧 Recent Fixes (Latest Update)
+## 🔧 Recent Updates (Latest)
 
-### CORS Issues Resolution ✅
-- **Fixed download from URL CORS errors**: Updated API endpoints from video listing API to correct router API
-- **Simplified router function**: Removed yt-dlp estimation that was causing timeouts
-- **Added proper API Gateway permissions**: Fixed Lambda invoke permissions for GET/POST methods
-- **Updated HTML files**: Corrected API endpoints in admin.html and download-status.html
+### Comprehensive Tag Management System ✅
+- **New Tags Tab**: Complete tag management interface in admin dashboard
+- **Tag CRUD Operations**: Create, rename, delete tags with automatic video updates
+- **Video Association Editor**: Bulk edit which videos are tagged with each tag
+- **Tag Usage Analytics**: View tag usage counts and video associations
+- **Smart Tag Operations**: Rename/delete tags updates all associated videos automatically
 
-### Thumbnail Generation Fixes ✅
-- **Fixed S3 permissions**: Added HeadObject and GetObject permissions for Lambda execution role
-- **Added Lambda invoke permissions**: Admin API can now properly invoke thumbnail generator
-- **Updated thumbnail generator**: Added proper video file existence checking
-- **Manual thumbnail script**: Works as backup for any missing thumbnails
+### Custom Title Support ✅
+- **Download Title Field**: Added custom title input to download from URL modal
+- **Title Parameter Support**: Router and downloader Lambda now handle custom titles
+- **Metadata Enhancement**: Always saves video metadata with title (falls back to filename)
+- **Database Integration**: Custom titles stored in DynamoDB and displayed in gallery
+
+### Previous Fixes ✅
+- **CORS Issues**: Fixed download from URL and status page CORS errors
+- **Thumbnail Generation**: Fixed S3 permissions and Lambda invoke permissions
+- **API Endpoints**: Corrected router API usage across all interfaces
 
 ### Current System Status
-- ✅ Download from URL: Working with proper CORS headers
+- ✅ Download from URL: Working with custom titles and proper CORS
 - ✅ Upload from local file: Working with automatic thumbnail generation
-- ✅ Download status page: Working with proper API endpoints
+- ✅ Tag Management: Complete CRUD operations with video associations
+- ✅ Custom Titles: Full support for download and upload workflows
 - ✅ All authentication and admin features: Fully functional
 
 ## 🐛 Troubleshooting
