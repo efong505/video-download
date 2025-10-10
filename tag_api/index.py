@@ -14,13 +14,16 @@ def lambda_handler(event, context):
         method = event.get('httpMethod', 'GET')
         path = event.get('path', '/tags')
         
-        if method == 'POST' and '/tag/video' in path:
+        query_params = event.get('queryStringParameters') or {}
+        action = query_params.get('action')
+        
+        if method == 'POST' and action == 'add_video':
             return add_video_metadata(event)
-        elif method == 'GET' and '/tag/videos' in path:
+        elif method == 'GET' and action == 'get_videos_by_tag':
             return get_videos_by_tag(event)
-        elif method == 'GET' and '/tag/all' in path:
+        elif method == 'GET' and action == 'get_all_tags':
             return get_all_tags(event)
-        elif method == 'PUT' and '/tag/video' in path:
+        elif method == 'PUT' and action == 'update_video':
             return update_video_tags(event)
         else:
             return {
