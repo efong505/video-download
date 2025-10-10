@@ -342,6 +342,26 @@ S3 Bucket (my-video-downloads-bucket):
 - **S3 bucket policies**: Restricted access to video content
 - **CloudFront protection**: DDoS protection and SSL termination
 
+## 🔧 Recent Fixes (Latest Update)
+
+### CORS Issues Resolution ✅
+- **Fixed download from URL CORS errors**: Updated API endpoints from video listing API to correct router API
+- **Simplified router function**: Removed yt-dlp estimation that was causing timeouts
+- **Added proper API Gateway permissions**: Fixed Lambda invoke permissions for GET/POST methods
+- **Updated HTML files**: Corrected API endpoints in admin.html and download-status.html
+
+### Thumbnail Generation Fixes ✅
+- **Fixed S3 permissions**: Added HeadObject and GetObject permissions for Lambda execution role
+- **Added Lambda invoke permissions**: Admin API can now properly invoke thumbnail generator
+- **Updated thumbnail generator**: Added proper video file existence checking
+- **Manual thumbnail script**: Works as backup for any missing thumbnails
+
+### Current System Status
+- ✅ Download from URL: Working with proper CORS headers
+- ✅ Upload from local file: Working with automatic thumbnail generation
+- ✅ Download status page: Working with proper API endpoints
+- ✅ All authentication and admin features: Fully functional
+
 ## 🐛 Troubleshooting
 
 ### Authentication Issues
