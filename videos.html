@@ -144,8 +144,10 @@
                 const container = document.getElementById('videos-container');
                 
                 if (data.videos && data.videos.length > 0) {
-                    // Use the same ADMIN API that admin page uses to get videos with metadata
+                    // Get video metadata - try admin API first, fallback to tag API for regular users
                     let videosWithMetadata = data.videos;
+                    
+                    // Try admin API first (works for admin users)
                     try {
                         const adminResponse = await fetch(`https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin?action=videos`, {
                             headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` }
@@ -154,13 +156,11 @@
                         if (adminResponse.ok) {
                             const adminData = await adminResponse.json();
                             if (adminData.videos) {
-                                // Create a map of admin video data by filename
                                 const adminVideoMap = new Map();
                                 adminData.videos.forEach(adminVideo => {
                                     adminVideoMap.set(adminVideo.filename, adminVideo);
                                 });
                                 
-                                // Merge S3 video data with admin metadata
                                 videosWithMetadata = data.videos.map(video => {
                                     const adminVideo = adminVideoMap.get(video.filename);
                                     return {
@@ -170,14 +170,67 @@
                                     };
                                 });
                             }
+                        } else {
+                            throw new Error('Admin API not accessible');
                         }
                     } catch (error) {
-                        console.log('Could not load admin metadata, using default titles');
-                        videosWithMetadata = data.videos.map(video => ({
-                            ...video,
-                            title: video.filename.replace('.mp4', '').replace(/_/g, ' '),
-                            tags: []
-                        }));
+                        // Fallback: Use TAG API for regular users
+                        console.log('Using TAG API for metadata (regular user)');
+                        try {
+                            const tagResponse = await fetch(`${TAG_API}?action=get_all_tags`);
+                            if (tagResponse.ok) {
+                                const tagData = await tagResponse.json();
+                                if (tagData.tags && tagData.tags.length > 0) {
+                                    // Get videos by each tag to build metadata
+                                    const tagPromises = tagData.tags.map(async (tag) => {
+                                        try {
+                                            const response = await fetch(`${TAG_API}?action=get_videos_by_tag&tag=${encodeURIComponent(tag)}`);
+                                            const data = await response.json();
+                                            return data.videos || [];
+                                        } catch (error) {
+                                            return [];
+                                        }
+                                    });
+                                    
+                                    const tagResults = await Promise.all(tagPromises);
+                                    const videoMetadataMap = new Map();
+                                    
+                                    tagResults.flat().forEach(video => {
+                                        if (video.filename) {
+                                            videoMetadataMap.set(video.filename, {
+                                                title: video.title || video.filename,
+                                                tags: video.tags || []
+                                            });
+                                        }
+                                    });
+                                    
+                                    videosWithMetadata = data.videos.map(video => {
+                                        const metadata = videoMetadataMap.get(video.filename);
+                                        return {
+                                            ...video,
+                                            title: metadata ? metadata.title : video.filename.replace('.mp4', '').replace(/_/g, ' '),
+                                            tags: metadata ? metadata.tags : []
+                                        };
+                                    });
+                                } else {
+                                    // No tags found, use default titles
+                                    videosWithMetadata = data.videos.map(video => ({
+                                        ...video,
+                                        title: video.filename.replace('.mp4', '').replace(/_/g, ' '),
+                                        tags: []
+                                    }));
+                                }
+                            } else {
+                                throw new Error('TAG API not accessible');
+                            }
+                        } catch (tagError) {
+                            console.log('Could not load any metadata, using default titles');
+                            videosWithMetadata = data.videos.map(video => ({
+                                ...video,
+                                title: video.filename.replace('.mp4', '').replace(/_/g, ' '),
+                                tags: []
+                            }));
+                        }
                     }
                     
 
