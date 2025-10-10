@@ -11,8 +11,8 @@ def lambda_handler(event, context):
     Tag management API for video metadata
     """
     try:
-        method = event['httpMethod']
-        path = event['path']
+        method = event.get('httpMethod', 'GET')
+        path = event.get('path', '/tags')
         
         if method == 'POST' and '/tag/video' in path:
             return add_video_metadata(event)

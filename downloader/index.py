@@ -2,8 +2,10 @@ import json
 import boto3
 import subprocess
 import os
+from datetime import datetime
 
 s3_client = boto3.client('s3')
+dynamodb = boto3.resource('dynamodb')
 
 def generate_thumbnails(video_path, output_name, bucket):
     """Generate thumbnails at 10%, 50%, 90% of video duration"""
@@ -96,6 +98,7 @@ def lambda_handler(event, context):
         url = event['url']
         format_id = event.get('format', None)
         output_name = event['output_name']
+        tags = event.get('tags', [])
         bucket = os.environ['S3_BUCKET']
         
         # Download to /tmp (Lambda's writable directory)
@@ -161,6 +164,23 @@ def lambda_handler(event, context):
         os.remove(output_path)
         
         print(f"Successfully uploaded to s3://{bucket}/{video_key}")
+        
+        # Save metadata to DynamoDB
+        if tags:
+            try:
+                table = dynamodb.Table('video-metadata')
+                table.put_item(
+                    Item={
+                        'video_id': output_name,
+                        'tags': tags,
+                        'upload_date': datetime.now().isoformat(),
+                        's3_key': video_key,
+                        'url': url
+                    }
+                )
+                print(f"Saved metadata for {output_name} with tags: {tags}")
+            except Exception as e:
+                print(f"Failed to save metadata: {e}")
         
         # Generate presigned URL with inline disposition
         presigned_url = s3_client.generate_presigned_url(

@@ -140,6 +140,7 @@ def lambda_handler(event, context):
         format_id = body.get('format', 'best')
         output_name = body.get('output_name', 'video.mp4')
         force_fargate = body.get('force_fargate', False)
+        tags = body.get('tags', [])
         
         if not url:
             return {
@@ -160,17 +161,17 @@ def lambda_handler(event, context):
         # Route decision: Check force_fargate first, then time estimate
         if force_fargate:
             print("Routing to Fargate (forced)")
-            response = start_fargate_task(url, format_id, output_name)
+            response = start_fargate_task(url, format_id, output_name, tags)
             method = "fargate"
             method_reason = "Forced Fargate routing - bypassing smart routing"
         elif estimated_seconds < 720:
             print("Routing to Lambda")
-            response = invoke_lambda_downloader(url, format_id, output_name)
+            response = invoke_lambda_downloader(url, format_id, output_name, tags)
             method = "lambda"
             method_reason = "Fast download (< 12 minutes) - using cost-effective Lambda"
         else:
             print("Routing to Fargate")
-            response = start_fargate_task(url, format_id, output_name)
+            response = start_fargate_task(url, format_id, output_name, tags)
             method = "fargate"
             method_reason = "Long download (≥ 12 minutes) - using reliable Fargate (1hr timeout)"
         
@@ -221,12 +222,13 @@ def lambda_handler(event, context):
             'body': json.dumps({'error': str(e)})
         }
 
-def invoke_lambda_downloader(url, format_id, output_name):
+def invoke_lambda_downloader(url, format_id, output_name, tags):
     """Invoke Lambda downloader function asynchronously"""
     payload = {
         'url': url,
         'format': format_id,
-        'output_name': output_name
+        'output_name': output_name,
+        'tags': tags
     }
     
     response = lambda_client.invoke(
@@ -237,8 +239,18 @@ def invoke_lambda_downloader(url, format_id, output_name):
     
     return {'type': 'lambda', 'status': 'invoked'}
 
-def start_fargate_task(url, format_id, output_name):
+def start_fargate_task(url, format_id, output_name, tags):
     """Start Fargate ECS task"""
+    environment = [
+        {'name': 'VIDEO_URL', 'value': url},
+        {'name': 'FORMAT_ID', 'value': format_id},
+        {'name': 'OUTPUT_NAME', 'value': output_name},
+        {'name': 'S3_BUCKET', 'value': os.environ['S3_BUCKET']}
+    ]
+    
+    if tags:
+        environment.append({'name': 'TAGS', 'value': ','.join(tags)})
+    
     response = ecs_client.run_task(
         cluster=os.environ['ECS_CLUSTER_NAME'],
         taskDefinition=os.environ['ECS_TASK_DEFINITION'],
@@ -252,12 +264,7 @@ def start_fargate_task(url, format_id, output_name):
         overrides={
             'containerOverrides': [{
                 'name': 'video-downloader',
-                'environment': [
-                    {'name': 'VIDEO_URL', 'value': url},
-                    {'name': 'FORMAT_ID', 'value': format_id},
-                    {'name': 'OUTPUT_NAME', 'value': output_name},
-                    {'name': 'S3_BUCKET', 'value': os.environ['S3_BUCKET']}
-                ]
+                'environment': environment
             }]
         }
     )
