@@ -506,12 +506,25 @@
             if (!confirm(`Are you sure you want to delete video: ${filename}?`)) return;
             
             try {
-                const response = await fetch(`${ADMIN_API}?action=video&filename=${encodeURIComponent(filename)}`, {
+                // Build URL manually to avoid encoding issues
+                const deleteUrl = `${ADMIN_API}?action=video&filename=${encodeURIComponent(filename)}`;
+                console.log('Delete URL:', deleteUrl);
+                
+                const response = await fetch(deleteUrl, {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${authToken}` }
                 });
                 
-                const data = await response.json();
+                console.log('Response status:', response.status);
+                const responseText = await response.text();
+                console.log('Response text:', responseText);
+                
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    data = { error: responseText };
+                }
                 
                 if (response.ok) {
                     document.getElementById('videos-message').innerHTML = 
@@ -519,9 +532,10 @@
                     loadVideos();
                     loadOverview(); // Refresh stats
                 } else {
-                    throw new Error(data.error);
+                    throw new Error(data.error || `HTTP ${response.status}`);
                 }
             } catch (error) {
+                console.error('Delete error:', error);
                 document.getElementById('videos-message').innerHTML = 
                     `<div class="error">Failed to delete video: ${error.message}</div>`;
             }

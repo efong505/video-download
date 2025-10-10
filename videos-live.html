@@ -22,7 +22,6 @@
             width: 100%;
             height: 200px;
             background: #000;
-            overflow: hidden;
         }
         .thumbnail {
             width: 100%;
@@ -57,8 +56,6 @@
             background: #f8f9fa;
             font-weight: bold;
             text-align: center;
-            position: relative;
-            z-index: 1;
         }
         .loading {
             text-align: center;
@@ -145,10 +142,9 @@
                     for (const video of data.videos) {
                         const baseName = video.filename.replace('.mp4', '');
                         const videoUrl = `${BUCKET_URL}/videos/${video.filename}`;
-                        const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb_2.jpg`;
-                        const fallbackThumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
+                        const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
                         
-                        createVideoCard(container, video.name, videoUrl, thumbnailUrl, fallbackThumbnailUrl);
+                        createVideoCard(container, video.name, videoUrl, thumbnailUrl);
                     }
                     
                     document.getElementById('loading').style.display = 'none';
@@ -165,7 +161,7 @@
             }
         }
         
-        function createVideoCard(container, title, videoUrl, thumbnailUrl, fallbackThumbnailUrl) {
+        function createVideoCard(container, title, videoUrl, thumbnailUrl) {
             const col = document.createElement('div');
             col.className = 'col-md-4';
             
@@ -173,7 +169,7 @@
                 <div class="video-card">
                     <div class="thumbnail-container">
                         <img src="${thumbnailUrl}" alt="${title}" class="thumbnail" 
-                             onerror="this.src='${fallbackThumbnailUrl}'; this.onerror=function(){this.style.display='none'; this.nextElementSibling.style.display='flex';}">
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                         <div class="thumbnail" style="display: none; background: #333; color: white; align-items: center; justify-content: center; font-size: 14px;">
                             No Thumbnail
                         </div>
