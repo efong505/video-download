@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Player</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        video { width: 100%; max-width: 800px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        input { width: 100%; padding: 10px; margin: 10px 0; }
+        button { padding: 10px 20px; background: #007cba; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>S3 Video Player</h1>
+        <input type="text" id="videoUrl" placeholder="Paste S3 video URL here..." />
+        <button onclick="loadVideo()">Load Video</button>
+        
+        <div id="videoContainer" style="margin-top: 20px;">
+            <video id="videoPlayer" controls style="display: none;">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        function loadVideo() {
+            const url = document.getElementById('videoUrl').value;
+            const video = document.getElementById('videoPlayer');
+            
+            if (url) {
+                video.src = url;
+                video.style.display = 'block';
+                video.load();
+            }
+        }
+        
+        // Auto-load if URL is in hash
+        if (window.location.hash) {
+            document.getElementById('videoUrl').value = decodeURIComponent(window.location.hash.substring(1));
+            loadVideo();
+        }
+    </script>
+</body>
+</html>

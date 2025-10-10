@@ -1,0 +1,23 @@
+{
+  "family": "video-downloader-task",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "512",
+  "memory": "1024",
+  "executionRoleArn": "arn:aws:iam::371751795928:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::371751795928:role/ecsTaskRole",
+  "containerDefinitions": [
+    {
+      "name": "video-downloader",
+      "image": "371751795928.dkr.ecr.us-east-1.amazonaws.com/video-downloader:latest",
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/video-downloader",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
+    }
+  ]
+}

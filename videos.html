@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekewaka Videos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .video-card {
+            position: relative;
+            cursor: pointer;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s;
+        }
+        .video-card:hover {
+            transform: scale(1.02);
+        }
+        .thumbnail-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: #000;
+        }
+        .thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.7);
+            border: none;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .play-button:hover {
+            background: rgba(0,0,0,0.9);
+        }
+        .video-player {
+            display: none;
+            width: 100%;
+            height: 200px;
+        }
+        .video-title {
+            padding: 10px;
+            background: #f8f9fa;
+            font-weight: bold;
+            text-align: center;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h1>My Videos</h1>
+            <p><a href="/">&larr; Back To Main Page</a></p>
+        </div>
+        <hr>
+        
+        <div id="loading" class="loading">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p>Loading videos...</p>
+        </div>
+        
+        <div id="videos-container" class="row g-4" style="display: none;">
+            <!-- Videos will be loaded here dynamically -->
+        </div>
+        
+        <div id="no-videos" class="text-center" style="display: none;">
+            <p>No videos found.</p>
+        </div>
+    </div>
+
+    <script>
+        const BUCKET_URL = 'https://d271vky579caz9.cloudfront.net';
+        
+        async function loadVideos() {
+            try {
+                // Fetch video list dynamically from API
+                const response = await fetch('https://wfeds5lejb.execute-api.us-east-1.amazonaws.com/prod/api/videos');
+                const data = await response.json();
+                
+                const container = document.getElementById('videos-container');
+                
+                if (data.videos && data.videos.length > 0) {
+                    for (const video of data.videos) {
+                        const baseName = video.filename.replace('.mp4', '');
+                        const videoUrl = `${BUCKET_URL}/videos/${video.filename}`;
+                        const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
+                        
+                        createVideoCard(container, video.name, videoUrl, thumbnailUrl);
+                    }
+                    
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('videos-container').style.display = 'flex';
+                } else {
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('no-videos').style.display = 'block';
+                }
+                
+            } catch (error) {
+                console.error('Error loading videos:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('no-videos').style.display = 'block';
+            }
+        }
+        
+        function createVideoCard(container, title, videoUrl, thumbnailUrl) {
+            const col = document.createElement('div');
+            col.className = 'col-md-4';
+            
+            col.innerHTML = `
+                <div class="video-card">
+                    <div class="thumbnail-container">
+                        <img src="${thumbnailUrl}" alt="${title}" class="thumbnail" 
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                        <div class="thumbnail" style="display: none; background: #333; color: white; align-items: center; justify-content: center; font-size: 14px;">
+                            No Thumbnail
+                        </div>
+                        <button class="play-button" onclick="playVideo(this, '${videoUrl}')">
+                            ▶
+                        </button>
+                        <video class="video-player" controls preload="none" style="display: none;">
+                            <source src="${videoUrl}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                    <div class="video-title">${title.replace(/_/g, ' ')}</div>
+                </div>
+            `;
+            
+            container.appendChild(col);
+        }
+        
+        function playVideo(button, videoUrl) {
+            const card = button.closest('.video-card');
+            const thumbnail = card.querySelector('.thumbnail');
+            const playBtn = card.querySelector('.play-button');
+            const video = card.querySelector('.video-player');
+            
+            // Hide thumbnail and play button
+            thumbnail.style.display = 'none';
+            playBtn.style.display = 'none';
+            
+            // Show and play video
+            video.style.display = 'block';
+            video.load();
+            video.play();
+            
+            // When video ends, show thumbnail again
+            video.addEventListener('ended', function() {
+                thumbnail.style.display = 'block';
+                playBtn.style.display = 'block';
+                video.style.display = 'none';
+            });
+            
+            // Handle pause to show thumbnail
+            video.addEventListener('pause', function() {
+                if (video.currentTime === 0 || video.ended) {
+                    thumbnail.style.display = 'block';
+                    playBtn.style.display = 'block';
+                    video.style.display = 'none';
+                }
+            });
+        }
+        
+        // Load videos when page loads
+        document.addEventListener('DOMContentLoaded', loadVideos);
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

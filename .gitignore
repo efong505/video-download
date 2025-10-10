@@ -1,0 +1,43 @@
+# Video files (too large for Git)
+*.mp4
+*.avi
+*.mkv
+*.mov
+*.wmv
+*.part
+*.ytdl
+
+# Python compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+
+# Deployment packages
+*.zip
+
+# Large dependencies (can be reinstalled)
+router/yt_dlp/
+router/boto3/
+router/botocore/
+downloader/layer/
+env/
+
+# AWS credentials
+*.pem
+*.key
+.aws/
+
+# Temporary files
+temp_*
+*.tmp
+response.json
+test-status.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
