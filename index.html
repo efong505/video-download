@@ -54,7 +54,7 @@
 
 
     <div class="text-center">
-        <h1 class="mt-9">
+        <h1 class="mt-9" id="nav-links">
             <a href="videos.html" rel="noopener noreferrer" class="mr-8">Go To My Videos</a>
             <a href="login.html" rel="noopener noreferrer" class="ml-8">Login</a>
         </h1>
@@ -317,6 +317,23 @@
 
         // Start the application
         window.onload = function () {
+            // Check if user is admin and add admin link
+            const userData = localStorage.getItem('user_data');
+            if (userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    if (user.role === 'admin') {
+                        const navLinks = document.getElementById('nav-links');
+                        navLinks.innerHTML = navLinks.innerHTML.replace(
+                            'Go To My Videos</a>',
+                            'Go To My Videos</a>\n            <a href="admin.html" rel="noopener noreferrer" class="mr-8">Admin Dashboard</a>'
+                        );
+                    }
+                } catch (error) {
+                    console.log('Error parsing user data');
+                }
+            }
+            
             resizeCanvas();
             animate();
         }

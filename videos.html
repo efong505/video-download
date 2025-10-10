@@ -70,8 +70,9 @@
     <div class="container mt-5">
         <div class="text-center mb-4">
             <h1>My Videos</h1>
-            <p>
+            <p id="nav-links">
                 <a href="/">&larr; Back To Main Page</a> | 
+                <a href="category.html">Browse by Category</a> | 
                 <a href="#" onclick="logout()">Logout</a>
             </p>
         </div>
@@ -96,6 +97,7 @@
     <script>
         const BUCKET_URL = 'https://d271vky579caz9.cloudfront.net';
         const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
+        const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
         
         // Check authentication on page load
         async function checkAuth() {
@@ -142,13 +144,51 @@
                 const container = document.getElementById('videos-container');
                 
                 if (data.videos && data.videos.length > 0) {
-                    for (const video of data.videos) {
+                    // Use the same ADMIN API that admin page uses to get videos with metadata
+                    let videosWithMetadata = data.videos;
+                    try {
+                        const adminResponse = await fetch(`https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin?action=videos`, {
+                            headers: { 'Authorization': `Bearer ${localStorage.getItem('auth_token')}` }
+                        });
+                        
+                        if (adminResponse.ok) {
+                            const adminData = await adminResponse.json();
+                            if (adminData.videos) {
+                                // Create a map of admin video data by filename
+                                const adminVideoMap = new Map();
+                                adminData.videos.forEach(adminVideo => {
+                                    adminVideoMap.set(adminVideo.filename, adminVideo);
+                                });
+                                
+                                // Merge S3 video data with admin metadata
+                                videosWithMetadata = data.videos.map(video => {
+                                    const adminVideo = adminVideoMap.get(video.filename);
+                                    return {
+                                        ...video,
+                                        title: adminVideo ? adminVideo.title : video.filename.replace('.mp4', '').replace(/_/g, ' '),
+                                        tags: adminVideo ? adminVideo.tags : []
+                                    };
+                                });
+                            }
+                        }
+                    } catch (error) {
+                        console.log('Could not load admin metadata, using default titles');
+                        videosWithMetadata = data.videos.map(video => ({
+                            ...video,
+                            title: video.filename.replace('.mp4', '').replace(/_/g, ' '),
+                            tags: []
+                        }));
+                    }
+                    
+
+                    
+                    for (const video of videosWithMetadata) {
                         const baseName = video.filename.replace('.mp4', '');
                         const videoUrl = `${BUCKET_URL}/videos/${video.filename}`;
                         const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb_2.jpg`;
                         const fallbackThumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
                         
-                        createVideoCard(container, video.name, videoUrl, thumbnailUrl, fallbackThumbnailUrl);
+                        createVideoCard(container, video.title, videoUrl, thumbnailUrl, fallbackThumbnailUrl);
                     }
                     
                     document.getElementById('loading').style.display = 'none';
@@ -234,6 +274,18 @@
         document.addEventListener('DOMContentLoaded', async function() {
             const isAuthenticated = await checkAuth();
             if (isAuthenticated) {
+                // Check if user is admin and add admin link
+                const userData = localStorage.getItem('user_data');
+                if (userData) {
+                    const user = JSON.parse(userData);
+                    if (user.role === 'admin') {
+                        const navLinks = document.getElementById('nav-links');
+                        navLinks.innerHTML = navLinks.innerHTML.replace(
+                            'Browse by Category</a> |',
+                            'Browse by Category</a> | <a href="admin.html">Admin Dashboard</a> |'
+                        );
+                    }
+                }
                 loadVideos();
             }
         });
