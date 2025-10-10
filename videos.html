@@ -67,7 +67,10 @@
     <div class="container mt-5">
         <div class="text-center mb-4">
             <h1>My Videos</h1>
-            <p><a href="/">&larr; Back To Main Page</a></p>
+            <p>
+                <a href="/">&larr; Back To Main Page</a> | 
+                <a href="#" onclick="logout()">Logout</a>
+            </p>
         </div>
         <hr>
         
@@ -89,6 +92,43 @@
 
     <script>
         const BUCKET_URL = 'https://d271vky579caz9.cloudfront.net';
+        const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
+        
+        // Check authentication on page load
+        async function checkAuth() {
+            const token = localStorage.getItem('auth_token');
+            
+            if (!token) {
+                // No token, redirect to login
+                window.location.href = 'login.html';
+                return false;
+            }
+            
+            try {
+                // Verify token with server
+                const response = await fetch(`${AUTH_API}?action=verify`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                
+                if (!response.ok) {
+                    // Invalid token, redirect to login
+                    localStorage.removeItem('auth_token');
+                    localStorage.removeItem('user_data');
+                    window.location.href = 'login.html';
+                    return false;
+                }
+                
+                return true;
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                // On error, redirect to login
+                window.location.href = 'login.html';
+                return false;
+            }
+        }
         
         async function loadVideos() {
             try {
@@ -180,8 +220,19 @@
             });
         }
         
-        // Load videos when page loads
-        document.addEventListener('DOMContentLoaded', loadVideos);
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
+        
+        // Check auth and load videos when page loads
+        document.addEventListener('DOMContentLoaded', async function() {
+            const isAuthenticated = await checkAuth();
+            if (isAuthenticated) {
+                loadVideos();
+            }
+        });
     </script>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>

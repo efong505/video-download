@@ -198,37 +198,48 @@ def delete_video(event):
             'body': json.dumps({'error': 'filename required'})
         }
     
-    # Delete from S3
-    s3_client.delete_object(
-        Bucket='my-video-downloads-bucket',
-        Key=f'videos/{filename}'
-    )
-    
-    # Delete thumbnails
     try:
+        # Delete from S3
+        s3_client.delete_object(
+            Bucket='my-video-downloads-bucket',
+            Key=f'videos/{filename}'
+        )
+        
+        # Delete thumbnails
         base_name = filename.rsplit('.', 1)[0]
         for i in range(1, 4):
-            s3_client.delete_object(
-                Bucket='my-video-downloads-bucket',
-                Key=f'thumbnails/{base_name}_thumb_{i}.jpg'
-            )
-    except:
-        pass
-    
-    # Delete metadata
-    try:
-        metadata_table.delete_item(Key={'video_id': filename})
-    except:
-        pass
-    
-    return {
-        'statusCode': 200,
-        'headers': cors_headers(),
-        'body': json.dumps({
-            'message': 'Video deleted',
-            'filename': filename
-        })
-    }
+            try:
+                s3_client.delete_object(
+                    Bucket='my-video-downloads-bucket',
+                    Key=f'thumbnails/{base_name}_thumb_{i}.jpg'
+                )
+            except Exception as e:
+                print(f'Failed to delete thumbnail {i}: {e}')
+        
+        # Delete metadata
+        try:
+            metadata_table.delete_item(Key={'video_id': filename})
+        except Exception as e:
+            print(f'Failed to delete metadata: {e}')
+        
+        return {
+            'statusCode': 200,
+            'headers': cors_headers(),
+            'body': json.dumps({
+                'message': 'Video deleted successfully',
+                'filename': filename
+            })
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({
+                'error': f'Failed to delete video: {str(e)}',
+                'filename': filename
+            })
+        }
 
 def cors_headers():
     return {
