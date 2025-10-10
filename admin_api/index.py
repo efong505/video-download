@@ -37,6 +37,8 @@ def lambda_handler(event, context):
             return get_all_videos(event)
         elif method == 'PUT' and action == 'user_role':
             return update_user_role(event)
+        elif method == 'PUT' and action == 'reset_password':
+            return reset_user_password(event)
         elif method == 'DELETE' and action == 'user':
             return delete_user(event)
         elif method == 'DELETE' and action == 'video':
@@ -179,6 +181,32 @@ def update_user_role(event):
             'message': 'User role updated',
             'user_id': user_id,
             'role': new_role
+        })
+    }
+
+def reset_user_password(event):
+    body = json.loads(event['body'])
+    user_id = body['user_id']
+    new_password = body['new_password']
+    
+    # Hash the new password
+    password_hash = hashlib.sha256(new_password.encode()).hexdigest()
+    
+    users_table.update_item(
+        Key={'user_id': user_id},
+        UpdateExpression='SET password_hash = :password, updated_at = :updated',
+        ExpressionAttributeValues={
+            ':password': password_hash,
+            ':updated': datetime.utcnow().isoformat()
+        }
+    )
+    
+    return {
+        'statusCode': 200,
+        'headers': cors_headers(),
+        'body': json.dumps({
+            'message': 'Password reset successfully',
+            'user_id': user_id
         })
     }
 

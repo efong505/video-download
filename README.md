@@ -83,9 +83,11 @@ Downloader/
 ├── generate_thumbnails.py   # Generate thumbnails for existing videos
 ├── index.html              # Main page with admin links for admins
 ├── videos.html            # Video gallery with custom titles
-├── category.html         # Tag-based video browsing
+├── category.html         # Tag-based video browsing with search/filter
 ├── login.html           # Login/registration page
-├── admin.html          # Complete admin dashboard
+├── admin.html          # Complete admin dashboard with search/filter
+├── profile.html        # User profile page with password management
+├── download-status.html # Download status monitoring page
 ├── router/
 │   └── index.py          # Router Lambda with tag support
 ├── downloader/
@@ -347,30 +349,48 @@ S3 Bucket (my-video-downloads-bucket):
 
 ## 🔧 Recent Updates (Latest)
 
-### Comprehensive Tag Management System ✅
-- **New Tags Tab**: Complete tag management interface in admin dashboard
-- **Tag CRUD Operations**: Create, rename, delete tags with automatic video updates
-- **Video Association Editor**: Bulk edit which videos are tagged with each tag
-- **Tag Usage Analytics**: View tag usage counts and video associations
-- **Smart Tag Operations**: Rename/delete tags updates all associated videos automatically
+### User Experience Enhancements ✅
+- **Profile Management**: Simplified user profile page with password change functionality
+- **Search & Filter**: Real-time search and tag filtering on videos.html and admin dashboard
+- **Email Notifications**: SNS-based email alerts for download events
+- **Password Management**: Admin password reset and user self-service password change
 
-### Custom Title Support ✅
-- **Download Title Field**: Added custom title input to download from URL modal
-- **Title Parameter Support**: Router and downloader Lambda now handle custom titles
-- **Metadata Enhancement**: Always saves video metadata with title (falls back to filename)
-- **Database Integration**: Custom titles stored in DynamoDB and displayed in gallery
+### Search & Filter System ✅
+- **Video Search**: Search videos by title or filename with real-time filtering
+- **Tag Filtering**: Filter videos by specific tags with dropdown selection
+- **Admin Search**: Enhanced admin dashboard with search and filter capabilities
+- **Clear Filters**: One-click filter reset functionality
+- **Responsive Design**: Mobile-friendly search and filter interface
 
-### Previous Fixes ✅
-- **CORS Issues**: Fixed download from URL and status page CORS errors
-- **Thumbnail Generation**: Fixed S3 permissions and Lambda invoke permissions
-- **API Endpoints**: Corrected router API usage across all interfaces
+### SNS Email Notification System ✅
+- **Download Started**: Email notification when download is initiated
+- **Download Success**: Detailed success notification with video information
+- **Download Failed**: Error notifications with failure details
+- **Download Timeout**: Alerts for downloads taking longer than expected
+- **Rich Content**: Notifications include URL, filename, tags, and timestamps
+
+### Password Management System ✅
+- **Admin Password Reset**: Admins can reset any user's password
+- **User Password Change**: Self-service password change with current password verification
+- **Security Features**: Password validation and secure hashing
+- **Profile Page**: Dedicated user profile interface
+
+### Previous Major Features ✅
+- **Comprehensive Tag Management**: Complete tag CRUD operations with video associations
+- **Custom Title Support**: Full support for custom video titles in downloads and uploads
+- **User Authentication**: JWT-based login system with role-based access
+- **Admin Dashboard**: Complete management interface for users, videos, and tags
 
 ### Current System Status
-- ✅ Download from URL: Working with custom titles and proper CORS
+- ✅ Download from URL: Working with custom titles and SNS notifications
 - ✅ Upload from local file: Working with automatic thumbnail generation
+- ✅ Search & Filter: Real-time search and tag filtering on all pages
+- ✅ Email Notifications: SNS alerts for all download events
+- ✅ Password Management: Admin reset and user self-service password change
 - ✅ Tag Management: Complete CRUD operations with video associations
 - ✅ Custom Titles: Full support for download and upload workflows
-- ✅ All authentication and admin features: Fully functional
+- ✅ User Authentication: JWT-based system with role-based access
+- ✅ Profile Management: Simplified user profile with security features
 
 ## 🐛 Troubleshooting
 

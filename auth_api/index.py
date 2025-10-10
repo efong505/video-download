@@ -30,6 +30,8 @@ def lambda_handler(event, context):
             return login_user(event)
         elif method == 'GET' and action == 'verify':
             return verify_token(event)
+        elif method == 'PUT' and action == 'change_password':
+            return change_password(event)
         else:
             return {
                 'statusCode': 404,
@@ -176,6 +178,77 @@ def verify_token(event):
             'statusCode': 401,
             'headers': cors_headers(),
             'body': json.dumps({'error': 'Invalid token'})
+        }
+
+def change_password(event):
+    # Verify token first
+    auth_header = event.get('headers', {}).get('Authorization', '')
+    if not auth_header.startswith('Bearer '):
+        return {
+            'statusCode': 401,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': 'Missing token'})
+        }
+    
+    token = auth_header.split(' ')[1]
+    
+    try:
+        payload = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
+    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+        return {
+            'statusCode': 401,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': 'Invalid or expired token'})
+        }
+    
+    body = json.loads(event['body'])
+    current_password = body['current_password']
+    new_password = body['new_password']
+    user_id = payload['user_id']
+    
+    # Get user from database
+    try:
+        response = users_table.get_item(Key={'user_id': user_id})
+        if 'Item' not in response:
+            return {
+                'statusCode': 404,
+                'headers': cors_headers(),
+                'body': json.dumps({'error': 'User not found'})
+            }
+        
+        user = response['Item']
+        
+        # Verify current password
+        current_password_hash = hashlib.sha256(current_password.encode()).hexdigest()
+        if user['password_hash'] != current_password_hash:
+            return {
+                'statusCode': 400,
+                'headers': cors_headers(),
+                'body': json.dumps({'error': 'Current password is incorrect'})
+            }
+        
+        # Update password
+        new_password_hash = hashlib.sha256(new_password.encode()).hexdigest()
+        users_table.update_item(
+            Key={'user_id': user_id},
+            UpdateExpression='SET password_hash = :password, updated_at = :updated',
+            ExpressionAttributeValues={
+                ':password': new_password_hash,
+                ':updated': datetime.utcnow().isoformat()
+            }
+        )
+        
+        return {
+            'statusCode': 200,
+            'headers': cors_headers(),
+            'body': json.dumps({'message': 'Password changed successfully'})
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
         }
 
 def cors_headers():

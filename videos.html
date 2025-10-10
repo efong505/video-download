@@ -155,6 +155,7 @@
                 <div class="nav-links" id="nav-links">
                     <a href="/" class="nav-link">🏠 Home</a>
                     <a href="category.html" class="nav-link">📂 Categories</a>
+                    <a href="profile.html" class="nav-link">👤 Profile</a>
                     <a href="#" onclick="logout()" class="nav-link logout">🚪 Logout</a>
                 </div>
             </div>
@@ -185,6 +186,22 @@
             <p>Loading videos...</p>
         </div>
         
+            <div class="search-filter-bar" style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: none;" id="search-filter-bar">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <input type="text" id="search-input" class="form-control" placeholder="Search videos by title or filename..." style="border-radius: 25px;">
+                    </div>
+                    <div class="col-md-4">
+                        <select id="tag-filter" class="form-select" style="border-radius: 25px;">
+                            <option value="">All Tags</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-outline-secondary" onclick="clearFilters()" style="border-radius: 25px; width: 100%;">Clear</button>
+                    </div>
+                </div>
+            </div>
+            
             <div id="videos-container" class="row g-4" style="display: none;">
                 <!-- Videos will be loaded here dynamically -->
             </div>
@@ -199,6 +216,9 @@
         const BUCKET_URL = 'https://d271vky579caz9.cloudfront.net';
         const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
         const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
+        
+        let allVideos = [];
+        let filteredVideos = [];
         
         // Check authentication on page load
         async function checkAuth() {
@@ -345,24 +365,22 @@
                     document.getElementById('total-tags').textContent = allTags.size;
                     document.getElementById('stats-bar').style.display = 'flex';
                     
-                    for (const video of videosWithMetadata) {
-                        const baseName = video.filename.replace('.mp4', '');
-                        const videoUrl = `${BUCKET_URL}/videos/${video.filename}`;
-                        const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb_2.jpg`;
-                        const fallbackThumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
-                        
-                        console.log('Creating video card for:', {
-                            filename: video.filename,
-                            title: video.title,
-                            videoUrl: videoUrl,
-                            thumbnailUrl: thumbnailUrl
-                        });
-                        
-                        createVideoCard(container, video.title, videoUrl, thumbnailUrl, fallbackThumbnailUrl);
-                    }
+                    // Store videos for filtering
+                    allVideos = videosWithMetadata;
+                    filteredVideos = [...allVideos];
+                    
+                    // Setup tag filter options
+                    setupTagFilter(allTags);
+                    
+                    // Setup search functionality
+                    setupSearch();
+                    
+                    // Display videos
+                    displayVideos(filteredVideos);
                     
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('videos-container').style.display = 'flex';
+                    document.getElementById('search-filter-bar').style.display = 'block';
                 } else {
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('no-videos').style.display = 'block';
@@ -455,6 +473,62 @@
                     video.style.display = 'none';
                 }
             });
+        }
+        
+        function setupTagFilter(allTags) {
+            const tagFilter = document.getElementById('tag-filter');
+            tagFilter.innerHTML = '<option value="">All Tags</option>';
+            
+            Array.from(allTags).sort().forEach(tag => {
+                const option = document.createElement('option');
+                option.value = tag;
+                option.textContent = tag;
+                tagFilter.appendChild(option);
+            });
+            
+            tagFilter.addEventListener('change', applyFilters);
+        }
+        
+        function setupSearch() {
+            const searchInput = document.getElementById('search-input');
+            searchInput.addEventListener('input', applyFilters);
+        }
+        
+        function applyFilters() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const selectedTag = document.getElementById('tag-filter').value;
+            
+            filteredVideos = allVideos.filter(video => {
+                const matchesSearch = !searchTerm || 
+                    video.title.toLowerCase().includes(searchTerm) || 
+                    video.filename.toLowerCase().includes(searchTerm);
+                
+                const matchesTag = !selectedTag || video.tags.includes(selectedTag);
+                
+                return matchesSearch && matchesTag;
+            });
+            
+            displayVideos(filteredVideos);
+        }
+        
+        function displayVideos(videos) {
+            const container = document.getElementById('videos-container');
+            container.innerHTML = '';
+            
+            for (const video of videos) {
+                const baseName = video.filename.replace('.mp4', '');
+                const videoUrl = `${BUCKET_URL}/videos/${video.filename}`;
+                const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb_2.jpg`;
+                const fallbackThumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
+                
+                createVideoCard(container, video.title, videoUrl, thumbnailUrl, fallbackThumbnailUrl);
+            }
+        }
+        
+        function clearFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('tag-filter').value = '';
+            applyFilters();
         }
         
         function logout() {

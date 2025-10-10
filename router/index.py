@@ -1,6 +1,10 @@
 import json
 import boto3
 import os
+from datetime import datetime
+
+sns_client = boto3.client('sns')
+SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:371751795928:video-download-notifications'
 
 def lambda_handler(event, context):
     try:
@@ -36,6 +40,21 @@ def lambda_handler(event, context):
                 'headers': {'Access-Control-Allow-Origin': '*'},
                 'body': json.dumps({'error': 'Missing url parameter'})
             }
+        
+        # Send initiation notification
+        try:
+            sns_client.publish(
+                TopicArn=SNS_TOPIC_ARN,
+                Subject="🚀 Video Download Started",
+                Message=f"A new video download has been initiated.\n\n"
+                       f"URL: {url}\n"
+                       f"Output: {body.get('output_name', 'video.mp4')}\n"
+                       f"Title: {body.get('title', 'Not specified')}\n"
+                       f"Tags: {', '.join(body.get('tags', [])) or 'None'}\n"
+                       f"Started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}"
+            )
+        except Exception as e:
+            print(f"Failed to send initiation notification: {e}")
         
         # Just invoke the downloader Lambda directly
         lambda_client = boto3.client('lambda')

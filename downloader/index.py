@@ -6,6 +6,21 @@ from datetime import datetime
 
 s3_client = boto3.client('s3')
 dynamodb = boto3.resource('dynamodb')
+sns_client = boto3.client('sns')
+
+SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:371751795928:video-download-notifications'
+
+def send_notification(subject, message):
+    """Send SNS notification"""
+    try:
+        sns_client.publish(
+            TopicArn=SNS_TOPIC_ARN,
+            Subject=subject,
+            Message=message
+        )
+        print(f"SNS notification sent: {subject}")
+    except Exception as e:
+        print(f"Failed to send SNS notification: {e}")
 
 def generate_thumbnails(video_path, output_name, bucket):
     """Generate thumbnails at 10%, 50%, 90% of video duration"""
@@ -166,6 +181,17 @@ def lambda_handler(event, context):
         
         print(f"Successfully uploaded to s3://{bucket}/{video_key}")
         
+        # Send success notification
+        send_notification(
+            "✅ Video Download Successful",
+            f"Video '{title or output_name}' has been successfully downloaded and uploaded.\n\n"
+            f"Filename: {output_name}\n"
+            f"URL: {url}\n"
+            f"S3 Location: s3://{bucket}/{video_key}\n"
+            f"Tags: {', '.join(tags) if tags else 'None'}\n"
+            f"Completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}"
+        )
+        
         # Save metadata to DynamoDB
         try:
             table = dynamodb.Table('video-metadata')
@@ -210,12 +236,28 @@ def lambda_handler(event, context):
         
     except subprocess.TimeoutExpired:
         print("Lambda timeout approaching, download took too long")
+        send_notification(
+            "⏰ Video Download Taking Too Long",
+            f"Video download is taking longer than expected and may have timed out.\n\n"
+            f"URL: {event.get('url', 'Unknown')}\n"
+            f"Output: {event.get('output_name', 'Unknown')}\n"
+            f"This may require manual intervention or using Fargate for longer videos.\n"
+            f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}"
+        )
         return {
             'statusCode': 408,
             'body': json.dumps({'error': 'Download timeout'})
         }
     except Exception as e:
         print(f"Error: {e}")
+        send_notification(
+            "❌ Video Download Failed",
+            f"Video download has failed with an error.\n\n"
+            f"URL: {event.get('url', 'Unknown')}\n"
+            f"Output: {event.get('output_name', 'Unknown')}\n"
+            f"Error: {str(e)}\n"
+            f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}"
+        )
         return {
             'statusCode': 500,
             'body': json.dumps({'error': str(e)})
