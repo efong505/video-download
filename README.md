@@ -350,6 +350,13 @@ S3 Bucket (my-video-downloads-bucket):
 
 ## 🔧 Recent Updates (Latest)
 
+### Adaptive Thumbnail Generation Fix ✅
+- **Smart Duration Detection**: Uses ffprobe to detect video length before thumbnail generation
+- **Adaptive Timing**: Calculates optimal timestamp (50% of duration, 1-10 second range)
+- **Short Video Support**: Fixes thumbnail generation for videos shorter than 10 seconds
+- **Fallback System**: Uses 3-second fallback if duration detection fails
+- **Prevents 404 Errors**: Eliminates timestamp-beyond-duration failures
+
 ### Download Status Tracking System ✅
 - **Real-time Job Monitoring**: Complete download status tracking with DynamoDB job storage
 - **Status Dashboard**: Dedicated download status page with auto-refresh every 10 seconds
@@ -393,7 +400,8 @@ S3 Bucket (my-video-downloads-bucket):
 ### Current System Status
 - ✅ Download Status Tracking: Real-time job monitoring with 24-hour history
 - ✅ Download from URL: Working with custom titles and SNS notifications
-- ✅ Upload from local file: Working with automatic thumbnail generation
+- ✅ Upload from local file: Working with adaptive thumbnail generation
+- ✅ Thumbnail Generation: Adaptive timing based on video duration (fixed for short videos)
 - ✅ Search & Filter: Real-time search and tag filtering on all pages
 - ✅ Email Notifications: SNS alerts for all download events
 - ✅ Password Management: Admin reset and user self-service password change
