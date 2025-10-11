@@ -70,14 +70,27 @@ def process_video(bucket, filename):
     os.remove(video_path)
 
 def generate_thumbnails(video_path, output_name, bucket):
-    """Generate thumbnail at 10 seconds"""
+    """Generate thumbnail with adaptive timing"""
     try:
         base_name = output_name.rsplit('.', 1)[0]
         thumb_name = f"{base_name}_thumb_2.jpg"
         thumb_path = f"/tmp/{thumb_name}"
         
-        # Extract frame at 10 seconds
-        cmd = ['ffmpeg', '-ss', '10', '-i', video_path, '-vframes', '1', '-q:v', '2', '-y', thumb_path]
+        # Get video duration
+        duration_cmd = ['ffprobe', '-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', video_path]
+        duration_result = subprocess.run(duration_cmd, capture_output=True, text=True, timeout=30)
+        
+        if duration_result.returncode == 0:
+            duration = float(duration_result.stdout.strip())
+            # Use 50% of duration, but at least 1 second and max 10 seconds
+            timestamp = max(1, min(10, duration * 0.5))
+            print(f"Video duration: {duration}s, using timestamp: {timestamp}s")
+        else:
+            timestamp = 3  # Fallback
+            print("Could not determine duration, using 3s")
+        
+        # Extract frame at calculated timestamp
+        cmd = ['ffmpeg', '-ss', str(timestamp), '-i', video_path, '-vframes', '1', '-q:v', '2', '-y', thumb_path]
         result = subprocess.run(cmd, capture_output=True, timeout=60)
         
         if result.returncode == 0:
