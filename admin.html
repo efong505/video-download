@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Video Downloader</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header h1 { display: inline-block; }
+        .user-info {
+            float: right;
+            margin-top: 5px;
+        }
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 0 20px;
+        }
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
+        .tab.active {
+            border-bottom-color: #667eea;
+            background: #f8f9ff;
+        }
+        .tab-content {
+            background: white;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            min-height: 500px;
+        }
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-number { font-size: 2em; font-weight: bold; }
+        .stat-label { opacity: 0.9; margin-top: 5px; }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .data-table th, .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        .data-table tr:hover {
+            background: #f8f9ff;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 2px;
+        }
+        .btn-primary { background: #667eea; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-warning { background: #ffc107; color: #212529; }
+        .btn:hover { opacity: 0.9; }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+        }
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+        }
+        .close {
+            float: right;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Admin Dashboard</h1>
+        <div class="user-info">
+            <span id="admin-email">Loading...</span>
+            <a href="videos.html" style="color: white; text-decoration: none; margin-right: 10px; padding: 8px 16px; background: rgba(255,255,255,0.2); border-radius: 4px;">Videos</a>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+        <div style="clear: both;"></div>
+    </div>
+
+    <div class="container">
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('overview')">Overview</div>
+            <div class="tab" onclick="showTab('users')">Users</div>
+            <div class="tab" onclick="showTab('videos')">Videos</div>
+            <div class="tab" onclick="showTab('tags')">Tags</div>
+        </div>
+
+        <div class="tab-content">
+            <!-- Overview Tab -->
+            <div id="overview" class="tab-pane active">
+                <h2>System Overview</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-users">-</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-videos">-</div>
+                        <div class="stat-label">Total Videos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-tags">-</div>
+                        <div class="stat-label">Total Tags</div>
+                    </div>
+                </div>
+                <div id="overview-message"></div>
+            </div>
+
+            <!-- Users Tab -->
+            <div id="users" class="tab-pane">
+                <h2>User Management</h2>
+                <button class="btn btn-primary" onclick="showCreateUserModal()" style="margin-bottom: 20px;">Create New User</button>
+                <div id="users-message"></div>
+                <div id="users-loading" class="loading">Loading users...</div>
+                <table id="users-table" class="data-table" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Created</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-tbody"></tbody>
+                </table>
+            </div>
+
+            <!-- Videos Tab -->
+            <div id="videos" class="tab-pane">
+                <h2>Video Management</h2>
+                <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="showUploadModal()">📁 Upload Video</button>
+                    <button class="btn btn-primary" onclick="showDownloadModal()">⬇️ Download from URL</button>
+                    <a href="download-status.html" class="btn" style="background: #28a745; color: white; text-decoration: none;">📊 Download Status</a>
+                </div>
+                
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none;" id="admin-search-filter">
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <input type="text" id="admin-search-input" placeholder="Search videos..." style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div style="min-width: 150px;">
+                            <select id="admin-tag-filter" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <option value="">All Tags</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="clearAdminFilters()" style="background: #6c757d; color: white;">Clear</button>
+                    </div>
+                </div>
+                <div id="videos-message"></div>
+                <div id="videos-loading" class="loading">Loading videos...</div>
+                <table id="videos-table" class="data-table" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Filename</th>
+                            <th>Title</th>
+                            <th>Size</th>
+                            <th>Tags</th>
+                            <th>Modified</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="videos-tbody"></tbody>
+                </table>
+            </div>
+
+            <!-- Tags Tab -->
+            <div id="tags" class="tab-pane">
+                <h2>Tag Management</h2>
+                <div id="tags-message"></div>
+                <div id="tags-loading" class="loading">Loading tags...</div>
+                <div id="tags-container" style="display: none;">
+                    <div style="margin-bottom: 20px;">
+                        <input type="text" id="new-tag-name" placeholder="New tag name" style="padding: 8px; margin-right: 10px;">
+                        <button class="btn btn-primary" onclick="createTag()">Create Tag</button>
+                    </div>
+                    <table id="tags-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Tag Name</th>
+                                <th>Video Count</th>
+                                <th>Videos Using This Tag</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tags-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div id="edit-user-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('edit-user-modal')">&times;</span>
+            <h3>Edit User Role</h3>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="text" id="edit-user-email" readonly>
+            </div>
+            <div class="form-group">
+                <label>Role:</label>
+                <select id="edit-user-role">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                    <option value="super_user">Super User</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="updateUserRole()">Update Role</button>
+        </div>
+    </div>
+
+    <!-- Edit Video Modal -->
+    <div id="edit-video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('edit-video-modal')">&times;</span>
+            <h3>Edit Video</h3>
+            <div class="form-group">
+                <label>Filename:</label>
+                <input type="text" id="edit-video-filename" readonly>
+            </div>
+            <div class="form-group">
+                <label>Title:</label>
+                <input type="text" id="edit-video-title">
+            </div>
+            <div class="form-group">
+                <label>Tags (comma-separated):</label>
+                <input type="text" id="edit-video-tags" placeholder="news, politics, 2024" autocomplete="off">
+                <div id="edit-tag-suggestions" style="display: none; border: 1px solid #ddd; max-height: 150px; overflow-y: auto; background: white; position: absolute; z-index: 1000; width: calc(100% - 40px);"></div>
+            </div>
+            <button class="btn btn-primary" onclick="updateVideo()">Update Video</button>
+        </div>
+    </div>
+
+    <!-- Create User Modal -->
+    <div id="create-user-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('create-user-modal')">&times;</span>
+            <h3>Create New User</h3>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="create-user-email" placeholder="user@example.com">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="create-user-password" placeholder="Enter secure password">
+            </div>
+            <div class="form-group">
+                <label>Role:</label>
+                <select id="create-user-role">
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                    <option value="super_user">Super User</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="createUser()">Create User</button>
+        </div>
+    </div>
+
+    <!-- Reset Password Modal -->
+    <div id="reset-password-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('reset-password-modal')">&times;</span>
+            <h3>Reset User Password</h3>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="text" id="reset-password-email" readonly>
+            </div>
+            <div class="form-group">
+                <label>New Password:</label>
+                <input type="password" id="reset-password-new" placeholder="Enter new password">
+            </div>
+            <button class="btn btn-primary" onclick="updateUserPassword()">Reset Password</button>
+        </div>
+    </div>
+
+    <!-- Edit Tag Videos Modal -->
+    <div id="edit-tag-videos-modal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span class="close" onclick="closeModal('edit-tag-videos-modal')">&times;</span>
+            <h3 id="edit-tag-videos-title">Edit Videos for Tag</h3>
+            <div style="margin-bottom: 20px;">
+                <p>Select which videos should have this tag:</p>
+            </div>
+            <div id="tag-videos-list" style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
+                <!-- Video checkboxes will be populated here -->
+            </div>
+            <div style="margin-top: 20px;">
+                <button class="btn btn-primary" onclick="saveTagVideoAssociations()">Save Changes</button>
+                <button class="btn" onclick="closeModal('edit-tag-videos-modal')" style="margin-left: 10px;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Video Modal -->
+    <div id="upload-video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('upload-video-modal')">&times;</span>
+            <h3>Upload Video</h3>
+            <div class="form-group">
+                <label>Select Video File:</label>
+                <input type="file" id="upload-video-file" accept="video/*">
+                <small style="color: #666; font-size: 12px;">File will be uploaded to S3 with thumbnail generation</small>
+            </div>
+            <div class="form-group">
+                <label>Title:</label>
+                <input type="text" id="upload-video-title" placeholder="Video title">
+            </div>
+            <div class="form-group">
+                <label>Tags (comma-separated):</label>
+                <input type="text" id="upload-video-tags" placeholder="news, politics, 2024" autocomplete="off">
+                <div id="upload-tag-suggestions" style="display: none; border: 1px solid #ddd; max-height: 150px; overflow-y: auto; background: white; position: absolute; z-index: 1000; width: calc(100% - 40px);"></div>
+            </div>
+            <div id="upload-progress" style="display: none;">
+                <div style="background: #f0f0f0; border-radius: 10px; overflow: hidden; margin: 10px 0;">
+                    <div id="upload-progress-bar" style="background: #667eea; height: 20px; width: 0%; transition: width 0.3s;"></div>
+                </div>
+                <div id="upload-status">Preparing upload...</div>
+            </div>
+            <button class="btn btn-primary" onclick="uploadVideo()" id="upload-btn">Upload Video</button>
+        </div>
+    </div>
+
+    <!-- Download Video Modal -->
+    <div id="download-video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('download-video-modal')">&times;</span>
+            <h3>Download Video from URL</h3>
+            <div class="form-group">
+                <label>Video URL:</label>
+                <input type="url" id="download-video-url" placeholder="https://youtube.com/watch?v=...">
+            </div>
+            <div class="form-group">
+                <label>Output Filename:</label>
+                <input type="text" id="download-video-filename" placeholder="my-video.mp4">
+            </div>
+            <div class="form-group">
+                <label>Title:</label>
+                <input type="text" id="download-video-title" placeholder="Video title">
+            </div>
+            <div class="form-group">
+                <label>Tags (comma-separated):</label>
+                <input type="text" id="download-video-tags" placeholder="news, politics, 2024" autocomplete="off">
+                <div id="download-tag-suggestions" style="display: none; border: 1px solid #ddd; max-height: 150px; overflow-y: auto; background: white; position: absolute; z-index: 1000; width: calc(100% - 40px);"></div>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="download-force-fargate"> Force Fargate (for long videos)
+                </label>
+            </div>
+            <button class="btn btn-primary" onclick="startDownload()">Start Download</button>
+        </div>
+    </div>
+
+    <!-- View Video Modal -->
+    <div id="view-video-modal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span class="close" onclick="closeModal('view-video-modal')">&times;</span>
+            <h3 id="view-video-title">Video Title</h3>
+            <video id="view-video-player" controls style="width: 100%; max-height: 400px; background: #000;">
+                <source id="view-video-source" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
+        const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
+        const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
+        
+        let currentUser = null;
+        let authToken = null;
+        let allTags = [];
+        let allAdminVideos = [];
+        let filteredAdminVideos = [];
+
+        // Initialize dashboard
+        window.addEventListener('load', function() {
+            authToken = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+            
+            if (!authToken || !userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(userData);
+            
+            if (currentUser.role !== 'admin' && currentUser.role !== 'super_user') {
+                alert('Admin access required');
+                window.location.href = 'videos.html';
+                return;
+            }
+            
+            document.getElementById('admin-email').textContent = currentUser.email;
+            loadAllTags();
+            loadOverview();
+        });
+
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+            
+            // Show selected tab
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            // Load data for tab
+            if (tabName === 'users') loadUsers();
+            if (tabName === 'videos') loadVideos();
+            if (tabName === 'tags') loadTags();
+            if (tabName === 'overview') loadOverview();
+        }
+
+        async function loadOverview() {
+            try {
+                const [usersRes, videosRes, tagsRes] = await Promise.all([
+                    fetch(`${ADMIN_API}?action=users`, {
+                        headers: { 'Authorization': `Bearer ${authToken}` }
+                    }),
+                    fetch(`${ADMIN_API}?action=videos`, {
+                        headers: { 'Authorization': `Bearer ${authToken}` }
+                    }),
+                    fetch(`${TAG_API}?action=get_all_tags`)
+                ]);
+
+                const users = await usersRes.json();
+                const videos = await videosRes.json();
+                const tags = await tagsRes.json();
+
+                document.getElementById('total-users').textContent = users.count || 0;
+                document.getElementById('total-videos').textContent = videos.count || 0;
+                document.getElementById('total-tags').textContent = tags.count || 0;
+                
+                document.getElementById('overview-message').innerHTML = 
+                    '<div class="success">System overview loaded successfully</div>';
+            } catch (error) {
+                document.getElementById('overview-message').innerHTML = 
+                    '<div class="error">Failed to load overview data</div>';
+            }
+        }
+
+        async function loadUsers() {
+            document.getElementById('users-loading').style.display = 'block';
+            document.getElementById('users-table').style.display = 'none';
+            
+            try {
+                const response = await fetch(`${ADMIN_API}?action=users`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayUsers(data.users);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('users-message').innerHTML = 
+                    `<div class="error">Failed to load users: ${error.message}</div>`;
+            } finally {
+                document.getElementById('users-loading').style.display = 'none';
+            }
+        }
+
+        function displayUsers(users) {
+            const tbody = document.getElementById('users-tbody');
+            tbody.innerHTML = '';
+            
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${user.email}</td>
+                    <td><span class="badge ${user.role === 'admin' ? 'badge-primary' : 'badge-secondary'}">${user.role}</span></td>
+                    <td>${new Date(user.created_at).toLocaleDateString()}</td>
+                    <td>${user.active ? 'Active' : 'Inactive'}</td>
+                    <td>
+                        <button class="btn btn-warning" onclick="editUser('${user.user_id}', '${user.email}', '${user.role}')">Edit Role</button>
+                        <button class="btn btn-primary" onclick="resetUserPassword('${user.user_id}', '${user.email}')">Reset Password</button>
+                        <button class="btn btn-danger" onclick="deleteUser('${user.user_id}', '${user.email}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            document.getElementById('users-table').style.display = 'table';
+        }
+
+        async function loadVideos() {
+            document.getElementById('videos-loading').style.display = 'block';
+            document.getElementById('videos-table').style.display = 'none';
+            
+            try {
+                const response = await fetch(`${ADMIN_API}?action=videos`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayVideos(data.videos);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('videos-message').innerHTML = 
+                    `<div class="error">Failed to load videos: ${error.message}</div>`;
+            } finally {
+                document.getElementById('videos-loading').style.display = 'none';
+            }
+        }
+
+        function displayVideos(videos) {
+            allAdminVideos = videos;
+            filteredAdminVideos = [...videos];
+            
+            // Setup admin filters
+            setupAdminFilters();
+            
+            renderAdminVideos(filteredAdminVideos);
+            document.getElementById('videos-table').style.display = 'table';
+            document.getElementById('admin-search-filter').style.display = 'block';
+        }
+        
+        function renderAdminVideos(videos) {
+            const tbody = document.getElementById('videos-tbody');
+            tbody.innerHTML = '';
+            
+            videos.forEach(video => {
+                const row = document.createElement('tr');
+                const sizeInMB = (video.size / (1024 * 1024)).toFixed(1);
+                const tags = video.tags.length > 0 ? video.tags.join(', ') : 'No tags';
+                
+                row.innerHTML = `
+                    <td>${video.filename}</td>
+                    <td>${video.title}</td>
+                    <td>${sizeInMB} MB</td>
+                    <td>${tags}</td>
+                    <td>${new Date(video.last_modified).toLocaleDateString()}</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="viewVideo('${video.filename}', '${video.title}')" style="margin-right: 5px; font-size: 12px;">👁️ View</button>
+                        <button class="btn btn-warning" onclick="editVideo('${video.filename}', '${video.title}', '${video.tags.join(',')}')" style="margin-right: 5px; font-size: 12px;">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteVideo('${video.filename}')" style="font-size: 12px;">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        function setupAdminFilters() {
+            const searchInput = document.getElementById('admin-search-input');
+            const tagFilter = document.getElementById('admin-tag-filter');
+            
+            // Setup tag filter
+            tagFilter.innerHTML = '<option value="">All Tags</option>';
+            const uniqueTags = new Set();
+            allAdminVideos.forEach(video => {
+                video.tags.forEach(tag => uniqueTags.add(tag));
+            });
+            
+            Array.from(uniqueTags).sort().forEach(tag => {
+                const option = document.createElement('option');
+                option.value = tag;
+                option.textContent = tag;
+                tagFilter.appendChild(option);
+            });
+            
+            // Add event listeners
+            searchInput.addEventListener('input', applyAdminFilters);
+            tagFilter.addEventListener('change', applyAdminFilters);
+        }
+        
+        function applyAdminFilters() {
+            const searchTerm = document.getElementById('admin-search-input').value.toLowerCase();
+            const selectedTag = document.getElementById('admin-tag-filter').value;
+            
+            filteredAdminVideos = allAdminVideos.filter(video => {
+                const matchesSearch = !searchTerm || 
+                    video.title.toLowerCase().includes(searchTerm) || 
+                    video.filename.toLowerCase().includes(searchTerm);
+                
+                const matchesTag = !selectedTag || video.tags.includes(selectedTag);
+                
+                return matchesSearch && matchesTag;
+            });
+            
+            renderAdminVideos(filteredAdminVideos);
+        }
+        
+        function clearAdminFilters() {
+            document.getElementById('admin-search-input').value = '';
+            document.getElementById('admin-tag-filter').value = '';
+            applyAdminFilters();
+        }
+
+        function editUser(userId, email, role) {
+            document.getElementById('edit-user-email').value = email;
+            document.getElementById('edit-user-role').value = role;
+            document.getElementById('edit-user-modal').dataset.userId = userId;
+            document.getElementById('edit-user-modal').style.display = 'block';
+        }
+
+        async function updateUserRole() {
+            const userId = document.getElementById('edit-user-modal').dataset.userId;
+            const newRole = document.getElementById('edit-user-role').value;
+            
+            try {
+                const response = await fetch(`${ADMIN_API}?action=user_role`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        role: newRole
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('users-message').innerHTML = 
+                        '<div class="success">User role updated successfully</div>';
+                    closeModal('edit-user-modal');
+                    loadUsers();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('users-message').innerHTML = 
+                    `<div class="error">Failed to update user role: ${error.message}</div>`;
+            }
+        }
+
+        async function deleteUser(userId, email) {
+            if (!confirm(`Are you sure you want to delete user: ${email}?`)) return;
+            
+            try {
+                const response = await fetch(`${ADMIN_API}?action=user&user_id=${userId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('users-message').innerHTML = 
+                        '<div class="success">User deleted successfully</div>';
+                    loadUsers();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('users-message').innerHTML = 
+                    `<div class="error">Failed to delete user: ${error.message}</div>`;
+            }
+        }
+
+        async function deleteVideo(filename) {
+            if (!confirm(`Are you sure you want to delete video: ${filename}?`)) return;
+            
+            try {
+                // Build URL manually to avoid encoding issues
+                const deleteUrl = `${ADMIN_API}?action=video&filename=${encodeURIComponent(filename)}`;
+                console.log('Delete URL:', deleteUrl);
+                
+                const response = await fetch(deleteUrl, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                console.log('Response status:', response.status);
+                const responseText = await response.text();
+                console.log('Response text:', responseText);
+                
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    data = { error: responseText };
+                }
+                
+                if (response.ok) {
+                    document.getElementById('videos-message').innerHTML = 
+                        '<div class="success">Video deleted successfully</div>';
+                    loadVideos();
+                    loadOverview(); // Refresh stats
+                } else {
+                    throw new Error(data.error || `HTTP ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Delete error:', error);
+                document.getElementById('videos-message').innerHTML = 
+                    `<div class="error">Failed to delete video: ${error.message}</div>`;
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showCreateUserModal() {
+            document.getElementById('create-user-email').value = '';
+            document.getElementById('create-user-password').value = '';
+            document.getElementById('create-user-role').value = 'user';
+            document.getElementById('create-user-modal').style.display = 'block';
+        }
+
+        async function createUser() {
+            const email = document.getElementById('create-user-email').value;
+            const password = document.getElementById('create-user-password').value;
+            const role = document.getElementById('create-user-role').value;
+            
+            if (!email || !password) {
+                document.getElementById('users-message').innerHTML = 
+                    '<div class="error">Please fill in all fields</div>';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${AUTH_API}?action=register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        email: email,
+                        password: password,
+                        role: role
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('users-message').innerHTML = 
+                        '<div class="success">User created successfully</div>';
+                    closeModal('create-user-modal');
+                    loadUsers();
+                } else {
+                    throw new Error(data.error || 'Failed to create user');
+                }
+            } catch (error) {
+                document.getElementById('users-message').innerHTML = 
+                    `<div class="error">Failed to create user: ${error.message}</div>`;
+            }
+        }
+
+        function showUploadModal() {
+            document.getElementById('upload-video-file').value = '';
+            document.getElementById('upload-video-title').value = '';
+            document.getElementById('upload-video-tags').value = '';
+            document.getElementById('upload-progress').style.display = 'none';
+            document.getElementById('upload-video-modal').style.display = 'block';
+            setupTagAutocomplete('upload-video-tags', 'upload-tag-suggestions');
+        }
+
+        function showDownloadModal() {
+            document.getElementById('download-video-url').value = '';
+            document.getElementById('download-video-filename').value = '';
+            document.getElementById('download-video-title').value = '';
+            document.getElementById('download-video-tags').value = '';
+            document.getElementById('download-force-fargate').checked = false;
+            document.getElementById('download-video-modal').style.display = 'block';
+            setupTagAutocomplete('download-video-tags', 'download-tag-suggestions');
+        }
+
+        function viewVideo(filename, title) {
+            const videoUrl = `https://d271vky579caz9.cloudfront.net/videos/${filename}`;
+            const player = document.getElementById('view-video-player');
+            const source = document.getElementById('view-video-source');
+            
+            document.getElementById('view-video-title').textContent = title;
+            
+            // Clear any existing sources and force reload
+            player.pause();
+            source.src = '';
+            player.load();
+            
+            // Set CloudFront URL
+            source.src = videoUrl;
+            player.load();
+            
+            document.getElementById('view-video-modal').style.display = 'block';
+        }
+
+        async function uploadVideo() {
+            const fileInput = document.getElementById('upload-video-file');
+            const title = document.getElementById('upload-video-title').value;
+            const tags = document.getElementById('upload-video-tags').value.split(',').map(t => t.trim()).filter(t => t);
+            
+            if (!fileInput.files[0]) {
+                document.getElementById('videos-message').innerHTML = 
+                    '<div class="error">Please select a video file</div>';
+                return;
+            }
+            
+            const file = fileInput.files[0];
+            const filename = file.name;
+            
+            document.getElementById('upload-progress').style.display = 'block';
+            document.getElementById('upload-btn').disabled = true;
+            document.getElementById('upload-status').textContent = 'Getting upload URL...';
+            
+            try {
+                // Get presigned URL from admin API
+                const urlResponse = await fetch(`${ADMIN_API}?action=upload_url`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ filename: filename })
+                });
+                
+                const urlData = await urlResponse.json();
+                if (!urlResponse.ok) throw new Error(urlData.error);
+                
+                document.getElementById('upload-progress-bar').style.width = '20%';
+                document.getElementById('upload-status').textContent = 'Uploading to S3...';
+                
+                // Upload file to S3
+                const uploadResponse = await fetch(urlData.upload_url, {
+                    method: 'PUT',
+                    body: file,
+                    headers: { 'Content-Type': file.type }
+                });
+                
+                if (!uploadResponse.ok) throw new Error('S3 upload failed');
+                
+                document.getElementById('upload-progress-bar').style.width = '70%';
+                document.getElementById('upload-status').textContent = 'Adding metadata...';
+                
+                // Add video metadata
+                await fetch(`${TAG_API}?action=add_video`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        video_id: filename,
+                        filename: filename,
+                        title: title || filename,
+                        tags: tags
+                    })
+                });
+                
+                document.getElementById('upload-progress-bar').style.width = '90%';
+                document.getElementById('upload-status').textContent = 'Generating thumbnail...';
+                
+                // Manually trigger thumbnail generation
+                try {
+                    await fetch(`${ADMIN_API}?action=generate_thumbnail`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ filename: filename })
+                    });
+                } catch (error) {
+                    console.log('Thumbnail generation failed:', error);
+                }
+                
+                document.getElementById('upload-progress-bar').style.width = '100%';
+                document.getElementById('upload-status').textContent = 'Upload complete! Thumbnails will be generated shortly.';
+                
+                setTimeout(() => {
+                    document.getElementById('videos-message').innerHTML = 
+                        '<div class="success">Video uploaded successfully!</div>';
+                    closeModal('upload-video-modal');
+                    loadVideos();
+                }, 1000);
+            } catch (error) {
+                document.getElementById('videos-message').innerHTML = 
+                    `<div class="error">Upload failed: ${error.message}</div>`;
+            } finally {
+                document.getElementById('upload-btn').disabled = false;
+            }
+        }
+
+        async function startDownload() {
+            const url = document.getElementById('download-video-url').value;
+            const filename = document.getElementById('download-video-filename').value;
+            const title = document.getElementById('download-video-title').value;
+            const tags = document.getElementById('download-video-tags').value.split(',').map(t => t.trim()).filter(t => t);
+            const forceFargate = document.getElementById('download-force-fargate').checked;
+            
+            if (!url || !filename) {
+                document.getElementById('videos-message').innerHTML = 
+                    '<div class="error">Please fill in URL and filename</div>';
+                return;
+            }
+            
+            try {
+                const response = await fetch('https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/download', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        url: url,
+                        output_name: filename,
+                        title: title,
+                        force_fargate: forceFargate,
+                        tags: tags
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('videos-message').innerHTML = 
+                        '<div class="success">Download started! Check the Download Status page for progress.</div>';
+                    closeModal('download-video-modal');
+                } else {
+                    throw new Error(data.error || 'Download failed');
+                }
+            } catch (error) {
+                document.getElementById('videos-message').innerHTML = 
+                    `<div class="error">Failed to start download: ${error.message}</div>`;
+            }
+        }
+
+        function editVideo(filename, title, tags) {
+            document.getElementById('edit-video-filename').value = filename;
+            document.getElementById('edit-video-title').value = title;
+            document.getElementById('edit-video-tags').value = tags;
+            document.getElementById('edit-video-modal').style.display = 'block';
+            setupTagAutocomplete('edit-video-tags', 'edit-tag-suggestions');
+        }
+
+        async function updateVideo() {
+            const filename = document.getElementById('edit-video-filename').value;
+            const title = document.getElementById('edit-video-title').value;
+            const tagsStr = document.getElementById('edit-video-tags').value;
+            const tags = tagsStr.split(',').map(tag => tag.trim()).filter(tag => tag);
+            
+            try {
+                const response = await fetch(`${TAG_API}?action=add_video`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        video_id: filename,
+                        filename: filename,
+                        title: title,
+                        tags: tags
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('videos-message').innerHTML = 
+                        '<div class="success">Video updated successfully</div>';
+                    closeModal('edit-video-modal');
+                    loadVideos();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('videos-message').innerHTML = 
+                    `<div class="error">Failed to update video: ${error.message}</div>`;
+            }
+        }
+
+        function resetUserPassword(userId, email) {
+            document.getElementById('reset-password-email').value = email;
+            document.getElementById('reset-password-new').value = '';
+            document.getElementById('reset-password-modal').dataset.userId = userId;
+            document.getElementById('reset-password-modal').style.display = 'block';
+        }
+
+        async function updateUserPassword() {
+            const userId = document.getElementById('reset-password-modal').dataset.userId;
+            const newPassword = document.getElementById('reset-password-new').value;
+            
+            if (!newPassword) {
+                document.getElementById('users-message').innerHTML = 
+                    '<div class="error">Please enter a new password</div>';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${ADMIN_API}?action=reset_password`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        new_password: newPassword
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('users-message').innerHTML = 
+                        '<div class="success">Password reset successfully</div>';
+                    closeModal('reset-password-modal');
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('users-message').innerHTML = 
+                    `<div class="error">Failed to reset password: ${error.message}</div>`;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
+
+        async function loadAllTags() {
+            try {
+                const response = await fetch(`${TAG_API}?action=get_all_tags`);
+                const data = await response.json();
+                allTags = data.tags || [];
+            } catch (error) {
+                console.log('Error loading tags:', error);
+            }
+        }
+
+        function setupTagAutocomplete(inputId, suggestionsId) {
+            const input = document.getElementById(inputId);
+            const suggestions = document.getElementById(suggestionsId);
+            
+            input.addEventListener('input', function() {
+                const value = this.value;
+                const lastComma = value.lastIndexOf(',');
+                const currentTag = value.substring(lastComma + 1).trim().toLowerCase();
+                
+                if (currentTag.length < 2) {
+                    suggestions.style.display = 'none';
+                    return;
+                }
+                
+                const matches = allTags.filter(tag => 
+                    tag.toLowerCase().includes(currentTag) && 
+                    !value.toLowerCase().includes(tag.toLowerCase())
+                );
+                
+                if (matches.length > 0) {
+                    suggestions.innerHTML = matches.map(tag => 
+                        `<div style="padding: 8px; cursor: pointer; border-bottom: 1px solid #eee;" onclick="selectTag('${inputId}', '${tag}')">${tag}</div>`
+                    ).join('');
+                    suggestions.style.display = 'block';
+                } else {
+                    suggestions.style.display = 'none';
+                }
+            });
+            
+            input.addEventListener('blur', function() {
+                setTimeout(() => suggestions.style.display = 'none', 200);
+            });
+        }
+
+        function selectTag(inputId, tag) {
+            const input = document.getElementById(inputId);
+            const value = input.value;
+            const lastComma = value.lastIndexOf(',');
+            
+            if (lastComma >= 0) {
+                input.value = value.substring(0, lastComma + 1) + ' ' + tag + ', ';
+            } else {
+                input.value = tag + ', ';
+            }
+            
+            input.focus();
+        }
+
+        async function loadTags() {
+            document.getElementById('tags-loading').style.display = 'block';
+            document.getElementById('tags-container').style.display = 'none';
+            
+            try {
+                // Get all tags and videos
+                const [tagsRes, videosRes] = await Promise.all([
+                    fetch(`${TAG_API}?action=get_all_tags`),
+                    fetch(`${ADMIN_API}?action=videos`, {
+                        headers: { 'Authorization': `Bearer ${authToken}` }
+                    })
+                ]);
+                
+                const tagsData = await tagsRes.json();
+                const videosData = await videosRes.json();
+                
+                if (tagsRes.ok && videosRes.ok) {
+                    displayTagsWithVideos(tagsData.tags || [], videosData.videos || []);
+                } else {
+                    throw new Error('Failed to load tag data');
+                }
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="error">Failed to load tags: ${error.message}</div>`;
+            } finally {
+                document.getElementById('tags-loading').style.display = 'none';
+            }
+        }
+
+        function displayTagsWithVideos(tags, videos) {
+            const tbody = document.getElementById('tags-tbody');
+            tbody.innerHTML = '';
+            
+            // Create tag usage map
+            const tagUsage = {};
+            tags.forEach(tag => {
+                tagUsage[tag] = videos.filter(video => video.tags.includes(tag));
+            });
+            
+            // Display each tag
+            Object.entries(tagUsage).forEach(([tag, tagVideos]) => {
+                const row = document.createElement('tr');
+                const videoList = tagVideos.map(v => v.title || v.filename).join(', ');
+                
+                row.innerHTML = `
+                    <td><strong>${tag}</strong></td>
+                    <td>${tagVideos.length}</td>
+                    <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;" title="${videoList}">${videoList || 'No videos'}</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="editTagVideos('${tag}')" style="font-size: 12px; margin-right: 5px;">Edit Videos</button>
+                        <button class="btn btn-warning" onclick="renameTag('${tag}')" style="font-size: 12px; margin-right: 5px;">Rename</button>
+                        <button class="btn btn-danger" onclick="deleteTag('${tag}', ${tagVideos.length})" style="font-size: 12px;">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            document.getElementById('tags-container').style.display = 'block';
+        }
+
+        async function createTag() {
+            const tagName = document.getElementById('new-tag-name').value.trim();
+            if (!tagName) {
+                document.getElementById('tags-message').innerHTML = 
+                    '<div class="error">Please enter a tag name</div>';
+                return;
+            }
+            
+            // Create a dummy video entry with just the tag to add it to the system
+            try {
+                await fetch(`${TAG_API}?action=add_video`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        video_id: `_tag_placeholder_${Date.now()}`,
+                        filename: `_tag_placeholder_${Date.now()}`,
+                        title: 'Tag Placeholder',
+                        tags: [tagName]
+                    })
+                });
+                
+                document.getElementById('new-tag-name').value = '';
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="success">Tag "${tagName}" created successfully</div>`;
+                loadTags();
+                loadAllTags(); // Refresh autocomplete
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="error">Failed to create tag: ${error.message}</div>`;
+            }
+        }
+
+        async function renameTag(oldTag) {
+            const newTag = prompt(`Rename tag "${oldTag}" to:`, oldTag);
+            if (!newTag || newTag === oldTag) return;
+            
+            try {
+                // Get all videos with this tag
+                const response = await fetch(`${TAG_API}?action=get_videos_by_tag&tag=${encodeURIComponent(oldTag)}`);
+                const data = await response.json();
+                
+                if (response.ok && data.videos) {
+                    // Update each video to replace old tag with new tag
+                    for (const video of data.videos) {
+                        const updatedTags = video.tags.map(tag => tag === oldTag ? newTag : tag);
+                        await fetch(`${TAG_API}?action=add_video`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                video_id: video.video_id,
+                                filename: video.filename,
+                                title: video.title,
+                                tags: updatedTags
+                            })
+                        });
+                    }
+                    
+                    document.getElementById('tags-message').innerHTML = 
+                        `<div class="success">Tag "${oldTag}" renamed to "${newTag}"</div>`;
+                    loadTags();
+                    loadAllTags(); // Refresh autocomplete
+                } else {
+                    throw new Error('Failed to get videos for tag');
+                }
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="error">Failed to rename tag: ${error.message}</div>`;
+            }
+        }
+
+        async function deleteTag(tag, videoCount) {
+            if (!confirm(`Are you sure you want to delete tag "${tag}"? This will remove it from ${videoCount} video(s).`)) return;
+            
+            try {
+                // Get all videos with this tag
+                const response = await fetch(`${TAG_API}?action=get_videos_by_tag&tag=${encodeURIComponent(tag)}`);
+                const data = await response.json();
+                
+                if (response.ok && data.videos) {
+                    // Update each video to remove the tag
+                    for (const video of data.videos) {
+                        const updatedTags = video.tags.filter(t => t !== tag);
+                        await fetch(`${TAG_API}?action=add_video`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                video_id: video.video_id,
+                                filename: video.filename,
+                                title: video.title,
+                                tags: updatedTags
+                            })
+                        });
+                    }
+                    
+                    document.getElementById('tags-message').innerHTML = 
+                        `<div class="success">Tag "${tag}" deleted successfully</div>`;
+                    loadTags();
+                    loadAllTags(); // Refresh autocomplete
+                } else {
+                    throw new Error('Failed to get videos for tag');
+                }
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="error">Failed to delete tag: ${error.message}</div>`;
+            }
+        }
+
+        let currentEditingTag = '';
+        let allVideosForTagEdit = [];
+
+        async function editTagVideos(tag) {
+            currentEditingTag = tag;
+            document.getElementById('edit-tag-videos-title').textContent = `Edit Videos for Tag: "${tag}"`;
+            
+            try {
+                // Get all videos
+                const response = await fetch(`${ADMIN_API}?action=videos`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const data = await response.json();
+                
+                if (response.ok && data.videos) {
+                    allVideosForTagEdit = data.videos;
+                    displayVideoCheckboxes(tag, data.videos);
+                    document.getElementById('edit-tag-videos-modal').style.display = 'block';
+                } else {
+                    throw new Error('Failed to load videos');
+                }
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="error">Failed to load videos: ${error.message}</div>`;
+            }
+        }
+
+        function displayVideoCheckboxes(tag, videos) {
+            const container = document.getElementById('tag-videos-list');
+            container.innerHTML = '';
+            
+            videos.forEach(video => {
+                const isChecked = video.tags.includes(tag);
+                const checkboxDiv = document.createElement('div');
+                checkboxDiv.style.cssText = 'margin-bottom: 10px; padding: 8px; border-bottom: 1px solid #eee;';
+                
+                checkboxDiv.innerHTML = `
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" ${isChecked ? 'checked' : ''} 
+                               data-video-id="${video.filename}" 
+                               style="margin-right: 10px;">
+                        <div>
+                            <strong>${video.title || video.filename}</strong>
+                            <br><small style="color: #666;">${video.filename}</small>
+                        </div>
+                    </label>
+                `;
+                
+                container.appendChild(checkboxDiv);
+            });
+        }
+
+        async function saveTagVideoAssociations() {
+            const checkboxes = document.querySelectorAll('#tag-videos-list input[type="checkbox"]');
+            const updates = [];
+            
+            try {
+                for (const checkbox of checkboxes) {
+                    const videoId = checkbox.dataset.videoId;
+                    const video = allVideosForTagEdit.find(v => v.filename === videoId);
+                    const isChecked = checkbox.checked;
+                    const hasTag = video.tags.includes(currentEditingTag);
+                    
+                    // Only update if there's a change
+                    if (isChecked !== hasTag) {
+                        let updatedTags;
+                        if (isChecked) {
+                            // Add tag
+                            updatedTags = [...video.tags, currentEditingTag];
+                        } else {
+                            // Remove tag
+                            updatedTags = video.tags.filter(t => t !== currentEditingTag);
+                        }
+                        
+                        updates.push({
+                            video_id: video.filename,
+                            filename: video.filename,
+                            title: video.title,
+                            tags: updatedTags
+                        });
+                    }
+                }
+                
+                // Apply all updates
+                for (const update of updates) {
+                    await fetch(`${TAG_API}?action=add_video`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(update)
+                    });
+                }
+                
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="success">Updated ${updates.length} video(s) for tag "${currentEditingTag}"</div>`;
+                closeModal('edit-tag-videos-modal');
+                loadTags();
+                
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML = 
+                    `<div class="error">Failed to update video associations: ${error.message}</div>`;
+            }
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "Records": [
+    {
+      "s3": {
+        "bucket": {
+          "name": "my-video-downloads-bucket"
+        },
+        "object": {
+          "key": "videos/funny%20armed%20forces.mp4"
+        }
+      }
+    }
+  ]
+}

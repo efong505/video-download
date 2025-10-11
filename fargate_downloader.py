@@ -1,9 +1,11 @@
 import os
 import boto3
 import subprocess
+from datetime import datetime
 from cookie_manager import get_fresh_youtube_cookies, test_cookies
 
 s3_client = boto3.client('s3')
+dynamodb = boto3.resource('dynamodb')
 
 def get_best_format(url):
     """
@@ -93,6 +95,7 @@ def main():
         url = os.environ['VIDEO_URL']
         format_id = os.environ.get('FORMAT_ID', None)
         output_name = os.environ['OUTPUT_NAME']
+        tags = os.environ.get('TAGS', '').split(',') if os.environ.get('TAGS') else []
         bucket = os.environ['S3_BUCKET']
         
         output_path = f"/tmp/{output_name}"
@@ -147,6 +150,23 @@ def main():
         )
         
         print(f"Successfully uploaded to s3://{bucket}/{video_key}")
+        
+        # Save metadata to DynamoDB
+        if tags:
+            try:
+                table = dynamodb.Table('video-metadata')
+                table.put_item(
+                    Item={
+                        'video_id': output_name,
+                        'tags': tags,
+                        'upload_date': datetime.now().isoformat(),
+                        's3_key': video_key,
+                        'url': url
+                    }
+                )
+                print(f"Saved metadata for {output_name} with tags: {tags}")
+            except Exception as e:
+                print(f"Failed to save metadata: {e}")
         
         # Generate thumbnails in thumbnails/ directory
         generate_thumbnails(output_path, output_name, bucket)

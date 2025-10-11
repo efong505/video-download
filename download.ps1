@@ -1,10 +1,11 @@
-param([string]$Url, [string]$OutputName = "video.mp4", [switch]$ForceFargate, [string]$Format = "auto")
+param([string]$Url, [string]$OutputName = "video.mp4", [switch]$ForceFargate, [string]$Format = "auto", [string[]]$Tags = @())
 
 if (-not $Url) {
-    Write-Host "Usage: .\download.ps1 'video-url' ['output-name.mp4'] [-ForceFargate] [-Format 'format-id']"
+    Write-Host "Usage: .\download.ps1 'video-url' ['output-name.mp4'] [-ForceFargate] [-Format 'format-id'] [-Tags 'tag1','tag2']"
     Write-Host "Examples:"
     Write-Host "  .\download.ps1 'video-url' 'video.mp4' -Format 'hls-2143'  # Force 720p"
     Write-Host "  .\download.ps1 'video-url' 'video.mp4' -Format 'auto'      # Auto-select best"
+    Write-Host "  .\download.ps1 'video-url' 'video.mp4' -Tags 'news','politics'  # Add tags"
     exit 1
 }
 
@@ -15,6 +16,9 @@ Write-Host "Downloading: $Url" -ForegroundColor Cyan
 $body = @{ url = $Url; format = if($Format -eq "auto") { "best" } else { $Format }; output_name = $OutputName }
 if ($ForceFargate) {
     $body.force_fargate = $true
+}
+if ($Tags.Count -gt 0) {
+    $body.tags = $Tags
 }
 $body = $body | ConvertTo-Json
 $response = Invoke-RestMethod -Uri "$API/download" -Method POST -ContentType "application/json" -Body $body
