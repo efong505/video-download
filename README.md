@@ -350,6 +350,15 @@ S3 Bucket (my-video-downloads-bucket):
 
 ## 🔧 Recent Updates (Latest)
 
+### Phase 2b Stage 1: Three-Tier User System ✅
+- **Role Hierarchy**: Super User > Admin > User with proper permission boundaries
+- **Super User Creation**: First super user account created with full system access
+- **Role Protection**: Admins cannot modify/delete super users or create new super users
+- **Enhanced APIs**: Auth and Admin APIs updated with three-tier role validation
+- **Frontend Updates**: All pages recognize super_user role for admin dashboard access
+- **Login Routing**: Super users automatically redirected to admin dashboard
+- **Role Management**: Admin dashboard includes super_user option in user creation/editing
+
 ### Adaptive Thumbnail Generation Fix ✅
 - **Smart Duration Detection**: Uses ffprobe to detect video length before thumbnail generation
 - **Adaptive Timing**: Calculates optimal timestamp (50% of duration, 1-10 second range)
@@ -398,6 +407,7 @@ S3 Bucket (my-video-downloads-bucket):
 - **Admin Dashboard**: Complete management interface for users, videos, and tags
 
 ### Current System Status
+- ✅ Three-Tier User System: Super User > Admin > User hierarchy with role protection
 - ✅ Download Status Tracking: Real-time job monitoring with 24-hour history
 - ✅ Download from URL: Working with custom titles and SNS notifications
 - ✅ Upload from local file: Working with adaptive thumbnail generation
@@ -407,7 +417,7 @@ S3 Bucket (my-video-downloads-bucket):
 - ✅ Password Management: Admin reset and user self-service password change
 - ✅ Tag Management: Complete CRUD operations with video associations
 - ✅ Custom Titles: Full support for download and upload workflows
-- ✅ User Authentication: JWT-based system with role-based access
+- ✅ User Authentication: JWT-based system with three-tier role-based access
 - ✅ Profile Management: Simplified user profile with security features
 
 ## 🐛 Troubleshooting
