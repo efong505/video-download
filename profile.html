@@ -187,8 +187,8 @@
             // Populate user info
             document.getElementById('user-email').value = currentUser.email;
             
-            // Add admin link if user is admin
-            if (currentUser.role === 'admin') {
+            // Add admin link if user is admin or super_user
+            if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
                 const navLinks = document.getElementById('nav-links');
                 const adminLink = document.createElement('a');
                 adminLink.href = 'admin.html';

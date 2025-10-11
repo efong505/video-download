@@ -310,6 +310,7 @@
                 <select id="edit-user-role">
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
+                    <option value="super_user">Super User</option>
                 </select>
             </div>
             <button class="btn btn-primary" onclick="updateUserRole()">Update Role</button>
@@ -356,6 +357,7 @@
                 <select id="create-user-role">
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
+                    <option value="super_user">Super User</option>
                 </select>
             </div>
             <button class="btn btn-primary" onclick="createUser()">Create User</button>
@@ -492,7 +494,7 @@
             
             currentUser = JSON.parse(userData);
             
-            if (currentUser.role !== 'admin') {
+            if (currentUser.role !== 'admin' && currentUser.role !== 'super_user') {
                 alert('Admin access required');
                 window.location.href = 'videos.html';
                 return;

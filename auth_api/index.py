@@ -1,8 +1,9 @@
 import json
 import boto3
 import hashlib
-import jwt
 import uuid
+import base64
+import hmac
 from datetime import datetime, timedelta
 
 dynamodb = boto3.resource('dynamodb')
@@ -50,6 +51,14 @@ def register_user(event):
     email = body['email'].lower()
     password = body['password']
     role = body.get('role', 'user')
+    
+    # Validate role
+    if role not in ['super_user', 'admin', 'user']:
+        return {
+            'statusCode': 400,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': 'Invalid role. Must be super_user, admin, or user'})
+        }
     
     # Check if user exists
     try:
@@ -120,13 +129,26 @@ def login_user(event):
             'body': json.dumps({'error': 'Invalid credentials'})
         }
     
-    # Generate JWT token
-    token = jwt.encode({
+    # Generate JWT token manually
+    header = {"alg": "HS256", "typ": "JWT"}
+    payload = {
         'user_id': user['user_id'],
         'email': user['email'],
         'role': user['role'],
-        'exp': datetime.utcnow() + timedelta(hours=24)
-    }, JWT_SECRET, algorithm='HS256')
+        'exp': int((datetime.utcnow() + timedelta(hours=24)).timestamp())
+    }
+    
+    # Encode header and payload
+    header_encoded = base64.urlsafe_b64encode(json.dumps(header).encode()).decode().rstrip('=')
+    payload_encoded = base64.urlsafe_b64encode(json.dumps(payload).encode()).decode().rstrip('=')
+    
+    # Create signature
+    message = f"{header_encoded}.{payload_encoded}"
+    signature = base64.urlsafe_b64encode(
+        hmac.new(JWT_SECRET.encode(), message.encode(), hashlib.sha256).digest()
+    ).decode().rstrip('=')
+    
+    token = f"{message}.{signature}"
     
     return {
         'statusCode': 200,
@@ -154,7 +176,24 @@ def verify_token(event):
     token = auth_header.split(' ')[1]
     
     try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
+        # Manual JWT decode
+        parts = token.split('.')
+        if len(parts) != 3:
+            raise ValueError('Invalid token format')
+        
+        # Decode payload
+        payload_data = parts[1]
+        payload_data += '=' * (4 - len(payload_data) % 4)
+        payload = json.loads(base64.urlsafe_b64decode(payload_data))
+        
+        # Check expiration
+        if payload.get('exp', 0) < datetime.utcnow().timestamp():
+            return {
+                'statusCode': 401,
+                'headers': cors_headers(),
+                'body': json.dumps({'error': 'Token expired'})
+            }
+        
         return {
             'statusCode': 200,
             'headers': cors_headers(),
@@ -167,13 +206,7 @@ def verify_token(event):
                 }
             })
         }
-    except jwt.ExpiredSignatureError:
-        return {
-            'statusCode': 401,
-            'headers': cors_headers(),
-            'body': json.dumps({'error': 'Token expired'})
-        }
-    except jwt.InvalidTokenError:
+    except Exception:
         return {
             'statusCode': 401,
             'headers': cors_headers(),
@@ -193,8 +226,18 @@ def change_password(event):
     token = auth_header.split(' ')[1]
     
     try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
-    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+        # Manual JWT decode
+        parts = token.split('.')
+        if len(parts) != 3:
+            raise ValueError('Invalid token format')
+        
+        payload_data = parts[1]
+        payload_data += '=' * (4 - len(payload_data) % 4)
+        payload = json.loads(base64.urlsafe_b64decode(payload_data))
+        
+        if payload.get('exp', 0) < datetime.utcnow().timestamp():
+            raise ValueError('Token expired')
+    except Exception:
         return {
             'statusCode': 401,
             'headers': cors_headers(),

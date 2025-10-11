@@ -84,11 +84,12 @@ def verify_admin_token(event):
         payload_data += '=' * (4 - len(payload_data) % 4)
         payload = json.loads(base64.b64decode(payload_data))
         
-        if payload.get('role') != 'admin':
+        user_role = payload.get('role')
+        if user_role not in ['super_user', 'admin']:
             return {
                 'statusCode': 403,
                 'headers': cors_headers(),
-                'body': json.dumps({'error': 'Admin access required'})
+                'body': json.dumps({'error': 'Admin or Super User access required'})
             }
         return {'statusCode': 200, 'user': payload}
     except Exception as e:
@@ -160,9 +161,47 @@ def get_all_videos(event):
     }
 
 def update_user_role(event):
+    # Get current user role from token
+    auth_result = verify_admin_token(event)
+    current_user = auth_result['user']
+    current_role = current_user.get('role')
+    
     body = json.loads(event['body'])
     user_id = body['user_id']
     new_role = body['role']
+    
+    # Get target user to check if they're super_user
+    try:
+        target_user_response = users_table.get_item(Key={'user_id': user_id})
+        if 'Item' not in target_user_response:
+            return {
+                'statusCode': 404,
+                'headers': cors_headers(),
+                'body': json.dumps({'error': 'User not found'})
+            }
+        target_user = target_user_response['Item']
+        
+        # Prevent admin from modifying super_user
+        if current_role == 'admin' and target_user.get('role') == 'super_user':
+            return {
+                'statusCode': 403,
+                'headers': cors_headers(),
+                'body': json.dumps({'error': 'Cannot modify Super User'})
+            }
+        
+        # Prevent admin from creating super_user
+        if current_role == 'admin' and new_role == 'super_user':
+            return {
+                'statusCode': 403,
+                'headers': cors_headers(),
+                'body': json.dumps({'error': 'Cannot create Super User'})
+            }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
+        }
     
     users_table.update_item(
         Key={'user_id': user_id},
@@ -211,6 +250,11 @@ def reset_user_password(event):
     }
 
 def delete_user(event):
+    # Get current user role from token
+    auth_result = verify_admin_token(event)
+    current_user = auth_result['user']
+    current_role = current_user.get('role')
+    
     query_params = event.get('queryStringParameters') or {}
     user_id = query_params.get('user_id')
     
@@ -219,6 +263,31 @@ def delete_user(event):
             'statusCode': 400,
             'headers': cors_headers(),
             'body': json.dumps({'error': 'user_id required'})
+        }
+    
+    # Get target user to check if they're super_user
+    try:
+        target_user_response = users_table.get_item(Key={'user_id': user_id})
+        if 'Item' not in target_user_response:
+            return {
+                'statusCode': 404,
+                'headers': cors_headers(),
+                'body': json.dumps({'error': 'User not found'})
+            }
+        target_user = target_user_response['Item']
+        
+        # Prevent admin from deleting super_user
+        if current_role == 'admin' and target_user.get('role') == 'super_user':
+            return {
+                'statusCode': 403,
+                'headers': cors_headers(),
+                'body': json.dumps({'error': 'Cannot delete Super User'})
+            }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
         }
     
     users_table.delete_item(Key={'user_id': user_id})

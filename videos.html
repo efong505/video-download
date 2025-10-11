@@ -547,12 +547,13 @@
                 const userData = localStorage.getItem('user_data');
                 if (userData) {
                     const user = JSON.parse(userData);
-                    if (user.role === 'admin') {
+                    if (user.role === 'admin' || user.role === 'super_user') {
                         const navLinks = document.getElementById('nav-links');
-                        navLinks.innerHTML = navLinks.innerHTML.replace(
-                            'Browse by Category</a> |',
-                            'Browse by Category</a> | <a href="admin.html">Admin Dashboard</a> |'
-                        );
+                        const adminLink = document.createElement('a');
+                        adminLink.href = 'admin.html';
+                        adminLink.className = 'nav-link';
+                        adminLink.textContent = '⚙️ Admin Dashboard';
+                        navLinks.insertBefore(adminLink, navLinks.lastElementChild);
                     }
                 }
                 loadVideos();
