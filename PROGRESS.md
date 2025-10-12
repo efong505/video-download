@@ -191,7 +191,8 @@
 - [x] Implement subscription creation/management
 - [x] Add webhook handlers for PayPal events
 - [x] Create quota enforcement middleware in router
-- [ ] Deploy PayPal billing API to AWS Lambda
+- [x] Deploy PayPal billing API to AWS Lambda
+- [x] Set up API Gateway endpoint (/paypal)
 - [ ] Deploy updated router with quota checks
 
 **Step 4: Frontend Integration**

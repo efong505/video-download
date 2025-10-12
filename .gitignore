@@ -23,6 +23,15 @@ router/botocore/
 downloader/layer/
 env/
 
+# PayPal API dependencies (can be reinstalled)
+paypal_billing_api/requests/
+paypal_billing_api/urllib3/
+paypal_billing_api/certifi/
+paypal_billing_api/charset_normalizer/
+paypal_billing_api/idna/
+paypal_billing_api/*dist-info/
+paypal_billing_api/bin/
+
 # AWS credentials
 *.pem
 *.key
