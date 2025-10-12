@@ -852,9 +852,34 @@
         }
 
         async function deleteUser(userId, email) {
-            if (!confirm(`Are you sure you want to delete user: ${email}?`)) return;
+            if (!confirm(`Are you sure you want to delete user: ${email}? Their videos will be transferred to 'system'.`)) return;
             
             try {
+                // First, reassign all videos owned by this user to 'system'
+                const videosResponse = await fetch(`${TAG_API}?action=list&user=${encodeURIComponent(currentUser.email)}&role=${encodeURIComponent(currentUser.role)}`);
+                const videosData = await videosResponse.json();
+                
+                if (videosData.videos) {
+                    const userVideos = videosData.videos.filter(video => video.owner === email);
+                    for (const video of userVideos) {
+                        await fetch(`${TAG_API}?action=add_video`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                video_id: video.filename,
+                                filename: video.filename,
+                                title: video.title,
+                                tags: video.tags,
+                                owner: 'system',
+                                visibility: video.visibility,
+                                video_type: video.video_type,
+                                external_url: video.external_url
+                            })
+                        });
+                    }
+                }
+                
+                // Then delete the user
                 const response = await fetch(`${ADMIN_API}?action=user&user_id=${userId}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${authToken}` }
@@ -864,7 +889,7 @@
                 
                 if (response.ok) {
                     document.getElementById('users-message').innerHTML = 
-                        '<div class="success">User deleted successfully</div>';
+                        '<div class="success">User deleted successfully. Their videos have been transferred to system.</div>';
                     loadUsers();
                 } else {
                     throw new Error(data.error);

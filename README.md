@@ -155,6 +155,7 @@ A complete serverless video management system built on AWS with intelligent Lamb
 2. **Thumbnail generation fails**: Check Lambda timeout settings
 3. **Large video downloads fail**: Use Fargate option for long videos
 4. **Authentication issues**: Check JWT token expiration (24 hours)
+5. **Size display issues**: TAG API includes S3 size lookup for accurate total size calculations
 
 ### Debug Features
 - Console logging in browser developer tools

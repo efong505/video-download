@@ -267,7 +267,13 @@
                 if (tagData.videos && tagData.videos.length > 0) {
                     let videosWithMetadata = tagData.videos;
                     
-                    const totalSize = videosWithMetadata.reduce((sum, video) => sum + (video.size || 0), 0);
+                    // Calculate size only for local videos (external videos don't have size)
+                    const totalSize = videosWithMetadata.reduce((sum, video) => {
+                        if (video.video_type === 'local' && video.size) {
+                            return sum + video.size;
+                        }
+                        return sum;
+                    }, 0);
                     const allTags = new Set();
                     videosWithMetadata.forEach(video => {
                         if (video.tags) {

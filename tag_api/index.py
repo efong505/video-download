@@ -295,7 +295,7 @@ def list_all_videos(event):
         
         # Super users and admins see all videos, others see only public + owned
         if user_role in ['super_user', 'admin'] or visibility == 'public' or (user_email and owner == user_email):
-            videos.append({
+            video_data = {
                 'filename': item.get('filename', ''),
                 'title': item.get('title', item.get('filename', '').replace('.mp4', '').replace('_', ' ')),
                 'tags': item.get('tags', []),
@@ -303,7 +303,24 @@ def list_all_videos(event):
                 'visibility': visibility,
                 'video_type': item.get('video_type', 'local'),
                 'external_url': item.get('external_url', '')
-            })
+            }
+            
+            # Add size for local videos
+            if item.get('video_type', 'local') == 'local':
+                try:
+                    import boto3
+                    s3_client = boto3.client('s3')
+                    s3_response = s3_client.head_object(
+                        Bucket='my-video-downloads-bucket',
+                        Key=f"videos/{item.get('filename', '')}"
+                    )
+                    video_data['size'] = s3_response['ContentLength']
+                except:
+                    video_data['size'] = 0
+            else:
+                video_data['size'] = 0
+                
+            videos.append(video_data)
     
     return {
         'statusCode': 200,
