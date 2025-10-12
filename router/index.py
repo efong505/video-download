@@ -89,7 +89,9 @@ def lambda_handler(event, context):
                 'format': 'best',
                 'output_name': output_name,
                 'title': body.get('title', ''),
-                'tags': body.get('tags', [])
+                'tags': body.get('tags', []),
+                'owner': body.get('owner', 'system'),
+                'visibility': body.get('visibility', 'public')
             })
         )
         

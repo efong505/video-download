@@ -91,6 +91,8 @@ def get_best_format(url):
     Get the best available format for the video by parsing format list.
     """
     try:
+        # Keep original format selection logic
+        
         # Get available formats
         result = subprocess.run(
             ['/opt/bin/yt-dlp', '--list-formats', url],
@@ -152,6 +154,8 @@ def lambda_handler(event, context):
         output_name = event['output_name']
         title = event.get('title', '')
         tags = event.get('tags', [])
+        owner = event.get('owner', 'system')
+        visibility = event.get('visibility', 'public')
         bucket = os.environ['S3_BUCKET']
         
         # Update job status to processing
@@ -171,9 +175,12 @@ def lambda_handler(event, context):
             '/opt/bin/yt-dlp',
             '-f', format_id,
             '--merge-output-format', 'mp4',  # Just remux to MP4 container
-            '-o', output_path,
-            url
+            '-o', output_path
         ]
+        
+        # No special platform handling
+        
+        cmd.append(url)
         
         print(f"Executing: {' '.join(cmd)}")
         print(f"Using format: {format_id}")
@@ -187,6 +194,9 @@ def lambda_handler(event, context):
             text=True,
             timeout=840  # 14 minutes (safety margin)
         )
+        
+        print(f"yt-dlp stdout: {result.stdout}")
+        print(f"yt-dlp stderr: {result.stderr}")
         
         if result.returncode != 0:
             update_job_status(job_id, 'failed', error=f"Download failed: {result.stderr}")
@@ -237,6 +247,8 @@ def lambda_handler(event, context):
             f"URL: {url}\n"
             f"S3 Location: s3://{bucket}/{video_key}\n"
             f"Tags: {', '.join(tags) if tags else 'None'}\n"
+            f"Owner: {owner}\n"
+            f"Visibility: {visibility}\n"
             f"Completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}"
         )
         
@@ -254,10 +266,12 @@ def lambda_handler(event, context):
                     'tags': tags,
                     'upload_date': datetime.now().isoformat(),
                     's3_key': video_key,
-                    'url': url
+                    'url': url,
+                    'owner': owner,
+                    'visibility': visibility
                 }
             )
-            print(f"Saved metadata for {output_name} with title: '{display_title}' and tags: {tags}")
+            print(f"Saved metadata for {output_name} with title: '{display_title}', tags: {tags}, owner: {event.get('owner', 'system')}, visibility: {event.get('visibility', 'public')}")
         except Exception as e:
             print(f"Failed to save metadata: {e}")
         
@@ -290,6 +304,7 @@ def lambda_handler(event, context):
             f"Video download is taking longer than expected and may have timed out.\n\n"
             f"URL: {event.get('url', 'Unknown')}\n"
             f"Output: {event.get('output_name', 'Unknown')}\n"
+            f"Owner: {event.get('owner', 'Unknown')}\n"
             f"This may require manual intervention or using Fargate for longer videos.\n"
             f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}"
         )
@@ -305,6 +320,7 @@ def lambda_handler(event, context):
             f"Video download has failed with an error.\n\n"
             f"URL: {event.get('url', 'Unknown')}\n"
             f"Output: {event.get('output_name', 'Unknown')}\n"
+            f"Owner: {event.get('owner', 'Unknown')}\n"
             f"Error: {str(e)}\n"
             f"Time: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}"
         )

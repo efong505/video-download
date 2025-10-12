@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Player</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #000;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .video-container {
+            max-width: 90vw;
+            max-height: 90vh;
+            text-align: center;
+        }
+        .video-title {
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            color: #fff;
+        }
+        video {
+            width: 100%;
+            height: auto;
+            max-height: 80vh;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+        .error {
+            background: #dc3545;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .loading {
+            color: #666;
+            text-align: center;
+            padding: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="video-container">
+        <div id="loading" class="loading">Loading video...</div>
+        <div id="error" class="error" style="display: none;">Video not found or not available for embedding</div>
+        <div id="video-content" style="display: none;">
+            <h1 id="video-title" class="video-title"></h1>
+            <video id="video-player" controls>
+                <source id="video-source" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <script>
+        const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
+        
+        async function loadVideo() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const filename = urlParams.get('v');
+            const titleParam = urlParams.get('t');
+            
+            if (!filename) {
+                showError('No video specified');
+                return;
+            }
+            
+            // Use title from URL parameter if available, otherwise generate from filename
+            let videoTitle = titleParam || filename.replace('.mp4', '').replace(/_/g, ' ');
+            
+            try {
+                // Try to get metadata for privacy check, but use URL title if provided
+                try {
+                    const response = await fetch(`${TAG_API}/${filename}`);
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.visibility === 'private') {
+                            throw new Error('Video is private');
+                        }
+                        // Only use API title if no title parameter was provided
+                        if (!titleParam && data.title) {
+                            videoTitle = data.title;
+                        }
+                    }
+                } catch (metadataError) {
+                    // Use URL title or fallback title if metadata fails
+                    console.log('Using URL/fallback title:', metadataError.message);
+                }
+                
+                // Set video details
+                document.getElementById('video-title').textContent = videoTitle;
+                document.getElementById('video-source').src = `https://d271vky579caz9.cloudfront.net/videos/${filename}`;
+                
+                // Load video
+                const player = document.getElementById('video-player');
+                player.load();
+                
+                // Show video content
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('video-content').style.display = 'block';
+                
+                // Update page title
+                document.title = videoTitle;
+                
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+        
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('error').style.display = 'block';
+            document.getElementById('error').textContent = message;
+        }
+        
+        window.addEventListener('load', loadVideo);
+    </script>
+</body>
+</html>

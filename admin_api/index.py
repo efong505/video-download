@@ -122,6 +122,12 @@ def get_all_users(event):
     }
 
 def get_all_videos(event):
+    # Get current user from token
+    auth_result = verify_admin_token(event)
+    current_user = auth_result['user']
+    current_role = current_user.get('role')
+    current_email = current_user.get('email')
+    
     # Get videos from S3
     s3_response = s3_client.list_objects_v2(
         Bucket='my-video-downloads-bucket',
@@ -143,13 +149,20 @@ def get_all_videos(event):
                 except:
                     metadata = {}
                 
-                videos.append({
-                    'filename': filename,
-                    'size': obj['Size'],
-                    'last_modified': obj['LastModified'].isoformat(),
-                    'tags': metadata.get('tags', []),
-                    'title': metadata.get('title', filename.replace('.mp4', ''))
-                })
+                # Admin/Super users see all videos, others see only their own + public
+                visibility = metadata.get('visibility', 'public')
+                owner = metadata.get('owner', 'system')
+                
+                if current_role in ['admin', 'super_user'] or visibility == 'public' or owner == current_email:
+                    videos.append({
+                        'filename': filename,
+                        'size': obj['Size'],
+                        'last_modified': obj['LastModified'].isoformat(),
+                        'tags': metadata.get('tags', []),
+                        'title': metadata.get('title', filename.replace('.mp4', '')),
+                        'owner': owner,
+                        'visibility': visibility
+                    })
     
     return {
         'statusCode': 200,
@@ -313,28 +326,31 @@ def delete_video(event):
         }
     
     try:
-        # Delete from S3
-        s3_client.delete_object(
-            Bucket='my-video-downloads-bucket',
-            Key=f'videos/{filename}'
-        )
+        # Check if it's an external video
+        metadata_response = metadata_table.get_item(Key={'video_id': filename})
+        metadata = metadata_response.get('Item', {})
+        video_type = metadata.get('video_type', 'local')
         
-        # Delete thumbnails
-        base_name = filename.rsplit('.', 1)[0]
-        for i in range(1, 4):
-            try:
-                s3_client.delete_object(
-                    Bucket='my-video-downloads-bucket',
-                    Key=f'thumbnails/{base_name}_thumb_{i}.jpg'
-                )
-            except Exception as e:
-                print(f'Failed to delete thumbnail {i}: {e}')
+        if video_type == 'local':
+            # Delete from S3
+            s3_client.delete_object(
+                Bucket='my-video-downloads-bucket',
+                Key=f'videos/{filename}'
+            )
+            
+            # Delete thumbnails
+            base_name = filename.rsplit('.', 1)[0]
+            for i in range(1, 4):
+                try:
+                    s3_client.delete_object(
+                        Bucket='my-video-downloads-bucket',
+                        Key=f'thumbnails/{base_name}_thumb_{i}.jpg'
+                    )
+                except Exception as e:
+                    print(f'Failed to delete thumbnail {i}: {e}')
         
-        # Delete metadata
-        try:
-            metadata_table.delete_item(Key={'video_id': filename})
-        except Exception as e:
-            print(f'Failed to delete metadata: {e}')
+        # Delete metadata (for both local and external videos)
+        metadata_table.delete_item(Key={'video_id': filename})
         
         return {
             'statusCode': 200,

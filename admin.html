@@ -237,6 +237,7 @@
                 <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
                     <button class="btn btn-primary" onclick="showUploadModal()">📁 Upload Video</button>
                     <button class="btn btn-primary" onclick="showDownloadModal()">⬇️ Download from URL</button>
+                    <button class="btn btn-primary" onclick="showExternalVideoModal()">🔗 Add External Video</button>
                     <a href="download-status.html" class="btn" style="background: #28a745; color: white; text-decoration: none;">📊 Download Status</a>
                 </div>
                 
@@ -250,6 +251,13 @@
                                 <option value="">All Tags</option>
                             </select>
                         </div>
+                        <div style="min-width: 120px;">
+                            <select id="admin-visibility-filter" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <option value="">All Videos</option>
+                                <option value="public">Public Only</option>
+                                <option value="private">Private Only</option>
+                            </select>
+                        </div>
                         <button class="btn" onclick="clearAdminFilters()" style="background: #6c757d; color: white;">Clear</button>
                     </div>
                 </div>
@@ -260,9 +268,10 @@
                         <tr>
                             <th>Filename</th>
                             <th>Title</th>
+                            <th>Owner</th>
+                            <th>Visibility</th>
                             <th>Size</th>
                             <th>Tags</th>
-                            <th>Modified</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
@@ -308,9 +317,7 @@
             <div class="form-group">
                 <label>Role:</label>
                 <select id="edit-user-role">
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                    <option value="super_user">Super User</option>
+                    <!-- Options populated dynamically based on current user role -->
                 </select>
             </div>
             <button class="btn btn-primary" onclick="updateUserRole()">Update Role</button>
@@ -335,6 +342,21 @@
                 <input type="text" id="edit-video-tags" placeholder="news, politics, 2024" autocomplete="off">
                 <div id="edit-tag-suggestions" style="display: none; border: 1px solid #ddd; max-height: 150px; overflow-y: auto; background: white; position: absolute; z-index: 1000; width: calc(100% - 40px);"></div>
             </div>
+            <div class="form-group">
+                <label>Owner:</label>
+                <select id="edit-video-owner-select" style="display: none;">
+                    <!-- Populated dynamically -->
+                </select>
+                <input type="text" id="edit-video-owner">
+                <button type="button" class="btn" onclick="toggleOwnerDropdown()" style="margin-left: 10px; padding: 5px 10px; font-size: 12px;">📋 Select User</button>
+            </div>
+            <div class="form-group">
+                <label>Visibility:</label>
+                <select id="edit-video-visibility">
+                    <option value="public">Public (visible to all users)</option>
+                    <option value="private">Private (only visible to owner)</option>
+                </select>
+            </div>
             <button class="btn btn-primary" onclick="updateVideo()">Update Video</button>
         </div>
     </div>
@@ -355,9 +377,7 @@
             <div class="form-group">
                 <label>Role:</label>
                 <select id="create-user-role">
-                    <option value="user">User</option>
-                    <option value="admin">Admin</option>
-                    <option value="super_user">Super User</option>
+                    <!-- Options populated dynamically based on current user role -->
                 </select>
             </div>
             <button class="btn btn-primary" onclick="createUser()">Create User</button>
@@ -418,6 +438,13 @@
                 <input type="text" id="upload-video-tags" placeholder="news, politics, 2024" autocomplete="off">
                 <div id="upload-tag-suggestions" style="display: none; border: 1px solid #ddd; max-height: 150px; overflow-y: auto; background: white; position: absolute; z-index: 1000; width: calc(100% - 40px);"></div>
             </div>
+            <div class="form-group">
+                <label>Visibility:</label>
+                <select id="upload-video-visibility">
+                    <option value="public">Public (visible to all users)</option>
+                    <option value="private">Private (only visible to you)</option>
+                </select>
+            </div>
             <div id="upload-progress" style="display: none;">
                 <div style="background: #f0f0f0; border-radius: 10px; overflow: hidden; margin: 10px 0;">
                     <div id="upload-progress-bar" style="background: #667eea; height: 20px; width: 0%; transition: width 0.3s;"></div>
@@ -451,6 +478,13 @@
                 <div id="download-tag-suggestions" style="display: none; border: 1px solid #ddd; max-height: 150px; overflow-y: auto; background: white; position: absolute; z-index: 1000; width: calc(100% - 40px);"></div>
             </div>
             <div class="form-group">
+                <label>Visibility:</label>
+                <select id="download-video-visibility">
+                    <option value="public">Public (visible to all users)</option>
+                    <option value="private">Private (only visible to you)</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label>
                     <input type="checkbox" id="download-force-fargate"> Force Fargate (for long videos)
                 </label>
@@ -468,6 +502,35 @@
                 <source id="view-video-source" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
+        </div>
+    </div>
+
+    <!-- Add External Video Modal -->
+    <div id="external-video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('external-video-modal')">&times;</span>
+            <h3>Add External Video</h3>
+            <div class="form-group">
+                <label>Video URL:</label>
+                <input type="url" id="external-video-url" placeholder="https://youtube.com/watch?v=... or https://rumble.com/...">
+            </div>
+            <div class="form-group">
+                <label>Title:</label>
+                <input type="text" id="external-video-title" placeholder="Video title">
+            </div>
+            <div class="form-group">
+                <label>Tags (comma-separated):</label>
+                <input type="text" id="external-video-tags" placeholder="news, politics, 2024" autocomplete="off">
+                <div id="external-tag-suggestions" style="display: none; border: 1px solid #ddd; max-height: 150px; overflow-y: auto; background: white; position: absolute; z-index: 1000; width: calc(100% - 40px);"></div>
+            </div>
+            <div class="form-group">
+                <label>Visibility:</label>
+                <select id="external-video-visibility">
+                    <option value="public">Public (visible to all users)</option>
+                    <option value="private">Private (only visible to you)</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="addExternalVideo()">Add External Video</button>
         </div>
     </div>
 
@@ -601,10 +664,7 @@
             document.getElementById('videos-table').style.display = 'none';
             
             try {
-                const response = await fetch(`${ADMIN_API}?action=videos`, {
-                    headers: { 'Authorization': `Bearer ${authToken}` }
-                });
-                
+                const response = await fetch(`${TAG_API}?action=list&user=${encodeURIComponent(currentUser.email)}&role=${encodeURIComponent(currentUser.role)}`);
                 const data = await response.json();
                 
                 if (response.ok) {
@@ -641,19 +701,40 @@
                 const sizeInMB = (video.size / (1024 * 1024)).toFixed(1);
                 const tags = video.tags.length > 0 ? video.tags.join(', ') : 'No tags';
                 
+                const embedUrl = `https://d271vky579caz9.cloudfront.net/embed.html?v=${video.filename}&t=${encodeURIComponent(video.title)}`;
+                const owner = video.owner || 'system';
+                const visibility = video.visibility || 'public';
+                const videoType = video.video_type || 'local';
+                const visibilityBadge = visibility === 'private' ? '<span style="background: #dc3545; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px;">Private</span>' : '<span style="background: #28a745; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px;">Public</span>';
+                const typeBadge = videoType === 'local' ? '' : `<span style="background: #007bff; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; margin-left: 5px;">${videoType.toUpperCase()}</span>`;
+                
                 row.innerHTML = `
-                    <td>${video.filename}</td>
+                    <td>${video.filename}${typeBadge}</td>
                     <td>${video.title}</td>
-                    <td>${sizeInMB} MB</td>
+                    <td>${owner}</td>
+                    <td>${visibilityBadge}</td>
+                    <td>${videoType === 'local' ? sizeInMB + ' MB' : 'External'}</td>
                     <td>${tags}</td>
-                    <td>${new Date(video.last_modified).toLocaleDateString()}</td>
                     <td>
-                        <button class="btn btn-primary" onclick="viewVideo('${video.filename}', '${video.title}')" style="margin-right: 5px; font-size: 12px;">👁️ View</button>
-                        <button class="btn btn-warning" onclick="editVideo('${video.filename}', '${video.title}', '${video.tags.join(',')}')" style="margin-right: 5px; font-size: 12px;">Edit</button>
+                        <button class="btn btn-primary" onclick="viewVideo('${video.filename}', '${video.title}', '${videoType}', '${video.external_url || ''}')" style="margin-right: 5px; font-size: 12px;">👁️ View</button>
+                        <button class="btn" onclick="copyEmbedLink('${embedUrl}')" style="margin-right: 5px; font-size: 12px; background: #28a745; color: white;">🔗 Embed</button>
+                        <button class="btn btn-warning edit-video-btn" data-filename="${encodeURIComponent(video.filename)}" data-title="${encodeURIComponent(video.title)}" data-tags="${encodeURIComponent(video.tags.join(','))}" data-owner="${encodeURIComponent(owner)}" data-visibility="${encodeURIComponent(visibility)}" style="margin-right: 5px; font-size: 12px;">Edit</button>
                         <button class="btn btn-danger" onclick="deleteVideo('${video.filename}')" style="font-size: 12px;">Delete</button>
                     </td>
                 `;
                 tbody.appendChild(row);
+            });
+            
+            // Add event listeners for edit buttons
+            document.querySelectorAll('.edit-video-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const filename = decodeURIComponent(this.dataset.filename);
+                    const title = decodeURIComponent(this.dataset.title);
+                    const tags = decodeURIComponent(this.dataset.tags);
+                    const owner = decodeURIComponent(this.dataset.owner);
+                    const visibility = decodeURIComponent(this.dataset.visibility);
+                    editVideo(filename, title, tags, owner, visibility);
+                });
             });
         }
         
@@ -676,13 +757,16 @@
             });
             
             // Add event listeners
+            const visibilityFilter = document.getElementById('admin-visibility-filter');
             searchInput.addEventListener('input', applyAdminFilters);
             tagFilter.addEventListener('change', applyAdminFilters);
+            visibilityFilter.addEventListener('change', applyAdminFilters);
         }
         
         function applyAdminFilters() {
             const searchTerm = document.getElementById('admin-search-input').value.toLowerCase();
             const selectedTag = document.getElementById('admin-tag-filter').value;
+            const selectedVisibility = document.getElementById('admin-visibility-filter').value;
             
             filteredAdminVideos = allAdminVideos.filter(video => {
                 const matchesSearch = !searchTerm || 
@@ -691,7 +775,10 @@
                 
                 const matchesTag = !selectedTag || video.tags.includes(selectedTag);
                 
-                return matchesSearch && matchesTag;
+                const matchesVisibility = !selectedVisibility || 
+                    (video.visibility || 'public') === selectedVisibility;
+                
+                return matchesSearch && matchesTag && matchesVisibility;
             });
             
             renderAdminVideos(filteredAdminVideos);
@@ -700,12 +787,33 @@
         function clearAdminFilters() {
             document.getElementById('admin-search-input').value = '';
             document.getElementById('admin-tag-filter').value = '';
+            document.getElementById('admin-visibility-filter').value = '';
             applyAdminFilters();
         }
 
         function editUser(userId, email, role) {
             document.getElementById('edit-user-email').value = email;
-            document.getElementById('edit-user-role').value = role;
+            
+            // Set role options based on current user role
+            const roleSelect = document.getElementById('edit-user-role');
+            roleSelect.innerHTML = '';
+            
+            if (currentUser.role === 'super_user') {
+                // Super users can set all roles
+                roleSelect.innerHTML = `
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                    <option value="super_user">Super User</option>
+                `;
+            } else {
+                // Admins can only set user and admin roles
+                roleSelect.innerHTML = `
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                `;
+            }
+            
+            roleSelect.value = role;
             document.getElementById('edit-user-modal').dataset.userId = userId;
             document.getElementById('edit-user-modal').style.display = 'block';
         }
@@ -813,7 +921,27 @@
         function showCreateUserModal() {
             document.getElementById('create-user-email').value = '';
             document.getElementById('create-user-password').value = '';
-            document.getElementById('create-user-role').value = 'user';
+            
+            // Set role options based on current user role
+            const roleSelect = document.getElementById('create-user-role');
+            roleSelect.innerHTML = '';
+            
+            if (currentUser.role === 'super_user') {
+                // Super users can create all roles
+                roleSelect.innerHTML = `
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                    <option value="super_user">Super User</option>
+                `;
+            } else {
+                // Admins can only create users and admins
+                roleSelect.innerHTML = `
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                `;
+            }
+            
+            roleSelect.value = 'user';
             document.getElementById('create-user-modal').style.display = 'block';
         }
 
@@ -862,6 +990,7 @@
             document.getElementById('upload-video-file').value = '';
             document.getElementById('upload-video-title').value = '';
             document.getElementById('upload-video-tags').value = '';
+            document.getElementById('upload-video-visibility').value = 'public';
             document.getElementById('upload-progress').style.display = 'none';
             document.getElementById('upload-video-modal').style.display = 'block';
             setupTagAutocomplete('upload-video-tags', 'upload-tag-suggestions');
@@ -872,26 +1001,75 @@
             document.getElementById('download-video-filename').value = '';
             document.getElementById('download-video-title').value = '';
             document.getElementById('download-video-tags').value = '';
+            document.getElementById('download-video-visibility').value = 'public';
             document.getElementById('download-force-fargate').checked = false;
             document.getElementById('download-video-modal').style.display = 'block';
             setupTagAutocomplete('download-video-tags', 'download-tag-suggestions');
         }
 
-        function viewVideo(filename, title) {
-            const videoUrl = `https://d271vky579caz9.cloudfront.net/videos/${filename}`;
-            const player = document.getElementById('view-video-player');
-            const source = document.getElementById('view-video-source');
-            
+        function showExternalVideoModal() {
+            document.getElementById('external-video-url').value = '';
+            document.getElementById('external-video-title').value = '';
+            document.getElementById('external-video-tags').value = '';
+            document.getElementById('external-video-visibility').value = 'public';
+            document.getElementById('external-video-modal').style.display = 'block';
+            setupTagAutocomplete('external-video-tags', 'external-tag-suggestions');
+        }
+
+        function viewVideo(filename, title, videoType = 'local', externalUrl = '') {
+            const modalContent = document.querySelector('#view-video-modal .modal-content');
             document.getElementById('view-video-title').textContent = title;
             
-            // Clear any existing sources and force reload
-            player.pause();
-            source.src = '';
-            player.load();
-            
-            // Set CloudFront URL
-            source.src = videoUrl;
-            player.load();
+            if (videoType === 'local') {
+                const videoUrl = `https://d271vky579caz9.cloudfront.net/videos/${filename}`;
+                const player = document.getElementById('view-video-player');
+                const source = document.getElementById('view-video-source');
+                
+                // Show video player, hide iframe
+                player.style.display = 'block';
+                const existingIframe = modalContent.querySelector('iframe');
+                if (existingIframe) existingIframe.remove();
+                
+                // Clear any existing sources and force reload
+                player.pause();
+                source.src = '';
+                player.load();
+                
+                // Set CloudFront URL
+                source.src = videoUrl;
+                player.load();
+            } else {
+                // Hide video player
+                document.getElementById('view-video-player').style.display = 'none';
+                
+                // Remove existing iframe
+                const existingIframe = modalContent.querySelector('iframe');
+                if (existingIframe) existingIframe.remove();
+                
+                // Create iframe for external video
+                const iframe = document.createElement('iframe');
+                iframe.style.cssText = 'width: 100%; height: 400px; border: none;';
+                
+                if (videoType === 'youtube') {
+                    const videoId = externalUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
+                    if (videoId) {
+                        iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                    }
+                } else if (videoType === 'rumble') {
+                    // Extract Rumble video ID and create proper embed URL
+                    const rumbleMatch = externalUrl.match(/rumble\.com\/v([a-zA-Z0-9]+)/);
+                    if (rumbleMatch) {
+                        iframe.src = `https://rumble.com/embed/${rumbleMatch[1]}/`;
+                    } else {
+                        iframe.src = externalUrl;
+                    }
+                } else if (videoType === 'facebook') {
+                    // Facebook embed format
+                    iframe.src = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(externalUrl)}&show_text=false&width=560&height=315`;
+                }
+                
+                modalContent.appendChild(iframe);
+            }
             
             document.getElementById('view-video-modal').style.display = 'block';
         }
@@ -944,6 +1122,7 @@
                 document.getElementById('upload-status').textContent = 'Adding metadata...';
                 
                 // Add video metadata
+                const visibility = document.getElementById('upload-video-visibility').value;
                 await fetch(`${TAG_API}?action=add_video`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -951,7 +1130,9 @@
                         video_id: filename,
                         filename: filename,
                         title: title || filename,
-                        tags: tags
+                        tags: tags,
+                        owner: currentUser.email,
+                        visibility: visibility
                     })
                 });
                 
@@ -994,6 +1175,7 @@
             const filename = document.getElementById('download-video-filename').value;
             const title = document.getElementById('download-video-title').value;
             const tags = document.getElementById('download-video-tags').value.split(',').map(t => t.trim()).filter(t => t);
+            const visibility = document.getElementById('download-video-visibility').value;
             const forceFargate = document.getElementById('download-force-fargate').checked;
             
             if (!url || !filename) {
@@ -1011,7 +1193,9 @@
                         output_name: filename,
                         title: title,
                         force_fargate: forceFargate,
-                        tags: tags
+                        tags: tags,
+                        owner: currentUser.email,
+                        visibility: visibility
                     })
                 });
                 
@@ -1030,12 +1214,57 @@
             }
         }
 
-        function editVideo(filename, title, tags) {
+        function editVideo(filename, title, tags, owner, visibility) {
             document.getElementById('edit-video-filename').value = filename;
             document.getElementById('edit-video-title').value = title;
             document.getElementById('edit-video-tags').value = tags;
+            document.getElementById('edit-video-owner').value = owner || 'system';
+            document.getElementById('edit-video-visibility').value = visibility || 'public';
+            loadUsersForOwnerDropdown();
             document.getElementById('edit-video-modal').style.display = 'block';
             setupTagAutocomplete('edit-video-tags', 'edit-tag-suggestions');
+        }
+        
+        async function loadUsersForOwnerDropdown() {
+            try {
+                const response = await fetch(`${ADMIN_API}?action=users`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const select = document.getElementById('edit-video-owner-select');
+                    select.innerHTML = '<option value="">Select user...</option>';
+                    data.users.forEach(user => {
+                        const option = document.createElement('option');
+                        option.value = user.email;
+                        option.textContent = `${user.email} (${user.role})`;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.log('Failed to load users:', error);
+            }
+        }
+        
+        function toggleOwnerDropdown() {
+            const select = document.getElementById('edit-video-owner-select');
+            const input = document.getElementById('edit-video-owner');
+            
+            if (select.style.display === 'none') {
+                select.style.display = 'block';
+                input.style.display = 'none';
+                select.addEventListener('change', function() {
+                    if (this.value) {
+                        input.value = this.value;
+                        input.style.display = 'block';
+                        this.style.display = 'none';
+                    }
+                });
+            } else {
+                select.style.display = 'none';
+                input.style.display = 'block';
+            }
         }
 
         async function updateVideo() {
@@ -1043,6 +1272,8 @@
             const title = document.getElementById('edit-video-title').value;
             const tagsStr = document.getElementById('edit-video-tags').value;
             const tags = tagsStr.split(',').map(tag => tag.trim()).filter(tag => tag);
+            const owner = document.getElementById('edit-video-owner').value;
+            const visibility = document.getElementById('edit-video-visibility').value;
             
             try {
                 const response = await fetch(`${TAG_API}?action=add_video`, {
@@ -1054,7 +1285,9 @@
                         video_id: filename,
                         filename: filename,
                         title: title,
-                        tags: tags
+                        tags: tags,
+                        owner: owner,
+                        visibility: visibility
                     })
                 });
                 
@@ -1450,6 +1683,83 @@
             } catch (error) {
                 document.getElementById('tags-message').innerHTML = 
                     `<div class="error">Failed to update video associations: ${error.message}</div>`;
+            }
+        }
+
+        function copyEmbedLink(embedUrl) {
+            navigator.clipboard.writeText(embedUrl).then(() => {
+                document.getElementById('videos-message').innerHTML = 
+                    '<div class="success">Embed link copied to clipboard!</div>';
+                setTimeout(() => {
+                    document.getElementById('videos-message').innerHTML = '';
+                }, 3000);
+            }).catch(() => {
+                prompt('Copy this embed link:', embedUrl);
+            });
+        }
+
+        function getVideoType(url) {
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                return 'youtube';
+            } else if (url.includes('rumble.com')) {
+                return 'rumble';
+            } else if (url.includes('facebook.com')) {
+                return 'facebook';
+            }
+            return 'external';
+        }
+
+        function generateVideoId(url, title) {
+            const videoType = getVideoType(url);
+            const timestamp = Date.now();
+            const cleanTitle = title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+            return `${videoType}-${cleanTitle}-${timestamp}`;
+        }
+
+        async function addExternalVideo() {
+            const url = document.getElementById('external-video-url').value;
+            const title = document.getElementById('external-video-title').value;
+            const tags = document.getElementById('external-video-tags').value.split(',').map(t => t.trim()).filter(t => t);
+            const visibility = document.getElementById('external-video-visibility').value;
+            
+            if (!url || !title) {
+                document.getElementById('videos-message').innerHTML = 
+                    '<div class="error">Please fill in URL and title</div>';
+                return;
+            }
+            
+            try {
+                const videoType = getVideoType(url);
+                const videoId = generateVideoId(url, title);
+                
+                const response = await fetch(`${TAG_API}?action=add_video`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        video_id: videoId,
+                        filename: videoId,
+                        title: title,
+                        tags: tags,
+                        owner: currentUser.email,
+                        visibility: visibility,
+                        external_url: url,
+                        video_type: videoType
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('videos-message').innerHTML = 
+                        '<div class="success">External video added successfully!</div>';
+                    closeModal('external-video-modal');
+                    loadVideos();
+                } else {
+                    throw new Error(data.error || 'Failed to add external video');
+                }
+            } catch (error) {
+                document.getElementById('videos-message').innerHTML = 
+                    `<div class="error">Failed to add external video: ${error.message}</div>`;
             }
         }
 

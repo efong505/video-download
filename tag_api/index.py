@@ -64,15 +64,25 @@ def add_video_metadata(event):
     filename = body['filename']
     tags = body.get('tags', [])
     title = body.get('title', filename.replace('.mp4', ''))
+    owner = body.get('owner', 'system')
+    visibility = body.get('visibility', 'public')
+    external_url = body.get('external_url')
+    video_type = body.get('video_type', 'local')  # 'local', 'youtube', 'rumble'
     
     item = {
         'video_id': video_id,
         'filename': filename,
         'title': title,
         'tags': tags,
+        'owner': owner,
+        'visibility': visibility,
+        'video_type': video_type,
         'upload_date': datetime.utcnow().isoformat(),
         'created_at': datetime.utcnow().isoformat()
     }
+    
+    if external_url:
+        item['external_url'] = external_url
     
     table.put_item(Item=item)
     
@@ -82,13 +92,19 @@ def add_video_metadata(event):
         'body': json.dumps({
             'message': 'Video metadata added',
             'video_id': video_id,
-            'tags': tags
+            'tags': tags,
+            'owner': owner,
+            'visibility': visibility,
+            'video_type': video_type
         })
     }
 
 def get_videos_by_tag(event):
-    """Get videos filtered by tag"""
-    tag = event['queryStringParameters'].get('tag') if event.get('queryStringParameters') else None
+    """Get videos filtered by tag with visibility control"""
+    query_params = event.get('queryStringParameters') or {}
+    tag = query_params.get('tag')
+    user_email = query_params.get('user')
+    user_role = query_params.get('role')
     
     if not tag:
         return {
@@ -103,15 +119,23 @@ def get_videos_by_tag(event):
         ExpressionAttributeValues={':tag': tag}
     )
     
-    videos = response['Items']
+    # Filter by visibility
+    filtered_videos = []
+    for item in response['Items']:
+        visibility = item.get('visibility', 'public')
+        owner = item.get('owner', 'system')
+        
+        # Super users and admins see all videos, others see only public + owned
+        if user_role in ['super_user', 'admin'] or visibility == 'public' or (user_email and owner == user_email):
+            filtered_videos.append(item)
     
     return {
         'statusCode': 200,
         'headers': cors_headers(),
         'body': json.dumps({
             'tag': tag,
-            'videos': videos,
-            'count': len(videos)
+            'videos': filtered_videos,
+            'count': len(filtered_videos)
         })
     }
 
@@ -138,28 +162,43 @@ def update_video_tags(event):
     body = json.loads(event['body'])
     video_id = body['video_id']
     new_tags = body['tags']
+    owner = body.get('owner')
+    visibility = body.get('visibility')
+    
+    update_expr = 'SET tags = :tags, updated_at = :updated'
+    expr_values = {
+        ':tags': new_tags,
+        ':updated': datetime.utcnow().isoformat()
+    }
+    
+    if owner:
+        update_expr += ', owner = :owner'
+        expr_values[':owner'] = owner
+    
+    if visibility:
+        update_expr += ', visibility = :visibility'
+        expr_values[':visibility'] = visibility
     
     table.update_item(
         Key={'video_id': video_id},
-        UpdateExpression='SET tags = :tags, updated_at = :updated',
-        ExpressionAttributeValues={
-            ':tags': new_tags,
-            ':updated': datetime.utcnow().isoformat()
-        }
+        UpdateExpression=update_expr,
+        ExpressionAttributeValues=expr_values
     )
     
     return {
         'statusCode': 200,
         'headers': cors_headers(),
         'body': json.dumps({
-            'message': 'Tags updated',
+            'message': 'Video updated',
             'video_id': video_id,
-            'tags': new_tags
+            'tags': new_tags,
+            'owner': owner,
+            'visibility': visibility
         })
     }
 
 def get_video_metadata(filename):
-    """Get metadata for a specific video"""
+    """Get metadata for a specific video - public access for embedding"""
     try:
         response = table.get_item(
             Key={'video_id': filename}
@@ -167,24 +206,31 @@ def get_video_metadata(filename):
         
         if 'Item' in response:
             item = response['Item']
+            visibility = item.get('visibility', 'public')
+            
+            # Only return metadata for public videos when accessed publicly
+            if visibility != 'public':
+                return {
+                    'statusCode': 403,
+                    'headers': cors_headers(),
+                    'body': json.dumps({'error': 'Video is private'})
+                }
+            
             return {
                 'statusCode': 200,
                 'headers': cors_headers(),
                 'body': json.dumps({
                     'filename': item.get('filename', filename),
                     'title': item.get('title', filename),
-                    'tags': item.get('tags', [])
+                    'tags': item.get('tags', []),
+                    'visibility': visibility
                 })
             }
         else:
             return {
-                'statusCode': 200,
+                'statusCode': 404,
                 'headers': cors_headers(),
-                'body': json.dumps({
-                    'filename': filename,
-                    'title': filename,
-                    'tags': []
-                })
+                'body': json.dumps({'error': 'Video not found'})
             }
     except Exception as e:
         return {
@@ -198,14 +244,24 @@ def update_video_metadata(event, filename):
     body = json.loads(event['body'])
     title = body.get('title', filename)
     tags = body.get('tags', [])
+    owner = body.get('owner', 'system')
+    visibility = body.get('visibility', 'public')
+    external_url = body.get('external_url')
+    video_type = body.get('video_type', 'local')
     
     item = {
         'video_id': filename,
         'filename': filename,
         'title': title,
         'tags': tags,
+        'owner': owner,
+        'visibility': visibility,
+        'video_type': video_type,
         'updated_at': datetime.utcnow().isoformat()
     }
+    
+    if external_url:
+        item['external_url'] = external_url
     
     table.put_item(Item=item)
     
@@ -216,22 +272,38 @@ def update_video_metadata(event, filename):
             'message': 'Video metadata updated',
             'filename': filename,
             'title': title,
-            'tags': tags
+            'tags': tags,
+            'owner': owner,
+            'visibility': visibility,
+            'video_type': video_type
         })
     }
 
 def list_all_videos(event):
-    """List all videos with metadata"""
+    """List videos with visibility filtering"""
+    query_params = event.get('queryStringParameters') or {}
+    user_email = query_params.get('user')
+    user_role = query_params.get('role')
+    
     response = table.scan()
     
     # Format videos to match admin API format
     videos = []
     for item in response['Items']:
-        videos.append({
-            'filename': item.get('filename', ''),
-            'title': item.get('title', item.get('filename', '').replace('.mp4', '')),
-            'tags': item.get('tags', [])
-        })
+        visibility = item.get('visibility', 'public')
+        owner = item.get('owner', 'system')
+        
+        # Super users and admins see all videos, others see only public + owned
+        if user_role in ['super_user', 'admin'] or visibility == 'public' or (user_email and owner == user_email):
+            videos.append({
+                'filename': item.get('filename', ''),
+                'title': item.get('title', item.get('filename', '').replace('.mp4', '').replace('_', ' ')),
+                'tags': item.get('tags', []),
+                'owner': owner,
+                'visibility': visibility,
+                'video_type': item.get('video_type', 'local'),
+                'external_url': item.get('external_url', '')
+            })
     
     return {
         'statusCode': 200,
