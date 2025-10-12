@@ -87,7 +87,17 @@ def register_user(event):
             'password_hash': password_hash,
             'role': role,
             'created_at': datetime.utcnow().isoformat(),
-            'active': True
+            'active': True,
+            'subscription_tier': 'free',
+            'storage_used': 0,
+            'storage_limit': 2147483648,  # 2GB in bytes
+            'video_count': 0,
+            'video_limit': 50,
+            'payment_provider': None,
+            'subscription_id': None,
+            'billing_cycle': None,
+            'next_billing_date': None,
+            'subscription_status': 'active'
         }
     )
     

@@ -34,6 +34,7 @@ def lambda_handler(event, context):
         # Parse request body (POST)
         body = json.loads(event.get('body', '{}'))
         url = body.get('url')
+        owner_email = body.get('owner', 'system')
         
         if not url:
             return {
@@ -41,6 +42,20 @@ def lambda_handler(event, context):
                 'headers': {'Access-Control-Allow-Origin': '*'},
                 'body': json.dumps({'error': 'Missing url parameter'})
             }
+        
+        # Check storage quota for non-system users
+        if owner_email != 'system':
+            quota_check = check_storage_quota(owner_email)
+            if not quota_check['allowed']:
+                return {
+                    'statusCode': 403,
+                    'headers': {'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({
+                        'error': 'Storage quota exceeded',
+                        'message': quota_check['message'],
+                        'current_usage': quota_check['usage']
+                    })
+                }
         
         # Create job entry
         job_id = str(uuid.uuid4())
@@ -110,6 +125,69 @@ def lambda_handler(event, context):
             'headers': {'Access-Control-Allow-Origin': '*'},
             'body': json.dumps({'error': str(e)})
         }
+
+def check_storage_quota(owner_email):
+    """Check if user has available storage quota"""
+    try:
+        users_table = dynamodb.Table('users')
+        
+        # Get user by email
+        response = users_table.query(
+            IndexName='email-index',
+            KeyConditionExpression='email = :email',
+            ExpressionAttributeValues={':email': owner_email}
+        )
+        
+        if not response['Items']:
+            return {'allowed': False, 'message': 'User not found', 'usage': {}}
+        
+        user = response['Items'][0]
+        storage_used = user.get('storage_used', 0)
+        storage_limit = user.get('storage_limit', 2147483648)  # 2GB default
+        video_count = user.get('video_count', 0)
+        video_limit = user.get('video_limit', 50)
+        
+        # Check video count limit
+        if video_limit > 0 and video_count >= video_limit:
+            return {
+                'allowed': False,
+                'message': f'Video limit reached ({video_count}/{video_limit}). Upgrade your plan to upload more videos.',
+                'usage': {
+                    'storage_used': storage_used,
+                    'storage_limit': storage_limit,
+                    'video_count': video_count,
+                    'video_limit': video_limit
+                }
+            }
+        
+        # Check storage limit (allow some buffer for video processing)
+        storage_buffer = 0.9  # Use 90% of limit as threshold
+        if storage_limit > 0 and storage_used >= (storage_limit * storage_buffer):
+            return {
+                'allowed': False,
+                'message': f'Storage limit nearly reached ({storage_used / (1024**3):.1f}GB / {storage_limit / (1024**3):.1f}GB). Upgrade your plan for more storage.',
+                'usage': {
+                    'storage_used': storage_used,
+                    'storage_limit': storage_limit,
+                    'video_count': video_count,
+                    'video_limit': video_limit
+                }
+            }
+        
+        return {
+            'allowed': True,
+            'message': 'Quota available',
+            'usage': {
+                'storage_used': storage_used,
+                'storage_limit': storage_limit,
+                'video_count': video_count,
+                'video_limit': video_limit
+            }
+        }
+        
+    except Exception as e:
+        print(f"Error checking quota: {e}")
+        return {'allowed': True, 'message': 'Quota check failed, allowing download', 'usage': {}}
 
 def get_job_status():
     try:
