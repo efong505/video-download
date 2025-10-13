@@ -186,6 +186,16 @@
             <p>Loading videos...</p>
         </div>
         
+            <!-- Category Filter Buttons -->
+            <div class="category-bar" style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: none;" id="category-bar">
+                <div class="d-flex flex-wrap gap-2 justify-content-center">
+                    <button class="btn btn-primary category-btn active" data-category="all" style="border-radius: 25px;">📺 All Videos</button>
+                    <button class="btn btn-outline-primary category-btn" data-category="sermons" style="border-radius: 25px;">⛪ Sermons</button>
+                    <button class="btn btn-outline-primary category-btn" data-category="politics" style="border-radius: 25px;">🏛️ Politics</button>
+                    <button class="btn btn-outline-primary category-btn" data-category="teaching" style="border-radius: 25px;">📖 Teaching</button>
+                </div>
+            </div>
+            
             <div class="search-filter-bar" style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: none;" id="search-filter-bar">
                 <div class="row g-3">
                     <div class="col-md-6">
@@ -209,6 +219,17 @@
             <div id="no-videos" class="text-center" style="display: none;">
                 <p>No videos found.</p>
             </div>
+            
+            <!-- Load More Button -->
+            <div class="text-center mt-4" id="load-more-container" style="display: none;">
+                <button id="load-more-btn" class="btn btn-primary btn-lg" style="border-radius: 25px; padding: 12px 30px;">
+                    📥 Load More Videos
+                </button>
+                <div id="loading-more" class="mt-3" style="display: none;">
+                    <div class="spinner-border spinner-border-sm" role="status"></div>
+                    <span class="ms-2">Loading more videos...</span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -219,6 +240,10 @@
         
         let allVideos = [];
         let filteredVideos = [];
+        let currentPage = 1;
+        let currentCategory = 'all';
+        let hasMore = true;
+        const videosPerPage = 24;
         
         async function checkAuth() {
             const token = localStorage.getItem('auth_token');
@@ -251,13 +276,13 @@
             }
         }
         
-        async function loadVideos() {
+        async function loadVideos(page = 1, category = 'all', append = false) {
             try {
                 const userData = localStorage.getItem('user_data');
                 const userEmail = userData ? JSON.parse(userData).email : '';
                 const userRole = userData ? JSON.parse(userData).role : '';
                 
-                const tagResponse = await fetch(`${TAG_API}?action=list&user=${encodeURIComponent(userEmail)}&role=${encodeURIComponent(userRole)}`);
+                const tagResponse = await fetch(`${TAG_API}?action=list&user=${encodeURIComponent(userEmail)}&role=${encodeURIComponent(userRole)}&page=${page}&limit=${videosPerPage}&category=${category}`);
                 const tagData = await tagResponse.json();
                 
                 console.log('TAG API response:', tagData);
@@ -266,39 +291,49 @@
                 
                 if (tagData.videos && tagData.videos.length > 0) {
                     let videosWithMetadata = tagData.videos;
+                    hasMore = tagData.has_more || false;
                     
-                    // Calculate size only for local videos (external videos don't have size)
-                    const totalSize = videosWithMetadata.reduce((sum, video) => {
-                        if (video.video_type === 'local' && video.size) {
-                            return sum + video.size;
-                        }
-                        return sum;
-                    }, 0);
-                    const allTags = new Set();
-                    videosWithMetadata.forEach(video => {
-                        if (video.tags) {
-                            video.tags.forEach(tag => allTags.add(tag));
-                        }
-                    });
+                    if (append) {
+                        allVideos = [...allVideos, ...videosWithMetadata];
+                    } else {
+                        allVideos = videosWithMetadata;
+                        
+                        // Calculate stats only on first load (simplified)
+                        const allTags = new Set();
+                        videosWithMetadata.forEach(video => {
+                            if (video.tags) {
+                                video.tags.forEach(tag => allTags.add(tag));
+                            }
+                        });
+                        
+                        document.getElementById('total-videos').textContent = tagData.total_count || videosWithMetadata.length;
+                        document.getElementById('total-size').textContent = 'Calculating...';
+                        document.getElementById('total-tags').textContent = allTags.size;
+                        document.getElementById('stats-bar').style.display = 'flex';
+                        
+                        setupTagFilter(allTags);
+                        setupSearch();
+                        setupCategoryFilter();
+                    }
                     
-                    document.getElementById('total-videos').textContent = videosWithMetadata.length;
-                    document.getElementById('total-size').textContent = (totalSize / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
-                    document.getElementById('total-tags').textContent = allTags.size;
-                    document.getElementById('stats-bar').style.display = 'flex';
-                    
-                    allVideos = videosWithMetadata;
                     filteredVideos = [...allVideos];
-                    
-                    setupTagFilter(allTags);
-                    setupSearch();
-                    displayVideos(filteredVideos);
+                    displayVideos(append ? videosWithMetadata : filteredVideos, append);
                     
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('videos-container').style.display = 'flex';
                     document.getElementById('search-filter-bar').style.display = 'block';
-                } else {
+                    document.getElementById('category-bar').style.display = 'block';
+                    
+                    // Show/hide load more button
+                    if (hasMore) {
+                        document.getElementById('load-more-container').style.display = 'block';
+                    } else {
+                        document.getElementById('load-more-container').style.display = 'none';
+                    }
+                } else if (!append) {
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('no-videos').style.display = 'block';
+                    document.getElementById('load-more-container').style.display = 'none';
                 }
                 
             } catch (error) {
@@ -455,9 +490,50 @@
             displayVideos(filteredVideos);
         }
         
-        function displayVideos(videos) {
+        function setupCategoryFilter() {
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            categoryButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    categoryButtons.forEach(b => {
+                        b.classList.remove('active');
+                        b.classList.remove('btn-primary');
+                        b.classList.add('btn-outline-primary');
+                    });
+                    this.classList.add('active');
+                    this.classList.add('btn-primary');
+                    this.classList.remove('btn-outline-primary');
+                    
+                    currentCategory = this.dataset.category;
+                    currentPage = 1;
+                    
+                    // Show loading
+                    document.getElementById('loading').style.display = 'block';
+                    document.getElementById('videos-container').style.display = 'none';
+                    document.getElementById('load-more-container').style.display = 'none';
+                    
+                    loadVideos(1, currentCategory, false);
+                });
+            });
+        }
+        
+        async function loadMoreVideos() {
+            document.getElementById('loading-more').style.display = 'block';
+            document.getElementById('load-more-btn').style.display = 'none';
+            
+            currentPage++;
+            await loadVideos(currentPage, currentCategory, true);
+            
+            document.getElementById('loading-more').style.display = 'none';
+            if (hasMore) {
+                document.getElementById('load-more-btn').style.display = 'block';
+            }
+        }
+        
+        function displayVideos(videos, append = false) {
             const container = document.getElementById('videos-container');
-            container.innerHTML = '';
+            if (!append) {
+                container.innerHTML = '';
+            }
             
             console.log('Displaying videos:', videos);
             
@@ -522,6 +598,9 @@
                 loadVideos();
             }
         });
+        
+        // Load more button event listener
+        document.getElementById('load-more-btn').addEventListener('click', loadMoreVideos);
     </script>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>

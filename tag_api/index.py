@@ -280,15 +280,18 @@ def update_video_metadata(event, filename):
     }
 
 def list_all_videos(event):
-    """List videos with visibility filtering"""
+    """List videos with visibility filtering and pagination"""
     query_params = event.get('queryStringParameters') or {}
     user_email = query_params.get('user')
     user_role = query_params.get('role')
+    page = int(query_params.get('page', 1))
+    limit = int(query_params.get('limit', 24))
+    category = query_params.get('category', 'all')
     
     response = table.scan()
     
-    # Format videos to match admin API format
-    videos = []
+    # Format and filter videos
+    all_videos = []
     for item in response['Items']:
         visibility = item.get('visibility', 'public')
         owner = item.get('owner', 'system')
@@ -302,32 +305,58 @@ def list_all_videos(event):
                 'owner': owner,
                 'visibility': visibility,
                 'video_type': item.get('video_type', 'local'),
-                'external_url': item.get('external_url', '')
+                'external_url': item.get('external_url', ''),
+                'upload_date': item.get('upload_date', item.get('created_at', ''))
             }
             
-            # Add size for local videos
-            if item.get('video_type', 'local') == 'local':
-                try:
-                    import boto3
-                    s3_client = boto3.client('s3')
-                    s3_response = s3_client.head_object(
-                        Bucket='my-video-downloads-bucket',
-                        Key=f"videos/{item.get('filename', '')}"
-                    )
-                    video_data['size'] = s3_response['ContentLength']
-                except:
-                    video_data['size'] = 0
-            else:
-                video_data['size'] = 0
+            # Add size for local videos (cached or estimated)
+            video_data['size'] = item.get('file_size', 0)  # Use cached size if available
                 
-            videos.append(video_data)
+            all_videos.append(video_data)
+    
+    # Category filtering
+    if category != 'all':
+        category_keywords = {
+            'sermons': ['sermon', 'preaching', 'biblical', 'scripture', 'gospel', 'ministry', 'pastor', 'church'],
+            'politics': ['political', 'conservative', 'government', 'election', 'policy', 'freedom', 'trump', 'biden'],
+            'teaching': ['teaching', 'study', 'bible', 'theology', 'doctrine', 'christian', 'lesson', 'education']
+        }
+        
+        if category in category_keywords:
+            keywords = category_keywords[category]
+            filtered_videos = []
+            for video in all_videos:
+                title_lower = video['title'].lower()
+                tags_lower = [tag.lower() for tag in video.get('tags', [])]
+                
+                # Check title and tags for keywords
+                title_match = any(keyword in title_lower for keyword in keywords)
+                tag_match = any(any(keyword in tag for keyword in keywords) for tag in tags_lower)
+                
+                if title_match or tag_match:
+                    filtered_videos.append(video)
+            all_videos = filtered_videos
+    
+    # Sort by upload date (newest first)
+    all_videos.sort(key=lambda x: x.get('upload_date', ''), reverse=True)
+    
+    # Pagination
+    total_count = len(all_videos)
+    start_index = (page - 1) * limit
+    end_index = start_index + limit
+    paginated_videos = all_videos[start_index:end_index]
     
     return {
         'statusCode': 200,
         'headers': cors_headers(),
         'body': json.dumps({
-            'videos': videos,
-            'count': len(videos)
+            'videos': paginated_videos,
+            'count': len(paginated_videos),
+            'total_count': total_count,
+            'page': page,
+            'limit': limit,
+            'total_pages': (total_count + limit - 1) // limit,
+            'has_more': end_index < total_count
         })
     }
 
