@@ -1,22 +1,43 @@
 # AWS Deployment Files
 *.zip
 response.json
-test-payload.json
+test-*.json
 cors-*.json
 
-# Python Dependencies
-articles_api/__pycache__/
-articles_api/bin/
-articles_api/certifi/
-articles_api/certifi-*
-articles_api/charset_normalizer/
-articles_api/charset_normalizer-*
-articles_api/idna/
-articles_api/idna-*
-articles_api/requests/
-articles_api/requests-*
-articles_api/urllib3/
-articles_api/urllib3-*
+# Python Dependencies (all Lambda functions)
+*/__pycache__/
+*/bin/
+*/lib/
+*/layer/
+*/certifi/
+*/certifi-*/
+*/charset_normalizer/
+*/charset_normalizer-*/
+*/idna/
+*/idna-*/
+*/requests/
+*/requests-*/
+*/urllib3/
+*/urllib3-*/
+*/boto3/
+*/botocore/
+*/dateutil/
+*/jmespath/
+*/s3transfer/
+*/yt_dlp/
+*/jwt/
+env/
+
+# Video Files
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.webm
+*.mkv
+*.part
+*.ytdl
 
 # Environment Files
 .env
