@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles - Christian Conservative Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        .article-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+        }
+        .article-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .article-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        .article-title {
+            color: #333;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+        .article-title:hover {
+            color: #667eea;
+        }
+        .article-excerpt {
+            color: #555;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        .article-tags {
+            margin-top: 15px;
+        }
+        .tag-badge {
+            background: #f8f9fa;
+            color: #495057;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+        .category-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .category-sermon { background: #e3f2fd; color: #1565c0; }
+        .category-politics { background: #fff3e0; color: #ef6c00; }
+        .category-devotional { background: #f3e5f5; color: #7b1fa2; }
+        .category-apologetics { background: #e8f5e8; color: #2e7d32; }
+        .category-ministry { background: #fff8e1; color: #f57f17; }
+        .category-general { background: #f5f5f5; color: #616161; }
+        .filter-bar {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="mb-0">📝 Articles & Blog</h1>
+                <div class="d-flex gap-3">
+                    <a href="/" class="nav-link">🏠 Home</a>
+                    <a href="videos.html" class="nav-link">🎬 Videos</a>
+                    <a href="create-article.html" class="nav-link">✍️ Write Article</a>
+                    <a href="#" onclick="logout()" class="nav-link">🚪 Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="row g-3 align-items-center">
+                <div class="col-md-4">
+                    <input type="text" id="search-input" class="form-control" placeholder="Search articles...">
+                </div>
+                <div class="col-md-3">
+                    <select id="category-filter" class="form-select">
+                        <option value="">All Categories</option>
+                        <option value="sermon">Sermons</option>
+                        <option value="politics">Political Commentary</option>
+                        <option value="devotional">Devotionals</option>
+                        <option value="apologetics">Apologetics</option>
+                        <option value="ministry">Ministry Updates</option>
+                        <option value="general">General</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <select id="author-filter" class="form-select">
+                        <option value="">All Authors</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-outline-secondary" onclick="clearFilters()">Clear</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Articles Container -->
+        <div id="loading" class="text-center py-5">
+            <div class="spinner-border" role="status"></div>
+            <p class="mt-3">Loading articles...</p>
+        </div>
+
+        <div id="articles-container" style="display: none;">
+            <!-- Articles will be loaded here -->
+        </div>
+
+        <div id="no-articles" class="text-center py-5" style="display: none;">
+            <h4>No articles found</h4>
+            <p class="text-muted">Be the first to write an article!</p>
+            <a href="create-article.html" class="btn btn-primary">✍️ Write Article</a>
+        </div>
+    </div>
+
+    <script>
+        const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
+        const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';
+        
+        let currentUser = null;
+        let authToken = null;
+        let allArticles = [];
+
+        // Check authentication on page load
+        window.addEventListener('load', async function() {
+            authToken = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+            
+            if (!authToken || !userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(userData);
+            
+            // Add admin link if user is admin or super_user
+            if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
+                const navLinks = document.querySelector('.d-flex.gap-3');
+                const adminLink = document.createElement('a');
+                adminLink.href = 'admin.html';
+                adminLink.className = 'nav-link';
+                adminLink.innerHTML = '⚙️ Admin';
+                navLinks.insertBefore(adminLink, navLinks.lastElementChild);
+            }
+            
+            await loadArticles();
+            setupFilters();
+        });
+
+        async function loadArticles() {
+            try {
+                const response = await fetch(`${ARTICLES_API}?action=list&visibility=public`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    allArticles = data.articles || [];
+                    displayArticles(allArticles);
+                    populateAuthorFilter(allArticles);
+                    
+                    document.getElementById('loading').style.display = 'none';
+                    
+                    if (allArticles.length === 0) {
+                        document.getElementById('no-articles').style.display = 'block';
+                    } else {
+                        document.getElementById('articles-container').style.display = 'block';
+                    }
+                } else {
+                    throw new Error(data.error || 'Failed to load articles');
+                }
+            } catch (error) {
+                console.error('Error loading articles:', error);
+                document.getElementById('loading').innerHTML = 
+                    '<div class="alert alert-danger">Failed to load articles</div>';
+            }
+        }
+
+        function displayArticles(articles) {
+            const container = document.getElementById('articles-container');
+            container.innerHTML = '';
+            
+            articles.forEach(article => {
+                const articleCard = createArticleCard(article);
+                container.appendChild(articleCard);
+            });
+        }
+
+        function createArticleCard(article) {
+            const card = document.createElement('div');
+            card.className = 'article-card';
+            
+            // Create excerpt from content (strip HTML and limit words)
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = article.content;
+            const plainText = tempDiv.textContent || tempDiv.innerText || '';
+            const excerpt = plainText.split(' ').slice(0, 30).join(' ') + (plainText.split(' ').length > 30 ? '...' : '');
+            
+            // Format date
+            const date = new Date(article.created_at).toLocaleDateString();
+            
+            card.innerHTML = `
+                <div class="article-meta">
+                    <span class="category-badge category-${article.category}">${getCategoryName(article.category)}</span>
+                    <span class="ms-3">By ${article.author}</span>
+                    <span class="ms-3">${date}</span>
+                    <span class="ms-3">📖 ${article.reading_time} min read</span>
+                    <span class="ms-3">👁️ ${article.view_count || 0} views</span>
+                </div>
+                
+                <h3><a href="article.html?id=${article.article_id}" class="article-title">${article.title}</a></h3>
+                
+                <div class="article-excerpt">${excerpt}</div>
+                
+                ${article.scripture_references && article.scripture_references.length > 0 ? 
+                    `<div class="mb-2">
+                        <small class="text-muted">📖 Scripture References: ${article.scripture_references.join(', ')}</small>
+                    </div>` : ''
+                }
+                
+                ${article.tags && article.tags.length > 0 ? 
+                    `<div class="article-tags">
+                        ${article.tags.map(tag => `<span class="tag-badge">${tag}</span>`).join('')}
+                    </div>` : ''
+                }
+            `;
+            
+            return card;
+        }
+
+        function getCategoryName(category) {
+            const names = {
+                'sermon': 'Sermon',
+                'politics': 'Politics',
+                'devotional': 'Devotional',
+                'apologetics': 'Apologetics',
+                'ministry': 'Ministry',
+                'general': 'General'
+            };
+            return names[category] || 'General';
+        }
+
+        function populateAuthorFilter(articles) {
+            const authors = [...new Set(articles.map(article => article.author))];
+            const authorFilter = document.getElementById('author-filter');
+            
+            authors.forEach(author => {
+                const option = document.createElement('option');
+                option.value = author;
+                option.textContent = author;
+                authorFilter.appendChild(option);
+            });
+        }
+
+        function setupFilters() {
+            const searchInput = document.getElementById('search-input');
+            const categoryFilter = document.getElementById('category-filter');
+            const authorFilter = document.getElementById('author-filter');
+            
+            searchInput.addEventListener('input', applyFilters);
+            categoryFilter.addEventListener('change', applyFilters);
+            authorFilter.addEventListener('change', applyFilters);
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('search-input').value.toLowerCase();
+            const selectedCategory = document.getElementById('category-filter').value;
+            const selectedAuthor = document.getElementById('author-filter').value;
+            
+            const filteredArticles = allArticles.filter(article => {
+                const matchesSearch = !searchTerm || 
+                    article.title.toLowerCase().includes(searchTerm) ||
+                    article.content.toLowerCase().includes(searchTerm) ||
+                    (article.tags && article.tags.some(tag => tag.toLowerCase().includes(searchTerm)));
+                
+                const matchesCategory = !selectedCategory || article.category === selectedCategory;
+                const matchesAuthor = !selectedAuthor || article.author === selectedAuthor;
+                
+                return matchesSearch && matchesCategory && matchesAuthor;
+            });
+            
+            displayArticles(filteredArticles);
+            
+            if (filteredArticles.length === 0) {
+                document.getElementById('articles-container').innerHTML = 
+                    '<div class="text-center py-5"><h4>No articles match your filters</h4></div>';
+            }
+        }
+
+        function clearFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('category-filter').value = '';
+            document.getElementById('author-filter').value = '';
+            displayArticles(allArticles);
+        }
+
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

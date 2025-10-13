@@ -1,52 +1,42 @@
-# Video files (too large for Git)
-*.mp4
-*.avi
-*.mkv
-*.mov
-*.wmv
-*.part
-*.ytdl
-
-# Python compiled files
-__pycache__/
-*.pyc
-*.pyo
-*.egg-info/
-
-# Deployment packages
+# AWS Deployment Files
 *.zip
-
-# Large dependencies (can be reinstalled)
-router/yt_dlp/
-router/boto3/
-router/botocore/
-downloader/layer/
-env/
-
-# PayPal API dependencies (can be reinstalled)
-paypal_billing_api/requests/
-paypal_billing_api/urllib3/
-paypal_billing_api/certifi/
-paypal_billing_api/charset_normalizer/
-paypal_billing_api/idna/
-paypal_billing_api/*dist-info/
-paypal_billing_api/bin/
-
-# AWS credentials
-*.pem
-*.key
-.aws/
-
-# Temporary files
-temp_*
-*.tmp
 response.json
-test-status.json
+test-payload.json
+cors-*.json
 
-# OS files
+# Python Dependencies
+articles_api/__pycache__/
+articles_api/bin/
+articles_api/certifi/
+articles_api/certifi-*
+articles_api/charset_normalizer/
+articles_api/charset_normalizer-*
+articles_api/idna/
+articles_api/idna-*
+articles_api/requests/
+articles_api/requests-*
+articles_api/urllib3/
+articles_api/urllib3-*
+
+# Environment Files
+.env
+.env.local
+.env.production
+
+# IDE Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS Files
 .DS_Store
 Thumbs.db
 
-# IDE files
-.vscode/
-.idea/
+# Logs
+*.log
+logs/
+
+# Temporary Files
+temp/
+tmp/
