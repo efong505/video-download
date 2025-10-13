@@ -298,16 +298,21 @@
                     } else {
                         allVideos = videosWithMetadata;
                         
-                        // Calculate stats only on first load (simplified)
+                        // Calculate stats only on first load
                         const allTags = new Set();
+                        let totalSize = 0;
                         videosWithMetadata.forEach(video => {
                             if (video.tags) {
                                 video.tags.forEach(tag => allTags.add(tag));
                             }
+                            // Add size if available (only for local videos)
+                            if (video.size && video.video_type === 'local') {
+                                totalSize += parseInt(video.size) || 0;
+                            }
                         });
                         
                         document.getElementById('total-videos').textContent = tagData.total_count || videosWithMetadata.length;
-                        document.getElementById('total-size').textContent = 'Calculating...';
+                        document.getElementById('total-size').textContent = formatFileSize(totalSize);
                         document.getElementById('total-tags').textContent = allTags.size;
                         document.getElementById('stats-bar').style.display = 'flex';
                         
@@ -572,6 +577,14 @@
             }).catch(() => {
                 prompt('Copy this embed link:', embedUrl);
             });
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 B';
+            const k = 1024;
+            const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
         
         function logout() {

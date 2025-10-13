@@ -4,6 +4,7 @@ from datetime import datetime
 import uuid
 
 dynamodb = boto3.resource('dynamodb')
+s3_client = boto3.client('s3')
 table = dynamodb.Table('video-metadata')
 
 def lambda_handler(event, context):
@@ -309,8 +310,19 @@ def list_all_videos(event):
                 'upload_date': item.get('upload_date', item.get('created_at', ''))
             }
             
-            # Add size for local videos (cached or estimated)
-            video_data['size'] = item.get('file_size', 0)  # Use cached size if available
+            # Add size for local videos from S3
+            if video_data['video_type'] == 'local':
+                try:
+                    s3_response = s3_client.head_object(
+                        Bucket='my-video-downloads-bucket',
+                        Key=f"videos/{video_data['filename']}"
+                    )
+                    video_data['size'] = s3_response['ContentLength']
+                except Exception as e:
+                    print(f"Error getting size for {video_data['filename']}: {e}")
+                    video_data['size'] = 0
+            else:
+                video_data['size'] = 0  # External videos don't have file size
                 
             all_videos.append(video_data)
     

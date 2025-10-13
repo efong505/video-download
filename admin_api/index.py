@@ -157,6 +157,7 @@ def get_all_videos(event):
                     videos.append({
                         'filename': filename,
                         'size': obj['Size'],
+                        'size_formatted': format_file_size(obj['Size']),
                         'last_modified': obj['LastModified'].isoformat(),
                         'tags': metadata.get('tags', []),
                         'title': metadata.get('title', filename.replace('.mp4', '')),
@@ -432,6 +433,17 @@ def generate_thumbnail(event):
             'headers': cors_headers(),
             'body': json.dumps({'error': str(e)})
         }
+
+def format_file_size(bytes):
+    """Format file size in human readable format"""
+    if bytes == 0:
+        return '0 B'
+    k = 1024
+    sizes = ['B', 'KB', 'MB', 'GB', 'TB']
+    i = int(bytes.bit_length() - 1) // 10 if bytes else 0
+    if i >= len(sizes):
+        i = len(sizes) - 1
+    return f"{bytes / (k ** i):.1f} {sizes[i]}"
 
 def cors_headers():
     return {
