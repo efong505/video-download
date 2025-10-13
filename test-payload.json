@@ -1,4 +1,1 @@
-{
-  "httpMethod": "POST",
-  "body": "{\"url\":\"https://www.youtube.com/watch?v=dQw4w9WgXcQ\",\"output_name\":\"test.mp4\"}"
-}
+{"httpMethod":"GET","queryStringParameters":{"action":"templates"}}
