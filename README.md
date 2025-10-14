@@ -10,6 +10,23 @@ A complete serverless video management system built on AWS with intelligent Lamb
 - **External Video Support**: Add YouTube, Rumble, and Facebook videos without downloading
 - **Intelligent Routing**: Automatic Lambda/Fargate selection based on video length
 - **Thumbnail Generation**: Automatic thumbnail creation for uploaded/downloaded videos
+- **Performance Optimization**: Pagination with category filtering for improved loading
+
+### Christian Blog & Article System (Phase 3)
+- **Rich Text Editor**: Quill.js editor with Bible verse integration
+- **Bible Integration**: Search and insert verses from multiple translations (KJV, ESV, NIV, NASB)
+- **Article Templates**: Pre-built templates for sermons and political commentary
+- **Scripture References**: Automatic extraction and tracking of Bible verses
+- **Category Management**: Sermons, Politics, Devotionals, Apologetics, Ministry, General
+- **Reading Time**: Automatic calculation based on word count
+- **View Tracking**: Article view count and engagement metrics
+
+### Subscription & Quota System
+- **PayPal Integration**: Subscription-based storage and video limits
+- **Tiered Plans**: Free (2GB/50 videos), Premium ($9.99/25GB/500 videos), Pro ($24.99/100GB/2000 videos), Enterprise ($99.99/unlimited)
+- **Quota Enforcement**: Real-time storage and video count tracking
+- **Usage Dashboard**: Comprehensive subscription management in profile
+- **Admin Unlimited**: Admin and Super User roles have unlimited access
 
 ### Authentication & Authorization
 - **JWT-based Authentication**: 24-hour token expiration
@@ -48,6 +65,8 @@ A complete serverless video management system built on AWS with intelligent Lamb
 - **TAG API**: Video metadata and tag management
 - **Router API**: Download job routing and management
 - **Video List API**: S3-based video listing
+- **Articles API**: Blog/article management with Bible integration
+- **PayPal Billing API**: Subscription management and quota enforcement
 
 ## Database Schema
 
@@ -68,6 +87,14 @@ A complete serverless video management system built on AWS with intelligent Lamb
 - `status`, `progress`, `error_message`
 - `created_at`, `updated_at`
 
+### Articles Table
+- `article_id` (Primary Key)
+- `title`, `content`, `author`
+- `category`, `tags[]`, `visibility`
+- `scripture_references[]`, `reading_time`
+- `view_count`, `likes_count`
+- `created_at`, `updated_at`
+
 ## Deployment
 
 ### Prerequisites
@@ -83,15 +110,19 @@ A complete serverless video management system built on AWS with intelligent Lamb
 4. **admin-api**: Administrative operations
 5. **auth-api**: Authentication
 6. **thumbnail-generator**: Thumbnail creation
+7. **articles-api**: Blog/article management with Bible integration
+8. **paypal-billing-api**: Subscription and quota management
 
 ### Frontend Files
 - `index.html`: Landing page
 - `login.html`: Authentication
-- `videos.html`: Video gallery
+- `videos.html`: Video gallery with pagination
 - `admin.html`: Admin dashboard
 - `embed.html`: Embedded video player
 - `category.html`: Tag-based browsing
-- `profile.html`: User profile management
+- `profile.html`: User profile with subscription management
+- `articles.html`: Article listing and browsing
+- `create-article.html`: Article creation with Bible integration
 
 ## Configuration
 
@@ -118,6 +149,9 @@ A complete serverless video management system built on AWS with intelligent Lamb
 3. Upload/download videos
 4. Edit video metadata and ownership
 5. Manage tags and categories
+6. Create and manage articles
+7. Access Bible verse integration tools
+8. Monitor subscription usage and quotas
 
 ### For Super Users
 - All admin capabilities
@@ -136,6 +170,57 @@ A complete serverless video management system built on AWS with intelligent Lamb
 2. Provide URL, title, tags, and visibility
 3. System automatically detects platform type
 4. Creates embed-ready entries without downloading
+
+## Article & Blog System
+
+### Creating Articles
+1. Access "Create Article" from navigation
+2. Choose from pre-built templates (Sermon, Political Commentary)
+3. Use rich text editor with formatting options
+4. Search and insert Bible verses with translation options
+5. Add categories, tags, and visibility settings
+6. Publish or save as draft
+
+### Bible Verse Integration
+- **Supported Translations**: KJV, ESV, NIV, NASB
+- **Search Format**: "John 3:16", "1 John 1:9", "Romans 8:28"
+- **Auto-formatting**: Verses inserted as styled blockquotes
+- **Reference Tracking**: Automatic scripture reference extraction
+
+### Article Management
+- **Public/Private**: Control article visibility
+- **Categories**: Organize by sermon, politics, devotional, etc.
+- **Tags**: Flexible tagging system for organization
+- **Analytics**: View count and reading time tracking
+
+## Subscription Plans
+
+### Free Tier
+- **Storage**: 2GB
+- **Videos**: 50 videos maximum
+- **Features**: Basic upload, public/private videos, external embeds
+- **Cost**: Free
+
+### Premium Tier ($9.99/month)
+- **Storage**: 25GB
+- **Videos**: 500 videos maximum
+- **Features**: All free features + priority processing, custom branding
+- **PayPal**: Automatic billing and management
+
+### Pro Tier ($24.99/month)
+- **Storage**: 100GB
+- **Videos**: 2000 videos maximum
+- **Features**: All premium features + analytics, API access, bulk operations
+
+### Enterprise Tier ($99.99/month)
+- **Storage**: Unlimited
+- **Videos**: Unlimited
+- **Features**: All pro features + white-label, dedicated support
+
+### Admin/Super User Access
+- **Unlimited Storage**: No storage restrictions
+- **Unlimited Videos**: No video count limits
+- **Full Access**: All platform features available
 
 ## Privacy & Security
 
@@ -156,6 +241,9 @@ A complete serverless video management system built on AWS with intelligent Lamb
 3. **Large video downloads fail**: Use Fargate option for long videos
 4. **Authentication issues**: Check JWT token expiration (24 hours)
 5. **Size display issues**: TAG API includes S3 size lookup for accurate total size calculations
+6. **Bible verse insertion errors**: Resolved - API now cleans verse text to remove line breaks
+7. **Slow video loading**: Implemented pagination (24 videos per page) with category filtering
+8. **Subscription quota issues**: Check PayPal webhook configuration and usage tracking
 
 ### Debug Features
 - Console logging in browser developer tools
