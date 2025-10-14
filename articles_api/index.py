@@ -165,9 +165,18 @@ def get_bible_verse(event):
         # Remove spaces and convert to lowercase
         formatted_ref = reference.lower().replace(' ', '')
         
-        # bible-api.com only supports KJV reliably
-        # For non-KJV requests, use KJV but notify user
-        url = BIBLE_API_BASE + '/' + formatted_ref
+        # bible-api.com supports KJV, ASV (1901), and YLT (NT only)
+        supported_translations = ['kjv', 'asv', 'ylt']
+        
+        if translation.lower() in supported_translations:
+            # Use the requested translation
+            if translation.lower() == 'kjv':
+                url = BIBLE_API_BASE + '/' + formatted_ref
+            else:
+                url = BIBLE_API_BASE + '/' + formatted_ref + '?translation=' + translation.lower()
+        else:
+            # Fallback to KJV for unsupported translations
+            url = BIBLE_API_BASE + '/' + formatted_ref
         
         response = requests.get(url, timeout=10)
         
@@ -178,11 +187,14 @@ def get_bible_verse(event):
             # Remove multiple spaces and normalize
             verse_text = ' '.join(verse_text.split())
             
-            # If non-KJV was requested, add note about KJV fallback
-            actual_translation = 'KJV'
+            # Determine actual translation returned
+            actual_translation = data.get('translation_name', translation.upper())
             translation_note = ''
-            if translation.lower() != 'kjv':
+            
+            # Add fallback note for unsupported translations
+            if translation.lower() not in supported_translations:
                 translation_note = f' (Note: {translation.upper()} not available, showing KJV)'
+                actual_translation = 'KJV'
             
             return {
                 'statusCode': 200,
@@ -194,6 +206,26 @@ def get_bible_verse(event):
                 })
             }
         else:
+            # If the specific translation failed, try KJV as fallback
+            if translation.lower() != 'kjv':
+                fallback_url = BIBLE_API_BASE + '/' + formatted_ref
+                fallback_response = requests.get(fallback_url, timeout=10)
+                
+                if fallback_response.status_code == 200:
+                    data = fallback_response.json()
+                    verse_text = data.get('text', '').replace('\n', ' ').replace('\r', ' ').strip()
+                    verse_text = ' '.join(verse_text.split())
+                    
+                    return {
+                        'statusCode': 200,
+                        'headers': headers,
+                        'body': json.dumps({
+                            'reference': data.get('reference', reference),
+                            'text': verse_text,
+                            'translation': f'KJV (Note: {translation.upper()} not found for this verse, showing KJV)'
+                        })
+                    }
+            
             return {
                 'statusCode': 404,
                 'headers': headers,
