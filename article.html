@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article - Christian Conservative Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        .article-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+        .article-meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="mb-0">📖 Article</h1>
+                <div class="d-flex gap-3">
+                    <a href="/" class="nav-link">🏠 Home</a>
+                    <a href="videos.html" class="nav-link">🎬 Videos</a>
+                    <a href="articles.html" class="nav-link">📝 Articles</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div id="article-container">
+                    <div class="text-center">
+                        <div class="spinner-border" role="status"></div>
+                        <p class="mt-2">Loading article...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';
+        
+        async function loadArticle() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const articleId = urlParams.get('id');
+            
+            if (!articleId) {
+                document.getElementById('article-container').innerHTML = '<div class="alert alert-danger">Article ID not provided</div>';
+                return;
+            }
+            
+            try {
+                const response = await fetch(ARTICLES_API + '?action=get&article_id=' + articleId);
+                const data = await response.json();
+                
+                if (data.article) {
+                    displayArticle(data.article);
+                } else {
+                    document.getElementById('article-container').innerHTML = '<div class="alert alert-danger">Article not found</div>';
+                }
+            } catch (error) {
+                document.getElementById('article-container').innerHTML = '<div class="alert alert-danger">Error loading article: ' + error.message + '</div>';
+            }
+        }
+        
+        function displayArticle(article) {
+            const container = document.getElementById('article-container');
+            const createdDate = new Date(article.created_at).toLocaleDateString();
+            
+            container.innerHTML = '<div class="article-content">' +
+                '<h1>' + article.title + '</h1>' +
+                '<div class="article-meta">' +
+                    '<span class="badge bg-primary me-2">' + article.category + '</span>' +
+                    'By ' + article.author + ' • ' + createdDate + ' • ' + article.reading_time + ' min read • ' + article.view_count + ' views' +
+                '</div>' +
+                '<div class="article-body">' + article.content + '</div>' +
+            '</div>';
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadArticle);
+    </script>
+</body>
+</html>

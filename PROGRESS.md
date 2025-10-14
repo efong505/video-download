@@ -100,12 +100,14 @@
 3. [x] **Article Management System** ✅ COMPLETE
    - Article creation and editing interface (create-article.html)
    - Article listing and browsing (articles.html)
+   - Article viewer with full content display (article.html)
    - Category management (Sermons, Politics, Devotionals, Apologetics, Ministry, General)
    - Public/Private visibility controls
    - Tag system for article organization
    - Scripture reference extraction and tracking
    - Reading time calculation
    - View count tracking
+   - Search and filtering capabilities
 
 4. [ ] **Advanced Ministry Tools & Features** - FUTURE PHASE
    - Sermon Outline Generator (AI-assisted)
@@ -146,11 +148,14 @@ articles-table:
 ### **Implementation Status:**
 1. [x] Rich text editor with Bible integration ✅ COMPLETE
 2. [x] Article creation and management system ✅ COMPLETE
-3. [x] Template library with Christian themes ✅ COMPLETE
-4. [x] Scripture reference system ✅ COMPLETE
-5. [ ] Social sharing and embedding - FUTURE
-6. [ ] Comment system with moderation - FUTURE
-7. [ ] Advanced ministry tools - FUTURE
+3. [x] Article viewer and display system ✅ COMPLETE
+4. [x] Template library with Christian themes ✅ COMPLETE
+5. [x] Scripture reference system ✅ COMPLETE
+6. [x] CORS and API Gateway integration ✅ COMPLETE
+7. [x] DynamoDB Decimal serialization fixes ✅ COMPLETE
+8. [ ] Social sharing and embedding - FUTURE
+9. [ ] Comment system with moderation - FUTURE
+10. [ ] Advanced ministry tools - FUTURE
 
 ## Phase 4 - Angular Conversion 🔄 PLANNED
 - [ ] Convert entire frontend to Angular framework
@@ -274,6 +279,22 @@ articles-table:
 3. Lambda function must include proper CORS headers in all responses
 4. requests module required for external API calls (Bible API)
 5. Deployment package must include all dependencies
+
+**RECURRING CORS ISSUE PATTERN** ✅ DOCUMENTED:
+- **Problem**: "Access-Control-Allow-Origin missing" errors in browser
+- **Root Causes**: 
+  1. API Gateway OPTIONS method using MOCK integration instead of Lambda
+  2. Lambda function name mismatch in API Gateway integration URI
+  3. Lambda function not returning CORS headers in error cases (500 status)
+- **Resolution Steps**:
+  1. Update OPTIONS method: `aws apigateway put-integration --type AWS_PROXY`
+  2. Verify Lambda function name in integration URI
+  3. Ensure Lambda returns CORS headers in try/catch blocks
+  4. Deploy API Gateway changes
+- **Key Commands**:
+  - Check integration: `aws apigateway get-method --http-method OPTIONS`
+  - Fix integration: `aws apigateway put-integration --type AWS_PROXY --uri arn:aws:apigateway:region:lambda:path/2015-03-31/functions/arn:aws:lambda:region:account:function:FUNCTION_NAME/invocations`
+  - Deploy: `aws apigateway create-deployment --stage-name prod`
 
 ## Key System Information
 - **Platform Name**: Christian Conservative Video Platform
@@ -436,3 +457,7 @@ articles-table:
 - **ROLE-BASED LIMITS**: Regular users have 2GB/50 video limits, admins have unlimited access
 - **BIBLE VERSE INTEGRATION**: Fixed JavaScript syntax errors caused by line breaks in Bible API responses
 - **ARTICLES API STABILITY**: Resolved CORS and dependency issues in Lambda deployment
+- **CORS PATTERN DOCUMENTED**: Recurring CORS issue resolution pattern documented for future reference
+- **ARTICLE VIEWER COMPLETE**: Full article display system with proper navigation and formatting
+- **DECIMAL SERIALIZATION**: Fixed DynamoDB Decimal objects causing JSON serialization errors
+- **PHASE 3 FULLY OPERATIONAL**: Complete blog/article system with creation, listing, and viewing

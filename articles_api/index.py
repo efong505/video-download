@@ -4,6 +4,7 @@ from datetime import datetime
 import uuid
 import re
 import requests
+from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
 articles_table = dynamodb.Table('articles')
@@ -12,11 +13,11 @@ articles_table = dynamodb.Table('articles')
 BIBLE_API_BASE = 'https://bible-api.com'
 
 def lambda_handler(event, context):
+    # Always add CORS headers
+    headers = cors_headers()
+    
     try:
         method = event.get('httpMethod', 'GET')
-        
-        # Always add CORS headers
-        headers = cors_headers()
         
         if method == 'OPTIONS':
             return {
@@ -52,60 +53,88 @@ def lambda_handler(event, context):
     except Exception as e:
         return {
             'statusCode': 500,
-            'headers': headers,
+            'headers': cors_headers(),
             'body': json.dumps({'error': str(e)})
         }
 
-def create_article(event):
-    """Create a new article"""
-    body = json.loads(event['body'])
-    
-    article_id = str(uuid.uuid4())
-    title = body['title']
-    content = body['content']
-    author = body['author']
-    category = body.get('category', 'general')
-    template_used = body.get('template_used', 'custom')
-    tags = body.get('tags', [])
-    visibility = body.get('visibility', 'public')
-    featured_image = body.get('featured_image', '')
-    
-    # Extract scripture references from content
-    scripture_references = extract_scripture_references(content)
-    
-    # Calculate reading time (average 200 words per minute)
-    word_count = len(content.split())
-    reading_time = max(1, round(word_count / 200))
-    
-    article = {
-        'article_id': article_id,
-        'title': title,
-        'content': content,
-        'author': author,
-        'category': category,
-        'template_used': template_used,
-        'scripture_references': scripture_references,
-        'tags': tags,
-        'visibility': visibility,
-        'featured_image': featured_image,
-        'reading_time': reading_time,
-        'view_count': 0,
-        'likes_count': 0,
-        'created_at': datetime.utcnow().isoformat(),
-        'updated_at': datetime.utcnow().isoformat()
-    }
-    
-    articles_table.put_item(Item=article)
+def create_article_test(event):
+    """Minimal test version of create article"""
+    headers = cors_headers()
     
     return {
         'statusCode': 200,
-        'headers': cors_headers(),
+        'headers': headers,
         'body': json.dumps({
-            'message': 'Article created successfully',
-            'article_id': article_id,
-            'scripture_references': scripture_references
+            'message': 'Test article creation - CORS working',
+            'article_id': 'test-123'
         })
     }
+
+def create_article(event):
+    """Create a new article"""
+    headers = cors_headers()
+    
+    try:
+        body = json.loads(event['body'])
+        
+        article_id = str(uuid.uuid4())
+        title = body['title']
+        content = body['content']
+        author = body['author']
+        category = body.get('category', 'general')
+        template_used = body.get('template_used', 'custom')
+        tags = body.get('tags', [])
+        visibility = body.get('visibility', 'public')
+        featured_image = body.get('featured_image', '')
+        
+        # Extract scripture references from content
+        scripture_references = extract_scripture_references(content)
+        
+        # Calculate reading time (average 200 words per minute)
+        word_count = len(content.split())
+        reading_time = max(1, round(word_count / 200))
+        
+        article = {
+            'article_id': article_id,
+            'title': title,
+            'content': content,
+            'author': author,
+            'category': category,
+            'template_used': template_used,
+            'scripture_references': scripture_references,
+            'tags': tags,
+            'visibility': visibility,
+            'featured_image': featured_image,
+            'reading_time': reading_time,
+            'view_count': 0,
+            'likes_count': 0,
+            'created_at': datetime.utcnow().isoformat(),
+            'updated_at': datetime.utcnow().isoformat()
+        }
+        
+        articles_table.put_item(Item=article)
+        
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps({
+                'message': 'Article created successfully',
+                'article_id': article_id,
+                'scripture_references': scripture_references
+            })
+        }
+    except json.JSONDecodeError:
+        return {
+            'statusCode': 400,
+            'headers': headers,
+            'body': json.dumps({'error': 'Invalid JSON in request body'})
+        }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': headers,
+            'body': json.dumps({'error': 'Failed to create article: ' + str(e)})
+        }
 
 def get_bible_verse(event):
     """Get Bible verse from API"""
@@ -241,7 +270,7 @@ def list_articles(event):
             'statusCode': 200,
             'headers': cors_headers(),
             'body': json.dumps({
-                'articles': articles,
+                'articles': convert_decimals(articles),
                 'count': len(articles)
             })
         }
@@ -286,7 +315,7 @@ def get_article(event):
         return {
             'statusCode': 200,
             'headers': cors_headers(),
-            'body': json.dumps({'article': article})
+            'body': json.dumps({'article': convert_decimals(article)})
         }
         
     except Exception as e:
@@ -382,10 +411,19 @@ def extract_scripture_references(content):
     references = re.findall(pattern, content)
     return list(set(references))
 
+def convert_decimals(obj):
+    """Convert Decimal objects to int/float for JSON serialization"""
+    if isinstance(obj, list):
+        return [convert_decimals(item) for item in obj]
+    elif isinstance(obj, dict):
+        return {key: convert_decimals(value) for key, value in obj.items()}
+    elif isinstance(obj, Decimal):
+        return int(obj) if obj % 1 == 0 else float(obj)
+    return obj
+
 def cors_headers():
     return {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Amz-Date, X-Api-Key, X-Amz-Security-Token',
-        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-        'Access-Control-Max-Age': '86400'
+        'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+        'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS'
     }

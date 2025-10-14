@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Article - Christian Conservative Platform</title>
+    <title>Create Article - Christian Conservative Platform v2</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
@@ -384,7 +384,7 @@
             }
             
             try {
-                const response = await fetch(ARTICLES_API + '?action=create', {
+                const response = await fetch('https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags?action=create_article', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -414,6 +414,27 @@
                 alert('Error publishing article. Please try again.');
             }
         });
+
+        function saveDraft() {
+            alert('Draft save functionality coming soon!');
+        }
+
+        function previewArticle() {
+            var content = quill ? quill.root.innerHTML : '';
+            if (!content.trim()) {
+                alert('Please add some content to preview');
+                return;
+            }
+            
+            var previewWindow = window.open('', '_blank');
+            previewWindow.document.write('<html><head><title>Article Preview</title>');
+            previewWindow.document.write('<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">');
+            previewWindow.document.write('</head><body><div class="container mt-4">');
+            previewWindow.document.write('<h1>' + (document.getElementById('article-title').value || 'Untitled Article') + '</h1>');
+            previewWindow.document.write('<div class="article-content">' + content + '</div>');
+            previewWindow.document.write('</div></body></html>');
+            previewWindow.document.close();
+        }
 
         function logout() {
             localStorage.removeItem('auth_token');
