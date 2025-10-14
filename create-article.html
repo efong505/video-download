@@ -159,11 +159,12 @@
                             </div>
                             <div class="mb-3">
                                 <select id="translation-select" class="form-select">
-                                    <option value="kjv">King James Version</option>
-                                    <option value="esv">English Standard Version</option>
-                                    <option value="niv">New International Version</option>
-                                    <option value="nasb">New American Standard</option>
+                                    <option value="kjv">King James Version (KJV)</option>
+                                    <option value="esv">English Standard Version (ESV) - Falls back to KJV</option>
+                                    <option value="niv">New International Version (NIV) - Falls back to KJV</option>
+                                    <option value="nasb">New American Standard (NASB) - Falls back to KJV</option>
                                 </select>
+                                <div class="form-text">Note: Only KJV is fully supported. Other translations will show KJV text.</div>
                             </div>
                             <button type="button" class="btn btn-outline-primary btn-sm" onclick="searchVerse()">🔍 Search Verse</button>
                             <div id="verse-result"></div>

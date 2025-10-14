@@ -161,15 +161,13 @@ def get_bible_verse(event):
         }
     
     try:
-        # Format reference for API (e.g., "john 3:16")
+        # Format reference for API (e.g., "john3:16")
+        # Remove spaces and convert to lowercase
         formatted_ref = reference.lower().replace(' ', '')
         
-        # Try different translation endpoints
-        if translation.lower() == 'kjv':
-            url = BIBLE_API_BASE + '/' + formatted_ref
-        else:
-            # For other translations, try with translation parameter
-            url = BIBLE_API_BASE + '/' + formatted_ref + '?translation=' + translation.lower()
+        # bible-api.com only supports KJV reliably
+        # For non-KJV requests, use KJV but notify user
+        url = BIBLE_API_BASE + '/' + formatted_ref
         
         response = requests.get(url, timeout=10)
         
@@ -180,20 +178,26 @@ def get_bible_verse(event):
             # Remove multiple spaces and normalize
             verse_text = ' '.join(verse_text.split())
             
+            # If non-KJV was requested, add note about KJV fallback
+            actual_translation = 'KJV'
+            translation_note = ''
+            if translation.lower() != 'kjv':
+                translation_note = f' (Note: {translation.upper()} not available, showing KJV)'
+            
             return {
                 'statusCode': 200,
                 'headers': headers,
                 'body': json.dumps({
                     'reference': data.get('reference', reference),
                     'text': verse_text,
-                    'translation': data.get('translation_name', translation.upper())
+                    'translation': actual_translation + translation_note
                 })
             }
         else:
             return {
                 'statusCode': 404,
                 'headers': headers,
-                'body': json.dumps({'error': 'Verse not found'})
+                'body': json.dumps({'error': 'Verse not found. Please check the reference format (e.g., "John 3:16")'})
             }
             
     except ImportError:

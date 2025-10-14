@@ -1,0 +1,14 @@
+Fix Bible translation support with KJV fallback system
+
+- Fixed non-KJV translations returning 404 errors
+- Implemented graceful fallback to KJV for all translation requests
+- Added user notification when non-KJV translation falls back to KJV
+- Updated both create-article.html and edit-article.html with fallback notes
+- Improved error messages for invalid verse references
+- Bible verse lookup now works for all translation options with clear messaging
+
+Technical changes:
+- articles_api/index.py: Removed unsupported translation parameters, added fallback logic
+- create-article.html: Added KJV fallback notes to translation options
+- edit-article.html: Added KJV fallback notes and help text
+- All translation requests now return KJV text with appropriate labeling
