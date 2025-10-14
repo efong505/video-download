@@ -7,10 +7,11 @@ from datetime import datetime, timedelta
 dynamodb = boto3.resource('dynamodb')
 users_table = dynamodb.Table('users')
 
-# PayPal Configuration - Sandbox Mode
-PAYPAL_CLIENT_ID = 'AU8sbnkVvvCSFzZooSwDCsfdVvuln82gK2kZvloeNtWd63ETi0dE_lkjVxvy2FJC1HqcD5GkRXSmjiZv'
-PAYPAL_CLIENT_SECRET = 'EB8JCUTcI3jcaEQKweWh1-s9BIvVycrC_b6KFDr1Uc_GNWxzdDLzPtTvlRTmSyhuSJh71oamRIdUle1P'
-PAYPAL_BASE_URL = 'https://api-m.sandbox.paypal.com'  # Sandbox mode for testing
+# PayPal Configuration - Use environment variables for security
+import os
+PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID', 'your-paypal-client-id')
+PAYPAL_CLIENT_SECRET = os.environ.get('PAYPAL_CLIENT_SECRET', 'your-paypal-client-secret')
+PAYPAL_BASE_URL = os.environ.get('PAYPAL_BASE_URL', 'https://api-m.sandbox.paypal.com')
 
 # Subscription tier configurations
 SUBSCRIPTION_TIERS = {
@@ -60,6 +61,8 @@ def lambda_handler(event, context):
             return cancel_subscription(event)
         elif method == 'GET' and action == 'usage':
             return get_usage_stats(event)
+        elif method == 'GET' and action == 'test':
+            return test_paypal_connection()
         else:
             return {
                 'statusCode': 404,
@@ -93,11 +96,85 @@ def get_paypal_access_token():
     else:
         raise Exception(f'Failed to get PayPal access token: {response.text}')
 
+def create_subscription_plan(tier, access_token):
+    """Create PayPal subscription plan"""
+    tier_config = SUBSCRIPTION_TIERS[tier]
+    
+    # Create product first
+    product_data = {
+        'name': f'Video Platform {tier.title()}',
+        'description': f'{tier.title()} video hosting plan',
+        'type': 'SERVICE',
+        'category': 'SOFTWARE'
+    }
+    
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+        'Content-Type': 'application/json'
+    }
+    
+    # Create product
+    product_response = requests.post(
+        f'{PAYPAL_BASE_URL}/v1/catalogs/products',
+        headers=headers,
+        json=product_data
+    )
+    
+    if product_response.status_code != 201:
+        return None
+    
+    product_id = product_response.json()['id']
+    
+    # Create plan
+    plan_data = {
+        'product_id': product_id,
+        'name': f'{tier.title()} Plan',
+        'description': f'Monthly {tier} subscription',
+        'billing_cycles': [{
+            'frequency': {
+                'interval_unit': 'MONTH',
+                'interval_count': 1
+            },
+            'tenure_type': 'REGULAR',
+            'sequence': 1,
+            'total_cycles': 0,
+            'pricing_scheme': {
+                'fixed_price': {
+                    'value': str(tier_config['price']),
+                    'currency_code': 'USD'
+                }
+            }
+        }],
+        'payment_preferences': {
+            'auto_bill_outstanding': True,
+            'setup_fee_failure_action': 'CONTINUE',
+            'payment_failure_threshold': 3
+        }
+    }
+    
+    plan_response = requests.post(
+        f'{PAYPAL_BASE_URL}/v1/billing/plans',
+        headers=headers,
+        json=plan_data
+    )
+    
+    if plan_response.status_code == 201:
+        return plan_response.json()['id']
+    
+    return None
+
 def create_subscription(event):
     """Create PayPal subscription for user"""
-    body = json.loads(event['body'])
-    user_id = body['user_id']
-    tier = body['tier']
+    try:
+        body = json.loads(event['body'])
+        user_id = body['user_id']
+        tier = body['tier']
+    except Exception as e:
+        return {
+            'statusCode': 400,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': f'Invalid request body: {str(e)}'})
+        }
     
     if tier not in SUBSCRIPTION_TIERS:
         return {
@@ -116,8 +193,14 @@ def create_subscription(event):
     try:
         access_token = get_paypal_access_token()
         
-        # Create subscription plan if not exists (in production, create these once)
-        plan_id = f'video-downloader-{tier}'
+        # Create subscription plan dynamically
+        plan_id = create_subscription_plan(tier, access_token)
+        if not plan_id:
+            return {
+                'statusCode': 400,
+                'headers': cors_headers(),
+                'body': json.dumps({'error': f'Failed to create subscription plan for {tier}'})
+            }
         
         # Create subscription
         subscription_data = {
@@ -456,6 +539,29 @@ def cancel_subscription(event):
             'statusCode': 500,
             'headers': cors_headers(),
             'body': json.dumps({'error': str(e)})
+        }
+
+def test_paypal_connection():
+    """Test PayPal API connection"""
+    try:
+        access_token = get_paypal_access_token()
+        return {
+            'statusCode': 200,
+            'headers': cors_headers(),
+            'body': json.dumps({
+                'status': 'success',
+                'message': 'PayPal API connection successful',
+                'token_length': len(access_token)
+            })
+        }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({
+                'status': 'error',
+                'message': f'PayPal API connection failed: {str(e)}'
+            })
         }
 
 def cors_headers():

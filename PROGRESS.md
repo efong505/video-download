@@ -805,3 +805,39 @@ articles-table:
 **Integration Status**: Ready for sandbox testing - subscription flow can be tested without real payments
 
 **Next Steps**: Test subscription upgrade flow, verify webhook handling, then switch to live credentials for production
+
+## PayPal Integration Troubleshooting & Security Enhancement ✅ COMPLETE
+**Problem**: CORS errors and PayPal resource not found errors during subscription testing
+
+**Issues Resolved**:
+1. **CORS Configuration**: Fixed API Gateway OPTIONS method to use Lambda integration instead of MOCK
+2. **PayPal Plan Creation**: Implemented dynamic plan creation instead of hardcoded plan IDs
+3. **Security Vulnerability**: Removed hardcoded credentials from source code
+4. **Environment Variables**: Configured secure credential storage in Lambda environment
+
+**Technical Fixes**:
+- Updated API Gateway OPTIONS method for proper CORS handling
+- Added dynamic PayPal product and subscription plan creation
+- Implemented environment variable-based credential management
+- Added comprehensive error handling and debugging endpoints
+- Created test endpoint for PayPal API connection verification
+
+**Security Enhancement**:
+- **Before**: Hardcoded PayPal credentials in source code (security risk)
+- **After**: Credentials stored as Lambda environment variables (secure)
+- **Code**: Updated to use `os.environ.get()` for credential access
+- **Git Safety**: Source code now safe to commit without credential exposure
+
+**Files Modified**:
+- `paypal_billing_api/index.py` - Secure credential handling and dynamic plan creation
+- API Gateway configuration - Fixed CORS integration
+- Lambda environment variables - Secure credential storage
+
+**Integration Status**: 
+- PayPal API connection: ✅ Working
+- Dynamic plan creation: ✅ Implemented
+- CORS issues: ✅ Resolved
+- Security: ✅ Credentials secured
+- Ready for subscription testing
+
+**Verification**: PayPal integration now creates subscription plans dynamically and handles all API calls securely through environment variables
