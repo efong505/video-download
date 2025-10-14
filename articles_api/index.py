@@ -3,8 +3,8 @@ import boto3
 from datetime import datetime
 import uuid
 import re
-import requests
 from decimal import Decimal
+import base64
 
 dynamodb = boto3.resource('dynamodb')
 articles_table = dynamodb.Table('articles')
@@ -81,15 +81,22 @@ def create_article(event):
         article_id = str(uuid.uuid4())
         title = body['title']
         content = body['content']
-        author_email = body['author']
+        author_input = body['author']
         category = body.get('category', 'general')
         template_used = body.get('template_used', 'custom')
         tags = body.get('tags', [])
         visibility = body.get('visibility', 'public')
         featured_image = body.get('featured_image', '')
         
-        # Get user's name from users table
-        author_name = get_user_name(author_email)
+        # Handle author field - if it contains @, it's an email, otherwise it's a name
+        if '@' in author_input:
+            # It's an email, look up the display name
+            author_email = author_input
+            author_name = get_user_name(author_email)
+        else:
+            # It's already a display name, use it directly
+            author_name = author_input
+            author_email = author_input  # Store the name as email for now
         
         # Auto-set study notes to private
         if category == 'study_notes':
@@ -161,6 +168,16 @@ def get_bible_verse(event):
         }
     
     try:
+        # Import requests here to handle missing module gracefully
+        try:
+            import requests
+        except ImportError:
+            return {
+                'statusCode': 500,
+                'headers': headers,
+                'body': json.dumps({'error': 'Bible verse lookup not available - requests module missing'})
+            }
+        
         # Format reference for API (e.g., "john3:16")
         # Remove spaces and convert to lowercase
         formatted_ref = reference.lower().replace(' ', '')
@@ -236,7 +253,7 @@ def get_bible_verse(event):
         return {
             'statusCode': 500,
             'headers': headers,
-            'body': json.dumps({'error': 'requests module not available'})
+            'body': json.dumps({'error': 'Bible verse lookup not available'})
         }
     except Exception as e:
         return {
@@ -340,6 +357,14 @@ def list_articles(event):
         
         response = articles_table.scan(**scan_kwargs)
         articles = response.get('Items', [])
+        
+        # Fix author names for existing articles that have email addresses
+        for article in articles:
+            author_field = article.get('author', '')
+            if '@' in author_field:
+                # This is an email, look up the proper name
+                proper_name = get_user_name(author_field)
+                article['author'] = proper_name
         
         # Sort by created_at descending
         articles.sort(key=lambda x: x.get('created_at', ''), reverse=True)
@@ -505,6 +530,31 @@ def convert_decimals(obj):
     elif isinstance(obj, Decimal):
         return int(obj) if obj % 1 == 0 else float(obj)
     return obj
+
+def extract_user_from_token(event):
+    """Extract user information from JWT token"""
+    try:
+        auth_header = event.get('headers', {}).get('Authorization', '')
+        if not auth_header.startswith('Bearer '):
+            return None
+        
+        token = auth_header.split(' ')[1]
+        parts = token.split('.')
+        if len(parts) != 3:
+            return None
+        
+        # Decode payload
+        payload_data = parts[1]
+        payload_data += '=' * (4 - len(payload_data) % 4)
+        payload = json.loads(base64.urlsafe_b64decode(payload_data))
+        
+        return {
+            'user_id': payload.get('user_id'),
+            'email': payload.get('email'),
+            'role': payload.get('role')
+        }
+    except Exception:
+        return None
 
 def get_user_name(email):
     """Get user's display name from users table"""

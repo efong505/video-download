@@ -268,6 +268,21 @@ articles-table:
 
 ## Recent System Fixes & Improvements ✅ COMPLETE
 
+### Author Display Issue Resolution (October 2024)
+- **Status**: ✅ COMPLETED
+- **Problem**: Articles displaying email addresses instead of first/last names as authors
+- **Root Cause**: Lambda function crashing due to missing 'requests' module import
+- **Resolution Process**:
+  1. ✅ Identified 502 errors preventing CORS headers from being returned
+  2. ✅ Removed problematic 'requests' import causing Lambda crashes
+  3. ✅ Added graceful handling for Bible verse lookup when requests unavailable
+  4. ✅ Implemented author name fix in list_articles function
+  5. ✅ Added on-the-fly email-to-name conversion for existing articles
+- **Technical Fix**: Modified list_articles() to detect email addresses and convert to proper names using get_user_name() lookup
+- **Result**: Articles now display proper first/last names instead of email addresses
+- **Files Modified**: articles_api/index.py
+- **Deployment**: Lambda function successfully updated and operational
+
 ### Final System Integration & Bug Fixes (December 2024)
 - **Status**: ✅ COMPLETED
 - **Issues Resolved**:
@@ -276,6 +291,7 @@ articles-table:
   3. ✅ User upload access "Admin required" error - modified admin_api upload_url endpoint
   4. ✅ External video option added to user-upload.html with toggle functionality
   5. ✅ External video thumbnail and embed enhancement - YouTube thumbnails and platform detection
+  6. ✅ Author display issue - articles now show proper names instead of email addresses
 
 #### Upload Access Control Fix
 - **Problem**: Regular users getting 403 "Admin or Super User access required" when uploading videos
