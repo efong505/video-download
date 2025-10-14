@@ -44,6 +44,10 @@ def lambda_handler(event, context):
         elif method == 'DELETE' and action == 'video':
             return delete_video(event)
         elif method == 'POST' and action == 'upload_url':
+            # Allow all authenticated users for upload_url
+            auth_result = verify_token_only(event)
+            if auth_result['statusCode'] != 200:
+                return auth_result
             return get_upload_url(event)
         elif method == 'POST' and action == 'generate_thumbnail':
             return generate_thumbnail(event)
@@ -91,6 +95,38 @@ def verify_admin_token(event):
                 'headers': cors_headers(),
                 'body': json.dumps({'error': 'Admin or Super User access required'})
             }
+        return {'statusCode': 200, 'user': payload}
+    except Exception as e:
+        return {
+            'statusCode': 401,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': 'Invalid token'})
+        }
+
+def verify_token_only(event):
+    """Verify token without role restrictions"""
+    auth_header = event.get('headers', {}).get('Authorization', '')
+    if not auth_header.startswith('Bearer '):
+        return {
+            'statusCode': 401,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': 'Missing token'})
+        }
+    
+    token = auth_header.split(' ')[1]
+    
+    try:
+        # Simple JWT decode without library
+        parts = token.split('.')
+        if len(parts) != 3:
+            raise ValueError('Invalid token format')
+        
+        # Decode payload
+        payload_data = parts[1]
+        # Add padding if needed
+        payload_data += '=' * (4 - len(payload_data) % 4)
+        payload = json.loads(base64.b64decode(payload_data))
+        
         return {'statusCode': 200, 'user': payload}
     except Exception as e:
         return {

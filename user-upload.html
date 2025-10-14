@@ -107,8 +107,19 @@
                 </div>
             </div>
 
-            <!-- Upload Form -->
-            <div id="upload-form">
+            <!-- Upload Options -->
+            <div class="mb-4">
+                <div class="btn-group w-100" role="group">
+                    <input type="radio" class="btn-check" name="upload-type" id="local-upload" checked>
+                    <label class="btn btn-outline-primary" for="local-upload">📁 Upload File</label>
+                    
+                    <input type="radio" class="btn-check" name="upload-type" id="external-upload">
+                    <label class="btn btn-outline-primary" for="external-upload">🔗 External Video</label>
+                </div>
+            </div>
+
+            <!-- Local Upload Form -->
+            <div id="local-upload-form">
                 <h4>📁 Select Video File</h4>
                 <div class="mb-3">
                     <input type="file" class="form-control" id="video-file" accept="video/*">
@@ -147,6 +158,39 @@
                 </button>
             </div>
 
+            <!-- External Video Form -->
+            <div id="external-upload-form" style="display: none;">
+                <h4>🔗 Add External Video</h4>
+                
+                <div class="mb-3">
+                    <label class="form-label">Video URL</label>
+                    <input type="url" class="form-control" id="external-video-url" placeholder="https://youtube.com/watch?v=... or https://rumble.com/...">
+                    <div class="form-text">Supported: YouTube, Rumble, Facebook</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">📝 Video Title</label>
+                    <input type="text" class="form-control" id="external-video-title" placeholder="Enter video title">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">🏷️ Tags (comma-separated)</label>
+                    <input type="text" class="form-control" id="external-video-tags" placeholder="news, politics, 2024">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">👁️ Visibility</label>
+                    <select class="form-control" id="external-video-visibility">
+                        <option value="public">Public (visible to all users)</option>
+                        <option value="private">Private (only visible to you)</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary btn-lg" id="external-btn" onclick="addExternalVideo()">
+                    🔗 Add External Video
+                </button>
+            </div>
+
             <!-- Messages -->
             <div id="messages" class="mt-3"></div>
         </div>
@@ -176,6 +220,19 @@
             await loadUserQuota();
             await loadAllTags();
             setupTagAutocomplete();
+            
+            // Setup upload type toggle
+            document.querySelectorAll('input[name="upload-type"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.id === 'local-upload') {
+                        document.getElementById('local-upload-form').style.display = 'block';
+                        document.getElementById('external-upload-form').style.display = 'none';
+                    } else {
+                        document.getElementById('local-upload-form').style.display = 'none';
+                        document.getElementById('external-upload-form').style.display = 'block';
+                    }
+                });
+            });
         });
 
         async function loadUserQuota() {
@@ -339,7 +396,7 @@
             document.getElementById('upload-status').textContent = 'Getting upload URL...';
 
             try {
-                // Get presigned URL from admin API
+                // Get presigned URL from admin API (allow regular users for upload)
                 const urlResponse = await fetch(`${ADMIN_API}?action=upload_url`, {
                     method: 'POST',
                     headers: {
@@ -412,6 +469,70 @@
                 showMessage(`Upload failed: ${error.message}`, 'error');
             } finally {
                 document.getElementById('upload-btn').disabled = false;
+            }
+        }
+
+        async function addExternalVideo() {
+            const url = document.getElementById('external-video-url').value.trim();
+            const title = document.getElementById('external-video-title').value.trim();
+            const tags = document.getElementById('external-video-tags').value.split(',').map(t => t.trim()).filter(t => t);
+            const visibility = document.getElementById('external-video-visibility').value;
+
+            if (!url) {
+                showMessage('Please enter a video URL', 'error');
+                return;
+            }
+
+            if (!title) {
+                showMessage('Please enter a video title', 'error');
+                return;
+            }
+
+            // Validate URL format
+            const supportedDomains = ['youtube.com', 'youtu.be', 'rumble.com', 'facebook.com', 'fb.watch'];
+            const isValidUrl = supportedDomains.some(domain => url.toLowerCase().includes(domain));
+            
+            if (!isValidUrl) {
+                showMessage('Please enter a valid YouTube, Rumble, or Facebook video URL', 'error');
+                return;
+            }
+
+            document.getElementById('external-btn').disabled = true;
+            document.getElementById('external-btn').textContent = 'Adding Video...';
+
+            try {
+                // Generate a unique filename for the external video
+                const videoId = 'ext_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                
+                // Add external video metadata
+                const response = await fetch(`${TAG_API}?action=add_video`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        video_id: videoId,
+                        filename: videoId,
+                        title: title,
+                        tags: tags,
+                        owner: currentUser.email,
+                        visibility: visibility,
+                        video_type: 'external',
+                        external_url: url
+                    })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Failed to add external video');
+
+                showMessage('External video added successfully! Redirecting to videos...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'videos.html';
+                }, 2000);
+
+            } catch (error) {
+                showMessage(`Failed to add external video: ${error.message}`, 'error');
+            } finally {
+                document.getElementById('external-btn').disabled = false;
+                document.getElementById('external-btn').textContent = '🔗 Add External Video';
             }
         }
 
