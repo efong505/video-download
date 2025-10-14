@@ -467,10 +467,16 @@ def convert_decimals(obj):
 def get_user_name(email):
     """Get user's display name from users table"""
     try:
-        response = users_table.get_item(Key={'email': email})
-        user = response.get('Item')
+        # Query using email index since email is not the primary key
+        response = users_table.query(
+            IndexName='email-index',
+            KeyConditionExpression='email = :email',
+            ExpressionAttributeValues={':email': email}
+        )
         
-        if user:
+        users = response.get('Items', [])
+        if users:
+            user = users[0]  # Get first matching user
             first_name = user.get('first_name', '')
             last_name = user.get('last_name', '')
             
