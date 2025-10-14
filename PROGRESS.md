@@ -248,6 +248,11 @@ articles-table:
 - [x] **Article Editing System**: Created edit-article.html with full CRUD functionality for updating existing articles
 - [x] **Service Notes Template**: Added new template for church service notes and observations
 - [x] **Study Notes Category**: Added private study notes category with automatic privacy setting
+- [x] **Article Author Editing**: Added ability for admin/super users to change article authors
+  - Author dropdown populated with all users (showing names and emails)
+  - Only admin and super_user roles can edit article authors
+  - Backend API updated to handle author changes with proper name resolution
+  - Author field hidden for regular users, visible only for admin/super users
 - [x] **User Name Implementation**: Replaced email addresses with actual user names for article authors
   - Updated registration form to include first_name and last_name fields
   - Modified auth API to store and retrieve user names
@@ -256,8 +261,48 @@ articles-table:
   - Added name fields to user creation and editing in admin panel
   - Implemented fallback to email for users without names set
   - ✅ **VERIFIED**: Article creation now displays author's first and last name instead of email address
+  - ✅ **VERIFIED**: Admin/super users can now edit article authors through the edit interface
 
 ## Recent System Fixes & Improvements ✅ COMPLETE
+
+### User Upload Access & Admin Name Editing (December 2024)
+- **Status**: ✅ COMPLETED
+- **Issues Resolved**:
+  1. Regular users getting "admin access required" when trying to upload videos
+  2. Admin/super users unable to edit first/last names in admin dashboard
+
+#### User Upload Access Fix
+- **Problem**: Upload button redirected regular users to admin.html requiring admin access
+- **Solution**: Created dedicated user upload interface with quota enforcement
+- **Files Created**:
+  - `user-upload.html` - Dedicated upload page for regular users with quota system
+  - `test-admin-api.html` - API testing tool for debugging admin functionality
+  - `USER_UPLOAD_FIXES.md` - Comprehensive documentation of fixes
+- **Files Modified**:
+  - `videos.html` - Updated upload link to point to user-upload.html
+- **Features Added**:
+  - Real-time storage quota visualization
+  - File size limits (500MB for regular users)
+  - Upgrade prompts when approaching limits
+  - Tag autocomplete functionality
+  - Progress tracking during uploads
+
+#### Storage Quota System Implementation
+- **Free Plan**: 2GB storage, 50 videos
+- **Premium Plan**: 25GB storage, 500 videos
+- **Pro Plan**: 100GB storage, 2000 videos
+- **Enterprise Plan**: Unlimited storage and videos
+- **Enforcement**: Frontend validation with backend API integration
+- **User Experience**: Visual progress bars and upgrade prompts
+
+#### Admin Name Editing Fix
+- **Problem**: Admin interface not updating user first/last names despite correct backend
+- **Root Cause**: Frontend caching issue, backend API was working correctly
+- **Solution**: Cache refresh and redeployment resolved the issue
+- **Verification**: Successfully tested via test-admin-api.html, confirmed backend functionality
+- **Status**: Admin users can now edit first/last names in user management interface
+
+### Previous System Fixes & Improvements ✅ COMPLETE
 - [x] **Registration Form Styling**: Fixed CSS styling for first_name and last_name input fields
 - [x] **Video Upload Access**: Fixed "Upload Video" link to redirect to admin dashboard instead of broken video-downloader page
 - [x] **External Video Display**: Enhanced external video embedding with proper iframe permissions and fallback "Open" buttons

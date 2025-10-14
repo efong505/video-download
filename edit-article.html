@@ -85,6 +85,13 @@
                             <input type="text" id="article-tags" class="form-control">
                         </div>
 
+                        <div class="mb-3" id="author-field" style="display: none;">
+                            <label class="form-label">Author (Admin Only)</label>
+                            <select id="article-author" class="form-select">
+                                <option value="">Loading users...</option>
+                            </select>
+                        </div>
+
                         <div class="mb-3">
                             <label class="form-label">Visibility</label>
                             <select id="article-visibility" class="form-select">
@@ -110,10 +117,12 @@
 
     <script>
         const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';
+        const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
         let currentUser = null;
         let authToken = null;
         let quill = null;
         let articleId = null;
+        let allUsers = [];
 
         window.addEventListener('load', async function() {
             authToken = localStorage.getItem('auth_token');
@@ -134,6 +143,12 @@
                 alert('Article ID not provided');
                 window.location.href = 'articles.html';
                 return;
+            }
+            
+            // Load users for admin/super users
+            if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
+                await loadUsers();
+                document.getElementById('author-field').style.display = 'block';
             }
             
             await loadArticle();
@@ -177,11 +192,44 @@
             });
         }
 
+        async function loadUsers() {
+            try {
+                const response = await fetch(ADMIN_API + '?action=users', {
+                    headers: {
+                        'Authorization': 'Bearer ' + authToken
+                    }
+                });
+                const data = await response.json();
+                
+                if (data.users) {
+                    allUsers = data.users;
+                    const authorSelect = document.getElementById('article-author');
+                    authorSelect.innerHTML = '';
+                    
+                    data.users.forEach(user => {
+                        const option = document.createElement('option');
+                        option.value = user.email;
+                        const displayName = user.first_name && user.last_name ? 
+                            user.first_name + ' ' + user.last_name : user.email;
+                        option.textContent = displayName + ' (' + user.email + ')';
+                        authorSelect.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+
         function populateForm(article) {
             document.getElementById('article-title').value = article.title;
             document.getElementById('article-category').value = article.category;
             document.getElementById('article-tags').value = article.tags ? article.tags.join(', ') : '';
             document.getElementById('article-visibility').value = article.visibility;
+            
+            // Set author if admin/super user
+            if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
+                document.getElementById('article-author').value = article.author_email || article.author;
+            }
             
             if (quill) {
                 quill.root.innerHTML = article.content;
@@ -197,6 +245,23 @@
             const visibility = document.getElementById('article-visibility').value;
             const content = quill ? quill.root.innerHTML : '';
             
+            let updateData = {
+                article_id: articleId,
+                title: title,
+                content: content,
+                category: category,
+                tags: tags,
+                visibility: visibility
+            };
+            
+            // Include author change if admin/super user
+            if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
+                const newAuthorEmail = document.getElementById('article-author').value;
+                if (newAuthorEmail) {
+                    updateData.author_email = newAuthorEmail;
+                }
+            }
+            
             if (!title || !content) {
                 alert('Please fill in the title and content');
                 return;
@@ -209,14 +274,7 @@
                         'Content-Type': 'application/json',
                         'Authorization': 'Bearer ' + authToken
                     },
-                    body: JSON.stringify({
-                        article_id: articleId,
-                        title: title,
-                        content: content,
-                        category: category,
-                        tags: tags,
-                        visibility: visibility
-                    })
+                    body: JSON.stringify(updateData)
                 });
                 
                 const data = await response.json();

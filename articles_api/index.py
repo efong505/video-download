@@ -394,6 +394,13 @@ def update_article(event):
             update_expression += ', visibility = :vis'
             expression_values[':vis'] = body['visibility']
         
+        if 'author_email' in body:
+            # Get new author's name
+            new_author_name = get_user_name(body['author_email'])
+            update_expression += ', author = :author, author_email = :author_email'
+            expression_values[':author'] = new_author_name
+            expression_values[':author_email'] = body['author_email']
+        
         articles_table.update_item(
             Key={'article_id': article_id},
             UpdateExpression=update_expression,
