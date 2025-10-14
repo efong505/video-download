@@ -7,10 +7,10 @@ from datetime import datetime, timedelta
 dynamodb = boto3.resource('dynamodb')
 users_table = dynamodb.Table('users')
 
-# PayPal Configuration (use environment variables in production)
-PAYPAL_CLIENT_ID = 'your-paypal-client-id'  # Set in Lambda environment
-PAYPAL_CLIENT_SECRET = 'your-paypal-client-secret'  # Set in Lambda environment
-PAYPAL_BASE_URL = 'https://api-m.sandbox.paypal.com'  # Use https://api-m.paypal.com for production
+# PayPal Configuration - Sandbox Mode
+PAYPAL_CLIENT_ID = 'AU8sbnkVvvCSFzZooSwDCsfdVvuln82gK2kZvloeNtWd63ETi0dE_lkjVxvy2FJC1HqcD5GkRXSmjiZv'
+PAYPAL_CLIENT_SECRET = 'EB8JCUTcI3jcaEQKweWh1-s9BIvVycrC_b6KFDr1Uc_GNWxzdDLzPtTvlRTmSyhuSJh71oamRIdUle1P'
+PAYPAL_BASE_URL = 'https://api-m.sandbox.paypal.com'  # Sandbox mode for testing
 
 # Subscription tier configurations
 SUBSCRIPTION_TIERS = {
