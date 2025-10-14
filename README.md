@@ -17,8 +17,8 @@ A complete serverless platform for Christians, pastors, and conservative voices 
 **APIs**: Bible verse integration, PayPal billing, video processing
 
 ## 🚀 Live Platform
-**URL**: https://d271vky579caz9.cloudfront.net
-**Demo Login**: super@admin.com / SuperSecure123!
+**URL**: https://videos.mytestimony.click
+**Demo Login**: admin@example.com / AdminPass123!
 
 ---
 
