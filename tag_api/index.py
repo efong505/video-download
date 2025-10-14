@@ -70,7 +70,18 @@ def add_video_metadata(event):
     owner = body.get('owner', 'system')
     visibility = body.get('visibility', 'public')
     external_url = body.get('external_url')
-    video_type = body.get('video_type', 'local')  # 'local', 'youtube', 'rumble'
+    video_type = body.get('video_type', 'local')
+    
+    # Auto-detect video type from external URL
+    if external_url and video_type == 'external':
+        if 'youtube.com' in external_url or 'youtu.be' in external_url:
+            video_type = 'youtube'
+        elif 'rumble.com' in external_url:
+            video_type = 'rumble'
+        elif 'facebook.com' in external_url or 'fb.watch' in external_url:
+            video_type = 'facebook'
+        else:
+            video_type = 'external'
     
     item = {
         'video_id': video_id,

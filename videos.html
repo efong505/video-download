@@ -355,7 +355,6 @@
             col.className = 'col-md-4';
             
             const embedUrl = `https://d271vky579caz9.cloudfront.net/embed.html?v=${filename}&t=${encodeURIComponent(title)}`;
-            const typeBadge = videoType === 'local' ? '' : `<span style="background: #007bff; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; position: absolute; top: 5px; right: 5px; z-index: 10;">${videoType.toUpperCase()}</span>`;
             
             if (videoType === 'local') {
                 col.innerHTML = `
@@ -382,28 +381,58 @@
                     </div>
                 `;
             } else {
+                // Detect platform and create appropriate embed
                 let embedSrc = '';
-                if (videoType === 'youtube') {
+                let thumbnailSrc = '';
+                let platformName = 'External';
+                
+                if (externalUrl.includes('youtube.com') || externalUrl.includes('youtu.be')) {
                     const videoId = externalUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
                     if (videoId) {
                         embedSrc = `https://www.youtube.com/embed/${videoId}`;
+                        thumbnailSrc = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+                        platformName = 'YouTube';
                     }
-                } else if (videoType === 'rumble') {
+                } else if (externalUrl.includes('rumble.com')) {
                     const rumbleMatch = externalUrl.match(/rumble\.com\/v([a-zA-Z0-9]+)/);
                     if (rumbleMatch) {
                         embedSrc = `https://rumble.com/embed/${rumbleMatch[1]}/`;
-                    } else {
-                        embedSrc = externalUrl;
+                        platformName = 'Rumble';
                     }
-                } else if (videoType === 'facebook') {
+                } else if (externalUrl.includes('facebook.com') || externalUrl.includes('fb.watch')) {
                     embedSrc = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(externalUrl)}&show_text=false&width=560&height=315`;
+                    platformName = 'Facebook';
                 }
+                
+                const typeBadge = `<span style="background: #007bff; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; position: absolute; top: 5px; right: 5px; z-index: 10;">${platformName}</span>`;
                 
                 col.innerHTML = `
                     <div class="video-card">
                         <div class="thumbnail-container" style="position: relative;">
                             ${typeBadge}
-                            <iframe src="${embedSrc}" style="width: 100%; height: 200px; border: none;" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                            ${thumbnailSrc ? `
+                                <img src="${thumbnailSrc}" alt="${title}" class="thumbnail" 
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="thumbnail" style="display: none; background: linear-gradient(135deg, #667eea, #764ba2); color: white; align-items: center; justify-content: center; font-size: 14px; font-weight: bold;">
+                                    🎬 ${title.substring(0,15)}${title.length > 15 ? '...' : ''}
+                                </div>
+                                <button class="play-button" onclick="playExternalVideo(this, '${embedSrc}')">
+                                    ▶
+                                </button>
+                                <div class="video-player" style="display: none; width: 100%; height: 200px;">
+                                    <iframe src="" style="width: 100%; height: 100%; border: none;" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                                </div>
+                            ` : `
+                                <div class="thumbnail" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold;">
+                                    🎬 ${title.substring(0,15)}${title.length > 15 ? '...' : ''}
+                                </div>
+                                <button class="play-button" onclick="playExternalVideo(this, '${embedSrc}')">
+                                    ▶
+                                </button>
+                                <div class="video-player" style="display: none; width: 100%; height: 200px;">
+                                    <iframe src="" style="width: 100%; height: 100%; border: none;" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+                                </div>
+                            `}
                         </div>
                         <div class="video-title">
                             ${title}
@@ -535,6 +564,20 @@
             if (hasMore) {
                 document.getElementById('load-more-btn').style.display = 'block';
             }
+        }
+        
+        function playExternalVideo(button, embedSrc) {
+            const card = button.closest('.video-card');
+            const thumbnail = card.querySelector('.thumbnail');
+            const playBtn = card.querySelector('.play-button');
+            const videoPlayer = card.querySelector('.video-player');
+            const iframe = videoPlayer.querySelector('iframe');
+            
+            thumbnail.style.display = 'none';
+            playBtn.style.display = 'none';
+            videoPlayer.style.display = 'block';
+            
+            iframe.src = embedSrc;
         }
         
         function displayVideos(videos, append = false) {
