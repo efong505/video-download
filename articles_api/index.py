@@ -164,11 +164,12 @@ def get_bible_verse(event):
         # Format reference for API (e.g., "john 3:16")
         formatted_ref = reference.lower().replace(' ', '')
         
-        # Only KJV works with bible-api.com, fallback to KJV for other translations
-        if translation.lower() != 'kjv':
-            translation = 'kjv'
-        
-        url = BIBLE_API_BASE + '/' + formatted_ref
+        # Try different translation endpoints
+        if translation.lower() == 'kjv':
+            url = BIBLE_API_BASE + '/' + formatted_ref
+        else:
+            # For other translations, try with translation parameter
+            url = BIBLE_API_BASE + '/' + formatted_ref + '?translation=' + translation.lower()
         
         response = requests.get(url, timeout=10)
         

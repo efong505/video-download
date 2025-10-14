@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tag Videos - Ekewaka</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .tag-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 30px;
+        }
+        .video-card {
+            border: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 20px;
+        }
+        .video-card:hover {
+            transform: translateY(-5px);
+        }
+        .video-thumbnail {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+        }
+        .related-tags {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="tag-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1>🏷️ <span id="tag-name">Loading...</span></h1>
+                    <p class="lead">Videos tagged with this topic</p>
+                    <div id="tag-stats" class="mt-3">
+                        <span class="badge bg-light text-dark">📹 <span id="video-count">0</span> Videos</span>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="videos.html" class="btn btn-light">← Back to All Videos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="related-tags">
+            <h5>Related Tags</h5>
+            <div id="related-tags-container">Loading...</div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Filter</h5>
+                        <div class="mb-3">
+                            <label class="form-label">Video Type</label>
+                            <select class="form-control" id="type-filter">
+                                <option value="all">All Types</option>
+                                <option value="local">Uploaded Videos</option>
+                                <option value="external">External Videos</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Sort By</label>
+                            <select class="form-control" id="sort-filter">
+                                <option value="newest">Newest First</option>
+                                <option value="oldest">Oldest First</option>
+                                <option value="title">Title A-Z</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div id="videos-container" class="row">
+                    <div class="col-12 text-center">
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
+        
+        let currentTag = null;
+        let allVideos = [];
+        let allTags = [];
+
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            currentTag = urlParams.get('tag');
+            
+            if (!currentTag) {
+                document.getElementById('videos-container').innerHTML = '<div class="col-12"><div class="alert alert-danger">No tag specified</div></div>';
+                return;
+            }
+            
+            document.getElementById('tag-name').textContent = currentTag;
+            loadTagVideos();
+            loadAllTags();
+        });
+
+        async function loadTagVideos() {
+            try {
+                const response = await fetch(TAG_API + '?action=list');
+                const data = await response.json();
+                
+                if (data.videos) {
+                    allVideos = data.videos.filter(video => 
+                        video.visibility === 'public' && 
+                        video.tags && 
+                        video.tags.includes(currentTag)
+                    );
+                    
+                    displayVideos(allVideos);
+                    updateStats();
+                }
+            } catch (error) {
+                console.error('Error loading videos:', error);
+                document.getElementById('videos-container').innerHTML = '<div class="col-12"><div class="alert alert-danger">Error loading videos</div></div>';
+            }
+        }
+
+        async function loadAllTags() {
+            try {
+                const response = await fetch(TAG_API + '?action=get_all_tags');
+                const data = await response.json();
+                allTags = data.tags || [];
+                displayRelatedTags();
+            } catch (error) {
+                console.error('Error loading tags:', error);
+            }
+        }
+
+        function displayVideos(videos) {
+            const container = document.getElementById('videos-container');
+            
+            if (videos.length === 0) {
+                container.innerHTML = '<div class="col-12"><div class="alert alert-info">No videos found with this tag</div></div>';
+                return;
+            }
+            
+            container.innerHTML = videos.map(video => {
+                const thumbnailUrl = video.video_type === 'external' && video.external_url && video.external_url.includes('youtube') 
+                    ? getYouTubeThumbnail(video.external_url)
+                    : `https://d271vky579caz9.cloudfront.net/thumbnails/${video.filename.replace('.mp4', '_thumb_2.jpg')}`;
+                
+                const platformBadge = video.video_type === 'external' ? getPlatformBadge(video.external_url) : '';
+                
+                return `
+                    <div class="col-md-4 mb-4">
+                        <div class="card video-card">
+                            <div class="position-relative">
+                                <img src="${thumbnailUrl}" class="card-img-top video-thumbnail" alt="${video.title}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIFRodW1ibmFpbDwvdGV4dD48L3N2Zz4='">
+                                ${platformBadge}
+                            </div>
+                            <div class="card-body">
+                                <h6 class="card-title">${video.title}</h6>
+                                <p class="card-text">
+                                    <small class="text-muted">By ${video.owner}</small><br>
+                                    <small class="text-muted">
+                                        ${video.tags ? video.tags.filter(tag => tag !== currentTag).map(tag => `<span class="badge bg-secondary me-1">${tag}</span>`).join('') : ''}
+                                    </small>
+                                </p>
+                                <a href="videos.html#${video.filename}" class="btn btn-primary btn-sm">Watch Video</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function displayRelatedTags() {
+            const relatedTags = allTags.filter(tag => tag !== currentTag).slice(0, 10);
+            const container = document.getElementById('related-tags-container');
+            
+            if (relatedTags.length === 0) {
+                container.innerHTML = '<span class="text-muted">No related tags found</span>';
+                return;
+            }
+            
+            container.innerHTML = relatedTags.map(tag => 
+                `<a href="tag-page.html?tag=${encodeURIComponent(tag)}" class="badge bg-primary me-2 mb-2 text-decoration-none">${tag}</a>`
+            ).join('');
+        }
+
+        function filterAndSortVideos() {
+            const typeFilter = document.getElementById('type-filter').value;
+            const sortFilter = document.getElementById('sort-filter').value;
+            
+            let filteredVideos = allVideos.filter(video => {
+                if (typeFilter !== 'all' && video.video_type !== typeFilter) return false;
+                return true;
+            });
+            
+            // Sort videos
+            filteredVideos.sort((a, b) => {
+                switch (sortFilter) {
+                    case 'newest':
+                        return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+                    case 'oldest':
+                        return new Date(a.created_at || 0) - new Date(b.created_at || 0);
+                    case 'title':
+                        return a.title.localeCompare(b.title);
+                    default:
+                        return 0;
+                }
+            });
+            
+            displayVideos(filteredVideos);
+        }
+
+        function updateStats() {
+            document.getElementById('video-count').textContent = allVideos.length;
+        }
+
+        function getYouTubeThumbnail(url) {
+            const videoId = extractYouTubeVideoId(url);
+            return videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '';
+        }
+
+        function extractYouTubeVideoId(url) {
+            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+
+        function getPlatformBadge(url) {
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                return '<span class="badge bg-danger position-absolute top-0 end-0 m-2">YouTube</span>';
+            } else if (url.includes('rumble.com')) {
+                return '<span class="badge bg-success position-absolute top-0 end-0 m-2">Rumble</span>';
+            } else if (url.includes('facebook.com') || url.includes('fb.watch')) {
+                return '<span class="badge bg-primary position-absolute top-0 end-0 m-2">Facebook</span>';
+            }
+            return '';
+        }
+
+        document.getElementById('type-filter').addEventListener('change', filterAndSortVideos);
+        document.getElementById('sort-filter').addEventListener('change', filterAndSortVideos);
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
