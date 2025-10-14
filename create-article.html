@@ -63,6 +63,10 @@
             padding: 15px;
             margin-top: 10px;
         }
+        .verse-results-container {
+            max-height: 300px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body>
@@ -100,6 +104,7 @@
                                 <option value="ministry">Ministry Update</option>
                                 <option value="service_notes">Service Notes</option>
                                 <option value="study_notes">Study Notes (Personal)</option>
+                                <option value="bible_study">Bible Study & Devotional</option>
                                 <option value="general">General</option>
                             </select>
                         </div>
@@ -168,7 +173,10 @@
                                 </select>
                                 <div class="form-text">Supported: KJV, ASV (1901), YLT (NT only). Other translations fall back to KJV.</div>
                             </div>
-                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="searchVerse()">🔍 Search Verse</button>
+                            <div class="d-flex gap-2">
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="searchVerse()">🔍 Search Verse</button>
+                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="clearVerseResults()">🗑️ Clear</button>
+                            </div>
                             <div id="verse-result"></div>
                         </div>
                     </div>
@@ -327,51 +335,99 @@
             }
         }
 
+        let verseCounter = 0;
+        let allVerses = [];
+
         function displayVerse(verseData) {
             const resultDiv = document.getElementById('verse-result');
             
-            // Create elements programmatically to avoid escaping issues
-            const verseDiv = document.createElement('div');
-            verseDiv.className = 'verse-result';
+            // Initialize container if first verse
+            if (verseCounter === 0) {
+                resultDiv.innerHTML = '<div class="verse-results-container"></div>';
+            }
+            
+            verseCounter++;
+            allVerses.push(verseData);
+            
+            // Create green alert box like edit-article.html
+            const alertDiv = document.createElement('div');
+            alertDiv.className = 'alert alert-success mb-2';
+            
+            const numberSpan = document.createElement('span');
+            numberSpan.className = 'badge bg-primary me-2';
+            numberSpan.textContent = verseCounter;
             
             const referenceH6 = document.createElement('h6');
-            referenceH6.textContent = verseData.reference;
+            referenceH6.className = 'mb-1';
+            referenceH6.appendChild(numberSpan);
+            referenceH6.appendChild(document.createTextNode(verseData.reference + ' (' + verseData.translation + ')'));
             
             const textP = document.createElement('p');
+            textP.className = 'mb-2';
             textP.textContent = '"' + verseData.text + '"';
             
-            const translationSmall = document.createElement('small');
-            translationSmall.className = 'text-muted';
-            translationSmall.textContent = verseData.translation;
-            
-            const buttonDiv = document.createElement('div');
-            buttonDiv.className = 'mt-2';
-            
             const insertBtn = document.createElement('button');
-            insertBtn.className = 'btn btn-sm btn-outline-primary';
-            insertBtn.innerHTML = '➕ Insert into Article';
+            insertBtn.className = 'btn btn-success btn-sm';
+            insertBtn.innerHTML = '✅ Insert This Verse';
             insertBtn.addEventListener('click', function() {
-                insertVerse(verseData.reference, verseData.text);
+                insertVerse(verseData.reference, verseData.text, verseData.translation);
             });
             
-            buttonDiv.appendChild(insertBtn);
-            verseDiv.appendChild(referenceH6);
-            verseDiv.appendChild(textP);
-            verseDiv.appendChild(translationSmall);
-            verseDiv.appendChild(buttonDiv);
+            alertDiv.appendChild(referenceH6);
+            alertDiv.appendChild(textP);
+            alertDiv.appendChild(insertBtn);
             
-            resultDiv.innerHTML = '';
-            resultDiv.appendChild(verseDiv);
+            const container = resultDiv.querySelector('.verse-results-container');
+            container.appendChild(alertDiv);
+            
+            // Add "Insert All" button if multiple verses
+            if (verseCounter > 1) {
+                let insertAllBtn = resultDiv.querySelector('.insert-all-btn');
+                if (!insertAllBtn) {
+                    insertAllBtn = document.createElement('button');
+                    insertAllBtn.className = 'btn btn-primary btn-sm mt-2 insert-all-btn';
+                    insertAllBtn.innerHTML = '📖 Insert All ' + verseCounter + ' Verses';
+                    insertAllBtn.addEventListener('click', insertAllVerses);
+                    resultDiv.appendChild(insertAllBtn);
+                } else {
+                    insertAllBtn.innerHTML = '📖 Insert All ' + verseCounter + ' Verses';
+                }
+            }
         }
 
-        function insertVerse(reference, text) {
-            const verseHtml = '<blockquote class="blockquote"><p>"' + text + '"</p><footer class="blockquote-footer">' + reference + '</footer></blockquote>';
+        function insertVerse(reference, text, translation) {
+            const verseHtml = '<blockquote class="bible-verse"><strong>' + reference + ' (' + translation + '):</strong> "' + text + '"</blockquote><p><br></p>';
             
             if (quill) {
                 const range = quill.getSelection();
                 const index = range ? range.index : quill.getLength();
                 quill.clipboard.dangerouslyPasteHTML(index, verseHtml);
             }
+        }
+        
+        function insertAllVerses() {
+            if (allVerses.length === 0) return;
+            
+            let allVersesHtml = '';
+            allVerses.forEach((verse, index) => {
+                allVersesHtml += '<blockquote class="bible-verse"><strong>' + (index + 1) + '. ' + verse.reference + ' (' + verse.translation + '):</strong> "' + verse.text + '"</blockquote>';
+            });
+            allVersesHtml += '<p><br></p>';
+            
+            if (quill) {
+                const range = quill.getSelection();
+                const index = range ? range.index : quill.getLength();
+                quill.clipboard.dangerouslyPasteHTML(index, allVersesHtml);
+            }
+            
+            // Clear results after insertion
+            clearVerseResults();
+        }
+        
+        function clearVerseResults() {
+            document.getElementById('verse-result').innerHTML = '';
+            verseCounter = 0;
+            allVerses = [];
         }
 
         document.getElementById('article-form').addEventListener('submit', async function(e) {

@@ -328,6 +328,30 @@ def get_article_templates(event):
 
 <h2>📝 Additional Notes</h2>
 <p>[Other observations, quotes, or thoughts]</p>'''
+        },
+        'bible_study': {
+            'name': 'Bible Study & Devotional Notes',
+            'description': 'Personal Bible study and devotional reflections',
+            'content': '''<h2>📖 Scripture Passage</h2>
+<p><em>Insert the Bible passage you are studying...</em></p>
+
+<h2>🔍 Observation</h2>
+<p>What do I notice about this passage? Key words, themes, context...</p>
+
+<h2>💭 Interpretation</h2>
+<p>What does this passage mean? What was the author trying to communicate?</p>
+
+<h2>❤️ Personal Reflection</h2>
+<p>How does this speak to my heart? What is God showing me?</p>
+
+<h2>🎯 Application</h2>
+<p>How will I apply this truth to my life today?</p>
+
+<h2>🙏 Prayer Response</h2>
+<p>Lord, thank You for this truth. Help me to...</p>
+
+<h2>📝 Additional Thoughts</h2>
+<p>Cross-references, questions for further study, insights...</p>'''
         }
     }
     
@@ -485,30 +509,70 @@ def update_article(event):
         }
 
 def delete_article(event):
-    """Delete an article"""
+    """Delete an article with role-based permissions"""
+    headers = cors_headers()
     query_params = event.get('queryStringParameters') or {}
     article_id = query_params.get('article_id')
     
     if not article_id:
         return {
             'statusCode': 400,
-            'headers': cors_headers(),
+            'headers': headers,
             'body': json.dumps({'error': 'article_id required'})
         }
     
     try:
+        # Get user info from token
+        user_info = extract_user_from_token(event)
+        if not user_info:
+            return {
+                'statusCode': 401,
+                'headers': headers,
+                'body': json.dumps({'error': 'Authentication required'})
+            }
+        
+        # Get the article to check ownership
+        response = articles_table.get_item(Key={'article_id': article_id})
+        article = response.get('Item')
+        
+        if not article:
+            return {
+                'statusCode': 404,
+                'headers': headers,
+                'body': json.dumps({'error': 'Article not found'})
+            }
+        
+        user_email = user_info['email']
+        user_role = user_info['role']
+        article_author_email = article.get('author_email', '')
+        
+        # Check permissions: super_user and admin can delete any article, users can only delete their own
+        if user_role in ['super_user', 'admin']:
+            # Super users and admins can delete any article
+            pass
+        elif user_email == article_author_email:
+            # Users can delete their own articles
+            pass
+        else:
+            return {
+                'statusCode': 403,
+                'headers': headers,
+                'body': json.dumps({'error': 'You can only delete your own articles'})
+            }
+        
+        # Delete the article
         articles_table.delete_item(Key={'article_id': article_id})
         
         return {
             'statusCode': 200,
-            'headers': cors_headers(),
+            'headers': headers,
             'body': json.dumps({'message': 'Article deleted successfully'})
         }
         
     except Exception as e:
         return {
             'statusCode': 500,
-            'headers': cors_headers(),
+            'headers': headers,
             'body': json.dumps({'error': str(e)})
         }
 
