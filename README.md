@@ -18,7 +18,7 @@ A complete serverless platform for Christians, pastors, and conservative voices 
 
 ## 🚀 Live Platform
 **URL**: https://videos.mytestimony.click
-**Demo Login**: admin@example.com / AdminPass123!
+**Demo Login**: admin@test.com / AdminPass123!
 
 ---
 
