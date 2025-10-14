@@ -199,6 +199,7 @@
     <script>
         const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
         const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
+        const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
         const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
         
         let currentUser = null;
@@ -441,19 +442,17 @@
                 document.getElementById('upload-progress-bar').style.width = '90%';
                 document.getElementById('upload-status').textContent = 'Generating thumbnail...';
 
-                // Trigger thumbnail generation
-                try {
-                    await fetch(`${ADMIN_API}?action=generate_thumbnail`, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${authToken}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ filename: filename })
-                    });
-                } catch (error) {
-                    console.log('Thumbnail generation failed:', error);
-                }
+                // Trigger thumbnail generation (allow to fail silently)
+                fetch(`${ADMIN_API}?action=generate_thumbnail`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ filename: filename })
+                }).catch(error => {
+                    console.log('Thumbnail generation failed (non-critical):', error);
+                });
 
                 document.getElementById('upload-progress-bar').style.width = '100%';
                 document.getElementById('upload-status').textContent = 'Upload complete!';

@@ -48,14 +48,21 @@ def process_video(bucket, filename):
     except s3_client.exceptions.NoSuchKey:
         print(f"Video file not found: videos/{filename}")
         return
+    except Exception as e:
+        print(f"Error checking video file: {e}")
+        return
     
     # Check if thumbnail already exists
     try:
         s3_client.head_object(Bucket=bucket, Key=thumb_key)
         print(f"Thumbnail already exists: {thumb_key}")
         return
-    except s3_client.exceptions.NoSuchKey:
-        pass
+    except Exception as e:
+        if 'NoSuchKey' in str(e) or '404' in str(e):
+            pass  # Thumbnail doesn't exist, continue to generate
+        else:
+            print(f"Error checking thumbnail: {e}")
+            return
     
     print(f"Processing video: {filename}")
     

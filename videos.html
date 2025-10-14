@@ -361,21 +361,24 @@
                     <div class="video-card">
                         <div class="thumbnail-container">
                             <img src="${thumbnailUrl}" alt="${title}" class="thumbnail" 
-                                 onerror="this.onerror=null; this.src='${fallbackThumbnailUrl}'; this.addEventListener('error', function(){this.style.display='none'; this.nextElementSibling.style.display='flex';});">
+                                 onerror="this.onerror=null; this.src='${fallbackThumbnailUrl}'; if(this.complete && this.naturalHeight === 0) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }" 
+                                 onload="if(this.naturalHeight === 0) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
                             <div class="thumbnail" style="display: none; background: linear-gradient(135deg, #667eea, #764ba2); color: white; align-items: center; justify-content: center; font-size: 14px; font-weight: bold;">
                                 📹 ${title.substring(0,20)}${title.length > 20 ? '...' : ''}
                             </div>
                             <button class="play-button" onclick="playVideo(this, '${videoUrl}')">
                                 ▶
                             </button>
-                            <video class="video-player" controls style="display: none;">
-                                Your browser does not support the video tag.
-                            </video>
+                        </div>
+                        <video class="video-player" controls style="display: none; width: 100%; height: 200px; background: #000;">
+                            Your browser does not support the video tag.
+                        </video>
                         </div>
                         <div class="video-title">
                             ${title}
                             <div style="margin-top: 8px;">
-                                <button onclick="copyEmbedLink('${embedUrl}')" style="background: #28a745; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; cursor: pointer;">🔗 Share</button>
+                                <button onclick="copyEmbedLink('${embedUrl}')" style="background: #28a745; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; cursor: pointer; margin-right: 5px;">🔗 Share</button>
+                                <button onclick="generateThumbnail('${filename}')" style="background: #ffc107; color: black; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; cursor: pointer;">🖼️ Thumb</button>
                             </div>
                         </div>
                     </div>
@@ -451,44 +454,44 @@
         function playVideo(button, videoUrl) {
             console.log('Playing video:', videoUrl);
             const card = button.closest('.video-card');
-            const thumbnail = card.querySelector('.thumbnail');
-            const playBtn = card.querySelector('.play-button');
+            const thumbnailContainer = card.querySelector('.thumbnail-container');
             const video = card.querySelector('.video-player');
             
-            thumbnail.style.display = 'none';
-            playBtn.style.display = 'none';
+            // Hide thumbnail container and show video
+            thumbnailContainer.style.display = 'none';
             video.style.display = 'block';
             
-            video.pause();
-            video.src = '';
-            video.load();
+            // Set video source and play
             video.src = videoUrl;
             video.load();
             
             video.addEventListener('error', function(e) {
                 console.error('Video error:', e, video.error);
-                thumbnail.style.display = 'block';
-                playBtn.style.display = 'block';
+                thumbnailContainer.style.display = 'block';
                 video.style.display = 'none';
             });
             
             video.play().catch(error => {
                 console.error('Play error:', error);
-            });
-            
-            video.addEventListener('ended', function() {
-                thumbnail.style.display = 'block';
-                playBtn.style.display = 'block';
+                thumbnailContainer.style.display = 'block';
                 video.style.display = 'none';
             });
             
-            video.addEventListener('pause', function() {
-                if (video.currentTime === 0 || video.ended) {
-                    thumbnail.style.display = 'block';
-                    playBtn.style.display = 'block';
+            // Add close button to video
+            if (!video.querySelector('.close-video')) {
+                const closeBtn = document.createElement('button');
+                closeBtn.className = 'close-video';
+                closeBtn.innerHTML = '✕';
+                closeBtn.style.cssText = 'position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; z-index: 1000;';
+                closeBtn.onclick = function() {
+                    video.pause();
+                    video.currentTime = 0;
+                    thumbnailContainer.style.display = 'block';
                     video.style.display = 'none';
-                }
-            });
+                };
+                video.parentElement.style.position = 'relative';
+                video.parentElement.appendChild(closeBtn);
+            }
         }
         
         function setupTagFilter(allTags) {
@@ -631,6 +634,33 @@
             const sizes = ['B', 'KB', 'MB', 'GB', 'TB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        async function generateThumbnail(filename) {
+            const authToken = localStorage.getItem('auth_token');
+            if (!authToken) return;
+            
+            try {
+                const response = await fetch('https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin?action=generate_thumbnail', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ filename: filename })
+                });
+                
+                if (response.ok) {
+                    alert('Thumbnail generation started for ' + filename);
+                    // Reload page after 10 seconds to show new thumbnail
+                    setTimeout(() => location.reload(), 10000);
+                } else {
+                    alert('Failed to generate thumbnail');
+                }
+            } catch (error) {
+                console.error('Thumbnail generation error:', error);
+                alert('Error generating thumbnail');
+            }
         }
         
         function logout() {
