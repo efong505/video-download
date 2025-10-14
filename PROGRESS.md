@@ -255,6 +255,7 @@ articles-table:
   - Enhanced admin dashboard with name management capabilities
   - Added name fields to user creation and editing in admin panel
   - Implemented fallback to email for users without names set
+  - ✅ **VERIFIED**: Article creation now displays author's first and last name instead of email address
 
 ## Recent System Fixes & Improvements ✅ COMPLETE
 - [x] **Registration Form Styling**: Fixed CSS styling for first_name and last_name input fields
