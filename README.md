@@ -1,4 +1,26 @@
-# AWS Video Downloader System
+# Christian Conservative Video Platform
+
+## 🎯 What It Is
+A complete serverless platform for Christians, pastors, and conservative voices to share videos, write articles, and build community around biblical values and political engagement.
+
+## ⚡ Key Features
+- **Video Management**: Download, upload, and share videos from YouTube, Rumble, Facebook
+- **Christian Blog System**: Write articles with Bible verse integration and ministry templates
+- **User Authentication**: Role-based access (Super User, Admin, User) with subscription tiers
+- **Smart Processing**: Automatic Lambda/Fargate routing based on video length
+- **Ministry Tools**: Bible verse lookup, sermon templates, scripture reference tracking
+- **Subscription Plans**: PayPal-integrated storage quotas from free to unlimited
+
+## 🏗️ Built With
+**AWS Serverless**: Lambda, S3, DynamoDB, CloudFront, API Gateway
+**Frontend**: HTML5, Bootstrap, Quill.js rich text editor
+**APIs**: Bible verse integration, PayPal billing, video processing
+
+## 🚀 Live Platform
+**URL**: https://d271vky579caz9.cloudfront.net
+**Demo Login**: super@admin.com / SuperSecure123!
+
+---
 
 A complete serverless video management system built on AWS with intelligent Lambda/Fargate routing, authentication, admin dashboard, and comprehensive video management capabilities.
 
