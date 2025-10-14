@@ -283,6 +283,23 @@ articles-table:
 - **Files Modified**: articles_api/index.py
 - **Deployment**: Lambda function successfully updated and operational
 
+### Bible Verse Lookup System Restoration (October 2024)
+- **Status**: ✅ COMPLETED
+- **Problem**: Bible verse lookup failing with 500 errors after requests module removal
+- **Root Cause**: Lambda function missing requests library needed for Bible API calls
+- **Resolution Process**:
+  1. ✅ Created proper Lambda deployment package with requests library and dependencies
+  2. ✅ Fixed KJV translation issue - was returning World English Bible instead of King James Version
+  3. ✅ Updated URL construction to explicitly request translation parameter for all versions
+  4. ✅ Deployed complete package with requests, urllib3, certifi, charset_normalizer, idna modules
+- **Technical Fix**: 
+  - Added requests library to Lambda deployment package (CodeSize: ~1MB)
+  - Fixed KJV URL to use `?translation=kjv` parameter instead of default endpoint
+  - Updated fallback URLs to explicitly request KJV translation
+- **Result**: Bible verse lookup fully operational with correct translations (KJV, ASV, YLT)
+- **Files Modified**: articles_api/index.py, Lambda deployment package
+- **Verification**: ✅ KJV returns proper King James Version text, all translations working correctly
+
 ### Final System Integration & Bug Fixes (December 2024)
 - **Status**: ✅ COMPLETED
 - **Issues Resolved**:
@@ -579,6 +596,8 @@ articles-table:
 - **ROLE-BASED LIMITS**: Regular users have 2GB/50 video limits, admins have unlimited access
 - **BIBLE VERSE INTEGRATION**: Fixed JavaScript syntax errors caused by line breaks in Bible API responses
 - **ARTICLES API STABILITY**: Resolved CORS and dependency issues in Lambda deployment
+- **BIBLE VERSE LOOKUP RESTORED**: Fixed 500 errors and KJV translation issues with proper Lambda package deployment
+- **TRANSLATION ACCURACY**: KJV now returns proper King James Version instead of World English Bible
 - **CORS PATTERN DOCUMENTED**: Recurring CORS issue resolution pattern documented for future reference
 - **ARTICLE VIEWER COMPLETE**: Full article display system with proper navigation and formatting
 - **DECIMAL SERIALIZATION**: Fixed DynamoDB Decimal objects causing JSON serialization errors

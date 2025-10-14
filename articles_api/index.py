@@ -186,14 +186,11 @@ def get_bible_verse(event):
         supported_translations = ['kjv', 'asv', 'ylt']
         
         if translation.lower() in supported_translations:
-            # Use the requested translation
-            if translation.lower() == 'kjv':
-                url = BIBLE_API_BASE + '/' + formatted_ref
-            else:
-                url = BIBLE_API_BASE + '/' + formatted_ref + '?translation=' + translation.lower()
+            # Use the requested translation - all need explicit translation parameter
+            url = BIBLE_API_BASE + '/' + formatted_ref + '?translation=' + translation.lower()
         else:
             # Fallback to KJV for unsupported translations
-            url = BIBLE_API_BASE + '/' + formatted_ref
+            url = BIBLE_API_BASE + '/' + formatted_ref + '?translation=kjv'
         
         response = requests.get(url, timeout=10)
         
@@ -225,7 +222,7 @@ def get_bible_verse(event):
         else:
             # If the specific translation failed, try KJV as fallback
             if translation.lower() != 'kjv':
-                fallback_url = BIBLE_API_BASE + '/' + formatted_ref
+                fallback_url = BIBLE_API_BASE + '/' + formatted_ref + '?translation=kjv'
                 fallback_response = requests.get(fallback_url, timeout=10)
                 
                 if fallback_response.status_code == 200:

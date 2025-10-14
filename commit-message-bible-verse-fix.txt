@@ -1,0 +1,25 @@
+Fix Bible verse lookup system - restore functionality and correct KJV translation
+
+Problem: Bible verse lookup failing with 500 errors after requests module removal
+Secondary Issue: KJV selection returning World English Bible instead of King James Version
+
+Resolution:
+- Created proper Lambda deployment package with requests library and all dependencies
+- Fixed KJV translation issue by explicitly requesting translation parameter
+- Updated URL construction for consistent behavior across all translations
+- Deployed complete package with requests, urllib3, certifi, charset_normalizer, idna modules
+
+Technical changes:
+- articles_api/index.py: Fixed KJV URL to use ?translation=kjv parameter
+- articles_api/index.py: Updated fallback URLs to explicitly request KJV translation
+- Lambda package: Added requests library and dependencies (CodeSize increased to ~1MB)
+- URL pattern: All translations now use explicit translation parameter for consistency
+
+Bible API Integration:
+- KJV: Now returns proper King James Version text
+- ASV: American Standard Version (1901) working correctly
+- YLT: Young's Literal Translation (NT only) working correctly
+- Fallback: Unsupported translations properly fall back to KJV with user notification
+
+Result: Bible verse lookup fully operational in both create-article.html and edit-article.html
+Status: All Bible translations working correctly with proper version text
