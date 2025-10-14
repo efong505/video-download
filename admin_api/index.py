@@ -107,6 +107,8 @@ def get_all_users(event):
         users.append({
             'user_id': item['user_id'],
             'email': item['email'],
+            'first_name': item.get('first_name', ''),
+            'last_name': item.get('last_name', ''),
             'role': item['role'],
             'created_at': item['created_at'],
             'active': item.get('active', True)
@@ -183,6 +185,8 @@ def update_user_role(event):
     body = json.loads(event['body'])
     user_id = body['user_id']
     new_role = body['role']
+    first_name = body.get('first_name', '')
+    last_name = body.get('last_name', '')
     
     # Get target user to check if they're super_user
     try:
@@ -217,21 +221,34 @@ def update_user_role(event):
             'body': json.dumps({'error': str(e)})
         }
     
+    # Build update expression dynamically
+    update_expression = 'SET #role = :role, updated_at = :updated'
+    expression_names = {'#role': 'role'}
+    expression_values = {
+        ':role': new_role,
+        ':updated': datetime.utcnow().isoformat()
+    }
+    
+    if first_name is not None:
+        update_expression += ', first_name = :first_name'
+        expression_values[':first_name'] = first_name
+    
+    if last_name is not None:
+        update_expression += ', last_name = :last_name'
+        expression_values[':last_name'] = last_name
+    
     users_table.update_item(
         Key={'user_id': user_id},
-        UpdateExpression='SET #role = :role, updated_at = :updated',
-        ExpressionAttributeNames={'#role': 'role'},
-        ExpressionAttributeValues={
-            ':role': new_role,
-            ':updated': datetime.utcnow().isoformat()
-        }
+        UpdateExpression=update_expression,
+        ExpressionAttributeNames=expression_names,
+        ExpressionAttributeValues=expression_values
     )
     
     return {
         'statusCode': 200,
         'headers': cors_headers(),
         'body': json.dumps({
-            'message': 'User role updated',
+            'message': 'User updated successfully',
             'user_id': user_id,
             'role': new_role
         })

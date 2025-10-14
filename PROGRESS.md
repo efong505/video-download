@@ -242,6 +242,28 @@ articles-table:
 - [x] Profile page usage calculation with TAG API integration
 - [x] Admin/Super User unlimited storage and video limits
 
+## Phase 3 Article System Enhancements ✅ COMPLETE
+- [x] **Draft/Preview Button Fixes**: Fixed non-functional draft and preview buttons in article creation
+- [x] **Video Upload Navigation**: Added "Upload Video" link to videos.html for all users
+- [x] **Article Editing System**: Created edit-article.html with full CRUD functionality for updating existing articles
+- [x] **Service Notes Template**: Added new template for church service notes and observations
+- [x] **Study Notes Category**: Added private study notes category with automatic privacy setting
+- [x] **User Name Implementation**: Replaced email addresses with actual user names for article authors
+  - Updated registration form to include first_name and last_name fields
+  - Modified auth API to store and retrieve user names
+  - Updated articles API to use user names instead of emails for author display
+  - Enhanced admin dashboard with name management capabilities
+  - Added name fields to user creation and editing in admin panel
+  - Implemented fallback to email for users without names set
+
+## Recent System Fixes & Improvements ✅ COMPLETE
+- [x] **Registration Form Styling**: Fixed CSS styling for first_name and last_name input fields
+- [x] **Video Upload Access**: Fixed "Upload Video" link to redirect to admin dashboard instead of broken video-downloader page
+- [x] **External Video Display**: Enhanced external video embedding with proper iframe permissions and fallback "Open" buttons
+- [x] **File Access Issues**: Uploaded missing video-downloader.html file to S3 to resolve Access Denied errors
+- [x] **User Experience**: Added direct links to external video platforms when embedding is restricted
+- [x] **Navigation Improvements**: Streamlined video upload workflow through admin interface
+
 ## Current Status
 **ACTIVE PHASE**: Phase 3 - Christian Blog & Article System ✅ COMPLETE
 **COMPLETED**: Full article system with rich text editor, Bible integration, templates, and CRUD operations
@@ -460,4 +482,9 @@ articles-table:
 - **CORS PATTERN DOCUMENTED**: Recurring CORS issue resolution pattern documented for future reference
 - **ARTICLE VIEWER COMPLETE**: Full article display system with proper navigation and formatting
 - **DECIMAL SERIALIZATION**: Fixed DynamoDB Decimal objects causing JSON serialization errors
-- **PHASE 3 FULLY OPERATIONAL**: Complete blog/article system with creation, listing, and viewing
+- **PHASE 3 FULLY OPERATIONAL**: Complete blog/article system with creation, editing, listing, and viewing
+- **USER NAME SYSTEM**: Full name support implemented across authentication, articles, and admin management
+- **ARTICLE ENHANCEMENTS**: Draft/preview functionality, service notes template, study notes category, and editing capabilities
+- **ADMIN NAME MANAGEMENT**: Administrators can now edit user first and last names through the admin dashboard
+- **SYSTEM STABILITY**: Fixed access issues, improved external video handling, and enhanced user experience
+- **NAVIGATION OPTIMIZED**: Streamlined upload workflow and fixed broken links across the platform

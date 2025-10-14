@@ -50,6 +50,8 @@ def register_user(event):
     body = json.loads(event['body'])
     email = body['email'].lower()
     password = body['password']
+    first_name = body.get('first_name', '')
+    last_name = body.get('last_name', '')
     role = body.get('role', 'user')
     
     # Validate role
@@ -84,6 +86,8 @@ def register_user(event):
         Item={
             'user_id': user_id,
             'email': email,
+            'first_name': first_name,
+            'last_name': last_name,
             'password_hash': password_hash,
             'role': role,
             'created_at': datetime.utcnow().isoformat(),
@@ -169,6 +173,9 @@ def login_user(event):
             'user': {
                 'user_id': user['user_id'],
                 'email': user['email'],
+                'first_name': user.get('first_name', ''),
+                'last_name': user.get('last_name', ''),
+                'name': f"{user.get('first_name', '')} {user.get('last_name', '')}".strip() or user['email'],
                 'role': user['role']
             }
         })

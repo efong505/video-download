@@ -8,6 +8,7 @@ from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
 articles_table = dynamodb.Table('articles')
+users_table = dynamodb.Table('users')
 
 # Bible API configuration (using free Bible API)
 BIBLE_API_BASE = 'https://bible-api.com'
@@ -80,12 +81,19 @@ def create_article(event):
         article_id = str(uuid.uuid4())
         title = body['title']
         content = body['content']
-        author = body['author']
+        author_email = body['author']
         category = body.get('category', 'general')
         template_used = body.get('template_used', 'custom')
         tags = body.get('tags', [])
         visibility = body.get('visibility', 'public')
         featured_image = body.get('featured_image', '')
+        
+        # Get user's name from users table
+        author_name = get_user_name(author_email)
+        
+        # Auto-set study notes to private
+        if category == 'study_notes':
+            visibility = 'private'
         
         # Extract scripture references from content
         scripture_references = extract_scripture_references(content)
@@ -98,7 +106,8 @@ def create_article(event):
             'article_id': article_id,
             'title': title,
             'content': content,
-            'author': author,
+            'author': author_name,
+            'author_email': author_email,
             'category': category,
             'template_used': template_used,
             'scripture_references': scripture_references,
@@ -236,6 +245,33 @@ def get_article_templates(event):
 
 <h2>🙏 Prayer for Leaders</h2>
 <p>Let us pray for our leaders and nation...</p>'''
+        },
+        'service_notes': {
+            'name': 'Service Notes Template',
+            'description': 'Notes and observations from church services',
+            'content': '''<h2>📅 Service Information</h2>
+<p><strong>Date:</strong> [Insert date]</p>
+<p><strong>Speaker:</strong> [Pastor/Speaker name]</p>
+<p><strong>Topic:</strong> [Service topic/theme]</p>
+
+<h2>📖 Scripture Focus</h2>
+<p>[Main scripture passages covered]</p>
+
+<h2>💡 Key Points</h2>
+<ul>
+<li>Point 1: [Your notes]</li>
+<li>Point 2: [Your notes]</li>
+<li>Point 3: [Your notes]</li>
+</ul>
+
+<h2>🎯 Personal Application</h2>
+<p>How does this apply to my life?</p>
+
+<h2>🙏 Prayer Requests</h2>
+<p>[Any prayer requests mentioned or personal prayers]</p>
+
+<h2>📝 Additional Notes</h2>
+<p>[Other observations, quotes, or thoughts]</p>'''
         }
     }
     
@@ -420,6 +456,29 @@ def convert_decimals(obj):
     elif isinstance(obj, Decimal):
         return int(obj) if obj % 1 == 0 else float(obj)
     return obj
+
+def get_user_name(email):
+    """Get user's display name from users table"""
+    try:
+        response = users_table.get_item(Key={'email': email})
+        user = response.get('Item')
+        
+        if user:
+            first_name = user.get('first_name', '')
+            last_name = user.get('last_name', '')
+            
+            if first_name and last_name:
+                return f"{first_name} {last_name}"
+            elif first_name:
+                return first_name
+            elif last_name:
+                return last_name
+        
+        # Fallback to email if no name found
+        return email
+    except Exception:
+        # Fallback to email on any error
+        return email
 
 def cors_headers():
     return {
