@@ -109,6 +109,8 @@ def create_article(event):
 
 def get_bible_verse(event):
     """Get Bible verse from API"""
+    headers = cors_headers()
+    
     query_params = event.get('queryStringParameters') or {}
     reference = query_params.get('reference')
     translation = query_params.get('translation', 'kjv')
@@ -116,40 +118,51 @@ def get_bible_verse(event):
     if not reference:
         return {
             'statusCode': 400,
-            'headers': cors_headers(),
+            'headers': headers,
             'body': json.dumps({'error': 'reference required'})
         }
     
     try:
         # Format reference for API (e.g., "john 3:16")
         formatted_ref = reference.lower().replace(' ', '')
-        url = f"{BIBLE_API_BASE}/{formatted_ref}?translation={translation}"
+        url = BIBLE_API_BASE + '/' + formatted_ref + '?translation=' + translation
         
         response = requests.get(url, timeout=10)
         
         if response.status_code == 200:
             data = response.json()
+            # Clean the text to remove line breaks and extra whitespace
+            verse_text = data.get('text', '').replace('\n', ' ').replace('\r', ' ').strip()
+            # Remove multiple spaces and normalize
+            verse_text = ' '.join(verse_text.split())
+            
             return {
                 'statusCode': 200,
-                'headers': cors_headers(),
+                'headers': headers,
                 'body': json.dumps({
                     'reference': data.get('reference', reference),
-                    'text': data.get('text', ''),
+                    'text': verse_text,
                     'translation': data.get('translation_name', translation.upper())
                 })
             }
         else:
             return {
                 'statusCode': 404,
-                'headers': cors_headers(),
+                'headers': headers,
                 'body': json.dumps({'error': 'Verse not found'})
             }
             
+    except ImportError:
+        return {
+            'statusCode': 500,
+            'headers': headers,
+            'body': json.dumps({'error': 'requests module not available'})
+        }
     except Exception as e:
         return {
             'statusCode': 500,
-            'headers': cors_headers(),
-            'body': json.dumps({'error': f'Bible API error: {str(e)}'})
+            'headers': headers,
+            'body': json.dumps({'error': 'Bible API error: ' + str(e)})
         }
 
 def get_article_templates(event):

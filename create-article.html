@@ -239,7 +239,7 @@
 
         async function loadTemplates() {
             try {
-                const response = await fetch(`${ARTICLES_API}?action=templates`);
+                const response = await fetch(ARTICLES_API + '?action=templates');
                 const data = await response.json();
                 
                 if (response.ok) {
@@ -264,10 +264,16 @@
                 const template = templates[key];
                 const templateCard = document.createElement('div');
                 templateCard.className = 'template-card';
-                templateCard.innerHTML = `
-                    <h6>${template.name}</h6>
-                    <p class="text-muted small mb-0">${template.description}</p>
-                `;
+                
+                const h6 = document.createElement('h6');
+                h6.textContent = template.name;
+                
+                const p = document.createElement('p');
+                p.className = 'text-muted small mb-0';
+                p.textContent = template.description;
+                
+                templateCard.appendChild(h6);
+                templateCard.appendChild(p);
                 templateCard.onclick = () => selectTemplate(key, template);
                 container.appendChild(templateCard);
             });
@@ -299,7 +305,8 @@
             }
             
             try {
-                const response = await fetch(`${ARTICLES_API}?action=bible_verse&reference=${encodeURIComponent(reference)}&translation=${translation}`);
+                const url = ARTICLES_API + '?action=bible_verse&reference=' + encodeURIComponent(reference) + '&translation=' + translation;
+                const response = await fetch(url);
                 const data = await response.json();
                 
                 if (response.ok) {
@@ -317,27 +324,43 @@
 
         function displayVerse(verseData) {
             const resultDiv = document.getElementById('verse-result');
-            resultDiv.innerHTML = `
-                <div class="verse-result">
-                    <h6>${verseData.reference}</h6>
-                    <p>"${verseData.text}"</p>
-                    <small class="text-muted">${verseData.translation}</small>
-                    <div class="mt-2">
-                        <button class="btn btn-sm btn-outline-primary" onclick="insertVerse('${verseData.reference}', '${verseData.text.replace(/'/g, "\\'")}')">
-                            ➕ Insert into Article
-                        </button>
-                    </div>
-                </div>
-            `;
+            
+            // Create elements programmatically to avoid escaping issues
+            const verseDiv = document.createElement('div');
+            verseDiv.className = 'verse-result';
+            
+            const referenceH6 = document.createElement('h6');
+            referenceH6.textContent = verseData.reference;
+            
+            const textP = document.createElement('p');
+            textP.textContent = '"' + verseData.text + '"';
+            
+            const translationSmall = document.createElement('small');
+            translationSmall.className = 'text-muted';
+            translationSmall.textContent = verseData.translation;
+            
+            const buttonDiv = document.createElement('div');
+            buttonDiv.className = 'mt-2';
+            
+            const insertBtn = document.createElement('button');
+            insertBtn.className = 'btn btn-sm btn-outline-primary';
+            insertBtn.innerHTML = '➕ Insert into Article';
+            insertBtn.addEventListener('click', function() {
+                insertVerse(verseData.reference, verseData.text);
+            });
+            
+            buttonDiv.appendChild(insertBtn);
+            verseDiv.appendChild(referenceH6);
+            verseDiv.appendChild(textP);
+            verseDiv.appendChild(translationSmall);
+            verseDiv.appendChild(buttonDiv);
+            
+            resultDiv.innerHTML = '';
+            resultDiv.appendChild(verseDiv);
         }
 
         function insertVerse(reference, text) {
-            const verseHtml = `
-                <blockquote class="blockquote">
-                    <p>"${text}"</p>
-                    <footer class="blockquote-footer">${reference}</footer>
-                </blockquote>
-            `;
+            const verseHtml = '<blockquote class="blockquote"><p>"' + text + '"</p><footer class="blockquote-footer">' + reference + '</footer></blockquote>';
             
             if (quill) {
                 const range = quill.getSelection();
@@ -361,11 +384,11 @@
             }
             
             try {
-                const response = await fetch(`${ARTICLES_API}?action=create`, {
+                const response = await fetch(ARTICLES_API + '?action=create', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${authToken}`
+                        'Authorization': 'Bearer ' + authToken
                     },
                     body: JSON.stringify({
                         title: title,

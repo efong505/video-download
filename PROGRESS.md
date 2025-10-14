@@ -175,6 +175,52 @@ articles-table:
 - [x] Public/private visibility controls
 - [x] Scripture reference extraction
 - [x] Reading time and view count tracking
+- [x] Bible verse insertion JavaScript syntax error resolution
+
+## Bible Verse Insertion Troubleshooting & Resolution ✅ COMPLETE
+**Problem**: JavaScript syntax error "string literal contains an unescaped line break" when inserting Bible verses
+
+**Root Cause Analysis**:
+1. Bible API (bible-api.com) returns verse text containing actual line breaks (\n, \r)
+2. Line breaks in JavaScript template literals and string concatenation caused syntax errors
+3. Multiple template literals throughout create-article.html needed conversion
+4. CORS issues with Articles API due to missing dependencies in deployment package
+
+**Troubleshooting Steps Performed**:
+1. **Initial Fix Attempt**: Replaced onclick attributes with data attributes - FAILED
+2. **Template Literal Removal**: Systematically removed all template literals from JavaScript - PARTIAL SUCCESS
+3. **DOM Element Creation**: Switched to programmatic DOM element creation - PARTIAL SUCCESS
+4. **String Concatenation**: Converted all template literals to string concatenation - PARTIAL SUCCESS
+5. **Cache Bypass**: Created create-article-v2.html with different approach - FAILED
+6. **API Investigation**: Identified Bible API returning unescaped line breaks - ROOT CAUSE FOUND
+
+**Final Resolution**:
+1. **Backend Fix**: Modified Articles API `get_bible_verse()` function to clean verse text:
+   - Remove line breaks: `.replace('\n', ' ').replace('\r', ' ')`
+   - Normalize whitespace: `' '.join(verse_text.split())`
+   - Strip extra spaces: `.strip()`
+
+2. **Deployment Fix**: Recreated Lambda deployment package with all dependencies:
+   - Included requests, urllib3, certifi, charset_normalizer, idna modules
+   - Fixed CORS headers to always return properly
+   - Added error handling for missing dependencies
+
+3. **JavaScript Cleanup**: Removed all template literals from create-article.html:
+   - Converted fetch URLs to string concatenation
+   - Replaced template literal variables with string concatenation
+   - Ensured no backticks remain in JavaScript code
+
+**Technical Details**:
+- **Files Modified**: `articles_api/index.py`, `create-article.html`
+- **API Endpoint**: Bible verse lookup now returns cleaned text
+- **Deployment**: Lambda function redeployed with proper dependency package
+- **Testing**: Verified Bible verse insertion works without syntax errors
+
+**Lessons Learned**:
+- External API responses must be sanitized for frontend consumption
+- Template literals with dynamic content containing line breaks cause JavaScript syntax errors
+- Lambda deployment packages must include all required dependencies
+- CORS issues often indicate backend Lambda function failures (502 errors)
 
 ## Recent Fixes & Enhancements ✅ COMPLETE
 - [x] User deletion with video ownership transfer
@@ -388,3 +434,5 @@ articles-table:
 - **USAGE TRACKING WORKING**: Profile page shows accurate storage and video count from TAG API
 - **ADMIN PRIVILEGES**: Admin and Super Users have unlimited storage and video access
 - **ROLE-BASED LIMITS**: Regular users have 2GB/50 video limits, admins have unlimited access
+- **BIBLE VERSE INTEGRATION**: Fixed JavaScript syntax errors caused by line breaks in Bible API responses
+- **ARTICLES API STABILITY**: Resolved CORS and dependency issues in Lambda deployment
