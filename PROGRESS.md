@@ -349,7 +349,7 @@ articles-table:
 **COMPLETED**: Full article system, video platform, and thumbnail generation system fully operational
 **NEXT PHASE**: Phase 4 Angular conversion for modern UI/UX
 **VISION**: Complete ministry platform combining video, articles, and community tools
-**SYSTEM STATUS**: All core functionality working - video uploads, thumbnail generation, external video support, article system
+**SYSTEM STATUS**: All core functionality working - video uploads (all users), thumbnail generation, external video support, article system
 
 ## Phase 3 Implementation Details ✅ COMPLETE
 **Articles API Lambda Function**: `articles_api/index.py`
@@ -576,6 +576,31 @@ articles-table:
 - **EXTERNAL VIDEO DISPLAY**: YouTube thumbnails, platform badges, and embedded playback functionality
 - **PLATFORM AUTO-DETECTION**: Automatic video type detection for YouTube, Rumble, and Facebook URLs
 - **THUMBNAIL GENERATION FIX**: Resolved Lambda function 404 errors preventing thumbnail generation for uploaded videos
+- **USER UPLOAD ACCESS FIX**: Fixed admin access requirement preventing regular users from uploading videos
+
+## User Upload Access Fix ✅ COMPLETE
+**Problem**: Regular users getting "Admin or Super User access required" error when trying to upload videos via user-upload.html
+
+**Root Cause**: Admin API was checking admin privileges for ALL requests before handling upload_url endpoint, causing 403 errors for regular users
+
+**Technical Issue**: 
+- Admin API flow: verify_admin_token() → then verify_token_only() for upload_url
+- First admin check was failing and returning 403 before reaching the user-specific logic
+- JavaScript error: Duplicate `const AUTH_API` declaration preventing uploadVideo function from loading
+
+**Resolution**:
+1. **Admin API Fix**: Moved upload_url endpoint check before admin token verification
+   - upload_url now uses verify_token_only() without admin check first
+   - All other endpoints still require admin/super_user privileges
+2. **JavaScript Fix**: Removed duplicate AUTH_API constant declaration in user-upload.html
+   - Fixed "uploadVideo is not defined" error
+   - Upload functionality now loads properly
+
+**Files Modified**:
+- `admin_api/index.py` - Reordered endpoint handling logic
+- `user-upload.html` - Fixed duplicate constant declaration
+
+**Verification**: ✅ Regular users can now successfully upload videos with proper quota enforcement
 
 ## Thumbnail Generation Troubleshooting & Resolution ✅ COMPLETE
 **Problem**: Lambda thumbnail-generator function failing with 404 errors, preventing thumbnail creation for uploaded videos like "antifa-out-of-work.mp4"

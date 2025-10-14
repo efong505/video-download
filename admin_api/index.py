@@ -24,13 +24,21 @@ def lambda_handler(event, context):
                 'body': json.dumps({})
             }
         
-        # Verify admin token for non-OPTIONS requests
+        query_params = event.get('queryStringParameters') or {}
+        action = query_params.get('action')
+        
+        # Handle upload_url with regular user token verification
+        if method == 'POST' and action == 'upload_url':
+            auth_result = verify_token_only(event)
+            if auth_result['statusCode'] != 200:
+                return auth_result
+            return get_upload_url(event)
+        
+        # Verify admin token for all other requests
         auth_result = verify_admin_token(event)
         if auth_result['statusCode'] != 200:
             return auth_result
         
-        query_params = event.get('queryStringParameters') or {}
-        action = query_params.get('action')
         if method == 'GET' and action == 'users':
             return get_all_users(event)
         elif method == 'GET' and action == 'videos':
@@ -43,12 +51,6 @@ def lambda_handler(event, context):
             return delete_user(event)
         elif method == 'DELETE' and action == 'video':
             return delete_video(event)
-        elif method == 'POST' and action == 'upload_url':
-            # Allow all authenticated users for upload_url
-            auth_result = verify_token_only(event)
-            if auth_result['statusCode'] != 200:
-                return auth_result
-            return get_upload_url(event)
         elif method == 'POST' and action == 'generate_thumbnail':
             return generate_thumbnail(event)
         else:
