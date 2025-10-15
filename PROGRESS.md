@@ -453,6 +453,31 @@ articles-table:
   - Fix integration: `aws apigateway put-integration --type AWS_PROXY --uri arn:aws:apigateway:region:lambda:path/2015-03-31/functions/arn:aws:lambda:region:account:function:FUNCTION_NAME/invocations`
   - Deploy: `aws apigateway create-deployment --stage-name prod`
 
+**PAYPAL SUBSCRIPTION ISSUES** ✅ RESOLVED:
+- **Issue 1: Usage Endpoint 500 Error**
+  - **Problem**: DynamoDB scan failed with "owner is a reserved keyword" error
+  - **Root Cause**: FilterExpression used reserved keyword without ExpressionAttributeNames
+  - **Fix**: Added ExpressionAttributeNames mapping for 'owner' field in video-metadata table scan
+  - **Status**: ✅ FIXED - Usage endpoint now works correctly
+
+- **Issue 2: Cancelled Subscription Showing Free Tier**
+  - **Problem**: After cancellation, subscription immediately showed as "Free" instead of retaining premium benefits until billing period ends
+  - **Root Cause**: Cancellation logic downgraded tier immediately instead of maintaining benefits until next_billing_date
+  - **Fix**: Modified get_subscription_status to show "active" status and maintain premium tier until billing date passes
+  - **Status**: ✅ FIXED - Users retain premium benefits until billing period expires
+
+- **Issue 3: No Automatic Subscription Downgrade**
+  - **Problem**: No mechanism to automatically downgrade expired subscriptions after billing period ends
+  - **Root Cause**: Missing scheduled task to process expired subscriptions
+  - **Fix**: Implemented automated system with process_expired_subscriptions() function and CloudWatch Events rule running daily at midnight UTC
+  - **Status**: ✅ IMPLEMENTED - Automatic downgrades occur daily
+
+- **Issue 4: PayPal Sandbox Cancellation Errors**
+  - **Problem**: PayPal RESOURCE_NOT_FOUND errors when cancelling sandbox subscriptions
+  - **Root Cause**: PayPal sandbox subscriptions often don't exist when trying to cancel
+  - **Fix**: Enhanced error handling to gracefully handle missing PayPal subscriptions and proceed with local cancellation
+  - **Status**: ✅ FIXED - Cancellation works regardless of PayPal sandbox state
+
 ## Key System Information
 - **Platform Name**: Christian Conservative Video Platform
 - **Super User**: super@admin.com / SuperSecure123!
@@ -623,7 +648,19 @@ articles-table:
 - **DECIMAL SERIALIZATION**: Fixed DynamoDB Decimal objects causing JSON serialization errors
 - **PHASE 3 FULLY OPERATIONAL**: Complete blog/article system with creation, editing, listing, and viewing
 - **USER NAME SYSTEM**: Full name support implemented across authentication, articles, and admin management
-- **ARTICLE ENHANCEMENTS**: Draft/preview functionality, service notes template, study notes category, and editing capabilities
+- **PAYPAL SUBSCRIPTION SYSTEM COMPLETE**: Full end-to-end subscription management with cancellation, usage tracking, and automatic downgrades
+- **SUBSCRIPTION CANCELLATION FIXED**: End-of-period benefit retention implemented with automatic downgrade scheduling
+- **USAGE TRACKING RESTORED**: Fixed DynamoDB reserved keyword issue in video-metadata table scanning
+- **AUTOMATED SUBSCRIPTION MANAGEMENT**: CloudWatch Events rule processes expired subscriptions daily at midnight UTC
+
+## Phase 3 Remaining Items:
+**Step 4: Advanced Features** ❌ PENDING
+- [ ] Comment system for articles
+- [ ] Article categories and tagging
+- [ ] Search functionality for articles
+- [ ] Article sharing and social media integration
+- [ ] Related articles suggestions
+- [ ] Article analytics and view trackingARTICLE ENHANCEMENTS**: Draft/preview functionality, service notes template, study notes category, and editing capabilities
 - **ADMIN NAME MANAGEMENT**: Administrators can now edit user first and last names through the admin dashboard
 - **SYSTEM STABILITY**: Fixed access issues, improved external video handling, and enhanced user experience
 - **NAVIGATION OPTIMIZED**: Streamlined upload workflow and fixed broken links across the platform
