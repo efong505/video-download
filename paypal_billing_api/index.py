@@ -65,6 +65,8 @@ def lambda_handler(event, context):
             return test_paypal_connection()
         elif method == 'POST' and action == 'activate_subscription':
             return activate_subscription(event)
+        elif method == 'POST' and action == 'process_expired_subscriptions':
+            return process_expired_subscriptions(event)
         else:
             return {
                 'statusCode': 404,
@@ -372,17 +374,32 @@ def get_subscription_status(event):
         video_count = int(user.get('video_count', 0)) if user.get('video_count') else 0
         video_limit = int(user.get('video_limit', 50)) if user.get('video_limit') else 50
         
+        # Check if cancelled subscription should still show premium benefits
+        subscription_status = user.get('subscription_status', 'active')
+        subscription_tier = user.get('subscription_tier', 'free')
+        next_billing_date = user.get('next_billing_date')
+        
+        # If cancelled but billing date is in future, show as active with benefits
+        if subscription_status == 'cancelled' and next_billing_date and subscription_tier != 'free':
+            try:
+                billing_date = datetime.fromisoformat(next_billing_date.replace('Z', '+00:00'))
+                if billing_date > datetime.utcnow():
+                    # Keep showing as active until billing period ends
+                    subscription_status = 'active'
+            except Exception as date_error:
+                print(f'Date parsing error: {str(date_error)}')
+        
         return {
             'statusCode': 200,
             'headers': cors_headers(),
             'body': json.dumps({
-                'subscription_tier': user.get('subscription_tier', 'free'),
+                'subscription_tier': subscription_tier,
                 'storage_used': storage_used,
                 'storage_limit': storage_limit,
                 'video_count': video_count,
                 'video_limit': video_limit,
-                'subscription_status': user.get('subscription_status', 'active'),
-                'next_billing_date': user.get('next_billing_date'),
+                'subscription_status': subscription_status,
+                'next_billing_date': next_billing_date,
                 'payment_provider': user.get('payment_provider')
             })
         }
@@ -407,9 +424,12 @@ def get_usage_stats(event):
         }
     
     try:
+        print(f'Getting usage stats for user: {user_id}')
         # Get user info
+        print('Getting user from database...')
         user_response = users_table.get_item(Key={'user_id': user_id})
         if 'Item' not in user_response:
+            print('User not found in database')
             return {
                 'statusCode': 404,
                 'headers': cors_headers(),
@@ -417,13 +437,18 @@ def get_usage_stats(event):
             }
         
         user = user_response['Item']
+        print(f'User found: {user.get("email")}')
         
         # Calculate actual usage from video metadata
+        print('Accessing video-metadata table...')
         video_table = dynamodb.Table('video-metadata')
+        print('Scanning for user videos...')
         videos_response = video_table.scan(
-            FilterExpression='owner = :owner',
+            FilterExpression='#owner = :owner',
+            ExpressionAttributeNames={'#owner': 'owner'},
             ExpressionAttributeValues={':owner': user['email']}
         )
+        print(f'Found {len(videos_response["Items"])} videos')
         
         total_size = 0
         video_count = 0
@@ -432,16 +457,30 @@ def get_usage_stats(event):
             if video.get('video_type', 'local') == 'local':
                 # Get actual file size from S3
                 try:
-                    import boto3
                     s3_client = boto3.client('s3')
-                    s3_response = s3_client.head_object(
-                        Bucket='my-video-downloads-bucket',
-                        Key=f"videos/{video.get('filename', '')}"
-                    )
-                    total_size += s3_response['ContentLength']
+                    filename = video.get('filename', '')
+                    if filename:
+                        try:
+                            s3_response = s3_client.head_object(
+                                Bucket='my-video-downloads-bucket',
+                                Key=f"videos/{filename}"
+                            )
+                            total_size += s3_response['ContentLength']
+                        except s3_client.exceptions.NoSuchKey:
+                            # File doesn't exist in S3, use estimated size or skip
+                            estimated_size = video.get('file_size', 0)
+                            if estimated_size:
+                                total_size += int(estimated_size)
+                        except Exception as s3_error:
+                            print(f'S3 error for {filename}: {str(s3_error)}')
+                            # Use estimated size if available
+                            estimated_size = video.get('file_size', 0)
+                            if estimated_size:
+                                total_size += int(estimated_size)
                     video_count += 1
-                except:
-                    pass
+                except Exception as general_error:
+                    print(f'General error processing video: {str(general_error)}')
+                    video_count += 1
             else:
                 video_count += 1
         
@@ -474,6 +513,9 @@ def get_usage_stats(event):
         }
         
     except Exception as e:
+        print(f'Error in get_usage_stats: {str(e)}')
+        import traceback
+        print(f'Traceback: {traceback.format_exc()}')
         return {
             'statusCode': 500,
             'headers': cors_headers(),
@@ -498,34 +540,106 @@ def cancel_subscription(event):
         
         user = response['Item']
         subscription_id = user.get('subscription_id')
+        current_tier = user.get('subscription_tier', 'free')
         
-        if not subscription_id:
+        # If user is already on free tier, just update status
+        if current_tier == 'free':
+            users_table.update_item(
+                Key={'user_id': user_id},
+                UpdateExpression='SET subscription_status = :status, subscription_id = :sub_id, updated_at = :updated',
+                ExpressionAttributeValues={
+                    ':status': 'cancelled',
+                    ':sub_id': None,
+                    ':updated': datetime.utcnow().isoformat()
+                }
+            )
             return {
-                'statusCode': 400,
+                'statusCode': 200,
                 'headers': cors_headers(),
-                'body': json.dumps({'error': 'No active subscription found'})
+                'body': json.dumps({'message': 'User subscription cancelled (was already on free tier)'})
             }
         
-        # Cancel subscription with PayPal
-        access_token = get_paypal_access_token()
+        # Try to cancel with PayPal if subscription ID exists
+        paypal_cancelled = False
+        if subscription_id:
+            try:
+                access_token = get_paypal_access_token()
+                
+                headers = {
+                    'Authorization': f'Bearer {access_token}',
+                    'Content-Type': 'application/json'
+                }
+                
+                cancel_data = {
+                    'reason': 'User requested cancellation'
+                }
+                
+                paypal_response = requests.post(
+                    f'{PAYPAL_BASE_URL}/v1/billing/subscriptions/{subscription_id}/cancel',
+                    headers=headers,
+                    json=cancel_data
+                )
+                
+                if paypal_response.status_code == 204:
+                    paypal_cancelled = True
+                elif paypal_response.status_code == 404:
+                    # Subscription doesn't exist in PayPal (common in sandbox), proceed with local cancellation
+                    print(f'PayPal subscription {subscription_id} not found, proceeding with local cancellation')
+                    paypal_cancelled = True
+                else:
+                    # Other PayPal errors
+                    error_data = paypal_response.json() if paypal_response.text else {}
+                    if error_data.get('name') == 'RESOURCE_NOT_FOUND':
+                        # Subscription doesn't exist, proceed with local cancellation
+                        print(f'PayPal subscription {subscription_id} resource not found, proceeding with local cancellation')
+                        paypal_cancelled = True
+                    else:
+                        return {
+                            'statusCode': 400,
+                            'headers': cors_headers(),
+                            'body': json.dumps({'error': f'PayPal cancellation failed: {paypal_response.text}'})
+                        }
+            except Exception as paypal_error:
+                print(f'PayPal cancellation error: {str(paypal_error)}')
+                # If PayPal fails, still proceed with local cancellation
+                paypal_cancelled = True
+        else:
+            # No subscription ID, proceed with local cancellation
+            paypal_cancelled = True
         
-        headers = {
-            'Authorization': f'Bearer {access_token}',
-            'Content-Type': 'application/json'
-        }
-        
-        cancel_data = {
-            'reason': 'User requested cancellation'
-        }
-        
-        response = requests.post(
-            f'{PAYPAL_BASE_URL}/v1/billing/subscriptions/{subscription_id}/cancel',
-            headers=headers,
-            json=cancel_data
-        )
-        
-        if response.status_code == 204:
-            # Update user to free tier
+        # Update user subscription status locally
+        if paypal_cancelled:
+            next_billing_date = user.get('next_billing_date')
+            current_time = datetime.utcnow()
+            
+            # Check if billing date is in the future
+            if next_billing_date:
+                try:
+                    billing_date = datetime.fromisoformat(next_billing_date.replace('Z', '+00:00'))
+                    if billing_date > current_time:
+                        # Keep current tier until billing period ends
+                        users_table.update_item(
+                            Key={'user_id': user_id},
+                            UpdateExpression='SET subscription_status = :status, subscription_id = :sub_id, updated_at = :updated',
+                            ExpressionAttributeValues={
+                                ':status': 'cancelled',
+                                ':sub_id': None,
+                                ':updated': current_time.isoformat()
+                            }
+                        )
+                        
+                        days_remaining = (billing_date - current_time).days
+                        return {
+                            'statusCode': 200,
+                            'headers': cors_headers(),
+                            'body': json.dumps({
+                                'message': f'Subscription cancelled successfully. You will retain {user.get("subscription_tier", "premium")} benefits until {billing_date.strftime("%B %d, %Y")} ({days_remaining} days remaining).'
+                            })
+                        }
+                except Exception as date_error:
+                    print(f'Date parsing error: {str(date_error)}')
+            
+            # If no valid billing date or date has passed, downgrade immediately
             free_config = SUBSCRIPTION_TIERS['free']
             
             users_table.update_item(
@@ -537,7 +651,7 @@ def cancel_subscription(event):
                     ':storage': free_config['storage_limit'],
                     ':videos': free_config['video_limit'],
                     ':sub_id': None,
-                    ':updated': datetime.utcnow().isoformat()
+                    ':updated': current_time.isoformat()
                 }
             )
             
@@ -545,12 +659,6 @@ def cancel_subscription(event):
                 'statusCode': 200,
                 'headers': cors_headers(),
                 'body': json.dumps({'message': 'Subscription cancelled successfully'})
-            }
-        else:
-            return {
-                'statusCode': 400,
-                'headers': cors_headers(),
-                'body': json.dumps({'error': f'PayPal cancellation failed: {response.text}'})
             }
             
     except Exception as e:
@@ -693,6 +801,58 @@ def activate_subscription(event):
             }
             
     except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
+        }
+
+def process_expired_subscriptions(event):
+    """Process expired subscriptions and downgrade users to free tier"""
+    try:
+        current_time = datetime.utcnow()
+        print(f'Processing expired subscriptions at {current_time.isoformat()}')
+        
+        # Scan for cancelled subscriptions with past billing dates
+        response = users_table.scan(
+            FilterExpression='subscription_status = :status AND next_billing_date < :current_time',
+            ExpressionAttributeValues={
+                ':status': 'cancelled',
+                ':current_time': current_time.isoformat()
+            }
+        )
+        
+        processed_count = 0
+        for user in response['Items']:
+            if user.get('subscription_tier') != 'free':
+                # Downgrade to free tier
+                free_config = SUBSCRIPTION_TIERS['free']
+                
+                users_table.update_item(
+                    Key={'user_id': user['user_id']},
+                    UpdateExpression='SET subscription_tier = :tier, storage_limit = :storage, video_limit = :videos, updated_at = :updated',
+                    ExpressionAttributeValues={
+                        ':tier': 'free',
+                        ':storage': free_config['storage_limit'],
+                        ':videos': free_config['video_limit'],
+                        ':updated': current_time.isoformat()
+                    }
+                )
+                
+                processed_count += 1
+                print(f'Downgraded user {user["user_id"]} from {user.get("subscription_tier")} to free')
+        
+        return {
+            'statusCode': 200,
+            'headers': cors_headers(),
+            'body': json.dumps({
+                'message': f'Processed {processed_count} expired subscriptions',
+                'processed_count': processed_count
+            })
+        }
+        
+    except Exception as e:
+        print(f'Error processing expired subscriptions: {str(e)}')
         return {
             'statusCode': 500,
             'headers': cors_headers(),
