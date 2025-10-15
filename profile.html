@@ -312,8 +312,17 @@
                 navLinks.insertBefore(adminLink, navLinks.lastElementChild);
             }
             
-            // Load subscription data
-            loadSubscriptionData();
+            // Check for PayPal return parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const subscriptionId = urlParams.get('subscription_id');
+            const token = urlParams.get('token');
+            
+            if (subscriptionId && token) {
+                activateSubscription(subscriptionId);
+            } else {
+                // Load subscription data
+                loadSubscriptionData();
+            }
         });
 
         async function changePassword() {
@@ -559,6 +568,37 @@
                 }
             } catch (error) {
                 alert(`Failed to cancel subscription: ${error.message}`);
+            }
+        }
+        
+        async function activateSubscription(subscriptionId) {
+            try {
+                const response = await fetch(`${PAYPAL_API}?action=activate_subscription&subscription_id=${subscriptionId}&user_id=${currentUser.user_id}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.status === 'activated') {
+                    // Clean URL and show success message
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    showMessage('Subscription activated successfully!', 'success');
+                    
+                    // Reload subscription data
+                    setTimeout(() => {
+                        loadSubscriptionData();
+                    }, 1000);
+                } else {
+                    showMessage('Subscription is still pending activation. Please wait a few minutes and refresh the page.', 'warning');
+                    loadSubscriptionData();
+                }
+            } catch (error) {
+                console.error('Activation error:', error);
+                showMessage('Error activating subscription. Please contact support if this persists.', 'danger');
+                loadSubscriptionData();
             }
         }
         

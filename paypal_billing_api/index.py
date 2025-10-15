@@ -63,6 +63,8 @@ def lambda_handler(event, context):
             return get_usage_stats(event)
         elif method == 'GET' and action == 'test':
             return test_paypal_connection()
+        elif method == 'POST' and action == 'activate_subscription':
+            return activate_subscription(event)
         else:
             return {
                 'statusCode': 404,
@@ -562,6 +564,80 @@ def test_paypal_connection():
                 'status': 'error',
                 'message': f'PayPal API connection failed: {str(e)}'
             })
+        }
+
+def activate_subscription(event):
+    """Activate subscription after PayPal approval"""
+    try:
+        query_params = event.get('queryStringParameters') or {}
+        subscription_id = query_params.get('subscription_id')
+        user_id = query_params.get('user_id')
+        
+        if not subscription_id or not user_id:
+            return {
+                'statusCode': 400,
+                'headers': cors_headers(),
+                'body': json.dumps({'error': 'Missing subscription_id or user_id'})
+            }
+        
+        # Get subscription details from PayPal
+        access_token = get_paypal_access_token()
+        headers = {
+            'Authorization': f'Bearer {access_token}',
+            'Content-Type': 'application/json'
+        }
+        
+        response = requests.get(
+            f'{PAYPAL_BASE_URL}/v1/billing/subscriptions/{subscription_id}',
+            headers=headers
+        )
+        
+        if response.status_code == 200:
+            subscription = response.json()
+            status = subscription['status']
+            
+            if status == 'ACTIVE':
+                # Get user's tier and update with active status
+                user_response = users_table.get_item(Key={'user_id': user_id})
+                if 'Item' in user_response:
+                    user = user_response['Item']
+                    tier = user.get('subscription_tier', 'free')
+                    tier_config = SUBSCRIPTION_TIERS[tier]
+                    
+                    users_table.update_item(
+                        Key={'user_id': user_id},
+                        UpdateExpression='SET subscription_status = :status, storage_limit = :storage, video_limit = :videos, updated_at = :updated',
+                        ExpressionAttributeValues={
+                            ':status': 'active',
+                            ':storage': tier_config['storage_limit'],
+                            ':videos': tier_config['video_limit'],
+                            ':updated': datetime.utcnow().isoformat()
+                        }
+                    )
+                
+                return {
+                    'statusCode': 200,
+                    'headers': cors_headers(),
+                    'body': json.dumps({'status': 'activated', 'subscription_status': status})
+                }
+            else:
+                return {
+                    'statusCode': 200,
+                    'headers': cors_headers(),
+                    'body': json.dumps({'status': 'pending', 'subscription_status': status})
+                }
+        else:
+            return {
+                'statusCode': 400,
+                'headers': cors_headers(),
+                'body': json.dumps({'error': f'PayPal error: {response.text}'})
+            }
+            
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
         }
 
 def cors_headers():

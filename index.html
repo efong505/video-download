@@ -3,320 +3,525 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Fireworks Generator</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Christian Conservative Video Platform - Empowering Faith-Based Digital Ministry</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-        
-        .margin-b-2 {
-            margin-bottom: 2rem;
+        :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #8b4513;
+            --accent-color: #d4af37;
+            --text-dark: #2c3e50;
+            --bg-light: #f8f9fa;
         }
         
-        /* Custom CSS for the night sky look and responsive canvas */
-        body, html {
-            margin: 0;
-            padding: 0;
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-dark);
+        }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 80px 0;
+            position: relative;
             overflow: hidden;
-            height: 100%;
-            width: 100%;
-            background-color: #0d0c1d; /* Deep indigo/black for night sky */
-            font-family: 'Orbitron', sans-serif;
-            color: #fff;
         }
-
         
-
-        canvas {
-            display: block;
-            touch-action: none; /* Prevents default touch actions on canvas */
-        }
-
-        #info-box {
+        .hero-section::before {
+            content: '';
             position: absolute;
-            top: 40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(10, 10, 20, 0.7);
-            padding: 12px 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-            border: 2px solid #555;
-            text-align: center;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-            z-index: 10;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="cross" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M10 0v20M0 10h20" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23cross)"/></svg>');
+            opacity: 0.3;
         }
-
         
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .feature-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            border-top: 4px solid var(--accent-color);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+        
+        .pricing-card {
+            background: white;
+            border-radius: 15px;
+            padding: 40px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .pricing-card.featured {
+            border: 3px solid var(--accent-color);
+            transform: scale(1.05);
+        }
+        
+        .pricing-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: var(--accent-color);
+            color: white;
+            padding: 5px 40px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            transform: rotate(45deg);
+        }
+        
+        .btn-primary-custom {
+            background: var(--primary-color);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary-custom:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .btn-outline-custom {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-custom:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .section-title {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        .testimonial-card {
+            background: var(--bg-light);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            border-left: 5px solid var(--accent-color);
+        }
+        
+        .navbar-custom {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+        }
+        
+        .navbar-brand {
+            font-weight: 700;
+            color: var(--primary-color) !important;
+        }
+        
+        .nav-link {
+            color: var(--text-dark) !important;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+        
+        .stats-section {
+            background: var(--bg-light);
+            padding: 60px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: white;
+            padding: 80px 0;
+        }
+        
+        .footer-custom {
+            background: var(--text-dark);
+            color: white;
+            padding: 40px 0 20px;
+        }
     </style>
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-cross me-2"></i>Christian Conservative Platform</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto" id="nav-links">
+                    <li class="nav-item"><a class="nav-link" href="videos.html"><i class="fas fa-video me-1"></i>Videos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="articles.html"><i class="fas fa-book me-1"></i>Articles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="login.html"><i class="fas fa-sign-in-alt me-1"></i>Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container hero-content">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-4">Transform Your Ministry's Digital Presence</h1>
+                    <p class="lead mb-4">The ultimate platform for Christians, pastors, and conservative voices to share videos, write biblically-grounded articles, and build thriving online communities without censorship.</p>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="videos.html" class="btn btn-light btn-lg px-4">
+                            <i class="fas fa-play me-2"></i>Explore Videos
+                        </a>
+                        <a href="articles.html" class="btn btn-outline-light btn-lg px-4">
+                            <i class="fas fa-book-open me-2"></i>Read Articles
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <div class="hero-stats mt-5 mt-lg-0">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="stat-item text-white">
+                                    <div class="h2 fw-bold">500+</div>
+                                    <small>Videos Hosted</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-item text-white">
+                                    <div class="h2 fw-bold">100+</div>
+                                    <small>Articles Published</small>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="stat-item text-white">
+                                    <div class="h2 fw-bold">50+</div>
+                                    <small>Ministry Partners</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <div class="text-center">
-        <h1 class="mt-9" id="nav-links">
-            <a href="videos.html" rel="noopener noreferrer" class="mr-8">🎬 Videos</a>
-            <a href="articles.html" rel="noopener noreferrer" class="mr-8">📝 Articles</a>
-            <a href="login.html" rel="noopener noreferrer" class="ml-8">Login</a>
-        </h1>
-    </div>
+    <!-- Features Section -->
+    <section class="py-5" id="features">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title display-5">Why Choose Our Platform?</h2>
+                <p class="lead text-muted">Built specifically for Christian content creators and conservative voices</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-bible"></i>
+                        </div>
+                        <h4>Bible Integration</h4>
+                        <p>Search and insert verses from KJV, ASV, YLT translations directly into your articles with our integrated Bible lookup system.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h4>Professional Video Management</h4>
+                        <p>Upload, download from YouTube/Rumble/Facebook, automatic thumbnails, and smart processing for videos of any length.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h4>No Censorship</h4>
+                        <p>Share your faith and conservative values without fear of suppression. Built by Christians, for Christians.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <h4>Ministry Templates</h4>
+                        <p>Pre-built templates for sermons, political commentary, Bible studies, and devotionals to streamline your content creation.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4>Role-Based Access</h4>
+                        <p>Enterprise-grade security with Super User, Admin, and User roles. Perfect for churches and ministry organizations.</p>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-6">
+                    <div class="feature-card text-center">
+                        <div class="feature-icon">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <h4>Serverless Architecture</h4>
+                        <p>Built on AWS with 99.9% uptime guarantee. Your content is always available when your audience needs it.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    <div id="info-box" class="mt-12">
-        <p class="text-yellow-400 font-bold">Click or Tap Anywhere to Launch a Firework!</p>
-        <p class="text-sm mt-1 text-gray-300">Just for fun... Enjoy the show.</p>
-    </div>
-    
-    <canvas id="fireworksCanvas"></canvas>
+    <!-- Pricing Section -->
+    <section class="py-5 bg-light" id="pricing">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title display-5">Choose Your Ministry Plan</h2>
+                <p class="lead text-muted">Flexible pricing that grows with your ministry</p>
+            </div>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="pricing-card text-center">
+                        <h4 class="fw-bold">Free Starter</h4>
+                        <div class="h2 text-primary fw-bold my-3">$0<small class="fs-6 text-muted">/month</small></div>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>2GB Storage</li>
+                            <li><i class="fas fa-check text-success me-2"></i>50 Videos</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Bible Integration</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Basic Templates</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Public/Private Content</li>
+                        </ul>
+                        <a href="login.html" class="btn btn-outline-custom w-100 mt-3">Get Started Free</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="pricing-card text-center">
+                        <h4 class="fw-bold">Premium Ministry</h4>
+                        <div class="h2 text-primary fw-bold my-3">$9.99<small class="fs-6 text-muted">/month</small></div>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>25GB Storage</li>
+                            <li><i class="fas fa-check text-success me-2"></i>500 Videos</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Priority Processing</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Custom Branding</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Advanced Analytics</li>
+                        </ul>
+                        <a href="login.html" class="btn btn-primary-custom w-100 mt-3">Choose Premium</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="pricing-card text-center featured">
+                        <h4 class="fw-bold">Pro Church</h4>
+                        <div class="h2 text-primary fw-bold my-3">$24.99<small class="fs-6 text-muted">/month</small></div>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>100GB Storage</li>
+                            <li><i class="fas fa-check text-success me-2"></i>2,000 Videos</li>
+                            <li><i class="fas fa-check text-success me-2"></i>API Access</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Bulk Operations</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Ministry Tools</li>
+                        </ul>
+                        <a href="login.html" class="btn btn-primary-custom w-100 mt-3">Choose Pro</a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="pricing-card text-center">
+                        <h4 class="fw-bold">Enterprise Network</h4>
+                        <div class="h2 text-primary fw-bold my-3">$99.99<small class="fs-6 text-muted">/month</small></div>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-success me-2"></i>Unlimited Storage</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Unlimited Videos</li>
+                            <li><i class="fas fa-check text-success me-2"></i>White-Label Options</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Dedicated Support</li>
+                            <li><i class="fas fa-check text-success me-2"></i>Custom Features</li>
+                        </ul>
+                        <a href="login.html" class="btn btn-primary-custom w-100 mt-3">Contact Sales</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
+    <!-- Testimonials Section -->
+    <section class="py-5" id="testimonials">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="section-title display-5">What Ministry Leaders Say</h2>
+            </div>
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="testimonial-card">
+                        <p class="fst-italic">"This platform revolutionized how we share our church's content. The Bible integration saves hours of work every week!"</p>
+                        <div class="d-flex align-items-center mt-3">
+                            <div class="me-3">
+                                <i class="fas fa-user-circle fa-2x text-primary"></i>
+                            </div>
+                            <div>
+                                <strong>Pastor Mike</strong><br>
+                                <small class="text-muted">Community Church</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="testimonial-card">
+                        <p class="fst-italic">"Finally, a platform that understands conservative values. No more worrying about censorship!"</p>
+                        <div class="d-flex align-items-center mt-3">
+                            <div class="me-3">
+                                <i class="fas fa-user-circle fa-2x text-primary"></i>
+                            </div>
+                            <div>
+                                <strong>Sarah Johnson</strong><br>
+                                <small class="text-muted">Political Commentator</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="testimonial-card">
+                        <p class="fst-italic">"The Bible study templates are incredible. Our small group engagement has tripled!"</p>
+                        <div class="d-flex align-items-center mt-3">
+                            <div class="me-3">
+                                <i class="fas fa-user-circle fa-2x text-primary"></i>
+                            </div>
+                            <div>
+                                <strong>David Chen</strong><br>
+                                <small class="text-muted">Bible Study Leader</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container text-center">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <h2 class="display-5 fw-bold mb-4">Ready to Transform Your Ministry?</h2>
+                    <p class="lead mb-4">Join hundreds of pastors, commentators, and ministry leaders who have already transformed their digital presence.</p>
+                    <div class="d-flex flex-wrap justify-content-center gap-3">
+                        <a href="login.html" class="btn btn-light btn-lg px-5">
+                            <i class="fas fa-rocket me-2"></i>Start Free Trial
+                        </a>
+                        <a href="videos.html" class="btn btn-outline-light btn-lg px-5">
+                            <i class="fas fa-play me-2"></i>Watch Demo
+                        </a>
+                    </div>
+                    <p class="mt-4 mb-0">
+                        <small><i class="fas fa-shield-alt me-2"></i>30-Day Money-Back Guarantee • 99.9% Uptime Promise • No Censorship Policy</small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer-custom">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <h5><i class="fas fa-cross me-2"></i>Christian Conservative Platform</h5>
+                    <p class="text-muted">Empowering Christian voices in the digital age through cutting-edge technology and biblical integration.</p>
+                    <p class="text-muted"><strong>"Go therefore and make disciples of all nations..."</strong> - Matthew 28:19</p>
+                </div>
+                <div class="col-lg-2">
+                    <h6>Platform</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="videos.html" class="text-muted text-decoration-none">Videos</a></li>
+                        <li><a href="articles.html" class="text-muted text-decoration-none">Articles</a></li>
+                        <li><a href="login.html" class="text-muted text-decoration-none">Login</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h6>Features</h6>
+                    <ul class="list-unstyled">
+                        <li><span class="text-muted">Bible Integration</span></li>
+                        <li><span class="text-muted">Video Management</span></li>
+                        <li><span class="text-muted">Article Templates</span></li>
+                        <li><span class="text-muted">Role-Based Access</span></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h6>Support</h6>
+                    <ul class="list-unstyled">
+                        <li><span class="text-muted">Documentation</span></li>
+                        <li><span class="text-muted">Ministry Help</span></li>
+                        <li><span class="text-muted">Technical Support</span></li>
+                        <li><span class="text-muted">Community</span></li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <h6>Ministry Focus</h6>
+                    <ul class="list-unstyled">
+                        <li><span class="text-muted">Sermons</span></li>
+                        <li><span class="text-muted">Bible Studies</span></li>
+                        <li><span class="text-muted">Political Commentary</span></li>
+                        <li><span class="text-muted">Apologetics</span></li>
+                    </ul>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="text-muted mb-0">&copy; 2024 Christian Conservative Video Platform. Built on AWS serverless architecture.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p class="text-muted mb-0">Trusted by ministries worldwide • Faith-focused • Conservative values</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // --- Setup and Constants ---
-        const canvas = document.getElementById('fireworksCanvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
-        
-        // Physics constants
-        const GRAVITY = 0.05;
-        const FIREWORK_SPEED = 5;
-        const FRICTION = 0.99;
-        const PARTICLE_COUNT = 50;
-
-        // Arrays to hold all active fireworks and particles
-        const fireworks = [];
-        const particles = [];
-
-        // --- Utility Functions ---
-
-        /**
-         * Converts HSL (Hue, Saturation, Lightness) to a CSS color string.
-         * @param {number} h Hue (0-360)
-         * @param {number} s Saturation (0-100)
-         * @param {number} l Lightness (0-100)
-         * @param {number} a Alpha (0-1)
-         * @returns {string} CSS color string (e.g., "hsla(120, 80%, 50%, 1)")
-         */
-        function hsla(h, s, l, a) {
-            return `hsla(${h}, ${s}%, ${l}%, ${a})`;
-        }
-
-        /**
-         * Gets a random vibrant color (high saturation, medium lightness).
-         * @returns {object} Object containing hue (h) and color string (c).
-         */
-        function getRandomColor() {
-            const h = Math.random() * 360;
-            const c = hsla(h, 70, 60, 1);
-            return { h, c };
-        }
-
-        // --- Particle Class (The Sparks) ---
-        class Particle {
-            constructor(x, y, hue, velocity) {
-                this.x = x;
-                this.y = y;
-                this.hue = hue;
-                this.color = hsla(this.hue, 80, 50, 1);
-                this.velocity = velocity;
-                
-                // Track previous position for trail effect
-                this.prevX = x;
-                this.prevY = y;
-                
-                // Life and fading
-                this.life = 1; // 100% life
-                this.decay = Math.random() * 0.015 + 0.005; 
-                this.size = Math.random() * 2 + 1;
-            }
-
-            update() {
-                // Apply friction and gravity
-                this.velocity.x *= FRICTION;
-                this.velocity.y *= FRICTION;
-                this.velocity.y += GRAVITY;
-
-                // Update position
-                this.prevX = this.x;
-                this.prevY = this.y;
-                this.x += this.velocity.x;
-                this.y += this.velocity.y;
-
-                // Decay and check for death
-                this.life -= this.decay;
-                return this.life > 0;
-            }
-
-            draw() {
-                ctx.beginPath();
-                // Draw a small line from previous to current position for trail
-                ctx.moveTo(this.prevX, this.prevY);
-                ctx.lineTo(this.x, this.y);
-                
-                // Set the color with decreasing alpha based on life
-                ctx.strokeStyle = hsla(this.hue, 80, 50, this.life);
-                ctx.lineWidth = this.size;
-                ctx.stroke();
-            }
-        }
-
-        // --- Firework Class (The Rocket) ---
-        class Firework {
-            constructor(startX, startY, targetX, targetY) {
-                this.x = startX;
-                this.y = startY;
-                this.startX = startX;
-                this.startY = startY;
-                this.targetX = targetX;
-                this.targetY = targetY;
-
-                // Calculate distance and angle
-                const dx = targetX - startX;
-                const dy = targetY - startY;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-
-                // Velocity components
-                this.velocity = {
-                    x: (dx / dist) * FIREWORK_SPEED,
-                    y: (dy / dist) * FIREWORK_SPEED,
-                };
-                
-                this.distanceTraveled = 0;
-                this.distanceToTarget = dist;
-                
-                const color = getRandomColor();
-                this.hue = color.h;
-                this.color = color.c;
-            }
-
-            update() {
-                // Apply gravity to the rocket
-                this.velocity.y += GRAVITY * 0.5;
-
-                // Track previous position for the rocket trail
-                const prevX = this.x;
-                const prevY = this.y;
-
-                // Update position
-                this.x += this.velocity.x;
-                this.y += this.velocity.y;
-                
-                // Calculate new distance traveled
-                const distChange = Math.sqrt((this.x - prevX)**2 + (this.y - prevY)**2);
-                this.distanceTraveled += distChange;
-
-                // Check if the firework should explode (reached its peak/target)
-                if (this.distanceTraveled >= this.distanceToTarget || this.y < this.targetY) {
-                    this.explode();
-                    return false; // Signal that this firework should be removed
-                }
-                
-                return true; // Keep the firework alive
-            }
-
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
-                ctx.fillStyle = this.color;
-                ctx.fill();
-            }
-
-            explode() {
-                // Create many particles in a circular/spherical pattern
-                for (let i = 0; i < PARTICLE_COUNT; i++) {
-                    const angle = Math.random() * Math.PI * 2;
-                    const speed = Math.random() * 4 + 1;
-
-                    const velocity = {
-                        x: Math.cos(angle) * speed,
-                        y: Math.sin(angle) * speed,
-                    };
-                    particles.push(new Particle(this.x, this.y, this.hue, velocity));
-                }
-            }
-        }
-        
-        // --- Initialization and Event Handlers ---
-        
-        function resizeCanvas() {
-            width = window.innerWidth;
-            height = window.innerHeight;
-            canvas.width = width;
-            canvas.height = height;
-        }
-
-        /**
-         * Adds a new firework launching from the bottom center to the clicked target.
-         * @param {number} x X-coordinate of the click/tap
-         * @param {number} y Y-coordinate of the click/tap
-         */
-        function launchFirework(x, y) {
-            const startX = width / 2;
-            const startY = height;
-            
-            // Adjust target Y slightly higher than the click point to ensure explosion
-            const targetY = y - 50; 
-            
-            fireworks.push(new Firework(startX, startY, x, targetY));
-        }
-
-        // Handle both mouse clicks and touch taps
-        function handleInteraction(event) {
-            let clientX, clientY;
-
-            if (event.type === 'touchstart') {
-                event.preventDefault(); // Stop scrolling/zooming
-                clientX = event.touches[0].clientX;
-                clientY = event.touches[0].clientY;
-            } else if (event.type === 'click') {
-                clientX = event.clientX;
-                clientY = event.clientY;
-            }
-            
-            if (clientX !== undefined) {
-                launchFirework(clientX, clientY);
-            }
-        }
-        
-        canvas.addEventListener('click', handleInteraction);
-        canvas.addEventListener('touchstart', handleInteraction);
-        window.addEventListener('resize', resizeCanvas);
-
-
-        // --- Game Loop (Animate) ---
-
-        function animate() {
-            // Request the next frame
-            requestAnimationFrame(animate);
-
-            // 1. Fade out the previous frame to create trails and a dark sky effect
-            // A low alpha value (0.1) creates long, smoky trails
-            ctx.fillStyle = 'rgba(13, 12, 29, 0.1)'; 
-            ctx.fillRect(0, 0, width, height);
-            
-            // 2. Update and draw fireworks (the rockets)
-            for (let i = fireworks.length - 1; i >= 0; i--) {
-                const isAlive = fireworks[i].update();
-                if (isAlive) {
-                    fireworks[i].draw();
-                } else {
-                    // Remove exploded firework
-                    fireworks.splice(i, 1);
-                }
-            }
-
-            // 3. Update and draw particles (the explosion sparks)
-            for (let i = particles.length - 1; i >= 0; i--) {
-                const isAlive = particles[i].update();
-                if (isAlive) {
-                    particles[i].draw();
-                } else {
-                    // Remove dead particle
-                    particles.splice(i, 1);
-                }
-            }
-        }
-
-        // Start the application
-        window.onload = function () {
-            // Check authentication and update navigation
+        // Authentication check and navigation update
+        document.addEventListener('DOMContentLoaded', function() {
             const token = localStorage.getItem('auth_token');
             const userData = localStorage.getItem('user_data');
             const navLinks = document.getElementById('nav-links');
@@ -324,35 +529,35 @@
             if (token && userData) {
                 try {
                     const user = JSON.parse(userData);
-                    // User is logged in - show logout and admin link if admin
-                    let newNav = navLinks.innerHTML.replace(
-                        '<a href="login.html" rel="noopener noreferrer" class="ml-8">Login</a>',
-                        '<a href="#" onclick="logout()" rel="noopener noreferrer" class="ml-8">Logout</a>'
-                    );
+                    // User is logged in - update navigation
+                    const loginItem = navLinks.querySelector('li:last-child');
                     
-                    if (user.role === 'admin') {
-                        newNav = newNav.replace(
-                            'Go To My Videos</a>',
-                            'Go To My Videos</a>\n            <a href="admin.html" rel="noopener noreferrer" class="mr-8">Admin Dashboard</a>'
-                        );
-                    }
-                    
-                    navLinks.innerHTML = newNav;
+                    // Replace login with user menu
+                    loginItem.innerHTML = `
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1"></i>${user.first_name || user.email}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user-circle me-2"></i>Profile</a></li>
+                                ${user.role === 'admin' || user.role === 'super_user' ? 
+                                    '<li><a class="dropdown-item" href="admin.html"><i class="fas fa-cog me-2"></i>Admin Dashboard</a></li>' : ''}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                    `;
                 } catch (error) {
                     console.log('Error parsing user data');
                 }
             }
-            
-            resizeCanvas();
-            animate();
-        }
+        });
         
         function logout() {
             localStorage.removeItem('auth_token');
             localStorage.removeItem('user_data');
             window.location.reload();
         }
-
     </script>
 </body>
 </html>
