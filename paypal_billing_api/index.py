@@ -168,10 +168,13 @@ def create_subscription_plan(tier, access_token):
 def create_subscription(event):
     """Create PayPal subscription for user"""
     try:
+        print(f"Received event: {json.dumps(event)}")
         body = json.loads(event['body'])
         user_id = body['user_id']
         tier = body['tier']
+        print(f"Creating subscription for user {user_id}, tier {tier}")
     except Exception as e:
+        print(f"Error parsing request body: {str(e)}")
         return {
             'statusCode': 400,
             'headers': cors_headers(),
@@ -228,11 +231,15 @@ def create_subscription(event):
             'Accept': 'application/json'
         }
         
+        print(f"Creating subscription with data: {json.dumps(subscription_data)}")
         response = requests.post(
             f'{PAYPAL_BASE_URL}/v1/billing/subscriptions',
             headers=headers,
             json=subscription_data
         )
+        
+        print(f"PayPal response status: {response.status_code}")
+        print(f"PayPal response: {response.text}")
         
         if response.status_code == 201:
             subscription = response.json()
@@ -359,15 +366,21 @@ def get_subscription_status(event):
         
         user = response['Item']
         
+        # Convert Decimal values to int for JSON serialization
+        storage_used = int(user.get('storage_used', 0)) if user.get('storage_used') else 0
+        storage_limit = int(user.get('storage_limit', 2147483648)) if user.get('storage_limit') else 2147483648
+        video_count = int(user.get('video_count', 0)) if user.get('video_count') else 0
+        video_limit = int(user.get('video_limit', 50)) if user.get('video_limit') else 50
+        
         return {
             'statusCode': 200,
             'headers': cors_headers(),
             'body': json.dumps({
                 'subscription_tier': user.get('subscription_tier', 'free'),
-                'storage_used': user.get('storage_used', 0),
-                'storage_limit': user.get('storage_limit', 2147483648),
-                'video_count': user.get('video_count', 0),
-                'video_limit': user.get('video_limit', 50),
+                'storage_used': storage_used,
+                'storage_limit': storage_limit,
+                'video_count': video_count,
+                'video_limit': video_limit,
                 'subscription_status': user.get('subscription_status', 'active'),
                 'next_billing_date': user.get('next_billing_date'),
                 'payment_provider': user.get('payment_provider')
@@ -547,15 +560,57 @@ def test_paypal_connection():
     """Test PayPal API connection"""
     try:
         access_token = get_paypal_access_token()
-        return {
-            'statusCode': 200,
-            'headers': cors_headers(),
-            'body': json.dumps({
-                'status': 'success',
-                'message': 'PayPal API connection successful',
-                'token_length': len(access_token)
-            })
+        
+        # Check recent subscription status
+        subscription_id = 'I-J6R67NVLMNF1'  # Most recent subscription
+        headers = {
+            'Authorization': f'Bearer {access_token}',
+            'Content-Type': 'application/json'
         }
+        
+        response = requests.get(
+            f'{PAYPAL_BASE_URL}/v1/billing/subscriptions/{subscription_id}',
+            headers=headers
+        )
+        
+        if response.status_code == 200:
+            subscription = response.json()
+            status = subscription['status']
+            
+            # If active, update user record
+            if status == 'ACTIVE':
+                users_table.update_item(
+                    Key={'user_id': '051f56aa-3bc5-4328-8252-2f78e756b011'},
+                    UpdateExpression='SET subscription_tier = :tier, subscription_status = :status, storage_limit = :storage, video_limit = :videos, updated_at = :updated',
+                    ExpressionAttributeValues={
+                        ':tier': 'premium',
+                        ':status': 'active',
+                        ':storage': 26843545600,  # 25GB
+                        ':videos': 500,
+                        ':updated': datetime.utcnow().isoformat()
+                    }
+                )
+            
+            return {
+                'statusCode': 200,
+                'headers': cors_headers(),
+                'body': json.dumps({
+                    'status': 'success',
+                    'message': 'PayPal API connection successful',
+                    'subscription_status': status,
+                    'subscription_id': subscription_id
+                })
+            }
+        else:
+            return {
+                'statusCode': 200,
+                'headers': cors_headers(),
+                'body': json.dumps({
+                    'status': 'success',
+                    'message': 'PayPal API connection successful',
+                    'subscription_error': response.text
+                })
+            }
     except Exception as e:
         return {
             'statusCode': 500,

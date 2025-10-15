@@ -9,6 +9,7 @@ cors-*.json
 */bin/
 */lib/
 */layer/
+*/package/
 */certifi/
 */certifi-*/
 */charset_normalizer/
@@ -20,13 +21,38 @@ cors-*.json
 */urllib3/
 */urllib3-*/
 */boto3/
+*/boto3-*/
 */botocore/
+*/botocore-*/
 */dateutil/
+*/python_dateutil-*/
 */jmespath/
+*/jmespath-*/
 */s3transfer/
+*/s3transfer-*/
 */yt_dlp/
+*/yt_dlp-*/
 */jwt/
+*/PyJWT-*/
+*/six.py
+*/six-*/
+*/share/
 env/
+
+# Python Distribution Info
+*/*.dist-info/
+*/*.egg-info/
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Virtual Environments
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
 
 # Video Files
 *.mp4
@@ -61,3 +87,22 @@ logs/
 # Temporary Files
 temp/
 tmp/
+
+# PayPal Credentials (NEVER commit these)
+paypal_credentials.json
+*.pem
+*.key
+
+# AWS Credentials
+.aws/
+aws-credentials.json
+
+# Database Backups
+*.db
+*.sqlite
+*.sqlite3
+
+# Node.js Dependencies (if any)
+node_modules/
+package-lock.json
+yarn.lock

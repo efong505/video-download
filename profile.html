@@ -385,56 +385,47 @@
         
         async function loadSubscriptionData() {
             try {
-                // Get videos owned by current user from TAG API
-                const response = await fetch(`${TAG_API}?action=list&user=${encodeURIComponent(currentUser.email)}&role=${encodeURIComponent(currentUser.role)}`);
+                // Get subscription data from PayPal API
+                const response = await fetch(`${PAYPAL_API}?action=subscription_status&user_id=${currentUser.user_id}`);
                 const data = await response.json();
                 
-                if (response.ok && data.videos) {
-                    console.log('Current user email:', currentUser.email);
-                    console.log('Total videos returned:', data.videos.length);
+                if (response.ok) {
+                    console.log('Subscription data:', data);
                     
-                    // Calculate usage from owned videos only
-                    let totalSize = 0;
-                    let videoCount = 0;
+                    // Get usage stats
+                    const usageResponse = await fetch(`${PAYPAL_API}?action=usage&user_id=${currentUser.user_id}`);
+                    const usageData = await usageResponse.json();
                     
-                    data.videos.forEach(video => {
-                        console.log('Video:', video.title, 'Owner:', video.owner, 'Size:', video.size, 'Type:', video.video_type);
-                        if (video.owner === currentUser.email) {
-                            if (video.video_type === 'local' && video.size) {
-                                totalSize += parseInt(video.size) || 0;
-                            }
-                            videoCount++;
-                        }
-                    });
-                    
-                    console.log('Final counts - Videos:', videoCount, 'Size:', totalSize);
-                    
-                    // Set limits based on user role
-                    let storageLimit, videoLimit, tier;
-                    if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
-                        storageLimit = -1; // Unlimited
-                        videoLimit = -1; // Unlimited
-                        tier = 'admin';
+                    if (usageResponse.ok) {
+                        subscriptionData = {
+                            subscription_tier: data.subscription_tier || 'free',
+                            subscription_status: data.subscription_status || 'active',
+                            storage_used: usageData.storage_used || 0,
+                            storage_limit: usageData.storage_limit || 2147483648,
+                            video_count: usageData.video_count || 0,
+                            video_limit: usageData.video_limit || 50,
+                            storage_percentage: usageData.storage_percentage || 0,
+                            video_percentage: usageData.video_percentage || 0,
+                            next_billing_date: data.next_billing_date
+                        };
                     } else {
-                        storageLimit = 2147483648; // 2GB
-                        videoLimit = 50;
-                        tier = 'free';
+                        // Fallback to basic subscription data
+                        subscriptionData = {
+                            subscription_tier: data.subscription_tier || 'free',
+                            subscription_status: data.subscription_status || 'active',
+                            storage_used: 0,
+                            storage_limit: 2147483648,
+                            video_count: 0,
+                            video_limit: 50,
+                            storage_percentage: 0,
+                            video_percentage: 0,
+                            next_billing_date: data.next_billing_date
+                        };
                     }
-                    
-                    subscriptionData = {
-                        subscription_tier: tier,
-                        subscription_status: 'active',
-                        storage_used: totalSize,
-                        storage_limit: storageLimit,
-                        video_count: videoCount,
-                        video_limit: videoLimit,
-                        storage_percentage: storageLimit > 0 ? (totalSize / storageLimit) * 100 : 0,
-                        video_percentage: videoLimit > 0 ? (videoCount / videoLimit) * 100 : 0
-                    };
                     
                     displaySubscriptionData(subscriptionData);
                 } else {
-                    throw new Error('Failed to load video data');
+                    throw new Error(data.error || 'Failed to load subscription data');
                 }
             } catch (error) {
                 console.error('Error loading subscription:', error);
@@ -515,6 +506,9 @@
         
         async function upgradeSubscription(tier) {
             try {
+                // Clean URL for return/cancel URLs
+                const cleanUrl = window.location.origin + window.location.pathname;
+                
                 const response = await fetch(`${PAYPAL_API}?action=create_subscription`, {
                     method: 'POST',
                     headers: {
@@ -524,8 +518,8 @@
                         user_id: currentUser.user_id,
                         tier: tier,
                         email: currentUser.email,
-                        return_url: window.location.href,
-                        cancel_url: window.location.href
+                        return_url: cleanUrl,
+                        cancel_url: cleanUrl
                     })
                 });
                 
