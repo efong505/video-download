@@ -189,6 +189,7 @@
             <div class="tab" onclick="showTab('users')">Users</div>
             <div class="tab" onclick="showTab('videos')">Videos</div>
             <div class="tab" onclick="showTab('tags')">Tags</div>
+            <div class="tab" onclick="showTab('subscriptions')">Subscriptions</div>
         </div>
 
         <div class="tab-content">
@@ -303,6 +304,41 @@
                         <tbody id="tags-tbody"></tbody>
                     </table>
                 </div>
+            </div>
+
+            <!-- Subscriptions Tab -->
+            <div id="subscriptions" class="tab-pane">
+                <h2>Subscription Management</h2>
+                <div class="stats-grid" style="margin-bottom: 30px;">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-subscribers">-</div>
+                        <div class="stat-label">Total Subscribers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="active-subscriptions">-</div>
+                        <div class="stat-label">Active Subscriptions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="monthly-revenue">-</div>
+                        <div class="stat-label">Monthly Revenue</div>
+                    </div>
+                </div>
+                <div id="subscriptions-message"></div>
+                <div id="subscriptions-loading" class="loading">Loading subscriptions...</div>
+                <table id="subscriptions-table" class="data-table" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Email</th>
+                            <th>Tier</th>
+                            <th>Status</th>
+                            <th>Usage</th>
+                            <th>Next Billing</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subscriptions-tbody"></tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -552,6 +588,42 @@
         </div>
     </div>
 
+    <!-- Edit Subscription Modal -->
+    <div id="edit-subscription-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('edit-subscription-modal')">&times;</span>
+            <h3>Edit User Subscription</h3>
+            <div class="form-group">
+                <label>User:</label>
+                <input type="text" id="edit-sub-user-email" readonly>
+            </div>
+            <div class="form-group">
+                <label>Subscription Tier:</label>
+                <select id="edit-sub-tier">
+                    <option value="free">Free (2GB, 50 videos)</option>
+                    <option value="premium">Premium (25GB, 500 videos)</option>
+                    <option value="pro">Pro (100GB, 2000 videos)</option>
+                    <option value="enterprise">Enterprise (Unlimited)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status:</label>
+                <select id="edit-sub-status">
+                    <option value="active">Active</option>
+                    <option value="pending">Pending</option>
+                    <option value="cancelled">Cancelled</option>
+                    <option value="expired">Expired</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Next Billing Date:</label>
+                <input type="date" id="edit-sub-billing-date">
+            </div>
+            <button class="btn btn-primary" onclick="updateSubscription()">Update Subscription</button>
+            <button class="btn btn-danger" onclick="cancelUserSubscription()" style="margin-left: 10px;">Cancel Subscription</button>
+        </div>
+    </div>
+
     <script>
         const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
         const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
@@ -599,6 +671,7 @@
             if (tabName === 'users') loadUsers();
             if (tabName === 'videos') loadVideos();
             if (tabName === 'tags') loadTags();
+            if (tabName === 'subscriptions') loadSubscriptions();
             if (tabName === 'overview') loadOverview();
         }
 
@@ -1820,6 +1893,241 @@
             } catch (error) {
                 document.getElementById('videos-message').innerHTML = 
                     `<div class="error">Failed to add external video: ${error.message}</div>`;
+            }
+        }
+
+        async function loadSubscriptions() {
+            document.getElementById('subscriptions-loading').style.display = 'block';
+            document.getElementById('subscriptions-table').style.display = 'none';
+            
+            try {
+                const response = await fetch(`${ADMIN_API}?action=users`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    await displaySubscriptions(data.users);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('subscriptions-message').innerHTML = 
+                    `<div class="error">Failed to load subscriptions: ${error.message}</div>`;
+            } finally {
+                document.getElementById('subscriptions-loading').style.display = 'none';
+            }
+        }
+
+        async function displaySubscriptions(users) {
+            const tbody = document.getElementById('subscriptions-tbody');
+            tbody.innerHTML = '';
+            
+            let totalSubscribers = 0;
+            let activeSubscriptions = 0;
+            let monthlyRevenue = 0;
+            
+            const tierPrices = { free: 0, premium: 9.99, pro: 24.99, enterprise: 99.99 };
+            
+            for (const user of users) {
+                const tier = user.subscription_tier || 'free';
+                const status = user.subscription_status || 'active';
+                
+                if (tier !== 'free') totalSubscribers++;
+                if (status === 'active' && tier !== 'free') {
+                    activeSubscriptions++;
+                    monthlyRevenue += tierPrices[tier] || 0;
+                }
+                
+                // Get usage data
+                let usageData = { storage_used: 0, video_count: 0, storage_limit: 0, video_limit: 0 };
+                try {
+                    const usageResponse = await fetch(`https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal?action=subscription_status&user_id=${user.user_id}`);
+                    if (usageResponse.ok) {
+                        usageData = await usageResponse.json();
+                    }
+                } catch (error) {
+                    console.log('Failed to get usage for user:', user.email);
+                }
+                
+                const displayName = user.first_name && user.last_name ? 
+                    `${user.first_name} ${user.last_name}` : 
+                    (user.first_name || user.last_name || 'No name set');
+                
+                const storageUsedMB = Math.round(usageData.storage_used / (1024 * 1024));
+                const storageLimitGB = Math.round(usageData.storage_limit / (1024 * 1024 * 1024));
+                const usagePercent = usageData.storage_limit > 0 ? 
+                    Math.round((usageData.storage_used / usageData.storage_limit) * 100) : 0;
+                
+                const tierBadge = getTierBadge(tier);
+                const statusBadge = getStatusBadge(status);
+                const nextBilling = user.next_billing_date ? 
+                    new Date(user.next_billing_date).toLocaleDateString() : 'N/A';
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${displayName}</td>
+                    <td>${user.email}</td>
+                    <td>${tierBadge}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <div style="font-size: 12px;">
+                            <div>Storage: ${storageUsedMB}MB / ${storageLimitGB}GB (${usagePercent}%)</div>
+                            <div>Videos: ${usageData.video_count} / ${usageData.video_limit}</div>
+                        </div>
+                    </td>
+                    <td>${nextBilling}</td>
+                    <td>
+                        <button class="btn btn-warning" onclick="editSubscription('${user.user_id}', '${user.email}', '${tier}', '${status}', '${user.next_billing_date || ''}')" style="font-size: 12px;">Edit</button>
+                        <button class="btn btn-primary" onclick="viewUsageDetails('${user.user_id}', '${user.email}')" style="font-size: 12px; margin-left: 5px;">Usage</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            }
+            
+            // Update stats
+            document.getElementById('total-subscribers').textContent = totalSubscribers;
+            document.getElementById('active-subscriptions').textContent = activeSubscriptions;
+            document.getElementById('monthly-revenue').textContent = `$${monthlyRevenue.toFixed(2)}`;
+            
+            document.getElementById('subscriptions-table').style.display = 'table';
+        }
+
+        function getTierBadge(tier) {
+            const colors = {
+                free: '#6c757d',
+                premium: '#007bff', 
+                pro: '#28a745',
+                enterprise: '#dc3545'
+            };
+            return `<span style="background: ${colors[tier] || '#6c757d'}; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px;">${tier.toUpperCase()}</span>`;
+        }
+
+        function getStatusBadge(status) {
+            const colors = {
+                active: '#28a745',
+                pending: '#ffc107',
+                cancelled: '#dc3545',
+                expired: '#6c757d'
+            };
+            return `<span style="background: ${colors[status] || '#6c757d'}; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px;">${status.toUpperCase()}</span>`;
+        }
+
+        function editSubscription(userId, email, tier, status, billingDate) {
+            document.getElementById('edit-sub-user-email').value = email;
+            document.getElementById('edit-sub-tier').value = tier;
+            document.getElementById('edit-sub-status').value = status;
+            
+            if (billingDate && billingDate !== 'null') {
+                const date = new Date(billingDate);
+                document.getElementById('edit-sub-billing-date').value = date.toISOString().split('T')[0];
+            } else {
+                document.getElementById('edit-sub-billing-date').value = '';
+            }
+            
+            document.getElementById('edit-subscription-modal').dataset.userId = userId;
+            document.getElementById('edit-subscription-modal').style.display = 'block';
+        }
+
+        async function updateSubscription() {
+            const userId = document.getElementById('edit-subscription-modal').dataset.userId;
+            const tier = document.getElementById('edit-sub-tier').value;
+            const status = document.getElementById('edit-sub-status').value;
+            const billingDate = document.getElementById('edit-sub-billing-date').value;
+            
+            const tierLimits = {
+                free: { storage: 2147483648, videos: 50 },
+                premium: { storage: 26843545600, videos: 500 },
+                pro: { storage: 107374182400, videos: 2000 },
+                enterprise: { storage: -1, videos: -1 }
+            };
+            
+            try {
+                const response = await fetch(`${ADMIN_API}?action=user_subscription`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        subscription_tier: tier,
+                        subscription_status: status,
+                        storage_limit: tierLimits[tier].storage,
+                        video_limit: tierLimits[tier].videos,
+                        next_billing_date: billingDate || null
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('subscriptions-message').innerHTML = 
+                        '<div class="success">Subscription updated successfully</div>';
+                    closeModal('edit-subscription-modal');
+                    loadSubscriptions();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('subscriptions-message').innerHTML = 
+                    `<div class="error">Failed to update subscription: ${error.message}</div>`;
+            }
+        }
+
+        async function cancelUserSubscription() {
+            const userId = document.getElementById('edit-subscription-modal').dataset.userId;
+            const email = document.getElementById('edit-sub-user-email').value;
+            
+            if (!confirm(`Are you sure you want to cancel the subscription for ${email}?`)) return;
+            
+            try {
+                const response = await fetch(`https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal?action=cancel_subscription`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: userId })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('subscriptions-message').innerHTML = 
+                        '<div class="success">Subscription cancelled successfully</div>';
+                    closeModal('edit-subscription-modal');
+                    loadSubscriptions();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('subscriptions-message').innerHTML = 
+                    `<div class="error">Failed to cancel subscription: ${error.message}</div>`;
+            }
+        }
+
+        async function viewUsageDetails(userId, email) {
+            try {
+                const response = await fetch(`https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal?action=usage&user_id=${userId}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const storageUsedMB = Math.round(data.storage_used / (1024 * 1024));
+                    const storageLimitGB = Math.round(data.storage_limit / (1024 * 1024 * 1024));
+                    const storagePercent = data.storage_limit > 0 ? 
+                        Math.round((data.storage_used / data.storage_limit) * 100) : 0;
+                    const videoPercent = data.video_limit > 0 ? 
+                        Math.round((data.video_count / data.video_limit) * 100) : 0;
+                    
+                    alert(`Usage Details for ${email}:\n\n` +
+                          `Storage: ${storageUsedMB} MB / ${storageLimitGB} GB (${storagePercent}%)\n` +
+                          `Videos: ${data.video_count} / ${data.video_limit} (${videoPercent}%)\n\n` +
+                          `Storage Percentage: ${data.storage_percentage?.toFixed(1)}%\n` +
+                          `Video Percentage: ${data.video_percentage?.toFixed(1)}%`);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                alert(`Failed to get usage details: ${error.message}`);
             }
         }
 

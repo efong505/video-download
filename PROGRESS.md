@@ -560,10 +560,10 @@ articles-table:
 - [x] Add usage dashboard to profile
 - [x] Implement upgrade/downgrade flows
 
-**Step 5: Admin Tools**
-- [ ] Subscription management in admin dashboard
-- [ ] Usage monitoring and reporting
-- [ ] Manual subscription adjustments
+**Step 5: Admin Tools** ✅ COMPLETE
+- [x] Subscription management in admin dashboard
+- [x] Usage monitoring and reporting
+- [x] Manual subscription adjustments
 
 ## Platform-Specific Features to Consider
 **Content Categories**:
@@ -946,3 +946,49 @@ articles-table:
 - Manual activation endpoints are essential for sandbox testing workflows
 
 **Verification**: ✅ PayPal subscription flow now working end-to-end with proper status tracking and user interface updates
+
+## Step 5: Admin Tools Implementation ✅ COMPLETE
+**Status**: Subscription management, usage monitoring, and manual adjustments now available in admin dashboard
+
+**Features Implemented**:
+1. **Subscription Management Dashboard**: New "Subscriptions" tab in admin.html with comprehensive subscription overview
+2. **Usage Monitoring**: Real-time storage and video usage tracking with percentage calculations
+3. **Manual Subscription Adjustments**: Admin interface to modify user subscription tiers, status, and billing dates
+4. **Revenue Reporting**: Monthly revenue calculations and subscriber statistics
+5. **Subscription Analytics**: Total subscribers, active subscriptions, and revenue metrics
+
+**Admin Dashboard Enhancements**:
+- **Subscriptions Tab**: Complete subscription management interface with user details, usage stats, and controls
+- **Statistics Cards**: Real-time metrics showing total subscribers, active subscriptions, and monthly revenue
+- **User Management**: Enhanced user table with subscription tier, status, usage data, and billing information
+- **Manual Controls**: Edit subscription modal for tier changes, status updates, and billing date adjustments
+- **Usage Details**: Detailed storage and video usage with percentage calculations and limits
+
+**Backend API Enhancements**:
+- **Admin API**: Added `update_user_subscription` endpoint for manual subscription management
+- **User Data**: Enhanced user retrieval to include subscription fields (tier, status, usage, limits)
+- **PayPal Integration**: Fixed usage stats endpoint to properly handle DynamoDB Decimal serialization
+- **Subscription Controls**: Backend support for tier changes, status updates, and billing date modifications
+
+**Technical Implementation**:
+- **Files Modified**: 
+  - `admin.html` - Added Subscriptions tab with management interface
+  - `admin_api/index.py` - Added subscription management endpoint
+  - `paypal_billing_api/index.py` - Fixed usage stats Decimal serialization
+- **Features Added**:
+  - Subscription tier management (Free, Premium, Pro, Enterprise)
+  - Status control (Active, Pending, Cancelled, Expired)
+  - Usage monitoring with real-time calculations
+  - Revenue tracking and analytics
+  - Manual billing date adjustments
+  - Subscription cancellation controls
+
+**Admin Capabilities**:
+- View all user subscriptions with detailed usage statistics
+- Manually adjust subscription tiers and status
+- Monitor storage and video usage across all users
+- Track monthly revenue and subscriber metrics
+- Cancel subscriptions and modify billing dates
+- View detailed usage breakdowns per user
+
+**Verification**: ✅ Admin dashboard now provides complete subscription management with usage monitoring, manual adjustments, and revenue tracking

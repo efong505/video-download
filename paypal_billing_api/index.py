@@ -456,16 +456,20 @@ def get_usage_stats(event):
             }
         )
         
+        # Convert Decimal values to int for JSON serialization
+        storage_limit = int(user.get('storage_limit', 2147483648)) if user.get('storage_limit') else 2147483648
+        video_limit = int(user.get('video_limit', 50)) if user.get('video_limit') else 50
+        
         return {
             'statusCode': 200,
             'headers': cors_headers(),
             'body': json.dumps({
                 'storage_used': total_size,
-                'storage_limit': user.get('storage_limit', 2147483648),
+                'storage_limit': storage_limit,
                 'video_count': video_count,
-                'video_limit': user.get('video_limit', 50),
-                'storage_percentage': (total_size / user.get('storage_limit', 2147483648)) * 100 if user.get('storage_limit', 2147483648) > 0 else 0,
-                'video_percentage': (video_count / user.get('video_limit', 50)) * 100 if user.get('video_limit', 50) > 0 else 0
+                'video_limit': video_limit,
+                'storage_percentage': (total_size / storage_limit) * 100 if storage_limit > 0 else 0,
+                'video_percentage': (video_count / video_limit) * 100 if video_limit > 0 else 0
             })
         }
         

@@ -53,6 +53,8 @@ def lambda_handler(event, context):
             return delete_video(event)
         elif method == 'POST' and action == 'generate_thumbnail':
             return generate_thumbnail(event)
+        elif method == 'PUT' and action == 'user_subscription':
+            return update_user_subscription(event)
         else:
             return {
                 'statusCode': 404,
@@ -149,7 +151,14 @@ def get_all_users(event):
             'last_name': item.get('last_name', ''),
             'role': item['role'],
             'created_at': item['created_at'],
-            'active': item.get('active', True)
+            'active': item.get('active', True),
+            'subscription_tier': item.get('subscription_tier', 'free'),
+            'subscription_status': item.get('subscription_status', 'active'),
+            'next_billing_date': item.get('next_billing_date'),
+            'storage_used': item.get('storage_used', 0),
+            'storage_limit': item.get('storage_limit', 2147483648),
+            'video_count': item.get('video_count', 0),
+            'video_limit': item.get('video_limit', 50)
         })
     
     return {
@@ -158,6 +167,47 @@ def get_all_users(event):
         'body': json.dumps({
             'users': users,
             'count': len(users)
+        })
+    }
+
+def update_user_subscription(event):
+    """Update user subscription details (admin only)"""
+    body = json.loads(event['body'])
+    user_id = body['user_id']
+    subscription_tier = body['subscription_tier']
+    subscription_status = body['subscription_status']
+    storage_limit = body['storage_limit']
+    video_limit = body['video_limit']
+    next_billing_date = body.get('next_billing_date')
+    
+    # Build update expression
+    update_expression = 'SET subscription_tier = :tier, subscription_status = :status, storage_limit = :storage, video_limit = :videos, updated_at = :updated'
+    expression_values = {
+        ':tier': subscription_tier,
+        ':status': subscription_status,
+        ':storage': storage_limit,
+        ':videos': video_limit,
+        ':updated': datetime.utcnow().isoformat()
+    }
+    
+    if next_billing_date:
+        update_expression += ', next_billing_date = :billing'
+        expression_values[':billing'] = next_billing_date
+    
+    users_table.update_item(
+        Key={'user_id': user_id},
+        UpdateExpression=update_expression,
+        ExpressionAttributeValues=expression_values
+    )
+    
+    return {
+        'statusCode': 200,
+        'headers': cors_headers(),
+        'body': json.dumps({
+            'message': 'Subscription updated successfully',
+            'user_id': user_id,
+            'subscription_tier': subscription_tier,
+            'subscription_status': subscription_status
         })
     }
 
