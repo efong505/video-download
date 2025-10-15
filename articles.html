@@ -13,6 +13,24 @@
             margin-bottom: 30px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
+        .dashboard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .nav-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
         .nav-link {
             color: white;
             text-decoration: none;
@@ -33,6 +51,26 @@
             padding: 25px;
             margin-bottom: 25px;
             transition: all 0.3s ease;
+            height: 100%;
+        }
+        @media (max-width: 768px) {
+            .article-card {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            .nav-brand {
+                font-size: 1.4rem;
+            }
+            .nav-links {
+                gap: 10px;
+            }
+            .nav-link {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            .filter-bar {
+                padding: 15px;
+            }
         }
         .article-card:hover {
             transform: translateY(-2px);
@@ -97,9 +135,9 @@
 <body>
     <div class="dashboard-header">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <h1 class="mb-0">📝 Articles & Blog</h1>
-                <div class="d-flex gap-3">
+            <div class="dashboard-nav">
+                <h1 class="nav-brand">📝 Articles & Blog</h1>
+                <div class="nav-links" id="nav-links">
                     <a href="/" class="nav-link">🏠 Home</a>
                     <a href="videos.html" class="nav-link">🎬 Videos</a>
                     <a href="create-article.html" class="nav-link">✍️ Write Article</a>
@@ -113,11 +151,11 @@
         <!-- Filter Bar -->
         <div class="filter-bar">
             <div class="row g-3 align-items-center">
-                <div class="col-md-4">
-                    <input type="text" id="search-input" class="form-control" placeholder="Search articles...">
+                <div class="col-lg-4 col-md-6">
+                    <input type="text" id="search-input" class="form-control" placeholder="Search articles..." style="border-radius: 25px;">
                 </div>
-                <div class="col-md-2">
-                    <select id="category-filter" class="form-select">
+                <div class="col-lg-2 col-md-6 col-sm-6">
+                    <select id="category-filter" class="form-select" style="border-radius: 25px;">
                         <option value="">All Categories</option>
                         <option value="sermon">Sermons</option>
                         <option value="politics">Political Commentary</option>
@@ -130,20 +168,20 @@
                         <option value="general">General</option>
                     </select>
                 </div>
-                <div class="col-md-2">
-                    <select id="draft-filter" class="form-select">
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <select id="draft-filter" class="form-select" style="border-radius: 25px;">
                         <option value="">All Articles</option>
                         <option value="drafts">📝 My Drafts</option>
                         <option value="published">✅ Published</option>
                     </select>
                 </div>
-                <div class="col-md-3">
-                    <select id="author-filter" class="form-select">
+                <div class="col-lg-3 col-md-4">
+                    <select id="author-filter" class="form-select" style="border-radius: 25px;">
                         <option value="">All Authors</option>
                     </select>
                 </div>
-                <div class="col-md-2">
-                    <button class="btn btn-outline-secondary" onclick="clearFilters()">Clear</button>
+                <div class="col-lg-1 col-md-4 col-sm-12">
+                    <button class="btn btn-outline-secondary w-100" onclick="clearFilters()" style="border-radius: 25px;">Clear</button>
                 </div>
             </div>
         </div>
@@ -154,7 +192,7 @@
             <p class="mt-3">Loading articles...</p>
         </div>
 
-        <div id="articles-container" style="display: none;">
+        <div id="articles-container" class="row g-4" style="display: none;">
             <!-- Articles will be loaded here -->
         </div>
 
@@ -260,6 +298,9 @@
         }
 
         function createArticleCard(article) {
+            const col = document.createElement('div');
+            col.className = 'col-lg-6 col-md-12';
+            
             const card = document.createElement('div');
             card.className = 'article-card';
             
@@ -305,7 +346,8 @@
                 }
             `;
             
-            return card;
+            col.appendChild(card);
+            return col;
         }
 
         function getCategoryName(category) {
