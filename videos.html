@@ -158,6 +158,7 @@
                     <a href="articles.html" class="nav-link">📝 Articles</a>
                     <a href="user-upload.html" class="nav-link">⬆️ Upload Video</a>
                     <a href="profile.html" class="nav-link">👤 Profile</a>
+                    <a href="#" onclick="viewMyPage()" class="nav-link">📄 My Page</a>
                     <a href="#" onclick="logout()" class="nav-link logout">🚪 Logout</a>
                 </div>
             </div>
@@ -660,6 +661,14 @@
             } catch (error) {
                 console.error('Thumbnail generation error:', error);
                 alert('Error generating thumbnail');
+            }
+        }
+        
+        function viewMyPage() {
+            const userData = localStorage.getItem('user_data');
+            if (userData) {
+                const user = JSON.parse(userData);
+                window.location.href = `user-page.html?user=${encodeURIComponent(user.email)}`;
             }
         }
         

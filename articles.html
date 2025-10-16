@@ -161,6 +161,7 @@
                     <a href="/" class="nav-link">🏠 Home</a>
                     <a href="videos.html" class="nav-link">🎬 Videos</a>
                     <a href="create-article.html" class="nav-link">✍️ Write Article</a>
+                    <a href="#" onclick="viewMyPage()" class="nav-link">📄 My Page</a>
                     <a href="#" onclick="logout()" class="nav-link">🚪 Logout</a>
                 </div>
             </div>
@@ -480,6 +481,14 @@
             }
         }
 
+        function viewMyPage() {
+            const userData = localStorage.getItem('user_data');
+            if (userData) {
+                const user = JSON.parse(userData);
+                window.location.href = `user-page.html?user=${encodeURIComponent(user.email)}`;
+            }
+        }
+        
         function logout() {
             localStorage.removeItem('auth_token');
             localStorage.removeItem('user_data');
