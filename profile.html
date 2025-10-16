@@ -120,8 +120,9 @@
                 <div class="nav-links" id="nav-links">
                     <a href="/" class="nav-link">🏠 Home</a>
                     <a href="videos.html" class="nav-link">🎬 Videos</a>
-                    <a href="category.html" class="nav-link">📂 Categories</a>
                     <a href="articles.html" class="nav-link">📝 Articles</a>
+                    <a href="resources.html" class="nav-link">📚 Resources</a>
+                    <a href="#" onclick="viewMyPage()" class="nav-link">📄 My Page</a>
                     <a href="#" onclick="logout()" class="nav-link logout">🚪 Logout</a>
                 </div>
             </div>
@@ -593,6 +594,14 @@
                 console.error('Activation error:', error);
                 showMessage('Error activating subscription. Please contact support if this persists.', 'danger');
                 loadSubscriptionData();
+            }
+        }
+        
+        function viewMyPage() {
+            const userData = localStorage.getItem('user_data');
+            if (userData) {
+                const user = JSON.parse(userData);
+                window.location.href = `user-page.html?user=${encodeURIComponent(user.email)}`;
             }
         }
         

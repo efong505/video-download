@@ -36,15 +36,31 @@
         
         @media (max-width: 768px) {
             .hero-section {
-                padding-top: 100px;
+                padding-top: 120px;
                 padding-bottom: 60px;
+            }
+            .navbar-logo {
+                margin-right: 8px;
             }
         }
         
         @media (max-width: 576px) {
             .hero-section {
-                padding-top: 90px;
+                padding-top: 130px;
                 padding-bottom: 50px;
+            }
+            .navbar-logo {
+                margin-right: 5px;
+            }
+            .d-flex.flex-wrap.gap-3 {
+                gap: 10px !important;
+                justify-content: center;
+            }
+            .logo-mobile {
+                margin-top: 20px;
+            }
+            .display-4 fw-bold mb-4 {
+                margin-bottom: 20px !important;
             }
         }
         
@@ -250,7 +266,7 @@
                 <div class="col-lg-6">
                     <h1 class="display-4 fw-bold mb-4">Transform Your Ministry's Digital Presence</h1>
                     <p class="lead mb-4">The ultimate platform for the 5-fold ministry (apostles, prophets, evangelists, pastors, teachers), Christian believers, and seekers to share videos, write biblically-grounded articles, and build thriving communities without censorship.</p>
-                    <div class="d-flex flex-wrap gap-3">
+                    <div class="d-flex flex-wrap gap-3 justify-content-center justify-lg-start">
                         <a href="videos.html" class="btn btn-light btn-lg px-4">
                             <i class="fas fa-play me-2"></i>Explore Videos
                         </a>
@@ -260,7 +276,7 @@
                     </div>
                 </div>
                 <div class="col-lg-6 text-center">
-                    <div class="mb-4">
+                    <div class="mb-4 logo-mobile">
                         <img src="techcrosslogo.jpg" alt="Christian Conservatives Today Logo" style="max-width: 200px; height: auto; opacity: 0.9; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
                     </div>
                     <div class="hero-stats mt-3">

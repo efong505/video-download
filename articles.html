@@ -27,7 +27,7 @@
         }
         .nav-links {
             display: flex;
-            gap: 15px;
+            gap: 20px;
             align-items: center;
             flex-wrap: wrap;
         }
@@ -43,6 +43,15 @@
         .nav-link:hover {
             background: rgba(255,255,255,0.2);
             color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .nav-link.logout {
+            background: rgba(220,53,69,0.8);
+            border-color: rgba(220,53,69,0.9);
+        }
+        .nav-link.logout:hover {
+            background: rgba(220,53,69,1);
         }
         .article-card {
             background: white;
@@ -164,8 +173,9 @@
                     <a href="videos.html" class="nav-link">🎬 Videos</a>
                     <a href="create-article.html" class="nav-link">✍️ Write Article</a>
                     <a href="resources.html" class="nav-link">📚 Resources</a>
+                    <a href="profile.html" class="nav-link">👤 Profile</a>
                     <a href="#" onclick="viewMyPage()" class="nav-link">📄 My Page</a>
-                    <a href="#" onclick="logout()" class="nav-link">🚪 Logout</a>
+                    <a href="#" onclick="logout()" class="nav-link logout">🚪 Logout</a>
                 </div>
             </div>
         </div>
