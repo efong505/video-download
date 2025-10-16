@@ -13,19 +13,73 @@
             margin-bottom: 30px;
         }
         .video-card {
-            border: none;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
+            position: relative;
+            cursor: pointer;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            background: white;
             margin-bottom: 20px;
         }
         .video-card:hover {
             transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
-        .video-thumbnail {
+        .thumbnail-container {
+            position: relative;
             width: 100%;
             height: 200px;
+            background: #000;
+            overflow: hidden;
+        }
+        .thumbnail {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
-            background: linear-gradient(45deg, #f0f0f0, #e0e0e0);
+        }
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(102,126,234,0.9);
+            border: none;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+        .play-button:hover {
+            background: rgba(102,126,234,1);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+        .video-player {
+            display: none;
+            width: 100%;
+            height: 200px;
+        }
+        .video-title {
+            padding: 15px;
+            background: white;
+            font-weight: 600;
+            text-align: center;
+            color: #333;
+            border-top: 1px solid #eee;
+        }
+        .video-actions {
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+        .btn-sm {
+            font-size: 12px;
+            padding: 4px 8px;
         }
     </style>
 </head>
@@ -88,6 +142,8 @@
         let userEmail = null;
         let allVideos = [];
         let allTags = [];
+        let currentUser = null;
+        let isOwner = false;
 
         window.addEventListener('load', function() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -96,6 +152,13 @@
             if (!userEmail) {
                 document.getElementById('videos-container').innerHTML = '<div class="col-12"><div class="alert alert-danger">No user specified</div></div>';
                 return;
+            }
+            
+            // Check if current user is the page owner
+            const userData = localStorage.getItem('user_data');
+            if (userData) {
+                currentUser = JSON.parse(userData);
+                isOwner = currentUser.email === userEmail;
             }
             
             loadUserData();
@@ -113,9 +176,13 @@
                 const data = await response.json();
                 
                 if (data.videos) {
-                    allVideos = data.videos.filter(video => 
-                        video.owner === userEmail && video.visibility === 'public'
-                    );
+                    // Show all videos for owner, only public for others
+                    allVideos = data.videos.filter(video => {
+                        if (video.owner === userEmail) {
+                            return isOwner || video.visibility === 'public';
+                        }
+                        return false;
+                    });
                     
                     // Extract unique tags
                     const tagSet = new Set();
@@ -160,28 +227,85 @@
                 return;
             }
             
-            container.innerHTML = videos.map(video => {
-                const thumbnailUrl = video.video_type === 'external' && video.external_url && video.external_url.includes('youtube') 
-                    ? getYouTubeThumbnail(video.external_url)
-                    : `https://d271vky579caz9.cloudfront.net/thumbnails/${video.filename.replace('.mp4', '_thumb_2.jpg')}`;
+            container.innerHTML = '';
+            
+            videos.forEach(video => {
+                const col = document.createElement('div');
+                col.className = 'col-md-4 mb-4';
                 
-                return `
-                    <div class="col-md-4 mb-4">
-                        <div class="card video-card">
-                            <img src="${thumbnailUrl}" class="card-img-top video-thumbnail" alt="${video.title}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZGRkIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIFRodW1ibmFpbDwvdGV4dD48L3N2Zz4='">
-                            <div class="card-body">
-                                <h6 class="card-title">${video.title}</h6>
-                                <p class="card-text">
-                                    <small class="text-muted">
-                                        ${video.tags ? video.tags.map(tag => `<span class="badge bg-secondary me-1">${tag}</span>`).join('') : ''}
-                                    </small>
-                                </p>
-                                <a href="videos.html#${video.filename}" class="btn btn-primary btn-sm">Watch Video</a>
+                const videoType = video.video_type || 'local';
+                const externalUrl = video.external_url || '';
+                
+                if (videoType === 'local') {
+                    const baseName = video.filename.replace('.mp4', '');
+                    const videoUrl = `https://d271vky579caz9.cloudfront.net/videos/${video.filename}`;
+                    const thumbnailUrl = `https://d271vky579caz9.cloudfront.net/thumbnails/${baseName}_thumb_2.jpg`;
+                    const fallbackThumbnailUrl = `https://d271vky579caz9.cloudfront.net/thumbnails/${baseName}_thumb.jpg`;
+                    
+                    col.innerHTML = `
+                        <div class="video-card">
+                            <div class="thumbnail-container">
+                                <img src="${thumbnailUrl}" alt="${video.title}" class="thumbnail" 
+                                     onerror="this.onerror=null; this.src='${fallbackThumbnailUrl}';">
+                                <button class="play-button" onclick="playVideo(this, '${videoUrl}')">
+                                    ▶
+                                </button>
                             </div>
+                            <video class="video-player" controls style="display: none;">
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="video-title">
+                                ${video.title}
+                                <div style="margin-top: 8px;">
+                                    ${video.tags ? video.tags.map(tag => `<span class="badge bg-secondary me-1" style="font-size: 10px;">${tag}</span>`).join('') : ''}
+                                </div>
+                            </div>
+                            ${isOwner ? `<div class="video-actions">
+                                <button class="btn btn-primary btn-sm me-2" onclick="editVideo('${video.filename}')">
+                                    ✏️ Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteVideo('${video.filename}', '${video.title}')">
+                                    🗑️ Delete
+                                </button>
+                            </div>` : ''}
                         </div>
-                    </div>
-                `;
-            }).join('');
+                    `;
+                } else {
+                    let thumbnailSrc = '';
+                    if (externalUrl.includes('youtube.com') || externalUrl.includes('youtu.be')) {
+                        const videoId = externalUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
+                        if (videoId) {
+                            thumbnailSrc = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+                        }
+                    }
+                    
+                    col.innerHTML = `
+                        <div class="video-card">
+                            <div class="thumbnail-container">
+                                <img src="${thumbnailSrc}" alt="${video.title}" class="thumbnail" 
+                                     onerror="this.style.background='linear-gradient(135deg, #667eea, #764ba2)'; this.style.color='white'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.innerHTML='🎬 ${video.title.substring(0,15)}';">
+                                <a href="${externalUrl}" target="_blank" class="play-button">▶</a>
+                            </div>
+                            <div class="video-title">
+                                ${video.title}
+                                <div style="margin-top: 8px;">
+                                    ${video.tags ? video.tags.map(tag => `<span class="badge bg-secondary me-1" style="font-size: 10px;">${tag}</span>`).join('') : ''}
+                                </div>
+                            </div>
+                            ${isOwner ? `<div class="video-actions">
+                                <button class="btn btn-primary btn-sm me-2" onclick="editVideo('${video.external_url}')">
+                                    ✏️ Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteVideo('${video.external_url}', '${video.title}')">
+                                    🗑️ Delete
+                                </button>
+                            </div>` : ''}
+                        </div>
+                    `;
+                }
+                
+                container.appendChild(col);
+            });
         }
 
         function displayTagFilters() {
@@ -223,6 +347,127 @@
         }
 
         document.getElementById('visibility-filter').addEventListener('change', filterVideos);
+        
+        function playVideo(button, videoUrl) {
+            console.log('Playing video:', videoUrl);
+            const card = button.closest('.video-card');
+            const thumbnailContainer = card.querySelector('.thumbnail-container');
+            const video = card.querySelector('.video-player');
+            
+            // Hide thumbnail container and show video
+            thumbnailContainer.style.display = 'none';
+            video.style.display = 'block';
+            
+            // Set video source and play
+            video.src = videoUrl;
+            video.load();
+            
+            video.addEventListener('error', function(e) {
+                console.error('Video error:', e, video.error);
+                thumbnailContainer.style.display = 'block';
+                video.style.display = 'none';
+            });
+            
+            video.play().catch(error => {
+                console.error('Play error:', error);
+                thumbnailContainer.style.display = 'block';
+                video.style.display = 'none';
+            });
+            
+            // Add close button to video
+            if (!video.querySelector('.close-video')) {
+                const closeBtn = document.createElement('button');
+                closeBtn.className = 'close-video';
+                closeBtn.innerHTML = '✕';
+                closeBtn.style.cssText = 'position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; z-index: 1000;';
+                closeBtn.onclick = function() {
+                    video.pause();
+                    video.currentTime = 0;
+                    thumbnailContainer.style.display = 'block';
+                    video.style.display = 'none';
+                };
+                video.parentElement.style.position = 'relative';
+                video.parentElement.appendChild(closeBtn);
+            }
+        }
+        
+        function editVideo(videoIdentifier) {
+            const video = allVideos.find(v => v.filename === videoIdentifier || v.external_url === videoIdentifier);
+            if (!video) {
+                alert('Video not found');
+                return;
+            }
+            
+            const newTitle = prompt('Edit video title:', video.title);
+            if (newTitle === null || newTitle.trim() === '') return;
+            
+            const newTags = prompt('Edit tags (comma-separated):', video.tags ? video.tags.join(', ') : '');
+            if (newTags === null) return;
+            
+            const newVisibility = confirm('Make video public?') ? 'public' : 'private';
+            
+            const updates = {
+                title: newTitle.trim(),
+                tags: newTags.split(',').map(tag => tag.trim()).filter(tag => tag),
+                visibility: newVisibility,
+                filename: video.filename,
+                external_url: video.external_url
+            };
+            
+            fetch(TAG_API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'update', ...updates })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Video updated successfully!');
+                    loadUserVideos();
+                } else {
+                    alert('Error updating video: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error updating video');
+            });
+        }
+        
+        function deleteVideo(videoIdentifier, title) {
+            if (!confirm(`Are you sure you want to delete "${title}"? This action cannot be undone.`)) {
+                return;
+            }
+            
+            const video = allVideos.find(v => v.filename === videoIdentifier || v.external_url === videoIdentifier);
+            if (!video) {
+                alert('Video not found');
+                return;
+            }
+            
+            fetch(TAG_API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    action: 'delete', 
+                    filename: video.filename,
+                    external_url: video.external_url
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Video deleted successfully!');
+                    loadUserVideos();
+                } else {
+                    alert('Error deleting video: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting video');
+            });
+        }
     </script>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
