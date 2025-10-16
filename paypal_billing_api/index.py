@@ -67,6 +67,8 @@ def lambda_handler(event, context):
             return activate_subscription(event)
         elif method == 'POST' and action == 'process_expired_subscriptions':
             return process_expired_subscriptions(event)
+        elif method == 'POST' and action == 'reset_user_subscription':
+            return reset_user_subscription(event)
         else:
             return {
                 'statusCode': 404,
@@ -801,6 +803,45 @@ def activate_subscription(event):
             }
             
     except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
+        }
+
+def reset_user_subscription(event):
+    """Reset user subscription to clean free tier state"""
+    try:
+        body = json.loads(event['body'])
+        user_id = body['user_id']
+        
+        # Reset user to clean free tier state
+        free_config = SUBSCRIPTION_TIERS['free']
+        current_time = datetime.utcnow()
+        
+        users_table.update_item(
+            Key={'user_id': user_id},
+            UpdateExpression='SET subscription_tier = :tier, subscription_status = :status, storage_limit = :storage, video_limit = :videos, subscription_id = :sub_id, payment_provider = :provider, next_billing_date = :billing, updated_at = :updated',
+            ExpressionAttributeValues={
+                ':tier': 'free',
+                ':status': 'active',
+                ':storage': free_config['storage_limit'],
+                ':videos': free_config['video_limit'],
+                ':sub_id': None,
+                ':provider': None,
+                ':billing': None,
+                ':updated': current_time.isoformat()
+            }
+        )
+        
+        return {
+            'statusCode': 200,
+            'headers': cors_headers(),
+            'body': json.dumps({'message': 'User subscription reset to free tier successfully'})
+        }
+        
+    except Exception as e:
+        print(f'Error resetting user subscription: {str(e)}')
         return {
             'statusCode': 500,
             'headers': cors_headers(),
