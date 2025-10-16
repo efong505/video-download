@@ -113,6 +113,15 @@
             color: #333;
             border-top: 1px solid #eee;
         }
+        .category-header {
+            background: linear-gradient(135deg, #2c5aa0 0%, #8b4513 100%);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            margin: 30px 0 20px 0;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
         .loading {
             text-align: center;
             padding: 40px;
@@ -170,6 +179,12 @@
     
     <div class="content-wrapper">
         <div class="container">
+            <!-- Page Header -->
+            <div class="page-header" style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 30px; margin-bottom: 30px; text-align: center;">
+                <h2 style="color: #2c5aa0; margin-bottom: 15px; font-weight: 600;">🎬 Video Library</h2>
+                <p style="color: #666; margin-bottom: 0; font-size: 1.1rem;">Discover and watch conservative Christian content from trusted sources</p>
+            </div>
+            
             <div class="stats-bar" id="stats-bar" style="display: none;">
                 <div class="stat-item">
                     <div class="stat-number" id="total-videos">0</div>
@@ -204,16 +219,19 @@
             
             <div class="search-filter-bar" style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: none;" id="search-filter-bar">
                 <div class="row g-3">
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         <input type="text" id="search-input" class="form-control" placeholder="Search videos by title or filename..." style="border-radius: 25px;">
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <select id="tag-filter" class="form-select" style="border-radius: 25px;">
                             <option value="">All Tags</option>
                         </select>
                     </div>
                     <div class="col-md-2">
                         <button class="btn btn-outline-secondary" onclick="clearFilters()" style="border-radius: 25px; width: 100%;">Clear</button>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary" onclick="refreshCategoryOrder()" style="border-radius: 25px; width: 100%;">🔄 Refresh</button>
                     </div>
                 </div>
             </div>
@@ -587,6 +605,81 @@
             iframe.src = embedSrc;
         }
         
+        function getTagIcon(tag) {
+            const iconMap = {
+                'sermons': 'fas fa-church',
+                'politics': 'fas fa-landmark',
+                'teaching': 'fas fa-chalkboard-teacher',
+                'news': 'fas fa-newspaper',
+                'apologetics': 'fas fa-shield-alt',
+                'ministry': 'fas fa-cross',
+                'bible': 'fas fa-book',
+                'worship': 'fas fa-music',
+                'prayer': 'fas fa-praying-hands',
+                'family': 'fas fa-home'
+            };
+            return iconMap[tag.toLowerCase()] || 'fas fa-video';
+        }
+
+        function getCategoryOrder() {
+            // Get category order from localStorage, with fallback to default
+            const savedOrder = localStorage.getItem('video_category_order');
+            console.log('Getting category order from localStorage:', savedOrder);
+            if (savedOrder) {
+                const parsed = JSON.parse(savedOrder);
+                console.log('Parsed category order:', parsed);
+                return parsed;
+            }
+            
+            // Default order
+            const defaultOrder = [
+                'news',
+                'politics', 
+                'sermons',
+                'teaching',
+                'apologetics',
+                'ministry',
+                'bible',
+                'worship',
+                'prayer',
+                'family'
+            ];
+            
+            console.log('Using default category order:', defaultOrder);
+            // Save default order to localStorage
+            localStorage.setItem('video_category_order', JSON.stringify(defaultOrder));
+            return defaultOrder;
+        }
+
+        function sortCategoriesByPriority(categories) {
+            const priorityOrder = getCategoryOrder();
+            console.log('Sorting categories:', categories, 'with priority order:', priorityOrder);
+            
+            // Normalize priority order to lowercase for comparison
+            const normalizedPriorityOrder = priorityOrder.map(cat => cat.toLowerCase());
+            
+            const sorted = categories.sort((a, b) => {
+                const aIndex = normalizedPriorityOrder.indexOf(a.toLowerCase());
+                const bIndex = normalizedPriorityOrder.indexOf(b.toLowerCase());
+                
+                console.log(`Comparing ${a} (index: ${aIndex}) with ${b} (index: ${bIndex})`);
+                
+                // If both categories are in priority list, sort by their position
+                if (aIndex !== -1 && bIndex !== -1) {
+                    return aIndex - bIndex;
+                }
+                // If only 'a' is in priority list, it comes first
+                if (aIndex !== -1) return -1;
+                // If only 'b' is in priority list, it comes first
+                if (bIndex !== -1) return 1;
+                // If neither is in priority list, sort alphabetically
+                return a.localeCompare(b);
+            });
+            
+            console.log('Final sorted categories:', sorted);
+            return sorted;
+        }
+
         function displayVideos(videos, append = false) {
             const container = document.getElementById('videos-container');
             if (!append) {
@@ -595,21 +688,101 @@
             
             console.log('Displaying videos:', videos);
             
-            for (const video of videos) {
-                const videoType = video.video_type || 'local';
-                const externalUrl = video.external_url || '';
-                
-                console.log('Processing video:', video.title, 'Type:', videoType, 'URL:', externalUrl);
-                
-                if (videoType === 'local') {
-                    const baseName = video.filename.replace('.mp4', '');
-                    const videoUrl = `${BUCKET_URL}/videos/${video.filename}`;
-                    const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb_2.jpg`;
-                    const fallbackThumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
+            if (append) {
+                // For appended videos (load more), just add them without grouping
+                for (const video of videos) {
+                    const videoType = video.video_type || 'local';
+                    const externalUrl = video.external_url || '';
                     
-                    createVideoCard(container, video.title, videoUrl, thumbnailUrl, fallbackThumbnailUrl, video.filename, videoType, externalUrl);
-                } else {
-                    createVideoCard(container, video.title, '', '', '', video.filename, videoType, externalUrl);
+                    if (videoType === 'local') {
+                        const baseName = video.filename.replace('.mp4', '');
+                        const videoUrl = `${BUCKET_URL}/videos/${video.filename}`;
+                        const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb_2.jpg`;
+                        const fallbackThumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
+                        
+                        createVideoCard(container, video.title, videoUrl, thumbnailUrl, fallbackThumbnailUrl, video.filename, videoType, externalUrl);
+                    } else {
+                        createVideoCard(container, video.title, '', '', '', video.filename, videoType, externalUrl);
+                    }
+                }
+            } else {
+                // Group videos by their primary tag for initial display
+                const groupedVideos = {};
+                const uncategorized = [];
+                
+                videos.forEach(video => {
+                    if (video.tags && video.tags.length > 0) {
+                        const primaryTag = video.tags[0]; // Use first tag as primary category
+                        if (!groupedVideos[primaryTag]) {
+                            groupedVideos[primaryTag] = [];
+                        }
+                        groupedVideos[primaryTag].push(video);
+                    } else {
+                        uncategorized.push(video);
+                    }
+                });
+                
+                // Display each category in priority order
+                const sortedCategories = sortCategoriesByPriority(Object.keys(groupedVideos));
+                console.log('Categories will be displayed in this order:', sortedCategories);
+                sortedCategories.forEach(tag => {
+                    // Create category header
+                    const categoryHeader = document.createElement('div');
+                    categoryHeader.className = 'category-header';
+                    const icon = getTagIcon(tag);
+                    categoryHeader.innerHTML = `<i class="${icon} me-2"></i>${tag.charAt(0).toUpperCase() + tag.slice(1)}`;
+                    container.appendChild(categoryHeader);
+                    
+                    // Create row for this category's videos
+                    const row = document.createElement('div');
+                    row.className = 'row g-4';
+                    
+                    groupedVideos[tag].forEach(video => {
+                        const videoType = video.video_type || 'local';
+                        const externalUrl = video.external_url || '';
+                        
+                        if (videoType === 'local') {
+                            const baseName = video.filename.replace('.mp4', '');
+                            const videoUrl = `${BUCKET_URL}/videos/${video.filename}`;
+                            const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb_2.jpg`;
+                            const fallbackThumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
+                            
+                            createVideoCard(row, video.title, videoUrl, thumbnailUrl, fallbackThumbnailUrl, video.filename, videoType, externalUrl);
+                        } else {
+                            createVideoCard(row, video.title, '', '', '', video.filename, videoType, externalUrl);
+                        }
+                    });
+                    
+                    container.appendChild(row);
+                });
+                
+                // Add uncategorized videos if any
+                if (uncategorized.length > 0) {
+                    const categoryHeader = document.createElement('div');
+                    categoryHeader.className = 'category-header';
+                    categoryHeader.innerHTML = `<i class="fas fa-video me-2"></i>Uncategorized`;
+                    container.appendChild(categoryHeader);
+                    
+                    const row = document.createElement('div');
+                    row.className = 'row g-4';
+                    
+                    uncategorized.forEach(video => {
+                        const videoType = video.video_type || 'local';
+                        const externalUrl = video.external_url || '';
+                        
+                        if (videoType === 'local') {
+                            const baseName = video.filename.replace('.mp4', '');
+                            const videoUrl = `${BUCKET_URL}/videos/${video.filename}`;
+                            const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb_2.jpg`;
+                            const fallbackThumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
+                            
+                            createVideoCard(row, video.title, videoUrl, thumbnailUrl, fallbackThumbnailUrl, video.filename, videoType, externalUrl);
+                        } else {
+                            createVideoCard(row, video.title, '', '', '', video.filename, videoType, externalUrl);
+                        }
+                    });
+                    
+                    container.appendChild(row);
                 }
             }
         }
@@ -697,7 +870,73 @@
                     }
                 }
                 loadVideos();
+                
+                // Check for category order changes every 2 seconds
+                setInterval(checkCategoryOrderChanges, 2000);
             }
+        });
+        
+        function checkCategoryOrderChanges() {
+            const currentCheck = localStorage.getItem('category_order_changed') || '0';
+            if (currentCheck !== lastCategoryCheck && allVideos.length > 0) {
+                console.log('Category order changed, refreshing display');
+                displayVideos(allVideos);
+                lastCategoryCheck = currentCheck;
+            }
+        }
+        
+        window.refreshCategoryOrder = function() {
+            console.log('=== REFRESH CATEGORY ORDER ===');
+            console.log('allVideos length:', allVideos.length);
+            console.log('localStorage video_category_order:', localStorage.getItem('video_category_order'));
+            
+            if (allVideos.length > 0) {
+                console.log('Sample video tags:', allVideos[0].tags);
+                console.log('All video tags:', allVideos.map(v => v.tags));
+                displayVideos(allVideos);
+            } else {
+                console.log('No videos loaded');
+            }
+        }
+        
+        window.testCategoryOrder = function() {
+            console.log('=== TESTING CATEGORY ORDER ===');
+            const testOrder = ['sermons', 'news', 'politics'];
+            localStorage.setItem('video_category_order', JSON.stringify(testOrder));
+            console.log('Set test order:', testOrder);
+            if (allVideos.length > 0) {
+                displayVideos(allVideos);
+            }
+        }
+        
+        window.checkProphecyVideos = function() {
+            console.log('=== CHECKING PROPHECY VIDEOS ===');
+            const prophecyVideos = allVideos.filter(v => v.tags && v.tags.includes('prophecy'));
+            console.log('Total videos loaded:', allVideos.length);
+            console.log('Videos with prophecy tag:', prophecyVideos.length);
+            prophecyVideos.forEach(v => {
+                console.log(`- ${v.title}: [${v.tags.join(', ')}]`);
+            });
+            
+            // Check all unique categories
+            const allCategories = [...new Set(allVideos.filter(v => v.tags && v.tags.length > 0).map(v => v.tags[0]))];
+            console.log('All categories found:', allCategories);
+        }
+        
+        // Check for category order changes when page gains focus
+        let lastCategoryCheck = localStorage.getItem('category_order_changed') || '0';
+        
+        window.addEventListener('focus', function() {
+            const currentCheck = localStorage.getItem('category_order_changed') || '0';
+            if (currentCheck !== lastCategoryCheck && allVideos.length > 0) {
+                displayVideos(allVideos);
+                lastCategoryCheck = currentCheck;
+            }
+        });
+        
+        // Also check on page load
+        window.addEventListener('load', function() {
+            lastCategoryCheck = localStorage.getItem('category_order_changed') || '0';
         });
         
         // Load more button event listener

@@ -238,6 +238,18 @@
             <!-- Videos Tab -->
             <div id="videos" class="tab-pane">
                 <h2>Video Management</h2>
+                
+                <!-- Category Order Management -->
+                <div style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+                    <h3>Video Category Display Order</h3>
+                    <p style="color: #666; margin-bottom: 15px;">Drag and drop to reorder how categories appear on the videos page</p>
+                    <div id="category-order-list" style="min-height: 100px; border: 2px dashed #ddd; border-radius: 8px; padding: 15px;">
+                        <!-- Category order items will be loaded here -->
+                    </div>
+                    <button class="btn btn-primary" onclick="saveCategoryOrder()" style="margin-top: 15px;">💾 Save Order</button>
+                    <button class="btn btn-secondary" onclick="resetCategoryOrder()" style="margin-top: 15px; margin-left: 10px;">🔄 Reset to Default</button>
+                </div>
+                
                 <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
                     <button class="btn btn-primary" onclick="showUploadModal()">📁 Upload Video</button>
                     <button class="btn btn-primary" onclick="showDownloadModal()">⬇️ Download from URL</button>
@@ -726,7 +738,7 @@
             
             // Load data for tab
             if (tabName === 'users') loadUsers();
-            if (tabName === 'videos') loadVideos();
+            if (tabName === 'videos') { loadVideos(); loadCategoryOrder(); }
             if (tabName === 'tags') loadTags();
             if (tabName === 'resources') loadResourcesAdmin();
             if (tabName === 'subscriptions') loadSubscriptions();
@@ -2401,6 +2413,133 @@
             
             document.getElementById('resources-message').innerHTML = '<div class="success">Resource deleted successfully</div>';
             loadResourcesList();
+        }
+
+        // Category Order Management Functions
+        async function loadCategoryOrder() {
+            try {
+                // Get actual categories from videos
+                const response = await fetch(`${TAG_API}?action=list&user=${encodeURIComponent(currentUser.email)}&role=${encodeURIComponent(currentUser.role)}`);
+                const data = await response.json();
+                
+                let actualCategories = [];
+                if (data.videos) {
+                    const categorySet = new Set();
+                    data.videos.forEach(video => {
+                        if (video.tags && video.tags.length > 0) {
+                            categorySet.add(video.tags[0]); // Primary tag becomes category
+                        }
+                    });
+                    actualCategories = Array.from(categorySet).sort();
+                }
+                
+                const savedOrder = localStorage.getItem('video_category_order');
+                let categoryOrder = [];
+                
+                if (savedOrder) {
+                    const saved = JSON.parse(savedOrder);
+                    // Merge saved order with actual categories
+                    categoryOrder = [...saved];
+                    actualCategories.forEach(cat => {
+                        if (!categoryOrder.includes(cat)) {
+                            categoryOrder.push(cat);
+                        }
+                    });
+                } else {
+                    categoryOrder = actualCategories;
+                }
+                
+                localStorage.setItem('video_category_order', JSON.stringify(categoryOrder));
+                displayCategoryOrder(categoryOrder);
+            } catch (error) {
+                console.error('Failed to load categories:', error);
+                // Fallback to default
+                const defaultOrder = ['news', 'politics', 'sermons', 'teaching', 'apologetics', 'ministry', 'bible', 'worship', 'prayer', 'family'];
+                displayCategoryOrder(defaultOrder);
+            }
+        }
+        
+        function displayCategoryOrder(categories) {
+            const container = document.getElementById('category-order-list');
+            container.innerHTML = '';
+            
+            categories.forEach((category, index) => {
+                const item = document.createElement('div');
+                item.className = 'category-order-item';
+                item.draggable = true;
+                item.dataset.category = category;
+                item.style.cssText = 'background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px 15px; margin: 5px; display: inline-block; cursor: move; user-select: none;';
+                item.innerHTML = `
+                    <span style="margin-right: 10px; color: #666;">${index + 1}.</span>
+                    <span style="font-weight: 500;">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
+                    <span style="margin-left: 10px; color: #999;">☰</span>
+                `;
+                
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragover', handleDragOver);
+                item.addEventListener('drop', handleDrop);
+                item.addEventListener('dragend', handleDragEnd);
+                
+                container.appendChild(item);
+            });
+        }
+        
+        let draggedElement = null;
+        
+        function handleDragStart(e) {
+            draggedElement = this;
+            this.style.opacity = '0.5';
+        }
+        
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+        
+        function handleDrop(e) {
+            e.preventDefault();
+            if (this !== draggedElement) {
+                const container = document.getElementById('category-order-list');
+                const allItems = Array.from(container.children);
+                const draggedIndex = allItems.indexOf(draggedElement);
+                const targetIndex = allItems.indexOf(this);
+                
+                if (draggedIndex < targetIndex) {
+                    container.insertBefore(draggedElement, this.nextSibling);
+                } else {
+                    container.insertBefore(draggedElement, this);
+                }
+            }
+        }
+        
+        function handleDragEnd(e) {
+            this.style.opacity = '1';
+            draggedElement = null;
+            
+            const items = document.querySelectorAll('.category-order-item');
+            items.forEach((item, index) => {
+                const numberSpan = item.querySelector('span');
+                numberSpan.textContent = `${index + 1}.`;
+            });
+        }
+        
+        function saveCategoryOrder() {
+            const items = document.querySelectorAll('.category-order-item');
+            const newOrder = Array.from(items).map(item => item.dataset.category);
+            
+            localStorage.setItem('video_category_order', JSON.stringify(newOrder));
+            localStorage.setItem('category_order_changed', Date.now().toString());
+            
+            document.getElementById('videos-message').innerHTML = 
+                '<div class="success">Category order saved successfully! Changes will appear when you visit the videos page.</div>';
+        }
+        
+        function resetCategoryOrder() {
+            const defaultOrder = ['news', 'politics', 'sermons', 'teaching', 'apologetics', 'ministry', 'bible', 'worship', 'prayer', 'family'];
+            localStorage.setItem('video_category_order', JSON.stringify(defaultOrder));
+            displayCategoryOrder(defaultOrder);
+            
+            document.getElementById('videos-message').innerHTML = 
+                '<div class="success">Category order reset to default!</div>';
         }
 
         // Close modals when clicking outside

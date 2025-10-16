@@ -256,6 +256,19 @@
             }
         }
 
+        function getCategoryIcon(category) {
+            const iconMap = {
+                'Research Resources': 'fas fa-search',
+                'Educational': 'fas fa-graduation-cap',
+                'Financial': 'fas fa-dollar-sign',
+                'News & Media': 'fas fa-newspaper',
+                'Ministry Tools': 'fas fa-cross',
+                'Apologetics': 'fas fa-shield-alt',
+                'General': 'fas fa-folder-open'
+            };
+            return iconMap[category] || 'fas fa-folder-open';
+        }
+
         function displayResources(resources) {
             const container = document.getElementById('resources-container');
             container.innerHTML = '';
@@ -273,7 +286,8 @@
             Object.keys(groupedResources).sort().forEach(category => {
                 const categoryHeader = document.createElement('div');
                 categoryHeader.className = 'category-header';
-                categoryHeader.innerHTML = `<i class="fas fa-folder-open me-2"></i>${category}`;
+                const icon = getCategoryIcon(category);
+                categoryHeader.innerHTML = `<i class="${icon} me-2"></i>${category}`;
                 container.appendChild(categoryHeader);
                 
                 const row = document.createElement('div');
