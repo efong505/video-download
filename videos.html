@@ -31,6 +31,18 @@
             align-items: center;
             flex-wrap: wrap;
         }
+        
+        @media (max-width: 768px) {
+            .nav-brand-container img {
+                height: 24px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .nav-brand-container img {
+                height: 20px;
+            }
+        }
         .nav-link {
             color: white;
             text-decoration: none;
@@ -151,7 +163,10 @@
     <div class="dashboard-header">
         <div class="container">
             <div class="dashboard-nav">
-                <h1 class="nav-brand">🎬 Video Gallery</h1>
+                <div class="nav-brand-container" style="display: flex; align-items: center;">
+                    <img src="techcrosslogo.svg" alt="Christian Conservatives Today" style="height: 28px; width: auto; margin-right: 10px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                    <h1 class="nav-brand">🎬 Video Gallery</h1>
+                </div>
                 <div class="nav-links" id="nav-links">
                     <a href="/" class="nav-link">🏠 Home</a>
                     <a href="category.html" class="nav-link">📂 Categories</a>

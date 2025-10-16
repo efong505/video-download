@@ -52,6 +52,9 @@
             .nav-brand {
                 font-size: 1.4rem;
             }
+            .nav-brand-container img {
+                height: 24px;
+            }
             .nav-links {
                 gap: 8px;
                 justify-content: center;
@@ -78,6 +81,9 @@
             }
             .nav-brand {
                 font-size: 1.2rem;
+            }
+            .nav-brand-container img {
+                height: 20px;
             }
         }
         .article-form {
@@ -125,7 +131,10 @@
     <div class="dashboard-header">
         <div class="container">
             <div class="dashboard-nav">
-                <h1 class="nav-brand">✍️ Create Article</h1>
+                <div class="nav-brand-container" style="display: flex; align-items: center;">
+                    <img src="techcrosslogo.svg" alt="Christian Conservatives Today" style="height: 28px; width: auto; margin-right: 10px; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+                    <h1 class="nav-brand">✍️ Create Article</h1>
+                </div>
                 <div class="nav-links" id="nav-links">
                     <a href="/" class="nav-link">🏠 Home</a>
                     <a href="videos.html" class="nav-link">🎬 Videos</a>

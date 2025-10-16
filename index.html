@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Christian Conservatives Today - Empowering Faith-Based Digital Ministry</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
@@ -35,12 +39,18 @@
                 padding-top: 100px;
                 padding-bottom: 60px;
             }
+            .navbar-logo {
+                height: 28px;
+            }
         }
         
         @media (max-width: 576px) {
             .hero-section {
                 padding-top: 90px;
                 padding-bottom: 50px;
+            }
+            .navbar-logo {
+                height: 24px;
             }
         }
         
@@ -163,6 +173,19 @@
         .navbar-brand {
             font-weight: 700;
             color: var(--primary-color) !important;
+            display: flex;
+            align-items: center;
+        }
+        
+        .navbar-logo {
+            height: 32px;
+            width: auto;
+            margin-right: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .navbar-logo:hover {
+            transform: scale(1.1);
         }
         
         .nav-link {
@@ -208,7 +231,10 @@
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
         <div class="container">
-            <a class="navbar-brand" href="#"><i class="fas fa-cross me-2"></i>Christian Conservatives Today</a>
+            <a class="navbar-brand" href="#">
+                <img src="techcrosslogo.svg" alt="Christian Conservatives Today" class="navbar-logo">
+                Christian Conservatives Today
+            </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -239,7 +265,10 @@
                     </div>
                 </div>
                 <div class="col-lg-6 text-center">
-                    <div class="hero-stats mt-5 mt-lg-0">
+                    <div class="mb-4">
+                        <img src="techcrosslogo.svg" alt="Christian Conservatives Today Logo" style="max-width: 200px; height: auto; opacity: 0.9; transition: transform 0.3s ease;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+                    </div>
+                    <div class="hero-stats mt-3">
                         <div class="row">
                             <div class="col-4">
                                 <div class="stat-item text-white">
