@@ -44,6 +44,8 @@ def lambda_handler(event, context):
             return get_bible_verse(event)
         elif method == 'GET' and action == 'templates':
             return get_article_templates(event)
+        elif method == 'GET' and action == 'search':
+            return search_articles(event)
         else:
             return {
                 'statusCode': 404,
@@ -360,6 +362,110 @@ def get_article_templates(event):
         'headers': cors_headers(),
         'body': json.dumps({'templates': templates})
     }
+
+def search_articles(event):
+    """Search articles by title, content, category, tags, or author"""
+    query_params = event.get('queryStringParameters') or {}
+    search_query = query_params.get('q', '').strip().lower()
+    category = query_params.get('category')
+    author = query_params.get('author')
+    visibility = query_params.get('visibility', 'public')
+    
+    try:
+        # Scan articles table
+        scan_kwargs = {}
+        
+        # Base filter for visibility
+        if visibility == 'public':
+            scan_kwargs['FilterExpression'] = 'visibility = :vis'
+            scan_kwargs['ExpressionAttributeValues'] = {':vis': 'public'}
+        
+        response = articles_table.scan(**scan_kwargs)
+        articles = response.get('Items', [])
+        
+        # Fix author names for existing articles that have email addresses
+        for article in articles:
+            author_field = article.get('author', '')
+            if '@' in author_field:
+                proper_name = get_user_name(author_field)
+                article['author'] = proper_name
+        
+        # Apply search filters
+        filtered_articles = []
+        
+        for article in articles:
+            match = True
+            
+            # Text search in title and content
+            if search_query:
+                title_match = search_query in article.get('title', '').lower()
+                content_match = search_query in article.get('content', '').lower()
+                author_match = search_query in article.get('author', '').lower()
+                tag_match = any(search_query in tag.lower() for tag in article.get('tags', []))
+                
+                if not (title_match or content_match or author_match or tag_match):
+                    match = False
+            
+            # Category filter
+            if category and article.get('category', '') != category:
+                match = False
+            
+            # Author filter
+            if author and author.lower() not in article.get('author', '').lower():
+                match = False
+            
+            if match:
+                filtered_articles.append(article)
+        
+        # Sort by relevance (title matches first, then by date)
+        if search_query:
+            def relevance_score(article):
+                score = 0
+                title = article.get('title', '').lower()
+                content = article.get('content', '').lower()
+                
+                # Title matches get highest score
+                if search_query in title:
+                    score += 10
+                    if title.startswith(search_query):
+                        score += 5
+                
+                # Content matches get medium score
+                if search_query in content:
+                    score += 3
+                
+                # Author matches get low score
+                if search_query in article.get('author', '').lower():
+                    score += 1
+                
+                return score
+            
+            filtered_articles.sort(key=lambda x: (relevance_score(x), x.get('created_at', '')), reverse=True)
+        else:
+            # Sort by date if no search query
+            filtered_articles.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+        
+        return {
+            'statusCode': 200,
+            'headers': cors_headers(),
+            'body': json.dumps({
+                'articles': convert_decimals(filtered_articles),
+                'count': len(filtered_articles),
+                'search_query': search_query,
+                'filters': {
+                    'category': category,
+                    'author': author,
+                    'visibility': visibility
+                }
+            })
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
+        }
 
 def list_articles(event):
     """List articles with optional filtering"""

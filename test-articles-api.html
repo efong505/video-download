@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles API Diagnostic</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Articles API Diagnostic</h1>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>API Tests</h5>
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-primary mb-2" onclick="testListEndpoint()">Test List Endpoint</button><br>
+                        <button class="btn btn-secondary mb-2" onclick="testSearchEndpoint()">Test Search Endpoint</button><br>
+                        <button class="btn btn-info mb-2" onclick="testCORS()">Test CORS</button><br>
+                        <button class="btn btn-warning mb-2" onclick="testAuth()">Test with Auth</button><br>
+                        <button class="btn btn-success" onclick="clearResults()">Clear Results</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Results</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="results" style="max-height: 400px; overflow-y: auto;">
+                            <p class="text-muted">Click a test button to see results...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';
+        
+        function log(message, type = 'info') {
+            const results = document.getElementById('results');
+            const timestamp = new Date().toLocaleTimeString();
+            const alertClass = type === 'error' ? 'alert-danger' : 
+                              type === 'success' ? 'alert-success' : 
+                              type === 'warning' ? 'alert-warning' : 'alert-info';
+            
+            results.innerHTML += `
+                <div class="alert ${alertClass} alert-sm mb-2">
+                    <small><strong>[${timestamp}]</strong> ${message}</small>
+                </div>
+            `;
+            results.scrollTop = results.scrollHeight;
+        }
+        
+        async function testListEndpoint() {
+            log('Testing List Endpoint...', 'info');
+            
+            try {
+                const url = `${ARTICLES_API}?action=list&visibility=public`;
+                log(`URL: ${url}`, 'info');
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                log(`Response Status: ${response.status} ${response.statusText}`, 
+                    response.ok ? 'success' : 'error');
+                
+                const responseHeaders = {};
+                response.headers.forEach((value, key) => {
+                    responseHeaders[key] = value;
+                });
+                log(`Response Headers: ${JSON.stringify(responseHeaders, null, 2)}`, 'info');
+                
+                const data = await response.json();
+                log(`Response Data: ${JSON.stringify(data, null, 2)}`, 
+                    response.ok ? 'success' : 'error');
+                
+            } catch (error) {
+                log(`Network Error: ${error.message}`, 'error');
+                log(`Error Stack: ${error.stack}`, 'error');
+            }
+        }
+        
+        async function testSearchEndpoint() {
+            log('Testing Search Endpoint...', 'info');
+            
+            try {
+                const url = `${ARTICLES_API}?action=search&visibility=public`;
+                log(`URL: ${url}`, 'info');
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                log(`Response Status: ${response.status} ${response.statusText}`, 
+                    response.ok ? 'success' : 'error');
+                
+                const data = await response.json();
+                log(`Response Data: ${JSON.stringify(data, null, 2)}`, 
+                    response.ok ? 'success' : 'error');
+                
+            } catch (error) {
+                log(`Network Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testCORS() {
+            log('Testing CORS with OPTIONS request...', 'info');
+            
+            try {
+                const response = await fetch(ARTICLES_API, {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': window.location.origin,
+                        'Access-Control-Request-Method': 'GET',
+                        'Access-Control-Request-Headers': 'Content-Type'
+                    }
+                });
+                
+                log(`CORS Response Status: ${response.status}`, 
+                    response.ok ? 'success' : 'error');
+                
+                const corsHeaders = {};
+                response.headers.forEach((value, key) => {
+                    if (key.toLowerCase().includes('access-control')) {
+                        corsHeaders[key] = value;
+                    }
+                });
+                log(`CORS Headers: ${JSON.stringify(corsHeaders, null, 2)}`, 'info');
+                
+            } catch (error) {
+                log(`CORS Error: ${error.message}`, 'error');
+            }
+        }
+        
+        async function testAuth() {
+            log('Testing with Authentication...', 'info');
+            
+            const authToken = localStorage.getItem('auth_token');
+            if (!authToken) {
+                log('No auth token found in localStorage', 'warning');
+                return;
+            }
+            
+            try {
+                const url = `${ARTICLES_API}?action=list`;
+                log(`URL: ${url}`, 'info');
+                log(`Auth Token: ${authToken.substring(0, 20)}...`, 'info');
+                
+                const response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    }
+                });
+                
+                log(`Auth Response Status: ${response.status} ${response.statusText}`, 
+                    response.ok ? 'success' : 'error');
+                
+                const data = await response.json();
+                log(`Auth Response Data: ${JSON.stringify(data, null, 2)}`, 
+                    response.ok ? 'success' : 'error');
+                
+            } catch (error) {
+                log(`Auth Error: ${error.message}`, 'error');
+            }
+        }
+        
+        function clearResults() {
+            document.getElementById('results').innerHTML = '<p class="text-muted">Results cleared. Click a test button to see results...</p>';
+        }
+        
+        // Auto-run basic test on page load
+        window.addEventListener('load', function() {
+            log('Articles API Diagnostic Tool Loaded', 'success');
+            log(`Testing API: ${ARTICLES_API}`, 'info');
+            
+            // Check if user is logged in
+            const authToken = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+            
+            if (authToken && userData) {
+                const user = JSON.parse(userData);
+                log(`Logged in as: ${user.email} (${user.role})`, 'success');
+            } else {
+                log('Not logged in - some tests may fail', 'warning');
+            }
+        });
+    </script>
+</body>
+</html>
