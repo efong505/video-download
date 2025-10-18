@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .dashboard-nav {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            padding: 15px 0;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .nav-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .breaking-banner {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+        .news-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid #3498db;
+        }
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .news-card.breaking {
+            border-left-color: #e74c3c;
+            background: linear-gradient(135deg, #fff 0%, #ffebee 100%);
+        }
+        .news-title {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        .news-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .news-summary {
+            color: #34495e;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .news-tags {
+            margin-bottom: 15px;
+        }
+        .tag-badge {
+            background: #3498db;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-right: 8px;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+        .breaking-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-right: 10px;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.5; }
+        }
+        .category-badge {
+            background: #27ae60;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-right: 10px;
+        }
+        .filter-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-weight: 600;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-weight: 600;
+        }
+        .external-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .external-link:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+        @media (max-width: 768px) {
+            .dashboard-nav {
+                gap: 8px;
+            }
+            .nav-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+        }
+        @media (max-width: 576px) {
+            .dashboard-nav {
+                gap: 5px;
+            }
+            .nav-btn {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh;">
+    <div class="container mt-4">
+        <!-- Navigation -->
+        <div class="dashboard-nav">
+            <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Home</a>
+            <a href="videos.html" class="nav-btn"><i class="fas fa-video"></i> Videos</a>
+            <a href="articles.html" class="nav-btn"><i class="fas fa-newspaper"></i> Articles</a>
+            <a href="news.html" class="nav-btn"><i class="fas fa-broadcast-tower"></i> News</a>
+            <div id="authLinks"></div>
+        </div>
+
+        <!-- Breaking News Banner -->
+        <div id="breakingBanner" style="display: none;" class="breaking-banner">
+            <h4><i class="fas fa-exclamation-triangle"></i> BREAKING NEWS</h4>
+            <div id="breakingContent"></div>
+        </div>
+
+        <!-- Page Header -->
+        <div class="text-center mb-4">
+            <h1 style="color: #2c3e50; font-weight: 700;">
+                <i class="fas fa-broadcast-tower"></i> Christian Conservative News
+            </h1>
+            <p style="color: #7f8c8d; font-size: 1.1em;">Stay informed with the latest news from a biblical perspective</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-section">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <select class="form-select" id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="general">General News</option>
+                        <option value="politics">Politics</option>
+                        <option value="christian">Christian News</option>
+                        <option value="election">Election Coverage</option>
+                        <option value="breaking">Breaking News</option>
+                        <option value="commentary">Commentary</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="breakingOnly">
+                        <label class="form-check-label" for="breakingOnly">
+                            Breaking News Only
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary" onclick="loadNews()">
+                        <i class="fas fa-filter"></i> Apply Filters
+                    </button>
+                </div>
+                <div class="col-md-3 text-end" id="adminControls" style="display: none;">
+                    <a href="create-news.html" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Create News
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- News List -->
+        <div id="newsList">
+            <div class="text-center">
+                <i class="fas fa-spinner fa-spin fa-2x" style="color: #3498db;"></i>
+                <p class="mt-2">Loading news...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        var NEWS_API = 'https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            setupNavigation();
+            loadNews();
+            loadBreakingNews();
+        });
+
+        function setupNavigation() {
+            var token = localStorage.getItem('token');
+            var userRole = localStorage.getItem('userRole');
+            var authLinksDiv = document.getElementById('authLinks');
+            
+            if (token) {
+                authLinksDiv.innerHTML = 
+                    '<a href="profile.html" class="nav-btn"><i class="fas fa-user"></i> Profile</a>' +
+                    '<button onclick="logout()" class="nav-btn" style="background: rgba(231, 76, 60, 0.8);"><i class="fas fa-sign-out-alt"></i> Logout</button>';
+                
+                if (['admin', 'super_user'].includes(userRole)) {
+                    authLinksDiv.innerHTML = 
+                        '<a href="admin.html" class="nav-btn"><i class="fas fa-cog"></i> Admin</a>' +
+                        '<a href="profile.html" class="nav-btn"><i class="fas fa-user"></i> Profile</a>' +
+                        '<button onclick="logout()" class="nav-btn" style="background: rgba(231, 76, 60, 0.8);"><i class="fas fa-sign-out-alt"></i> Logout</button>';
+                    
+                    document.getElementById('adminControls').style.display = 'block';
+                }
+            } else {
+                authLinksDiv.innerHTML = 
+                    '<a href="login.html" class="nav-btn"><i class="fas fa-sign-in-alt"></i> Login</a>' +
+                    '<a href="register.html" class="nav-btn"><i class="fas fa-user-plus"></i> Register</a>';
+            }
+        }
+
+        function loadBreakingNews() {
+            fetch(NEWS_API + '?action=list&breaking=true')
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data && data.length > 0) {
+                    var breakingNews = data[0]; // Get most recent breaking news
+                    var banner = document.getElementById('breakingBanner');
+                    var content = document.getElementById('breakingContent');
+                    
+                    content.innerHTML = 
+                        '<h5>' + breakingNews.title + '</h5>' +
+                        '<p>' + (breakingNews.summary || 'Click to read more...') + '</p>' +
+                        '<a href="news-article.html?id=' + breakingNews.news_id + '" class="btn btn-light btn-sm">Read Full Story</a>';
+                    
+                    banner.style.display = 'block';
+                }
+            })
+            .catch(function(error) {
+                console.error('Error loading breaking news:', error);
+            });
+        }
+
+        function loadNews() {
+            var category = document.getElementById('categoryFilter').value;
+            var breakingOnly = document.getElementById('breakingOnly').checked;
+            
+            var url = NEWS_API + '?action=list';
+            if (category) url += '&category=' + category;
+            if (breakingOnly) url += '&breaking=true';
+            
+            fetch(url)
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                displayNews(data);
+            })
+            .catch(function(error) {
+                console.error('Error loading news:', error);
+                document.getElementById('newsList').innerHTML = 
+                    '<div class="text-center"><p class="text-danger">Failed to load news</p></div>';
+            });
+        }
+
+        function displayNews(newsItems) {
+            var container = document.getElementById('newsList');
+            
+            if (!newsItems || newsItems.length === 0) {
+                container.innerHTML = 
+                    '<div class="text-center"><p class="text-muted">No news articles found</p></div>';
+                return;
+            }
+            
+            var html = '';
+            newsItems.forEach(function(news) {
+                var isBreaking = news.is_breaking;
+                var cardClass = isBreaking ? 'news-card breaking' : 'news-card';
+                
+                html += '<div class="' + cardClass + '">';
+                
+                // Breaking badge
+                if (isBreaking) {
+                    html += '<span class="breaking-badge"><i class="fas fa-exclamation-triangle"></i> BREAKING</span>';
+                }
+                
+                // Category badge
+                html += '<span class="category-badge">' + (news.category || 'General').toUpperCase() + '</span>';
+                
+                // Title
+                html += '<h3 class="news-title">' + news.title + '</h3>';
+                
+                // Meta info
+                html += '<div class="news-meta">';
+                html += '<i class="fas fa-user"></i> ' + (news.author_name || news.author) + ' | ';
+                html += '<i class="fas fa-calendar"></i> ' + formatDate(news.created_at) + ' | ';
+                html += '<i class="fas fa-eye"></i> ' + (news.view_count || 0) + ' views';
+                html += '</div>';
+                
+                // Summary
+                if (news.summary) {
+                    html += '<div class="news-summary">' + news.summary + '</div>';
+                }
+                
+                // Tags
+                if (news.tags && news.tags.length > 0) {
+                    html += '<div class="news-tags">';
+                    news.tags.forEach(function(tag) {
+                        html += '<span class="tag-badge">' + tag + '</span>';
+                    });
+                    html += '</div>';
+                }
+                
+                // Actions
+                html += '<div class="d-flex justify-content-between align-items-center">';
+                html += '<a href="news-article.html?id=' + news.news_id + '" class="btn btn-primary">Read More</a>';
+                
+                if (news.external_url) {
+                    html += '<a href="' + news.external_url + '" target="_blank" class="external-link">';
+                    html += '<i class="fas fa-external-link-alt"></i> Original Source</a>';
+                }
+                html += '</div>';
+                
+                html += '</div>';
+            });
+            
+            container.innerHTML = html;
+        }
+
+        function formatDate(dateString) {
+            var date = new Date(dateString);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userRole');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

@@ -191,6 +191,7 @@
             <div class="tab" onclick="showTab('tags')">Tags</div>
             <div class="tab" onclick="showTab('resources')">Resources</div>
             <div class="tab" onclick="showTab('comments')">Comments</div>
+            <div class="tab" onclick="showTab('news')">News</div>
             <div class="tab" onclick="showTab('subscriptions')">Subscriptions</div>
         </div>
 
@@ -414,6 +415,31 @@
                         </tr>
                     </thead>
                     <tbody id="comments-tbody"></tbody>
+                </table>
+            </div>
+
+            <!-- News Tab -->
+            <div id="news" class="tab-pane">
+                <h2>News Management</h2>
+                <div style="margin-bottom: 20px;">
+                    <a href="create-news.html" class="btn btn-primary">Create News Article</a>
+                    <a href="news.html" class="btn" style="background: #28a745; color: white; margin-left: 10px;">View News Page</a>
+                </div>
+                <div id="news-message"></div>
+                <div id="news-loading" class="loading">Loading news...</div>
+                <table id="news-table" class="data-table" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Author</th>
+                            <th>Status</th>
+                            <th>Breaking</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="news-tbody"></tbody>
                 </table>
             </div>
 
@@ -740,6 +766,7 @@
         const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
         const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
         const COMMENTS_API = 'https://l10alau5g3.execute-api.us-east-1.amazonaws.com/prod/comments';
+        const NEWS_API = 'https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news';
         
         let currentUser = null;
         let authToken = null;
@@ -785,6 +812,7 @@
             if (tabName === 'tags') loadTags();
             if (tabName === 'resources') loadResourcesAdmin();
             if (tabName === 'comments') loadComments();
+            if (tabName === 'news') loadNews();
             if (tabName === 'subscriptions') loadSubscriptions();
             if (tabName === 'overview') loadOverview();
         }
@@ -2835,6 +2863,92 @@
                 updateBulkActionButtons();
             }
         });
+
+        // News Management Functions
+        async function loadNews() {
+            document.getElementById('news-loading').style.display = 'block';
+            document.getElementById('news-table').style.display = 'none';
+            
+            try {
+                const response = await fetch(`${NEWS_API}?action=list`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    displayNews(data);
+                } else {
+                    throw new Error(data.error || 'Failed to load news');
+                }
+            } catch (error) {
+                document.getElementById('news-message').innerHTML = 
+                    `<div class="error">Failed to load news: ${error.message}</div>`;
+            } finally {
+                document.getElementById('news-loading').style.display = 'none';
+            }
+        }
+        
+        function displayNews(newsItems) {
+            const tbody = document.getElementById('news-tbody');
+            tbody.innerHTML = '';
+            
+            if (!newsItems || newsItems.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No news articles found</td></tr>';
+                document.getElementById('news-table').style.display = 'table';
+                return;
+            }
+            
+            newsItems.forEach(news => {
+                const row = document.createElement('tr');
+                const createdDate = new Date(news.created_at).toLocaleDateString();
+                const breakingBadge = news.is_breaking ? 
+                    '<span style="background: #dc3545; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px;">BREAKING</span>' : '-';
+                const statusBadge = news.status === 'published' ? 
+                    '<span style="background: #28a745; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px;">PUBLISHED</span>' :
+                    '<span style="background: #ffc107; color: #212529; padding: 2px 8px; border-radius: 3px; font-size: 11px;">' + news.status.toUpperCase() + '</span>';
+                
+                row.innerHTML = `
+                    <td>${news.title}</td>
+                    <td>${news.category || 'general'}</td>
+                    <td>${news.author_name || news.author}</td>
+                    <td>${statusBadge}</td>
+                    <td>${breakingBadge}</td>
+                    <td>${createdDate}</td>
+                    <td>
+                        <a href="news-article.html?id=${news.news_id}" class="btn btn-primary" style="font-size: 12px; margin-right: 5px;">View</a>
+                        <button class="btn btn-danger" onclick="deleteNewsItem('${news.news_id}', '${news.title.replace(/'/g, "\\'")}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            document.getElementById('news-table').style.display = 'table';
+        }
+        
+        async function deleteNewsItem(newsId, title) {
+            if (!confirm(`Are you sure you want to delete news article: "${title}"?`)) return;
+            
+            try {
+                const response = await fetch(`${NEWS_API}?action=delete&news_id=${newsId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('news-message').innerHTML = 
+                        '<div class="success">News article deleted successfully</div>';
+                    loadNews();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('news-message').innerHTML = 
+                    `<div class="error">Failed to delete news: ${error.message}</div>`;
+            }
+        }
 
         // Close modals when clicking outside
         window.onclick = function(event) {

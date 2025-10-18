@@ -1,0 +1,349 @@
+import json
+import boto3
+import uuid
+from datetime import datetime
+from decimal import Decimal
+import jwt
+import os
+
+# Initialize DynamoDB
+dynamodb = boto3.resource('dynamodb')
+news_table = dynamodb.Table('news-table')
+users_table = dynamodb.Table('users')
+
+# JWT Secret (should match your auth API)
+JWT_SECRET = 'your-jwt-secret-key'
+
+def lambda_handler(event, context):
+    # CORS headers
+    headers = {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+        'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS'
+    }
+    
+    try:
+        # Handle preflight OPTIONS request
+        http_method = event.get('httpMethod', 'GET')
+        if http_method == 'OPTIONS':
+            return {
+                'statusCode': 200,
+                'headers': headers,
+                'body': json.dumps({'message': 'CORS preflight'})
+            }
+        
+        # Get action from query parameters
+        query_params = event.get('queryStringParameters') or {}
+        action = query_params.get('action', 'list')
+        
+        # Route based on HTTP method and action
+        if http_method == 'POST' or action == 'create':
+            return create_news(event, headers)
+        elif http_method == 'PUT' or action == 'update':
+            return update_news(event, headers)
+        elif http_method == 'DELETE' or action == 'delete':
+            return delete_news(event, headers)
+        elif action == 'get':
+            return get_news(event, headers)
+        else:
+            return list_news(event, headers)
+            
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': headers,
+            'body': json.dumps({'error': str(e), 'type': type(e).__name__})
+        }
+
+def verify_token(event):
+    """Verify JWT token and return user info"""
+    try:
+        auth_header = event.get('headers', {}).get('Authorization', '')
+        if not auth_header.startswith('Bearer '):
+            return None
+        
+        token = auth_header.split(' ')[1]
+        payload = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
+        return payload
+    except:
+        return None
+
+def verify_admin_token(event):
+    """Verify admin/super_user token"""
+    user_info = verify_token(event)
+    if not user_info:
+        return None
+    
+    role = user_info.get('role', 'user')
+    if role in ['admin', 'super_user']:
+        return user_info
+    return None
+
+def get_user_name(email):
+    """Get user's full name from email"""
+    try:
+        response = users_table.get_item(Key={'email': email})
+        if 'Item' in response:
+            user = response['Item']
+            first_name = user.get('first_name', '')
+            last_name = user.get('last_name', '')
+            if first_name or last_name:
+                return f"{first_name} {last_name}".strip()
+        return email
+    except:
+        return email
+
+def create_news(event, headers):
+    """Create new news item"""
+    user_info = verify_admin_token(event)
+    if not user_info:
+        return {
+            'statusCode': 403,
+            'headers': headers,
+            'body': json.dumps({'error': 'Admin access required'})
+        }
+    
+    try:
+        body = json.loads(event['body'])
+        
+        news_id = str(uuid.uuid4())
+        now = datetime.utcnow().isoformat()
+        
+        news_item = {
+            'news_id': news_id,
+            'title': body['title'],
+            'content': body.get('content', ''),
+            'summary': body.get('summary', ''),
+            'category': body.get('category', 'general'),
+            'tags': body.get('tags', []),
+            'author': user_info['email'],
+            'author_name': get_user_name(user_info['email']),
+            'visibility': body.get('visibility', 'public'),
+            'is_breaking': body.get('is_breaking', False),
+            'external_url': body.get('external_url', ''),
+            'featured_image': body.get('featured_image', ''),
+            'scheduled_publish': body.get('scheduled_publish', ''),
+            'status': body.get('status', 'published'),
+            'created_at': now,
+            'updated_at': now,
+            'view_count': 0
+        }
+        
+        news_table.put_item(Item=news_item)
+        
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps({
+                'message': 'News created successfully',
+                'news_id': news_id
+            })
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': headers,
+            'body': json.dumps({'error': str(e)})
+        }
+
+def list_news(event, headers):
+    """List news items with filtering"""
+    try:
+        params = event.get('queryStringParameters') or {}
+        category = params.get('category')
+        visibility = params.get('visibility')
+        breaking_only = params.get('breaking') == 'true'
+        
+        # Scan news table
+        scan_kwargs = {}
+        filter_expressions = []
+        expression_values = {}
+        
+        if category:
+            filter_expressions.append('category = :category')
+            expression_values[':category'] = category
+        
+        if visibility:
+            filter_expressions.append('visibility = :visibility')
+            expression_values[':visibility'] = visibility
+        
+        if breaking_only:
+            filter_expressions.append('is_breaking = :breaking')
+            expression_values[':breaking'] = True
+        
+        # Only show published items for non-admin users
+        user_info = verify_token(event)
+        if not user_info or user_info.get('role') not in ['admin', 'super_user']:
+            filter_expressions.append('#status = :status')
+            expression_values[':status'] = 'published'
+            scan_kwargs['ExpressionAttributeNames'] = {'#status': 'status'}
+        
+        if filter_expressions:
+            scan_kwargs['FilterExpression'] = ' AND '.join(filter_expressions)
+            scan_kwargs['ExpressionAttributeValues'] = expression_values
+        
+        response = news_table.scan(**scan_kwargs)
+        news_items = response.get('Items', [])
+        
+        # Sort by created_at descending
+        news_items.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+        
+        # Convert Decimal objects to int/float
+        for item in news_items:
+            if 'view_count' in item:
+                item['view_count'] = int(item['view_count'])
+        
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps(news_items, default=str)
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': headers,
+            'body': json.dumps({'error': str(e)})
+        }
+
+def get_news(event, headers):
+    """Get single news item by ID"""
+    try:
+        params = event.get('queryStringParameters') or {}
+        news_id = params.get('news_id')
+        
+        if not news_id:
+            return {
+                'statusCode': 400,
+                'headers': headers,
+                'body': json.dumps({'error': 'news_id required'})
+            }
+        
+        response = news_table.get_item(Key={'news_id': news_id})
+        
+        if 'Item' not in response:
+            return {
+                'statusCode': 404,
+                'headers': headers,
+                'body': json.dumps({'error': 'News not found'})
+            }
+        
+        news_item = response['Item']
+        
+        # Increment view count
+        try:
+            news_table.update_item(
+                Key={'news_id': news_id},
+                UpdateExpression='SET view_count = view_count + :inc',
+                ExpressionAttributeValues={':inc': 1}
+            )
+            news_item['view_count'] = int(news_item.get('view_count', 0)) + 1
+        except:
+            pass
+        
+        # Convert Decimal objects
+        if 'view_count' in news_item:
+            news_item['view_count'] = int(news_item['view_count'])
+        
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps(news_item, default=str)
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': headers,
+            'body': json.dumps({'error': str(e)})
+        }
+
+def update_news(event, headers):
+    """Update existing news item"""
+    user_info = verify_admin_token(event)
+    if not user_info:
+        return {
+            'statusCode': 403,
+            'headers': headers,
+            'body': json.dumps({'error': 'Admin access required'})
+        }
+    
+    try:
+        body = json.loads(event['body'])
+        news_id = body.get('news_id')
+        
+        if not news_id:
+            return {
+                'statusCode': 400,
+                'headers': headers,
+                'body': json.dumps({'error': 'news_id required'})
+            }
+        
+        # Build update expression
+        update_expression = 'SET updated_at = :updated_at'
+        expression_values = {':updated_at': datetime.utcnow().isoformat()}
+        
+        # Update fields if provided
+        fields = ['title', 'content', 'summary', 'category', 'tags', 'visibility', 
+                 'is_breaking', 'external_url', 'featured_image', 'scheduled_publish', 'status']
+        
+        for field in fields:
+            if field in body:
+                update_expression += f', {field} = :{field}'
+                expression_values[f':{field}'] = body[field]
+        
+        news_table.update_item(
+            Key={'news_id': news_id},
+            UpdateExpression=update_expression,
+            ExpressionAttributeValues=expression_values
+        )
+        
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps({'message': 'News updated successfully'})
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': headers,
+            'body': json.dumps({'error': str(e)})
+        }
+
+def delete_news(event, headers):
+    """Delete news item"""
+    user_info = verify_admin_token(event)
+    if not user_info:
+        return {
+            'statusCode': 403,
+            'headers': headers,
+            'body': json.dumps({'error': 'Admin access required'})
+        }
+    
+    try:
+        params = event.get('queryStringParameters') or {}
+        news_id = params.get('news_id')
+        
+        if not news_id:
+            return {
+                'statusCode': 400,
+                'headers': headers,
+                'body': json.dumps({'error': 'news_id required'})
+            }
+        
+        news_table.delete_item(Key={'news_id': news_id})
+        
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps({'message': 'News deleted successfully'})
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': headers,
+            'body': json.dumps({'error': str(e)})
+        }

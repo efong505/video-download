@@ -670,6 +670,8 @@ articles-table:
 - [x] **Public article viewing** ✅ COMPLETE - Non-authenticated users can access public articles for improved ministry outreach
 - [x] **Featured image system** ✅ COMPLETE - Upload featured images, thumbnail display in listings, Open Graph integration, image compression
 - [ ] **Auto-summary for resources** - AI-powered website analysis to generate descriptions from URLs, with admin override capability and manual editing
+- [ ] **News management system** - Topic-based news page with admin backend, breaking news banners, scheduled publishing, external link support, Christian/political news categories, and state-specific election coverage with contributor network for Republican candidate tracking across all 50 states
+- [ ] **State election contributor system** - Interactive state map, state correspondent assignments, candidate profiles, election calendar, and local Republican election coverage from verified contributors in each state
 - [ ] **Related articles suggestions** - Algorithm-based article recommendations
 - [ ] **Article analytics and view tracking** - Detailed analytics, view statistics, engagement metrics
 - [ ] **Advanced ministry tools** - Enhanced features for ministry use (see Phase 3 item 4 above for full list)ARTICLE ENHANCEMENTS**: Draft/preview functionality, service notes template, study notes category, and editing capabilities
@@ -1298,3 +1300,94 @@ const privateResponse = await fetch(`${ARTICLES_API}?action=list&visibility=priv
 - Graceful degradation for all features
 
 This approach resolved the recurring breakage and created a stable, reliable create article interface.
+
+## Markdown Support Implementation ✅ COMPLETE (January 2025)
+
+### Feature Overview
+**Enhancement**: Added markdown editing capabilities to both create-article.html and edit-article.html without breaking existing WYSIWYG functionality.
+
+### Implementation Details
+**Core Features Added**:
+- **Toggle Switch**: Seamless switching between WYSIWYG and Markdown modes
+- **Markdown Parser**: Integrated marked.js library for HTML conversion
+- **HTML Entity Decoding**: Fixed apostrophe and special character handling
+- **Bidirectional Conversion**: Automatic conversion between HTML and Markdown when switching modes
+- **Help System**: Built-in markdown syntax reference with examples
+- **Content Preservation**: Maintains content integrity during mode switches
+
+### Technical Implementation
+**Libraries Added**:
+- `marked.js` - Markdown to HTML parsing
+- Custom HTML to Markdown conversion function
+- HTML entity decoder for proper character handling
+
+**Files Modified**:
+- `create-article.html` - Added markdown toggle, textarea, and conversion functions
+- `edit-article.html` - Added identical markdown functionality for editing existing articles
+
+**Key Functions Implemented**:
+- `toggleMarkdownMode()` - Switches between WYSIWYG and markdown editors
+- `convertHtmlToMarkdown()` - Converts rich text to markdown syntax with HTML entity decoding
+- `getCurrentContent()` - Returns content from active editor mode for form submission
+- `showMarkdownHelp()` - Displays markdown syntax reference guide
+
+### HTML Entity Decoding Fix
+**Problem**: HTML entities like `&#39;` (apostrophes) weren't displaying properly in markdown mode
+**Solution**: Added HTML entity decoding using temporary DOM element:
+```javascript
+const tempDiv = document.createElement('div');
+tempDiv.innerHTML = html;
+const decodedHtml = tempDiv.innerHTML;
+```
+**Result**: Text like "It&#39;s all about perception" now correctly displays as "It's all about perception"
+
+### User Experience Features
+**Markdown Mode Benefits**:
+- Faster typing for users familiar with markdown
+- Better version control compatibility
+- Cleaner content structure
+- Keyboard-focused editing workflow
+- Syntax highlighting in monospace font
+
+**WYSIWYG Mode Benefits**:
+- Visual editing with immediate formatting preview
+- Image and video embedding tools
+- Bible verse insertion functionality
+- Rich formatting toolbar
+- No syntax knowledge required
+
+### Backward Compatibility
+**Preserved Functionality**:
+- All existing Quill.js features remain intact
+- Bible verse lookup works in both modes
+- Image and video insertion preserved
+- Template system continues to work
+- Form submission handles both editor types
+- No breaking changes to existing workflows
+
+### Markdown Syntax Support
+**Supported Elements**:
+- Headers (`# ## ###`)
+- Bold (`**text**`) and Italic (`*text*`)
+- Links (`[text](url)`)
+- Images (`![alt](url)`)
+- Lists (`- item` or `1. item`)
+- Blockquotes (`> text`)
+- Code blocks (`` `code` `` or ``` blocks)
+- Line breaks and paragraphs
+
+### Integration Points
+**Form Submission**: Updated to use `getCurrentContent()` function that automatically detects active editor mode
+**Preview Function**: Enhanced to work with both WYSIWYG and markdown content
+**Template System**: Templates load in WYSIWYG mode and can be converted to markdown
+
+### Testing & Verification
+- ✅ Mode switching preserves content integrity
+- ✅ HTML entities decode properly (apostrophes, quotes, etc.)
+- ✅ Form submission works from both editor modes
+- ✅ Bible verse insertion functions in both modes
+- ✅ Template system compatible with markdown conversion
+- ✅ No breaking changes to existing functionality
+- ✅ Help system provides clear markdown syntax guidance
+
+**Status**: Markdown support fully implemented and operational in both article creation and editing interfaces, providing users with flexible content creation options while maintaining all existing functionality.

@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         .dashboard-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -196,10 +197,32 @@
 
                         <div class="mb-3">
                             <label class="form-label">Article Content</label>
-                            <div class="mb-2">
+                            <div class="mb-2 d-flex gap-2 align-items-center">
                                 <button type="button" class="btn btn-outline-primary btn-sm" onclick="showBibleLookup()">📖 Insert Bible Verse</button>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="markdownMode" onchange="toggleMarkdownMode()">
+                                    <label class="form-check-label" for="markdownMode">📝 Markdown Mode</label>
+                                </div>
+                                <button type="button" class="btn btn-outline-info btn-sm" onclick="showMarkdownHelp()" id="markdown-help-btn" style="display: none;">❓ Markdown Help</button>
                             </div>
                             <div id="article-content" style="height: 400px;"></div>
+                            <textarea id="markdown-content" class="form-control" style="height: 400px; display: none; font-family: 'Courier New', monospace;" placeholder="Write your article in Markdown...
+
+# Heading 1
+## Heading 2
+**Bold text**
+*Italic text*
+[Link](https://example.com)
+![Image](image-url)
+
+- List item 1
+- List item 2
+
+> Blockquote
+
+```
+Code block
+```"></textarea>
                         </div>
 
                         <!-- Bible Verse Lookup Modal -->
@@ -263,6 +286,9 @@
         let quill = null;
         let articleId = null;
         let allUsers = [];
+        let isMarkdownMode = false;
+        let lastQuillContent = '';
+        let lastMarkdownContent = '';
 
         window.addEventListener('load', async function() {
             authToken = localStorage.getItem('auth_token');
@@ -287,8 +313,8 @@
             
             // Load users for admin/super users
             if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
-                await loadUsers();
                 document.getElementById('author-field').style.display = 'block';
+                await loadUsers();
             }
             
             await loadArticle();
@@ -516,25 +542,38 @@
                         'Authorization': 'Bearer ' + authToken
                     }
                 });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch users: ' + response.status);
+                }
+                
                 const data = await response.json();
                 
-                if (data.users) {
+                if (data.users && Array.isArray(data.users)) {
                     allUsers = data.users;
-                    const authorSelect = document.getElementById('article-author');
-                    authorSelect.innerHTML = '';
-                    
-                    data.users.forEach(user => {
-                        const option = document.createElement('option');
-                        option.value = user.email;
-                        const displayName = user.first_name && user.last_name ? 
-                            user.first_name + ' ' + user.last_name : user.email;
-                        option.textContent = displayName + ' (' + user.email + ')';
-                        authorSelect.appendChild(option);
-                    });
+                    populateAuthorDropdown(data.users);
+                } else {
+                    throw new Error('No users found in response');
                 }
             } catch (error) {
                 console.error('Error loading users:', error);
+                const authorSelect = document.getElementById('article-author');
+                authorSelect.innerHTML = '<option value="">Error loading users</option>';
             }
+        }
+        
+        function populateAuthorDropdown(users) {
+            const authorSelect = document.getElementById('article-author');
+            authorSelect.innerHTML = '<option value="">Select Author...</option>';
+            
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.email;
+                const displayName = user.first_name && user.last_name ? 
+                    user.first_name + ' ' + user.last_name : user.email;
+                option.textContent = displayName + ' (' + user.email + ')';
+                authorSelect.appendChild(option);
+            });
         }
 
         function populateForm(article) {
@@ -543,27 +582,14 @@
             document.getElementById('article-tags').value = article.tags ? article.tags.join(', ') : '';
             document.getElementById('article-visibility').value = article.visibility;
             
-            // Set author if admin/super user - fix author display issue
+            // Set author if admin/super user
             if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
-                // Try to find the author by email first, then by name
-                let authorEmail = article.author_email || article.author;
-                
-                // If article.author looks like an email, use it directly
-                if (article.author && article.author.includes('@')) {
-                    authorEmail = article.author;
-                } else {
-                    // If article.author is a name, find the corresponding email
-                    const matchingUser = allUsers.find(user => {
-                        const fullName = user.first_name && user.last_name ? 
-                            user.first_name + ' ' + user.last_name : '';
-                        return fullName === article.author || user.email === article.author;
-                    });
-                    if (matchingUser) {
-                        authorEmail = matchingUser.email;
-                    }
+                const authorSelect = document.getElementById('article-author');
+                if (authorSelect) {
+                    // Use author_email if available, otherwise use author field
+                    const authorEmail = article.author_email || article.author || '';
+                    authorSelect.value = authorEmail;
                 }
-                
-                document.getElementById('article-author').value = authorEmail;
             }
             
             if (quill) {
@@ -601,7 +627,7 @@
             const category = document.getElementById('article-category').value;
             const tags = document.getElementById('article-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
             const visibility = document.getElementById('article-visibility').value;
-            const content = quill ? quill.root.innerHTML : '';
+            const content = getCurrentContent();
             const featuredImageInput = document.getElementById('featured-image');
             
             let updateData = {
@@ -736,6 +762,123 @@
             if (userData) {
                 const user = JSON.parse(userData);
                 window.location.href = `user-page.html?user=${encodeURIComponent(user.email)}`;
+            }
+        }
+        
+        function toggleMarkdownMode() {
+            const markdownCheckbox = document.getElementById('markdownMode');
+            const quillEditor = document.getElementById('article-content');
+            const markdownTextarea = document.getElementById('markdown-content');
+            const helpBtn = document.getElementById('markdown-help-btn');
+            
+            isMarkdownMode = markdownCheckbox.checked;
+            
+            if (isMarkdownMode) {
+                // Switch to markdown mode
+                lastQuillContent = quill.root.innerHTML;
+                const markdownText = convertHtmlToMarkdown(lastQuillContent);
+                markdownTextarea.value = markdownText;
+                
+                quillEditor.style.display = 'none';
+                markdownTextarea.style.display = 'block';
+                helpBtn.style.display = 'inline-block';
+            } else {
+                // Switch back to WYSIWYG mode
+                lastMarkdownContent = markdownTextarea.value;
+                const htmlContent = marked.parse(lastMarkdownContent);
+                quill.root.innerHTML = htmlContent;
+                
+                quillEditor.style.display = 'block';
+                markdownTextarea.style.display = 'none';
+                helpBtn.style.display = 'none';
+            }
+        }
+        
+        function convertHtmlToMarkdown(html) {
+            // Create a temporary div to decode HTML entities
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            const decodedHtml = tempDiv.innerHTML;
+            
+            // Basic HTML to Markdown conversion
+            return decodedHtml
+                .replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1\n\n')
+                .replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n\n')
+                .replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n\n')
+                .replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**')
+                .replace(/<b[^>]*>(.*?)<\/b>/gi, '**$1**')
+                .replace(/<em[^>]*>(.*?)<\/em>/gi, '*$1*')
+                .replace(/<i[^>]*>(.*?)<\/i>/gi, '*$1*')
+                .replace(/<a[^>]*href=["'](.*?)["'][^>]*>(.*?)<\/a>/gi, '[$2]($1)')
+                .replace(/<img[^>]*src=["'](.*?)["'][^>]*alt=["'](.*?)["'][^>]*>/gi, '![$2]($1)')
+                .replace(/<img[^>]*src=["'](.*?)["'][^>]*>/gi, '![]($1)')
+                .replace(/<blockquote[^>]*>(.*?)<\/blockquote>/gi, '> $1\n\n')
+                .replace(/<ul[^>]*>(.*?)<\/ul>/gis, function(match, content) {
+                    return content.replace(/<li[^>]*>(.*?)<\/li>/gi, '- $1\n') + '\n';
+                })
+                .replace(/<ol[^>]*>(.*?)<\/ol>/gis, function(match, content) {
+                    let counter = 1;
+                    return content.replace(/<li[^>]*>(.*?)<\/li>/gi, function() {
+                        return (counter++) + '. ' + arguments[1] + '\n';
+                    }) + '\n';
+                })
+                .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n')
+                .replace(/<br[^>]*>/gi, '\n')
+                .replace(/<[^>]+>/g, '') // Remove remaining HTML tags
+                .replace(/\n{3,}/g, '\n\n') // Clean up extra newlines
+                .trim();
+        }
+        
+        function showMarkdownHelp() {
+            const helpContent = `
+# Markdown Quick Reference
+
+## Headers
+# H1 Header
+## H2 Header
+### H3 Header
+
+## Text Formatting
+**Bold text**
+*Italic text*
+~~Strikethrough~~
+
+## Links and Images
+[Link text](https://example.com)
+![Alt text](image-url)
+
+## Lists
+- Unordered list item
+- Another item
+
+1. Ordered list item
+2. Another item
+
+## Quotes and Code
+> Blockquote text
+
+\`Inline code\`
+
+\`\`\`
+Code block
+\`\`\`
+
+## Line Breaks
+Two spaces at end of line  
+Creates a line break
+
+Empty line creates new paragraph
+            `;
+            
+            alert(helpContent);
+        }
+        
+        function getCurrentContent() {
+            if (isMarkdownMode) {
+                const markdownText = document.getElementById('markdown-content').value;
+                return marked.parse(markdownText);
+            } else {
+                return quill.root.innerHTML;
             }
         }
         

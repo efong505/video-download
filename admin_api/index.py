@@ -155,10 +155,10 @@ def get_all_users(event):
             'subscription_tier': item.get('subscription_tier', 'free'),
             'subscription_status': item.get('subscription_status', 'active'),
             'next_billing_date': item.get('next_billing_date'),
-            'storage_used': item.get('storage_used', 0),
-            'storage_limit': item.get('storage_limit', 2147483648),
-            'video_count': item.get('video_count', 0),
-            'video_limit': item.get('video_limit', 50)
+            'storage_used': int(item.get('storage_used', 0)),
+            'storage_limit': int(item.get('storage_limit', 2147483648)),
+            'video_count': int(item.get('video_count', 0)),
+            'video_limit': int(item.get('video_limit', 50))
         })
     
     return {
