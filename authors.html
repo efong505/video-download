@@ -182,10 +182,16 @@
         let allAuthors = [];
 
         window.addEventListener('load', function() {
-            loadAuthors();
+            // Check authentication first
+            const authToken = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+            
+            if (!authToken || !userData) {
+                window.location.href = 'login.html';
+                return;
+            }
             
             // Add admin link if user is admin or super_user
-            const userData = localStorage.getItem('user_data');
             if (userData) {
                 const user = JSON.parse(userData);
                 if (user.role === 'admin' || user.role === 'super_user') {
@@ -199,6 +205,8 @@
                     }
                 }
             }
+            
+            loadAuthors();
         });
 
         async function loadAuthors() {

@@ -187,6 +187,9 @@
 
     <script>
         const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';
+        const COMMENTS_API = 'https://l10alau5g3.execute-api.us-east-1.amazonaws.com/prod/comments';
+        let currentArticleId = null;
+        let currentUser = null;
         
         async function loadArticle() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -269,6 +272,15 @@
                         '<input type="text" id="article-url" class="copy-link-input" value="' + currentUrl + '" readonly>' +
                     '</div>' +
                 '</div>' +
+                '<div class="comments-section mt-4">' +
+                    '<h4>💬 Comments</h4>' +
+                    '<div id="comments-container">' +
+                        '<div class="text-center">' +
+                            '<div class="spinner-border spinner-border-sm" role="status"></div>' +
+                            '<span class="ms-2">Loading comments...</span>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
             '</div>';
             
             // Store article data for sharing functions
@@ -278,6 +290,10 @@
                 url: currentUrl,
                 author: article.author
             };
+            
+            // Store article ID and load comments
+            currentArticleId = article.article_id;
+            loadComments();
         }
         
         function viewMyPage() {
@@ -397,6 +413,274 @@
                         navLinks.insertBefore(adminLink, navLinks.lastElementChild);
                     }
                 }
+            }
+        }
+        
+        async function loadComments() {
+            if (!currentArticleId) return;
+            
+            try {
+                const response = await fetch(COMMENTS_API + '?action=list&article_id=' + currentArticleId);
+                const data = await response.json();
+                
+                if (data.comments) {
+                    displayComments(data.comments);
+                } else {
+                    displayNoComments();
+                }
+            } catch (error) {
+                console.error('Error loading comments:', error);
+                displayNoComments();
+            }
+        }
+        
+        function displayComments(comments) {
+            const container = document.getElementById('comments-container');
+            const authToken = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+            
+            if (userData) {
+                currentUser = JSON.parse(userData);
+            }
+            
+            let html = '';
+            
+            // Add comment form for authenticated users
+            if (authToken) {
+                html += '<div class="comment-form mb-4">' +
+                    '<h6>💬 Leave a Comment</h6>' +
+                    '<form onsubmit="submitComment(event)">' +
+                        '<div class="mb-3">' +
+                            '<textarea id="comment-content" class="form-control" rows="3" placeholder="Share your thoughts..." required></textarea>' +
+                        '</div>' +
+                        '<button type="submit" class="btn btn-primary btn-sm">📝 Post Comment</button>' +
+                    '</form>' +
+                '</div>';
+            } else {
+                html += '<div class="alert alert-info mb-4">' +
+                    '<p class="mb-2">💬 Join the conversation! <a href="login.html">Login</a> or <a href="register.html">Sign up</a> to leave a comment.</p>' +
+                '</div>';
+            }
+            
+            if (comments.length === 0) {
+                html += '<p class="text-muted">No comments yet. Be the first to share your thoughts!</p>';
+            } else {
+                html += '<div class="comments-list">';
+                comments.forEach(comment => {
+                    html += renderComment(comment, authToken);
+                });
+                html += '</div>';
+            }
+            
+            container.innerHTML = html;
+        }
+        
+        function renderComment(comment, authToken) {
+            const createdDate = new Date(comment.created_at).toLocaleDateString();
+            const canEdit = authToken && currentUser && 
+                (currentUser.email === comment.author_email || 
+                 currentUser.role === 'admin' || currentUser.role === 'super_user');
+            
+            let html = '<div class="comment mb-3 p-3" style="border-left: 4px solid #667eea; background: #f8f9fa;">' +
+                '<div class="comment-header d-flex justify-content-between align-items-start mb-2">' +
+                    '<div>' +
+                        '<strong>' + comment.author + '</strong>' +
+                        '<small class="text-muted ms-2">' + createdDate + '</small>' +
+                    '</div>';
+            
+            if (canEdit) {
+                html += '<div class="comment-actions">' +
+                    '<button class="btn btn-sm btn-outline-secondary me-1" onclick="editComment(\'' + comment.comment_id + '\', \'' + comment.content.replace(/'/g, "\\'") + '\')">' +
+                        '✏️ Edit' +
+                    '</button>' +
+                    '<button class="btn btn-sm btn-outline-danger" onclick="deleteComment(\'' + comment.comment_id + '\')">' +
+                        '🗑️ Delete' +
+                    '</button>' +
+                '</div>';
+            }
+            
+            html += '</div>' +
+                '<div class="comment-content" id="comment-' + comment.comment_id + '">' +
+                    '<p>' + comment.content + '</p>' +
+                '</div>';
+            
+            // Add replies if any
+            if (comment.replies && comment.replies.length > 0) {
+                html += '<div class="replies ms-4 mt-3">';
+                comment.replies.forEach(reply => {
+                    html += renderComment(reply, authToken);
+                });
+                html += '</div>';
+            }
+            
+            // Add reply button for authenticated users
+            if (authToken) {
+                html += '<div class="mt-2">' +
+                    '<button class="btn btn-sm btn-outline-primary" onclick="showReplyForm(\'' + comment.comment_id + '\')">' +
+                        '↩️ Reply' +
+                    '</button>' +
+                '</div>';
+            }
+            
+            html += '</div>';
+            return html;
+        }
+        
+        function displayNoComments() {
+            const container = document.getElementById('comments-container');
+            const authToken = localStorage.getItem('auth_token');
+            
+            let html = '';
+            
+            if (authToken) {
+                html += '<div class="comment-form mb-4">' +
+                    '<h6>💬 Leave a Comment</h6>' +
+                    '<form onsubmit="submitComment(event)">' +
+                        '<div class="mb-3">' +
+                            '<textarea id="comment-content" class="form-control" rows="3" placeholder="Share your thoughts..." required></textarea>' +
+                        '</div>' +
+                        '<button type="submit" class="btn btn-primary btn-sm">📝 Post Comment</button>' +
+                    '</form>' +
+                '</div>';
+            }
+            
+            html += '<p class="text-muted">No comments yet. Be the first to share your thoughts!</p>';
+            container.innerHTML = html;
+        }
+        
+        async function submitComment(event) {
+            event.preventDefault();
+            
+            const content = document.getElementById('comment-content').value.trim();
+            const authToken = localStorage.getItem('auth_token');
+            
+            if (!content || !authToken) return;
+            
+            try {
+                const response = await fetch(COMMENTS_API + '?action=create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + authToken
+                    },
+                    body: JSON.stringify({
+                        article_id: currentArticleId,
+                        content: content
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('comment-content').value = '';
+                    loadComments(); // Reload comments
+                } else {
+                    alert('Error posting comment: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error posting comment: ' + error.message);
+            }
+        }
+        
+        async function deleteComment(commentId) {
+            if (!confirm('Are you sure you want to delete this comment?')) return;
+            
+            const authToken = localStorage.getItem('auth_token');
+            if (!authToken) return;
+            
+            try {
+                const response = await fetch(COMMENTS_API + '?action=delete&comment_id=' + commentId, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + authToken
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    loadComments(); // Reload comments
+                } else {
+                    alert('Error deleting comment: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error deleting comment: ' + error.message);
+            }
+        }
+        
+        function editComment(commentId, currentContent) {
+            const commentDiv = document.getElementById('comment-' + commentId);
+            const newContent = prompt('Edit your comment:', currentContent);
+            
+            if (newContent && newContent.trim() !== currentContent) {
+                updateComment(commentId, newContent.trim());
+            }
+        }
+        
+        async function updateComment(commentId, newContent) {
+            const authToken = localStorage.getItem('auth_token');
+            if (!authToken) return;
+            
+            try {
+                const response = await fetch(COMMENTS_API + '?action=update', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + authToken
+                    },
+                    body: JSON.stringify({
+                        comment_id: commentId,
+                        content: newContent
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    loadComments(); // Reload comments
+                } else {
+                    alert('Error updating comment: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error updating comment: ' + error.message);
+            }
+        }
+        
+        function showReplyForm(parentId) {
+            // Simple implementation - could be enhanced with inline reply forms
+            const content = prompt('Enter your reply:');
+            if (content && content.trim()) {
+                submitReply(parentId, content.trim());
+            }
+        }
+        
+        async function submitReply(parentId, content) {
+            const authToken = localStorage.getItem('auth_token');
+            if (!authToken) return;
+            
+            try {
+                const response = await fetch(COMMENTS_API + '?action=create', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + authToken
+                    },
+                    body: JSON.stringify({
+                        article_id: currentArticleId,
+                        content: content,
+                        parent_id: parentId
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    loadComments(); // Reload comments
+                } else {
+                    alert('Error posting reply: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error posting reply: ' + error.message);
             }
         }
         
