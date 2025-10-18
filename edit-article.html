@@ -188,6 +188,13 @@
                         </div>
 
                         <div class="mb-3">
+                            <label class="form-label">Featured Image</label>
+                            <input type="file" id="featured-image" class="form-control" accept="image/*">
+                            <div class="form-text">Optional: Upload a new featured image for social media sharing and article preview</div>
+                            <div id="featured-image-preview" class="mt-2"></div>
+                        </div>
+
+                        <div class="mb-3">
                             <label class="form-label">Article Content</label>
                             <div class="mb-2">
                                 <button type="button" class="btn btn-outline-primary btn-sm" onclick="showBibleLookup()">📖 Insert Bible Verse</button>
@@ -287,6 +294,39 @@
             await loadArticle();
         });
 
+        function setupFeaturedImageHandler() {
+            const featuredImageInput = document.getElementById('featured-image');
+            featuredImageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        compressImage(e.target.result, function(compressedDataUrl) {
+                            showFeaturedImagePreview(compressedDataUrl);
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        function showFeaturedImagePreview(dataUrl) {
+            const previewDiv = document.getElementById('featured-image-preview');
+            previewDiv.innerHTML = 
+                '<div class="card" style="max-width: 300px;">' +
+                    '<img src="' + dataUrl + '" class="card-img-top" style="height: 150px; object-fit: cover;">' +
+                    '<div class="card-body p-2">' +
+                        '<small class="text-muted">New Featured Image Preview</small>' +
+                        '<button type="button" class="btn btn-sm btn-outline-danger ms-2" onclick="removeFeaturedImage()">Remove</button>' +
+                    '</div>' +
+                '</div>';
+        }
+        
+        function removeFeaturedImage() {
+            document.getElementById('featured-image').value = '';
+            document.getElementById('featured-image-preview').innerHTML = '';
+        }
+
         async function loadArticle() {
             try {
                 const response = await fetch(ARTICLES_API + '?action=get&article_id=' + articleId, {
@@ -299,6 +339,7 @@
                 if (data.article) {
                     initializeEditor();
                     addImageResizeFeature();
+                    setupFeaturedImageHandler();
                     populateForm(data.article);
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('edit-form').style.display = 'block';
@@ -528,6 +569,29 @@
             if (quill) {
                 quill.root.innerHTML = article.content;
             }
+            
+            // Show existing featured image if present
+            if (article.featured_image) {
+                showExistingFeaturedImage(article.featured_image);
+            }
+        }
+        
+        function showExistingFeaturedImage(imageData) {
+            const previewDiv = document.getElementById('featured-image-preview');
+            previewDiv.innerHTML = 
+                '<div class="card" style="max-width: 300px;">' +
+                    '<img src="' + imageData + '" class="card-img-top" style="height: 150px; object-fit: cover;">' +
+                    '<div class="card-body p-2">' +
+                        '<small class="text-muted">Current Featured Image</small>' +
+                        '<button type="button" class="btn btn-sm btn-outline-danger ms-2" onclick="removeExistingFeaturedImage()">Remove</button>' +
+                    '</div>' +
+                '</div>';
+        }
+        
+        function removeExistingFeaturedImage() {
+            document.getElementById('featured-image-preview').innerHTML = '';
+            // Mark for removal in form submission
+            document.getElementById('featured-image-preview').setAttribute('data-remove-existing', 'true');
         }
 
         document.getElementById('article-form').addEventListener('submit', async function(e) {
@@ -538,6 +602,7 @@
             const tags = document.getElementById('article-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
             const visibility = document.getElementById('article-visibility').value;
             const content = quill ? quill.root.innerHTML : '';
+            const featuredImageInput = document.getElementById('featured-image');
             
             let updateData = {
                 article_id: articleId,
@@ -547,6 +612,26 @@
                 tags: tags,
                 visibility: visibility
             };
+            
+            // Handle featured image update
+            const previewDiv = document.getElementById('featured-image-preview');
+            if (previewDiv.getAttribute('data-remove-existing') === 'true') {
+                // User wants to remove existing image
+                updateData.featured_image = '';
+            } else if (featuredImageInput.files[0]) {
+                // User uploaded a new image - compress and include it
+                const file = featuredImageInput.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    compressImage(e.target.result, function(compressedDataUrl) {
+                        updateData.featured_image = compressedDataUrl;
+                        submitArticleUpdate(updateData);
+                    });
+                };
+                reader.readAsDataURL(file);
+                return; // Exit here, submitArticleUpdate will be called from the callback
+            }
+            // If no changes to featured image, don't include it in update
             
             // Include author change if admin/super user
             if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
@@ -561,6 +646,10 @@
                 return;
             }
             
+            submitArticleUpdate(updateData);
+        });
+        
+        async function submitArticleUpdate(updateData) {
             try {
                 const response = await fetch(ARTICLES_API + '?action=update', {
                     method: 'PUT',
@@ -583,7 +672,7 @@
                 console.error('Error updating article:', error);
                 alert('Error updating article. Please try again.');
             }
-        });
+        }
 
         let currentVerse = null;
 

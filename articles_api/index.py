@@ -616,6 +616,10 @@ def update_article(event):
             update_expression += ', visibility = :vis'
             expression_values[':vis'] = body['visibility']
         
+        if 'featured_image' in body:
+            update_expression += ', featured_image = :img'
+            expression_values[':img'] = body['featured_image']
+        
         if 'author_email' in body:
             # Get new author's name
             new_author_name = get_user_name(body['author_email'])
