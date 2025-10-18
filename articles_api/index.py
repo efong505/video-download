@@ -513,7 +513,7 @@ def list_articles(event):
         }
 
 def get_article(event):
-    """Get a single article by ID"""
+    """Get a single article by ID - supports public access for public articles"""
     query_params = event.get('queryStringParameters') or {}
     article_id = query_params.get('article_id')
     
@@ -534,6 +534,34 @@ def get_article(event):
                 'headers': cors_headers(),
                 'body': json.dumps({'error': 'Article not found'})
             }
+        
+        # Check if article is private and user is not authenticated
+        if article.get('visibility') == 'private':
+            user_info = extract_user_from_token(event)
+            if not user_info:
+                return {
+                    'statusCode': 401,
+                    'headers': cors_headers(),
+                    'body': json.dumps({'error': 'Authentication required for private articles'})
+                }
+            
+            # Check if user can access this private article (author or admin)
+            user_email = user_info['email']
+            user_role = user_info['role']
+            article_author_email = article.get('author_email', '')
+            
+            if user_role not in ['super_user', 'admin'] and user_email != article_author_email:
+                return {
+                    'statusCode': 403,
+                    'headers': cors_headers(),
+                    'body': json.dumps({'error': 'Access denied to private article'})
+                }
+        
+        # Fix author name if it's an email
+        author_field = article.get('author', '')
+        if '@' in author_field:
+            proper_name = get_user_name(author_field)
+            article['author'] = proper_name
         
         # Increment view count
         articles_table.update_item(

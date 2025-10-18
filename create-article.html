@@ -222,6 +222,13 @@
                         </div>
 
                         <div class="mb-3">
+                            <label class="form-label">Featured Image</label>
+                            <input type="file" id="featured-image" class="form-control" accept="image/*">
+                            <div class="form-text">Optional: Upload a featured image for social media sharing and article preview</div>
+                            <div id="featured-image-preview" class="mt-2"></div>
+                        </div>
+
+                        <div class="mb-3">
                             <label class="form-label">Article Content</label>
                             <div class="mb-2">
                                 <button type="button" class="btn btn-outline-secondary btn-sm" onclick="resizeLastVideo()" id="resize-video-btn">📐 Resize Last Video</button>
@@ -482,11 +489,45 @@
             currentUser = JSON.parse(userData);
             initializeEditor();
             addImageResizeFeature();
+            setupFeaturedImageHandler();
             
             setTimeout(function() {
                 loadTemplates();
             }, 100);
         });
+        
+        function setupFeaturedImageHandler() {
+            var featuredImageInput = document.getElementById('featured-image');
+            featuredImageInput.addEventListener('change', function(e) {
+                var file = e.target.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        compressImage(e.target.result, function(compressedDataUrl) {
+                            showFeaturedImagePreview(compressedDataUrl);
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        function showFeaturedImagePreview(dataUrl) {
+            var previewDiv = document.getElementById('featured-image-preview');
+            previewDiv.innerHTML = 
+                '<div class="card" style="max-width: 300px;">' +
+                    '<img src="' + dataUrl + '" class="card-img-top" style="height: 150px; object-fit: cover;">' +
+                    '<div class="card-body p-2">' +
+                        '<small class="text-muted">Featured Image Preview</small>' +
+                        '<button type="button" class="btn btn-sm btn-outline-danger ms-2" onclick="removeFeaturedImage()">Remove</button>' +
+                    '</div>' +
+                '</div>';
+        }
+        
+        function removeFeaturedImage() {
+            document.getElementById('featured-image').value = '';
+            document.getElementById('featured-image-preview').innerHTML = '';
+        }
 
         function loadTemplates() {
             fetch(ARTICLES_API + '?action=templates')
@@ -683,12 +724,31 @@
             var tags = document.getElementById('article-tags').value.split(',').map(function(tag) { return tag.trim(); }).filter(function(tag) { return tag; });
             var visibility = document.getElementById('article-visibility').value;
             var content = quill ? quill.root.innerHTML : '';
+            var featuredImageInput = document.getElementById('featured-image');
+            var featuredImage = '';
+            
+            // Get featured image if uploaded
+            if (featuredImageInput.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    compressImage(e.target.result, function(compressedDataUrl) {
+                        submitArticle(title, category, tags, visibility, content, compressedDataUrl);
+                    });
+                };
+                reader.readAsDataURL(featuredImageInput.files[0]);
+                return; // Exit here, submitArticle will be called from the reader callback
+            }
+            
+            // No featured image, submit directly
+            submitArticle(title, category, tags, visibility, content, '');
             
             if (!title || !content) {
                 alert('Please fill in the title and content');
                 return;
             }
-            
+        });
+        
+        function submitArticle(title, category, tags, visibility, content, featuredImage) {
             fetch(ARTICLES_API + '?action=create', {
                 method: 'POST',
                 headers: {
@@ -702,7 +762,8 @@
                     category: category,
                     template_used: selectedTemplate || 'custom',
                     tags: tags,
-                    visibility: visibility
+                    visibility: visibility,
+                    featured_image: featuredImage
                 })
             })
             .then(function(response) { return response.json(); })
@@ -718,8 +779,17 @@
                 console.error('Error publishing article:', error);
                 alert('Error publishing article. Please try again.');
             });
+        }
         });
 
+        function viewMyPage() {
+            var userData = localStorage.getItem('user_data');
+            if (userData) {
+                var user = JSON.parse(userData);
+                window.location.href = 'user-page.html?user=' + encodeURIComponent(user.email);
+            }
+        }
+        
         function logout() {
             localStorage.removeItem('auth_token');
             localStorage.removeItem('user_data');
