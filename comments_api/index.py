@@ -33,6 +33,10 @@ def lambda_handler(event, context):
             return update_comment(event)
         elif method == 'DELETE' and action == 'delete':
             return delete_comment(event)
+        elif method == 'GET' and action == 'admin_list':
+            return admin_list_comments(event)
+        elif method == 'PUT' and action == 'bulk_action':
+            return bulk_comment_action(event)
         else:
             return {
                 'statusCode': 404,
@@ -339,6 +343,106 @@ def convert_decimals(obj):
     elif isinstance(obj, Decimal):
         return int(obj) if obj % 1 == 0 else float(obj)
     return obj
+
+def admin_list_comments(event):
+    headers = cors_headers()
+    
+    try:
+        user_info = extract_user_from_token(event)
+        if not user_info or user_info['role'] not in ['admin', 'super_user']:
+            return {
+                'statusCode': 403,
+                'headers': headers,
+                'body': json.dumps({'error': 'Admin access required'})
+            }
+        
+        # Get all comments for admin review
+        response = comments_table.scan()
+        comments = response.get('Items', [])
+        
+        # Sort by created_at descending (newest first)
+        comments.sort(key=lambda x: x.get('created_at', ''), reverse=True)
+        
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps({
+                'comments': convert_decimals(comments),
+                'count': len(comments)
+            })
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': headers,
+            'body': json.dumps({'error': str(e)})
+        }
+
+def bulk_comment_action(event):
+    headers = cors_headers()
+    
+    try:
+        user_info = extract_user_from_token(event)
+        if not user_info or user_info['role'] not in ['admin', 'super_user']:
+            return {
+                'statusCode': 403,
+                'headers': headers,
+                'body': json.dumps({'error': 'Admin access required'})
+            }
+        
+        body = json.loads(event['body'])
+        comment_ids = body.get('comment_ids', [])
+        action = body.get('action')  # 'delete', 'restore'
+        
+        if not comment_ids or not action:
+            return {
+                'statusCode': 400,
+                'headers': headers,
+                'body': json.dumps({'error': 'comment_ids and action required'})
+            }
+        
+        updated_count = 0
+        
+        for comment_id in comment_ids:
+            try:
+                if action == 'delete':
+                    comments_table.update_item(
+                        Key={'comment_id': comment_id},
+                        UpdateExpression='SET is_deleted = :deleted, updated_at = :updated',
+                        ExpressionAttributeValues={
+                            ':deleted': True,
+                            ':updated': datetime.utcnow().isoformat()
+                        }
+                    )
+                elif action == 'restore':
+                    comments_table.update_item(
+                        Key={'comment_id': comment_id},
+                        UpdateExpression='SET is_deleted = :deleted, updated_at = :updated',
+                        ExpressionAttributeValues={
+                            ':deleted': False,
+                            ':updated': datetime.utcnow().isoformat()
+                        }
+                    )
+                updated_count += 1
+            except Exception:
+                continue
+        
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps({
+                'message': f'{updated_count} comments {action}d successfully',
+                'updated_count': updated_count
+            })
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': headers,
+            'body': json.dumps({'error': str(e)})
+        }
 
 def cors_headers():
     return {
