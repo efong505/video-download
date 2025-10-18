@@ -566,8 +566,10 @@
                 'sermon': '⛪',
                 'devotional': '🙏',
                 'bible_study': '📚',
+                'political': '🇺🇸',
                 'political_commentary': '🇺🇸',
                 'politics': '🇺🇸',
+                'christian_politics_commentary': '🇺🇸',
                 'service_notes': '⛪',
                 'study_notes': '📝'
             };
@@ -709,11 +711,22 @@
         }
 
         function saveDraft() {
-            alert('Draft functionality not implemented yet');
+            var title = document.getElementById('article-title').value.trim();
+            if (!title) {
+                alert('Please enter a title to save draft');
+                return;
+            }
+            window.open('draft-manager.html', 'draftWindow', 'width=600,height=400,scrollbars=yes');
         }
 
         function previewArticle() {
-            alert('Preview functionality not implemented yet');
+            var title = document.getElementById('article-title').value.trim();
+            var content = quill ? quill.root.innerHTML : '';
+            if (!title || !content) {
+                alert('Please enter title and content to preview');
+                return;
+            }
+            window.open('article-preview.html', 'previewWindow', 'width=800,height=600,scrollbars=yes');
         }
 
         document.getElementById('article-form').addEventListener('submit', function(e) {
@@ -725,7 +738,11 @@
             var visibility = document.getElementById('article-visibility').value;
             var content = quill ? quill.root.innerHTML : '';
             var featuredImageInput = document.getElementById('featured-image');
-            var featuredImage = '';
+            
+            if (!title || !content) {
+                alert('Please fill in the title and content');
+                return;
+            }
             
             // Get featured image if uploaded
             if (featuredImageInput.files[0]) {
@@ -741,11 +758,6 @@
             
             // No featured image, submit directly
             submitArticle(title, category, tags, visibility, content, '');
-            
-            if (!title || !content) {
-                alert('Please fill in the title and content');
-                return;
-            }
         });
         
         function submitArticle(title, category, tags, visibility, content, featuredImage) {
@@ -780,8 +792,6 @@
                 alert('Error publishing article. Please try again.');
             });
         }
-        });
-
         function viewMyPage() {
             var userData = localStorage.getItem('user_data');
             if (userData) {
@@ -796,6 +806,8 @@
             window.location.href = 'login.html';
         }
     </script>
+    
+
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -289,7 +289,11 @@
 
         async function loadArticle() {
             try {
-                const response = await fetch(ARTICLES_API + '?action=get&article_id=' + articleId);
+                const response = await fetch(ARTICLES_API + '?action=get&article_id=' + articleId, {
+                    headers: {
+                        'Authorization': 'Bearer ' + authToken
+                    }
+                });
                 const data = await response.json();
                 
                 if (data.article) {

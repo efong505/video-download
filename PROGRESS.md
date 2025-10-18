@@ -659,6 +659,7 @@ articles-table:
 - **OPEN GRAPH META TAGS**: Dynamic meta tag updates for rich social media previews
 - **COPY LINK FUNCTIONALITY**: One-click article link copying with visual feedback and fallback support
 - **PUBLIC ARTICLE ACCESS**: Non-authenticated users can now view public articles, improving ministry outreach and viral potential
+- **FEATURED IMAGE SYSTEM**: Complete image upload, compression, display in listings and articles, Open Graph integration for rich social media previews
 
 ## Phase 3 Step 4: Advanced Features
 **Status**: Items 8-10 from Implementation Status above
@@ -667,7 +668,8 @@ articles-table:
 - [x] **Search functionality for articles** ✅ COMPLETE - Full-text search, category search, tag search, author search
 - [x] **Article sharing and social media integration** ✅ COMPLETE - Social media sharing buttons, link copying, Open Graph meta tags
 - [x] **Public article viewing** ✅ COMPLETE - Non-authenticated users can access public articles for improved ministry outreach
-- [ ] **Featured image system** - Upload/select featured images for articles, thumbnail display in listings, image preview in article view, fallback image system
+- [x] **Featured image system** ✅ COMPLETE - Upload featured images, thumbnail display in listings, Open Graph integration, image compression
+- [ ] **Auto-summary for resources** - AI-powered website analysis to generate descriptions from URLs, with admin override capability and manual editing
 - [ ] **Related articles suggestions** - Algorithm-based article recommendations
 - [ ] **Article analytics and view tracking** - Detailed analytics, view statistics, engagement metrics
 - [ ] **Advanced ministry tools** - Enhanced features for ministry use (see Phase 3 item 4 above for full list)ARTICLE ENHANCEMENTS**: Draft/preview functionality, service notes template, study notes category, and editing capabilities

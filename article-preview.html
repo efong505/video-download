@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Preview</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .preview-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        .article-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+        .article-meta {
+            color: #666;
+            font-size: 0.9em;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="preview-header">
+        <div class="container">
+            <h1>👁️ Article Preview</h1>
+            <p class="mb-0">This is how your article will appear to readers</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div id="preview-content" class="article-content">
+                    <div class="text-center">
+                        <div class="spinner-border" role="status"></div>
+                        <p class="mt-2">Loading preview...</p>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button class="btn btn-secondary" onclick="window.close()">Close Preview</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', function() {
+            if (window.opener) {
+                try {
+                    var title = window.opener.document.getElementById('article-title').value.trim();
+                    var category = window.opener.document.getElementById('article-category').value;
+                    var content = window.opener.quill ? window.opener.quill.root.innerHTML : '';
+                    var author = window.opener.currentUser ? window.opener.currentUser.email : 'Author';
+                    
+                    if (!title || !content) {
+                        document.getElementById('preview-content').innerHTML = 
+                            '<div class="alert alert-warning">Please enter title and content in the main window to preview.</div>';
+                        return;
+                    }
+                    
+                    var previewHtml = 
+                        '<h1>' + title + '</h1>' +
+                        '<div class="article-meta">' +
+                            '<span class="badge bg-primary me-2">' + category + '</span>' +
+                            'By ' + author + ' • ' + new Date().toLocaleDateString() + ' • Preview Mode' +
+                        '</div>' +
+                        '<div class="article-body">' + content + '</div>';
+                    
+                    document.getElementById('preview-content').innerHTML = previewHtml;
+                    document.title = 'Preview: ' + title;
+                } catch (error) {
+                    document.getElementById('preview-content').innerHTML = 
+                        '<div class="alert alert-danger">Error loading preview. Please make sure the create article window is still open.</div>';
+                }
+            } else {
+                document.getElementById('preview-content').innerHTML = 
+                    '<div class="alert alert-info">This preview page should be opened from the create article page.</div>';
+            }
+        });
+    </script>
+</body>
+</html>

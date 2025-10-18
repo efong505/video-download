@@ -243,12 +243,18 @@
                     '<a href="register.html" class="btn btn-outline-primary">📝 Sign Up Free</a>' +
                 '</div>' : '';
             
+            const featuredImageHtml = article.featured_image ? 
+                '<div class="mb-4">' +
+                    '<img src="' + article.featured_image + '" class="img-fluid rounded" style="width: 100%; max-height: 400px; object-fit: cover;" alt="' + article.title + '">' +
+                '</div>' : '';
+            
             container.innerHTML = loginPrompt + '<div class="article-content">' +
                 '<h1>' + article.title + '</h1>' +
                 '<div class="article-meta">' +
                     '<span class="badge bg-primary me-2">' + article.category + '</span>' +
                     'By ' + article.author + ' • ' + createdDate + ' • ' + article.reading_time + ' min read • ' + article.view_count + ' views' +
                 '</div>' +
+                featuredImageHtml +
                 '<div class="article-body">' + article.content + '</div>' +
                 '<div class="sharing-section">' +
                     '<h5>📢 Share this article</h5>' +
@@ -303,6 +309,12 @@
             document.getElementById('og-title').setAttribute('content', article.title);
             document.getElementById('og-description').setAttribute('content', excerpt);
             document.getElementById('og-url').setAttribute('content', window.location.href);
+            
+            // Update image meta tags if featured image exists
+            if (article.featured_image) {
+                document.getElementById('og-image').setAttribute('content', article.featured_image);
+                document.getElementById('twitter-image').setAttribute('content', article.featured_image);
+            }
             
             // Update Twitter tags
             document.getElementById('twitter-title').setAttribute('content', article.title);
