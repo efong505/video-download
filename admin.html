@@ -2303,15 +2303,52 @@
             setupResourceForm();
         }
         
-        function loadResourceCategories() {
-            let categories = JSON.parse(localStorage.getItem('resource_categories') || '[]');
-            if (categories.length === 0) {
-                categories = ['Research Resources', 'Educational', 'Financial', 'News & Media', 'Ministry Tools', 'Apologetics'];
-                localStorage.setItem('resource_categories', JSON.stringify(categories));
+        async function loadResourceCategories() {
+            try {
+                // Check if we need to migrate from localStorage
+                await migrateLocalCategoriesToAPI();
+                
+                const response = await fetch(`${RESOURCES_API}?action=get_categories`);
+                const categories = await response.json();
+                displayCategories(categories);
+                populateCategorySelect(categories);
+            } catch (error) {
+                console.error('Failed to load categories:', error);
+                const defaultCategories = ['Research Resources', 'Educational', 'Financial', 'News & Media', 'Ministry Tools', 'Apologetics'];
+                displayCategories(defaultCategories);
+                populateCategorySelect(defaultCategories);
             }
+        }
+        
+        async function migrateLocalCategoriesToAPI() {
+            const migrated = localStorage.getItem('categories_migrated');
+            if (migrated) return; // Already migrated
             
-            displayCategories(categories);
-            populateCategorySelect(categories);
+            try {
+                const localCategories = JSON.parse(localStorage.getItem('resource_categories') || '[]');
+                if (localCategories.length > 0) {
+                    // Get existing API categories
+                    const response = await fetch(`${RESOURCES_API}?action=get_categories`);
+                    const apiCategories = await response.json();
+                    
+                    // Merge local categories with API categories (avoid duplicates)
+                    const mergedCategories = [...new Set([...apiCategories, ...localCategories])];
+                    
+                    // Save merged categories to API
+                    await fetch(`${RESOURCES_API}?action=save_categories`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ categories: mergedCategories })
+                    });
+                    
+                    console.log('Migrated categories from localStorage to API:', localCategories);
+                }
+                
+                // Mark as migrated
+                localStorage.setItem('categories_migrated', 'true');
+            } catch (error) {
+                console.error('Failed to migrate categories:', error);
+            }
         }
         
         function displayCategories(categories) {
@@ -2342,81 +2379,130 @@
             });
         }
         
-        function addCategory() {
+        async function addCategory() {
             const name = document.getElementById('new-category-name').value.trim();
             if (!name) {
                 document.getElementById('resources-message').innerHTML = '<div class="error">Please enter a category name</div>';
                 return;
             }
             
-            // Auto-select emoji based on category name
-            const emoji = getCategoryEmoji(name);
-            
-            let categories = JSON.parse(localStorage.getItem('resource_categories') || '[]');
-            if (categories.includes(name)) {
-                document.getElementById('resources-message').innerHTML = '<div class="error">Category already exists</div>';
-                return;
+            try {
+                const response = await fetch(`${RESOURCES_API}?action=get_categories`);
+                const categories = await response.json();
+                
+                if (categories.includes(name)) {
+                    document.getElementById('resources-message').innerHTML = '<div class="error">Category already exists</div>';
+                    return;
+                }
+                
+                categories.push(name);
+                await fetch(`${RESOURCES_API}?action=save_categories`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ categories: categories })
+                });
+                
+                document.getElementById('new-category-name').value = '';
+                document.getElementById('resources-message').innerHTML = '<div class="success">Category added successfully</div>';
+                loadResourceCategories();
+                loadResourceCategoryOrder();
+            } catch (error) {
+                document.getElementById('resources-message').innerHTML = `<div class="error">Failed to add category: ${error.message}</div>`;
             }
-            
-            categories.push(name);
-            localStorage.setItem('resource_categories', JSON.stringify(categories));
-            document.getElementById('new-category-name').value = '';
-            document.getElementById('resources-message').innerHTML = '<div class="success">Category added successfully</div>';
-            loadResourceCategories();
-            loadResourceCategoryOrder();
         }
         
-        function editCategory(oldName) {
+        async function editCategory(oldName) {
             const newName = prompt(`Rename category "${oldName}" to:`, oldName);
             if (!newName || newName === oldName) return;
             
-            let categories = JSON.parse(localStorage.getItem('resource_categories') || '[]');
-            const index = categories.indexOf(oldName);
-            if (index !== -1) {
-                categories[index] = newName;
-                localStorage.setItem('resource_categories', JSON.stringify(categories));
+            try {
+                const catResponse = await fetch(`${RESOURCES_API}?action=get_categories`);
+                const categories = await catResponse.json();
+                const index = categories.indexOf(oldName);
                 
-                // Update existing resources with this category
-                let resources = JSON.parse(localStorage.getItem('admin_resources') || '[]');
-                resources.forEach(resource => {
-                    if (resource.category === oldName) {
-                        resource.category = newName;
+                if (index !== -1) {
+                    categories[index] = newName;
+                    await fetch(`${RESOURCES_API}?action=save_categories`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ categories: categories })
+                    });
+                    
+                    // Update existing resources with this category
+                    const resResponse = await fetch(`${RESOURCES_API}?action=list`);
+                    const resources = await resResponse.json();
+                    
+                    for (const resource of resources) {
+                        if (resource.category === oldName) {
+                            await fetch(`${RESOURCES_API}?action=update`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    id: resource.id,
+                                    name: resource.name,
+                                    category: newName,
+                                    url: resource.url,
+                                    description: resource.description
+                                })
+                            });
+                        }
                     }
-                });
-                localStorage.setItem('admin_resources', JSON.stringify(resources));
-                
-                document.getElementById('resources-message').innerHTML = '<div class="success">Category renamed successfully</div>';
-                loadResourceCategories();
-                loadResourceCategoryOrder();
+                    
+                    document.getElementById('resources-message').innerHTML = '<div class="success">Category renamed successfully</div>';
+                    loadResourceCategories();
+                    loadResourceCategoryOrder();
+                }
+            } catch (error) {
+                document.getElementById('resources-message').innerHTML = `<div class="error">Failed to rename category: ${error.message}</div>`;
             }
         }
         
-        function deleteCategory(categoryName) {
+        async function deleteCategory(categoryName) {
             if (!confirm(`Are you sure you want to delete category "${categoryName}"? Resources in this category will be moved to "General".`)) return;
             
-            let categories = JSON.parse(localStorage.getItem('resource_categories') || '[]');
-            categories = categories.filter(cat => cat !== categoryName);
-            
-            // Ensure "General" category exists
-            if (!categories.includes('General')) {
-                categories.push('General');
-            }
-            
-            localStorage.setItem('resource_categories', JSON.stringify(categories));
-            
-            // Update existing resources with this category
-            let resources = JSON.parse(localStorage.getItem('admin_resources') || '[]');
-            resources.forEach(resource => {
-                if (resource.category === categoryName) {
-                    resource.category = 'General';
+            try {
+                const catResponse = await fetch(`${RESOURCES_API}?action=get_categories`);
+                let categories = await catResponse.json();
+                categories = categories.filter(cat => cat !== categoryName);
+                
+                // Ensure "General" category exists
+                if (!categories.includes('General')) {
+                    categories.push('General');
                 }
-            });
-            localStorage.setItem('admin_resources', JSON.stringify(resources));
-            
-            document.getElementById('resources-message').innerHTML = '<div class="success">Category deleted successfully</div>';
-            loadResourceCategories();
-            loadResourceCategoryOrder();
-            loadResourcesList();
+                
+                await fetch(`${RESOURCES_API}?action=save_categories`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ categories: categories })
+                });
+                
+                // Update existing resources with this category
+                const resResponse = await fetch(`${RESOURCES_API}?action=list`);
+                const resources = await resResponse.json();
+                
+                for (const resource of resources) {
+                    if (resource.category === categoryName) {
+                        await fetch(`${RESOURCES_API}?action=update`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                id: resource.id,
+                                name: resource.name,
+                                category: 'General',
+                                url: resource.url,
+                                description: resource.description
+                            })
+                        });
+                    }
+                }
+                
+                document.getElementById('resources-message').innerHTML = '<div class="success">Category deleted successfully</div>';
+                loadResourceCategories();
+                loadResourceCategoryOrder();
+                loadResourcesList();
+            } catch (error) {
+                document.getElementById('resources-message').innerHTML = `<div class="error">Failed to delete category: ${error.message}</div>`;
+            }
         }
         
         function setupResourceForm() {
@@ -3283,6 +3369,7 @@
         function getCategoryEmoji(categoryName) {
             const name = categoryName.toLowerCase();
             const emojiMap = {
+                'business': '💼',
                 'research': '🔍',
                 'educational': '🎓',
                 'education': '🎓',
@@ -3291,7 +3378,6 @@
                 'financial': '💰',
                 'finance': '💰',
                 'money': '💰',
-                'business': '💼',
                 'news': '📰',
                 'media': '📺',
                 'ministry': '✝️',

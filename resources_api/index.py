@@ -29,6 +29,10 @@ def lambda_handler(event, context):
             return get_category_order(headers)
         elif action == 'save_order':
             return save_category_order(event, headers)
+        elif action == 'get_categories':
+            return get_categories(headers)
+        elif action == 'save_categories':
+            return save_categories(event, headers)
         else:
             return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'Invalid action'})}
     except Exception as e:
@@ -39,10 +43,10 @@ def list_resources(headers):
     resources = response.get('Items', [])
     # Normalize resource_id to id for frontend compatibility
     for resource in resources:
-        if 'resource_id' in resource and resource['resource_id'] != '_category_order':
+        if 'resource_id' in resource and resource['resource_id'] not in ['_category_order', '_categories']:
             resource['id'] = resource['resource_id']
-    # Filter out the category order item
-    resources = [r for r in resources if r.get('resource_id') != '_category_order']
+    # Filter out the category order and categories items
+    resources = [r for r in resources if r.get('resource_id') not in ['_category_order', '_categories']]
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps(resources, default=str)}
 
 def create_resource(event, headers):
@@ -110,3 +114,22 @@ def save_category_order(event, headers):
     
     table.put_item(Item={'resource_id': '_category_order', 'order': order})
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Order saved'})}
+
+def get_categories(headers):
+    try:
+        response = table.get_item(Key={'resource_id': '_categories'})
+        if 'Item' in response:
+            return {'statusCode': 200, 'headers': headers, 'body': json.dumps(response['Item']['categories'])}
+        # Return default categories if none exist
+        default_categories = ['Research Resources', 'Educational', 'Financial', 'News & Media', 'Ministry Tools', 'Apologetics']
+        return {'statusCode': 200, 'headers': headers, 'body': json.dumps(default_categories)}
+    except:
+        default_categories = ['Research Resources', 'Educational', 'Financial', 'News & Media', 'Ministry Tools', 'Apologetics']
+        return {'statusCode': 200, 'headers': headers, 'body': json.dumps(default_categories)}
+
+def save_categories(event, headers):
+    body = json.loads(event.get('body', '{}'))
+    categories = body.get('categories', [])
+    
+    table.put_item(Item={'resource_id': '_categories', 'categories': categories})
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Categories saved'})}
