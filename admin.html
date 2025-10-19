@@ -353,7 +353,14 @@
                         </div>
                         <div class="form-group">
                             <label>Website URL:</label>
-                            <input type="url" id="resource-url" placeholder="https://example.com" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                            <div style="display: flex; gap: 10px;">
+                                <input type="url" id="resource-url" placeholder="https://example.com" required style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                                <button type="button" class="btn btn-primary" onclick="analyzeResourceUrl()" id="analyze-resource-btn" style="white-space: nowrap;">
+                                    <span id="analyze-resource-text">🔍 Auto-Fill</span>
+                                    <span id="analyze-resource-spinner" class="spinner-border spinner-border-sm" style="display:none;"></span>
+                                </button>
+                            </div>
+                            <small style="color: #666;">Paste URL and click Auto-Fill to extract title and description</small>
                         </div>
                         <div class="form-group">
                             <label>Description:</label>
@@ -767,6 +774,7 @@
         const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
         const COMMENTS_API = 'https://l10alau5g3.execute-api.us-east-1.amazonaws.com/prod/comments';
         const NEWS_API = 'https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news';
+        const URL_ANALYSIS_API = 'https://q65k3dbpd7.execute-api.us-east-1.amazonaws.com/prod/analyze';
         
         let currentUser = null;
         let authToken = null;
@@ -2474,6 +2482,63 @@
                 `;
                 container.appendChild(resourceDiv);
             });
+        }
+        
+        async function analyzeResourceUrl() {
+            const url = document.getElementById('resource-url').value.trim();
+            if (!url) {
+                alert('Please enter a URL first');
+                return;
+            }
+            
+            const analyzeBtn = document.getElementById('analyze-resource-btn');
+            const analyzeText = document.getElementById('analyze-resource-text');
+            const analyzeSpinner = document.getElementById('analyze-resource-spinner');
+            
+            analyzeBtn.disabled = true;
+            analyzeText.style.display = 'none';
+            analyzeSpinner.style.display = 'inline-block';
+            
+            try {
+                const response = await fetch(URL_ANALYSIS_API, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({url: url, context: 'resource'})
+                });
+                
+                const data = await response.json();
+                console.log('URL Analysis Response:', data);
+                
+                if (data.error) {
+                    alert('Error analyzing URL: ' + data.error);
+                } else {
+                    // Populate title
+                    if (data.title && !document.getElementById('resource-name').value) {
+                        console.log('Setting title:', data.title);
+                        document.getElementById('resource-name').value = data.title;
+                    }
+                    
+                    // Populate description - prioritize AI summary, fallback to meta description
+                    if (data.ai_summary) {
+                        console.log('Setting AI summary:', data.ai_summary);
+                        document.getElementById('resource-description').value = data.ai_summary;
+                    } else if (data.description) {
+                        console.log('Setting meta description:', data.description);
+                        document.getElementById('resource-description').value = data.description;
+                    } else {
+                        console.log('No description found in response');
+                    }
+                    
+                    document.getElementById('resources-message').innerHTML = '<div class="success">Resource information extracted successfully!</div>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to analyze URL: ' + error.message);
+            } finally {
+                analyzeBtn.disabled = false;
+                analyzeText.style.display = 'inline';
+                analyzeSpinner.style.display = 'none';
+            }
         }
         
         function deleteResource(resourceId) {

@@ -47,6 +47,7 @@ env/
 *.pyd
 __pycache__/
 
+
 # Virtual Environments
 venv/
 .venv/
@@ -106,3 +107,6 @@ aws-credentials.json
 node_modules/
 package-lock.json
 yarn.lock
+
+# url_analysis_api
+url_analysis_api/python/* 

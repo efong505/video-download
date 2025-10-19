@@ -61,7 +61,14 @@
                     </div>
                     <div class="col-12">
                         <label class="form-label">Website URL</label>
-                        <input type="url" id="resource-url" class="form-control" required>
+                        <div class="input-group">
+                            <input type="url" id="resource-url" class="form-control" required>
+                            <button type="button" class="btn btn-outline-primary" onclick="analyzeUrl()" id="analyze-btn">
+                                <span id="analyze-text">🔍 Auto-Fill</span>
+                                <span id="analyze-spinner" class="spinner-border spinner-border-sm" style="display:none;"></span>
+                            </button>
+                        </div>
+                        <div class="form-text">Paste URL and click Auto-Fill to extract title and description</div>
                     </div>
                     <div class="col-12">
                         <label class="form-label">Description</label>
@@ -88,6 +95,7 @@
 
     <script>
         const RESOURCES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/resources';
+        const URL_ANALYSIS_API = 'https://q65k3dbpd7.execute-api.us-east-1.amazonaws.com/prod/analyze';
         let authToken = localStorage.getItem('auth_token');
 
         // Initialize with sample data
@@ -223,6 +231,54 @@
             });
         }
 
+        async function analyzeUrl() {
+            const url = document.getElementById('resource-url').value.trim();
+            if (!url) {
+                alert('Please enter a URL first');
+                return;
+            }
+            
+            const analyzeBtn = document.getElementById('analyze-btn');
+            const analyzeText = document.getElementById('analyze-text');
+            const analyzeSpinner = document.getElementById('analyze-spinner');
+            
+            analyzeBtn.disabled = true;
+            analyzeText.style.display = 'none';
+            analyzeSpinner.style.display = 'inline-block';
+            
+            try {
+                const response = await fetch(URL_ANALYSIS_API, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({url: url})
+                });
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    alert('Error analyzing URL: ' + data.error);
+                } else {
+                    // Auto-fill name and description
+                    if (data.title && !document.getElementById('resource-name').value) {
+                        document.getElementById('resource-name').value = data.title;
+                    }
+                    if (data.ai_summary) {
+                        document.getElementById('resource-description').value = data.ai_summary;
+                    } else if (data.description) {
+                        document.getElementById('resource-description').value = data.description;
+                    }
+                    alert('✅ Resource information extracted successfully!');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to analyze URL');
+            } finally {
+                analyzeBtn.disabled = false;
+                analyzeText.style.display = 'inline';
+                analyzeSpinner.style.display = 'none';
+            }
+        }
+        
         function deleteResource(resourceId) {
             if (!confirm('Are you sure you want to delete this resource?')) {
                 return;

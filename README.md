@@ -112,6 +112,7 @@ A complete serverless video management system built on AWS with intelligent Lamb
 - **Router API**: Download job routing and management
 - **Articles API**: Blog/article management with Bible integration
 - **PayPal Billing API**: Subscription management and quota enforcement
+- **URL Analysis API**: Auto-summary for resources with AI-powered content extraction
 
 ## 💾 Database Schema
 
@@ -180,6 +181,7 @@ A complete serverless video management system built on AWS with intelligent Lamb
 6. **thumbnail-generator**: Thumbnail creation
 7. **articles-api**: Blog/article management with Bible integration
 8. **paypal-billing-api**: Subscription and quota management
+9. **url-analysis-api**: URL content extraction and AI summarization
 
 ### Frontend Files
 - `index.html`: Landing page with platform overview
@@ -218,6 +220,101 @@ A complete serverless video management system built on AWS with intelligent Lamb
 - All admin capabilities plus system-wide control
 - Create other super users and admins
 - Unlimited storage and video access
+
+## 🤖 URL Analysis & Auto-Summary
+
+### Feature Overview
+Automatically extract and summarize content from external URLs when creating articles.
+
+### How It Works
+1. **Meta Tag Extraction** (Always Active):
+   - Extracts title, description, and Open Graph image
+   - Fast and free - no API costs
+   - Works for any webpage
+
+2. **AI Summarization** (Optional):
+   - Uses AWS Bedrock Claude Instant for intelligent summaries
+   - Christian conservative perspective
+   - 2-3 sentence summaries with biblical relevance
+   - Cost: ~$0.0015 per summary
+
+### Enable/Disable AI Summarization
+
+**Quick Toggle Script (Recommended):**
+
+A PowerShell script `toggle-ai.ps1` is provided for easy AI management:
+
+```powershell
+# Enable AI summarization
+.\toggle-ai.ps1 enable
+
+# Disable AI summarization
+.\toggle-ai.ps1 disable
+
+# Check current status
+.\toggle-ai.ps1 status
+```
+
+**Manual Commands:**
+
+*Enable AI (with AWS Bedrock):*
+
+- Linux/Mac (Bash):
+```bash
+aws lambda update-function-configuration \
+  --function-name url-analysis-api \
+  --environment Variables={USE_AI_SUMMARY=true}
+```
+
+- Windows (PowerShell):
+```powershell
+aws lambda update-function-configuration --function-name url-analysis-api --environment "Variables={USE_AI_SUMMARY=true}"
+```
+
+*Disable AI (Meta Tags Only):*
+
+- Linux/Mac (Bash):
+```bash
+aws lambda update-function-configuration \
+  --function-name url-analysis-api \
+  --environment Variables={USE_AI_SUMMARY=false}
+```
+
+- Windows (PowerShell):
+```powershell
+aws lambda update-function-configuration --function-name url-analysis-api --environment "Variables={USE_AI_SUMMARY=false}"
+```
+
+*Check Current Status:*
+
+- Linux/Mac (Bash):
+```bash
+aws lambda get-function-configuration \
+  --function-name url-analysis-api \
+  --query 'Environment.Variables.USE_AI_SUMMARY'
+```
+
+- Windows (PowerShell):
+```powershell
+aws lambda get-function-configuration --function-name url-analysis-api --query "Environment.Variables.USE_AI_SUMMARY"
+```
+
+### Prerequisites for AI
+- AWS Bedrock access enabled in your account
+- Lambda execution role with `bedrock:InvokeModel` permission
+- Claude Instant model access granted
+
+### Usage in Article Creation
+1. Paste URL in "Resource URL" field
+2. Click "🔍 Analyze" button
+3. Review extracted title, description, and AI summary (if enabled)
+4. Click "📋 Apply to Article" to auto-populate content
+5. Edit and customize as needed
+
+### Cost Considerations
+- **Meta Extraction**: Free (always active)
+- **AI Summarization**: ~$0.0015 per URL analyzed
+- **Estimated Monthly**: 1000 summaries = ~$1.50
 
 ## 🔧 Advanced Features
 
