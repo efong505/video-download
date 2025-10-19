@@ -5,13 +5,16 @@ from datetime import datetime
 from decimal import Decimal
 import base64
 
-# Initialize DynamoDB
+# Initialize AWS services
 dynamodb = boto3.resource('dynamodb')
+s3 = boto3.client('s3')
 news_table = dynamodb.Table('news-table')
 users_table = dynamodb.Table('users')
 
-# JWT Secret (should match your auth API)
+# Configuration
 JWT_SECRET = 'your-jwt-secret-key'
+S3_BUCKET = 'my-video-downloads-bucket'
+CLOUDFRONT_URL = 'https://d271vky579caz9.cloudfront.net'
 
 def lambda_handler(event, context):
     # CORS headers
@@ -36,7 +39,9 @@ def lambda_handler(event, context):
         action = query_params.get('action', 'list')
         
         # Route based on HTTP method and action
-        if http_method == 'POST' or action == 'create':
+        if action == 'upload':
+            return upload_image(event, headers)
+        elif http_method == 'POST' or action == 'create':
             return create_news(event, headers)
         elif http_method == 'PUT' or action == 'update':
             return update_news(event, headers)
@@ -296,6 +301,7 @@ def update_news(event, headers):
         # Build update expression
         update_expression = 'SET updated_at = :updated_at'
         expression_values = {':updated_at': datetime.utcnow().isoformat()}
+        expression_names = {}
         
         # Update fields if provided
         fields = ['title', 'content', 'summary', 'category', 'tags', 'visibility', 
@@ -303,14 +309,25 @@ def update_news(event, headers):
         
         for field in fields:
             if field in body:
-                update_expression += f', {field} = :{field}'
-                expression_values[f':{field}'] = body[field]
+                if field == 'status':
+                    # Use expression attribute name for reserved keyword
+                    update_expression += ', #status = :status'
+                    expression_names['#status'] = 'status'
+                    expression_values[':status'] = body[field]
+                else:
+                    update_expression += f', {field} = :{field}'
+                    expression_values[f':{field}'] = body[field]
         
-        news_table.update_item(
-            Key={'news_id': news_id},
-            UpdateExpression=update_expression,
-            ExpressionAttributeValues=expression_values
-        )
+        update_kwargs = {
+            'Key': {'news_id': news_id},
+            'UpdateExpression': update_expression,
+            'ExpressionAttributeValues': expression_values
+        }
+        
+        if expression_names:
+            update_kwargs['ExpressionAttributeNames'] = expression_names
+        
+        news_table.update_item(**update_kwargs)
         
         return {
             'statusCode': 200,
@@ -352,6 +369,62 @@ def delete_news(event, headers):
             'statusCode': 200,
             'headers': headers,
             'body': json.dumps({'message': 'News deleted successfully'})
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': headers,
+            'body': json.dumps({'error': str(e)})
+        }
+
+def upload_image(event, headers):
+    """Upload image to S3"""
+    user_info = verify_admin_token(event)
+    if not user_info:
+        return {
+            'statusCode': 403,
+            'headers': headers,
+            'body': json.dumps({'error': 'Admin access required'})
+        }
+    
+    try:
+        body = json.loads(event['body'])
+        image_data = body.get('image')
+        filename = body.get('filename', f'news-{uuid.uuid4()}.jpg')
+        
+        if not image_data:
+            return {
+                'statusCode': 400,
+                'headers': headers,
+                'body': json.dumps({'error': 'Image data required'})
+            }
+        
+        # Decode base64 image
+        if ',' in image_data:
+            image_data = image_data.split(',')[1]
+        
+        image_bytes = base64.b64decode(image_data)
+        
+        # Upload to S3
+        s3_key = f'news-images/{filename}'
+        s3.put_object(
+            Bucket=S3_BUCKET,
+            Key=s3_key,
+            Body=image_bytes,
+            ContentType='image/jpeg',
+            CacheControl='max-age=31536000'
+        )
+        
+        image_url = f'{CLOUDFRONT_URL}/{s3_key}'
+        
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps({
+                'message': 'Image uploaded successfully',
+                'url': image_url
+            })
         }
         
     except Exception as e:

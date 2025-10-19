@@ -326,6 +326,13 @@
                 html += '</div>';
             }
             
+            // Featured Image
+            if (news.featured_image) {
+                html += '<div class="text-center mb-4">';
+                html += '<img src="' + news.featured_image + '" alt="' + news.title + '" style="max-width: 100%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">';
+                html += '</div>';
+            }
+            
             // Summary
             if (news.summary) {
                 html += '<div class="alert alert-info">';
