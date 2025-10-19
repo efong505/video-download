@@ -874,13 +874,20 @@ Code block
                 .replace(/<img[^>]*src=["'](.*?)["'][^>]*alt=["'](.*?)["'][^>]*>/gi, '![$2]($1)')
                 .replace(/<img[^>]*src=["'](.*?)["'][^>]*>/gi, '![]($1)')
                 .replace(/<blockquote[^>]*>(.*?)<\/blockquote>/gi, '> $1\n\n')
-                .replace(/<ul[^>]*>(.*?)<\/ul>/gis, function(match, content) {
-                    return content.replace(/<li[^>]*>(.*?)<\/li>/gi, '- $1\n') + '\n';
+                // Handle lists - try multiple patterns
+                .replace(/<li[^>]*data-list="bullet"[^>]*>([\s\S]*?)<\/li>/gi, '- $1\n')
+                .replace(/<li[^>]*data-list="ordered"[^>]*>([\s\S]*?)<\/li>/gi, function(match, content, offset, string) {
+                    var beforeMatch = string.substring(0, offset);
+                    var orderCount = (beforeMatch.match(/data-list="ordered"/g) || []).length + 1;
+                    return orderCount + '. ' + content + '\n';
                 })
-                .replace(/<ol[^>]*>(.*?)<\/ol>/gis, function(match, content) {
+                .replace(/<ul[^>]*>([\s\S]*?)<\/ul>/gi, function(match, content) {
+                    return content.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, '- $1\n') + '\n';
+                })
+                .replace(/<ol[^>]*>([\s\S]*?)<\/ol>/gi, function(match, content) {
                     var counter = 1;
-                    return content.replace(/<li[^>]*>(.*?)<\/li>/gi, function() {
-                        return (counter++) + '. ' + arguments[1] + '\n';
+                    return content.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, function(match, item) {
+                        return (counter++) + '. ' + item + '\n';
                     }) + '\n';
                 })
                 .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n')
