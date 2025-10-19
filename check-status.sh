@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Check Download Status Script
+# Monitors ECS task status and progress
+# Usage: ./check-status.sh [TASK_ID]
+# If no TASK_ID provided, lists all running tasks
+
 TASK_ID="$1"
 API="https://qdk8y6nna6.execute-api.us-east-1.amazonaws.com/prod"
 

@@ -1,4 +1,7 @@
-# Toggle AI Summary for URL Analysis API
+# Toggle AI Summary Script
+# Enables/disables AI summarization for URL Analysis API
+# Usage: .\toggle-ai.ps1 enable|disable|status
+
 param(
     [Parameter(Mandatory=$true)]
     [ValidateSet("enable", "disable", "status")]

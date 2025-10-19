@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Live Logs Monitor Script
+# Streams real-time logs from running ECS tasks
+# Usage: ./live-logs.sh [TASK_ID]
+# If no TASK_ID provided, auto-detects running task
+
 TASK_ID="$1"
 
 if [ -z "$TASK_ID" ]; then

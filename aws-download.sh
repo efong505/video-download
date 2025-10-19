@@ -1,6 +1,10 @@
 #!/bin/bash
 
 # AWS Video Downloader Script
+# Downloads videos via AWS API with progress monitoring
+# Usage: ./aws-download.sh <video_url> [output_name]
+# Example: ./aws-download.sh 'https://rumble.com/video-url' 'my_video.mp4'
+
 API_BASE="https://qdk8y6nna6.execute-api.us-east-1.amazonaws.com/prod"
 
 # Check if URL provided

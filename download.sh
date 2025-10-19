@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Video Download Script
+# Downloads videos with optional format selection and Fargate routing
+# Usage: ./download.sh 'video-url' ['output-name.mp4'] [--force-fargate] [--format 'format-id']
+# Example: ./download.sh 'video-url' 'video.mp4' --format 'hls-2143'
+
 FORCE_FARGATE=false
 FORMAT="auto"
 

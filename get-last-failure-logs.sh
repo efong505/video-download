@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Get Last Failure Logs Script
+# Retrieves logs from the most recent failed task
+# Usage: ./get-last-failure-logs.sh
+
 echo "🔍 Getting latest task logs..."
 
 # Get logs from the known latest stream
