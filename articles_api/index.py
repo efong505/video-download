@@ -612,6 +612,14 @@ def update_article(event):
             update_expression += ', scripture_references = :refs'
             expression_values[':refs'] = scripture_refs
         
+        if 'category' in body:
+            update_expression += ', category = :cat'
+            expression_values[':cat'] = body['category']
+        
+        if 'tags' in body:
+            update_expression += ', tags = :tags'
+            expression_values[':tags'] = body['tags']
+        
         if 'visibility' in body:
             update_expression += ', visibility = :vis'
             expression_values[':vis'] = body['visibility']

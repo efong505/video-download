@@ -669,6 +669,8 @@ articles-table:
 - [x] **Article sharing and social media integration** ✅ COMPLETE - Social media sharing buttons, link copying, Open Graph meta tags
 - [x] **Public article viewing** ✅ COMPLETE - Non-authenticated users can access public articles for improved ministry outreach
 - [x] **Featured image system** ✅ COMPLETE - Upload featured images, thumbnail display in listings, Open Graph integration, image compression
+- [x] **Horizontal scrolling UI** ✅ COMPLETE - Netflix/YouTube-style horizontal scroll with arrow navigation for videos, resources, articles, and news pages
+- [x] **Resource management enhancements** ✅ COMPLETE - Edit functionality, emoji icons (47 keywords), category bulk rename, empty category cleanup
 - [ ] **Auto-summary for resources** - AI-powered website analysis to generate descriptions from URLs, with admin override capability and manual editing
 - [ ] **News management system** - Topic-based news page with admin backend, breaking news banners, scheduled publishing, external link support, Christian/political news categories, and state-specific election coverage with contributor network for Republican candidate tracking across all 50 states
 - [ ] **State election contributor system** - Interactive state map, state correspondent assignments, candidate profiles, election calendar, and local Republican election coverage from verified contributors in each state
@@ -1441,3 +1443,101 @@ quill.setContents(delta);
 - ✅ Both WYSIWYG and markdown modes handle lists correctly
 
 **Status**: Quill editor list preservation issue resolved - articles with bullet points now load and edit properly without content loss.
+
+## Horizontal Scrolling UI & Resource Management Enhancements ✅ COMPLETE (January 2025)
+
+### Feature Overview
+**Enhancement**: Implemented Netflix/YouTube-style horizontal scrolling interface across videos, resources, articles, and news pages with comprehensive resource management improvements.
+
+### Horizontal Scroll Implementation
+**Core Features**:
+- **Scroll Containers**: Smooth horizontal scrolling with custom scrollbar styling
+- **Arrow Navigation**: Left/right arrow buttons with smart visibility (desktop only, hidden on mobile)
+- **Subtle Button Design**: White background with soft shadows (40px size, rgba(255,255,255,0.8))
+- **Category Grouping**: Content organized by categories with horizontal scroll per section
+- **Responsive Design**: Mobile uses native touch scrolling, desktop uses arrow buttons
+
+**Technical Implementation**:
+- **Card Widths**: Videos (300px), Resources (400px), Articles (450px), News (400px)
+- **Scroll Amounts**: Videos (320px), Resources (420px), Articles (470px), News (420px)
+- **Arrow Visibility Logic**: Left arrow hidden when scrollLeft === 0, right arrow hidden when scrollLeft >= scrollWidth - clientWidth - 1
+- **Mobile Breakpoint**: Arrows only display on desktop (min-width: 768px) via CSS media query
+
+**Files Modified**:
+- `videos.html` - Horizontal scroll with 300px video cards and 320px scroll amount
+- `resources.html` - Horizontal scroll with 400px resource cards and 420px scroll amount
+- `articles.html` - Horizontal scroll with 450px article cards and 470px scroll amount
+- `news.html` - Horizontal scroll with 400px news cards and 420px scroll amount
+
+### Resource Management Enhancements
+**Features Added**:
+- **Emoji Icons**: Automatic emoji selection for 47 category keywords (e.g., Research → 🔍, Educational → 🎓, Financial → 💰)
+- **Edit Functionality**: Complete resource editing allowing modification of name, category, URL, and description
+- **Category Bulk Rename**: Edit button (✏️) in "Resource Category Display Order" section for renaming categories
+- **Empty Category Cleanup**: Automatic removal of categories with no resources
+- **Duplicate Fix**: Normalized resource_id to id in Lambda to prevent duplicate creation on updates
+
+**Emoji Keyword Mappings** (47 total):
+- Business (💼), Design/Art/Graphic (🎨), Christian (✝️), Church (⛪), School/Learning (🎓)
+- Money/Financial (💰), Music (🎵), Government (🏛️), Medical (🏥), Tech/Computer (💻)
+- Book (📚), Video (🎬), Podcast (🎙️), Audio (🎧), Legal/Law (⚖️)
+- Community/Social (👥), Charity (❤️), Nonprofit (🤝), Mission/Outreach (🌍)
+- And 28 more keywords with appropriate emoji mappings
+
+**Backend Updates**:
+- **Lambda Function**: Added 'update' action to resources_api for resource editing
+- **ID Normalization**: Fixed duplicate bug by adding id field in list_resources() function
+- **API Integration**: Resources stored in DynamoDB via RESOURCES_API endpoint
+
+**Files Modified**:
+- `admin.html` - getCategoryEmoji() with 47 keywords, edit/delete buttons, category rename functionality
+- `resources.html` - getCategoryIcon() function, emoji display in category headers
+- `resources_api/index.py` - Added update_resource() function, normalized resource_id to id
+- `emoji_update.txt` - Reference file with new emoji mappings for manual updates
+
+### Bug Fixes
+**Issues Resolved**:
+1. **Resource Deletion Refresh**: Fixed missing loadResourcesList() call after category deletion
+2. **Duplicate Resources**: Normalized resource_id to id in Lambda's list function
+3. **Empty Categories**: Automatic cleanup in loadResourceCategoryOrder()
+4. **Event Handler Escaping**: Used createElement() with .onclick to prevent string escaping issues
+5. **Emoji Encoding**: Created reference file for manual emoji updates due to file encoding issues
+
+### User Experience Improvements
+**Navigation**:
+- Smooth horizontal scrolling with visual feedback
+- Arrow buttons appear/disappear based on scroll position
+- Touch-friendly mobile interface without arrow clutter
+- Category-based content organization
+
+**Resource Management**:
+- Visual emoji icons for quick category identification
+- Easy editing and deletion of resources
+- Bulk category renaming for organizational flexibility
+- Automatic cleanup of unused categories
+
+### Technical Insights
+**Key Patterns**:
+- Arrow visibility based on scroll position prevents unnecessary UI elements
+- Mobile vs desktop UX differentiation via CSS media queries
+- Resources API integration with DynamoDB for persistent storage
+- Category management split between localStorage (categories) and DynamoDB (resources)
+- Event handler pattern using createElement() prevents data escaping issues
+- Emoji mapping with .includes() for flexible keyword matching
+
+**Performance Considerations**:
+- Fixed card widths prevent layout shifts during scrolling
+- Scroll amounts slightly larger than card width for smooth transitions
+- Custom scrollbar styling improves visual consistency
+- Event listeners efficiently manage arrow visibility updates
+
+### Verification
+- ✅ Horizontal scrolling works across all content pages
+- ✅ Arrow buttons show/hide correctly based on scroll position
+- ✅ Mobile devices use native touch scrolling without arrows
+- ✅ Resource editing and deletion work without duplicates
+- ✅ Emoji icons display correctly for 47 category keywords
+- ✅ Category bulk rename updates all associated resources
+- ✅ Empty categories automatically removed from display
+
+**Status**: Horizontal scrolling UI and resource management enhancements fully implemented and operational across the platform, providing modern Netflix-style content browsing with comprehensive resource organization tools.
