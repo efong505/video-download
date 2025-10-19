@@ -21,6 +21,8 @@ def lambda_handler(event, context):
             return list_resources(headers)
         elif action == 'create':
             return create_resource(event, headers)
+        elif action == 'update':
+            return update_resource(event, headers)
         elif action == 'delete':
             return delete_resource(event, headers)
         elif action == 'get_order':
@@ -35,6 +37,12 @@ def lambda_handler(event, context):
 def list_resources(headers):
     response = table.scan()
     resources = response.get('Items', [])
+    # Normalize resource_id to id for frontend compatibility
+    for resource in resources:
+        if 'resource_id' in resource and resource['resource_id'] != '_category_order':
+            resource['id'] = resource['resource_id']
+    # Filter out the category order item
+    resources = [r for r in resources if r.get('resource_id') != '_category_order']
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps(resources, default=str)}
 
 def create_resource(event, headers):
@@ -57,6 +65,27 @@ def create_resource(event, headers):
     })
     
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Resource created'})}
+
+def update_resource(event, headers):
+    body = json.loads(event.get('body', '{}'))
+    resource_id = body.get('id')
+    name = body.get('name')
+    category = body.get('category')
+    url = body.get('url')
+    description = body.get('description', '')
+    
+    if not all([resource_id, name, category, url]):
+        return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'Missing required fields'})}
+    
+    table.put_item(Item={
+        'resource_id': resource_id,
+        'name': name,
+        'category': category,
+        'url': url,
+        'description': description
+    })
+    
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Resource updated'})}
 
 def delete_resource(event, headers):
     resource_id = event.get('queryStringParameters', {}).get('resource_id')

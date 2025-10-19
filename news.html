@@ -57,6 +57,76 @@
             transition: all 0.3s ease;
             border-left: 5px solid #3498db;
         }
+        .horizontal-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 10px 0;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .news-card-wrapper {
+            flex: 0 0 400px;
+            min-width: 400px;
+        }
+        .category-section-header {
+            color: #2c3e50;
+            font-weight: 700;
+            font-size: 1.5em;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+        }
+        .scroll-wrapper {
+            position: relative;
+        }
+        .scroll-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.8);
+            color: #333;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            display: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .scroll-btn:hover {
+            background: rgba(255,255,255,1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateY(-50%) scale(1.05);
+        }
+        .scroll-btn-left {
+            left: -25px;
+        }
+        .scroll-btn-right {
+            right: -25px;
+        }
+        @media (min-width: 768px) {
+            .scroll-btn {
+                display: block;
+            }
+        }
         .news-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px rgba(0,0,0,0.15);
@@ -320,12 +390,33 @@
                 return;
             }
             
-            var html = '';
+            // Group news by category
+            var groupedNews = {};
             newsItems.forEach(function(news) {
-                var isBreaking = news.is_breaking;
-                var cardClass = isBreaking ? 'news-card breaking' : 'news-card';
+                var category = news.category || 'general';
+                if (!groupedNews[category]) {
+                    groupedNews[category] = [];
+                }
+                groupedNews[category].push(news);
+            });
+            
+            var html = '';
+            
+            // Display each category
+            var categoryIndex = 0;
+            Object.keys(groupedNews).sort().forEach(function(category) {
+                html += '<h3 class="category-section-header">' + category.toUpperCase() + '</h3>';
+                html += '<div class="scroll-wrapper">';
+                html += '<button class="scroll-btn scroll-btn-left" onclick="scrollCategory(' + categoryIndex + ', -420)">◀</button>';
+                html += '<div class="horizontal-scroll-container" id="news-scroll-' + categoryIndex + '">';
+                categoryIndex++;
                 
-                html += '<div class="' + cardClass + '">';
+                groupedNews[category].forEach(function(news) {
+                    var isBreaking = news.is_breaking;
+                    var cardClass = isBreaking ? 'news-card breaking' : 'news-card';
+                    
+                    html += '<div class="news-card-wrapper">';
+                    html += '<div class="' + cardClass + '">';
                 
                 // Breaking badge
                 if (isBreaking) {
@@ -368,16 +459,49 @@
                     html += '<i class="fas fa-external-link-alt"></i> Original Source</a>';
                 }
                 html += '</div>';
-                
-                html += '</div>';
+                html += '</div>'; // Close news-card-wrapper
             });
             
+            html += '</div>'; // Close horizontal-scroll-container
+            html += '<button class="scroll-btn scroll-btn-right" onclick="scrollCategory(' + (categoryIndex - 1) + ', 420)">▶</button>';
+            html += '</div>'; // Close scroll-wrapper
+        });
+            
             container.innerHTML = html;
+            
+            setTimeout(updateNewsArrows, 100);
         }
 
         function formatDate(dateString) {
             var date = new Date(dateString);
             return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+
+        function scrollCategory(index, amount) {
+            var container = document.getElementById('news-scroll-' + index);
+            if (container) {
+                container.scrollBy({ left: amount, behavior: 'smooth' });
+            }
+        }
+        
+        function updateNewsArrows() {
+            var containers = document.querySelectorAll('[id^="news-scroll-"]');
+            containers.forEach(function(container, index) {
+                var leftBtn = container.previousElementSibling;
+                var rightBtn = container.nextElementSibling;
+                
+                if (leftBtn && leftBtn.classList.contains('scroll-btn-left')) {
+                    leftBtn.style.display = container.scrollLeft > 0 ? 'block' : 'none';
+                }
+                if (rightBtn && rightBtn.classList.contains('scroll-btn-right')) {
+                    rightBtn.style.display = container.scrollLeft < container.scrollWidth - container.clientWidth - 1 ? 'block' : 'none';
+                }
+                
+                container.addEventListener('scroll', function() {
+                    if (leftBtn) leftBtn.style.display = container.scrollLeft > 0 ? 'block' : 'none';
+                    if (rightBtn) rightBtn.style.display = container.scrollLeft < container.scrollWidth - container.clientWidth - 1 ? 'block' : 'none';
+                });
+            });
         }
 
         function logout() {

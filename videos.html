@@ -122,6 +122,68 @@
             font-weight: bold;
             font-size: 1.2rem;
         }
+        .horizontal-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 10px 0;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .video-card-wrapper {
+            flex: 0 0 300px;
+            min-width: 300px;
+        }
+        .scroll-wrapper {
+            position: relative;
+        }
+        .scroll-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.8);
+            color: #333;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            display: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .scroll-btn:hover {
+            background: rgba(255,255,255,1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateY(-50%) scale(1.05);
+        }
+        .scroll-btn-left {
+            left: -25px;
+        }
+        .scroll-btn-right {
+            right: -25px;
+        }
+        @media (min-width: 768px) {
+            .scroll-btn {
+                display: block;
+            }
+        }
         .loading {
             text-align: center;
             padding: 40px;
@@ -376,7 +438,7 @@
         
         function createVideoCard(container, title, videoUrl, thumbnailUrl, fallbackThumbnailUrl, filename, videoType = 'local', externalUrl = '') {
             const col = document.createElement('div');
-            col.className = 'col-md-4';
+            col.className = 'video-card-wrapper';
             
             const embedUrl = `https://d271vky579caz9.cloudfront.net/embed.html?v=${filename}&t=${encodeURIComponent(title)}`;
             
@@ -735,9 +797,33 @@
                     categoryHeader.innerHTML = `<i class="${icon} me-2"></i>${tag.charAt(0).toUpperCase() + tag.slice(1)}`;
                     container.appendChild(categoryHeader);
                     
-                    // Create row for this category's videos
+                    // Create scroll wrapper with arrows
+                    const scrollWrapper = document.createElement('div');
+                    scrollWrapper.className = 'scroll-wrapper';
+                    
+                    const leftBtn = document.createElement('button');
+                    leftBtn.className = 'scroll-btn scroll-btn-left';
+                    leftBtn.innerHTML = '◀';
+                    leftBtn.onclick = () => row.scrollBy({ left: -320, behavior: 'smooth' });
+                    
+                    const rightBtn = document.createElement('button');
+                    rightBtn.className = 'scroll-btn scroll-btn-right';
+                    rightBtn.innerHTML = '▶';
+                    rightBtn.onclick = () => row.scrollBy({ left: 320, behavior: 'smooth' });
+                    
+                    // Create horizontal scroll container for this category's videos
                     const row = document.createElement('div');
-                    row.className = 'row g-4';
+                    row.className = 'horizontal-scroll-container';
+                    
+                    row.addEventListener('scroll', () => {
+                        leftBtn.style.display = row.scrollLeft > 0 ? 'block' : 'none';
+                        rightBtn.style.display = row.scrollLeft < row.scrollWidth - row.clientWidth - 1 ? 'block' : 'none';
+                    });
+                    
+                    setTimeout(() => {
+                        leftBtn.style.display = 'none';
+                        rightBtn.style.display = row.scrollWidth > row.clientWidth ? 'block' : 'none';
+                    }, 100);
                     
                     groupedVideos[tag].forEach(video => {
                         const videoType = video.video_type || 'local';
@@ -755,7 +841,10 @@
                         }
                     });
                     
-                    container.appendChild(row);
+                    scrollWrapper.appendChild(leftBtn);
+                    scrollWrapper.appendChild(row);
+                    scrollWrapper.appendChild(rightBtn);
+                    container.appendChild(scrollWrapper);
                 });
                 
                 // Add uncategorized videos if any
@@ -765,8 +854,31 @@
                     categoryHeader.innerHTML = `<i class="fas fa-video me-2"></i>Uncategorized`;
                     container.appendChild(categoryHeader);
                     
+                    const scrollWrapper = document.createElement('div');
+                    scrollWrapper.className = 'scroll-wrapper';
+                    
+                    const leftBtn = document.createElement('button');
+                    leftBtn.className = 'scroll-btn scroll-btn-left';
+                    leftBtn.innerHTML = '◀';
+                    leftBtn.onclick = () => row.scrollBy({ left: -320, behavior: 'smooth' });
+                    
+                    const rightBtn = document.createElement('button');
+                    rightBtn.className = 'scroll-btn scroll-btn-right';
+                    rightBtn.innerHTML = '▶';
+                    rightBtn.onclick = () => row.scrollBy({ left: 320, behavior: 'smooth' });
+                    
                     const row = document.createElement('div');
-                    row.className = 'row g-4';
+                    row.className = 'horizontal-scroll-container';
+                    
+                    row.addEventListener('scroll', () => {
+                        leftBtn.style.display = row.scrollLeft > 0 ? 'block' : 'none';
+                        rightBtn.style.display = row.scrollLeft < row.scrollWidth - row.clientWidth - 1 ? 'block' : 'none';
+                    });
+                    
+                    setTimeout(() => {
+                        leftBtn.style.display = 'none';
+                        rightBtn.style.display = row.scrollWidth > row.clientWidth ? 'block' : 'none';
+                    }, 100);
                     
                     uncategorized.forEach(video => {
                         const videoType = video.video_type || 'local';
@@ -784,7 +896,10 @@
                         }
                     });
                     
-                    container.appendChild(row);
+                    scrollWrapper.appendChild(leftBtn);
+                    scrollWrapper.appendChild(row);
+                    scrollWrapper.appendChild(rightBtn);
+                    container.appendChild(scrollWrapper);
                 }
             }
         }

@@ -62,6 +62,68 @@
             transition: all 0.3s ease;
             height: 100%;
         }
+        .horizontal-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 10px 0;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .article-card-wrapper {
+            flex: 0 0 450px;
+            min-width: 450px;
+        }
+        .scroll-wrapper {
+            position: relative;
+        }
+        .scroll-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.8);
+            color: #333;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            display: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .scroll-btn:hover {
+            background: rgba(255,255,255,1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateY(-50%) scale(1.05);
+        }
+        .scroll-btn-left {
+            left: -25px;
+        }
+        .scroll-btn-right {
+            right: -25px;
+        }
+        @media (min-width: 768px) {
+            .scroll-btn {
+                display: block;
+            }
+        }
         @media (max-width: 768px) {
             .article-card {
                 padding: 20px;
@@ -535,24 +597,79 @@
                 return;
             }
             
+            // Group articles by category
+            const groupedArticles = {};
+            articles.forEach(article => {
+                const category = article.category || 'general';
+                if (!groupedArticles[category]) {
+                    groupedArticles[category] = [];
+                }
+                groupedArticles[category].push(article);
+            });
+            
             let successCount = 0;
             let errorCount = 0;
             
-            articles.forEach((article, index) => {
-                try {
-                    if (!article || typeof article !== 'object') {
-                        console.warn(`Skipping invalid article at index ${index}:`, article);
+            // Display each category
+            Object.keys(groupedArticles).sort().forEach(category => {
+                // Create category header
+                const categoryHeader = document.createElement('div');
+                categoryHeader.className = 'col-12';
+                categoryHeader.innerHTML = `<h3 class="mt-4 mb-3" style="color: #667eea; font-weight: 600;">${getCategoryName(category)}</h3>`;
+                container.appendChild(categoryHeader);
+                
+                // Create scroll wrapper with arrows
+                const scrollContainer = document.createElement('div');
+                scrollContainer.className = 'col-12';
+                const outerWrapper = document.createElement('div');
+                outerWrapper.className = 'scroll-wrapper';
+                
+                const leftBtn = document.createElement('button');
+                leftBtn.className = 'scroll-btn scroll-btn-left';
+                leftBtn.innerHTML = '◀';
+                
+                const rightBtn = document.createElement('button');
+                rightBtn.className = 'scroll-btn scroll-btn-right';
+                rightBtn.innerHTML = '▶';
+                
+                const scrollWrapper = document.createElement('div');
+                scrollWrapper.className = 'horizontal-scroll-container';
+                
+                leftBtn.onclick = () => scrollWrapper.scrollBy({ left: -470, behavior: 'smooth' });
+                rightBtn.onclick = () => scrollWrapper.scrollBy({ left: 470, behavior: 'smooth' });
+                
+                scrollWrapper.addEventListener('scroll', () => {
+                    leftBtn.style.display = scrollWrapper.scrollLeft > 0 ? 'block' : 'none';
+                    rightBtn.style.display = scrollWrapper.scrollLeft < scrollWrapper.scrollWidth - scrollWrapper.clientWidth - 1 ? 'block' : 'none';
+                });
+                
+                setTimeout(() => {
+                    leftBtn.style.display = 'none';
+                    rightBtn.style.display = scrollWrapper.scrollWidth > scrollWrapper.clientWidth ? 'block' : 'none';
+                }, 100);
+                
+                groupedArticles[category].forEach((article, index) => {
+                    try {
+                        if (!article || typeof article !== 'object') {
+                            console.warn(`Skipping invalid article at index ${index}:`, article);
+                            errorCount++;
+                            return;
+                        }
+                        
+                        const articleCard = createArticleCard(article);
+                        scrollWrapper.appendChild(articleCard);
+                        successCount++;
+                    } catch (error) {
+                        console.error(`Error displaying article at index ${index}:`, error, article);
                         errorCount++;
-                        return;
                     }
-                    
-                    const articleCard = createArticleCard(article);
-                    container.appendChild(articleCard);
-                    successCount++;
-                } catch (error) {
-                    console.error(`Error displaying article at index ${index}:`, error, article);
-                    errorCount++;
-                }
+                });
+                
+                outerWrapper.appendChild(leftBtn);
+                outerWrapper.appendChild(scrollWrapper);
+                outerWrapper.appendChild(rightBtn);
+                scrollContainer.appendChild(outerWrapper);
+                container.appendChild(scrollContainer);
             });
             
             console.log(`Articles displayed: ${successCount} successful, ${errorCount} errors`);
@@ -575,7 +692,7 @@
 
         function createArticleCard(article) {
             const col = document.createElement('div');
-            col.className = 'col-lg-6 col-md-12';
+            col.className = 'article-card-wrapper';
             
             const card = document.createElement('div');
             card.className = 'article-card';
