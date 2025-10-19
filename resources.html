@@ -168,90 +168,56 @@
 
     <script>
         const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
-        const RESOURCES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/resources';
+        const RESOURCES_API = 'https://ckbtfz4vbl.execute-api.us-east-1.amazonaws.com/prod/resources';
         
         let currentUser = null;
         let authToken = null;
+        let isAuthenticated = false;
 
         window.addEventListener('load', async function() {
             authToken = localStorage.getItem('auth_token');
             const userData = localStorage.getItem('user_data');
             
-            if (!authToken || !userData) {
-                window.location.href = 'login.html';
-                return;
+            if (authToken && userData) {
+                isAuthenticated = true;
+                currentUser = JSON.parse(userData);
+                setupAuthenticatedNav();
+            } else {
+                setupPublicNav();
             }
             
-            currentUser = JSON.parse(userData);
+            await loadResources();
+        });
+        
+        function setupAuthenticatedNav() {
+            const navLinks = document.getElementById('nav-links');
             
             // Add admin link if user is admin or super_user
             if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
-                const navLinks = document.getElementById('nav-links');
                 const adminLink = document.createElement('a');
                 adminLink.href = 'admin.html';
                 adminLink.className = 'nav-link';
                 adminLink.innerHTML = '⚙️ Admin';
                 navLinks.insertBefore(adminLink, navLinks.lastElementChild);
             }
-            
-            await loadResources();
-        });
+        }
+        
+        function setupPublicNav() {
+            const navLinks = document.getElementById('nav-links');
+            navLinks.innerHTML = `
+                <a href="/" class="nav-link">🏠 Home</a>
+                <a href="login.html" class="nav-link">🔐 Login</a>
+                <a href="register.html" class="nav-link">📝 Register</a>
+            `;
+        }
 
         async function loadResources() {
             try {
-                // Load from localStorage for now
-                let resources = JSON.parse(localStorage.getItem('admin_resources') || '[]');
+                const response = await fetch(`${RESOURCES_API}?action=list`);
+                const resources = await response.json();
+                console.log('Loaded resources:', resources);
                 
-                // Sample data if none exists
-                if (resources.length === 0) {
-                    resources = [
-                        {
-                            id: '1',
-                            name: 'Dr. Frank Turek',
-                            category: 'Research Resources',
-                            url: 'https://crossexamined.org/dr-frank-turek/',
-                            description: 'Christian apologetics and worldview training'
-                        },
-                        {
-                            id: '2',
-                            name: 'Hillsdale College',
-                            category: 'Educational',
-                            url: 'https://online.hillsdale.edu/courses/promo/marxism-socialism-communism',
-                            description: 'Free online courses on Marxism, Socialism, and Communism'
-                        },
-                        {
-                            id: '3',
-                            name: 'Patriot Academy',
-                            category: 'Educational',
-                            url: 'https://patriotacademy.com',
-                            description: 'Constitutional training and civic education'
-                        },
-                        {
-                            id: '4',
-                            name: 'Wall Builders',
-                            category: 'Research Resources',
-                            url: 'https://wallbuilders.com/',
-                            description: 'American history and constitutional principles'
-                        },
-                        {
-                            id: '5',
-                            name: 'George Barna',
-                            category: 'Research Resources',
-                            url: 'https://www.barna.com/',
-                            description: 'Christian research and cultural analysis'
-                        },
-                        {
-                            id: '6',
-                            name: 'Financial Peace - Dave Ramsey',
-                            category: 'Financial',
-                            url: 'https://www.ramseysolutions.com/',
-                            description: 'Biblical financial principles and debt-free living'
-                        }
-                    ];
-                    localStorage.setItem('admin_resources', JSON.stringify(resources));
-                }
-                
-                if (resources.length > 0) {
+                if (resources && resources.length > 0) {
                     displayResources(resources);
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('resources-container').style.display = 'block';
@@ -259,7 +225,6 @@
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('no-resources').style.display = 'block';
                 }
-                
             } catch (error) {
                 console.error('Error loading resources:', error);
                 document.getElementById('loading').style.display = 'none';
@@ -280,7 +245,7 @@
             return iconMap[category] || 'fas fa-folder-open';
         }
 
-        function displayResources(resources) {
+        async function displayResources(resources) {
             const container = document.getElementById('resources-container');
             container.innerHTML = '';
             
@@ -293,8 +258,33 @@
                 groupedResources[resource.category].push(resource);
             });
             
-            // Display each category
-            Object.keys(groupedResources).sort().forEach(category => {
+            // Get category order from API or localStorage fallback
+            let categoryOrder = [];
+            try {
+                const orderResponse = await fetch(`${RESOURCES_API}?action=get_order`);
+                const orderData = await orderResponse.json();
+                if (orderResponse.ok && orderData && orderData.length > 0) {
+                    categoryOrder = orderData;
+                    localStorage.setItem('resource_category_order', JSON.stringify(orderData));
+                } else {
+                    const savedOrder = localStorage.getItem('resource_category_order');
+                    categoryOrder = savedOrder ? JSON.parse(savedOrder) : Object.keys(groupedResources).sort();
+                }
+            } catch (error) {
+                const savedOrder = localStorage.getItem('resource_category_order');
+                categoryOrder = savedOrder ? JSON.parse(savedOrder) : Object.keys(groupedResources).sort();
+            }
+            
+            // Add any new categories not in saved order
+            Object.keys(groupedResources).forEach(cat => {
+                if (!categoryOrder.includes(cat)) {
+                    categoryOrder.push(cat);
+                }
+            });
+            
+            // Display each category in order
+            categoryOrder.forEach(category => {
+                if (!groupedResources[category]) return;
                 const categoryHeader = document.createElement('div');
                 categoryHeader.className = 'category-header';
                 const icon = getCategoryIcon(category);
@@ -334,6 +324,10 @@
         }
 
         function viewMyPage() {
+            if (!isAuthenticated) {
+                window.location.href = 'login.html';
+                return;
+            }
             const userData = localStorage.getItem('user_data');
             if (userData) {
                 const user = JSON.parse(userData);
@@ -342,6 +336,7 @@
         }
         
         function logout() {
+            if (!isAuthenticated) return;
             localStorage.removeItem('auth_token');
             localStorage.removeItem('user_data');
             window.location.href = 'login.html';

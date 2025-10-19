@@ -176,8 +176,10 @@
         <h1>Admin Dashboard</h1>
         <div class="user-info">
             <span id="admin-email">Loading...</span>
-            <a href="videos.html" style="color: white; text-decoration: none; margin-right: 10px; padding: 8px 16px; background: rgba(255,255,255,0.2); border-radius: 4px;">Videos</a>
-            <a href="articles.html" style="color: white; text-decoration: none; margin-right: 10px; padding: 8px 16px; background: rgba(255,255,255,0.2); border-radius: 4px;">Articles</a>
+            <a href="/" style="color: white; text-decoration: none; margin-right: 10px; padding: 8px 16px; background: rgba(255,255,255,0.2); border-radius: 4px;">🏠 Home</a>
+            <a href="videos.html" style="color: white; text-decoration: none; margin-right: 10px; padding: 8px 16px; background: rgba(255,255,255,0.2); border-radius: 4px;">🎬 Videos</a>
+            <a href="articles.html" style="color: white; text-decoration: none; margin-right: 10px; padding: 8px 16px; background: rgba(255,255,255,0.2); border-radius: 4px;">📝 Articles</a>
+            <a href="resources.html" style="color: white; text-decoration: none; margin-right: 10px; padding: 8px 16px; background: rgba(255,255,255,0.2); border-radius: 4px;">📚 Resources</a>
             <button class="logout-btn" onclick="logout()">Logout</button>
         </div>
         <div style="clear: both;"></div>
@@ -324,6 +326,16 @@
             <!-- Resources Tab -->
             <div id="resources" class="tab-pane">
                 <h2>Resource Management</h2>
+                
+                <!-- Category Order Management -->
+                <div style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+                    <h3>Resource Category Display Order</h3>
+                    <p style="color: #666; margin-bottom: 15px;">Drag and drop to reorder how categories appear on the resources page</p>
+                    <div id="resource-category-order-list" style="min-height: 100px; border: 2px dashed #ddd; border-radius: 8px; padding: 15px;">
+                        <!-- Category order items will be loaded here -->
+                    </div>
+                    <button class="btn btn-primary" onclick="saveResourceCategoryOrder()" style="margin-top: 15px;">💾 Save Order</button>
+                </div>
                 
                 <!-- Category Management -->
                 <div style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
@@ -775,6 +787,7 @@
         const COMMENTS_API = 'https://l10alau5g3.execute-api.us-east-1.amazonaws.com/prod/comments';
         const NEWS_API = 'https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news';
         const URL_ANALYSIS_API = 'https://q65k3dbpd7.execute-api.us-east-1.amazonaws.com/prod/analyze';
+        const RESOURCES_API = 'https://ckbtfz4vbl.execute-api.us-east-1.amazonaws.com/prod/resources';
         
         let currentUser = null;
         let authToken = null;
@@ -2285,6 +2298,7 @@
         function loadResourcesAdmin() {
             initializeSampleResources();
             loadResourceCategories();
+            loadResourceCategoryOrder();
             loadResourcesList();
             setupResourceForm();
         }
@@ -2345,6 +2359,7 @@
             document.getElementById('new-category-name').value = '';
             document.getElementById('resources-message').innerHTML = '<div class="success">Category added successfully</div>';
             loadResourceCategories();
+            loadResourceCategoryOrder();
         }
         
         function editCategory(oldName) {
@@ -2368,6 +2383,7 @@
                 
                 document.getElementById('resources-message').innerHTML = '<div class="success">Category renamed successfully</div>';
                 loadResourceCategories();
+                loadResourceCategoryOrder();
             }
         }
         
@@ -2395,6 +2411,7 @@
             
             document.getElementById('resources-message').innerHTML = '<div class="success">Category deleted successfully</div>';
             loadResourceCategories();
+            loadResourceCategoryOrder();
         }
         
         function setupResourceForm() {
@@ -2404,7 +2421,7 @@
             });
         }
         
-        function addResource() {
+        async function addResource() {
             const name = document.getElementById('resource-name').value.trim();
             const category = document.getElementById('resource-category').value;
             const url = document.getElementById('resource-url').value.trim();
@@ -2415,23 +2432,28 @@
                 return;
             }
             
-            let resources = JSON.parse(localStorage.getItem('admin_resources') || '[]');
-            const newResource = {
-                id: Date.now().toString(),
-                name: name,
-                category: category,
-                url: url,
-                description: description
-            };
-            
-            resources.push(newResource);
-            localStorage.setItem('admin_resources', JSON.stringify(resources));
-            
-            // Clear form
-            document.getElementById('resource-form-admin').reset();
-            
-            document.getElementById('resources-message').innerHTML = '<div class="success">Resource added successfully</div>';
-            loadResourcesList();
+            try {
+                const response = await fetch(`${RESOURCES_API}?action=create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: Date.now().toString(),
+                        name: name,
+                        category: category,
+                        url: url,
+                        description: description
+                    })
+                });
+                
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error);
+                
+                document.getElementById('resource-form-admin').reset();
+                document.getElementById('resources-message').innerHTML = '<div class="success">Resource added successfully</div>';
+                loadResourcesList();
+            } catch (error) {
+                document.getElementById('resources-message').innerHTML = `<div class="error">Failed to add resource: ${error.message}</div>`;
+            }
         }
         
         // Initialize sample data if none exists
@@ -2450,9 +2472,14 @@
             }
         }
         
-        function loadResourcesList() {
-            let resources = JSON.parse(localStorage.getItem('admin_resources') || '[]');
-            displayResourcesList(resources);
+        async function loadResourcesList() {
+            try {
+                const response = await fetch(`${RESOURCES_API}?action=list`);
+                const resources = await response.json();
+                displayResourcesList(resources);
+            } catch (error) {
+                document.getElementById('resources-message').innerHTML = `<div class="error">Failed to load resources: ${error.message}</div>`;
+            }
         }
         
         function displayResourcesList(resources) {
@@ -2541,15 +2568,153 @@
             }
         }
         
-        function deleteResource(resourceId) {
+        async function deleteResource(resourceId) {
             if (!confirm('Are you sure you want to delete this resource?')) return;
             
-            let resources = JSON.parse(localStorage.getItem('admin_resources') || '[]');
-            resources = resources.filter(r => r.id !== resourceId);
-            localStorage.setItem('admin_resources', JSON.stringify(resources));
+            try {
+                const response = await fetch(`${RESOURCES_API}?action=delete&resource_id=${resourceId}`, {
+                    method: 'DELETE'
+                });
+                
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error);
+                
+                document.getElementById('resources-message').innerHTML = '<div class="success">Resource deleted successfully</div>';
+                loadResourcesList();
+            } catch (error) {
+                document.getElementById('resources-message').innerHTML = `<div class="error">Failed to delete resource: ${error.message}</div>`;
+            }
+        }
+
+        // Resource Category Order Management Functions
+        async function loadResourceCategoryOrder() {
+            try {
+                const response = await fetch(`${RESOURCES_API}?action=list`);
+                const resources = await response.json();
+                
+                let actualCategories = [];
+                if (resources && resources.length > 0) {
+                    const categorySet = new Set();
+                    resources.forEach(resource => {
+                        if (resource.category) {
+                            categorySet.add(resource.category);
+                        }
+                    });
+                    actualCategories = Array.from(categorySet).sort();
+                }
+                
+                const savedOrder = localStorage.getItem('resource_category_order');
+                let categoryOrder = [];
+                
+                if (savedOrder) {
+                    const saved = JSON.parse(savedOrder);
+                    categoryOrder = [...saved];
+                    actualCategories.forEach(cat => {
+                        if (!categoryOrder.includes(cat)) {
+                            categoryOrder.push(cat);
+                        }
+                    });
+                } else {
+                    categoryOrder = actualCategories;
+                }
+                
+                localStorage.setItem('resource_category_order', JSON.stringify(categoryOrder));
+                displayResourceCategoryOrder(categoryOrder);
+            } catch (error) {
+                console.error('Failed to load resource categories:', error);
+            }
+        }
+        
+        function displayResourceCategoryOrder(categories) {
+            const container = document.getElementById('resource-category-order-list');
+            container.innerHTML = '';
             
-            document.getElementById('resources-message').innerHTML = '<div class="success">Resource deleted successfully</div>';
-            loadResourcesList();
+            if (categories.length === 0) {
+                container.innerHTML = '<p style="color: #999; text-align: center;">No categories yet. Add resources to create categories.</p>';
+                return;
+            }
+            
+            categories.forEach((category, index) => {
+                const item = document.createElement('div');
+                item.className = 'resource-category-order-item';
+                item.draggable = true;
+                item.dataset.category = category;
+                item.style.cssText = 'background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px 15px; margin: 5px; display: inline-block; cursor: move; user-select: none;';
+                item.innerHTML = `
+                    <span style="margin-right: 10px; color: #666;">${index + 1}.</span>
+                    <span style="font-weight: 500;">${category}</span>
+                    <span style="margin-left: 10px; color: #999;">☰</span>
+                `;
+                
+                item.addEventListener('dragstart', handleResourceDragStart);
+                item.addEventListener('dragover', handleResourceDragOver);
+                item.addEventListener('drop', handleResourceDrop);
+                item.addEventListener('dragend', handleResourceDragEnd);
+                
+                container.appendChild(item);
+            });
+        }
+        
+        let draggedResourceElement = null;
+        
+        function handleResourceDragStart(e) {
+            draggedResourceElement = this;
+            this.style.opacity = '0.5';
+        }
+        
+        function handleResourceDragOver(e) {
+            e.preventDefault();
+        }
+        
+        function handleResourceDrop(e) {
+            e.preventDefault();
+            if (this !== draggedResourceElement) {
+                const container = document.getElementById('resource-category-order-list');
+                const allItems = Array.from(container.children);
+                const draggedIndex = allItems.indexOf(draggedResourceElement);
+                const targetIndex = allItems.indexOf(this);
+                
+                if (draggedIndex < targetIndex) {
+                    container.insertBefore(draggedResourceElement, this.nextSibling);
+                } else {
+                    container.insertBefore(draggedResourceElement, this);
+                }
+            }
+        }
+        
+        function handleResourceDragEnd(e) {
+            this.style.opacity = '1';
+            draggedResourceElement = null;
+            
+            const items = document.querySelectorAll('.resource-category-order-item');
+            items.forEach((item, index) => {
+                const numberSpan = item.querySelector('span');
+                numberSpan.textContent = `${index + 1}.`;
+            });
+        }
+        
+        async function saveResourceCategoryOrder() {
+            const items = document.querySelectorAll('.resource-category-order-item');
+            const newOrder = Array.from(items).map(item => item.dataset.category);
+            
+            try {
+                const response = await fetch(`${RESOURCES_API}?action=save_order`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ order: newOrder })
+                });
+                
+                if (response.ok) {
+                    localStorage.setItem('resource_category_order', JSON.stringify(newOrder));
+                    document.getElementById('resources-message').innerHTML = 
+                        '<div class="success">Category order saved globally! All users will see this order.</div>';
+                } else {
+                    throw new Error('Failed to save order');
+                }
+            } catch (error) {
+                document.getElementById('resources-message').innerHTML = 
+                    `<div class="error">Failed to save order: ${error.message}</div>`;
+            }
         }
 
         // Category Order Management Functions

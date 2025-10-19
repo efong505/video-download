@@ -1,6 +1,5 @@
 import json
 import boto3
-from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('resources-table')
@@ -24,6 +23,10 @@ def lambda_handler(event, context):
             return create_resource(event, headers)
         elif action == 'delete':
             return delete_resource(event, headers)
+        elif action == 'get_order':
+            return get_category_order(headers)
+        elif action == 'save_order':
+            return save_category_order(event, headers)
         else:
             return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'Invalid action'})}
     except Exception as e:
@@ -62,3 +65,19 @@ def delete_resource(event, headers):
     
     table.delete_item(Key={'resource_id': resource_id})
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Resource deleted'})}
+
+def get_category_order(headers):
+    try:
+        response = table.get_item(Key={'resource_id': '_category_order'})
+        if 'Item' in response:
+            return {'statusCode': 200, 'headers': headers, 'body': json.dumps(response['Item']['order'])}
+        return {'statusCode': 200, 'headers': headers, 'body': json.dumps([])}
+    except:
+        return {'statusCode': 200, 'headers': headers, 'body': json.dumps([])}
+
+def save_category_order(event, headers):
+    body = json.loads(event.get('body', '{}'))
+    order = body.get('order', [])
+    
+    table.put_item(Item={'resource_id': '_category_order', 'order': order})
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Order saved'})}
