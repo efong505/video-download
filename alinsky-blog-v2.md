@@ -90,36 +90,42 @@ That's not subtle. One of the most prominent progressive voices in America is ch
 
 Among the Midwest Academy's alumni? US Representative Jan Schakowsky of Illinois. Robert Creamer, one of the Academy's directors, previously worked for Chicago's Citizen Action Program—which was created by Alinsky's Industrial Areas Foundation.
 
-See the pattern?
+[Bernie Sanders keynoted their 50th anniversary](https://www.thenation.com/article/politics/midwest-academy-organizing/), also praises their work while carefully avoiding any mention of their Alinsky roots.
 
-### Barack Obama: The Alinsky Connection
+This is the pattern: use the methods, hide the source, claim it's just "community organizing."
 
-Let's talk about the most prominent example: Barack Obama.
+### Barack Obama: The Alinsky President
 
-From 1985 to 1988, fresh out of college, Obama worked as a community organizer in Chicago. He served as executive director of the Developing Communities Project, where he set up job training programs, college-prep tutoring, and tenants' rights organizations.
+Obama didn't just learn these tactics—he taught them. From 1985-1988, he [worked as a community organizer](https://www.washingtonpost.com/politics/decision2012/obamas-organizing-years-guiding-others-and-finding-himself/2012/08/26/b0b9b5b8-e4c6-11e1-8f62-58260e3940a0_story.html) using Alinsky's methods. He [led workshops on Alinsky's concepts](https://www.bostonglobe.com/news/politics/2012/03/25/the-story-behind-mitt-romney-attacks-barack-obama-saul-alinsky/cHpUP7bUQAjjqBN8dMD4cM/story.html). He served on boards funding this radical organizing.
 
-But here's the kicker: Obama worked in the organizing tradition of Saul Alinsky, as translated through the Gamaliel Foundation—another organization in the Alinsky lineage. And the Midwest Academy was indirectly responsible for funding Obama's early organizing work.
+Then he became president and used these same tactics against the American people. Remember ["punish our enemies"](https://www.politico.com/story/2010/10/obama-to-latinos-punish-our-enemies-044130)? Remember the [IRS targeting conservatives](https://www.washingtonpost.com/business/economy/irs-admits-targeting-conservatives-for-tax-exemption-applications/2013/05/10/3b6a0ada-b987-11e2-92f3-f291801936b8_story.html)? Remember the weaponization of federal agencies? That's Alinsky's Rule #13 in action: pick the target, freeze it, personalize it, polarize it.
 
-Obama didn't just work in this tradition—he taught it. He led workshops on Alinsky's concepts and methods. He served on boards of foundations supporting community organizing. When he first ran for office in 1996, he pledged to bring the spirit of community organizing to the state Senate.
+The media called it "hope and change." Conservatives who understood the source called it what it was: radical transformation using Alinsky's playbook.
 
-Then he became president. And suddenly, conservatives had a field day linking him to Alinsky, trying to paint him as a radical. The association became toxic.
+### AOC and the New Radicals
 
-### The New Generation: AOC and Movement Politics
-
-Fast forward to 2016. A young bartender from the Bronx named Alexandria Ocasio-Cortez volunteers as an organizer for Bernie Sanders' presidential campaign. She learns the grassroots organizing playbook. Two years later, she pulls off one of the biggest upsets in congressional history.
+Fast forward to 2016. A young bartender from the Bronx named lexandria Ocasio-Cortez came up through [Bernie Sanders' campaign](https://www.vox.com/policy-and-politics/2018/6/27/17509604/alexandria-ocasio-cortez-democratic-socialist-of-america), learning the same organizing methods. After her upset victory, her team launched [Movement School](https://www.politico.com/news/magazine/2019/12/19/alexandria-ocasio-cortez-organizers-087670) to train the next generation of radicals.
 
 After her victory, lead organizers from her campaign launched Movement School—a 10-week program training the next generation of progressive organizers. The first graduating class? Eighty-two percent people of color, 80 percent from working-class backgrounds.
 
-Sound familiar? That's Alinsky 101: organize in marginalized communities, train local leaders, build power from the bottom up.
+Notice the pattern? Each generation trains the next, spreading Alinsky's methods while burying his name deeper. The tactics get more sophisticated, the technology gets more powerful, but the goal remains the same: destroy traditional American institutions and values.
 
-## What Modern Democratic Organizing Looks Like
+## What This Really Looks Like in Practice
 
-The methods are alive and well, even if the name stays buried. Here's what's happening right now:
+Democrats don't just use these tactics—they've weaponized them with government power and cutting-edge technology.
 
 ### People's Action
 This major organizing network offers ["Base Building & Campaigns Boot Camp"](https://peoplesaction.org/organizing-revival/) and "Fundamentals of Organizing" training. Their curriculum emphasizes building relationships grounded in mutual self-interest, power analysis, and one-to-one relational meetings.
 
 Every single one of those concepts comes straight from Alinsky's playbook. But you won't find his name in their materials.
+
+### Government as Alinsky Weapon
+
+Look at how they've applied Rule #4 ("Make the enemy live up to its own book of rules"):
+- Weaponize civil rights laws against conservatives
+- Use environmental regulations to destroy traditional industries  
+- Turn "hate speech" rules into censorship of conservative voices
+- Demand "tolerance" while being completely intolerant of traditional values
 
 ### The DNC Gets Serious About Organizing
 In 2021, Grassroots Democrats HQ and Blue Future launched "Organize for Democracy," a paid training program teaching young activists organizing basics. By 2024, they had 275 young organizers from more than 20 states making over half a million calls.
@@ -142,17 +148,20 @@ Here's what's fascinating: all these programs teach Alinsky's core principles, j
 
 Sound familiar? It should. These are Alinsky's principles, taught without attribution.
 
-## Why the Silence?
 
-So why don't Democrats just own it? Why the strategic amnesia around Alinsky's name?
 
-Simple: conservatives successfully weaponized it.
+## Why They Hide the Name
 
-During the 2008 campaign, Republicans tried to paint Obama as a dangerous radical by linking him to Alinsky. During 2016, they did the same with Hillary Clinton (who wrote her undergraduate thesis on Alinsky back in 1969). The name became associated with radicalism, subversion, un-American activity.
+Democrats know that if Americans understood the source of their tactics, they'd be horrified. Alinsky was a radical who:
+- Dedicated his book to Lucifer
+- Openly despised American institutions
+- Advocated for the destruction of traditional values
+- Trained organizers to lie about their true goals
+- Believed the ends always justify the means
 
-For Democrats, saying "Alinsky" became political poison. Better to just teach the methods under the neutral label of "community organizing" and avoid the controversy entirely.
+So they rebrand it as "community organizing" and "grassroots activism." They train thousands in these methods while scrubbing Alinsky's name from the materials. They use his tactics while claiming moral authority.
 
-It's actually a brilliant bit of political judo. Republicans attack "Alinsky tactics," Democrats respond with "we're just doing community organizing," and the methods continue spreading while the conversation gets stuck on the name.
+It's the ultimate application of Alinsky's own rules: deceive about your true intentions while destroying your opponents.
 
 ## The Ghost Becomes the Machine: AI and Alinsky's Tactics
 

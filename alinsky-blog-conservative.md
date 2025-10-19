@@ -10,7 +10,7 @@ This isn't ancient history. This is happening right now, in every Democratic cam
 
 ## Who Was Saul Alinsky? The Radical They Don't Want You to Know
 
-Saul Alinsky (1909-1972) wasn't just a "community organizer"—he was a revolutionary who openly despised American institutions and wrote the manual for destroying them from within. His 1971 book <a href="https://archive.org/details/RulesForRadicals" target="_blank">Rules For Radicals</a> ["Rules for Radicals"](https://archive.org/details/RulesForRadicals) literally opens with an acknowledgment to Lucifer as ["the first radical known to man who rebelled against the establishment."](https://www.snopes.com/fact-check/saul-alinsky-dedicated-rules-for-radicals-to-lucifer/)
+Saul Alinsky (1909-1972) wasn't just a "community organizer"—he was a revolutionary who openly despised American institutions and wrote the manual for destroying them from within. His 1971 book ["Rules for Radicals"](https://archive.org/details/RulesForRadicals) literally opens with an acknowledgment to Lucifer as ["the first radical known to man who rebelled against the establishment."](https://www.snopes.com/fact-check/saul-alinsky-dedicated-rules-for-radicals-to-lucifer/)
 
 Let that sink in. The intellectual godfather of modern Democratic politics acknowledges that the first person to create a rebellion against the establishiment was Satan himself.
 
@@ -18,31 +18,47 @@ Let that sink in. The intellectual godfather of modern Democratic politics ackno
 
 Democrats love to rebrand these as "organizing principles," but let's call them what they really are—[weapons of political warfare](https://www.goodreads.com/work/quotes/1689347-rules-for-radicals-a-pragmatic-primer-for-realistic-radicals) designed to tear down traditional American values:
 
-1. **Power is not only what you have but what the enemy thinks you have** - Deception and intimidation as core strategy
+<ol>
+<li><strong>Power is not only what you have but what the enemy thinks you have</strong> - Deception and intimidation as core strategy</li>
+<li><strong>Never go outside the expertise of your people</strong> - Keep your radicals in their comfort zone while they attack ours</li>
+<li><strong>Whenever possible, go outside the expertise of the enemy</strong> - Force conservatives to fight on unfamiliar ground</li>
+<li><strong>Make the enemy live up to its own book of rules</strong> - Weaponize our principles against us while abandoning their own</li>
+<li><strong>Ridicule is man's most potent weapon</strong> - Mock, shame, and humiliate anyone who disagrees</li>
+<li><strong>A good tactic is one your people enjoy</strong> - Make destruction fun for the foot soldiers</li>
+<li><strong>A tactic that drags on too long becomes a drag</strong> - Keep changing attacks so we can't defend effectively</li>
+<li><strong>Keep the pressure on with different tactics</strong> - Never let conservatives recover or regroup</li>
+<li><strong>The threat is usually more terrifying than the thing itself</strong> - Rule by fear and intimidation</li>
+<li><strong>Maintain constant pressure upon the opposition</strong> - Exhaust and demoralize traditional Americans</li>
+<li><strong>If you push a negative hard enough, it will push through and become a positive</strong> - Turn every crisis into an opportunity for more power</li>
+<li><strong>The price of a successful attack is a constructive alternative</strong> - Always have the government solution ready</li>
+<li><strong>Pick the target, freeze it, personalize it, and polarize it</strong> - Destroy individuals who stand in the way</li>
+</ol>
 
-2. **Never go outside the expertise of your people** - Keep your radicals in their comfort zone while they attack ours
+<!-- 1\. **Power is not only what you have but what the enemy thinks you have** - Deception and intimidation as core strategy
 
-3. **Whenever possible, go outside the expertise of the enemy** - Force conservatives to fight on unfamiliar ground
+2\. **Never go outside the expertise of your people** - Keep your radicals in their comfort zone while they attack ours
 
-4. **Make the enemy live up to its own book of rules** - Weaponize our principles against us while abandoning their own
+3\. **Whenever possible, go outside the expertise of the enemy** - Force conservatives to fight on unfamiliar ground
 
-5. **Ridicule is man's most potent weapon** - Mock, shame, and humiliate anyone who disagrees
+4\. **Make the enemy live up to its own book of rules** - Weaponize our principles against us while abandoning their own
 
-6. **A good tactic is one your people enjoy** - Make destruction fun for the foot soldiers
+5\. **Ridicule is man's most potent weapon** - Mock, shame, and humiliate anyone who disagrees
 
-7. **A tactic that drags on too long becomes a drag** - Keep changing attacks so we can't defend effectively
+6\. **A good tactic is one your people enjoy** - Make destruction fun for the foot soldiers
 
-8. **Keep the pressure on with different tactics** - Never let conservatives recover or regroup
+7\. **A tactic that drags on too long becomes a drag** - Keep changing attacks so we can't defend effectively
 
-9. **The threat is usually more terrifying than the thing itself** - Rule by fear and intimidation
+8\. **Keep the pressure on with different tactics** - Never let conservatives recover or regroup
 
-10. **Maintain constant pressure upon the opposition** - Exhaust and demoralize traditional Americans
+9\. **The threat is usually more terrifying than the thing itself** - Rule by fear and intimidation
 
-11. **If you push a negative hard enough, it will push through and become a positive** - Turn every crisis into an opportunity for more power
+10\. **Maintain constant pressure upon the opposition** - Exhaust and demoralize traditional Americans
 
-12. **The price of a successful attack is a constructive alternative** - Always have the government solution ready
+11\. **If you push a negative hard enough, it will push through and become a positive** - Turn every crisis into an opportunity for more power
 
-13. **Pick the target, freeze it, personalize it, and polarize it** - Destroy individuals who stand in the way
+12\. **The price of a successful attack is a constructive alternative** - Always have the government solution ready
+
+13\. **Pick the target, freeze it, personalize it, and polarize it** - Destroy individuals who stand in the way -->
 
 Sound familiar? This is the playbook behind cancel culture, the weaponization of government agencies, and the systematic destruction of anyone who challenges the progressive agenda.
 
