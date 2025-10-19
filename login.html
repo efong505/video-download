@@ -201,8 +201,10 @@
                     messageDiv.innerHTML = `<div class="message success">${data.message}</div>`;
                     
                     if (isLoginMode && data.token) {
-                        localStorage.setItem('auth_token', data.token);
-                        localStorage.setItem('user_data', JSON.stringify(data.user));
+                        localStorage.setItem('token', data.token);
+                        localStorage.setItem('userEmail', data.user.email);
+                        localStorage.setItem('userRole', data.user.role);
+                        localStorage.setItem('userName', data.user.name);
                         
                         setTimeout(() => {
                             if (data.user.role === 'admin' || data.user.role === 'super_user') {
@@ -223,13 +225,12 @@
 
         // Check if already logged in
         window.addEventListener('load', function() {
-            const token = localStorage.getItem('auth_token');
-            const userData = localStorage.getItem('user_data');
+            const token = localStorage.getItem('token');
+            const userEmail = localStorage.getItem('userEmail');
             
-            if (token && userData) {
-                const user = JSON.parse(userData);
+            if (token && userEmail) {
                 document.getElementById('message').innerHTML = 
-                    `<div class="message success">Already logged in as ${user.email}</div>`;
+                    `<div class="message success">Already logged in as ${userEmail}</div>`;
             }
         });
     </script>

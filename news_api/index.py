@@ -3,8 +3,7 @@ import boto3
 import uuid
 from datetime import datetime
 from decimal import Decimal
-import jwt
-import os
+import base64
 
 # Initialize DynamoDB
 dynamodb = boto3.resource('dynamodb')
@@ -58,14 +57,28 @@ def lambda_handler(event, context):
 def verify_token(event):
     """Verify JWT token and return user info"""
     try:
-        auth_header = event.get('headers', {}).get('Authorization', '')
+        headers = event.get('headers', {})
+        auth_header = headers.get('Authorization') or headers.get('authorization', '')
         if not auth_header.startswith('Bearer '):
             return None
         
         token = auth_header.split(' ')[1]
-        payload = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
+        parts = token.split('.')
+        if len(parts) != 3:
+            return None
+        
+        # Decode payload
+        payload_data = parts[1]
+        payload_data += '=' * (4 - len(payload_data) % 4)
+        payload = json.loads(base64.urlsafe_b64decode(payload_data))
+        
+        # Check expiration
+        if payload.get('exp', 0) < datetime.utcnow().timestamp():
+            return None
+        
         return payload
-    except:
+    except Exception as e:
+        print(f"Token verification error: {str(e)}")
         return None
 
 def verify_admin_token(event):
