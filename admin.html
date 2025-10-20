@@ -2723,38 +2723,29 @@
         // Resource Category Order Management Functions
         async function loadResourceCategoryOrder() {
             try {
-                const response = await fetch(`${RESOURCES_API}?action=list`);
-                const resources = await response.json();
+                // Get categories from API (same source as Manage Categories section)
+                const response = await fetch(`${RESOURCES_API}?action=get_categories`);
+                const categories = await response.json();
                 
-                let actualCategories = [];
-                if (resources && resources.length > 0) {
-                    const categorySet = new Set();
-                    resources.forEach(resource => {
-                        if (resource.category) {
-                            categorySet.add(resource.category);
-                        }
-                    });
-                    actualCategories = Array.from(categorySet).sort();
-                }
+                // Get saved order from API
+                const orderResponse = await fetch(`${RESOURCES_API}?action=get_order`);
+                const savedOrder = await orderResponse.json();
                 
-                const savedOrder = localStorage.getItem('resource_category_order');
                 let categoryOrder = [];
                 
-                if (savedOrder) {
-                    const saved = JSON.parse(savedOrder);
-                    // Only keep categories that have resources
-                    categoryOrder = saved.filter(cat => actualCategories.includes(cat));
-                    // Add new categories
-                    actualCategories.forEach(cat => {
+                if (savedOrder && savedOrder.length > 0) {
+                    // Use saved order, but add any new categories that aren't in the order yet
+                    categoryOrder = [...savedOrder];
+                    categories.forEach(cat => {
                         if (!categoryOrder.includes(cat)) {
                             categoryOrder.push(cat);
                         }
                     });
                 } else {
-                    categoryOrder = actualCategories;
+                    // No saved order, use categories as-is
+                    categoryOrder = categories;
                 }
                 
-                localStorage.setItem('resource_category_order', JSON.stringify(categoryOrder));
                 displayResourceCategoryOrder(categoryOrder);
             } catch (error) {
                 console.error('Failed to load resource categories:', error);

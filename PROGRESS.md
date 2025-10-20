@@ -671,6 +671,12 @@ articles-table:
 - [x] **Featured image system** ✅ COMPLETE - Upload featured images, thumbnail display in listings, Open Graph integration, image compression
 - [x] **Horizontal scrolling UI** ✅ COMPLETE - Netflix/YouTube-style horizontal scroll with arrow navigation for videos, resources, articles, and news pages
 - [x] **Resource management enhancements** ✅ COMPLETE - Edit functionality, emoji icons (47 keywords), category bulk rename, empty category cleanup
+- [ ] **Multiple categories per resource** - Allow resources to be assigned to multiple categories simultaneously with backward compatibility for existing single-category resources. Implementation requires:
+  - Backend: Convert category field from string to array in resources_api Lambda
+  - Frontend: Change category dropdown to multi-select checkboxes in admin.html
+  - Display: Update resources.html to show resources in multiple category sections
+  - Migration: Automatic conversion of existing string categories to single-item arrays
+  - Backward compatibility: Handle both string and array formats during transition
 - [ ] **Auto-summary for resources** - AI-powered website analysis to generate descriptions from URLs, with admin override capability and manual editing
 - [ ] **News management system** - Topic-based news page with admin backend, breaking news banners, scheduled publishing, external link support, Christian/political news categories, and state-specific election coverage with contributor network for Republican candidate tracking across all 50 states
 - [ ] **State election contributor system** - Interactive state map, state correspondent assignments, candidate profiles, election calendar, and local Republican election coverage from verified contributors in each state
