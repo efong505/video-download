@@ -258,6 +258,7 @@
             <div class="tab" onclick="showTab('users')">Users</div>
             <div class="tab" onclick="showTab('videos')">Videos</div>
             <div class="tab" onclick="showTab('tags')">Tags</div>
+            <div class="tab" onclick="showTab('articles')">Articles</div>
             <div class="tab" onclick="showTab('resources')">Resources</div>
             <div class="tab" onclick="showTab('comments')">Comments</div>
             <div class="tab" onclick="showTab('news')">News</div>
@@ -364,6 +365,44 @@
                     </thead>
                     <tbody id="videos-tbody"></tbody>
                 </table>
+            </div>
+
+            <!-- Articles Tab -->
+            <div id="articles" class="tab-pane">
+                <h2>Article Management</h2>
+                
+                <!-- Article Categories -->
+                <div style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+                    <h3>Article Categories</h3>
+                    <div id="article-categories-list" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+                        <span class="category-badge category-sermon">Sermon</span>
+                        <span class="category-badge category-politics">Politics</span>
+                        <span class="category-badge category-devotional">Devotional</span>
+                        <span class="category-badge category-apologetics">Apologetics</span>
+                        <span class="category-badge category-ministry">Ministry</span>
+                        <span class="category-badge category-service_notes">Service Notes</span>
+                        <span class="category-badge category-study_notes">Study Notes</span>
+                        <span class="category-badge category-bible_study">Bible Study</span>
+                        <span class="category-badge category-general">General</span>
+                    </div>
+                    <p style="color: #666; margin-top: 15px; font-size: 0.9rem;">Categories are predefined. Use tags for custom organization.</p>
+                </div>
+                
+                <!-- Article Tags Management -->
+                <div style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+                    <h3>Article Tags</h3>
+                    <div id="article-tags-loading" class="text-center" style="padding: 20px;">
+                        <div class="spinner-border" role="status"></div>
+                        <p class="mt-2">Loading tags...</p>
+                    </div>
+                    <div id="article-tags-container" style="display: none;">
+                        <div id="article-tags-list" style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+                            <!-- Tags will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="articles-message"></div>
             </div>
 
             <!-- Tags Tab -->
@@ -855,6 +894,7 @@
         const NEWS_API = 'https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news';
         const URL_ANALYSIS_API = 'https://q65k3dbpd7.execute-api.us-east-1.amazonaws.com/prod/analyze';
         const RESOURCES_API = 'https://ckbtfz4vbl.execute-api.us-east-1.amazonaws.com/prod/resources';
+        const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';
         
         let currentUser = null;
         let authToken = null;
@@ -897,6 +937,7 @@
             if (tabName === 'users') loadUsers();
             if (tabName === 'videos') { loadVideos(); loadCategoryOrder(); }
             if (tabName === 'tags') loadTags();
+            if (tabName === 'articles') loadArticleTags();
             if (tabName === 'resources') loadResourcesAdmin();
             if (tabName === 'comments') loadComments();
             if (tabName === 'news') loadNews();
@@ -3429,6 +3470,60 @@
                 document.getElementById('news-message').innerHTML = 
                     `<div class="error">Failed to delete news: ${error.message}</div>`;
             }
+        }
+
+        // Article Tags Management
+        async function loadArticleTags() {
+            document.getElementById('article-tags-loading').style.display = 'block';
+            document.getElementById('article-tags-container').style.display = 'none';
+            
+            try {
+                const response = await fetch(`${ARTICLES_API}?action=list&visibility=public`);
+                const data = await response.json();
+                
+                if (response.ok && data.articles) {
+                    displayArticleTags(data.articles);
+                } else {
+                    throw new Error('Failed to load articles');
+                }
+            } catch (error) {
+                document.getElementById('articles-message').innerHTML = 
+                    `<div class="error">Failed to load article tags: ${error.message}</div>`;
+            } finally {
+                document.getElementById('article-tags-loading').style.display = 'none';
+            }
+        }
+        
+        function displayArticleTags(articles) {
+            const tagCounts = {};
+            articles.forEach(article => {
+                if (article.tags && Array.isArray(article.tags)) {
+                    article.tags.forEach(tag => {
+                        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                    });
+                }
+            });
+            
+            const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
+            
+            const container = document.getElementById('article-tags-list');
+            container.innerHTML = '';
+            
+            if (sortedTags.length === 0) {
+                container.innerHTML = '<p class="text-muted">No tags found. Tags are created when articles are published.</p>';
+            } else {
+                sortedTags.forEach(([tag, count]) => {
+                    const tagBadge = document.createElement('span');
+                    tagBadge.style.cssText = 'background: #667eea; color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px;';
+                    tagBadge.innerHTML = `
+                        <span>🏷️ ${tag}</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">${count}</span>
+                    `;
+                    container.appendChild(tagBadge);
+                });
+            }
+            
+            document.getElementById('article-tags-container').style.display = 'block';
         }
 
         function getCategoryEmoji(categoryName) {

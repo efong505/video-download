@@ -162,12 +162,15 @@
 
             <form id="newsForm">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                         <div class="mb-3">
                             <label for="title" class="form-label">Title *</label>
                             <input type="text" class="form-control" id="title" required>
                         </div>
                     </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label for="category" class="form-label">Category</label>
@@ -176,9 +179,26 @@
                                 <option value="politics">Politics</option>
                                 <option value="christian">Christian News</option>
                                 <option value="election">Election Coverage</option>
+                                <option value="state-election">State Elections</option>
                                 <option value="breaking">Breaking News</option>
                                 <option value="commentary">Commentary</option>
+                                <option value="world">World News</option>
+                                <option value="local">Local News</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="state" class="form-label">State (Optional)</label>
+                            <select class="form-select" id="state">
+                                <option value="">None</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="scheduled_publish" class="form-label">Schedule Publish (Optional)</label>
+                            <input type="datetime-local" class="form-control" id="scheduled_publish">
                         </div>
                     </div>
                 </div>
@@ -280,6 +300,9 @@
                 window.location.href = 'login.html';
                 return;
             }
+            
+            // Populate state dropdown
+            populateStateDropdown();
 
             // Initialize Quill
             quill = new Quill('#editor', {
@@ -306,6 +329,27 @@
                 }
             });
         });
+        
+        function populateStateDropdown() {
+            var states = [
+                'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
+                'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
+                'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan',
+                'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+                'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio',
+                'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
+                'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
+                'Wisconsin', 'Wyoming'
+            ];
+            
+            var select = document.getElementById('state');
+            states.forEach(function(state) {
+                var option = document.createElement('option');
+                option.value = state.toLowerCase().replace(/ /g, '-');
+                option.textContent = state;
+                select.appendChild(option);
+            });
+        }
 
         function addTag(tagText) {
             if (tagText && !tags.includes(tagText)) {
@@ -357,16 +401,21 @@
         function createNews() {
             var token = localStorage.getItem('token');
             
+            var scheduledPublish = document.getElementById('scheduled_publish').value;
+            var state = document.getElementById('state').value;
+            
             var newsData = {
                 title: document.getElementById('title').value,
                 content: quill.root.innerHTML,
                 summary: document.getElementById('summary').value,
                 category: document.getElementById('category').value,
+                state: state,
                 visibility: document.getElementById('visibility').value,
                 status: document.getElementById('status').value,
                 is_breaking: isBreaking,
                 external_url: document.getElementById('external_url').value,
                 featured_image: document.getElementById('featured_image').value,
+                scheduled_publish: scheduledPublish ? new Date(scheduledPublish).toISOString() : '',
                 tags: tags
             };
 

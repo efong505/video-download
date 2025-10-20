@@ -664,7 +664,7 @@ articles-table:
 ## Phase 3 Step 4: Advanced Features
 **Status**: Items 8-10 from Implementation Status above
 - [x] **Comment system for articles** ✅ COMPLETE - User comments, moderation tools, discussion threads, nested replies, edit/delete functionality
-- [ ] **Article categories and tagging** - Enhanced category system, tag management, filtering
+- [x] **Article categories and tagging** ✅ COMPLETE - Tag cloud with popular tags, clickable tag filtering, tag dropdown filter, category-based organization, admin tag management dashboard
 - [x] **Search functionality for articles** ✅ COMPLETE - Full-text search, category search, tag search, author search
 - [x] **Article sharing and social media integration** ✅ COMPLETE - Social media sharing buttons, link copying, Open Graph meta tags
 - [x] **Public article viewing** ✅ COMPLETE - Non-authenticated users can access public articles for improved ministry outreach
@@ -678,7 +678,7 @@ articles-table:
   - Migration: Automatic conversion of existing string categories to single-item arrays
   - Backward compatibility: Handle both string and array formats during transition
 - [x] **Auto-summary for resources** ✅ COMPLETE - AI-powered website analysis to generate descriptions from URLs using AWS Bedrock Claude, with admin override capability and manual editing
-- [ ] **News management system** - Topic-based news page with admin backend, breaking news banners, scheduled publishing, external link support, Christian/political news categories, and state-specific election coverage with contributor network for Republican candidate tracking across all 50 states
+- [x] **News management system** ✅ COMPLETE - Topic-based news with breaking news banners, scheduled publishing, state-specific election coverage, external link support, Christian/political news categories, horizontal scrolling UI, admin creation/editing, and comprehensive filtering
 - [ ] **State election contributor system** - Interactive state map, state correspondent assignments, candidate profiles, election calendar, and local Republican election coverage from verified contributors in each state
 - [ ] **Related articles suggestions** - Algorithm-based article recommendations
 - [ ] **Article analytics and view tracking** - Detailed analytics, view statistics, engagement metrics

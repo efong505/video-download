@@ -200,6 +200,34 @@
             margin-right: 8px;
             margin-bottom: 5px;
             display: inline-block;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .tag-badge:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-1px);
+        }
+        .tag-cloud-item {
+            background: #f8f9fa;
+            color: #495057;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid #dee2e6;
+        }
+        .tag-cloud-item:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        .tag-cloud-item.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
         }
         .category-badge {
             padding: 4px 12px;
@@ -268,6 +296,16 @@
     </div>
 
     <div class="container">
+        <!-- Popular Tags Cloud -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3">🏷️ Popular Tags</h5>
+                <div id="tags-cloud" class="d-flex flex-wrap gap-2">
+                    <div class="spinner-border spinner-border-sm" role="status"></div>
+                </div>
+            </div>
+        </div>
+
         <!-- Filter Bar -->
         <div class="filter-bar">
             <div class="row g-3 align-items-center">
@@ -291,6 +329,11 @@
                         <option value="general">General</option>
                     </select>
                 </div>
+                <div class="col-lg-2 col-md-6 col-sm-6">
+                    <select id="tag-filter" class="form-select" style="border-radius: 25px;">
+                        <option value="">All Tags</option>
+                    </select>
+                </div>
                 <div class="col-lg-2 col-md-4 col-sm-6">
                     <select id="draft-filter" class="form-select" style="border-radius: 25px;">
                         <option value="">All Articles</option>
@@ -298,7 +341,7 @@
                         <option value="published">✅ Published</option>
                     </select>
                 </div>
-                <div class="col-lg-3 col-md-4">
+                <div class="col-lg-2 col-md-4">
                     <select id="author-filter" class="form-select" style="border-radius: 25px;">
                         <option value="">All Authors</option>
                     </select>
@@ -567,6 +610,7 @@
                 } else {
                     displayArticles(allArticles);
                     populateAuthorFilter(allArticles);
+                    populateTagsCloud(allArticles);
                     document.getElementById('articles-container').style.display = 'block';
                 }
                 
@@ -759,7 +803,7 @@
                     
                     ${article.tags && Array.isArray(article.tags) && article.tags.length > 0 ? 
                         `<div class="article-tags">
-                            ${article.tags.slice(0, 8).map(tag => `<span class="tag-badge">${(tag || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;')}</span>`).join('')}
+                            ${article.tags.slice(0, 8).map(tag => `<span class="tag-badge" onclick="filterByTag('${(tag || '').replace(/'/g, "\\'")}')">🏷️ ${(tag || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;')}</span>`).join('')}
                         </div>` : ''
                     }
                     
@@ -818,6 +862,62 @@
                 authorFilter.appendChild(option);
             });
         }
+        
+        function populateTagsCloud(articles) {
+            const tagCounts = {};
+            articles.forEach(article => {
+                if (article.tags && Array.isArray(article.tags)) {
+                    article.tags.forEach(tag => {
+                        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                    });
+                }
+            });
+            
+            const sortedTags = Object.entries(tagCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 20);
+            
+            const tagsCloud = document.getElementById('tags-cloud');
+            tagsCloud.innerHTML = '';
+            
+            if (sortedTags.length === 0) {
+                tagsCloud.innerHTML = '<small class="text-muted">No tags yet</small>';
+                return;
+            }
+            
+            sortedTags.forEach(([tag, count]) => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'tag-cloud-item';
+                tagElement.textContent = `${tag} (${count})`;
+                tagElement.onclick = () => filterByTag(tag);
+                tagsCloud.appendChild(tagElement);
+            });
+            
+            // Also populate tag filter dropdown
+            const tagFilter = document.getElementById('tag-filter');
+            tagFilter.innerHTML = '<option value="">All Tags</option>';
+            sortedTags.forEach(([tag]) => {
+                const option = document.createElement('option');
+                option.value = tag;
+                option.textContent = tag;
+                tagFilter.appendChild(option);
+            });
+        }
+        
+        function filterByTag(tag) {
+            document.getElementById('tag-filter').value = tag;
+            document.getElementById('search-input').value = '';
+            document.getElementById('category-filter').value = '';
+            document.getElementById('author-filter').value = '';
+            applyFilters();
+            
+            // Highlight active tag
+            document.querySelectorAll('.tag-cloud-item').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Scroll to articles
+            document.getElementById('articles-container').scrollIntoView({ behavior: 'smooth' });
+        }
 
         function setupFilters() {
             const searchInput = document.getElementById('search-input');
@@ -835,16 +935,20 @@
             categoryFilter.addEventListener('change', applyFilters);
             authorFilter.addEventListener('change', applyFilters);
             draftFilter.addEventListener('change', applyFilters);
+            
+            const tagFilter = document.getElementById('tag-filter');
+            tagFilter.addEventListener('change', applyFilters);
         }
 
         async function applyFilters() {
             const searchTerm = document.getElementById('search-input').value.trim();
             const selectedCategory = document.getElementById('category-filter').value;
             const selectedAuthor = document.getElementById('author-filter').value;
+            const selectedTag = document.getElementById('tag-filter').value;
             const selectedDraftFilter = document.getElementById('draft-filter').value;
             
             // If no filters applied, just display all articles
-            if (!searchTerm && !selectedCategory && !selectedAuthor && !selectedDraftFilter) {
+            if (!searchTerm && !selectedCategory && !selectedAuthor && !selectedTag && !selectedDraftFilter) {
                 displayArticles(allArticles);
                 return;
             }
@@ -860,8 +964,9 @@
                     
                     const matchesCategory = !selectedCategory || article.category === selectedCategory;
                     const matchesAuthor = !selectedAuthor || article.author === selectedAuthor;
+                    const matchesTag = !selectedTag || (article.tags && article.tags.includes(selectedTag));
                     
-                    return matchesSearch && matchesCategory && matchesAuthor;
+                    return matchesSearch && matchesCategory && matchesAuthor && matchesTag;
                 });
                 
                 // Apply draft filter
@@ -894,7 +999,9 @@
             document.getElementById('search-input').value = '';
             document.getElementById('category-filter').value = '';
             document.getElementById('author-filter').value = '';
+            document.getElementById('tag-filter').value = '';
             document.getElementById('draft-filter').value = '';
+            document.querySelectorAll('.tag-cloud-item').forEach(el => el.classList.remove('active'));
             displayArticles(allArticles);
         }
 

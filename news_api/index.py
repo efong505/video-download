@@ -127,6 +127,17 @@ def create_news(event, headers):
         news_id = str(uuid.uuid4())
         now = datetime.utcnow().isoformat()
         
+        # Determine status based on scheduled_publish
+        scheduled_publish = body.get('scheduled_publish', '')
+        status = body.get('status', 'published')
+        if scheduled_publish:
+            try:
+                scheduled_time = datetime.fromisoformat(scheduled_publish.replace('Z', '+00:00'))
+                if scheduled_time > datetime.utcnow():
+                    status = 'scheduled'
+            except:
+                pass
+        
         news_item = {
             'news_id': news_id,
             'title': body['title'],
@@ -134,14 +145,15 @@ def create_news(event, headers):
             'summary': body.get('summary', ''),
             'category': body.get('category', 'general'),
             'tags': body.get('tags', []),
+            'state': body.get('state', ''),
             'author': user_info['email'],
             'author_name': get_user_name(user_info['email']),
             'visibility': body.get('visibility', 'public'),
             'is_breaking': body.get('is_breaking', False),
             'external_url': body.get('external_url', ''),
             'featured_image': body.get('featured_image', ''),
-            'scheduled_publish': body.get('scheduled_publish', ''),
-            'status': body.get('status', 'published'),
+            'scheduled_publish': scheduled_publish,
+            'status': status,
             'created_at': now,
             'updated_at': now,
             'view_count': 0
@@ -172,6 +184,7 @@ def list_news(event, headers):
         category = params.get('category')
         visibility = params.get('visibility')
         breaking_only = params.get('breaking') == 'true'
+        state = params.get('state')
         
         # Scan news table
         scan_kwargs = {}
@@ -189,6 +202,14 @@ def list_news(event, headers):
         if breaking_only:
             filter_expressions.append('is_breaking = :breaking')
             expression_values[':breaking'] = True
+        
+        if state:
+            filter_expressions.append('#state = :state')
+            expression_values[':state'] = state
+            if '#status' in scan_kwargs.get('ExpressionAttributeNames', {}):
+                scan_kwargs['ExpressionAttributeNames']['#state'] = 'state'
+            else:
+                scan_kwargs['ExpressionAttributeNames'] = {'#state': 'state'}
         
         # Only show published items for non-admin users
         user_info = verify_token(event)
@@ -304,7 +325,7 @@ def update_news(event, headers):
         expression_names = {}
         
         # Update fields if provided
-        fields = ['title', 'content', 'summary', 'category', 'tags', 'visibility', 
+        fields = ['title', 'content', 'summary', 'category', 'tags', 'state', 'visibility', 
                  'is_breaking', 'external_url', 'featured_image', 'scheduled_publish', 'status']
         
         for field in fields:

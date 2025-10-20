@@ -271,21 +271,29 @@
                         <option value="politics">Politics</option>
                         <option value="christian">Christian News</option>
                         <option value="election">Election Coverage</option>
+                        <option value="state-election">State Elections</option>
                         <option value="breaking">Breaking News</option>
                         <option value="commentary">Commentary</option>
+                        <option value="world">World News</option>
+                        <option value="local">Local News</option>
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" id="breakingOnly">
                         <label class="form-check-label" for="breakingOnly">
-                            Breaking News Only
+                            Breaking Only
                         </label>
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
+                    <select class="form-select" id="stateFilter">
+                        <option value="">All States</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
                     <button class="btn btn-primary" onclick="loadNews()">
-                        <i class="fas fa-filter"></i> Apply Filters
+                        <i class="fas fa-filter"></i> Filter
                     </button>
                 </div>
                 <div class="col-md-3 text-end" id="adminControls" style="display: none;">
@@ -311,9 +319,31 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             setupNavigation();
+            populateStateFilter();
             loadNews();
             loadBreakingNews();
         });
+        
+        function populateStateFilter() {
+            var states = [
+                'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
+                'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
+                'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan',
+                'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+                'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio',
+                'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
+                'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
+                'Wisconsin', 'Wyoming'
+            ];
+            
+            var select = document.getElementById('stateFilter');
+            states.forEach(function(state) {
+                var option = document.createElement('option');
+                option.value = state.toLowerCase().replace(/ /g, '-');
+                option.textContent = state;
+                select.appendChild(option);
+            });
+        }
 
         function setupNavigation() {
             var token = localStorage.getItem('token');
@@ -364,10 +394,12 @@
         function loadNews() {
             var category = document.getElementById('categoryFilter').value;
             var breakingOnly = document.getElementById('breakingOnly').checked;
+            var state = document.getElementById('stateFilter').value;
             
             var url = NEWS_API + '?action=list';
             if (category) url += '&category=' + category;
             if (breakingOnly) url += '&breaking=true';
+            if (state) url += '&state=' + state;
             
             fetch(url)
             .then(function(response) { return response.json(); })
@@ -434,6 +466,12 @@
                 html += '<i class="fas fa-user"></i> ' + (news.author_name || news.author) + ' | ';
                 html += '<i class="fas fa-calendar"></i> ' + formatDate(news.created_at) + ' | ';
                 html += '<i class="fas fa-eye"></i> ' + (news.view_count || 0) + ' views';
+                if (news.state) {
+                    html += ' | <i class="fas fa-map-marker-alt"></i> ' + news.state.toUpperCase();
+                }
+                if (news.status === 'scheduled') {
+                    html += ' | <i class="fas fa-clock"></i> Scheduled';
+                }
                 html += '</div>';
                 
                 // Summary
