@@ -259,6 +259,7 @@
             <div class="tab" onclick="showTab('videos')">Videos</div>
             <div class="tab" onclick="showTab('tags')">Tags</div>
             <div class="tab" onclick="showTab('articles')">Articles</div>
+            <div class="tab" onclick="showTab('analytics')">Analytics</div>
             <div class="tab" onclick="showTab('resources')">Resources</div>
             <div class="tab" onclick="showTab('comments')">Comments</div>
             <div class="tab" onclick="showTab('news')">News</div>
@@ -365,6 +366,48 @@
                     </thead>
                     <tbody id="videos-tbody"></tbody>
                 </table>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div id="analytics" class="tab-pane">
+                <h2>Article Analytics</h2>
+                <div class="stats-grid" style="margin-bottom: 30px;">
+                    <div class="stat-card">
+                        <div class="stat-number" id="analytics-total-articles">-</div>
+                        <div class="stat-label">Total Articles</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="analytics-total-views">-</div>
+                        <div class="stat-label">Total Views</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="analytics-avg-views">-</div>
+                        <div class="stat-label">Avg Views/Article</div>
+                    </div>
+                </div>
+                
+                <h3>Top 10 Most Viewed Articles</h3>
+                <div id="analytics-loading" class="loading">Loading analytics...</div>
+                <table id="analytics-table" class="data-table" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Title</th>
+                            <th>Author</th>
+                            <th>Category</th>
+                            <th>Views</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="analytics-tbody"></tbody>
+                </table>
+                
+                <h3 style="margin-top: 40px;">Category Performance</h3>
+                <div id="category-stats-container" style="margin-top: 20px;">
+                    <!-- Category stats will be loaded here -->
+                </div>
+                
+                <div id="analytics-message"></div>
             </div>
 
             <!-- Articles Tab -->
@@ -938,6 +981,7 @@
             if (tabName === 'videos') { loadVideos(); loadCategoryOrder(); }
             if (tabName === 'tags') loadTags();
             if (tabName === 'articles') loadArticleTags();
+            if (tabName === 'analytics') loadAnalytics();
             if (tabName === 'resources') loadResourcesAdmin();
             if (tabName === 'comments') loadComments();
             if (tabName === 'news') loadNews();
@@ -3524,6 +3568,88 @@
             }
             
             document.getElementById('article-tags-container').style.display = 'block';
+        }
+
+        async function loadAnalytics() {
+            document.getElementById('analytics-loading').style.display = 'block';
+            document.getElementById('analytics-table').style.display = 'none';
+            
+            try {
+                const response = await fetch(`${ARTICLES_API}?action=analytics`);
+                const data = await response.json();
+                
+                if (response.ok && data.analytics) {
+                    displayAnalytics(data.analytics);
+                } else {
+                    throw new Error(data.error || 'Failed to load analytics');
+                }
+            } catch (error) {
+                document.getElementById('analytics-message').innerHTML = 
+                    `<div class="error">Failed to load analytics: ${error.message}</div>`;
+            } finally {
+                document.getElementById('analytics-loading').style.display = 'none';
+            }
+        }
+        
+        function displayAnalytics(analytics) {
+            // Update stats
+            document.getElementById('analytics-total-articles').textContent = analytics.total_articles;
+            document.getElementById('analytics-total-views').textContent = analytics.total_views.toLocaleString();
+            document.getElementById('analytics-avg-views').textContent = analytics.average_views;
+            
+            // Display top articles
+            const tbody = document.getElementById('analytics-tbody');
+            tbody.innerHTML = '';
+            
+            if (analytics.top_articles.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No articles found</td></tr>';
+            } else {
+                analytics.top_articles.forEach((article, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><strong>#${index + 1}</strong></td>
+                        <td>${article.title}</td>
+                        <td>${article.author}</td>
+                        <td><span class="badge bg-primary">${article.category}</span></td>
+                        <td><strong>${article.view_count.toLocaleString()}</strong></td>
+                        <td>
+                            <a href="article.html?id=${article.article_id}" class="btn btn-primary" style="font-size: 12px;" target="_blank">View</a>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+            
+            // Display category stats
+            const categoryContainer = document.getElementById('category-stats-container');
+            categoryContainer.innerHTML = '';
+            
+            const sortedCategories = Object.entries(analytics.category_stats)
+                .sort((a, b) => b[1].views - a[1].views);
+            
+            sortedCategories.forEach(([category, stats]) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.style.cssText = 'background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #667eea;';
+                categoryDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="font-size: 1.1rem;">${category}</strong>
+                            <div style="color: #666; margin-top: 5px;">
+                                ${stats.count} article${stats.count !== 1 ? 's' : ''} • 
+                                ${stats.views.toLocaleString()} total views • 
+                                ${Math.round(stats.views / stats.count)} avg views
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #667eea;">${stats.views.toLocaleString()}</div>
+                            <div style="font-size: 0.8rem; color: #999;">views</div>
+                        </div>
+                    </div>
+                `;
+                categoryContainer.appendChild(categoryDiv);
+            });
+            
+            document.getElementById('analytics-table').style.display = 'table';
         }
 
         function getCategoryEmoji(categoryName) {

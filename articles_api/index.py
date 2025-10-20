@@ -46,6 +46,8 @@ def lambda_handler(event, context):
             return get_article_templates(event)
         elif method == 'GET' and action == 'search':
             return search_articles(event)
+        elif method == 'GET' and action == 'analytics':
+            return get_analytics(event)
         else:
             return {
                 'statusCode': 404,
@@ -566,9 +568,10 @@ def get_article(event):
         # Increment view count
         articles_table.update_item(
             Key={'article_id': article_id},
-            UpdateExpression='SET view_count = view_count + :inc',
-            ExpressionAttributeValues={':inc': 1}
+            UpdateExpression='SET view_count = if_not_exists(view_count, :zero) + :inc',
+            ExpressionAttributeValues={':inc': 1, ':zero': 0}
         )
+        article['view_count'] = article.get('view_count', 0) + 1
         
         return {
             'statusCode': 200,
@@ -791,6 +794,86 @@ def get_user_name(email):
     except Exception:
         # Fallback to email on any error
         return email
+
+def get_analytics(event):
+    """Get article analytics"""
+    query_params = event.get('queryStringParameters') or {}
+    article_id = query_params.get('article_id')
+    
+    try:
+        if article_id:
+            # Get analytics for specific article
+            response = articles_table.get_item(Key={'article_id': article_id})
+            article = response.get('Item')
+            
+            if not article:
+                return {
+                    'statusCode': 404,
+                    'headers': cors_headers(),
+                    'body': json.dumps({'error': 'Article not found'})
+                }
+            
+            analytics = {
+                'article_id': article_id,
+                'title': article.get('title'),
+                'view_count': article.get('view_count', 0),
+                'likes_count': article.get('likes_count', 0),
+                'created_at': article.get('created_at'),
+                'author': article.get('author'),
+                'category': article.get('category'),
+                'tags': article.get('tags', [])
+            }
+            
+            return {
+                'statusCode': 200,
+                'headers': cors_headers(),
+                'body': json.dumps({'analytics': convert_decimals(analytics)})
+            }
+        else:
+            # Get overall analytics
+            response = articles_table.scan()
+            articles = response.get('Items', [])
+            
+            total_views = sum(article.get('view_count', 0) for article in articles)
+            total_articles = len(articles)
+            
+            # Top 10 most viewed articles
+            top_articles = sorted(articles, key=lambda x: x.get('view_count', 0), reverse=True)[:10]
+            
+            # Category breakdown
+            category_stats = {}
+            for article in articles:
+                cat = article.get('category', 'general')
+                if cat not in category_stats:
+                    category_stats[cat] = {'count': 0, 'views': 0}
+                category_stats[cat]['count'] += 1
+                category_stats[cat]['views'] += article.get('view_count', 0)
+            
+            analytics = {
+                'total_articles': total_articles,
+                'total_views': total_views,
+                'average_views': round(total_views / total_articles, 1) if total_articles > 0 else 0,
+                'top_articles': [{
+                    'article_id': a.get('article_id'),
+                    'title': a.get('title'),
+                    'view_count': a.get('view_count', 0),
+                    'author': a.get('author'),
+                    'category': a.get('category')
+                } for a in top_articles],
+                'category_stats': category_stats
+            }
+            
+            return {
+                'statusCode': 200,
+                'headers': cors_headers(),
+                'body': json.dumps({'analytics': convert_decimals(analytics)})
+            }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
+        }
 
 def cors_headers():
     return {
