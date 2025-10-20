@@ -14,22 +14,81 @@
         .header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .header h1 { display: inline-block; }
-        .user-info {
-            float: right;
-            margin-top: 5px;
+        .dashboard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
         }
-        .logout-btn {
+        .nav-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .nav-link:hover {
             background: rgba(255,255,255,0.2);
             color: white;
-            border: 1px solid rgba(255,255,255,0.3);
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-left: 10px;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .nav-link.logout {
+            background: rgba(220,53,69,0.8);
+            border-color: rgba(220,53,69,0.9);
+        }
+        .nav-link.logout:hover {
+            background: rgba(220,53,69,1);
+        }
+        @media (max-width: 768px) {
+            .nav-brand {
+                font-size: 1.4rem;
+            }
+            .nav-links {
+                gap: 8px;
+                justify-content: center;
+                width: 100%;
+                margin-top: 10px;
+            }
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+            .dashboard-nav {
+                justify-content: center;
+                text-align: center;
+            }
+        }
+        @media (max-width: 576px) {
+            .nav-links {
+                gap: 5px;
+            }
+            .nav-link {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+            }
+            .nav-brand {
+                font-size: 1.2rem;
+            }
         }
         .container {
             max-width: 1200px;
@@ -173,16 +232,24 @@
 </head>
 <body>
     <div class="header">
-        <h1>Admin Dashboard</h1>
-        <div class="user-info">
-            <span id="admin-email">Loading...</span>
-            <a href="/" style="color: white; text-decoration: none; margin-right: 10px; padding: 8px 16px; background: rgba(255,255,255,0.2); border-radius: 4px;">🏠 Home</a>
-            <a href="videos.html" style="color: white; text-decoration: none; margin-right: 10px; padding: 8px 16px; background: rgba(255,255,255,0.2); border-radius: 4px;">🎬 Videos</a>
-            <a href="articles.html" style="color: white; text-decoration: none; margin-right: 10px; padding: 8px 16px; background: rgba(255,255,255,0.2); border-radius: 4px;">📝 Articles</a>
-            <a href="resources.html" style="color: white; text-decoration: none; margin-right: 10px; padding: 8px 16px; background: rgba(255,255,255,0.2); border-radius: 4px;">📚 Resources</a>
-            <button class="logout-btn" onclick="logout()">Logout</button>
+        <div class="container">
+            <div class="dashboard-nav">
+                <h1 class="nav-brand">⚙️ Admin Dashboard</h1>
+                <div class="nav-links" id="nav-links">
+                    <a href="/" class="nav-link">🏠 Home</a>
+                    <a href="category.html" class="nav-link">📂 Categories</a>
+                    <a href="videos.html" class="nav-link">🎬 Videos</a>
+                    <a href="articles.html" class="nav-link">📝 Articles</a>
+                    <a href="news.html" class="nav-link">📰 News</a>
+                    <a href="authors.html" class="nav-link">👥 Authors</a>
+                    <a href="resources.html" class="nav-link">📚 Resources</a>
+                    <a href="user-upload.html" class="nav-link">⬆️ Upload Video</a>
+                    <a href="profile.html" class="nav-link">👤 Profile</a>
+                    <a href="#" onclick="viewMyPage()" class="nav-link">📄 My Page</a>
+                    <a href="#" onclick="logout()" class="nav-link logout">🚪 Logout</a>
+                </div>
+            </div>
         </div>
-        <div style="clear: both;"></div>
     </div>
 
     <div class="container">
@@ -813,7 +880,6 @@
                 return;
             }
             
-            document.getElementById('admin-email').textContent = currentUser.email;
             loadAllTags();
             loadOverview();
         });
@@ -1648,6 +1714,14 @@
             }
         }
 
+        function viewMyPage() {
+            const userData = localStorage.getItem('user_data');
+            if (userData) {
+                const user = JSON.parse(userData);
+                window.location.href = `user-page.html?user=${encodeURIComponent(user.email)}`;
+            }
+        }
+        
         function logout() {
             localStorage.removeItem('auth_token');
             localStorage.removeItem('user_data');

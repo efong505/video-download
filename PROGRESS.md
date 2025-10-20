@@ -677,7 +677,7 @@ articles-table:
   - Display: Update resources.html to show resources in multiple category sections
   - Migration: Automatic conversion of existing string categories to single-item arrays
   - Backward compatibility: Handle both string and array formats during transition
-- [ ] **Auto-summary for resources** - AI-powered website analysis to generate descriptions from URLs, with admin override capability and manual editing
+- [x] **Auto-summary for resources** ✅ COMPLETE - AI-powered website analysis to generate descriptions from URLs using AWS Bedrock Claude, with admin override capability and manual editing
 - [ ] **News management system** - Topic-based news page with admin backend, breaking news banners, scheduled publishing, external link support, Christian/political news categories, and state-specific election coverage with contributor network for Republican candidate tracking across all 50 states
 - [ ] **State election contributor system** - Interactive state map, state correspondent assignments, candidate profiles, election calendar, and local Republican election coverage from verified contributors in each state
 - [ ] **Related articles suggestions** - Algorithm-based article recommendations
