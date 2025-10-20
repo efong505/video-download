@@ -679,8 +679,8 @@ articles-table:
   - Backward compatibility: Handle both string and array formats during transition
 - [x] **Auto-summary for resources** ✅ COMPLETE - AI-powered website analysis to generate descriptions from URLs using AWS Bedrock Claude, with admin override capability and manual editing
 - [x] **News management system** ✅ COMPLETE - Topic-based news with breaking news banners, scheduled publishing, state-specific election coverage, external link support, Christian/political news categories, horizontal scrolling UI, admin creation/editing, and comprehensive filtering
+- [x] **Related articles suggestions** ✅ COMPLETE - Algorithm-based recommendations using category matching, shared tags, same author, and recency scoring to suggest top 3 related articles
 - [ ] **State election contributor system** - Interactive state map, state correspondent assignments, candidate profiles, election calendar, and local Republican election coverage from verified contributors in each state
-- [ ] **Related articles suggestions** - Algorithm-based article recommendations
 - [ ] **Article analytics and view tracking** - Detailed analytics, view statistics, engagement metrics
 - [ ] **Advanced ministry tools** - Enhanced features for ministry use (see Phase 3 item 4 above for full list)ARTICLE ENHANCEMENTS**: Draft/preview functionality, service notes template, study notes category, and editing capabilities
 - **ADMIN NAME MANAGEMENT**: Administrators can now edit user first and last names through the admin dashboard

@@ -150,6 +150,18 @@
             width: 300px;
             max-width: 100%;
         }
+        .related-articles-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .related-articles-section .card {
+            transition: all 0.3s ease;
+        }
+        .related-articles-section .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body>
@@ -272,6 +284,15 @@
                         '<input type="text" id="article-url" class="copy-link-input" value="' + currentUrl + '" readonly>' +
                     '</div>' +
                 '</div>' +
+                '<div class="related-articles-section mt-5 mb-4">' +
+                    '<h4>📚 Related Articles</h4>' +
+                    '<div id="related-articles-container">' +
+                        '<div class="text-center">' +
+                            '<div class="spinner-border spinner-border-sm" role="status"></div>' +
+                            '<span class="ms-2">Loading related articles...</span>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>' +
                 '<div class="comments-section mt-4">' +
                     '<h4>💬 Comments</h4>' +
                     '<div id="comments-container">' +
@@ -293,7 +314,93 @@
             
             // Store article ID and load comments
             currentArticleId = article.article_id;
+            loadRelatedArticles(article);
             loadComments();
+        }
+        
+        async function loadRelatedArticles(currentArticle) {
+            try {
+                const response = await fetch(ARTICLES_API + '?action=list&visibility=public');
+                const data = await response.json();
+                
+                if (data.articles) {
+                    const related = findRelatedArticles(currentArticle, data.articles);
+                    displayRelatedArticles(related);
+                } else {
+                    document.getElementById('related-articles-container').innerHTML = '<p class="text-muted">No related articles found.</p>';
+                }
+            } catch (error) {
+                console.error('Error loading related articles:', error);
+                document.getElementById('related-articles-container').innerHTML = '<p class="text-muted">Unable to load related articles.</p>';
+            }
+        }
+        
+        function findRelatedArticles(current, allArticles) {
+            const scored = allArticles
+                .filter(a => a.article_id !== current.article_id && a.visibility === 'public')
+                .map(article => {
+                    let score = 0;
+                    
+                    // Same category = +10 points
+                    if (article.category === current.category) score += 10;
+                    
+                    // Shared tags = +5 points per tag
+                    if (current.tags && article.tags) {
+                        const sharedTags = current.tags.filter(tag => article.tags.includes(tag));
+                        score += sharedTags.length * 5;
+                    }
+                    
+                    // Same author = +3 points
+                    if (article.author === current.author) score += 3;
+                    
+                    // Recent articles = +1 point (within 30 days)
+                    const daysDiff = (new Date() - new Date(article.created_at)) / (1000 * 60 * 60 * 24);
+                    if (daysDiff <= 30) score += 1;
+                    
+                    return { article, score };
+                })
+                .filter(item => item.score > 0)
+                .sort((a, b) => b.score - a.score)
+                .slice(0, 3)
+                .map(item => item.article);
+            
+            return scored;
+        }
+        
+        function displayRelatedArticles(articles) {
+            const container = document.getElementById('related-articles-container');
+            
+            if (articles.length === 0) {
+                container.innerHTML = '<p class="text-muted">No related articles found.</p>';
+                return;
+            }
+            
+            let html = '<div class="row">';
+            articles.forEach(article => {
+                const excerpt = article.content ? article.content.substring(0, 100).replace(/<[^>]*>/g, '') + '...' : '';
+                const date = new Date(article.created_at).toLocaleDateString();
+                
+                html += '<div class="col-md-4 mb-3">' +
+                    '<div class="card h-100" style="border-left: 4px solid #667eea;">' +
+                        '<div class="card-body">' +
+                            '<span class="badge bg-primary mb-2">' + article.category + '</span>' +
+                            '<h6 class="card-title">' +
+                                '<a href="article.html?id=' + article.article_id + '" style="text-decoration: none; color: #333;">' +
+                                    article.title +
+                                '</a>' +
+                            '</h6>' +
+                            '<p class="card-text text-muted small">' + excerpt + '</p>' +
+                            '<div class="small text-muted">' +
+                                '<span>By ' + article.author + '</span> • ' +
+                                '<span>' + date + '</span>' +
+                            '</div>' +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            });
+            html += '</div>';
+            
+            container.innerHTML = html;
         }
         
         function viewMyPage() {
