@@ -346,8 +346,9 @@
         }
 
         function setupNavigation() {
-            var token = localStorage.getItem('token');
-            var userRole = localStorage.getItem('userRole');
+            var token = localStorage.getItem('auth_token');
+            var userData = localStorage.getItem('user_data');
+            var userRole = userData ? JSON.parse(userData).role : null;
             var authLinksDiv = document.getElementById('authLinks');
             
             if (token) {
@@ -543,9 +544,8 @@
         }
 
         function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('userRole');
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
             window.location.href = 'login.html';
         }
     </script>
