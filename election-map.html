@@ -123,6 +123,11 @@
         .view-toggle button {
             margin: 0 5px;
         }
+        .view-toggle button.active {
+            background-color: #667eea;
+            border-color: #667eea;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -155,8 +160,8 @@
     <div class="container">
         <div class="state-map-container">
             <div class="view-toggle">
-                <button class="btn btn-primary" onclick="showMapView()">🗺️ Map View</button>
-                <button class="btn btn-outline-primary" onclick="showGridView()">📋 Grid View</button>
+                <button id="map-view-btn" class="btn btn-primary active" onclick="showMapView()">🗺️ Map View</button>
+                <button id="grid-view-btn" class="btn btn-outline-primary" onclick="showGridView()">📋 Grid View</button>
             </div>
             <div id="map-view">
                 <svg id="us-map"></svg>
@@ -176,6 +181,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         const CONTRIBUTORS_API = 'https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors';
         
@@ -230,19 +236,13 @@
         }
         
         function renderUSMap() {
-            const container = document.getElementById('us-map').parentElement;
-            const width = container.offsetWidth || 960;
-            const height = window.innerWidth < 768 ? 400 : 600;
-            
             const svg = d3.select('#us-map')
-                .attr('width', '100%')
-                .attr('height', '100%')
                 .attr('viewBox', '0 0 960 600')
                 .attr('preserveAspectRatio', 'xMidYMid meet');
             
             const projection = d3.geoAlbersUsa()
                 .scale(1200)
-                .translate([width / 2, height / 2]);
+                .translate([480, 300]);
             
             const path = d3.geoPath().projection(projection);
             
@@ -278,11 +278,23 @@
         function showMapView() {
             document.getElementById('map-view').style.display = 'block';
             document.getElementById('grid-view').style.display = 'none';
+            document.getElementById('map-view-btn').classList.add('active');
+            document.getElementById('map-view-btn').classList.remove('btn-outline-primary');
+            document.getElementById('map-view-btn').classList.add('btn-primary');
+            document.getElementById('grid-view-btn').classList.remove('active');
+            document.getElementById('grid-view-btn').classList.remove('btn-primary');
+            document.getElementById('grid-view-btn').classList.add('btn-outline-primary');
         }
         
         function showGridView() {
             document.getElementById('map-view').style.display = 'none';
             document.getElementById('grid-view').style.display = 'block';
+            document.getElementById('grid-view-btn').classList.add('active');
+            document.getElementById('grid-view-btn').classList.remove('btn-outline-primary');
+            document.getElementById('grid-view-btn').classList.add('btn-primary');
+            document.getElementById('map-view-btn').classList.remove('active');
+            document.getElementById('map-view-btn').classList.remove('btn-primary');
+            document.getElementById('map-view-btn').classList.add('btn-outline-primary');
         }
 
         function renderStateGrid() {
@@ -341,7 +353,7 @@
                         raceCandidates.forEach(c => {
                             const positions = c.positions || {};
                             const partyBadge = c.party === 'Republican' ? '<span class="badge bg-danger">R</span>' : 
-                                             c.party === 'Democrat' ? '<span class="badge bg-primary">D</span>' : 
+                                             (c.party === 'Democrat' || c.party === 'Democratic') ? '<span class="badge bg-primary">D</span>' : 
                                              '<span class="badge bg-secondary">' + (c.party || 'IND') + '</span>';
                             candidatesHTML += '<div class="col-md-6"><div class="candidate-card">' +
                                 '<h6>' + c.name + ' ' + partyBadge + '</h6>' +
@@ -350,8 +362,8 @@
                                 (Object.keys(positions).length > 0 ? '<hr><p class="mb-1"><strong>Key Positions:</strong></p><ul class="small">' + 
                                     Object.entries(positions).map(([k,v]) => '<li><strong>' + k.replace('_', ' ').toUpperCase() + ':</strong> ' + v + '</li>').join('') + '</ul>' : '') +
                                 (c.endorsements && c.endorsements.length > 0 ? '<p class="mb-1"><small><strong>Endorsed by:</strong> ' + c.endorsements.join(', ') + '</small></p>' : '') +
-                                (c.website ? '<a href="' + c.website + '" target="_blank" class="btn btn-sm btn-primary">Website</a> ' : '') +
-                                (c.voting_record_url ? '<a href="' + c.voting_record_url + '" target="_blank" class="btn btn-sm btn-outline-primary">Voting Record</a>' : '') +
+                                (c.website && c.website.trim() ? '<a href="' + validateUrl(c.website) + '" target="_blank" class="btn btn-sm btn-primary">Website</a> ' : '') +
+                                (c.voting_record_url && c.voting_record_url.trim() ? '<a href="' + validateUrl(c.voting_record_url) + '" target="_blank" class="btn btn-sm btn-outline-primary">Voting Record</a>' : '') +
                             '</div></div>';
                         });
                         candidatesHTML += '</div>';
@@ -396,6 +408,20 @@
             document.getElementById('state-details').scrollIntoView({ behavior: 'smooth' });
         }
 
+        function validateUrl(url) {
+            if (!url || !url.trim()) return '/candidate-404.html';
+            url = url.trim();
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            try {
+                new URL(url);
+                return url;
+            } catch {
+                return '/candidate-404.html';
+            }
+        }
+        
         function applyAsContributor(state) {
             alert('Contributor application feature coming soon! Contact admin to become a state correspondent for ' + state);
         }

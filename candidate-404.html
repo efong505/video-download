@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Not Found</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: Arial, sans-serif;
+        }
+        .error-container {
+            background: white;
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+        }
+        .error-icon {
+            font-size: 120px;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #667eea;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        .funny-message {
+            font-size: 20px;
+            color: #666;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        .btn-home {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            margin-top: 30px;
+            transition: transform 0.3s;
+        }
+        .btn-home:hover {
+            transform: scale(1.05);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-icon">🗳️❓</div>
+        <h1>Website Missing!</h1>
+        <div class="funny-message">
+            <p><strong>Looks like this candidate's website has gone on vacation... permanently.</strong></p>
+            <p>Maybe they're too busy campaigning door-to-door? 🚪</p>
+            <p>Or perhaps their web developer is still "working on it" since 2008? 💻</p>
+            <p>Either way, you might want to check their social media or send a carrier pigeon. 🐦</p>
+        </div>
+        <a href="/election-map.html" class="btn btn-home">← Back to Election Map</a>
+    </div>
+</body>
+</html>

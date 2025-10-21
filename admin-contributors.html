@@ -50,21 +50,49 @@
         <div class="tab-content mt-3">
             <div id="contributors" class="tab-pane fade show active">
                 <button class="btn btn-primary mb-3" onclick="showAddContributor()">+ Add Contributor</button>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="filter-contributors" placeholder="Filter by state or email..." onkeyup="filterContributors()">
+                </div>
                 <div id="contributors-list"></div>
             </div>
             
             <div id="races" class="tab-pane fade">
                 <button class="btn btn-primary mb-3" onclick="showAddRace()">+ Add Race</button>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <select class="form-control" id="filter-race-state" onchange="filterRaces()">
+                            <option value="">All States</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="filter-race-office" placeholder="Filter by office..." onkeyup="filterRaces()">
+                    </div>
+                </div>
                 <div id="races-list"></div>
             </div>
             
             <div id="candidates" class="tab-pane fade">
                 <button class="btn btn-primary mb-3" onclick="showAddCandidate()">+ Add Candidate</button>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <select class="form-control" id="filter-candidate-state" onchange="filterCandidates()">
+                            <option value="">All States</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="filter-candidate-office" placeholder="Filter by office or name..." onkeyup="filterCandidates()">
+                    </div>
+                </div>
                 <div id="candidates-list"></div>
             </div>
             
             <div id="events" class="tab-pane fade">
                 <button class="btn btn-primary mb-3" onclick="showAddEvent()">+ Add Event</button>
+                <div class="mb-3">
+                    <select class="form-control" id="filter-event-state" onchange="filterEvents()">
+                        <option value="">All States</option>
+                    </select>
+                </div>
                 <div id="events-list"></div>
             </div>
             
@@ -115,7 +143,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Contributor</h5>
+                    <h5 class="modal-title" id="contributorModalTitle">Add Contributor</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -149,7 +177,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Candidate</h5>
+                    <h5 class="modal-title" id="candidateModalTitle">Add Candidate</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -260,7 +288,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Race</h5>
+                    <h5 class="modal-title" id="raceModalTitle">Add Race</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -304,7 +332,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Add Election Event</h5>
+                    <h5 class="modal-title" id="eventModalTitle">Add Election Event</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -350,11 +378,18 @@
         const states = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
 
         let allRaces = [];
+        let allContributors = [];
+        let allCandidates = [];
+        let allEvents = [];
         
         function populateStateDropdowns() {
             ['contrib-state', 'cand-state', 'event-state', 'race-state'].forEach(id => {
                 const select = document.getElementById(id);
                 select.innerHTML = '<option value="">Select State</option>' + states.map(s => '<option value="' + s + '">' + s + '</option>').join('');
+            });
+            ['filter-race-state', 'filter-candidate-state', 'filter-event-state'].forEach(id => {
+                const select = document.getElementById(id);
+                select.innerHTML = '<option value="">All States</option>' + states.map(s => '<option value="' + s + '">' + s + '</option>').join('');
             });
         }
         
@@ -367,13 +402,22 @@
 
         async function loadContributors() {
             const response = await fetch(API + '?resource=contributors', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
-            const data = await response.json();
-            document.getElementById('contributors-list').innerHTML = data.map(c => 
+            allContributors = await response.json();
+            filterContributors();
+        }
+        
+        function filterContributors() {
+            const filter = document.getElementById('filter-contributors').value.toLowerCase();
+            const filtered = allContributors.filter(c => 
+                c.state.toLowerCase().includes(filter) || c.user_email.toLowerCase().includes(filter)
+            );
+            document.getElementById('contributors-list').innerHTML = filtered.map(c => 
                 '<div class="card mb-2"><div class="card-body">' +
                 '<h6>' + c.user_email + ' - ' + c.state + '</h6>' +
                 '<p>' + (c.bio || '') + '</p>' +
                 '<span class="badge bg-' + (c.verified ? 'success' : 'secondary') + '">' + (c.verified ? 'Verified' : 'Unverified') + '</span>' +
                 '<button class="btn btn-sm btn-danger float-end" onclick="deleteContributor(\'' + c.contributor_id + '\')">Delete</button>' +
+                '<button class="btn btn-sm btn-primary float-end me-2" onclick="editContributor(\'' + c.contributor_id + '\')">Edit</button>' +
                 '</div></div>'
             ).join('');
         }
@@ -381,21 +425,42 @@
         async function loadRaces() {
             const response = await fetch(API + '?resource=races', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
             allRaces = await response.json();
-            document.getElementById('races-list').innerHTML = allRaces.map(r => 
+            filterRaces();
+            populateRaceDropdown();
+        }
+        
+        function filterRaces() {
+            const stateFilter = document.getElementById('filter-race-state').value;
+            const officeFilter = document.getElementById('filter-race-office').value.toLowerCase();
+            const filtered = allRaces.filter(r => 
+                (!stateFilter || r.state === stateFilter) && 
+                (!officeFilter || r.office.toLowerCase().includes(officeFilter))
+            );
+            document.getElementById('races-list').innerHTML = filtered.map(r => 
                 '<div class="card mb-2"><div class="card-body">' +
                 '<h6>' + r.state + ' - ' + r.office + '</h6>' +
                 '<p><strong>' + r.race_type + '</strong> - ' + new Date(r.election_date).toLocaleDateString() + '</p>' +
                 '<p>' + (r.description || '') + '</p>' +
                 '<button class="btn btn-sm btn-danger float-end" onclick="deleteRace(\'' + r.race_id + '\')">Delete</button>' +
+                '<button class="btn btn-sm btn-primary float-end me-2" onclick="editRace(\'' + r.race_id + '\')">Edit</button>' +
                 '</div></div>'
             ).join('');
-            populateRaceDropdown();
         }
         
         async function loadCandidates() {
             const response = await fetch(API + '?resource=candidates', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
-            const data = await response.json();
-            document.getElementById('candidates-list').innerHTML = data.map(c => {
+            allCandidates = await response.json();
+            filterCandidates();
+        }
+        
+        function filterCandidates() {
+            const stateFilter = document.getElementById('filter-candidate-state').value;
+            const officeFilter = document.getElementById('filter-candidate-office').value.toLowerCase();
+            const filtered = allCandidates.filter(c => 
+                (!stateFilter || c.state === stateFilter) && 
+                (!officeFilter || c.office.toLowerCase().includes(officeFilter) || c.name.toLowerCase().includes(officeFilter))
+            );
+            document.getElementById('candidates-list').innerHTML = filtered.map(c => {
                 const race = allRaces.find(r => r.race_id === c.race_id);
                 const positions = c.positions || {};
                 return '<div class="card mb-2"><div class="card-body">' +
@@ -405,35 +470,132 @@
                 (c.faith_statement ? '<p class="text-muted"><em>"' + c.faith_statement + '"</em></p>' : '') +
                 (Object.keys(positions).length > 0 ? '<p><small><strong>Positions:</strong> ' + Object.entries(positions).map(([k,v]) => k + ': ' + v).join(', ') + '</small></p>' : '') +
                 '<button class="btn btn-sm btn-danger float-end" onclick="deleteCandidate(\'' + c.candidate_id + '\')">Delete</button>' +
+                '<button class="btn btn-sm btn-primary float-end me-2" onclick="editCandidate(\'' + c.candidate_id + '\')">Edit</button>' +
                 '</div></div>';
             }).join('');
         }
 
         async function loadEvents() {
             const response = await fetch(API + '?resource=events', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
-            const data = await response.json();
-            document.getElementById('events-list').innerHTML = data.map(e => 
+            allEvents = await response.json();
+            filterEvents();
+        }
+        
+        function filterEvents() {
+            const stateFilter = document.getElementById('filter-event-state').value;
+            const filtered = allEvents.filter(e => !stateFilter || e.state === stateFilter);
+            document.getElementById('events-list').innerHTML = filtered.map(e => 
                 '<div class="card mb-2"><div class="card-body">' +
                 '<h6>' + e.title + ' - ' + e.state + '</h6>' +
                 '<p>' + new Date(e.event_date).toLocaleDateString() + ' - ' + e.event_type + '</p>' +
                 '<button class="btn btn-sm btn-danger float-end" onclick="deleteEvent(\'' + e.event_id + '\')">Delete</button>' +
+                '<button class="btn btn-sm btn-primary float-end me-2" onclick="editEvent(\'' + e.event_id + '\')">Edit</button>' +
                 '</div></div>'
             ).join('');
         }
 
+        let editingContributorId = null;
+        
         function showAddContributor() {
+            editingContributorId = null;
+            document.getElementById('contributorModalTitle').textContent = 'Add Contributor';
+            document.getElementById('contributorForm').reset();
+            new bootstrap.Modal(document.getElementById('contributorModal')).show();
+        }
+        
+        async function editContributor(contributorId) {
+            editingContributorId = contributorId;
+            document.getElementById('contributorModalTitle').textContent = 'Edit Contributor';
+            const contributor = allContributors.find(c => c.contributor_id === contributorId);
+            if (!contributor) return;
+            document.getElementById('contrib-email').value = contributor.user_email || '';
+            document.getElementById('contrib-state').value = contributor.state || '';
+            document.getElementById('contrib-bio').value = contributor.bio || '';
+            document.getElementById('contrib-verified').checked = contributor.verified || false;
             new bootstrap.Modal(document.getElementById('contributorModal')).show();
         }
 
+        let editingRaceId = null;
+        
         function showAddRace() {
+            editingRaceId = null;
+            document.getElementById('raceModalTitle').textContent = 'Add Race';
+            document.getElementById('raceForm').reset();
             new bootstrap.Modal(document.getElementById('raceModal')).show();
         }
         
+        async function editRace(raceId) {
+            editingRaceId = raceId;
+            document.getElementById('raceModalTitle').textContent = 'Edit Race';
+            const race = allRaces.find(r => r.race_id === raceId);
+            if (!race) return;
+            document.getElementById('race-state').value = race.state || '';
+            document.getElementById('race-office').value = race.office || '';
+            document.getElementById('race-date').value = race.election_date || '';
+            document.getElementById('race-type').value = race.race_type || 'general';
+            document.getElementById('race-desc').value = race.description || '';
+            new bootstrap.Modal(document.getElementById('raceModal')).show();
+        }
+        
+        let editingCandidateId = null;
+        
         function showAddCandidate() {
+            editingCandidateId = null;
+            document.getElementById('candidateModalTitle').textContent = 'Add Candidate';
+            document.getElementById('candidateForm').reset();
+            new bootstrap.Modal(document.getElementById('candidateModal')).show();
+        }
+        
+        async function editCandidate(candidateId) {
+            editingCandidateId = candidateId;
+            document.getElementById('candidateModalTitle').textContent = 'Edit Candidate';
+            
+            const response = await fetch(API + '?resource=candidates', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
+            const candidates = await response.json();
+            const candidate = candidates.find(c => c.candidate_id === candidateId);
+            
+            if (!candidate) return;
+            
+            document.getElementById('cand-name').value = candidate.name || '';
+            document.getElementById('cand-state').value = candidate.state || '';
+            document.getElementById('cand-race').value = candidate.race_id || '';
+            document.getElementById('cand-office').value = candidate.office || '';
+            document.getElementById('cand-bio').value = candidate.bio || '';
+            document.getElementById('cand-faith').value = candidate.faith_statement || '';
+            document.getElementById('cand-website').value = candidate.website || '';
+            document.getElementById('cand-voting-record').value = candidate.voting_record_url || '';
+            document.getElementById('cand-endorsements').value = (candidate.endorsements || []).join(', ');
+            
+            const positions = candidate.positions || {};
+            document.getElementById('pos-abortion').value = positions.abortion || '';
+            document.getElementById('pos-guns').value = positions.guns || '';
+            document.getElementById('pos-immigration').value = positions.immigration || '';
+            document.getElementById('pos-religious-freedom').value = positions.religious_freedom || '';
+            document.getElementById('pos-taxes').value = positions.taxes || '';
+            document.getElementById('pos-education').value = positions.education || '';
+            
             new bootstrap.Modal(document.getElementById('candidateModal')).show();
         }
 
+        let editingEventId = null;
+        
         function showAddEvent() {
+            editingEventId = null;
+            document.getElementById('eventModalTitle').textContent = 'Add Election Event';
+            document.getElementById('eventForm').reset();
+            new bootstrap.Modal(document.getElementById('eventModal')).show();
+        }
+        
+        async function editEvent(eventId) {
+            editingEventId = eventId;
+            document.getElementById('eventModalTitle').textContent = 'Edit Event';
+            const event = allEvents.find(e => e.event_id === eventId);
+            if (!event) return;
+            document.getElementById('event-title').value = event.title || '';
+            document.getElementById('event-state').value = event.state || '';
+            document.getElementById('event-date').value = event.event_date || '';
+            document.getElementById('event-type').value = event.event_type || 'primary';
+            document.getElementById('event-desc').value = event.description || '';
             new bootstrap.Modal(document.getElementById('eventModal')).show();
         }
 
@@ -445,11 +607,20 @@
                 verified: document.getElementById('contrib-verified').checked
             };
             
-            await fetch(API + '?resource=contributors', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
-                body: JSON.stringify(data)
-            });
+            if (editingContributorId) {
+                data.contributor_id = editingContributorId;
+                await fetch(API + '?resource=contributors&action=update', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+            } else {
+                await fetch(API + '?resource=contributors', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+            }
             
             bootstrap.Modal.getInstance(document.getElementById('contributorModal')).hide();
             loadContributors();
@@ -464,11 +635,20 @@
                 description: document.getElementById('race-desc').value
             };
             
-            await fetch(API + '?resource=races', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
-                body: JSON.stringify(data)
-            });
+            if (editingRaceId) {
+                data.race_id = editingRaceId;
+                await fetch(API + '?resource=races&action=update', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+            } else {
+                await fetch(API + '?resource=races', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+            }
             
             bootstrap.Modal.getInstance(document.getElementById('raceModal')).hide();
             loadRaces();
@@ -494,18 +674,33 @@
                 office: document.getElementById('cand-office').value,
                 bio: document.getElementById('cand-bio').value,
                 website: document.getElementById('cand-website').value,
-                race_id: document.getElementById('cand-race').value,
+                race_id: document.getElementById('cand-race').value || null,
                 faith_statement: document.getElementById('cand-faith').value,
                 voting_record_url: document.getElementById('cand-voting-record').value,
                 positions: positions,
                 endorsements: endorsements
             };
             
-            await fetch(API + '?resource=candidates', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
-                body: JSON.stringify(data)
-            });
+            if (editingCandidateId) {
+                data.candidate_id = editingCandidateId;
+                const response = await fetch(API + '?resource=candidates&action=update', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (!response.ok) {
+                    console.error('Update failed:', result);
+                    alert('Update failed: ' + (result.error || 'Unknown error'));
+                    return;
+                }
+            } else {
+                await fetch(API + '?resource=candidates', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+            }
             
             bootstrap.Modal.getInstance(document.getElementById('candidateModal')).hide();
             loadCandidates();
@@ -520,11 +715,20 @@
                 description: document.getElementById('event-desc').value
             };
             
-            await fetch(API + '?resource=events', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
-                body: JSON.stringify(data)
-            });
+            if (editingEventId) {
+                data.event_id = editingEventId;
+                await fetch(API + '?resource=events&action=update', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+            } else {
+                await fetch(API + '?resource=events', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+            }
             
             bootstrap.Modal.getInstance(document.getElementById('eventModal')).hide();
             loadEvents();

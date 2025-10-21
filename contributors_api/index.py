@@ -242,11 +242,16 @@ def update_candidate(event, headers):
         return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'candidate_id required'})}
     update_expr = 'SET updated_at = :updated'
     expr_values = {':updated': datetime.utcnow().isoformat()}
-    for field in ['name', 'bio', 'website', 'photo_url', 'status', 'office', 'race_id', 'positions', 'endorsements', 'voting_record_url', 'faith_statement']:
+    expr_names = {}
+    for field in ['name', 'bio', 'website', 'photo_url', 'status', 'office', 'party', 'state', 'race_id', 'positions', 'endorsements', 'voting_record_url', 'faith_statement']:
         if field in body:
-            update_expr += f', {field} = :{field}'
-            expr_values[f':{field}'] = body[field]
-    candidates_table.update_item(Key={'candidate_id': candidate_id}, UpdateExpression=update_expr, ExpressionAttributeValues=expr_values)
+            value = body[field]
+            if value == '' and field == 'race_id':
+                value = None
+            expr_names[f'#{field}'] = field
+            update_expr += f', #{field} = :{field}'
+            expr_values[f':{field}'] = value
+    candidates_table.update_item(Key={'candidate_id': candidate_id}, UpdateExpression=update_expr, ExpressionAttributeNames=expr_names, ExpressionAttributeValues=expr_values)
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Updated'})}
 
 def delete_candidate(event, headers):
