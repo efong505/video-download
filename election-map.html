@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>State Election Coverage - Christian Conservative Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+    <style>
+        .navbar-custom {
+            background: rgba(255,255,255,0.95);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 0;
+        }
+        .navbar-custom .nav-link {
+            color: #333 !important;
+            font-weight: 500;
+        }
+        .navbar-custom .nav-link:hover {
+            color: #667eea !important;
+        }
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+        .state-map-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .state-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .state-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .state-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .state-card.has-contributor {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+        .state-card .badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+        .contributor-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .candidate-card {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .event-card {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        #us-map {
+            width: 100%;
+            height: 600px;
+            margin: 0 auto;
+            display: block;
+        }
+        .state {
+            fill: #667eea;
+            stroke: white;
+            stroke-width: 1.5;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .state:hover {
+            fill: #764ba2;
+            stroke-width: 2.5;
+        }
+        .state.has-contributor {
+            fill: #28a745;
+        }
+        .state.has-contributor:hover {
+            fill: #20c997;
+        }
+        .state-label {
+            fill: white;
+            font-size: 10px;
+            font-weight: bold;
+            pointer-events: none;
+            text-anchor: middle;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .view-toggle {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .view-toggle button {
+            margin: 0 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="/" style="color: #667eea; font-weight: bold;">🗺️ Election Map</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="videos.html">Videos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="articles.html">Articles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="news.html">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="resources.html">Resources</a></li>
+                    <li class="nav-item" id="admin-link" style="display:none;"><a class="nav-link" href="admin-contributors.html">Admin</a></li>
+                    <li class="nav-item" id="auth-link"><a class="nav-link" href="login.html">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="dashboard-header">
+        <div class="container">
+            <h1>🗺️ State Election Coverage</h1>
+            <p>Republican Election Coverage by State Correspondents</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="state-map-container">
+            <div class="view-toggle">
+                <button class="btn btn-primary" onclick="showMapView()">🗺️ Map View</button>
+                <button class="btn btn-outline-primary" onclick="showGridView()">📋 Grid View</button>
+            </div>
+            <div id="map-view">
+                <svg id="us-map"></svg>
+            </div>
+            <div id="grid-view" style="display: none;">
+                <div id="state-grid" class="state-grid"></div>
+            </div>
+        </div>
+
+        <div id="state-details" style="display: none;">
+            <div class="contributor-info">
+                <h4 id="state-name"></h4>
+                <div id="contributor-section"></div>
+                <div id="candidates-section"></div>
+                <div id="events-section"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CONTRIBUTORS_API = 'https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors';
+        
+        // Check authentication status and update nav
+        function updateAuthLink() {
+            const token = localStorage.getItem('auth_token');
+            const userRole = localStorage.getItem('userRole');
+            const authLink = document.getElementById('auth-link');
+            const adminLink = document.getElementById('admin-link');
+            if (token) {
+                authLink.innerHTML = '<a class="nav-link" href="#" onclick="logout()">Logout</a>';
+                if (userRole === 'super_user' || userRole === 'admin') {
+                    adminLink.style.display = 'block';
+                }
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
+        const states = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+        
+        let contributors = [];
+        let candidates = [];
+        let events = [];
+        let races = [];
+
+        async function loadData() {
+            try {
+                const [contribResp, candResp, eventsResp, racesResp] = await Promise.all([
+                    fetch(CONTRIBUTORS_API + '?resource=contributors'),
+                    fetch(CONTRIBUTORS_API + '?resource=candidates'),
+                    fetch(CONTRIBUTORS_API + '?resource=events'),
+                    fetch(CONTRIBUTORS_API + '?resource=races')
+                ]);
+                
+                contributors = await contribResp.json();
+                candidates = await candResp.json();
+                events = await eventsResp.json();
+                races = await racesResp.json();
+                
+                renderStateGrid();
+                renderUSMap();
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+        
+        function renderUSMap() {
+            const width = 960;
+            const height = 600;
+            
+            const svg = d3.select('#us-map')
+                .attr('width', width)
+                .attr('height', height);
+            
+            const projection = d3.geoAlbersUsa()
+                .scale(1200)
+                .translate([width / 2, height / 2]);
+            
+            const path = d3.geoPath().projection(projection);
+            
+            d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json').then(us => {
+                const statesFeatures = topojson.feature(us, us.objects.states).features;
+                
+                svg.selectAll('.state')
+                    .data(statesFeatures)
+                    .enter().append('path')
+                    .attr('class', d => {
+                        const stateName = getStateName(d.id);
+                        const hasContributor = contributors.some(c => c.state === stateName && c.status === 'active');
+                        return 'state' + (hasContributor ? ' has-contributor' : '');
+                    })
+                    .attr('d', path)
+                    .on('click', function(event, d) {
+                        selectState(getStateName(d.id));
+                    })
+                    .append('title')
+                    .text(d => {
+                        const stateName = getStateName(d.id);
+                        const count = contributors.filter(c => c.state === stateName).length;
+                        return stateName + (count > 0 ? ' (' + count + ' correspondent' + (count > 1 ? 's' : '') + ')' : '');
+                    });
+            });
+        }
+        
+        function getStateName(id) {
+            const stateIds = {1:'Alabama',2:'Alaska',4:'Arizona',5:'Arkansas',6:'California',8:'Colorado',9:'Connecticut',10:'Delaware',12:'Florida',13:'Georgia',15:'Hawaii',16:'Idaho',17:'Illinois',18:'Indiana',19:'Iowa',20:'Kansas',21:'Kentucky',22:'Louisiana',23:'Maine',24:'Maryland',25:'Massachusetts',26:'Michigan',27:'Minnesota',28:'Mississippi',29:'Missouri',30:'Montana',31:'Nebraska',32:'Nevada',33:'New Hampshire',34:'New Jersey',35:'New Mexico',36:'New York',37:'North Carolina',38:'North Dakota',39:'Ohio',40:'Oklahoma',41:'Oregon',42:'Pennsylvania',44:'Rhode Island',45:'South Carolina',46:'South Dakota',47:'Tennessee',48:'Texas',49:'Utah',50:'Vermont',51:'Virginia',53:'Washington',54:'West Virginia',55:'Wisconsin',56:'Wyoming'};
+            return stateIds[id] || '';
+        }
+        
+        function showMapView() {
+            document.getElementById('map-view').style.display = 'block';
+            document.getElementById('grid-view').style.display = 'none';
+        }
+        
+        function showGridView() {
+            document.getElementById('map-view').style.display = 'none';
+            document.getElementById('grid-view').style.display = 'block';
+        }
+
+        function renderStateGrid() {
+            const grid = document.getElementById('state-grid');
+            grid.innerHTML = states.map(state => {
+                const hasContributor = contributors.some(c => c.state === state && c.status === 'active');
+                const contributorCount = contributors.filter(c => c.state === state).length;
+                
+                return '<div class="state-card ' + (hasContributor ? 'has-contributor' : '') + '" onclick="selectState(\'' + state + '\')">' +
+                    (hasContributor ? '<span class="badge bg-success">✓</span>' : '') +
+                    '<h5>' + state + '</h5>' +
+                    '<small>' + (hasContributor ? contributorCount + ' Correspondent' + (contributorCount > 1 ? 's' : '') : 'No Coverage') + '</small>' +
+                '</div>';
+            }).join('');
+        }
+
+        function selectState(state) {
+            document.getElementById('state-details').style.display = 'block';
+            document.getElementById('state-name').textContent = state + ' Election Coverage';
+            
+            const stateContributors = contributors.filter(c => c.state === state);
+            const stateCandidates = candidates.filter(c => c.state === state);
+            const stateEvents = events.filter(e => e.state === state);
+            
+            document.getElementById('contributor-section').innerHTML = 
+                '<h5>📝 State Correspondents</h5>' +
+                (stateContributors.length > 0 ? 
+                    stateContributors.map(c => 
+                        '<div class="alert alert-success">' +
+                            '<strong>' + c.user_email + '</strong>' +
+                            (c.verified ? ' <span class="badge bg-primary">✓ Verified</span>' : '') +
+                            '<p class="mb-0 mt-2">' + (c.bio || 'No bio provided') + '</p>' +
+                        '</div>'
+                    ).join('') :
+                    '<p class="text-muted">No correspondents assigned yet. <a href="#" onclick="applyAsContributor(\'' + state + '\')">Apply to cover this state</a></p>'
+                );
+            
+            const stateRaces = races.filter(r => r.state === state);
+            let candidatesHTML = '<h5 class="mt-4">🎯 Republican Candidates</h5>';
+            
+            if (stateRaces.length > 0) {
+                stateRaces.forEach(race => {
+                    const raceCandidates = stateCandidates.filter(c => c.race_id === race.race_id);
+                    candidatesHTML += '<div class="alert alert-info mt-3"><strong>' + race.office + '</strong> - ' + race.race_type + ' (' + new Date(race.election_date).toLocaleDateString() + ')</div>';
+                    
+                    if (raceCandidates.length > 0) {
+                        candidatesHTML += '<div class="row">';
+                        raceCandidates.forEach(c => {
+                            const positions = c.positions || {};
+                            candidatesHTML += '<div class="col-md-6"><div class="candidate-card">' +
+                                '<h6>' + c.name + '</h6>' +
+                                (c.faith_statement ? '<p class="text-muted fst-italic">"' + c.faith_statement + '"</p>' : '') +
+                                '<p class="mb-1">' + (c.bio || '') + '</p>' +
+                                (Object.keys(positions).length > 0 ? '<hr><p class="mb-1"><strong>Key Positions:</strong></p><ul class="small">' + 
+                                    Object.entries(positions).map(([k,v]) => '<li><strong>' + k.replace('_', ' ').toUpperCase() + ':</strong> ' + v + '</li>').join('') + '</ul>' : '') +
+                                (c.endorsements && c.endorsements.length > 0 ? '<p class="mb-1"><small><strong>Endorsed by:</strong> ' + c.endorsements.join(', ') + '</small></p>' : '') +
+                                (c.website ? '<a href="' + c.website + '" target="_blank" class="btn btn-sm btn-primary">Website</a> ' : '') +
+                                (c.voting_record_url ? '<a href="' + c.voting_record_url + '" target="_blank" class="btn btn-sm btn-outline-primary">Voting Record</a>' : '') +
+                            '</div></div>';
+                        });
+                        candidatesHTML += '</div>';
+                    } else {
+                        candidatesHTML += '<p class="text-muted">No candidates announced yet.</p>';
+                    }
+                });
+            }
+            
+            const unassignedCandidates = stateCandidates.filter(c => !c.race_id);
+            if (unassignedCandidates.length > 0) {
+                candidatesHTML += '<div class="alert alert-secondary mt-3"><strong>Other Candidates</strong></div>';
+                unassignedCandidates.forEach(c => {
+                    candidatesHTML += '<div class="candidate-card">' +
+                        '<h6>' + c.name + ' - ' + c.office + '</h6>' +
+                        '<p>' + (c.bio || '') + '</p>' +
+                        (c.website ? '<a href="' + c.website + '" target="_blank">Visit Website</a>' : '') +
+                    '</div>';
+                });
+            }
+            
+            if (stateCandidates.length === 0) {
+                candidatesHTML += '<p class="text-muted">No candidates listed yet.</p>';
+            }
+            
+            document.getElementById('candidates-section').innerHTML = candidatesHTML;
+            
+            document.getElementById('events-section').innerHTML = 
+                '<h5 class="mt-4">📅 Upcoming Events</h5>' +
+                (stateEvents.length > 0 ?
+                    stateEvents.map(e =>
+                        '<div class="event-card">' +
+                            '<h6>' + e.title + '</h6>' +
+                            '<p class="mb-1"><strong>Date:</strong> ' + new Date(e.event_date).toLocaleDateString() + '</p>' +
+                            '<p class="mb-0">' + (e.description || '') + '</p>' +
+                        '</div>'
+                    ).join('') :
+                    '<p class="text-muted">No upcoming events.</p>'
+                );
+            
+            document.getElementById('state-details').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function applyAsContributor(state) {
+            alert('Contributor application feature coming soon! Contact admin to become a state correspondent for ' + state);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthLink();
+            loadData();
+        });
+    </script>
+</body>
+</html>

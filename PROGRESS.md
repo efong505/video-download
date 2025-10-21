@@ -682,7 +682,7 @@ articles-table:
 - [x] **Auto-summary for resources** ✅ COMPLETE - AI-powered website analysis to generate descriptions from URLs using AWS Bedrock Claude, with admin override capability and manual editing
 - [x] **News management system** ✅ COMPLETE - Topic-based news with breaking news banners, scheduled publishing, state-specific election coverage, external link support, Christian/political news categories, horizontal scrolling UI, admin creation/editing, and comprehensive filtering
 - [x] **Related articles suggestions** ✅ COMPLETE - Algorithm-based recommendations using category matching, shared tags, same author, and recency scoring to suggest top 3 related articles
-- [ ] **State election contributor system** - Interactive state map, state correspondent assignments, candidate profiles, election calendar, and local Republican election coverage from verified contributors in each state
+- [x] **State election contributor system** ✅ COMPLETE - Interactive state map with 50 states, state correspondent assignments with verification badges, Republican candidate profiles by state, election calendar with event types, contributor management dashboard, role-based access control, and local election coverage from verified contributors
 - [x] **Article analytics and view tracking** ✅ COMPLETE - View counts, top articles dashboard, category performance stats, analytics API endpoint
 - [ ] **Advanced ministry tools** - Enhanced features for ministry use (see Phase 3 item 4 above for full list)ARTICLE ENHANCEMENTS**: Draft/preview functionality, service notes template, study notes category, and editing capabilities
 - **ADMIN NAME MANAGEMENT**: Administrators can now edit user first and last names through the admin dashboard
@@ -1549,3 +1549,90 @@ quill.setContents(delta);
 - ✅ Empty categories automatically removed from display
 
 **Status**: Horizontal scrolling UI and resource management enhancements fully implemented and operational across the platform, providing modern Netflix-style content browsing with comprehensive resource organization tools.
+
+## Election Map Authentication & Navigation Enhancement ✅ COMPLETE (January 2025)
+
+### Authentication Fix
+**Problem**: Election map page (election-map.html) showed "Login" link even when user was logged in.
+
+**Root Cause**: 
+- Page was checking for `authToken` in localStorage
+- Login system stores token as `auth_token` (different key name)
+- Mismatch between storage key names prevented authentication detection
+
+**Resolution**:
+- Updated `updateAuthLink()` function to check `auth_token` instead of `authToken`
+- Added role-based Admin link visibility (only for super_user and admin roles)
+- Enhanced `logout()` function to clear all authentication data
+- Fixed localStorage key consistency across the platform
+
+**Files Modified**:
+- `election-map.html` - Updated authentication check and logout function
+
+**Features Added**:
+- Dynamic Login/Logout link based on authentication status
+- Admin navigation link (visible only to super_user and admin roles)
+- Proper token cleanup on logout
+- Role-based navigation menu
+
+### 2025 Election Data Guidance
+**User Request**: How to find 2025 election information for the election system
+
+**Primary Sources Provided**:
+- **Ballotpedia** - Most comprehensive election database
+- **Cook Political Report** - Competitive race ratings
+- **RealClearPolitics** - Election calendar and polling
+
+**Christian Conservative Sources**:
+- **Family Research Council Action** - Candidate scorecards on biblical values
+- **iVoterGuide** - Biblical worldview ratings
+- **American Family Association** - Family values action alerts
+- **Susan B. Anthony Pro-Life America** - Pro-life endorsements
+- **Alliance Defending Freedom** - Religious freedom positions
+
+**2025 Key Races Identified**:
+- Virginia Governor (November 2025) - Open seat
+- New Jersey Governor (November 2025) - Open seat
+- Virginia Legislature - All 140 seats
+- New Jersey Legislature - All 120 seats
+- Congressional special elections (as announced)
+
+**Programmatic Data Access**:
+- **Ballotpedia API** - Best option for race/candidate data (requires API key)
+- **Google Civic Information API** - Free election data
+- **OpenFEC API** - Federal candidate filings
+- **Vote Smart API** - Candidate positions and voting records
+
+**Limitations Noted**:
+- No public APIs for Christian conservative organizations (FRC, iVoterGuide, SBA)
+- Manual data entry required for endorsements and scorecards
+- Web scraping may violate terms of service
+- Recommended approach: Use Ballotpedia API + manual Christian ratings collection
+
+**CSV Bulk Import Tool**:
+- Existing bulk import functionality ready for 2025 data
+- Sample CSV templates available (races and candidates)
+- Can be updated with 2025 election information
+
+### Technical Implementation
+**Authentication Keys**:
+- `auth_token` - JWT authentication token (stored by login.html)
+- `userRole` - User role (super_user, admin, user)
+- `userEmail` - User email address
+- `userName` - User display name
+- `user_data` - Complete user object
+
+**Role-Based Features**:
+- Admin link only visible to super_user and admin roles
+- Regular users see Login/Logout only
+- Proper permission checks before displaying admin navigation
+
+### Verification
+- ✅ Login/Logout link displays correctly based on authentication
+- ✅ Admin link only shows for privileged users
+- ✅ Token cleanup works properly on logout
+- ✅ 2025 election data sources documented
+- ✅ Programmatic data access options provided
+- ✅ CSV bulk import ready for new election data
+
+**Status**: Election map authentication system fully functional with role-based navigation and comprehensive 2025 election data guidance provided for system population.

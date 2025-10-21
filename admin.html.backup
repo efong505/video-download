@@ -244,7 +244,6 @@
                     <a href="authors.html" class="nav-link">👥 Authors</a>
                     <a href="resources.html" class="nav-link">📚 Resources</a>
                     <a href="user-upload.html" class="nav-link">⬆️ Upload Video</a>
-                    <a href="admin-contributors.html" class="nav-link">🗺️ Contributors</a>
                     <a href="profile.html" class="nav-link">👤 Profile</a>
                     <a href="#" onclick="viewMyPage()" class="nav-link">📄 My Page</a>
                     <a href="#" onclick="logout()" class="nav-link logout">🚪 Logout</a>
