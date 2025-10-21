@@ -1,0 +1,172 @@
+[
+  {
+    "office": "Lincoln City Council At-Large Seat 2",
+    "election_date": "5/6/2025",
+    "created_at": "2025-10-21T05:39:36.684662",
+    "created_by": "super@admin.com",
+    "race_id": "222e531c-60fd-4b2f-8f86-315147664a54",
+    "description": "Lincoln City Council At-Large Election - COMPLETED",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Omaha City Council District 3",
+    "election_date": "5/13/2025",
+    "created_at": "2025-10-21T05:39:36.067614",
+    "created_by": "super@admin.com",
+    "race_id": "12f3d6dc-5878-453b-a7bb-d18668f7cdf3",
+    "description": "Omaha City Council District 3 Election - COMPLETED",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Omaha City Council District 2",
+    "election_date": "5/13/2025",
+    "created_at": "2025-10-21T05:39:35.963316",
+    "created_by": "super@admin.com",
+    "race_id": "ff331202-d60e-4ecd-92d9-b8a78ac39d71",
+    "description": "Omaha City Council District 2 Election - COMPLETED. LaVonya Goodwin defeated Ben Gray and incumbent Juanita Johnson.",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Lincoln Public Schools Board District 4",
+    "election_date": "5/6/2025",
+    "created_at": "2025-10-21T05:39:37.294993",
+    "created_by": "super@admin.com",
+    "race_id": "33cce4fc-cdf7-46d9-a0bd-83a84513d909",
+    "description": "Lincoln Public Schools Board of Education District 4 - COMPLETED",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Omaha City Council District 6",
+    "election_date": "5/13/2025",
+    "created_at": "2025-10-21T05:39:36.372523",
+    "created_by": "super@admin.com",
+    "race_id": "f3a6bf9d-d9f7-4522-9320-de975df2bcb3",
+    "description": "Omaha City Council District 6 Election - COMPLETED. Brinker Harding ran unopposed.",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Lincoln Public Schools Board District 3",
+    "election_date": "5/6/2025",
+    "created_at": "2025-10-21T05:39:37.190436",
+    "created_by": "super@admin.com",
+    "race_id": "63952a11-41dd-41c0-9384-dd82a6365948",
+    "description": "Lincoln Public Schools Board of Education District 3 - COMPLETED",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Omaha City Council District 4",
+    "election_date": "5/13/2025",
+    "created_at": "2025-10-21T05:39:36.160432",
+    "created_by": "super@admin.com",
+    "race_id": "c11473e2-1cdd-44fd-830b-cda6e45dbab0",
+    "description": "Omaha City Council District 4 Election - COMPLETED. Ron Hug retained seat.",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Lincoln City Council At-Large Seat 1",
+    "election_date": "5/6/2025",
+    "created_at": "2025-10-21T05:39:36.583943",
+    "created_by": "super@admin.com",
+    "race_id": "3cd01491-9701-449f-8159-7e7cb0e262e3",
+    "description": "Lincoln City Council At-Large Election - COMPLETED. Three Democrats won: S\u00e4ndra Washington Tom Beckius and Bennie Shobe. Primary held 4/8/2025.",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Lincoln Public Schools Board District 1",
+    "election_date": "5/6/2025",
+    "created_at": "2025-10-21T05:39:36.970115",
+    "created_by": "super@admin.com",
+    "race_id": "b2c58b22-bf61-4bfc-aa3e-2810d460bc43",
+    "description": "Lincoln Public Schools Board of Education District 1 - COMPLETED",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Lincoln Public Schools Board District 2",
+    "election_date": "5/6/2025",
+    "created_at": "2025-10-21T05:39:37.067014",
+    "created_by": "super@admin.com",
+    "race_id": "57361fac-26d6-4dc9-8c03-b5007152a1dc",
+    "description": "Lincoln Public Schools Board of Education District 2 - COMPLETED",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Lincoln Airport Authority",
+    "election_date": "5/6/2025",
+    "created_at": "2025-10-21T05:39:36.875774",
+    "created_by": "super@admin.com",
+    "race_id": "2d46a2e2-fdb8-4447-acb3-63734a18bea6",
+    "description": "Lincoln Airport Authority Election - COMPLETED. Incumbent Vanessa Emlich retained seat defeating Tom Trumble.",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Omaha City Council District 1",
+    "election_date": "5/13/2025",
+    "created_at": "2025-10-21T05:39:35.863145",
+    "created_by": "super@admin.com",
+    "race_id": "8b07657b-844d-4dd1-b255-81987bac8d72",
+    "description": "Omaha City Council District 1 Election - COMPLETED",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Omaha City Council District 7",
+    "election_date": "5/13/2025",
+    "created_at": "2025-10-21T05:39:36.475523",
+    "created_by": "super@admin.com",
+    "race_id": "4003c3f9-739d-4033-8450-79c49d2bf697",
+    "description": "Omaha City Council District 7 Election - COMPLETED. Aimee Melton re-elected.",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Omaha Mayor",
+    "election_date": "5/13/2025",
+    "created_at": "2025-10-21T05:39:35.754240",
+    "created_by": "super@admin.com",
+    "race_id": "7550bca4-2d18-4b03-ba15-a9843547b85c",
+    "description": "Omaha Mayoral Election - COMPLETED. Democrat John Ewing Jr. defeated Republican incumbent Jean Stothert. Primary held 4/1/2025. Ewing became first elected Black mayor of Omaha.",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Lincoln City Council At-Large Seat 3",
+    "election_date": "5/6/2025",
+    "created_at": "2025-10-21T05:39:36.781942",
+    "created_by": "super@admin.com",
+    "race_id": "93b1c02a-7bd2-4a58-aa4a-aeb30825e216",
+    "description": "Lincoln City Council At-Large Election - COMPLETED",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Omaha City Council District 5",
+    "election_date": "5/13/2025",
+    "created_at": "2025-10-21T05:39:36.260689",
+    "created_by": "super@admin.com",
+    "race_id": "e2b5bd27-19af-4578-90e0-82f7cbdb9a40",
+    "description": "Omaha City Council District 5 Election - COMPLETED. Don Rowe ran unopposed.",
+    "race_type": "general",
+    "state": "Nebraska"
+  },
+  {
+    "office": "Governor",
+    "election_date": "11/3/2026",
+    "created_at": "2025-10-21T05:39:37.388394",
+    "created_by": "super@admin.com",
+    "race_id": "4725e353-3dbe-44df-bdba-17344b714da3",
+    "description": "Nebraska Gubernatorial Election. Republican incumbent Jim Pillen seeking second term. Primary election May 12 2026. Pillen first governor-farmer in over century.",
+    "race_type": "general",
+    "state": "Nebraska"
+  }
+]

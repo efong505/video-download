@@ -1,0 +1,48 @@
+feat: Complete election data system with 7 states and automation workflow
+
+Major Features:
+- Added comprehensive election data for 7 states (CA, HI, NE, VA, TX, GA, NM)
+- Created 204 races (45 in 2025, 159 in 2026) across all states
+- Added 191 candidates with detailed profiles and Christian conservative analysis
+- Generated 7 complete state voter guides with proper metadata
+
+Database Enhancements:
+- Updated state-summaries table with title and election_year fields
+- All summaries now follow format: "[State] 2025-2026 Elections - Complete Christian Conservatives Today Guide"
+- Added 2026 federal races (Senate, House, Governor) for VA, TX, GA
+- Linked all candidates to races via race_id for proper relationships
+
+State Coverage:
+- California: 95 races, 57 candidates
+- Hawaii: 53 races, 54 candidates  
+- Nebraska: 17 races, 17 candidates
+- Virginia: 9 races, 29 candidates (added 2026 federal races)
+- Texas: 14 races, 14 candidates (added 2026 federal races)
+- Georgia: 16 races, 20 candidates (added 2026 federal races)
+- New Mexico: 16 races, 19 candidates (NEW)
+
+File Organization:
+- Created "Election Data and Files" folder structure
+- Organized all CSV files into "CSV files" subfolder
+- Moved voter guides to "Voter Guides_Summaries" subfolder
+- Created "Scripts" folder with automation tools
+
+Automation & Workflow:
+- Created comprehensive ELECTION_DATA_WORKFLOW.md documentation
+- Built update_candidate.py script for updating existing candidates
+- Built validate_election_data.py for data quality checks
+- Documented complete process for replicating in future election cycles
+- Established workflow for tracking candidate announcements and updates
+
+Scripts Added:
+- update_candidate.py - Update candidate info (status, bio, endorsements)
+- validate_election_data.py - Check data quality and find issues
+- Scripts README with usage examples
+
+Documentation:
+- Complete workflow guide for annual election cycles
+- Step-by-step replication process for 2028, 2030, etc.
+- Candidate tracking and update procedures
+- Data quality monitoring guidelines
+
+This establishes a complete, repeatable system for managing election data across all 50 states for every election cycle.

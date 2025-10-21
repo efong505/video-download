@@ -1,4 +1,4 @@
-# California 2025-2026 Elections - Complete Christian Conservative Guide
+# California 2025-2026 Elections - Complete Christian Conservatives Today Guide
 
 ## 📊 Database Summary
 

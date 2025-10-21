@@ -1,0 +1,122 @@
+[
+  {
+    "office": "City Council (All 15 seats)",
+    "election_date": "2025-11-04",
+    "created_at": "2025-10-21T02:07:41.985786",
+    "created_by": "super@admin.com",
+    "race_id": "7aa0a393-97e2-4605-a9d9-70854801dbab",
+    "description": "Georgia City Council Elections - All seats up for election including Council President",
+    "race_type": "general",
+    "state": "Georgia"
+  },
+  {
+    "office": "Board of Education Districts 2",
+    "election_date": "2025-11-04",
+    "created_at": "2025-10-21T02:07:49.401776",
+    "created_by": "super@admin.com",
+    "race_id": "533345ff-261c-46a9-a726-b0bd0e2b4c1e",
+    "description": "Georgia Board of Education Elections - Four even-numbered seats up for election",
+    "race_type": "general",
+    "state": "Georgia"
+  },
+  {
+    "office": "Public Service Commission District 3",
+    "election_date": "2025-11-04",
+    "created_at": "2025-10-21T02:07:47.521353",
+    "created_by": "super@admin.com",
+    "race_id": "641b7042-2757-42a9-bf67-914ae43abb7d",
+    "description": "GA PSC District 3 - Republican Fitz Johnson (incumbent) vs. Democrat Peter Hubbard",
+    "race_type": "general",
+    "state": "Georgia"
+  },
+  {
+    "office": "Mayor",
+    "election_date": "2025-11-04",
+    "created_at": "2025-10-21T02:07:41.892616",
+    "created_by": "super@admin.com",
+    "race_id": "bda432a3-5481-4e2e-9564-c9cf612fa9a9",
+    "description": "Georgia Mayoral Election - Democrat Andre Dickens (incumbent) seeking re-election",
+    "race_type": "general",
+    "state": "Georgia"
+  },
+  {
+    "office": "City Council (All 15 seats)",
+    "election_date": "2025-11-04",
+    "created_at": "2025-10-21T02:07:37.125558",
+    "created_by": "super@admin.com",
+    "race_id": "da3a16d9-121b-44b8-87df-2274ad07bcff",
+    "description": "Georgia City Council Elections - All seats up for election including Council President",
+    "race_type": "general",
+    "state": "Georgia"
+  },
+  {
+    "office": "Public Service Commission District 2",
+    "election_date": "2025-11-04",
+    "created_at": "2025-10-21T02:07:41.957645",
+    "created_by": "super@admin.com",
+    "race_id": "a3bb4568-837c-4254-90e7-c65f96ad67d2",
+    "description": "GA PSC District 2 - Republican Tim Echols (incumbent) vs. Democrat Alicia Johnson",
+    "race_type": "general",
+    "state": "Georgia"
+  },
+  {
+    "office": "Public Service Commission District 3",
+    "election_date": "2025-11-04",
+    "created_at": "2025-10-21T02:07:42.049200",
+    "created_by": "super@admin.com",
+    "race_id": "b8bd982e-7c51-440d-9620-c11cc7709c15",
+    "description": "GA PSC District 3 - Republican Fitz Johnson (incumbent) vs. Democrat Peter Hubbard",
+    "race_type": "general",
+    "state": "Georgia"
+  },
+  {
+    "office": "Board of Education Districts 2",
+    "election_date": "2025-11-04",
+    "created_at": "2025-10-21T02:07:43.831458",
+    "created_by": "super@admin.com",
+    "race_id": "0a5c691b-5cbc-4f14-8c8a-d6e11e72e884",
+    "description": "Georgia Board of Education Elections - Four even-numbered seats up for election",
+    "race_type": "general",
+    "state": "Georgia"
+  },
+  {
+    "office": "Mayor",
+    "election_date": "2025-11-04",
+    "created_at": "2025-10-21T02:07:37.027606",
+    "created_by": "super@admin.com",
+    "race_id": "17b85270-ad3f-476d-941f-a552f87dd4b0",
+    "description": "Georgia Mayoral Election - Democrat Andre Dickens (incumbent) seeking re-election",
+    "race_type": "general",
+    "state": "Georgia"
+  },
+  {
+    "office": "Public Service Commission District 2",
+    "election_date": "2025-11-04",
+    "created_at": "2025-10-21T02:07:47.424883",
+    "created_by": "super@admin.com",
+    "race_id": "1261eaa1-e4ae-4ba4-a259-74c639756a6f",
+    "description": "GA PSC District 2 - Republican Tim Echols (incumbent) vs. Democrat Alicia Johnson",
+    "race_type": "general",
+    "state": "Georgia"
+  },
+  {
+    "office": "Mayor",
+    "election_date": "2025-11-04",
+    "created_at": "2025-10-21T02:07:41.576445",
+    "created_by": "super@admin.com",
+    "race_id": "1c6b8d81-1c73-4d71-9a46-0a4f02acd3d6",
+    "description": "Georgia Mayoral Election - Democrat khalid kamau (incumbent) seeking re-election",
+    "race_type": "general",
+    "state": "Georgia"
+  },
+  {
+    "office": "Mayor",
+    "election_date": "2025-11-04",
+    "created_at": "2025-10-21T02:07:47.042340",
+    "created_by": "super@admin.com",
+    "race_id": "cd8d45ce-7b7f-4c02-adb0-7d1d4b0ebc20",
+    "description": "Georgia Mayoral Election - Democrat khalid kamau (incumbent) seeking re-election",
+    "race_type": "general",
+    "state": "Georgia"
+  }
+]
