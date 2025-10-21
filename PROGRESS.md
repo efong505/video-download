@@ -1636,3 +1636,47 @@ quill.setContents(delta);
 - ✅ CSV bulk import ready for new election data
 
 **Status**: Election map authentication system fully functional with role-based navigation and comprehensive 2025 election data guidance provided for system population.
+
+### Future Enhancement: Dedicated Comparative Race View (Optional)
+**Current State**: 
+- Candidates linked via `race_id` field for grouping
+- Policy positions stored (abortion, guns, immigration, religious freedom, taxes, education)
+- Endorsements and faith statements displayed
+- Side-by-side display on election map when clicking states
+
+**Proposed Enhancement**:
+- **Head-to-Head Comparison Matrix**: Side-by-side table comparing candidates in same race
+- **Issue-by-Issue Breakdown**: Visual comparison of policy positions with color coding
+- **Opponent Field**: Direct 1-on-1 linking in CSV (opponent_name column)
+- **Polling Data Integration**: Add polling numbers and trends to CSV
+- **Debate Schedule**: Track and display upcoming debates
+- **Voting Record Comparison**: Side-by-side legislative history
+- **Endorsement Comparison**: Visual comparison of endorsing organizations
+- **Funding Comparison**: Campaign finance data integration
+- **Interactive Comparison Tool**: Allow users to select 2+ candidates for detailed comparison
+
+**Implementation Approach**:
+1. Add `opponent_name` and `polling_average` columns to candidates CSV
+2. Create `compare-candidates.html` page with comparison matrix
+3. Add "Compare" button on election-map.html for races with multiple candidates
+4. Build comparison API endpoint to fetch and format candidate data
+5. Design visual comparison UI with color-coded position differences
+6. Integrate with external polling APIs (RealClearPolitics, FiveThirtyEight)
+
+**Benefits**:
+- Easier voter decision-making with clear side-by-side comparisons
+- Visual identification of policy differences
+- Quick access to key differentiators between candidates
+- Enhanced user engagement with interactive comparison tools
+- Better informed Christian conservative voters
+
+**CSV Structure Enhancement**:
+```csv
+name,state,office,party,opponent_name,polling_average,debate_dates,bio,positions,endorsements
+Ted Cruz,Texas,U.S. Senate,Republican,Colin Allred,48.5,2024-10-15;2024-10-22,...
+Colin Allred,Texas,U.S. Senate,Democrat,Ted Cruz,46.2,2024-10-15;2024-10-22,...
+```
+
+**Priority**: Low (current grouping system functional, enhancement would improve UX)
+**Effort**: Medium (requires new UI components and comparison logic)
+**Value**: High (significantly improves voter information and decision-making)
