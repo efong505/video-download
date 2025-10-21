@@ -1,4 +1,5 @@
 # CSVLOD Enterprise Architecture Framework
+
 ## Christian Conservatives Today Platform
 
 **Document Version**: 1.0  
@@ -39,6 +40,7 @@ The CSVLOD framework, developed by Svyatoslav Kotusev, represents six types of E
 **Christian Conservatives Today** is a serverless video and article platform serving the 5-fold ministry (apostles, prophets, evangelists, pastors, teachers), Christian believers, and conservative voices. Built entirely on AWS serverless architecture with 9 microservices, 4 DynamoDB tables, and S3/CloudFront content delivery.
 
 **Key Metrics**:
+
 - **Architecture**: 100% Serverless (AWS Lambda, DynamoDB, S3, CloudFront)
 - **Microservices**: 9 Lambda functions
 - **Users**: 3-tier role system (Super User > Admin > User)

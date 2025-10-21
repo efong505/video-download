@@ -196,7 +196,7 @@
             const adminLink = document.getElementById('admin-link');
             if (token) {
                 authLink.innerHTML = '<a class="nav-link" href="#" onclick="logout()">Logout</a>';
-                if (userRole === 'super_user' || userRole === 'admin') {
+                if (userRole === 'super_user' || userRole === 'admin' || userRole === 'editor') {
                     adminLink.style.display = 'block';
                 }
             }
@@ -314,7 +314,7 @@
                 const hasContributor = contributors.some(c => c.state === state && c.status === 'active');
                 const contributorCount = contributors.filter(c => c.state === state).length;
                 
-                return '<div class="state-card ' + (hasContributor ? 'has-contributor' : '') + '" onclick="selectState(\"' + state + '\")">' +
+                return '<div class="state-card ' + (hasContributor ? 'has-contributor' : '') + '" onclick="selectState(\'' + state + '\')">' +
                     (hasContributor ? '<span class="badge bg-success">✓</span>' : '') +
                     '<h5>' + state + '</h5>' +
                     '<small>' + (hasContributor ? contributorCount + ' Correspondent' + (contributorCount > 1 ? 's' : '') : 'No Coverage') + '</small>' +
@@ -361,7 +361,7 @@
                     '</div>' +
                     '</div>' +
                     '<div style="max-height: 300px; overflow-y: auto; font-size: 14px; line-height: 1.6;">' + renderedContent + '</div>' +
-                    '<small class="text-muted">Last updated: ' + new Date(stateSummary.last_updated).toLocaleDateString() + '</small>' +
+                    '<small class="text-muted">Last updated: ' + (stateSummary.updated_at ? new Date(stateSummary.updated_at).toLocaleDateString() : 'Recently') + '</small>' +
                 '</div>';
             }
             
@@ -370,16 +370,45 @@
                 (stateContributors.length > 0 ? 
                     stateContributors.map(c => 
                         '<div class="alert alert-success">' +
-                            '<strong>' + c.user_email + '</strong>' +
+                            '<strong>' + (c.first_name && c.last_name ? c.first_name + ' ' + c.last_name : c.user_email) + '</strong>' +
                             (c.verified ? ' <span class="badge bg-primary">✓ Verified</span>' : '') +
+                            '<br><a href="mailto:' + c.user_email + '">' + c.user_email + '</a>' +
+                            (c.phone_number ? ' | <a href="tel:' + c.phone_number + '">📞 ' + c.phone_number + '</a>' : '') +
                             '<p class="mb-0 mt-2">' + (c.bio || 'No bio provided') + '</p>' +
                         '</div>'
                     ).join('') :
-                    '<p class="text-muted">No correspondents assigned yet. <a href="#" onclick="applyAsContributor(\'' + state + '\')">Apply to cover this state</a></p>'
+                    '<p class="text-muted">No correspondents assigned yet. <a href="apply-correspondent.html?state=' + encodeURIComponent(state) + '">Apply to cover this state</a></p>'
                 );
             
             const stateRaces = races.filter(r => r.state === state);
-            let candidatesHTML = '<h5 class="mt-4">🎯 Candidates</h5>';
+            const candidateCount = stateCandidates.length;
+            const raceCount = stateRaces.length;
+            const raceSummary = stateRaces.map(r => {
+                const count = stateCandidates.filter(c => c.race_id === r.race_id).length;
+                return r.office + ' (' + count + ')';
+            }).join(', ');
+            
+            let candidatesHTML = '<div class="card mb-4" style="border: 2px solid #667eea; border-radius: 12px;">' +
+                '<div class="card-body" style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);">' +
+                '<h5 class="card-title mb-3" style="color: #667eea;">📊 Election Overview</h5>' +
+                '<div class="row text-center">' +
+                '<div class="col-md-6 mb-2">' +
+                '<div class="p-3" style="background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">' +
+                '<h3 class="mb-0" style="color: #667eea; font-weight: bold;">' + raceCount + '</h3>' +
+                '<small class="text-muted">Total Races</small>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-md-6 mb-2">' +
+                '<div class="p-3" style="background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">' +
+                '<h3 class="mb-0" style="color: #28a745; font-weight: bold;">' + candidateCount + '</h3>' +
+                '<small class="text-muted">Total Candidates</small>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                (raceCount > 0 ? '<div class="mt-3 p-2" style="background: white; border-radius: 8px;"><small class="text-muted"><strong>Races:</strong> ' + raceSummary + '</small></div>' : '') +
+                '</div>' +
+                '</div>' +
+                '<h5 class="mt-4">🎯 Candidates</h5>';
             
             if (stateRaces.length > 0) {
                 stateRaces.forEach(race => {
@@ -393,12 +422,20 @@
                         candidatesHTML += '<div class="row">';
                         raceCandidates.forEach(c => {
                             const positions = c.positions || {};
-                            const partyBadge = c.party === 'Republican' ? '<span class="badge bg-danger">R</span>' : 
-                                             (c.party === 'Democrat' || c.party === 'Democratic') ? '<span class="badge bg-primary">D</span>' : 
-                                             '<span class="badge bg-secondary">' + (c.party || 'IND') + '</span>';
+                            const getPartyBadge = (party) => {
+                                if (!party) return '<span class="badge bg-secondary">IND</span>';
+                                const p = party.toLowerCase();
+                                if (p === 'republican') return '<span class="badge bg-danger">R</span>';
+                                if (p === 'democrat' || p === 'democratic') return '<span class="badge bg-primary">D</span>';
+                                if (p === 'independent') return '<span class="badge bg-secondary">IND</span>';
+                                if (p === 'libertarian') return '<span class="badge bg-warning">L</span>';
+                                if (p === 'green') return '<span class="badge bg-success">G</span>';
+                                return '<span class="badge bg-secondary">' + party.substring(0, 3).toUpperCase() + '</span>';
+                            };
+                            const partyBadge = getPartyBadge(c.party);
                             candidatesHTML += '<div class="col-md-6"><div class="candidate-card">' +
                                 '<h6>' + c.name + ' ' + partyBadge + '</h6>' +
-                                (c.faith_statement ? '<p class="text-muted fst-italic">"' + c.faith_statement + '"</p>' : '') +
+                                (c.faith_statement ? '<p class="text-muted fst-italic">"' + c.faith_statement + '"</p>' : '<p class="text-muted fst-italic">No publicly disclosed faith statement</p>') +
                                 '<p class="mb-1">' + (c.bio || '') + '</p>' +
                                 (Object.keys(positions).length > 0 ? '<hr><p class="mb-1"><strong>Key Positions:</strong></p><ul class="small">' + 
                                     Object.entries(positions).map(([k,v]) => '<li><strong>' + k.replace('_', ' ').toUpperCase() + ':</strong> ' + v + '</li>').join('') + '</ul>' : '') +
@@ -482,7 +519,7 @@
                 '</div>' +
                 '<div class="modal-body" style="font-size: 15px; line-height: 1.8;">' + renderedContent + '</div>' +
                 '<div class="modal-footer">' +
-                '<small class="text-muted me-auto">Last updated: ' + new Date(stateSummary.last_updated).toLocaleDateString() + '</small>' +
+                '<small class="text-muted me-auto">Last updated: ' + (stateSummary.updated_at ? new Date(stateSummary.updated_at).toLocaleDateString() : 'Recently') + '</small>' +
                 '<div class="btn-group">' +
                 '<button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">⬇️ Download</button>' +
                 '<ul class="dropdown-menu">' +
@@ -531,7 +568,7 @@
             // Add header
             const header = stateSummary.title + '\n' +
                 '='.repeat(stateSummary.title.length) + '\n' +
-                'Last Updated: ' + new Date(stateSummary.last_updated).toLocaleDateString() + '\n' +
+                'Last Updated: ' + (stateSummary.updated_at ? new Date(stateSummary.updated_at).toLocaleDateString() : 'Recently') + '\n' +
                 'Source: Christian Conservative Election Platform\n\n';
             
             content = header + content;
@@ -565,7 +602,7 @@
             const container = document.createElement('div');
             container.style.cssText = 'position: absolute; left: -9999px; width: 800px; padding: 40px; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.6; background: white;';
             container.innerHTML = '<h1 style="font-size: 24px; margin-bottom: 10px;">' + stateSummary.title + '</h1>' +
-                '<p style="font-size: 12px; color: #666; margin-bottom: 5px;">Last Updated: ' + new Date(stateSummary.last_updated).toLocaleDateString() + '</p>' +
+                '<p style="font-size: 12px; color: #666; margin-bottom: 5px;">Last Updated: ' + (stateSummary.updated_at ? new Date(stateSummary.updated_at).toLocaleDateString() : 'Recently') + '</p>' +
                 '<p style="font-size: 12px; color: #666; margin-bottom: 20px;">Source: Christian Conservative Election Platform</p>' +
                 '<hr style="margin-bottom: 20px; border: 1px solid #ccc;" />' +
                 '<div>' + renderedHTML + '</div>';

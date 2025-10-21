@@ -447,7 +447,7 @@
                 col.innerHTML = `
                     <div class="video-card">
                         <div class="thumbnail-container">
-                            <img src="${thumbnailUrl}" alt="${title}" class="thumbnail" 
+                            <img src="${thumbnailUrl}" alt="${title}" class="thumbnail" loading="lazy"
                                  onerror="this.onerror=null; this.src='${fallbackThumbnailUrl}'; if(this.complete && this.naturalHeight === 0) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }" 
                                  onload="if(this.naturalHeight === 0) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }">
                             <div class="thumbnail" style="display: none; background: linear-gradient(135deg, #667eea, #764ba2); color: white; align-items: center; justify-content: center; font-size: 14px; font-weight: bold;">
@@ -501,7 +501,7 @@
                         <div class="thumbnail-container" style="position: relative;">
                             ${typeBadge}
                             ${thumbnailSrc ? `
-                                <img src="${thumbnailSrc}" alt="${title}" class="thumbnail" 
+                                <img src="${thumbnailSrc}" alt="${title}" class="thumbnail" loading="lazy"
                                      onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                 <div class="thumbnail" style="display: none; background: linear-gradient(135deg, #667eea, #764ba2); color: white; align-items: center; justify-content: center; font-size: 14px; font-weight: bold;">
                                     🎬 ${title.substring(0,15)}${title.length > 15 ? '...' : ''}

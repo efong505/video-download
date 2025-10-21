@@ -29,7 +29,8 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="admin.html">← Admin Dashboard</a></li>
+                    <li class="nav-item" id="admin-dashboard-link"><a class="nav-link" href="admin.html">← Admin Dashboard</a></li>
+                    <li class="nav-item" id="pending-changes-link"><a class="nav-link" href="admin-pending-changes.html">📋 Pending Changes <span id="pending-count-badge" class="badge bg-danger" style="display:none;">0</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="election-map.html" target="_blank">View Public Map</a></li>
                     <li class="nav-item"><a class="nav-link" href="videos.html">Videos</a></li>
                     <li class="nav-item"><a class="nav-link" href="articles.html">Articles</a></li>
@@ -51,7 +52,7 @@
 
         <div class="tab-content mt-3">
             <div id="contributors" class="tab-pane fade show active">
-                <button class="btn btn-primary mb-3" onclick="showAddContributor()">+ Add Contributor</button>
+                <button class="btn btn-primary mb-3" id="add-contributor-btn" onclick="showAddContributor()">+ Add Contributor</button>
                 <div class="mb-3">
                     <input type="text" class="form-control" id="filter-contributors" placeholder="Filter by state or email..." onkeyup="filterContributors()">
                 </div>
@@ -161,8 +162,28 @@
                 <div class="modal-body">
                     <form id="contributorForm">
                         <div class="mb-3">
-                            <label>User Email</label>
-                            <input type="email" class="form-control" id="contrib-email" required>
+                            <label>Select User</label>
+                            <select class="form-control" id="contrib-user" required onchange="selectUser()">
+                                <option value="">Select a registered user...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label>Email (auto-filled)</label>
+                            <input type="email" class="form-control" id="contrib-email" readonly>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" id="contrib-first-name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" id="contrib-last-name">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label>Phone Number</label>
+                            <input type="tel" class="form-control" id="contrib-phone" placeholder="(555) 123-4567">
                         </div>
                         <div class="mb-3">
                             <label>State</label>
@@ -174,6 +195,10 @@
                         </div>
                         <div class="mb-3">
                             <label><input type="checkbox" id="contrib-verified"> Verified</label>
+                        </div>
+                        <div class="mb-3" id="bypass-approval-section" style="display:none;">
+                            <label><input type="checkbox" id="contrib-bypass-approval"> Bypass Approval (Auto-approve all submissions)</label>
+                            <small class="text-muted d-block">When enabled, this editor's submissions will be published immediately without admin review.</small>
                         </div>
                     </form>
                 </div>
@@ -209,6 +234,18 @@
                         <div class="mb-3">
                             <label>Office</label>
                             <input type="text" class="form-control" id="cand-office" placeholder="e.g., Governor, Senate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Party</label>
+                            <select class="form-control" id="cand-party">
+                                <option value="Republican">Republican</option>
+                                <option value="Democrat">Democrat</option>
+                                <option value="Independent">Independent</option>
+                                <option value="Libertarian">Libertarian</option>
+                                <option value="Green">Green</option>
+                                <option value="Constitution">Constitution</option>
+                                <option value="Other">Other</option>
+                            </select>
                         </div>
                         <div class="mb-3">
                             <label>Bio</label>
@@ -460,6 +497,7 @@
         let allCandidates = [];
         let allEvents = [];
         let allSummaries = [];
+        let allUsers = [];
         
         function populateStateDropdowns() {
             ['contrib-state', 'cand-state', 'event-state', 'race-state'].forEach(id => {
@@ -483,6 +521,39 @@
             ).join('');
         }
 
+        async function loadUsers() {
+            try {
+                const response = await fetch(API + '?resource=users', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
+                allUsers = await response.json();
+                console.log('Loaded users:', allUsers);
+                populateUserDropdown();
+            } catch (e) {
+                console.error('Failed to load users:', e);
+                allUsers = [];
+            }
+        }
+        
+        function populateUserDropdown() {
+            const select = document.getElementById('contrib-user');
+            select.innerHTML = '<option value="">Select a registered user...</option>' + 
+                allUsers.map(u => {
+                    const fullName = (u.first_name || '') + ' ' + (u.last_name || '');
+                    const displayName = fullName.trim() || 'No name';
+                    return '<option value="' + u.email + '">' + u.email + ' (' + displayName + ')</option>';
+                }).join('');
+        }
+        
+        function selectUser() {
+            const select = document.getElementById('contrib-user');
+            const email = select.value;
+            document.getElementById('contrib-email').value = email;
+            const user = allUsers.find(u => u.email === email);
+            if (user) {
+                document.getElementById('contrib-first-name').value = user.first_name || '';
+                document.getElementById('contrib-last-name').value = user.last_name || '';
+            }
+        }
+        
         async function loadContributors() {
             const response = await fetch(API + '?resource=contributors', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
             allContributors = await response.json();
@@ -490,17 +561,20 @@
         }
         
         function filterContributors() {
+            const userRole = localStorage.getItem('userRole');
             const filter = document.getElementById('filter-contributors').value.toLowerCase();
             const filtered = allContributors.filter(c => 
                 c.state.toLowerCase().includes(filter) || c.user_email.toLowerCase().includes(filter)
             );
             document.getElementById('contributors-list').innerHTML = filtered.map(c => 
                 '<div class="card mb-2"><div class="card-body">' +
-                '<h6>' + c.user_email + ' - ' + c.state + '</h6>' +
+                '<h6>' + (c.first_name && c.last_name ? c.first_name + ' ' + c.last_name + ' - ' : '') + c.user_email + ' - ' + c.state + '</h6>' +
+                (c.phone_number ? '<p><strong>Phone:</strong> ' + c.phone_number + '</p>' : '') +
                 '<p>' + (c.bio || '') + '</p>' +
-                '<span class="badge bg-' + (c.verified ? 'success' : 'secondary') + '">' + (c.verified ? 'Verified' : 'Unverified') + '</span>' +
-                '<button class="btn btn-sm btn-danger float-end" onclick="deleteContributor(\'' + c.contributor_id + '\')">Delete</button>' +
-                '<button class="btn btn-sm btn-primary float-end me-2" onclick="editContributor(\'' + c.contributor_id + '\')">Edit</button>' +
+                '<span class="badge bg-' + (c.verified ? 'success' : 'secondary') + '">' + (c.verified ? 'Verified' : 'Unverified') + '</span> ' +
+                '<span class="badge bg-' + (c.bypass_approval ? 'warning' : 'info') + '">' + (c.bypass_approval ? 'Auto-Approve' : 'Needs Approval') + '</span>' +
+                (userRole !== 'editor' ? '<button class="btn btn-sm btn-danger float-end" onclick="deleteContributor(\'' + c.contributor_id + '\')">Delete</button>' : '') +
+                (userRole !== 'editor' ? '<button class="btn btn-sm btn-primary float-end me-2" onclick="editContributor(\'' + c.contributor_id + '\')">Edit</button>' : '') +
                 '</div></div>'
             ).join('');
         }
@@ -604,21 +678,29 @@
         let editingContributorId = null;
         
         function showAddContributor() {
+            const userRole = localStorage.getItem('userRole');
             editingContributorId = null;
             document.getElementById('contributorModalTitle').textContent = 'Add Contributor';
             document.getElementById('contributorForm').reset();
+            document.getElementById('bypass-approval-section').style.display = userRole === 'editor' ? 'none' : 'block';
             new bootstrap.Modal(document.getElementById('contributorModal')).show();
         }
         
         async function editContributor(contributorId) {
+            const userRole = localStorage.getItem('userRole');
             editingContributorId = contributorId;
             document.getElementById('contributorModalTitle').textContent = 'Edit Contributor';
             const contributor = allContributors.find(c => c.contributor_id === contributorId);
             if (!contributor) return;
             document.getElementById('contrib-email').value = contributor.user_email || '';
+            document.getElementById('contrib-first-name').value = contributor.first_name || '';
+            document.getElementById('contrib-last-name').value = contributor.last_name || '';
+            document.getElementById('contrib-phone').value = contributor.phone_number || '';
             document.getElementById('contrib-state').value = contributor.state || '';
             document.getElementById('contrib-bio').value = contributor.bio || '';
             document.getElementById('contrib-verified').checked = contributor.verified || false;
+            document.getElementById('contrib-bypass-approval').checked = contributor.bypass_approval || false;
+            document.getElementById('bypass-approval-section').style.display = userRole === 'editor' ? 'none' : 'block';
             new bootstrap.Modal(document.getElementById('contributorModal')).show();
         }
 
@@ -667,6 +749,7 @@
             document.getElementById('cand-state').value = candidate.state || '';
             document.getElementById('cand-race').value = candidate.race_id || '';
             document.getElementById('cand-office').value = candidate.office || '';
+            document.getElementById('cand-party').value = candidate.party || 'Republican';
             document.getElementById('cand-bio').value = candidate.bio || '';
             document.getElementById('cand-faith').value = candidate.faith_statement || '';
             document.getElementById('cand-website').value = candidate.website || '';
@@ -810,11 +893,17 @@
         }
 
         async function saveContributor() {
+            const userRole = localStorage.getItem('userRole');
+            const email = document.getElementById('contrib-email').value;
             const data = {
-                user_email: document.getElementById('contrib-email').value,
+                user_email: email,
+                first_name: document.getElementById('contrib-first-name').value,
+                last_name: document.getElementById('contrib-last-name').value,
+                phone_number: document.getElementById('contrib-phone').value,
                 state: document.getElementById('contrib-state').value,
                 bio: document.getElementById('contrib-bio').value,
-                verified: document.getElementById('contrib-verified').checked
+                verified: document.getElementById('contrib-verified').checked,
+                bypass_approval: userRole === 'editor' ? false : document.getElementById('contrib-bypass-approval').checked
             };
             
             if (editingContributorId) {
@@ -825,11 +914,13 @@
                     body: JSON.stringify(data)
                 });
             } else {
-                await fetch(API + '?resource=contributors', {
+                const response = await fetch(API + '?resource=contributors', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
                     body: JSON.stringify(data)
                 });
+                const result = await response.json();
+                alert(result.message || 'Contributor added!');
             }
             
             bootstrap.Modal.getInstance(document.getElementById('contributorModal')).hide();
@@ -845,19 +936,28 @@
                 description: document.getElementById('race-desc').value
             };
             
+            const userRole = localStorage.getItem('userRole');
             if (editingRaceId) {
                 data.race_id = editingRaceId;
-                await fetch(API + '?resource=races&action=update', {
+                const response = await fetch(API + '?resource=races&action=update', {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
                     body: JSON.stringify(data)
                 });
+                const result = await response.json();
+                if (userRole === 'editor' && result.message && result.message.includes('review')) {
+                    alert('✓ Your changes have been submitted for review. An admin will review and approve your submission.');
+                }
             } else {
-                await fetch(API + '?resource=races', {
+                const response = await fetch(API + '?resource=races', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
                     body: JSON.stringify(data)
                 });
+                const result = await response.json();
+                if (userRole === 'editor' && result.message && result.message.includes('review')) {
+                    alert('✓ Your race has been submitted for review. An admin will review and approve your submission.');
+                }
             }
             
             bootstrap.Modal.getInstance(document.getElementById('raceModal')).hide();
@@ -882,6 +982,7 @@
                 name: document.getElementById('cand-name').value,
                 state: document.getElementById('cand-state').value,
                 office: document.getElementById('cand-office').value,
+                party: document.getElementById('cand-party').value,
                 bio: document.getElementById('cand-bio').value,
                 website: document.getElementById('cand-website').value,
                 race_id: document.getElementById('cand-race').value || null,
@@ -891,6 +992,7 @@
                 endorsements: endorsements
             };
             
+            const userRole = localStorage.getItem('userRole');
             if (editingCandidateId) {
                 data.candidate_id = editingCandidateId;
                 const response = await fetch(API + '?resource=candidates&action=update', {
@@ -904,12 +1006,19 @@
                     alert('Update failed: ' + (result.error || 'Unknown error'));
                     return;
                 }
+                if (userRole === 'editor' && result.message && result.message.includes('review')) {
+                    alert('✓ Your changes have been submitted for review. An admin will review and approve your submission.');
+                }
             } else {
-                await fetch(API + '?resource=candidates', {
+                const response = await fetch(API + '?resource=candidates', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
                     body: JSON.stringify(data)
                 });
+                const result = await response.json();
+                if (userRole === 'editor' && result.message && result.message.includes('review')) {
+                    alert('✓ Your candidate has been submitted for review. An admin will review and approve your submission.');
+                }
             }
             
             bootstrap.Modal.getInstance(document.getElementById('candidateModal')).hide();
@@ -1154,13 +1263,48 @@
             loadCandidates();
         }
         
+        async function updatePendingCount() {
+            try {
+                const response = await fetch(API + '?resource=pending-changes', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
+                const changes = await response.json();
+                const count = changes.length;
+                const badge = document.getElementById('pending-count-badge');
+                if (count > 0) {
+                    badge.textContent = count;
+                    badge.style.display = 'inline';
+                } else {
+                    badge.style.display = 'none';
+                }
+            } catch (e) {
+                console.error('Failed to load pending count:', e);
+            }
+        }
+        
         document.addEventListener('DOMContentLoaded', async function() {
+            const userRole = localStorage.getItem('userRole');
+            if (userRole !== 'admin' && userRole !== 'super_user' && userRole !== 'editor') {
+                alert('Access denied. Editor, Admin or Super User role required.');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Hide admin-only features for editors
+            if (userRole === 'editor') {
+                document.querySelector('a[href="#import"]').parentElement.style.display = 'none';
+                document.getElementById('add-contributor-btn').style.display = 'none';
+                document.getElementById('admin-dashboard-link').style.display = 'none';
+                document.getElementById('pending-changes-link').style.display = 'none';
+            }
+            
             populateStateDropdowns();
+            await loadUsers();
             loadContributors();
             await loadRaces();
             loadCandidates();
             loadEvents();
             loadSummaries();
+            updatePendingCount();
+            setInterval(updatePendingCount, 30000); // Update every 30 seconds
         });
     </script>
 </body>
