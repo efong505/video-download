@@ -1637,6 +1637,132 @@ quill.setContents(delta);
 
 **Status**: Election map authentication system fully functional with role-based navigation and comprehensive 2025 election data guidance provided for system population.
 
+## State Summaries Markdown/Rich Text Editor Enhancement ✅ COMPLETE (January 2025)
+
+### Feature Overview
+**Enhancement**: Implemented seamless dual-mode content editor for state election summaries with markdown and rich text editing capabilities.
+
+### Implementation Details
+**Core Features Added**:
+- **Mode Toggle Buttons**: 📝 Rich Text Editor and 📄 Markdown Mode with visual styling and emoji labels
+- **Separate Content Storage**: Independent `markdownContent` and `htmlContent` variables for seamless mode switching
+- **Bidirectional Conversion**: Automatic markdown-to-HTML rendering when switching to Rich Text mode
+- **Content Preservation**: No data loss when toggling between modes - each mode maintains its own content
+- **Auto-Detection**: System detects content type on load (HTML vs markdown) and sets appropriate mode
+- **Preview Functionality**: Renders markdown properly using marked.js in both modes
+- **Clean List Display**: Summaries list shows rendered text preview instead of raw markdown/HTML
+
+### Technical Implementation
+**Mode Switching Logic**:
+```javascript
+// Markdown Mode: Saves current content, displays textarea
+function switchToMarkdown() {
+    if (!isMarkdownMode && summaryEditor) {
+        htmlContent = summaryEditor.root.innerHTML;
+    }
+    document.getElementById('summary-content').value = markdownContent;
+}
+
+// Rich Text Mode: Saves markdown, renders to HTML in Quill editor
+function switchToRichText() {
+    if (isMarkdownMode) {
+        markdownContent = document.getElementById('summary-content').value;
+    }
+    if (htmlContent) {
+        summaryEditor.root.innerHTML = htmlContent;
+    } else if (markdownContent) {
+        summaryEditor.root.innerHTML = marked.parse(markdownContent);
+    }
+}
+```
+
+**Content Detection on Load**:
+```javascript
+const content = summary.content || '';
+if (content.startsWith('<')) {
+    htmlContent = content;  // HTML content
+    markdownContent = '';
+} else {
+    markdownContent = content;  // Markdown content
+    htmlContent = '';
+}
+```
+
+**List Display Enhancement**:
+```javascript
+const renderedPreview = content.startsWith('<') ? content : marked.parse(content);
+const textPreview = renderedPreview.replace(/<[^>]*>/g, '').substring(0, 200);
+// Shows clean text instead of markdown syntax or HTML tags
+```
+
+### Files Modified
+- `admin-contributors.html` - Complete dual-mode editor implementation
+  - Added mode toggle buttons with emoji labels
+  - Implemented separate content storage variables
+  - Enhanced preview and save functions
+  - Fixed summaries list to show clean text preview
+  - Added auto-detection for content type on load
+
+### User Experience Features
+**Markdown Mode Benefits**:
+- Fast typing for markdown-familiar users
+- Plain textarea for pasting raw markdown
+- Monospace font for syntax clarity
+- No HTML wrapping or conversion
+- Direct markdown-to-database storage
+
+**Rich Text Mode Benefits**:
+- Visual WYSIWYG editing with Quill.js
+- Toolbar for formatting (headers, bold, italic, lists, links)
+- Rendered markdown preview
+- HTML output for rich formatting
+- No markdown syntax knowledge required
+
+**Seamless Switching**:
+- Toggle between modes without data loss
+- Markdown automatically renders when switching to Rich Text
+- HTML preserved when switching back to Markdown
+- Each mode maintains independent content
+- Preview works correctly in both modes
+
+### Key Improvements
+**Problem 1**: Quill editor treating pasted markdown as plain text, wrapping in HTML tags
+**Solution**: Separate storage for markdown and HTML, no automatic syncing between modes
+
+**Problem 2**: Switching from Rich Text to Markdown showed HTML code instead of markdown
+**Solution**: Independent content variables - markdown stays as markdown, HTML stays as HTML
+
+**Problem 3**: Summaries list showing raw markdown syntax (# headers, ** bold, etc.)
+**Solution**: Render markdown to HTML, strip tags, show clean text preview (first 200 chars)
+
+### Technical Insights
+**Key Patterns**:
+- Separate content storage prevents mode-switching data corruption
+- marked.js library handles markdown-to-HTML conversion
+- Quill editor loads HTML via `root.innerHTML` for proper rendering
+- Content type detection uses `startsWith('<')` to identify HTML
+- Preview function works with both markdown and HTML content
+- List display strips HTML tags for clean text preview
+
+**Integration Points**:
+- State summaries stored in DynamoDB `state-summaries` table
+- API endpoint: `/contributors?resource=summaries`
+- Markdown rendering on election-map.html using marked.js
+- Admin panel manages summaries with full CRUD operations
+
+### Verification
+- ✅ Mode toggle buttons visible with emoji labels
+- ✅ Seamless switching between markdown and rich text modes
+- ✅ No data loss when toggling modes
+- ✅ Markdown renders properly in Rich Text mode
+- ✅ HTML preserved when switching back to Markdown
+- ✅ Preview function works in both modes
+- ✅ Summaries list shows clean text instead of raw markdown
+- ✅ Content type auto-detected on load (HTML vs markdown)
+- ✅ Save function captures content from active mode
+
+**Status**: State summaries dual-mode editor fully operational - users can seamlessly toggle between markdown and rich text editing with complete content preservation and proper rendering in all views.
+
 ### Election Map Display Enhancements ✅ COMPLETE (January 2025)
 **Problem 1**: Candidates not displaying under races despite being imported
 **Root Cause**: Candidates had empty string `race_id` values instead of matching race IDs

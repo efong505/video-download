@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manage Contributors - Admin</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
         .navbar-custom {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -44,6 +45,7 @@
             <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#races">Races</a></li>
             <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#candidates">Candidates</a></li>
             <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#events">Events</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#summaries">State Summaries</a></li>
             <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#import">Bulk Import</a></li>
         </ul>
 
@@ -84,6 +86,16 @@
                     </div>
                 </div>
                 <div id="candidates-list"></div>
+            </div>
+            
+            <div id="summaries" class="tab-pane fade">
+                <button class="btn btn-primary mb-3" onclick="showAddSummary()">+ Add State Summary</button>
+                <div class="mb-3">
+                    <select class="form-control" id="filter-summary-state" onchange="filterSummaries()">
+                        <option value="">All States</option>
+                    </select>
+                </div>
+                <div id="summaries-list"></div>
             </div>
             
             <div id="events" class="tab-pane fade">
@@ -328,6 +340,64 @@
         </div>
     </div>
 
+    <div class="modal fade" id="summaryModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="summaryModalTitle">Add State Summary</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="summaryForm">
+                        <div class="mb-3">
+                            <label>State</label>
+                            <select class="form-control" id="summary-state" required></select>
+                        </div>
+                        <div class="mb-3">
+                            <label>Title</label>
+                            <input type="text" class="form-control" id="summary-title" placeholder="e.g., Hawaii 2025-2026 Elections Guide" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Election Year</label>
+                            <input type="text" class="form-control" id="summary-year" value="2026">
+                        </div>
+                        <div class="mb-3">
+                            <label>Content (Voter Guide Summary)</label>
+                            <div class="btn-group mb-2 d-block" role="group">
+                                <button type="button" class="btn btn-sm btn-outline-primary" id="richtext-mode-btn" onclick="switchToRichText()">📝 Rich Text Editor</button>
+                                <button type="button" class="btn btn-sm btn-primary" id="markdown-mode-btn" onclick="switchToMarkdown()">📄 Markdown Mode</button>
+                            </div>
+                            <div id="summary-editor" style="height: 400px; display: none;"></div>
+                            <textarea class="form-control" id="summary-content" rows="20" style="font-family: monospace;"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-info" onclick="previewSummary()">Preview</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSummary()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="previewModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Preview: <span id="preview-state-name"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-primary" id="preview-content"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="eventModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -373,6 +443,14 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        marked.setOptions({
+            breaks: true,
+            gfm: true
+        });
+    </script>
     <script>
         const API = 'https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors';
         const states = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
@@ -381,16 +459,21 @@
         let allContributors = [];
         let allCandidates = [];
         let allEvents = [];
+        let allSummaries = [];
         
         function populateStateDropdowns() {
             ['contrib-state', 'cand-state', 'event-state', 'race-state'].forEach(id => {
                 const select = document.getElementById(id);
                 select.innerHTML = '<option value="">Select State</option>' + states.map(s => '<option value="' + s + '">' + s + '</option>').join('');
             });
-            ['filter-race-state', 'filter-candidate-state', 'filter-event-state'].forEach(id => {
+            ['filter-race-state', 'filter-candidate-state', 'filter-event-state', 'filter-summary-state'].forEach(id => {
                 const select = document.getElementById(id);
                 select.innerHTML = '<option value="">All States</option>' + states.map(s => '<option value="' + s + '">' + s + '</option>').join('');
             });
+            const summaryState = document.getElementById('summary-state');
+            if (summaryState) {
+                summaryState.innerHTML = '<option value="">Select State</option>' + states.map(s => '<option value="' + s + '">' + s + '</option>').join('');
+            }
         }
         
         function populateRaceDropdown() {
@@ -479,6 +562,30 @@
             const response = await fetch(API + '?resource=events', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
             allEvents = await response.json();
             filterEvents();
+        }
+        
+        async function loadSummaries() {
+            const response = await fetch(API + '?resource=summaries', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
+            allSummaries = await response.json();
+            filterSummaries();
+        }
+        
+        function filterSummaries() {
+            const stateFilter = document.getElementById('filter-summary-state').value;
+            const filtered = allSummaries.filter(s => !stateFilter || s.state === stateFilter);
+            document.getElementById('summaries-list').innerHTML = filtered.map(s => {
+                const content = s.content || '';
+                const renderedPreview = content.startsWith('<') ? content : marked.parse(content);
+                const textPreview = renderedPreview.replace(/<[^>]*>/g, '').substring(0, 200);
+                return '<div class="card mb-2"><div class="card-body">' +
+                '<h6>' + s.state + ' - ' + s.title + '</h6>' +
+                '<p><small>Election Year: ' + s.election_year + '</small></p>' +
+                '<p style="max-height: 100px; overflow-y: auto; font-size: 12px; color: #666;">' + textPreview + '...</p>' +
+                '<small class="text-muted">Last updated: ' + new Date(s.last_updated).toLocaleDateString() + '</small><br>' +
+                '<button class="btn btn-sm btn-danger float-end" onclick="deleteSummary(\'' + s.state + '\')">Delete</button>' +
+                '<button class="btn btn-sm btn-primary float-end me-2" onclick="editSummary(\'' + s.state + '\')">Edit</button>' +
+                '</div></div>';
+            }).join('');
         }
         
         function filterEvents() {
@@ -578,12 +685,115 @@
         }
 
         let editingEventId = null;
+        let editingSummaryState = null;
+        let summaryEditor = null;
+        let markdownContent = '';
+        let htmlContent = '';
         
         function showAddEvent() {
             editingEventId = null;
             document.getElementById('eventModalTitle').textContent = 'Add Election Event';
             document.getElementById('eventForm').reset();
             new bootstrap.Modal(document.getElementById('eventModal')).show();
+        }
+        
+        let isMarkdownMode = true;
+        
+        function switchToMarkdown() {
+            if (!isMarkdownMode && summaryEditor) {
+                htmlContent = summaryEditor.root.innerHTML;
+            }
+            isMarkdownMode = true;
+            document.getElementById('summary-editor').style.display = 'none';
+            document.getElementById('summary-content').style.display = 'block';
+            document.getElementById('markdown-mode-btn').classList.remove('btn-outline-primary');
+            document.getElementById('markdown-mode-btn').classList.add('btn-primary');
+            document.getElementById('richtext-mode-btn').classList.remove('btn-primary');
+            document.getElementById('richtext-mode-btn').classList.add('btn-outline-primary');
+            document.getElementById('summary-content').value = markdownContent;
+        }
+        
+        function switchToRichText() {
+            if (isMarkdownMode) {
+                markdownContent = document.getElementById('summary-content').value;
+            }
+            isMarkdownMode = false;
+            document.getElementById('summary-editor').style.display = 'block';
+            document.getElementById('summary-content').style.display = 'none';
+            document.getElementById('richtext-mode-btn').classList.remove('btn-outline-primary');
+            document.getElementById('richtext-mode-btn').classList.add('btn-primary');
+            document.getElementById('markdown-mode-btn').classList.remove('btn-primary');
+            document.getElementById('markdown-mode-btn').classList.add('btn-outline-primary');
+            if (!summaryEditor) {
+                summaryEditor = new Quill('#summary-editor', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            [{ 'header': [1, 2, 3, false] }],
+                            ['bold', 'italic', 'underline'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['link'],
+                            ['clean']
+                        ]
+                    }
+                });
+            }
+            if (htmlContent) {
+                summaryEditor.root.innerHTML = htmlContent;
+            } else if (markdownContent) {
+                summaryEditor.root.innerHTML = marked.parse(markdownContent);
+            }
+        }
+        
+        function showAddSummary() {
+            editingSummaryState = null;
+            markdownContent = '';
+            htmlContent = '';
+            document.getElementById('summaryModalTitle').textContent = 'Add State Summary';
+            document.getElementById('summaryForm').reset();
+            document.getElementById('summary-content').value = '';
+            isMarkdownMode = true;
+            document.getElementById('summary-editor').style.display = 'none';
+            document.getElementById('summary-content').style.display = 'block';
+            document.getElementById('markdown-mode-btn').classList.remove('btn-outline-primary');
+            document.getElementById('markdown-mode-btn').classList.add('btn-primary');
+            document.getElementById('richtext-mode-btn').classList.remove('btn-primary');
+            document.getElementById('richtext-mode-btn').classList.add('btn-outline-primary');
+            if (summaryEditor) {
+                summaryEditor.setText('');
+            }
+            new bootstrap.Modal(document.getElementById('summaryModal')).show();
+        }
+        
+        async function editSummary(state) {
+            editingSummaryState = state;
+            document.getElementById('summaryModalTitle').textContent = 'Edit State Summary';
+            const summary = allSummaries.find(s => s.state === state);
+            if (!summary) return;
+            const content = summary.content || '';
+            if (content.startsWith('<')) {
+                htmlContent = content;
+                markdownContent = '';
+            } else {
+                markdownContent = content;
+                htmlContent = '';
+            }
+            document.getElementById('summary-state').value = summary.state || '';
+            document.getElementById('summary-state').disabled = true;
+            document.getElementById('summary-title').value = summary.title || '';
+            document.getElementById('summary-year').value = summary.election_year || '2026';
+            document.getElementById('summary-content').value = markdownContent;
+            isMarkdownMode = true;
+            document.getElementById('summary-editor').style.display = 'none';
+            document.getElementById('summary-content').style.display = 'block';
+            document.getElementById('markdown-mode-btn').classList.remove('btn-outline-primary');
+            document.getElementById('markdown-mode-btn').classList.add('btn-primary');
+            document.getElementById('richtext-mode-btn').classList.remove('btn-primary');
+            document.getElementById('richtext-mode-btn').classList.add('btn-outline-primary');
+            if (summaryEditor) {
+                summaryEditor.setText('');
+            }
+            new bootstrap.Modal(document.getElementById('summaryModal')).show();
         }
         
         async function editEvent(eventId) {
@@ -706,6 +916,79 @@
             loadCandidates();
         }
 
+        function previewSummary() {
+            const state = document.getElementById('summary-state').value;
+            const title = document.getElementById('summary-title').value;
+            let content;
+            if (isMarkdownMode) {
+                markdownContent = document.getElementById('summary-content').value;
+                content = markdownContent;
+            } else {
+                htmlContent = summaryEditor.root.innerHTML;
+                content = htmlContent;
+            }
+            
+            if (!state || !title) {
+                alert('Please select a state and enter a title');
+                return;
+            }
+            
+            const renderedContent = content.startsWith('<') ? content : marked.parse(content);
+            
+            document.getElementById('preview-state-name').textContent = state;
+            document.getElementById('preview-content').innerHTML = 
+                '<h5>📖 ' + title + '</h5>' +
+                '<div style="max-height: 400px; overflow-y: auto; font-size: 14px; line-height: 1.6;">' + renderedContent + '</div>' +
+                '<small class="text-muted">Last updated: ' + new Date().toLocaleDateString() + '</small>';
+            
+            new bootstrap.Modal(document.getElementById('previewModal')).show();
+        }
+        
+        async function saveSummary() {
+            let content;
+            if (isMarkdownMode) {
+                markdownContent = document.getElementById('summary-content').value;
+                content = markdownContent;
+            } else {
+                htmlContent = summaryEditor.root.innerHTML;
+                content = htmlContent;
+            }
+            
+            const data = {
+                state: document.getElementById('summary-state').value,
+                title: document.getElementById('summary-title').value,
+                election_year: document.getElementById('summary-year').value,
+                content: content
+            };
+            
+            if (editingSummaryState) {
+                await fetch(API + '?resource=summaries&action=update', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+            } else {
+                await fetch(API + '?resource=summaries', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+            }
+            
+            document.getElementById('summary-state').disabled = false;
+            bootstrap.Modal.getInstance(document.getElementById('summaryModal')).hide();
+            loadSummaries();
+        }
+        
+        async function deleteSummary(state) {
+            if (!confirm('Delete this state summary?')) return;
+            await fetch(API + '?resource=summaries&action=delete&state=' + state, {
+                method: 'DELETE',
+                headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}
+            });
+            loadSummaries();
+        }
+        
         async function saveEvent() {
             const data = {
                 title: document.getElementById('event-title').value,
@@ -877,6 +1160,7 @@
             await loadRaces();
             loadCandidates();
             loadEvents();
+            loadSummaries();
         });
     </script>
 </body>

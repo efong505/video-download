@@ -11,6 +11,7 @@ candidates_table = dynamodb.Table('candidates')
 election_events_table = dynamodb.Table('election-events')
 users_table = dynamodb.Table('users')
 races_table = dynamodb.Table('races')
+summaries_table = dynamodb.Table('state-summaries')
 
 def lambda_handler(event, context):
     headers = cors_headers()
@@ -47,6 +48,12 @@ def lambda_handler(event, context):
             elif method == 'PUT': return update_event(event, headers)
             elif method == 'DELETE': return delete_event(event, headers)
             else: return list_events(event, headers)
+        elif resource == 'summaries':
+            if method == 'POST': return create_summary(event, headers)
+            elif method == 'PUT': return update_summary(event, headers)
+            elif method == 'DELETE': return delete_summary(event, headers)
+            elif action == 'get': return get_summary(event, headers)
+            else: return list_summaries(event, headers)
         else:
             return {'statusCode': 404, 'headers': headers, 'body': json.dumps({'error': 'Resource not found'})}
             
@@ -373,6 +380,64 @@ def delete_race(event, headers):
     if not race_id:
         return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'race_id required'})}
     races_table.delete_item(Key={'race_id': race_id})
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Deleted'})}
+
+def create_summary(event, headers):
+    user_info = verify_admin_token(event)
+    if not user_info:
+        return {'statusCode': 403, 'headers': headers, 'body': json.dumps({'error': 'Admin access required'})}
+    body = json.loads(event['body'])
+    summary = {
+        'state': body['state'],
+        'title': body.get('title', f"{body['state']} Election Guide"),
+        'content': body.get('content', ''),
+        'election_year': body.get('election_year', '2026'),
+        'last_updated': datetime.utcnow().isoformat(),
+        'updated_by': user_info['email']
+    }
+    summaries_table.put_item(Item=summary)
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Summary created'})}
+
+def get_summary(event, headers):
+    params = event.get('queryStringParameters') or {}
+    state = params.get('state')
+    if not state:
+        return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'state required'})}
+    response = summaries_table.get_item(Key={'state': state})
+    if 'Item' not in response:
+        return {'statusCode': 404, 'headers': headers, 'body': json.dumps({'error': 'Not found'})}
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps(convert_decimals(response['Item']))}
+
+def list_summaries(event, headers):
+    response = summaries_table.scan()
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps(convert_decimals(response.get('Items', [])))}
+
+def update_summary(event, headers):
+    user_info = verify_admin_token(event)
+    if not user_info:
+        return {'statusCode': 403, 'headers': headers, 'body': json.dumps({'error': 'Admin access required'})}
+    body = json.loads(event['body'])
+    state = body.get('state')
+    if not state:
+        return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'state required'})}
+    update_expr = 'SET last_updated = :updated, updated_by = :by'
+    expr_values = {':updated': datetime.utcnow().isoformat(), ':by': user_info['email']}
+    for field in ['title', 'content', 'election_year']:
+        if field in body:
+            update_expr += f', {field} = :{field}'
+            expr_values[f':{field}'] = body[field]
+    summaries_table.update_item(Key={'state': state}, UpdateExpression=update_expr, ExpressionAttributeValues=expr_values)
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Updated'})}
+
+def delete_summary(event, headers):
+    user_info = verify_admin_token(event)
+    if not user_info:
+        return {'statusCode': 403, 'headers': headers, 'body': json.dumps({'error': 'Admin access required'})}
+    params = event.get('queryStringParameters') or {}
+    state = params.get('state')
+    if not state:
+        return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'state required'})}
+    summaries_table.delete_item(Key={'state': state})
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Deleted'})}
 
 def cors_headers():
