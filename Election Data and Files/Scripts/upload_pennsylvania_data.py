@@ -172,7 +172,7 @@ print("\nUploading Pennsylvania summary...")
 summaries_table.put_item(Item=summary)
 print("  Summary uploaded successfully")
 
-print("\n✅ Pennsylvania data upload complete!")
+print("\n[SUCCESS] Pennsylvania data upload complete!")
 print(f"   Races: {len(races)}")
 print(f"   Candidates: {len(candidates)}")
 print(f"   Summary: Uploaded")
