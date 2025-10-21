@@ -86,6 +86,11 @@
             margin: 0 auto;
             display: block;
         }
+        @media (max-width: 768px) {
+            #us-map {
+                height: 400px;
+            }
+        }
         .state {
             fill: #667eea;
             stroke: white;
@@ -225,12 +230,15 @@
         }
         
         function renderUSMap() {
-            const width = 960;
-            const height = 600;
+            const container = document.getElementById('us-map').parentElement;
+            const width = container.offsetWidth || 960;
+            const height = window.innerWidth < 768 ? 400 : 600;
             
             const svg = d3.select('#us-map')
-                .attr('width', width)
-                .attr('height', height);
+                .attr('width', '100%')
+                .attr('height', '100%')
+                .attr('viewBox', '0 0 960 600')
+                .attr('preserveAspectRatio', 'xMidYMid meet');
             
             const projection = d3.geoAlbersUsa()
                 .scale(1200)
@@ -299,6 +307,11 @@
             const stateCandidates = candidates.filter(c => c.state === state);
             const stateEvents = events.filter(e => e.state === state);
             
+            // Debug logging
+            console.log('State:', state);
+            console.log('State Candidates:', stateCandidates);
+            console.log('State Races:', races.filter(r => r.state === state));
+            
             document.getElementById('contributor-section').innerHTML = 
                 '<h5>📝 State Correspondents</h5>' +
                 (stateContributors.length > 0 ? 
@@ -313,19 +326,25 @@
                 );
             
             const stateRaces = races.filter(r => r.state === state);
-            let candidatesHTML = '<h5 class="mt-4">🎯 Republican Candidates</h5>';
+            let candidatesHTML = '<h5 class="mt-4">🎯 Candidates</h5>';
             
             if (stateRaces.length > 0) {
                 stateRaces.forEach(race => {
                     const raceCandidates = stateCandidates.filter(c => c.race_id === race.race_id);
+                    console.log('Race:', race.office, 'Race ID:', race.race_id);
+                    console.log('Candidates for this race:', raceCandidates);
+                    console.log('Candidate race_ids:', stateCandidates.map(c => ({name: c.name, race_id: c.race_id})));
                     candidatesHTML += '<div class="alert alert-info mt-3"><strong>' + race.office + '</strong> - ' + race.race_type + ' (' + new Date(race.election_date).toLocaleDateString() + ')</div>';
                     
                     if (raceCandidates.length > 0) {
                         candidatesHTML += '<div class="row">';
                         raceCandidates.forEach(c => {
                             const positions = c.positions || {};
+                            const partyBadge = c.party === 'Republican' ? '<span class="badge bg-danger">R</span>' : 
+                                             c.party === 'Democrat' ? '<span class="badge bg-primary">D</span>' : 
+                                             '<span class="badge bg-secondary">' + (c.party || 'IND') + '</span>';
                             candidatesHTML += '<div class="col-md-6"><div class="candidate-card">' +
-                                '<h6>' + c.name + '</h6>' +
+                                '<h6>' + c.name + ' ' + partyBadge + '</h6>' +
                                 (c.faith_statement ? '<p class="text-muted fst-italic">"' + c.faith_statement + '"</p>' : '') +
                                 '<p class="mb-1">' + (c.bio || '') + '</p>' +
                                 (Object.keys(positions).length > 0 ? '<hr><p class="mb-1"><strong>Key Positions:</strong></p><ul class="small">' + 
@@ -342,7 +361,8 @@
                 });
             }
             
-            const unassignedCandidates = stateCandidates.filter(c => !c.race_id);
+            const unassignedCandidates = stateCandidates.filter(c => !c.race_id || c.race_id === '');
+            console.log('Unassigned candidates:', unassignedCandidates);
             if (unassignedCandidates.length > 0) {
                 candidatesHTML += '<div class="alert alert-secondary mt-3"><strong>Other Candidates</strong></div>';
                 unassignedCandidates.forEach(c => {

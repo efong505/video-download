@@ -95,6 +95,18 @@ A complete serverless video management system built on AWS with intelligent Lamb
 - **Search & Filter**: Find articles by title, content, category, author, or tags
 - **Analytics**: Reading time calculation and view count tracking
 
+### Phase 3.5 - State Election Coverage System ✅ COMPLETE
+- **Interactive US Map**: D3.js/TopoJSON map with accurate state boundaries
+- **State Correspondents**: Verified contributors for state-level election coverage
+- **Race Management**: Track gubernatorial, senate, and state legislative races
+- **Candidate Profiles**: Comprehensive candidate information with policy positions
+- **Multi-Party Support**: Visual party badges (Republican, Democrat, Independent, Libertarian, etc.)
+- **Policy Tracking**: 6 key issues (abortion, guns, immigration, religious freedom, taxes, education)
+- **Endorsements**: Track organizational endorsements and faith statements
+- **CSV Bulk Import**: Rapid data population with auto-matching race assignment
+- **Mobile Responsive**: Full US map display on all device sizes
+- **2025 Election Ready**: Guidance for Virginia, New Jersey gubernatorial races and more
+
 ## 🏗️ Technical Architecture
 
 ### AWS Services Used
@@ -113,6 +125,7 @@ A complete serverless video management system built on AWS with intelligent Lamb
 - **Articles API**: Blog/article management with Bible integration
 - **PayPal Billing API**: Subscription management and quota enforcement
 - **URL Analysis API**: Auto-summary for resources with AI-powered content extraction
+- **Contributors API**: State election coverage, races, candidates, and events management
 
 ## 💾 Database Schema
 
@@ -130,6 +143,12 @@ A complete serverless video management system built on AWS with intelligent Lamb
 - `article_id` (Primary Key), `title`, `content`, `author`
 - `category`, `tags[]`, `visibility`, `scripture_references[]`
 - `reading_time`, `view_count`, `created_at`, `updated_at`
+
+### Election System Tables
+- **Contributors**: `contributor_id`, `user_email`, `state`, `bio`, `verified`, `status`
+- **Races**: `race_id`, `state`, `office`, `election_date`, `race_type`, `description`
+- **Candidates**: `candidate_id`, `name`, `state`, `office`, `party`, `race_id`, `positions{}`, `endorsements[]`, `faith_statement`
+- **Events**: `event_id`, `title`, `state`, `event_date`, `event_type`, `description`
 
 ### Download Jobs Table
 - `job_id` (Primary Key), `status`, `progress`, `error_message`
@@ -195,6 +214,8 @@ A complete serverless video management system built on AWS with intelligent Lamb
 - `article.html`: Individual article viewer
 - `user-page.html`: Dynamic user-specific pages
 - `tag-page.html`: Tag-based video galleries
+- `election-map.html`: Interactive US election map with state coverage
+- `admin-contributors.html`: Election system admin interface with CSV import
 
 ## 🎯 Usage Guide
 

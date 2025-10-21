@@ -646,11 +646,15 @@
                 
                 const endorsements = endorsementsStr ? endorsementsStr.split(';').map(e => e.trim()) : [];
                 
+                // Auto-match race by state and office
+                const matchingRace = allRaces.find(r => r.state === state && r.office === office);
+                const race_id = matchingRace ? matchingRace.race_id : null;
+                
                 try {
                     await fetch(API + '?resource=candidates', {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
-                        body: JSON.stringify({ name, state, office, party, bio, website, faith_statement, positions, endorsements })
+                        body: JSON.stringify({ name, state, office, party, bio, website, faith_statement, positions, endorsements, race_id })
                     });
                     imported++;
                 } catch (error) {

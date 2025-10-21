@@ -1637,6 +1637,60 @@ quill.setContents(delta);
 
 **Status**: Election map authentication system fully functional with role-based navigation and comprehensive 2025 election data guidance provided for system population.
 
+### Election Map Display Enhancements ✅ COMPLETE (January 2025)
+**Problem 1**: Candidates not displaying under races despite being imported
+**Root Cause**: Candidates had empty string `race_id` values instead of matching race IDs
+**Resolution**: 
+- Added debug logging to diagnose race_id matching issues
+- Updated CSV import to auto-match candidates to races by state + office
+- Candidates now automatically linked to races during bulk import
+
+**Problem 2**: All candidates labeled as "Republican" regardless of actual party
+**Root Cause**: Page title said "Republican Candidates" and no party badges displayed
+**Resolution**:
+- Changed section title from "🎯 Republican Candidates" to "🎯 Candidates"
+- Added party badge system with color coding:
+  - Red badge (R) for Republicans
+  - Blue badge (D) for Democrats
+  - Gray badge for Independents, Libertarians, Green, Constitution, and other parties
+  - Displays full party name for third parties
+
+**Problem 3**: US map cut off on mobile devices (only left half visible)
+**Root Cause**: Fixed SVG dimensions not responsive to mobile screen sizes
+**Resolution**:
+- Added SVG `viewBox="0 0 960 600"` for proper scaling
+- Added `preserveAspectRatio="xMidYMid meet"` to center map
+- Set width/height to 100% for container-based sizing
+- Added mobile media query to reduce height on small screens
+- Map now displays full US on all device sizes
+
+**Technical Implementation**:
+- **Files Modified**: `election-map.html`, `admin-contributors.html`
+- **Party Badge Logic**: Conditional rendering based on party field value
+- **Auto-Matching**: `allRaces.find(r => r.state === state && r.office === office)`
+- **Responsive SVG**: ViewBox-based scaling instead of fixed dimensions
+
+**Features Added**:
+- Multi-party support with visual distinction
+- Mobile-responsive US map display
+- Automatic race-to-candidate linking during CSV import
+- Debug logging for troubleshooting race_id issues
+- Empty string race_id handling
+
+**User Experience Improvements**:
+- Clear visual party identification with colored badges
+- Full map visibility on mobile devices
+- Simplified CSV import workflow (no manual race_id entry needed)
+- Support for all political parties (not just R/D)
+
+**CSV Import Workflow**:
+1. Import races first (generates race_id automatically)
+2. Import candidates second (auto-matches to races by state + office)
+3. System automatically assigns correct race_id to candidates
+4. No manual ID management required
+
+**Verification**: ✅ Party badges display correctly, mobile map shows full US, candidates properly linked to races via auto-matching
+
 ### Future Enhancement: Dedicated Comparative Race View (Optional)
 **Current State**: 
 - Candidates linked via `race_id` field for grouping
