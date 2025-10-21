@@ -1866,6 +1866,174 @@ Election Data and Files/
 
 **Status**: State election coverage system fully operational with 8 states complete (245 races, 191 candidates), comprehensive contributor management, and automated workflow for future expansion to all 50 states.
 
+## Editor Role System & Approval Workflow ✅ COMPLETE (January 2025)
+
+### System Overview
+**Feature**: Comprehensive 3-tier role system with approval workflow for editor submissions, allowing trusted contributors to manage state election content with admin oversight.
+
+### Role Hierarchy Implemented
+1. **Super User / Admin**: Full system access, can approve/deny editor submissions, manage all content
+2. **Editor**: Can create/edit candidates, races, events, and summaries for assigned states, submissions require approval unless bypass enabled
+3. **Regular User**: Read-only access to public content
+
+### Core Features
+**Approval Workflow**:
+- Editor submissions go to `pending-changes` DynamoDB table
+- Admins notified via email when new submissions arrive
+- Admin review interface (admin-pending-changes.html) with approve/deny buttons
+- Approved changes automatically applied to live data
+- Denied changes remain in pending table with status tracking
+
+**Bypass Approval System**:
+- Admin-controlled toggle for trusted editors
+- When enabled, editor submissions publish immediately without review
+- Visual badges: "Needs Approval" (blue) vs "Auto-Approve" (yellow)
+- Checkbox in contributor edit form (admin-only access)
+
+**Pending Count Badge**:
+- Real-time count of pending submissions in navbar
+- Red badge shows number (e.g., "📋 Pending Changes (2)")
+- Updates every 30 seconds automatically
+- Hides when count is 0
+- Only visible to admins/super_users
+
+**Party Selection Enhancement**:
+- Dropdown in candidate form with 7 options: Republican, Democrat, Independent, Libertarian, Green, Constitution, Other
+- Color-coded party badges on election map:
+  - Republican = Red "R"
+  - Democrat = Blue "D"
+  - Independent = Gray "IND"
+  - Libertarian = Yellow "L"
+  - Green = Green "G"
+  - Other = First 3 letters in gray
+
+### Technical Implementation
+**Database Schema**:
+- **pending-changes table**: change_id (PK), change_type, data, submitted_by, submitted_at, status, state, reviewed_by, reviewed_at
+- **contributors table**: Added `bypass_approval` boolean field
+- **users table**: Uses user_id as primary key (not email)
+
+**API Endpoints**:
+- `POST /contributors?resource=pending-changes` - Submit change for review
+- `GET /contributors?resource=pending-changes` - List pending changes (admin only)
+- `PUT /contributors?resource=pending-changes` - Approve/deny change (admin only)
+- `GET /contributors?resource=users` - List users for contributor dropdown (editor+ access)
+
+**Permission Checks**:
+- `verify_admin_token()` - Super user and admin access
+- `verify_editor_token()` - Editor, admin, and super user access
+- `is_editor_for_state()` - Checks contributor assignment for specific state
+- `has_bypass_approval()` - Checks if editor has auto-approve privilege
+
+**Frontend Components**:
+- `admin-pending-changes.html` - Review interface with approve/deny buttons
+- `admin-contributors.html` - Enhanced with pending count badge and bypass approval checkbox
+- `election-map.html` - Fixed party badge display logic
+
+### Workflow Process
+1. **Editor Creates Content**: Editor submits candidate/race/event/summary for assigned state
+2. **Approval Check**: System checks if editor has bypass_approval enabled
+3. **Pending Queue**: If approval required, submission goes to pending-changes table
+4. **Admin Notification**: Email sent to all admins/super_users about new submission
+5. **Admin Review**: Admin views submission in pending changes interface
+6. **Approve/Deny**: Admin clicks approve (applies to live data) or deny (marks as denied)
+7. **Status Update**: Change status updated with reviewer info and timestamp
+
+### Auto-Role Assignment
+**Feature**: When contributor is created, system automatically assigns editor role to user
+**Process**:
+1. Admin creates contributor with user email
+2. Lambda scans users table for matching email
+3. Gets user_id from matched user record
+4. Updates user role field to 'editor'
+5. User can now submit content for their assigned state
+
+### User Selection Enhancement
+**Feature**: Contributor form uses dropdown populated from users table instead of manual email entry
+**Benefits**:
+- Prevents typos in email addresses
+- Shows user names alongside emails
+- Auto-fills first/last name from user record
+- Ensures only registered users can be contributors
+
+### UI Permission Controls
+**Admin Dashboard**:
+- Editors see limited tabs: Contributors (read-only), Races, Candidates, Events, Summaries
+- Editors cannot see: Bulk Import tab, Admin Dashboard link, Pending Changes link
+- Editors cannot: Add/edit/delete contributors, manage users
+- Admins see all tabs and full functionality
+
+**Badge System**:
+- Blue "Needs Approval" badge = editor requires review for submissions
+- Yellow "Auto-Approve" badge = editor's submissions publish immediately
+- Badge shows on contributor list for quick identification
+- Helps admins identify which editors are trusted vs need moderation
+
+### Files Modified
+- `contributors_api/index.py` - Added pending changes logic, bypass approval checks, auto-role assignment
+- `admin-contributors.html` - Added pending count badge, bypass approval checkbox, party dropdown, user selection dropdown
+- `admin-pending-changes.html` - Created review interface with approve/deny functionality
+- `election-map.html` - Fixed party badge display logic with case-insensitive comparison
+
+### Scripts Created
+- `create_pending_changes_table.py` - Creates DynamoDB table for pending submissions
+- `assign_editor_role.py` - Manually assign editor role to users
+- `check_user_role.py` - Check user role by email
+- `check_all_users_and_pending.py` - Diagnostic script for users and pending changes
+- `check_candidate_party.py` - Verify party field values in database
+
+### Key Insights
+**Database Design**:
+- Users table uses user_id as primary key (not email)
+- Contributors table links to users via email (not user_id)
+- Pending changes store complete data object for replay on approval
+- Status field tracks: pending, approved, denied
+
+**Security**:
+- JWT token validation on all API endpoints
+- Role-based access control at API level
+- State-based permissions for editors
+- Admin-only access to approval workflow
+
+**User Experience**:
+- Clear visual feedback with badges and counts
+- Popup confirmation when editor submits content
+- Email notifications keep admins informed
+- One-click approve/deny workflow
+- Automatic role assignment reduces admin workload
+
+### Troubleshooting & Fixes
+**Issue 1**: Pending changes not appearing in admin interface
+- **Cause**: API URL mismatch (yvqx5yjqo3 vs hzursivfuk)
+- **Fix**: Updated admin-pending-changes.html to use correct API URL
+
+**Issue 2**: 403 Forbidden errors when loading pending changes
+- **Cause**: localStorage key mismatch (authToken vs auth_token)
+- **Fix**: Updated to use correct auth_token key
+
+**Issue 3**: Party showing as "IND" for Republican candidates
+- **Cause**: Party badge logic defaulting to party value or 'IND'
+- **Fix**: Implemented proper party detection with case-insensitive comparison
+
+### Verification
+- ✅ Editor role system fully functional
+- ✅ Approval workflow working end-to-end
+- ✅ Bypass approval toggle operational
+- ✅ Pending count badge updates in real-time
+- ✅ Party dropdown and badges display correctly
+- ✅ User selection dropdown populated from database
+- ✅ Auto-role assignment working
+- ✅ Email notifications sent to admins
+- ✅ Approve/deny actions apply changes correctly
+- ✅ UI permissions hide admin features from editors
+
+**Status**: Editor role system and approval workflow fully operational, enabling distributed content management with centralized oversight for state election coverage platform.
+
+## Next State: Pennsylvania
+**Priority**: Tier 1 - High Priority (Critical swing state, large conservative base)
+**Recommended Approach**: Follow established workflow from previous 8 states
+**Data Sources**: Ballotpedia, state election board, Christian conservative scorecards
+
 ## State Summaries Markdown/Rich Text Editor Enhancement ✅ COMPLETE (January 2025)
 
 ### Feature Overview

@@ -816,16 +816,6 @@
                     const row = document.createElement('div');
                     row.className = 'horizontal-scroll-container';
                     
-                    row.addEventListener('scroll', () => {
-                        leftBtn.style.display = row.scrollLeft > 0 ? 'block' : 'none';
-                        rightBtn.style.display = row.scrollLeft < row.scrollWidth - row.clientWidth - 1 ? 'block' : 'none';
-                    });
-                    
-                    setTimeout(() => {
-                        leftBtn.style.display = 'none';
-                        rightBtn.style.display = row.scrollWidth > row.clientWidth ? 'block' : 'none';
-                    }, 100);
-                    
                     groupedVideos[tag].forEach(video => {
                         const videoType = video.video_type || 'local';
                         const externalUrl = video.external_url || '';
@@ -846,6 +836,16 @@
                     scrollWrapper.appendChild(row);
                     scrollWrapper.appendChild(rightBtn);
                     container.appendChild(scrollWrapper);
+                    
+                    requestAnimationFrame(() => {
+                        leftBtn.style.display = 'none';
+                        rightBtn.style.display = row.scrollWidth > row.clientWidth ? 'block' : 'none';
+                    });
+                    
+                    row.addEventListener('scroll', () => {
+                        leftBtn.style.display = row.scrollLeft > 0 ? 'block' : 'none';
+                        rightBtn.style.display = row.scrollLeft < row.scrollWidth - row.clientWidth - 1 ? 'block' : 'none';
+                    });
                 });
                 
                 // Add uncategorized videos if any
@@ -871,16 +871,6 @@
                     const row = document.createElement('div');
                     row.className = 'horizontal-scroll-container';
                     
-                    row.addEventListener('scroll', () => {
-                        leftBtn.style.display = row.scrollLeft > 0 ? 'block' : 'none';
-                        rightBtn.style.display = row.scrollLeft < row.scrollWidth - row.clientWidth - 1 ? 'block' : 'none';
-                    });
-                    
-                    setTimeout(() => {
-                        leftBtn.style.display = 'none';
-                        rightBtn.style.display = row.scrollWidth > row.clientWidth ? 'block' : 'none';
-                    }, 100);
-                    
                     uncategorized.forEach(video => {
                         const videoType = video.video_type || 'local';
                         const externalUrl = video.external_url || '';
@@ -901,6 +891,16 @@
                     scrollWrapper.appendChild(row);
                     scrollWrapper.appendChild(rightBtn);
                     container.appendChild(scrollWrapper);
+                    
+                    requestAnimationFrame(() => {
+                        leftBtn.style.display = 'none';
+                        rightBtn.style.display = row.scrollWidth > row.clientWidth ? 'block' : 'none';
+                    });
+                    
+                    row.addEventListener('scroll', () => {
+                        leftBtn.style.display = row.scrollLeft > 0 ? 'block' : 'none';
+                        rightBtn.style.display = row.scrollLeft < row.scrollWidth - row.clientWidth - 1 ? 'block' : 'none';
+                    });
                 }
             }
         }
