@@ -515,17 +515,25 @@ def get_upload_url(event):
 def generate_thumbnail(event):
     body = json.loads(event['body'])
     filename = body['filename']
+    video_type = body.get('video_type', 'local')
+    external_url = body.get('external_url')
     
     lambda_client = boto3.client('lambda')
     try:
         # Use dedicated thumbnail generator Lambda
+        payload = {
+            'filename': filename,
+            'bucket': 'my-video-downloads-bucket',
+            'video_type': video_type
+        }
+        
+        if external_url:
+            payload['external_url'] = external_url
+        
         lambda_client.invoke(
             FunctionName='thumbnail-generator',
             InvocationType='Event',
-            Payload=json.dumps({
-                'filename': filename,
-                'bucket': 'my-video-downloads-bucket'
-            })
+            Payload=json.dumps(payload)
         )
         return {
             'statusCode': 200,

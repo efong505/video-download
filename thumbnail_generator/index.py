@@ -3,8 +3,12 @@ import boto3
 import subprocess
 import os
 import urllib.parse
+import urllib.request
+import re
 
 s3_client = boto3.client('s3')
+dynamodb = boto3.resource('dynamodb')
+metadata_table = dynamodb.Table('video-metadata')
 
 def lambda_handler(event, context):
     """Handle S3 events and generate thumbnails"""
@@ -21,9 +25,16 @@ def lambda_handler(event, context):
                     process_video(bucket, filename)
         else:
             # Handle direct invocation
-            filename = event['filename']
+            filename = event.get('filename')
             bucket = event.get('bucket', 'my-video-downloads-bucket')
-            process_video(bucket, filename)
+            video_type = event.get('video_type', 'local')
+            external_url = event.get('external_url')
+            
+            if video_type == 'local':
+                process_video(bucket, filename)
+            else:
+                # Handle external video thumbnail
+                process_external_thumbnail(filename, external_url, video_type)
         
         return {
             'statusCode': 200,
@@ -111,3 +122,64 @@ def generate_thumbnails(video_path, output_name, bucket):
             
     except Exception as e:
         print(f"Thumbnail generation failed: {e}")
+
+def process_external_thumbnail(video_id, external_url, video_type):
+    """Fetch and store thumbnails for external videos"""
+    try:
+        thumbnail_url = get_thumbnail_url(external_url, video_type)
+        
+        if thumbnail_url:
+            print(f"Fetching thumbnail from: {thumbnail_url}")
+            
+            # Download thumbnail
+            req = urllib.request.Request(thumbnail_url, headers={'User-Agent': 'Mozilla/5.0'})
+            with urllib.request.urlopen(req, timeout=10) as response:
+                thumbnail_data = response.read()
+            
+            # Upload to S3
+            thumb_key = f"thumbnails/{video_id}_thumb_2.jpg"
+            s3_client.put_object(
+                Bucket='my-video-downloads-bucket',
+                Key=thumb_key,
+                Body=thumbnail_data,
+                ContentType='image/jpeg'
+            )
+            
+            print(f"Uploaded external thumbnail: {thumb_key}")
+        else:
+            print(f"No thumbnail available for video type: {video_type}")
+            
+    except Exception as e:
+        print(f"Failed to fetch external thumbnail: {e}")
+
+def get_thumbnail_url(url, video_type):
+    """Extract thumbnail URL from external video platforms"""
+    
+    if video_type == 'youtube' or 'youtube.com' in url or 'youtu.be' in url:
+        # Extract YouTube video ID
+        patterns = [
+            r'(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)',
+            r'youtube\.com\/embed\/([^&\n?#]+)'
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, url)
+            if match:
+                video_id = match.group(1)
+                # Try maxresdefault first
+                return f"https://img.youtube.com/vi/{video_id}/maxresdefault.jpg"
+        
+    elif video_type == 'rumble' or 'rumble.com' in url:
+        # Rumble uses a different thumbnail structure
+        # Extract video ID from URL like rumble.com/v12345-title.html
+        match = re.search(r'rumble\.com\/v([a-zA-Z0-9]+)', url)
+        if match:
+            # Rumble thumbnails are not easily accessible without API
+            # Return None for now
+            return None
+        
+    elif video_type == 'facebook' or 'facebook.com' in url or 'fb.watch' in url:
+        # Facebook thumbnails require API access
+        return None
+    
+    return None

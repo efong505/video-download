@@ -499,8 +499,18 @@
             document.getElementById('external-btn').textContent = 'Adding Video...';
 
             try {
+                // Determine video type
+                let videoType = 'external';
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                    videoType = 'youtube';
+                } else if (url.includes('rumble.com')) {
+                    videoType = 'rumble';
+                } else if (url.includes('facebook.com') || url.includes('fb.watch')) {
+                    videoType = 'facebook';
+                }
+                
                 // Generate a unique filename for the external video
-                const videoId = 'ext_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                const videoId = videoType + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
                 
                 // Add external video metadata
                 const response = await fetch(`${TAG_API}?action=add_video`, {
@@ -513,13 +523,31 @@
                         tags: tags,
                         owner: currentUser.email,
                         visibility: visibility,
-                        video_type: 'external',
+                        video_type: videoType,
                         external_url: url
                     })
                 });
 
                 const data = await response.json();
                 if (!response.ok) throw new Error(data.error || 'Failed to add external video');
+
+                // Trigger thumbnail generation for external video
+                try {
+                    await fetch(`${ADMIN_API}?action=generate_thumbnail`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ 
+                            filename: videoId,
+                            video_type: videoType,
+                            external_url: url
+                        })
+                    });
+                } catch (error) {
+                    console.log('Thumbnail generation failed (non-critical):', error);
+                }
 
                 showMessage('External video added successfully! Redirecting to videos...', 'success');
                 setTimeout(() => {

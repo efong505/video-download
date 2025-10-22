@@ -2206,6 +2206,24 @@
                 const data = await response.json();
                 
                 if (response.ok) {
+                    // Trigger thumbnail generation for external video
+                    try {
+                        await fetch(`${ADMIN_API}?action=generate_thumbnail`, {
+                            method: 'POST',
+                            headers: {
+                                'Authorization': `Bearer ${authToken}`,
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify({ 
+                                filename: videoId,
+                                video_type: videoType,
+                                external_url: url
+                            })
+                        });
+                    } catch (error) {
+                        console.log('Thumbnail generation failed (non-critical):', error);
+                    }
+                    
                     document.getElementById('videos-message').innerHTML = 
                         '<div class="success">External video added successfully!</div>';
                     closeModal('external-video-modal');
