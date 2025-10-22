@@ -274,9 +274,8 @@
                 isOwner = currentUser.email === userEmail;
             }
             
-            loadUserData();
             loadUserVideos();
-            loadUserArticles();
+            loadUserArticles(); // This now calls loadUserData() internally
         });
 
         async function loadUserData() {
@@ -334,6 +333,9 @@
 
         async function loadUserArticles() {
             try {
+                // Wait for user data to load first
+                await loadUserData();
+                
                 // Load both public and private articles
                 const publicResponse = await fetch(ARTICLES_API + '?action=list&visibility=public');
                 const publicData = await publicResponse.json();
@@ -341,9 +343,13 @@
                 let userArticles = [];
                 
                 if (publicData.articles) {
-                    userArticles = publicData.articles.filter(article => 
-                        article.author === userEmail || article.author === userName
-                    );
+                    userArticles = publicData.articles.filter(article => {
+                        // Check if article author matches user email or user name
+                        return article.author === userEmail || 
+                               article.author === userName ||
+                               (article.author && article.author.toLowerCase() === userEmail.toLowerCase()) ||
+                               (article.author && userName && article.author.toLowerCase() === userName.toLowerCase());
+                    });
                 }
                 
                 // If owner, also load private articles

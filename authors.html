@@ -250,18 +250,12 @@
                     author.videos > 0 || author.articles > 0
                 );
                 
-                // Get actual names for authors
-                for (let author of allAuthors) {
-                    try {
-                        const nameResponse = await fetch(`${AUTH_API}?action=get_user_name&email=${encodeURIComponent(author.email)}`);
-                        const nameData = await nameResponse.json();
-                        author.name = nameData.name && nameData.name.trim() ? nameData.name : author.email.split('@')[0];
-                    } catch (error) {
-                        author.name = author.email.split('@')[0];
-                    }
-                }
+                // Use email username as display name
+                allAuthors.forEach(author => {
+                    author.name = author.email.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                });
                 
-                displayAuthors(allAuthors);
+                displayAuthors(allAuthors.sort((a, b) => (b.videos + b.articles) - (a.videos + a.articles)));
                 
             } catch (error) {
                 console.error('Error loading authors:', error);
