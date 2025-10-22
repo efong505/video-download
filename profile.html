@@ -386,6 +386,55 @@
         
         async function loadSubscriptionData() {
             try {
+                // CRITICAL: Admin/Super User Unlimited Access Logic
+                // DO NOT REMOVE: Admins and super users get unlimited storage/videos
+                // This check must happen BEFORE PayPal API calls
+                if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
+                    // Still fetch usage stats for display
+                    try {
+                        const usageResponse = await fetch(`${PAYPAL_API}?action=usage&user_id=${currentUser.user_id}`);
+                        const usageData = await usageResponse.json();
+                        
+                        if (usageResponse.ok) {
+                            subscriptionData = {
+                                subscription_tier: 'admin',
+                                subscription_status: 'active',
+                                storage_used: usageData.storage_used || 0,
+                                storage_limit: -1,
+                                video_count: usageData.video_count || 0,
+                                video_limit: -1,
+                                storage_percentage: 0,
+                                video_percentage: 0
+                            };
+                        } else {
+                            subscriptionData = {
+                                subscription_tier: 'admin',
+                                subscription_status: 'active',
+                                storage_used: 0,
+                                storage_limit: -1,
+                                video_count: 0,
+                                video_limit: -1,
+                                storage_percentage: 0,
+                                video_percentage: 0
+                            };
+                        }
+                    } catch (error) {
+                        console.error('Failed to fetch usage:', error);
+                        subscriptionData = {
+                            subscription_tier: 'admin',
+                            subscription_status: 'active',
+                            storage_used: 0,
+                            storage_limit: -1,
+                            video_count: 0,
+                            video_limit: -1,
+                            storage_percentage: 0,
+                            video_percentage: 0
+                        };
+                    }
+                    displaySubscriptionData(subscriptionData);
+                    return;
+                }
+                
                 // Get subscription data from PayPal API
                 const response = await fetch(`${PAYPAL_API}?action=subscription_status&user_id=${currentUser.user_id}`);
                 const data = await response.json();
