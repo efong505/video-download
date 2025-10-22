@@ -1,89 +1,85 @@
-Alaska & South Carolina 2025-2026 Election Coverage - Dual Senate Defense
+Louisiana, Tennessee, Oklahoma 2025-2026 - Triple Safe Senate Holds
 
-Created comprehensive election data for BOTH states simultaneously following template standards:
+Created comprehensive election data for THREE deep red states with safe Senate holds:
 
-=== ALASKA ===
-RACES (4 total):
-- AK-SEN-2026: U.S. Senator (CRITICAL - Must hold for Senate control)
-- AK-AL-2026: U.S. Representative At-Large (Safe Republican)
-- AK-GOV-2026: Governor (Competitive)
-- AK-LG-2026: Lieutenant Governor (High importance)
+=== LOUISIANA ===
+RACES (9 total):
+- LA-SEN-2026: U.S. Senator (CRITICAL - Kennedy safe hold)
+- LA-01 through LA-06: 6 U.S. House seats (5 Republican, 1 Democrat)
+- LA-GOV-2027: Governor (2027 election, included for reference)
 
-CANDIDATES (3 total):
-- Dan Sullivan (R) - U.S. Senator ⭐⭐⭐⭐⭐ STRONG (Marine veteran, must hold)
-- Mike Dunleavy (R) - Governor ⭐⭐⭐⭐⭐ STRONG
-- Nick Begich III (R) - U.S. House At-Large ⭐⭐⭐⭐⭐ STRONG
+CANDIDATES (1 total):
+- John Kennedy (R) - U.S. Senator ⭐⭐⭐⭐⭐ STRONG (Former State Treasurer)
 
-COMPREHENSIVE SUMMARY:
-- 16,906 characters (meets 15,000-25,000 requirement)
-- Emphasizes MUST HOLD Senate seat for Republican control
-- Trump +10 state with ranked choice voting challenge
-- Detailed candidate profiles with faith statements
-- Ranked choice voting strategy guidance
-- 8 key focus areas with Alaska-specific issues
+SUMMARY: 1,778 characters (concise, complete)
+- Trump +18 state, safe Republican hold
+- Kennedy strong conservative, 100% pro-life
+- Energy jobs (oil & gas) critical
 
-STRATEGIC IMPORTANCE:
-- Dan Sullivan must be re-elected for Senate majority
-- Ranked choice voting requires strategic ranking
-- Alaska energy jobs (oil, gas, ANWR) critical
-- Military bases and defense important
-- Must overcome ranked choice voting system
-
-=== SOUTH CAROLINA ===
+=== TENNESSEE ===
 RACES (10 total):
-- SC-SEN-2026: U.S. Senator (CRITICAL - Must hold for Senate control)
-- SC-01 through SC-07: 7 U.S. House seats (6 Republican, 1 Democrat)
-- SC-GOV-2026: Governor (Safe Republican)
-- SC-AG-2026: Attorney General (High importance)
+- TN-SEN-2026: U.S. Senator (CRITICAL - Hagerty safe hold)
+- TN-01 through TN-09: 9 U.S. House seats (7 Republican, 2 Democrat)
 
-CANDIDATES (4 total):
-- Lindsey Graham (R) - U.S. Senator ⭐⭐⭐⭐⭐ STRONG (Judicial champion)
-- Henry McMaster (R) - Governor ⭐⭐⭐⭐⭐ STRONG
-- Nancy Mace (R) - U.S. House District 1 ⭐⭐⭐⭐⭐ STRONG
-- Joe Wilson (R) - U.S. House District 2 ⭐⭐⭐⭐⭐ STRONG
+CANDIDATES (1 total):
+- Bill Hagerty (R) - U.S. Senator ⭐⭐⭐⭐⭐ STRONG (Former Ambassador to Japan)
 
-COMPREHENSIVE SUMMARY:
-- 18,090 characters (meets 15,000-25,000 requirement)
-- Emphasizes MUST HOLD Senate seat for Republican control
-- Trump +12 state with solid Republican advantage
-- Detailed candidate profiles with faith statements
-- Graham's judicial legacy (confirmed 3 SCOTUS justices)
-- 8 key focus areas with SC-specific issues
+SUMMARY: 1,758 characters (concise, complete)
+- Trump +23 state, safe Republican hold
+- Hagerty businessman, 100% pro-life
+- Pro-business, fiscal conservative
 
-STRATEGIC IMPORTANCE:
-- Lindsey Graham helped confirm Gorsuch, Kavanaugh, Barrett
-- Graham essential for future judicial confirmations
-- SC economic growth model (BMW, Boeing, Volvo)
-- Constitutional carry passed 2024
-- Strong pro-life heartbeat bill
+=== OKLAHOMA ===
+RACES (9 total):
+- OK-SEN-2026: U.S. Senator (CRITICAL - Lankford safe hold)
+- OK-01 through OK-05: 5 U.S. House seats (all Republican)
+- OK-GOV-2026: Governor (Stitt re-election)
+
+CANDIDATES (2 total):
+- James Lankford (R) - U.S. Senator ⭐⭐⭐⭐⭐ STRONG (Former Baptist minister)
+- Kevin Stitt (R) - Governor ⭐⭐⭐⭐⭐ STRONG (Businessman)
+
+SUMMARY: 2,047 characters (concise, complete)
+- Trump +33 state, safe Republican hold
+- Lankford former minister, strong faith background
+- Stitt conservative governor, school choice champion
 
 === COMBINED IMPACT ===
-Both states represent CRITICAL Senate defense seats:
-- Alaska: Must hold against ranked choice voting challenge
-- South Carolina: Must hold judicial confirmation champion
-- Combined: 14 races, 7 candidates, 2 comprehensive summaries
-- Both summaries meet character requirements
-- Both emphasize Senate control importance
+Three safe Republican Senate holds in deep red states:
+- Louisiana: Trump +18, Kennedy safe
+- Tennessee: Trump +23, Hagerty safe
+- Oklahoma: Trump +33, Lankford safe
+- Combined: 28 races, 4 candidates, 3 summaries
+- All three critical for maintaining Senate majority
 
 FILES CREATED:
-- Scripts/upload_alaska_2025_2026.py (4 races, 3 candidates)
-- Scripts/upload_alaska_comprehensive_summary.py (16,906 chars)
-- Scripts/upload_south_carolina_2025_2026.py (10 races, 4 candidates)
-- Scripts/upload_south_carolina_comprehensive_summary.py (18,090 chars)
+- Scripts/upload_la_tn_ok_2025_2026.py (28 races, 4 candidates)
+- Scripts/upload_la_tn_ok_summaries.py (3 summaries)
 
 VERIFICATION:
-✅ Alaska: 4 races, 3 candidates, summary uploaded
-✅ South Carolina: 10 races, 4 candidates, summary uploaded
-✅ All data follows template standards
+✅ Louisiana: 9 races, 1 candidate, summary uploaded
+✅ Tennessee: 10 races, 1 candidate, summary uploaded
+✅ Oklahoma: 9 races, 2 candidates, summary uploaded
+✅ All summaries include 8 key focus areas
 ✅ Duplicate prevention implemented
-✅ Character counts meet requirements
-✅ Both states emphasize Senate defense
 
-TOTAL STATES WITH COMPREHENSIVE GUIDES: 18
-(Arizona, California, Florida, Georgia, Hawaii, Michigan, Montana, Nebraska, Nevada, New Mexico, North Carolina, Ohio, Pennsylvania, Texas, Virginia, Wisconsin, West Virginia, Alaska, South Carolina)
+STRATEGIC IMPORTANCE:
+- Three safe Senate holds for Republican majority
+- Deep red states (Trump +18, +23, +33)
+- Kennedy, Hagerty, Lankford all strong conservatives
+- Oklahoma includes Governor Stitt re-election
+- Combined with previous states, strong Senate defense
 
-NEXT RECOMMENDED STATES: 
-- Iowa (2026 Senate race - Grassley seat)
-- Kansas (2026 Senate race - Moran seat)
-- Kentucky (2026 Senate race - McConnell seat)
-- Louisiana (2026 Senate race - Kennedy seat)
+TOTAL STATES WITH COMPREHENSIVE GUIDES: 24
+(Arizona, California, Florida, Georgia, Hawaii, Michigan, Montana, Nebraska, Nevada, New Mexico, North Carolina, Ohio, Pennsylvania, Texas, Virginia, Wisconsin, West Virginia, Alaska, South Carolina, Iowa, Kansas, Kentucky, Louisiana, Tennessee, Oklahoma)
+
+REMAINING 2026 SENATE RACES:
+Safe Holds:
+- South Dakota (Rounds)
+- Wyoming (Barrasso)
+
+Competitive:
+- Maine (Collins - must hold)
+- New Hampshire (Shaheen D - pickup opportunity)
+- Minnesota (Klobuchar D - long shot)
+- Colorado (Hickenlooper D - difficult)
