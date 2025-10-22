@@ -244,6 +244,7 @@ Nebraska is **CRITICAL** for Christian conservatives:
 
 ### **What Pastors Can Do (501c3 Compliant):**
 
+✅ **Endorse candidates from pulpit** (IRS now permits pastoral endorsements)
 ✅ **Distribute non-partisan voter guides**
 ✅ **Host candidate forums**
 ✅ **Preach on biblical citizenship**
@@ -251,8 +252,7 @@ Nebraska is **CRITICAL** for Christian conservatives:
 ✅ **Encourage early voting**
 ✅ **Prayer emphasis for elections**
 
-❌ **Cannot endorse candidates from pulpit**
-❌ **Cannot donate church funds to campaigns**
+❌ **Cannot donate church funds** to campaigns (personal donations allowed)
 
 ### **What Church Members Can Do:**
 

@@ -243,6 +243,7 @@ Despite Democrat dominance, Republicans can compete:
 
 ### **What Pastors Can Do (501c3 Compliant):**
 
+✅ **Endorse candidates from pulpit** (IRS now permits pastoral endorsements)
 ✅ **Distribute non-partisan voter guides** (iVoterGuide.org)
 ✅ **Host candidate forums** (invite all candidates)
 ✅ **Preach on biblical citizenship**
@@ -250,8 +251,7 @@ Despite Democrat dominance, Republicans can compete:
 ✅ **Encourage early voting**
 ✅ **Prayer emphasis** for elections
 
-❌ **Cannot endorse candidates** from pulpit
-❌ **Cannot donate church funds** to campaigns
+❌ **Cannot donate church funds** to campaigns (personal donations allowed)
 
 ### **What Church Members Can Do:**
 

@@ -470,6 +470,7 @@ Michigan is **WINNABLE AND CRITICAL** for Christian conservatives:
 
 ### **What Pastors Can Do (501c3 Compliant):**
 
+✅ **Endorse candidates from pulpit** (IRS now permits pastoral endorsements)
 ✅ **Distribute non-partisan voter guides** (iVoterGuide.org, Michigan Family Voice)
 ✅ **Host candidate forums** (invite all candidates, equal time)
 ✅ **Preach on biblical citizenship** (Romans 13, 1 Peter 2)
@@ -478,9 +479,7 @@ Michigan is **WINNABLE AND CRITICAL** for Christian conservatives:
 ✅ **Prayer emphasis** for elections
 ✅ **Teach biblical worldview** on issues
 
-❌ **Cannot endorse candidates** from pulpit (501c3 restriction)
-❌ **Cannot donate church funds** to campaigns
-❌ **Cannot allow campaign materials** in church
+❌ **Cannot donate church funds** to campaigns (personal donations allowed)
 
 ### **What Church Members Can Do:**
 

@@ -544,17 +544,16 @@ Pennsylvania's congressional delegation plays a vital role in national policy af
 
 ### **What Pastors Can Do (501c3 Compliant):**
 
+✅ **Endorse candidates from pulpit** (IRS now permits pastoral endorsements)
 ✅ **Distribute non-partisan voter guides** (iVoterGuide.org, Pennsylvania Family Institute)
-✅ **Host candidate forums** (invite all candidates, equal time, no endorsements)
+✅ **Host candidate forums** (invite all candidates, equal time)
 ✅ **Preach on biblical citizenship** (Romans 13, 1 Peter 2, biblical duty to engage)
 ✅ **Voter registration drives** after services (register church members to vote)
 ✅ **Encourage early voting** (promote voting as Christian duty)
 ✅ **Prayer emphasis** for elections (pray for candidates, voters, election integrity)
-✅ **Teach biblical worldview** on issues (life, family, freedom without endorsing candidates)
+✅ **Teach biblical worldview** on issues (life, family, freedom)
 
-❌ **Cannot endorse candidates** from pulpit (501c3 restriction)
-❌ **Cannot donate church funds** to campaigns (use personal funds only)
-❌ **Cannot allow campaign materials** in church (maintain neutrality)
+❌ **Cannot donate church funds** to campaigns (personal donations allowed)
 
 **501c3 Compliance:** Churches can educate on issues, register voters, host forums, and encourage voting WITHOUT endorsing candidates. Focus on biblical principles, not partisan politics.
 

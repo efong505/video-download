@@ -142,6 +142,7 @@
 
 ### **What Pastors Can Do (501c3 Compliant):**
 
+✅ **Endorse candidates from pulpit** (IRS now permits pastoral endorsements)
 ✅ **Distribute non-partisan voter guides** ([source])
 ✅ **Host candidate forums** (invite all candidates)
 ✅ **Preach on biblical citizenship** ([scripture reference])
@@ -149,9 +150,7 @@
 ✅ **Encourage early voting**
 ✅ **Prayer emphasis** for elections
 
-❌ **Cannot endorse candidates** from pulpit
-❌ **Cannot donate church funds** to campaigns
-❌ **[Additional restriction if applicable]**
+❌ **Cannot donate church funds** to campaigns (personal donations allowed)
 
 ### **What Church Members Can Do:**
 

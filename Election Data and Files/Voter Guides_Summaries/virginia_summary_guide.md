@@ -269,16 +269,15 @@ Virginia is **WINNABLE** for Christian conservatives:
 
 ### **What Pastors Can Do (501c3 Compliant):**
 
+✅ **Endorse candidates from pulpit** (IRS now permits pastoral endorsements)
 ✅ **Distribute non-partisan voter guides** (iVoterGuide.org, ChurchVoterGuides.org)
-✅ **Host candidate forums** (invite all candidates, no endorsements)
+✅ **Host candidate forums** (invite all candidates)
 ✅ **Preach on biblical citizenship** (Romans 13, 1 Timothy 2:1-2)
 ✅ **Voter registration drives** after Sunday services
 ✅ **Encourage early voting** (September-November)
 ✅ **Prayer emphasis** for elections, candidates, voters
 
-❌ **Cannot endorse candidates** from pulpit (501c3 restriction)
-❌ **Cannot donate church funds** to campaigns
-❌ **Cannot allow campaign materials** in church building
+❌ **Cannot donate church funds** to campaigns (personal donations allowed)
 
 ### **What Church Members Can Do:**
 
