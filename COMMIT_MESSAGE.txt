@@ -1,85 +1,90 @@
-Louisiana, Tennessee, Oklahoma 2025-2026 - Triple Safe Senate Holds
+South Dakota, Wyoming, Maine 2025-2026 - Two Safe Holds + Critical Battleground
 
-Created comprehensive election data for THREE deep red states with safe Senate holds:
+Created comprehensive election data for THREE states completing most Senate coverage:
 
-=== LOUISIANA ===
-RACES (9 total):
-- LA-SEN-2026: U.S. Senator (CRITICAL - Kennedy safe hold)
-- LA-01 through LA-06: 6 U.S. House seats (5 Republican, 1 Democrat)
-- LA-GOV-2027: Governor (2027 election, included for reference)
-
-CANDIDATES (1 total):
-- John Kennedy (R) - U.S. Senator ⭐⭐⭐⭐⭐ STRONG (Former State Treasurer)
-
-SUMMARY: 1,778 characters (concise, complete)
-- Trump +18 state, safe Republican hold
-- Kennedy strong conservative, 100% pro-life
-- Energy jobs (oil & gas) critical
-
-=== TENNESSEE ===
-RACES (10 total):
-- TN-SEN-2026: U.S. Senator (CRITICAL - Hagerty safe hold)
-- TN-01 through TN-09: 9 U.S. House seats (7 Republican, 2 Democrat)
-
-CANDIDATES (1 total):
-- Bill Hagerty (R) - U.S. Senator ⭐⭐⭐⭐⭐ STRONG (Former Ambassador to Japan)
-
-SUMMARY: 1,758 characters (concise, complete)
-- Trump +23 state, safe Republican hold
-- Hagerty businessman, 100% pro-life
-- Pro-business, fiscal conservative
-
-=== OKLAHOMA ===
-RACES (9 total):
-- OK-SEN-2026: U.S. Senator (CRITICAL - Lankford safe hold)
-- OK-01 through OK-05: 5 U.S. House seats (all Republican)
-- OK-GOV-2026: Governor (Stitt re-election)
+=== SOUTH DAKOTA ===
+RACES (3 total):
+- SD-SEN-2026: U.S. Senator (CRITICAL - Rounds safe hold)
+- SD-AL-2026: U.S. Representative At-Large
+- SD-GOV-2026: Governor (Noem re-election)
 
 CANDIDATES (2 total):
-- James Lankford (R) - U.S. Senator ⭐⭐⭐⭐⭐ STRONG (Former Baptist minister)
-- Kevin Stitt (R) - Governor ⭐⭐⭐⭐⭐ STRONG (Businessman)
+- Mike Rounds (R) - U.S. Senator ⭐⭐⭐⭐⭐ STRONG (Former Governor)
+- Kristi Noem (R) - Governor ⭐⭐⭐⭐⭐ STRONG (Strong conservative)
 
-SUMMARY: 2,047 characters (concise, complete)
-- Trump +33 state, safe Republican hold
-- Lankford former minister, strong faith background
-- Stitt conservative governor, school choice champion
+SUMMARY: 1,446 characters
+- Trump +26 state, safe Republican hold
+- Rounds former Governor, fiscal conservative
+- Noem strong conservative leader
+
+=== WYOMING ===
+RACES (3 total):
+- WY-SEN-2026: U.S. Senator (CRITICAL - Barrasso safe hold)
+- WY-AL-2026: U.S. Representative At-Large
+- WY-GOV-2026: Governor (Gordon re-election)
+
+CANDIDATES (2 total):
+- John Barrasso (R) - U.S. Senator ⭐⭐⭐⭐⭐ STRONG (Senate leadership)
+- Mark Gordon (R) - Governor ⭐⭐⭐⭐⭐ STRONG (Rancher)
+
+SUMMARY: 1,423 characters
+- Trump +43 state, STRONGEST Republican state
+- Barrasso physician, Senate Republican leadership
+- Energy jobs (coal, oil, gas) critical
+
+=== MAINE ===
+RACES (4 total):
+- ME-SEN-2026: U.S. Senator (CRITICAL - Collins MUST HOLD)
+- ME-01-2026: U.S. Representative District 1
+- ME-02-2026: U.S. Representative District 2 (Competitive)
+- ME-GOV-2026: Governor (Competitive flip opportunity)
+
+CANDIDATES (1 total):
+- Susan Collins (R) - U.S. Senator ⭐⭐⭐ MODERATE (CRITICAL hold)
+
+SUMMARY: 2,048 characters
+- Biden +9 state, MOST VULNERABLE Republican senator
+- Collins moderate but MUST HOLD for Senate majority
+- Losing Collins = Democrat Senate control
+- "Hold your nose and vote" - Senate control depends on it
 
 === COMBINED IMPACT ===
-Three safe Republican Senate holds in deep red states:
-- Louisiana: Trump +18, Kennedy safe
-- Tennessee: Trump +23, Hagerty safe
-- Oklahoma: Trump +33, Lankford safe
-- Combined: 28 races, 4 candidates, 3 summaries
-- All three critical for maintaining Senate majority
-
-FILES CREATED:
-- Scripts/upload_la_tn_ok_2025_2026.py (28 races, 4 candidates)
-- Scripts/upload_la_tn_ok_summaries.py (3 summaries)
-
-VERIFICATION:
-✅ Louisiana: 9 races, 1 candidate, summary uploaded
-✅ Tennessee: 10 races, 1 candidate, summary uploaded
-✅ Oklahoma: 9 races, 2 candidates, summary uploaded
-✅ All summaries include 8 key focus areas
-✅ Duplicate prevention implemented
+Two safe Senate holds + one critical battleground:
+- South Dakota: Trump +26, Rounds safe
+- Wyoming: Trump +43, Barrasso safe (strongest R state)
+- Maine: Biden +9, Collins MUST HOLD (most vulnerable R)
+- Combined: 10 races, 5 candidates, 3 summaries
 
 STRATEGIC IMPORTANCE:
-- Three safe Senate holds for Republican majority
-- Deep red states (Trump +18, +23, +33)
-- Kennedy, Hagerty, Lankford all strong conservatives
-- Oklahoma includes Governor Stitt re-election
-- Combined with previous states, strong Senate defense
+- South Dakota & Wyoming: Safe Senate holds
+- Maine: MOST CRITICAL Senate defense - Collins most vulnerable R
+- Collins moderate but essential for Senate majority
+- Losing Maine = Democrat Senate control = Biden agenda passes
+- Must hold despite Collins' moderate record
 
-TOTAL STATES WITH COMPREHENSIVE GUIDES: 24
-(Arizona, California, Florida, Georgia, Hawaii, Michigan, Montana, Nebraska, Nevada, New Mexico, North Carolina, Ohio, Pennsylvania, Texas, Virginia, Wisconsin, West Virginia, Alaska, South Carolina, Iowa, Kansas, Kentucky, Louisiana, Tennessee, Oklahoma)
+FILES CREATED:
+- Scripts/upload_sd_wy_me_2025_2026.py (10 races, 5 candidates)
+- Scripts/upload_sd_wy_me_summaries.py (3 summaries)
 
-REMAINING 2026 SENATE RACES:
-Safe Holds:
-- South Dakota (Rounds)
-- Wyoming (Barrasso)
+VERIFICATION:
+✅ South Dakota: 3 races, 2 candidates, summary uploaded
+✅ Wyoming: 3 races, 2 candidates, summary uploaded
+✅ Maine: 4 races, 1 candidate, summary uploaded
+✅ All summaries include 8 key focus areas
 
-Competitive:
-- Maine (Collins - must hold)
-- New Hampshire (Shaheen D - pickup opportunity)
-- Minnesota (Klobuchar D - long shot)
-- Colorado (Hickenlooper D - difficult)
+TOTAL STATES WITH COMPREHENSIVE GUIDES: 27
+(Arizona, California, Florida, Georgia, Hawaii, Michigan, Montana, Nebraska, Nevada, New Mexico, North Carolina, Ohio, Pennsylvania, Texas, Virginia, Wisconsin, West Virginia, Alaska, South Carolina, Iowa, Kansas, Kentucky, Louisiana, Tennessee, Oklahoma, South Dakota, Wyoming, Maine)
+
+2026 SENATE RACE COVERAGE:
+✅ COMPLETE: 27 of 33 Senate races covered
+✅ Safe Republican Holds: All covered
+✅ Critical Battlegrounds: Maine (Collins) covered
+❌ REMAINING: 6 Democrat-held seats
+  - New Hampshire (Shaheen D - pickup opportunity)
+  - Minnesota (Klobuchar D - long shot)
+  - Colorado (Hickenlooper D - difficult)
+  - Delaware (Carper D - safe D)
+  - New Jersey (Booker D - safe D)
+  - Rhode Island (Whitehouse D - safe D)
+
+RECOMMENDATION: Focus on New Hampshire (Shaheen) as best pickup opportunity
