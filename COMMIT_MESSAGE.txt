@@ -1,49 +1,89 @@
-West Virginia 2025-2026 Election Coverage - Guaranteed Senate Pickup
+Alaska & South Carolina 2025-2026 Election Coverage - Dual Senate Defense
 
-Created comprehensive West Virginia election data following template standards:
+Created comprehensive election data for BOTH states simultaneously following template standards:
 
-RACES (6 total):
-- WV-SEN-2026: U.S. Senator (CRITICAL - Guaranteed pickup, Manchin retiring)
-- WV-01-2026: U.S. Representative District 1 (Safe Republican)
-- WV-02-2026: U.S. Representative District 2 (Safe Republican)
-- WV-GOV-2026: Governor (Safe Republican)
-- WV-AG-2026: Attorney General (High importance)
-- WV-SOS-2026: Secretary of State (Election integrity)
+=== ALASKA ===
+RACES (4 total):
+- AK-SEN-2026: U.S. Senator (CRITICAL - Must hold for Senate control)
+- AK-AL-2026: U.S. Representative At-Large (Safe Republican)
+- AK-GOV-2026: Governor (Competitive)
+- AK-LG-2026: Lieutenant Governor (High importance)
 
-CANDIDATES (4 total):
-- Patrick Morrisey (R) - U.S. Senator ⭐⭐⭐⭐⭐ STRONG
-- Jim Justice (R) - Governor ⭐⭐⭐⭐⭐ STRONG
-- Carol Miller (R) - U.S. House District 3 ⭐⭐⭐⭐⭐ STRONG
-- Alex Mooney (R) - U.S. House District 2 ⭐⭐⭐⭐⭐ STRONG
+CANDIDATES (3 total):
+- Dan Sullivan (R) - U.S. Senator ⭐⭐⭐⭐⭐ STRONG (Marine veteran, must hold)
+- Mike Dunleavy (R) - Governor ⭐⭐⭐⭐⭐ STRONG
+- Nick Begich III (R) - U.S. House At-Large ⭐⭐⭐⭐⭐ STRONG
 
 COMPREHENSIVE SUMMARY:
-- 28,991 characters (meets 15,000-25,000 requirement)
-- Emphasizes GUARANTEED Senate pickup with Manchin retiring
-- Trump +39 state - strongest Republican state in America
-- 100% certain Republican gain for Senate control
+- 16,906 characters (meets 15,000-25,000 requirement)
+- Emphasizes MUST HOLD Senate seat for Republican control
+- Trump +10 state with ranked choice voting challenge
 - Detailed candidate profiles with faith statements
-- 8 key focus areas: Pro-life, School Choice, Religious Liberty, Family Values, 2nd Amendment, Election Integrity, Border Security, Economic Freedom
-- Church mobilization strategy with IRS guidance
-- Prayer points and action plan
+- Ranked choice voting strategy guidance
+- 8 key focus areas with Alaska-specific issues
 
 STRATEGIC IMPORTANCE:
-- Joe Manchin retiring = guaranteed Republican Senate pickup
-- Trump won WV by 39 points (68.6% to 29.7%) - strongest state
-- No new Democrat elected statewide since 2000
-- Patrick Morrisey (AG) strong conservative frontrunner
-- This seat alone could flip Senate control
-- 100% certain Republican gain
+- Dan Sullivan must be re-elected for Senate majority
+- Ranked choice voting requires strategic ranking
+- Alaska energy jobs (oil, gas, ANWR) critical
+- Military bases and defense important
+- Must overcome ranked choice voting system
+
+=== SOUTH CAROLINA ===
+RACES (10 total):
+- SC-SEN-2026: U.S. Senator (CRITICAL - Must hold for Senate control)
+- SC-01 through SC-07: 7 U.S. House seats (6 Republican, 1 Democrat)
+- SC-GOV-2026: Governor (Safe Republican)
+- SC-AG-2026: Attorney General (High importance)
+
+CANDIDATES (4 total):
+- Lindsey Graham (R) - U.S. Senator ⭐⭐⭐⭐⭐ STRONG (Judicial champion)
+- Henry McMaster (R) - Governor ⭐⭐⭐⭐⭐ STRONG
+- Nancy Mace (R) - U.S. House District 1 ⭐⭐⭐⭐⭐ STRONG
+- Joe Wilson (R) - U.S. House District 2 ⭐⭐⭐⭐⭐ STRONG
+
+COMPREHENSIVE SUMMARY:
+- 18,090 characters (meets 15,000-25,000 requirement)
+- Emphasizes MUST HOLD Senate seat for Republican control
+- Trump +12 state with solid Republican advantage
+- Detailed candidate profiles with faith statements
+- Graham's judicial legacy (confirmed 3 SCOTUS justices)
+- 8 key focus areas with SC-specific issues
+
+STRATEGIC IMPORTANCE:
+- Lindsey Graham helped confirm Gorsuch, Kavanaugh, Barrett
+- Graham essential for future judicial confirmations
+- SC economic growth model (BMW, Boeing, Volvo)
+- Constitutional carry passed 2024
+- Strong pro-life heartbeat bill
+
+=== COMBINED IMPACT ===
+Both states represent CRITICAL Senate defense seats:
+- Alaska: Must hold against ranked choice voting challenge
+- South Carolina: Must hold judicial confirmation champion
+- Combined: 14 races, 7 candidates, 2 comprehensive summaries
+- Both summaries meet character requirements
+- Both emphasize Senate control importance
 
 FILES CREATED:
-- Scripts/upload_west_virginia_2025_2026.py (races and candidates)
-- Scripts/upload_west_virginia_comprehensive_summary.py (28,991 chars)
+- Scripts/upload_alaska_2025_2026.py (4 races, 3 candidates)
+- Scripts/upload_alaska_comprehensive_summary.py (16,906 chars)
+- Scripts/upload_south_carolina_2025_2026.py (10 races, 4 candidates)
+- Scripts/upload_south_carolina_comprehensive_summary.py (18,090 chars)
 
 VERIFICATION:
-✅ 6 races uploaded to DynamoDB
-✅ 4 candidates uploaded to DynamoDB
-✅ Comprehensive summary uploaded to state-summaries table
+✅ Alaska: 4 races, 3 candidates, summary uploaded
+✅ South Carolina: 10 races, 4 candidates, summary uploaded
 ✅ All data follows template standards
 ✅ Duplicate prevention implemented
-✅ Character count meets requirements
+✅ Character counts meet requirements
+✅ Both states emphasize Senate defense
 
-NEXT STATE: Alaska or South Carolina (both have 2026 Senate races)
+TOTAL STATES WITH COMPREHENSIVE GUIDES: 18
+(Arizona, California, Florida, Georgia, Hawaii, Michigan, Montana, Nebraska, Nevada, New Mexico, North Carolina, Ohio, Pennsylvania, Texas, Virginia, Wisconsin, West Virginia, Alaska, South Carolina)
+
+NEXT RECOMMENDED STATES: 
+- Iowa (2026 Senate race - Grassley seat)
+- Kansas (2026 Senate race - Moran seat)
+- Kentucky (2026 Senate race - McConnell seat)
+- Louisiana (2026 Senate race - Kennedy seat)
