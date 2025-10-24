@@ -308,9 +308,10 @@
                         state.</small>
                 </div>
                 <div class="col-md-4">
+                    <input type="text" id="first-name-input" class="form-control mb-2" placeholder="First Name *" required>
+                    <input type="text" id="last-name-input" class="form-control mb-2" placeholder="Last Name (optional)">
                     <div class="input-group">
-                        <input type="email" id="email-input" class="form-control" placeholder="your@email.com"
-                            aria-label="Email address">
+                        <input type="email" id="email-input" class="form-control" placeholder="your@email.com *" required>
                         <button class="btn btn-primary" type="button" onclick="subscribeEmail()">Subscribe</button>
                     </div>
                 </div>
@@ -902,10 +903,20 @@
 
         async function subscribeEmail() {
             const emailInput = document.getElementById('email-input');
+            const firstNameInput = document.getElementById('first-name-input');
+            const lastNameInput = document.getElementById('last-name-input');
+            
             const email = emailInput.value.trim();
+            const firstName = firstNameInput.value.trim();
+            const lastName = lastNameInput.value.trim();
 
             if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 alert('Please enter a valid email address.');
+                return;
+            }
+            
+            if (!firstName) {
+                alert('Please enter your first name.');
                 return;
             }
 
@@ -913,18 +924,32 @@
                 const response = await fetch(EMAIL_API_ENDPOINT + '/subscribe', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({email: email})
+                    body: JSON.stringify({email: email, first_name: firstName, last_name: lastName})
                 });
 
                 const data = await response.json();
 
                 if (response.ok) {
                     const banner = document.getElementById('email-capture-banner');
-                    banner.innerHTML = '<div class="text-center py-3">' +
-                        '<h5 class="text-success mb-2">✓ Thank You for Subscribing!</h5>' +
-                        '<p class="mb-0">Confirmation email sent to <strong>' + email + '</strong></p>' +
-                        '<small class="text-muted">Check your inbox (and spam folder) for your welcome email.</small>' +
-                        '</div>';
+                    if (data.message === 'already_subscribed') {
+                        banner.innerHTML = '<div class="text-center py-3">' +
+                            '<h5 class="text-info mb-2">✓ Already Subscribed!</h5>' +
+                            '<p class="mb-0"><strong>' + email + '</strong> is already on our mailing list.</p>' +
+                            '<small class="text-muted">You\'ll continue receiving election updates and voter guides.</small>' +
+                            '</div>';
+                    } else if (data.message === 'confirmation_resent') {
+                        banner.innerHTML = '<div class="text-center py-3">' +
+                            '<h5 class="text-info mb-2">✓ Confirmation Email Resent!</h5>' +
+                            '<p class="mb-0">Check your inbox at <strong>' + email + '</strong></p>' +
+                            '<small class="text-muted">Please click the confirmation link to complete your subscription.</small>' +
+                            '</div>';
+                    } else {
+                        banner.innerHTML = '<div class="text-center py-3">' +
+                            '<h5 class="text-success mb-2">✓ Almost Done!</h5>' +
+                            '<p class="mb-0">Confirmation email sent to <strong>' + email + '</strong></p>' +
+                            '<small class="text-muted">Please check your inbox and click the confirmation link to complete your subscription.</small>' +
+                            '</div>';
+                    }
                 } else {
                     alert(data.error || 'Subscription failed. Please try again.');
                 }
