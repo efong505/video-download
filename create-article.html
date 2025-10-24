@@ -162,25 +162,27 @@
             border: none;
         }
     </style>
+    <style>
+        body { padding-top: 70px; }
+    </style>
 </head>
 <body>
+    <!-- Unified Navbar -->
+    <div id="navbar-container" data-page="create-article"></div>
+    <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            })
+            .catch(err => console.error('Failed to load navbar:', err));
+    </script>
+    
     <div class="dashboard-header">
         <div class="container">
-            <div class="dashboard-nav">
-                <h1 class="nav-brand">✍️ Create Article</h1>
-                <div class="nav-links" id="nav-links">
-                    <a href="/" class="nav-link">🏠 Home</a>
-                    <a href="category.html" class="nav-link">📂 Categories</a>
-                    <a href="videos.html" class="nav-link">🎬 Videos</a>
-                    <a href="articles.html" class="nav-link">📝 Articles</a>
-                    <a href="authors.html" class="nav-link">👥 Authors</a>
-                    <a href="resources.html" class="nav-link">📚 Resources</a>
-                    <a href="user-upload.html" class="nav-link">⬆️ Upload Video</a>
-                    <a href="profile.html" class="nav-link">👤 Profile</a>
-                    <a href="#" onclick="viewMyPage()" class="nav-link">📄 My Page</a>
-                    <a href="#" onclick="logout()" class="nav-link logout">🚪 Logout</a>
-                </div>
-            </div>
+            <h1 class="mb-0">✍️ Create Article</h1>
         </div>
     </div>
 

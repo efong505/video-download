@@ -46,19 +46,27 @@
             padding: 30px;
         }
     </style>
+    <style>
+        body { padding-top: 70px; }
+    </style>
 </head>
 <body>
+    <!-- Unified Navbar -->
+    <div id="navbar-container" data-page="admin-templates"></div>
+    <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            })
+            .catch(err => console.error('Failed to load navbar:', err));
+    </script>
+    
     <div class="dashboard-header">
         <div class="container">
-            <div class="d-flex justify-content-between align-items-center">
-                <h1 class="mb-0">🛠️ Template Management</h1>
-                <div class="d-flex gap-3">
-                    <a href="admin.html" class="nav-link">⚙️ Admin</a>
-                    <a href="articles.html" class="nav-link">📝 Articles</a>
-                    <a href="create-article.html" class="nav-link">✍️ Create</a>
-                    <a href="#" onclick="logout()" class="nav-link">🚪 Logout</a>
-                </div>
-            </div>
+            <h1 class="mb-0">🛠️ Template Management</h1>
         </div>
     </div>
 
@@ -207,11 +215,17 @@
                             <small class="text-secondary">ID: ${key}</small>
                         </div>
                         <div class="btn-group-vertical btn-group-sm">
-                            <button class="btn btn-outline-primary btn-sm" onclick="editTemplate('${key}', ${JSON.stringify(template).replace(/"/g, '&quot;')})">✏️ Edit</button>
-                            <button class="btn btn-outline-danger btn-sm" onclick="deleteTemplate('${key}')">🗑️ Delete</button>
+                            <button class="btn btn-outline-primary btn-sm" data-template-id="${key}">✏️ Edit</button>
+                            <button class="btn btn-outline-danger btn-sm" data-template-id="${key}">🗑️ Delete</button>
                         </div>
                     </div>
                 `;
+                
+                const editBtn = templateCard.querySelector('.btn-outline-primary');
+                editBtn.addEventListener('click', () => editTemplate(key, template));
+                
+                const deleteBtn = templateCard.querySelector('.btn-outline-danger');
+                deleteBtn.addEventListener('click', () => deleteTemplate(key));
                 
                 container.appendChild(templateCard);
             });
@@ -219,8 +233,8 @@
 
         function editTemplate(templateId, template) {
             editingTemplateId = templateId;
-            document.getElementById('form-title').textContent = '✏️ Edit Template';
-            document.getElementById('save-btn').textContent = '💾 Update Template';
+            document.getElementById('form-title').textContent = 'Edit Template';
+            document.getElementById('save-btn').textContent = 'Update Template';
             
             document.getElementById('template-id').value = templateId;
             document.getElementById('template-name').value = template.name;
@@ -234,8 +248,8 @@
 
         function resetForm() {
             editingTemplateId = null;
-            document.getElementById('form-title').textContent = '📝 Create New Template';
-            document.getElementById('save-btn').textContent = '💾 Save Template';
+            document.getElementById('form-title').textContent = 'Create New Template';
+            document.getElementById('save-btn').textContent = 'Save Template';
             document.getElementById('template-form').reset();
             document.getElementById('template-id').value = '';
             if (quill) {
@@ -327,36 +341,18 @@
         function previewTemplate() {
             const name = document.getElementById('template-name').value || 'Template Preview';
             const content = quill ? quill.root.innerHTML : '';
-            
             if (!content.trim()) {
                 alert('Please add some content to preview');
                 return;
             }
-            
-            const previewWindow = window.open('', '_blank', 'width=800,height=600,scrollbars=yes');
-            const previewHtml = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Template Preview</title>
-                    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-                    <style>
-                        body { padding: 20px; }
-                        .template-content { margin-top: 20px; line-height: 1.6; }
-                        blockquote { border-left: 4px solid #667eea; padding-left: 15px; margin: 20px 0; }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-                        <h1 class="mb-3">📋 ${name}</h1>
-                        <div class="template-content">${content}</div>
-                    </div>
-                </body>
-                </html>
-            `;
-            
-            previewWindow.document.write(previewHtml);
-            previewWindow.document.close();
+            const w = window.open('', '_blank');
+            const h1 = w.document.createElement('h1');
+            h1.textContent = name;
+            const div = w.document.createElement('div');
+            div.innerHTML = content;
+            w.document.body.appendChild(h1);
+            w.document.body.appendChild(div);
+            w.document.body.style.padding = '20px';
         }
 
         function logout() {

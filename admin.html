@@ -276,8 +276,19 @@
             color: #2c5aa0;
         }
         @media (max-width: 991px) {
-            body { padding-top: 140px; }
+            body { padding-top: 160px; }
             .admin-secondary-menu { top: 56px; }
+        }
+        @media (max-width: 768px) {
+            .data-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+            .category-order-item, .resource-category-order-item {
+                pointer-events: none;
+            }
         }
     </style>
 </head>
@@ -318,7 +329,6 @@
             <div class="tab" onclick="showTab('users')">Users</div>
             <div class="tab" onclick="showTab('videos')">Videos</div>
             <div class="tab" onclick="showTab('tags')">Tags</div>
-            <div class="tab" onclick="showTab('articles')">Articles</div>
             <div class="tab" onclick="showTab('analytics')">Analytics</div>
             <div class="tab" onclick="showTab('resources')">Resources</div>
             <div class="tab" onclick="showTab('comments')">Comments</div>
@@ -3071,6 +3081,10 @@
         let draggedResourceElement = null;
         
         function handleResourceDragStart(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                return false;
+            }
             draggedResourceElement = this;
             this.style.opacity = '0.5';
         }
@@ -3203,6 +3217,10 @@
         let draggedElement = null;
         
         function handleDragStart(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                return false;
+            }
             draggedElement = this;
             this.style.opacity = '0.5';
         }

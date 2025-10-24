@@ -253,7 +253,7 @@
                     });
                 }
 
-                // Set quota limits based on subscription tier (default to free)
+                // Set quota limits based on subscription tier or role
                 const quotaLimits = {
                     free: { storage: 2 * 1024 * 1024 * 1024, videos: 50 }, // 2GB
                     premium: { storage: 25 * 1024 * 1024 * 1024, videos: 500 }, // 25GB
@@ -261,7 +261,11 @@
                     enterprise: { storage: Infinity, videos: Infinity }
                 };
 
-                const tier = 'free'; // Default to free, would come from user data in real implementation
+                // Admin and super_user get unlimited
+                let tier = 'free';
+                if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
+                    tier = 'enterprise';
+                }
                 const limits = quotaLimits[tier];
 
                 userQuota = {
@@ -293,11 +297,13 @@
             document.getElementById('video-count').textContent = userQuota.videoCount;
             document.getElementById('video-limit').textContent = userQuota.videoLimit === Infinity ? '∞' : userQuota.videoLimit;
 
-            // Show upgrade notice if near or at limit
-            if (percentage >= 95 || userQuota.videoCount >= userQuota.videoLimit) {
+            // Show upgrade notice if near or at limit (not for admin/super_user)
+            if ((percentage >= 95 || userQuota.videoCount >= userQuota.videoLimit) && 
+                currentUser.role !== 'admin' && currentUser.role !== 'super_user') {
                 document.getElementById('upgrade-notice').style.display = 'block';
-                document.getElementById('upload-form').style.opacity = '0.5';
+                document.getElementById('local-upload-form').style.opacity = '0.5';
                 document.getElementById('upload-btn').disabled = true;
+                document.getElementById('external-btn').disabled = true;
             }
         }
 

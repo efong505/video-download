@@ -10,7 +10,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 20px 0;
-            padding-top: 90px;
+            padding-top: 100px;
             margin-bottom: 30px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
@@ -310,6 +310,13 @@
     </div>
 
     <div class="container">
+        <!-- Create Article Button (for logged-in users) -->
+        <div id="create-article-btn" style="display: none; margin-bottom: 20px;">
+            <a href="create-article.html" class="btn btn-primary btn-lg">
+                ✍️ Create Article
+            </a>
+        </div>
+
         <!-- Popular Tags Cloud -->
         <div class="card mb-4">
             <div class="card-body">
@@ -482,6 +489,9 @@
             }
             
             currentUser = JSON.parse(userData);
+            
+            // Show Create Article button for logged-in users
+            document.getElementById('create-article-btn').style.display = 'block';
             
             // Add admin link if user is admin or super_user
             if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
