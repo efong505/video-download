@@ -898,49 +898,39 @@
         }
 
         // Email subscription function
+        const EMAIL_API_ENDPOINT = 'https://niexv1rw75.execute-api.us-east-1.amazonaws.com';
+
         async function subscribeEmail() {
             const emailInput = document.getElementById('email-input');
             const email = emailInput.value.trim();
 
-            if (!email) {
-                alert('Please enter your email address.');
-                return;
-            }
-
-            // Basic email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 alert('Please enter a valid email address.');
                 return;
             }
 
             try {
-                // TODO: Replace with your actual API endpoint
-                // For now, we'll store in localStorage and show success
-                const subscribers = JSON.parse(localStorage.getItem('email_subscribers') || '[]');
-                if (!subscribers.includes(email)) {
-                    subscribers.push(email);
-                    localStorage.setItem('email_subscribers', JSON.stringify(subscribers));
+                const response = await fetch(EMAIL_API_ENDPOINT + '/subscribe', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email: email})
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    const banner = document.getElementById('email-capture-banner');
+                    banner.innerHTML = '<div class="text-center py-3">' +
+                        '<h5 class="text-success mb-2">✓ Thank You for Subscribing!</h5>' +
+                        '<p class="mb-0">Confirmation email sent to <strong>' + email + '</strong></p>' +
+                        '<small class="text-muted">Check your inbox (and spam folder) for your welcome email.</small>' +
+                        '</div>';
+                } else {
+                    alert(data.error || 'Subscription failed. Please try again.');
                 }
-
-                // Show success message
-                const banner = document.getElementById('email-capture-banner');
-                banner.innerHTML = '<div class="text-center py-3">' +
-                    '<h5 class="text-success mb-2">✓ Thank You for Subscribing!</h5>' +
-                    '<p class="mb-0">You\'ll receive election updates and voter guides at <strong>' + email + '</strong></p>' +
-                    '<small class="text-muted">Check your inbox for a confirmation email.</small>' +
-                    '</div>';
-
-                // Optional: Send to your backend API
-                // await fetch('YOUR_API_ENDPOINT', {
-                //     method: 'POST',
-                //     headers: { 'Content-Type': 'application/json' },
-                //     body: JSON.stringify({ email: email, source: 'election-map' })
-                // });
-
             } catch (error) {
                 console.error('Subscription error:', error);
-                alert('There was an error subscribing. Please try again.');
+                alert('There was an error subscribing. Please check your internet connection and try again.');
             }
         }
 

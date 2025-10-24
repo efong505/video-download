@@ -4,7 +4,7 @@
  */
 
 // IMPORTANT: Replace with your actual API Gateway URL after deployment
-const EMAIL_API_ENDPOINT = 'https://YOUR-API-ID.execute-api.us-east-1.amazonaws.com';
+const EMAIL_API_ENDPOINT = 'https://niexv1rw75.execute-api.us-east-1.amazonaws.com';
 
 async function subscribeEmail() {
     const emailInput = document.getElementById('email-input');

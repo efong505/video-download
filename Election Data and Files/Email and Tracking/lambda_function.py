@@ -21,8 +21,12 @@ FROM_EMAIL = 'Christian Conservatives Today <contact@christianconservativestoday
 
 def lambda_handler(event, context):
     """Main Lambda handler - routes requests to appropriate function"""
-    path = event.get('path', '')
+    # API Gateway v2 uses rawPath, v1 uses path
+    path = event.get('rawPath', event.get('path', ''))
+    # API Gateway v2 uses requestContext.http.method, v1 uses httpMethod
     method = event.get('httpMethod', '')
+    if not method and 'requestContext' in event:
+        method = event.get('requestContext', {}).get('http', {}).get('method', '')
     
     # Handle CORS preflight
     if method == 'OPTIONS':
@@ -31,12 +35,48 @@ def lambda_handler(event, context):
     # Route to appropriate handler
     if path == '/subscribe' or (method == 'POST' and not path.startswith('/track')):
         return handle_subscription(event)
+    elif path == '/unsubscribe':
+        return handle_unsubscribe(event)
     elif path.startswith('/track/open/'):
         return handle_open_tracking(event)
     elif path.startswith('/track/click/'):
         return handle_click_tracking(event)
     else:
         return cors_response(404, {'error': 'Not found'})
+
+def handle_unsubscribe(event):
+    """Handle email unsubscribe"""
+    try:
+        # Get email from query string or body
+        email = None
+        if 'queryStringParameters' in event and event['queryStringParameters']:
+            email = event['queryStringParameters'].get('email', '').strip().lower()
+        if not email and event.get('body'):
+            body = json.loads(event.get('body', '{}'))
+            email = body.get('email', '').strip().lower()
+        
+        if not email:
+            return cors_response(400, {'error': 'Email required'})
+        
+        # Update subscriber status
+        subscribers_table.update_item(
+            Key={'email': email},
+            UpdateExpression='SET #status = :status, unsubscribed_at = :date',
+            ExpressionAttributeNames={'#status': 'status'},
+            ExpressionAttributeValues={
+                ':status': 'unsubscribed',
+                ':date': datetime.now().isoformat()
+            }
+        )
+        
+        # Log unsubscribe event
+        log_event(email, 'unsubscribed', 'user-action')
+        
+        return cors_response(200, {'message': 'Successfully unsubscribed', 'email': email})
+        
+    except Exception as e:
+        print(f"Unsubscribe error: {str(e)}")
+        return cors_response(500, {'error': 'Unsubscribe failed'})
 
 def handle_subscription(event):
     """Handle new email subscription"""

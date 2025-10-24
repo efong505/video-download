@@ -7,19 +7,28 @@ Follow these steps in order to deploy the email subscription system with trackin
 - AWS Account with admin access
 - Domain: christianconservativestoday.com
 - Email: contact@christianconservativestoday.com (working)
-- Basic familiarity with AWS Console
+- Basic familiarity with AWS Console OR PowerShell
+- AWS CLI installed (for PowerShell method): `Install-Module -Name AWSPowerShell.NetCore`
 
 ## Estimated Time: 30-45 minutes
+
+## Setup Methods
+
+Each step includes:
+- 🖱️ **AWS Console** - Click through web interface
+- 💻 **PowerShell CLI** - Run commands in terminal
 
 ---
 
 ## Step 1: Verify Email in AWS SES (5 minutes)
 
-### 1.1 Go to SES Console
+### 🖱️ AWS Console Method
+
+#### 1.1 Go to SES Console
 - Open: https://console.aws.amazon.com/ses/
 - Make sure you're in **us-east-1** region (top right)
 
-### 1.2 Verify Email Address
+#### 1.2 Verify Email Address
 1. Click **Verified identities** in left menu
 2. Click **Create identity** button
 3. Select **Email address**
@@ -28,10 +37,35 @@ Follow these steps in order to deploy the email subscription system with trackin
 6. Check your email inbox
 7. Click the verification link from AWS
 
-### 1.3 Verify Status
+#### 1.3 Verify Status
 - Wait 1-2 minutes
 - Refresh the page
 - Status should show **Verified** ✓
+
+### 💻 PowerShell CLI Method
+
+```powershell
+# Set region
+Set-DefaultAWSRegion -Region us-east-1
+
+# Verify email address
+$email = "contact@christianconservativestoday.com"
+Confirm-SESEmailIdentity -EmailAddress $email
+
+Write-Host "Verification email sent to $email"
+Write-Host "Check your inbox and click the verification link"
+
+# Wait for user to verify, then check status
+Read-Host "Press Enter after clicking verification link"
+
+# Check verification status
+$identity = Get-SESIdentityVerificationAttributes -Identity $email
+if ($identity.VerificationStatus -eq "Success") {
+    Write-Host "✓ Email verified successfully!" -ForegroundColor Green
+} else {
+    Write-Host "⚠ Email not verified yet. Status: $($identity.VerificationStatus)" -ForegroundColor Yellow
+}
+```
 
 ---
 
@@ -80,7 +114,9 @@ bounced emails from our list. We honor all unsubscribe requests immediately.
 
 ## Step 3: Create DynamoDB Tables (5 minutes)
 
-### 3.1 Create Subscribers Table
+### 🖱️ AWS Console Method
+
+#### 3.1 Create Subscribers Table
 1. Go to DynamoDB Console: https://console.aws.amazon.com/dynamodb/
 2. Click **Create table**
 3. Settings:
@@ -90,7 +126,7 @@ bounced emails from our list. We honor all unsubscribe requests immediately.
 4. Click **Create table**
 5. Wait for status to show **Active** (30 seconds)
 
-### 3.2 Create Events Table
+#### 3.2 Create Events Table
 1. Click **Create table** again
 2. Settings:
    - **Table name**: `email-events`
@@ -100,15 +136,73 @@ bounced emails from our list. We honor all unsubscribe requests immediately.
 3. Click **Create table**
 4. Wait for status to show **Active**
 
-### 3.3 Verify Tables
+#### 3.3 Verify Tables
 - You should see both tables listed
 - Both should show **Active** status
+
+### 💻 PowerShell CLI Method
+
+```powershell
+# Create email-subscribers table
+Write-Host "Creating email-subscribers table..." -ForegroundColor Cyan
+
+$subscribersSchema = @(
+    @{AttributeName="email"; AttributeType="S"}
+)
+$subscribersKey = @(
+    @{AttributeName="email"; KeyType="HASH"}
+)
+
+New-DDBTable `
+    -TableName "email-subscribers" `
+    -AttributeDefinition $subscribersSchema `
+    -KeySchema $subscribersKey `
+    -BillingMode PAY_PER_REQUEST `
+    -Region us-east-1
+
+Write-Host "✓ email-subscribers table created" -ForegroundColor Green
+
+# Create email-events table
+Write-Host "Creating email-events table..." -ForegroundColor Cyan
+
+$eventsSchema = @(
+    @{AttributeName="event_id"; AttributeType="S"},
+    @{AttributeName="timestamp"; AttributeType="N"}
+)
+$eventsKey = @(
+    @{AttributeName="event_id"; KeyType="HASH"},
+    @{AttributeName="timestamp"; KeyType="RANGE"}
+)
+
+New-DDBTable `
+    -TableName "email-events" `
+    -AttributeDefinition $eventsSchema `
+    -KeySchema $eventsKey `
+    -BillingMode PAY_PER_REQUEST `
+    -Region us-east-1
+
+Write-Host "✓ email-events table created" -ForegroundColor Green
+
+# Wait for tables to become active
+Write-Host "Waiting for tables to become active..." -ForegroundColor Yellow
+
+do {
+    Start-Sleep -Seconds 5
+    $subStatus = (Get-DDBTable -TableName "email-subscribers").TableStatus
+    $evtStatus = (Get-DDBTable -TableName "email-events").TableStatus
+    Write-Host "Subscribers: $subStatus | Events: $evtStatus"
+} while ($subStatus -ne "ACTIVE" -or $evtStatus -ne "ACTIVE")
+
+Write-Host "✓ Both tables are now ACTIVE!" -ForegroundColor Green
+```
 
 ---
 
 ## Step 4: Create Lambda Function (10 minutes)
 
-### 4.1 Create Function
+### 🖱️ AWS Console Method
+
+#### 4.1 Create Function
 1. Go to Lambda Console: https://console.aws.amazon.com/lambda/
 2. Click **Create function**
 3. Choose **Author from scratch**
@@ -119,7 +213,7 @@ bounced emails from our list. We honor all unsubscribe requests immediately.
    - Leave other settings as default
 5. Click **Create function**
 
-### 4.2 Add Function Code
+#### 4.2 Add Function Code
 1. In the function page, scroll to **Code source** section
 2. Delete the default code in `lambda_function.py`
 3. Open the file `lambda_function.py` from this folder
@@ -128,7 +222,7 @@ bounced emails from our list. We honor all unsubscribe requests immediately.
 6. Click **Deploy** button (top right)
 7. Wait for "Successfully deployed" message
 
-### 4.3 Add Permissions
+#### 4.3 Add Permissions
 1. Click **Configuration** tab
 2. Click **Permissions** in left menu
 3. Click the **Role name** link (opens in new tab)
@@ -139,18 +233,97 @@ bounced emails from our list. We honor all unsubscribe requests immediately.
 6. Click **Add permissions**
 7. Close the IAM tab
 
-### 4.4 Increase Timeout
+#### 4.4 Increase Timeout
 1. Back in Lambda, click **Configuration** tab
 2. Click **General configuration**
 3. Click **Edit**
 4. Change **Timeout** to `30` seconds
 5. Click **Save**
 
+### 💻 PowerShell CLI Method
+
+```powershell
+# Create IAM role for Lambda
+Write-Host "Creating IAM role for Lambda..." -ForegroundColor Cyan
+
+$trustPolicy = @"
+{
+  ""Version"": ""2012-10-17"",
+  ""Statement"": [{
+    ""Effect"": ""Allow"",
+    ""Principal"": {""Service"": ""lambda.amazonaws.com""},
+    ""Action"": ""sts:AssumeRole""
+  }]
+}
+"@
+
+$role = New-IAMRole `
+    -RoleName "email-subscription-lambda-role" `
+    -AssumeRolePolicyDocument $trustPolicy `
+    -Description "Role for email subscription Lambda function"
+
+Write-Host "✓ IAM role created" -ForegroundColor Green
+
+# Attach policies to role
+Write-Host "Attaching policies..." -ForegroundColor Cyan
+
+Register-IAMRolePolicy `
+    -RoleName "email-subscription-lambda-role" `
+    -PolicyArn "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+
+Register-IAMRolePolicy `
+    -RoleName "email-subscription-lambda-role" `
+    -PolicyArn "arn:aws:iam::aws:policy/AmazonSESFullAccess"
+
+Register-IAMRolePolicy `
+    -RoleName "email-subscription-lambda-role" `
+    -PolicyArn "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+
+Write-Host "✓ Policies attached" -ForegroundColor Green
+
+# Wait for role to propagate
+Write-Host "Waiting for IAM role to propagate..." -ForegroundColor Yellow
+Start-Sleep -Seconds 10
+
+# Create deployment package
+Write-Host "Creating deployment package..." -ForegroundColor Cyan
+
+$zipPath = "$PWD\lambda_function.zip"
+if (Test-Path $zipPath) { Remove-Item $zipPath }
+
+Compress-Archive -Path "lambda_function.py" -DestinationPath $zipPath
+
+Write-Host "✓ Deployment package created" -ForegroundColor Green
+
+# Create Lambda function
+Write-Host "Creating Lambda function..." -ForegroundColor Cyan
+
+$functionCode = [System.IO.File]::ReadAllBytes($zipPath)
+
+$function = Publish-LMFunction `
+    -FunctionName "email-subscription-handler" `
+    -Runtime "python3.12" `
+    -Role $role.Arn `
+    -Handler "lambda_function.lambda_handler" `
+    -ZipFile $functionCode `
+    -Timeout 30 `
+    -MemorySize 256 `
+    -Region us-east-1
+
+Write-Host "✓ Lambda function created!" -ForegroundColor Green
+Write-Host "Function ARN: $($function.FunctionArn)" -ForegroundColor Cyan
+
+# Clean up zip file
+Remove-Item $zipPath
+```
+
 ---
 
 ## Step 5: Create API Gateway (10 minutes)
 
-### 5.1 Create HTTP API
+### 🖱️ AWS Console Method
+
+#### 5.1 Create HTTP API
 1. Go to API Gateway Console: https://console.aws.amazon.com/apigateway/
 2. Click **Create API**
 3. Find **HTTP API** and click **Build**
@@ -161,21 +334,21 @@ bounced emails from our list. We honor all unsubscribe requests immediately.
 8. **API name**: `email-subscription-api`
 9. Click **Next**
 
-### 5.2 Configure Routes
+#### 5.2 Configure Routes
 1. On "Configure routes" page, you'll see a default route
 2. Click **Next** (we'll add more routes later)
 
-### 5.3 Configure Stages
+#### 5.3 Configure Stages
 1. **Stage name**: `$default` (already filled)
 2. **Auto-deploy**: Enabled (checked)
 3. Click **Next**
 
-### 5.4 Review and Create
+#### 5.4 Review and Create
 1. Review settings
 2. Click **Create**
 3. Wait for creation to complete
 
-### 5.5 Add Additional Routes
+#### 5.5 Add Additional Routes
 1. In your API, click **Routes** in left menu
 2. Click **Create** button
 3. Add these routes one by one:
@@ -204,11 +377,116 @@ bounced emails from our list. We honor all unsubscribe requests immediately.
 - Integration: Select your Lambda function
 - Click **Create**
 
-### 5.6 Get Your API URL
+#### 5.6 Grant Lambda Invoke Permission (CRITICAL)
+1. Go back to Lambda Console
+2. Open your `email-subscription-handler` function
+3. Click **Configuration** tab
+4. Click **Permissions** in left menu
+5. Scroll down to **Resource-based policy statements**
+6. Click **Add permissions**
+7. Select **AWS service**
+8. Service: **API Gateway**
+9. Statement ID: `apigateway-invoke`
+10. Principal: `apigateway.amazonaws.com`
+11. Source ARN: `arn:aws:execute-api:us-east-1:YOUR_ACCOUNT_ID:YOUR_API_ID/*/*`
+    - Replace `YOUR_ACCOUNT_ID` with your AWS account ID
+    - Replace `YOUR_API_ID` with your API Gateway ID from Step 5.4
+12. Action: `lambda:InvokeFunction`
+13. Click **Save**
+
+**Note**: Without this permission, API Gateway cannot call your Lambda function and you'll get "Not Found" errors!
+
+#### 5.7 Get Your API URL
 1. Click **Stages** in left menu
 2. Click **$default**
 3. Copy the **Invoke URL** (looks like: `https://abc123xyz.execute-api.us-east-1.amazonaws.com`)
 4. **SAVE THIS URL** - you'll need it for the frontend
+
+### 💻 PowerShell CLI Method
+
+```powershell
+# Get Lambda function ARN
+$lambdaArn = (Get-LMFunction -FunctionName "email-subscription-handler").FunctionArn
+$accountId = $lambdaArn.Split(':')[4]
+
+Write-Host "Creating API Gateway..." -ForegroundColor Cyan
+
+# Create HTTP API
+$api = New-AG2Api `
+    -Name "email-subscription-api" `
+    -ProtocolType "HTTP" `
+    -Target $lambdaArn `
+    -Region us-east-1
+
+Write-Host "✓ API created: $($api.ApiId)" -ForegroundColor Green
+
+# Grant API Gateway permission to invoke Lambda
+Write-Host "Granting API Gateway permissions..." -ForegroundColor Cyan
+
+Add-LMPermission `
+    -FunctionName "email-subscription-handler" `
+    -StatementId "apigateway-invoke" `
+    -Action "lambda:InvokeFunction" `
+    -Principal "apigateway.amazonaws.com" `
+    -SourceArn "arn:aws:execute-api:us-east-1:${accountId}:$($api.ApiId)/*/*" `
+    -Region us-east-1
+
+Write-Host "✓ Permissions granted" -ForegroundColor Green
+
+# Get integration ID
+$integrations = Get-AG2IntegrationList -ApiId $api.ApiId
+$integrationId = $integrations[0].IntegrationId
+
+# Create routes
+Write-Host "Creating routes..." -ForegroundColor Cyan
+
+# POST /subscribe
+New-AG2Route `
+    -ApiId $api.ApiId `
+    -RouteKey "POST /subscribe" `
+    -Target "integrations/$integrationId" `
+    -Region us-east-1
+
+# GET /track/open/{tracking_id}
+New-AG2Route `
+    -ApiId $api.ApiId `
+    -RouteKey "GET /track/open/{tracking_id}" `
+    -Target "integrations/$integrationId" `
+    -Region us-east-1
+
+# GET /track/click/{tracking_id}
+New-AG2Route `
+    -ApiId $api.ApiId `
+    -RouteKey "GET /track/click/{tracking_id}" `
+    -Target "integrations/$integrationId" `
+    -Region us-east-1
+
+# OPTIONS /{proxy+}
+New-AG2Route `
+    -ApiId $api.ApiId `
+    -RouteKey "OPTIONS /{proxy+}" `
+    -Target "integrations/$integrationId" `
+    -Region us-east-1
+
+Write-Host "✓ Routes created" -ForegroundColor Green
+
+# Get API endpoint
+$apiEndpoint = "https://$($api.ApiId).execute-api.us-east-1.amazonaws.com"
+
+Write-Host "`n" -NoNewline
+Write-Host "========================================" -ForegroundColor Green
+Write-Host "API Gateway Setup Complete!" -ForegroundColor Green
+Write-Host "========================================" -ForegroundColor Green
+Write-Host "API Endpoint: $apiEndpoint" -ForegroundColor Cyan
+Write-Host "`nSave this URL for the frontend configuration!" -ForegroundColor Yellow
+Write-Host "========================================" -ForegroundColor Green
+
+# Copy to clipboard (Windows only)
+$apiEndpoint | Set-Clipboard
+Write-Host "✓ API endpoint copied to clipboard" -ForegroundColor Green
+```
+
+**Note**: The PowerShell method automatically grants Lambda invoke permission in the `Add-LMPermission` command above. If using Console method, you MUST complete Step 5.6 manually!
 
 ---
 
@@ -283,9 +561,18 @@ pip install boto3
 ```
 
 ### 8.2 Configure AWS Credentials
+
+**Bash:**
 ```bash
 aws configure
 ```
+
+**PowerShell:**
+```powershell
+Set-AWSCredential -AccessKey YOUR_ACCESS_KEY -SecretKey YOUR_SECRET_KEY -StoreAs default
+Initialize-AWSDefaultConfiguration -Region us-east-1
+```
+
 Enter your AWS Access Key ID and Secret Access Key
 
 ### 8.3 Run Analytics Script
@@ -318,18 +605,26 @@ You should see:
 4. Verify SES is out of sandbox mode (Step 2)
 
 ### API Gateway Error
-**Problem**: "Failed to subscribe" error on website
+**Problem**: "Failed to subscribe" or "Not found" error
 
 **Solutions**:
-1. Check API Gateway URL is correct in frontend code
-2. Verify Lambda function has DynamoDB permissions
-3. Check browser console for errors (F12)
-4. Test API directly:
+1. **Check Lambda permissions**: Verify Step 5.6 was completed (API Gateway invoke permission)
+2. **Test Lambda directly**:
+   ```powershell
+   $payload = @{rawPath='/subscribe'; requestContext=@{http=@{method='POST'}}; body='{"email":"test@example.com"}'} | ConvertTo-Json -Depth 5 -Compress
+   Invoke-LMFunction -FunctionName 'email-subscription-handler' -Payload $payload -Region us-east-1
+   ```
+3. Check API Gateway URL is correct in frontend code
+4. Verify Lambda function has DynamoDB and SES permissions
+5. Check browser console for errors (F12)
+6. Test API directly:
    ```bash
    curl -X POST https://YOUR-API-URL/subscribe \
      -H "Content-Type: application/json" \
      -d '{"email":"test@example.com"}'
    ```
+
+**Note**: The `lambda_function.py` provided handles both API Gateway v1 and v2 formats automatically.
 
 ### Tracking Not Working
 **Problem**: Opens/clicks not recorded in DynamoDB
