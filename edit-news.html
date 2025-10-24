@@ -271,8 +271,9 @@
         var newsId = null;
 
         document.addEventListener('DOMContentLoaded', function() {
-            var token = localStorage.getItem('token');
-            var userRole = localStorage.getItem('userRole');
+            var token = localStorage.getItem('auth_token');
+            var userData = localStorage.getItem('user_data');
+            var userRole = userData ? JSON.parse(userData).role : null;
             
             if (!token || !['admin', 'super_user'].includes(userRole)) {
                 alert('Admin access required');
@@ -320,7 +321,7 @@
         });
 
         function loadNews() {
-            var token = localStorage.getItem('token');
+            var token = localStorage.getItem('auth_token');
             
             fetch(NEWS_API + '?action=get&news_id=' + newsId, {
                 headers: {
@@ -413,7 +414,7 @@
         });
 
         function updateNews() {
-            var token = localStorage.getItem('token');
+            var token = localStorage.getItem('auth_token');
             
             var newsData = {
                 news_id: newsId,
@@ -461,7 +462,7 @@
             var reader = new FileReader();
             reader.onload = function(e) {
                 var imageData = e.target.result;
-                var token = localStorage.getItem('token');
+                var token = localStorage.getItem('auth_token');
                 
                 document.getElementById('imagePreview').innerHTML = 
                     '<img src="' + imageData + '" style="max-width: 200px; border-radius: 10px;">';
@@ -495,9 +496,8 @@
         }
 
         function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('userRole');
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
             window.location.href = 'login.html';
         }
     </script>

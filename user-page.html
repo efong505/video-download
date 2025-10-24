@@ -279,23 +279,36 @@
         });
 
         async function loadUserData() {
+            // If viewing own page, use localStorage data
+            if (currentUser && currentUser.email === userEmail) {
+                const fullName = [currentUser.first_name, currentUser.last_name].filter(n => n && n.trim()).join(' ');
+                if (fullName) {
+                    userName = fullName;
+                    document.getElementById('user-name').textContent = fullName;
+                    return;
+                }
+            }
+            
             // Try to get user's actual name from auth API
             try {
-                const response = await fetch('https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth?action=get_user_name&email=' + encodeURIComponent(userEmail));
+                const response = await fetch('https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth?action=get_user&email=' + encodeURIComponent(userEmail));
                 const data = await response.json();
                 
-                if (data.name && data.name.trim()) {
-                    userName = data.name;
-                    document.getElementById('user-name').textContent = data.name;
-                } else {
-                    userName = userEmail.split('@')[0];
-                    document.getElementById('user-name').textContent = userEmail.split('@')[0];
+                if (data && data.first_name) {
+                    const fullName = [data.first_name, data.last_name].filter(n => n && n.trim()).join(' ');
+                    if (fullName) {
+                        userName = fullName;
+                        document.getElementById('user-name').textContent = fullName;
+                        return;
+                    }
                 }
             } catch (error) {
                 console.warn('Could not load user name:', error);
-                userName = userEmail.split('@')[0];
-                document.getElementById('user-name').textContent = userEmail.split('@')[0];
             }
+            
+            // Fallback to email prefix
+            userName = userEmail.split('@')[0];
+            document.getElementById('user-name').textContent = userEmail.split('@')[0];
         }
 
         async function loadUserVideos() {

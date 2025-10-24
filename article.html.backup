@@ -20,8 +20,84 @@
     <meta name="twitter:image" content="https://d271vky579caz9.cloudfront.net/images/logo.png" id="twitter-image">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            padding-top: 80px;
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .dashboard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .nav-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .nav-link.logout {
+            background: rgba(220,53,69,0.8);
+            border-color: rgba(220,53,69,0.9);
+        }
+        .nav-link.logout:hover {
+            background: rgba(220,53,69,1);
+        }
+        @media (max-width: 768px) {
+            .nav-brand {
+                font-size: 1.4rem;
+            }
+            .nav-links {
+                gap: 8px;
+                justify-content: center;
+                width: 100%;
+                margin-top: 10px;
+            }
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+            .dashboard-nav {
+                justify-content: center;
+                text-align: center;
+            }
+        }
+        @media (max-width: 576px) {
+            .nav-links {
+                gap: 5px;
+            }
+            .nav-link {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+            }
+            .nav-brand {
+                font-size: 1.2rem;
+            }
         }
         .article-content {
             background: white;
@@ -89,8 +165,24 @@
     </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <div id="navbar-container" data-page="article" data-icon="📖"></div>
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="dashboard-nav">
+                <h1 class="nav-brand">📖 Article</h1>
+                <div class="nav-links" id="nav-links">
+                    <a href="/" class="nav-link">🏠 Home</a>
+                    <a href="videos.html" class="nav-link">🎬 Videos</a>
+                    <a href="articles.html" class="nav-link">📝 Articles</a>
+                    <a href="create-article.html" class="nav-link">✍️ Write Article</a>
+                    <a href="authors.html" class="nav-link">👥 Authors</a>
+                    <a href="resources.html" class="nav-link">📚 Resources</a>
+                    <a href="profile.html" class="nav-link">👤 Profile</a>
+                    <a href="#" onclick="viewMyPage()" class="nav-link">📄 My Page</a>
+                    <a href="#" onclick="logout()" class="nav-link logout">🚪 Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="container">
         <div class="row">
@@ -319,7 +411,11 @@
             }
         }
         
-
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
         
         function updateMetaTags(article) {
             // Update page title
@@ -399,7 +495,33 @@
             '</div>';
         }
         
-
+        function updateNavigation() {
+            const isAuthenticated = localStorage.getItem('auth_token');
+            const navLinks = document.getElementById('nav-links');
+            
+            if (!isAuthenticated) {
+                // Replace authenticated navigation with public navigation
+                navLinks.innerHTML = 
+                    '<a href="/" class="nav-link">🏠 Home</a>' +
+                    '<a href="articles.html" class="nav-link">📝 Articles</a>' +
+                    '<a href="authors.html" class="nav-link">👥 Authors</a>' +
+                    '<a href="login.html" class="nav-link">🔑 Login</a>' +
+                    '<a href="register.html" class="nav-link">📝 Sign Up</a>';
+            } else {
+                // Add admin link if user is admin or super_user
+                const userData = localStorage.getItem('user_data');
+                if (userData) {
+                    const user = JSON.parse(userData);
+                    if (user.role === 'admin' || user.role === 'super_user') {
+                        const adminLink = document.createElement('a');
+                        adminLink.href = 'admin.html';
+                        adminLink.className = 'nav-link';
+                        adminLink.innerHTML = '⚙️ Admin';
+                        navLinks.insertBefore(adminLink, navLinks.lastElementChild);
+                    }
+                }
+            }
+        }
         
         async function loadComments() {
             if (!currentArticleId) return;
@@ -671,17 +793,11 @@
         
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            fetch('navbar.html')
-                .then(r => r.text())
-                .then(html => {
-                    document.getElementById('navbar-container').innerHTML = html;
-                    initNavbar();
-                });
+            updateNavigation();
             loadArticle();
         });
         
 
     </script>
-    <script src="navbar.js"></script>
 </body>
 </html>

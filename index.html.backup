@@ -259,7 +259,31 @@
 
 <body>
     <!-- Navigation -->
-    <div id="navbar-container" data-page="index" data-icon-style="fontawesome"></div>
+    <nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <img src="techcrosslogo.jpg" alt="Christian Conservatives Today" class="navbar-logo">
+                Christian Conservatives Today
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto" id="nav-links">
+                    <li class="nav-item"><a class="nav-link" href="videos.html"><i
+                                class="fas fa-video me-1"></i>Videos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="articles.html"><i
+                                class="fas fa-book me-1"></i>Articles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="election-map.html"><i
+                                class="fas fa-map me-1"></i>Election Map</a></li>
+                    <li class="nav-item"><a class="nav-link" href="resources.html"><i
+                                class="fas fa-book-open me-1"></i>Resources</a></li>
+                    <li class="nav-item"><a class="nav-link" href="login.html"><i
+                                class="fas fa-sign-in-alt me-1"></i>Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
     <!-- Hero Section -->
     <section class="hero-section">
@@ -701,14 +725,45 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="navbar.js"></script>
     <script>
-        fetch('navbar.html')
-            .then(r => r.text())
-            .then(html => {
-                document.getElementById('navbar-container').innerHTML = html;
-                initNavbar();
-            });
+        // Authentication check and navigation update
+        document.addEventListener('DOMContentLoaded', function () {
+            const token = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+            const navLinks = document.getElementById('nav-links');
+
+            if (token && userData) {
+                try {
+                    const user = JSON.parse(userData);
+                    // User is logged in - update navigation
+                    const loginItem = navLinks.querySelector('li:last-child');
+
+                    // Replace login with user menu
+                    loginItem.innerHTML = `
+                        <div class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user me-1"></i>${user.first_name || user.email}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="profile.html"><i class="fas fa-user-circle me-2"></i>Profile</a></li>
+                                ${user.role === 'admin' || user.role === 'super_user' ?
+                            '<li><a class="dropdown-item" href="admin.html"><i class="fas fa-cog me-2"></i>Admin Dashboard</a></li>' : ''}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                            </ul>
+                        </div>
+                    `;
+                } catch (error) {
+                    console.log('Error parsing user data');
+                }
+            }
+        });
+
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.reload();
+        }
     </script>
 </body>
 

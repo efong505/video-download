@@ -412,17 +412,17 @@
         }
         
         async function editSubscriber(email, firstName, lastName) {
-            const newFirstName = prompt('First Name:', firstName);
+            const newFirstName = prompt('Edit First Name:', firstName);
             if (newFirstName === null) return;
             
-            const newLastName = prompt('Last Name:', lastName);
+            const newLastName = prompt('Edit Last Name (leave empty to clear):', lastName);
             if (newLastName === null) return;
             
             try {
                 const response = await fetch(`${API_BASE}/subscribers/${email}`, {
                     method: 'PUT',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({first_name: newFirstName, last_name: newLastName})
+                    body: JSON.stringify({first_name: newFirstName.trim(), last_name: newLastName.trim()})
                 });
                 
                 if (response.ok) {

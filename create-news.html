@@ -292,8 +292,9 @@
         // Initialize Quill editor
         document.addEventListener('DOMContentLoaded', function() {
             // Check authentication
-            var token = localStorage.getItem('token');
-            var userRole = localStorage.getItem('userRole');
+            var token = localStorage.getItem('auth_token');
+            var userData = localStorage.getItem('user_data');
+            var userRole = userData ? JSON.parse(userData).role : null;
             
             if (!token || !['admin', 'super_user'].includes(userRole)) {
                 alert('Admin access required');
@@ -399,7 +400,7 @@
         });
 
         function createNews() {
-            var token = localStorage.getItem('token');
+            var token = localStorage.getItem('auth_token');
             
             var scheduledPublish = document.getElementById('scheduled_publish').value;
             var state = document.getElementById('state').value;
@@ -451,7 +452,7 @@
             var reader = new FileReader();
             reader.onload = function(e) {
                 var imageData = e.target.result;
-                var token = localStorage.getItem('token');
+                var token = localStorage.getItem('auth_token');
                 
                 // Show preview
                 document.getElementById('imagePreview').innerHTML = 
@@ -487,9 +488,8 @@
         }
 
         function logout() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('userEmail');
-            localStorage.removeItem('userRole');
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
             window.location.href = 'login.html';
         }
     </script>

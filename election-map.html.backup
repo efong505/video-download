@@ -64,7 +64,6 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 20px 0;
-            padding-top: 90px;
             margin-bottom: 30px;
         }
 
@@ -261,17 +260,26 @@
         </div>
     </div>
 
-    <!-- Unified Navbar - Revert: restore from election-map.html.backup -->
-    <div id="navbar-container" data-page="election-map" data-icon="🗺️"></div>
-    <script src="navbar.js"></script>
-    <script>
-        fetch('navbar.html')
-            .then(r => r.text())
-            .then(html => {
-                document.getElementById('navbar-container').innerHTML = html;
-                initNavbar();
-            });
-    </script>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="/" style="color: #667eea; font-weight: bold;">🗺️ Election Map</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="videos.html">Videos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="articles.html">Articles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="news.html">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="resources.html">Resources</a></li>
+                    <li class="nav-item" id="admin-link" style="display:none;"><a class="nav-link"
+                            href="admin-contributors.html">Admin</a></li>
+                    <li class="nav-item" id="auth-link"><a class="nav-link" href="login.html">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
     <div class="dashboard-header">
         <div class="container">
             <h1>🗺️ Christian Conservative Election Map</h1>
@@ -380,7 +388,19 @@
     <script>
         const CONTRIBUTORS_API = 'https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors';
 
-
+        // Check authentication status and update nav
+        function updateAuthLink() {
+            const token = localStorage.getItem('auth_token');
+            const userRole = localStorage.getItem('userRole');
+            const authLink = document.getElementById('auth-link');
+            const adminLink = document.getElementById('admin-link');
+            if (token) {
+                authLink.innerHTML = '<a class="nav-link" href="#" onclick="logout()">Logout</a>';
+                if (userRole === 'super_user' || userRole === 'admin' || userRole === 'editor') {
+                    adminLink.style.display = 'block';
+                }
+            }
+        }
 
 
         function showErrorMessage() {
@@ -393,6 +413,9 @@
 
         function logout() {
             localStorage.removeItem('auth_token');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userName');
             localStorage.removeItem('user_data');
             window.location.href = 'login.html';
         }
@@ -1027,6 +1050,7 @@
 
         // Allow Enter key to submit email
         document.addEventListener('DOMContentLoaded', () => {
+            updateAuthLink();
             loadData();
             updateLastUpdateDate();
 

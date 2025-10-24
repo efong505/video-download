@@ -10,7 +10,6 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 20px 0;
-            padding-top: 90px;
             margin-bottom: 30px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
@@ -278,23 +277,11 @@
     </style>
 </head>
 <body>
-    <!-- Unified Navbar - Revert: restore from articles.html.backup -->
-    <div id="navbar-container" data-page="articles"></div>
-    <script src="navbar.js"></script>
-    <script>
-        fetch('navbar.html')
-            .then(r => r.text())
-            .then(html => {
-                document.getElementById('navbar-container').innerHTML = html;
-                initNavbar();
-            });
-    </script>
-    
     <div class="dashboard-header">
         <div class="container">
             <div class="dashboard-nav">
                 <h1 class="nav-brand">📝 Articles & Blog</h1>
-                <div class="nav-links" id="nav-links" style="display:none;">
+                <div class="nav-links" id="nav-links">
                     <a href="/" class="nav-link">🏠 Home</a>
                     <a href="videos.html" class="nav-link">🎬 Videos</a>
                     <a href="create-article.html" class="nav-link">✍️ Write Article</a>
