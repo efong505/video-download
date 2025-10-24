@@ -1,90 +1,42 @@
-South Dakota, Wyoming, Maine 2025-2026 - Two Safe Holds + Critical Battleground
+Fix mobile header spacing issues and prepare CSS/JS consolidation
 
-Created comprehensive election data for THREE states completing most Senate coverage:
+FIXES:
+- Fixed mobile header spacing on videos.html, articles.html, resources.html
+- Fixed mobile header spacing on admin-templates.html, admin-resources.html
+- Fixed admin.html header to account for both navbar and secondary menu on mobile
+- Changed spacing from desktop-default to mobile-only media queries (@max-width: 991px)
+- Added Android-specific padding (@max-width: 422px) for very small screens
 
-=== SOUTH DAKOTA ===
-RACES (3 total):
-- SD-SEN-2026: U.S. Senator (CRITICAL - Rounds safe hold)
-- SD-AL-2026: U.S. Representative At-Large
-- SD-GOV-2026: Governor (Noem re-election)
+TECHNICAL CHANGES:
+- Moved padding-top and margin-top into @media queries for mobile-only application
+- Desktop views now display with normal spacing (no extra padding)
+- Mobile views properly account for fixed navbar (56px) and secondary menu (~49px on admin)
+- All pages manually tested and verified working correctly
 
-CANDIDATES (2 total):
-- Mike Rounds (R) - U.S. Senator ⭐⭐⭐⭐⭐ STRONG (Former Governor)
-- Kristi Noem (R) - Governor ⭐⭐⭐⭐⭐ STRONG (Strong conservative)
+CONSOLIDATION PREP:
+- Created compare-inline-css.py script to analyze inline CSS across all pages
+- Script extracts CSS rules, identifies duplicates, and calculates consolidation potential
+- Prepared for Phase 1 of CSS/JS consolidation plan
+- Ready to generate detailed comparison report for shared styles
 
-SUMMARY: 1,446 characters
-- Trump +26 state, safe Republican hold
-- Rounds former Governor, fiscal conservative
-- Noem strong conservative leader
-
-=== WYOMING ===
-RACES (3 total):
-- WY-SEN-2026: U.S. Senator (CRITICAL - Barrasso safe hold)
-- WY-AL-2026: U.S. Representative At-Large
-- WY-GOV-2026: Governor (Gordon re-election)
-
-CANDIDATES (2 total):
-- John Barrasso (R) - U.S. Senator ⭐⭐⭐⭐⭐ STRONG (Senate leadership)
-- Mark Gordon (R) - Governor ⭐⭐⭐⭐⭐ STRONG (Rancher)
-
-SUMMARY: 1,423 characters
-- Trump +43 state, STRONGEST Republican state
-- Barrasso physician, Senate Republican leadership
-- Energy jobs (coal, oil, gas) critical
-
-=== MAINE ===
-RACES (4 total):
-- ME-SEN-2026: U.S. Senator (CRITICAL - Collins MUST HOLD)
-- ME-01-2026: U.S. Representative District 1
-- ME-02-2026: U.S. Representative District 2 (Competitive)
-- ME-GOV-2026: Governor (Competitive flip opportunity)
-
-CANDIDATES (1 total):
-- Susan Collins (R) - U.S. Senator ⭐⭐⭐ MODERATE (CRITICAL hold)
-
-SUMMARY: 2,048 characters
-- Biden +9 state, MOST VULNERABLE Republican senator
-- Collins moderate but MUST HOLD for Senate majority
-- Losing Collins = Democrat Senate control
-- "Hold your nose and vote" - Senate control depends on it
-
-=== COMBINED IMPACT ===
-Two safe Senate holds + one critical battleground:
-- South Dakota: Trump +26, Rounds safe
-- Wyoming: Trump +43, Barrasso safe (strongest R state)
-- Maine: Biden +9, Collins MUST HOLD (most vulnerable R)
-- Combined: 10 races, 5 candidates, 3 summaries
-
-STRATEGIC IMPORTANCE:
-- South Dakota & Wyoming: Safe Senate holds
-- Maine: MOST CRITICAL Senate defense - Collins most vulnerable R
-- Collins moderate but essential for Senate majority
-- Losing Maine = Democrat Senate control = Biden agenda passes
-- Must hold despite Collins' moderate record
+FILES MODIFIED:
+- videos.html - Mobile-only header spacing
+- articles.html - Mobile-only header spacing  
+- resources.html - Mobile-only header spacing
+- admin-templates.html - Mobile-only header spacing
+- admin-resources.html - Mobile-only header spacing
+- admin.html - Mobile header spacing with secondary menu adjustment
 
 FILES CREATED:
-- Scripts/upload_sd_wy_me_2025_2026.py (10 races, 5 candidates)
-- Scripts/upload_sd_wy_me_summaries.py (3 summaries)
+- compare-inline-css.py - CSS analysis and comparison tool
 
-VERIFICATION:
-✅ South Dakota: 3 races, 2 candidates, summary uploaded
-✅ Wyoming: 3 races, 2 candidates, summary uploaded
-✅ Maine: 4 races, 1 candidate, summary uploaded
-✅ All summaries include 8 key focus areas
+DOCUMENTATION:
+- CSS-JS-AUDIT-REPORT.md - Already exists (31 pages analyzed)
+- CSS-JS-CONSOLIDATION-PLAN.md - Already exists (5-week implementation plan)
+- Ready to generate CSS-INLINE-COMPARISON.md with detailed findings
 
-TOTAL STATES WITH COMPREHENSIVE GUIDES: 27
-(Arizona, California, Florida, Georgia, Hawaii, Michigan, Montana, Nebraska, Nevada, New Mexico, North Carolina, Ohio, Pennsylvania, Texas, Virginia, Wisconsin, West Virginia, Alaska, South Carolina, Iowa, Kansas, Kentucky, Louisiana, Tennessee, Oklahoma, South Dakota, Wyoming, Maine)
-
-2026 SENATE RACE COVERAGE:
-✅ COMPLETE: 27 of 33 Senate races covered
-✅ Safe Republican Holds: All covered
-✅ Critical Battlegrounds: Maine (Collins) covered
-❌ REMAINING: 6 Democrat-held seats
-  - New Hampshire (Shaheen D - pickup opportunity)
-  - Minnesota (Klobuchar D - long shot)
-  - Colorado (Hickenlooper D - difficult)
-  - Delaware (Carper D - safe D)
-  - New Jersey (Booker D - safe D)
-  - Rhode Island (Whitehouse D - safe D)
-
-RECOMMENDATION: Focus on New Hampshire (Shaheen) as best pickup opportunity
+NEXT STEPS:
+1. Run compare-inline-css.py to generate comparison report
+2. Review findings and identify high-priority shared styles
+3. Create common-styles.css with truly shared CSS
+4. Begin incremental page updates (Phase 2 of consolidation plan)
