@@ -73,6 +73,18 @@ def handle_unsubscribe(event):
         # Log unsubscribe event
         log_event(email, 'unsubscribed', 'user-action')
         
+        # Send notification email
+        try:
+            ses.send_email(
+                Source=FROM_EMAIL,
+                Destination={'ToAddresses': ['contact@christianconservativestoday.com']},
+                Message={
+                    'Subject': {'Data': f'Unsubscribe: {email}'},
+                    'Body': {'Text': {'Data': f'{email} unsubscribed on {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}'}}}
+            )
+        except:
+            pass
+        
         return cors_response(200, {'message': 'Successfully unsubscribed', 'email': email})
         
     except Exception as e:
@@ -249,7 +261,7 @@ def send_welcome_email(email):
     
     # Generate tracked links
     election_map_link = create_tracked_link(email, campaign_id, f"{DOMAIN}/election-map.html")
-    unsubscribe_link = f"{API_GATEWAY}/unsubscribe?email={email}"
+    unsubscribe_link = f"{DOMAIN}/unsubscribe.html?email={email}"
     
     # HTML email body
     html_body = f"""
