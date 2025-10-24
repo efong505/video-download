@@ -17,6 +17,7 @@ events_table = dynamodb.Table('email-events')
 
 # Configuration
 DOMAIN = 'https://christianconservativestoday.com'
+API_GATEWAY = 'https://niexv1rw75.execute-api.us-east-1.amazonaws.com'
 FROM_EMAIL = 'Christian Conservatives Today <contact@christianconservativestoday.com>'
 
 def lambda_handler(event, context):
@@ -248,7 +249,7 @@ def send_welcome_email(email):
     
     # Generate tracked links
     election_map_link = create_tracked_link(email, campaign_id, f"{DOMAIN}/election-map.html")
-    unsubscribe_link = f"{DOMAIN}/unsubscribe?email={email}"
+    unsubscribe_link = f"{API_GATEWAY}/unsubscribe?email={email}"
     
     # HTML email body
     html_body = f"""

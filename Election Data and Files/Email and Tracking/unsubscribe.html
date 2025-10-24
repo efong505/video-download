@@ -58,12 +58,7 @@
             }
             
             try {
-                const response = await fetch(API_ENDPOINT + '/unsubscribe?email=' + encodeURIComponent(email), {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
+                const response = await fetch(API_ENDPOINT + '/unsubscribe?email=' + encodeURIComponent(email));
                 
                 if (response.ok) {
                     const form = document.getElementById('unsubscribe-form');
