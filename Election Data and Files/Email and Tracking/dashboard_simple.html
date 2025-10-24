@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Subscriber Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
         .stat-card { border-left: 4px solid #667eea; transition: transform 0.2s; }
         .stat-card:hover { transform: translateY(-5px); }
         .subscriber-row:hover { background: #f8f9fa; cursor: pointer; }
+        #quill-editor { height: 300px; }
     </style>
 </head>
 <body>
@@ -121,9 +123,66 @@
 
             <!-- Campaigns Tab -->
             <div class="tab-pane fade" id="campaigns">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-light"><strong>Campaign Performance</strong></div>
-                    <div class="card-body" id="campaigns-list">Loading...</div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card shadow-sm mb-3">
+                            <div class="card-header bg-primary text-white"><strong>📧 Send New Campaign</strong></div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Campaign ID</label>
+                                    <input type="text" id="campaign-id" class="form-control" placeholder="e.g., jan-2025-update">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Subject Line</label>
+                                    <input type="text" id="campaign-subject" class="form-control" placeholder="e.g., Election Update">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Template</label>
+                                    <select id="template-select" class="form-select" onchange="loadTemplate()">
+                                        <option value="">Custom (Start from scratch)</option>
+                                        <option value="election_update">Election Update (Purple)</option>
+                                        <option value="urgent_alert">Urgent Alert (Red)</option>
+                                        <option value="newsletter">Newsletter (Professional)</option>
+                                        <option value="prayer_action">Prayer & Action (Spiritual)</option>
+                                    </select>
+                                    <button class="btn btn-sm btn-outline-info mt-2 w-100" onclick="previewTemplate()" id="preview-template-btn" style="display: none;">👁️ Preview Template Design</button>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Content Mode</label>
+                                    <div class="btn-group w-100" role="group">
+                                        <input type="radio" class="btn-check" name="content-mode" id="mode-visual" checked>
+                                        <label class="btn btn-outline-primary" for="mode-visual" onclick="switchMode('visual')">📝 Visual</label>
+                                        <input type="radio" class="btn-check" name="content-mode" id="mode-html">
+                                        <label class="btn btn-outline-primary" for="mode-html" onclick="switchMode('html')">💻 HTML</label>
+                                        <input type="radio" class="btn-check" name="content-mode" id="mode-markdown">
+                                        <label class="btn btn-outline-primary" for="mode-markdown" onclick="switchMode('markdown')">📄 Markdown</label>
+                                    </div>
+                                    <small class="text-muted d-block mt-1">💡 Switch between modes anytime. Visual mode renders HTML for editing.</small>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Email Content</label>
+                                    <div id="editor-container-visual" style="display: block;">
+                                        <div id="quill-editor"></div>
+                                    </div>
+                                    <div id="editor-container-code" style="display: none;">
+                                        <textarea id="campaign-content" class="form-control" rows="12" placeholder="Enter your content here..."></textarea>
+                                    </div>
+                                    <small class="text-muted">Available placeholders: {{TITLE}}, {{CONTENT}}, {{CTA_TEXT}}, {{CTA_LINK}}, {{PRAYER}}, {{ACTION_STEPS}}, {{DATE}}</small>
+                                </div>
+                                <div class="mb-3">
+                                    <button class="btn btn-sm btn-outline-secondary" onclick="previewEmail()">👁️ Preview</button>
+                                </div>
+                                <button class="btn btn-primary w-100" onclick="sendCampaign()">📤 Send to All Active Subscribers</button>
+                                <small class="text-muted d-block mt-2">Will send to <strong id="active-count">-</strong> active subscribers</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-light"><strong>Campaign Performance</strong></div>
+                            <div class="card-body" id="campaigns-list">Loading...</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -146,17 +205,15 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="email_templates.js"></script>
     <script>
         const API_BASE = 'http://localhost:5000/api';
         let allSubscribers = [];
         let allStats = {};
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadAllData();
-            document.getElementById('search-input').addEventListener('input', (e) => {
-                filterSubscribers(e.target.value);
-            });
-        });
+
 
         async function loadAllData() {
             try {
@@ -183,10 +240,15 @@
         }
 
         function updateStats() {
+            const active = allStats.active || 0;
             document.getElementById('stat-total').textContent = allStats.total || 0;
-            document.getElementById('stat-active').textContent = allStats.active || 0;
+            document.getElementById('stat-active').textContent = active;
             document.getElementById('stat-opens').textContent = allStats.total_opens || 0;
             document.getElementById('stat-clicks').textContent = allStats.total_clicks || 0;
+            
+            // Update active count in campaign form
+            const activeCountEl = document.getElementById('active-count');
+            if (activeCountEl) activeCountEl.textContent = active;
         }
 
         function updateRecentSubscribers() {
@@ -269,6 +331,7 @@
                     <td>${s.total_opens || 0}</td>
                     <td>${s.total_clicks || 0}</td>
                     <td>
+                        <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); resendEmail('${s.email}')">Resend</button>
                         ${s.status === 'active' 
                             ? `<button class="btn btn-sm btn-danger" onclick="event.stopPropagation(); unsubscribe('${s.email}')">Unsubscribe</button>`
                             : `<button class="btn btn-sm btn-success" onclick="event.stopPropagation(); resubscribe('${s.email}')">Resubscribe</button>`
@@ -354,6 +417,255 @@
             }
         }
 
+        async function resendEmail(email) {
+            if (!confirm(`Resend welcome email to ${email}?`)) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/subscribers/${email}/resend`, { method: 'POST' });
+                if (response.ok) {
+                    alert('✓ Welcome email sent successfully!');
+                } else {
+                    alert('✗ Failed to send email');
+                }
+            } catch (error) {
+                alert('✗ Error sending email');
+            }
+        }
+
+        let currentMode = 'visual';
+        let quillEditor = null;
+        
+        // Initialize Quill on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAllData();
+            document.getElementById('search-input').addEventListener('input', (e) => {
+                filterSubscribers(e.target.value);
+            });
+            
+            // Initialize Quill
+            quillEditor = new Quill('#quill-editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        [{ 'align': [] }],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            });
+        });
+        let currentTemplate = '';
+
+        function switchMode(mode) {
+            const visualContainer = document.getElementById('editor-container-visual');
+            const codeContainer = document.getElementById('editor-container-code');
+            const codeTextarea = document.getElementById('campaign-content');
+            
+            // Get current content
+            let content = '';
+            if (currentMode === 'visual' && quillEditor) {
+                content = quillEditor.root.innerHTML;
+            } else {
+                content = codeTextarea.value;
+            }
+            
+            // Switch display
+            if (mode === 'visual') {
+                visualContainer.style.display = 'block';
+                codeContainer.style.display = 'none';
+                if (quillEditor) {
+                    if (currentMode === 'markdown' && content && !content.startsWith('<')) {
+                        content = marked.parse(content);
+                    }
+                    // Extract body content from full HTML templates
+                    const bodyMatch = content.match(/<body[^>]*>(.*?)<\/body>/is);
+                    if (bodyMatch) {
+                        content = bodyMatch[1];
+                    }
+                    quillEditor.root.innerHTML = content;
+                }
+            } else {
+                visualContainer.style.display = 'none';
+                codeContainer.style.display = 'block';
+                // If switching from visual to HTML and we have a template, reconstruct full HTML
+                if (currentMode === 'visual' && currentTemplate) {
+                    const template = EMAIL_TEMPLATES[currentTemplate];
+                    const bodyMatch = template.html.match(/<body[^>]*>(.*?)<\/body>/is);
+                    if (bodyMatch) {
+                        content = template.html.replace(bodyMatch[1], content);
+                    }
+                }
+                codeTextarea.value = content;
+            }
+            
+            currentMode = mode;
+        }
+
+        function loadTemplate() {
+            const templateKey = document.getElementById('template-select').value;
+            const previewBtn = document.getElementById('preview-template-btn');
+            
+            if (!templateKey) {
+                if (quillEditor) quillEditor.root.innerHTML = '';
+                document.getElementById('campaign-content').value = '';
+                previewBtn.style.display = 'none';
+                currentTemplate = '';
+                return;
+            }
+            
+            currentTemplate = templateKey;
+            const template = EMAIL_TEMPLATES[templateKey];
+            previewBtn.style.display = 'block';
+            
+            // Load template in current mode
+            if (currentMode === 'visual') {
+                const bodyMatch = template.html.match(/<body[^>]*>(.*?)<\/body>/is);
+                if (quillEditor && bodyMatch) {
+                    quillEditor.root.innerHTML = bodyMatch[1];
+                }
+            } else {
+                document.getElementById('campaign-content').value = template.html;
+            }
+        }
+        
+        function previewTemplate() {
+            if (!currentTemplate) return;
+            
+            const template = EMAIL_TEMPLATES[currentTemplate];
+            let content = template.html;
+            
+            // Replace placeholders with sample data
+            content = content
+                .replace(/{{TITLE}}/g, 'Sample Title - Replace This')
+                .replace(/{{CONTENT}}/g, 'This is sample content. Replace this with your actual message.')
+                .replace(/{{CTA_TEXT}}/g, 'Click Here')
+                .replace(/{{CTA_LINK}}/g, 'https://christianconservativestoday.com/election-map.html')
+                .replace(/{{PRAYER}}/g, 'Sample prayer text - replace with your prayer')
+                .replace(/{{ACTION_STEPS}}/g, '1. First action step\n2. Second action step\n3. Third action step')
+                .replace(/{{DATE}}/g, new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }));
+            
+            const previewWindow = window.open('', 'Template Preview', 'width=700,height=800');
+            previewWindow.document.write(content);
+            previewWindow.document.close();
+        }
+
+        function previewEmail() {
+            let content = '';
+            
+            // Get content based on current mode
+            if (currentMode === 'visual' && quillEditor) {
+                content = quillEditor.root.innerHTML;
+                // If using a template, wrap content back in full HTML structure
+                if (currentTemplate) {
+                    const template = EMAIL_TEMPLATES[currentTemplate];
+                    const bodyMatch = template.html.match(/<body[^>]*>(.*?)<\/body>/is);
+                    if (bodyMatch) {
+                        content = template.html.replace(bodyMatch[1], content);
+                    }
+                } else {
+                    // Wrap simple content in basic email structure
+                    content = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head><meta charset="UTF-8"></head>
+                    <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                        ${content}
+                    </body>
+                    </html>
+                    `;
+                }
+            } else {
+                content = document.getElementById('campaign-content').value;
+                if (currentMode === 'markdown') {
+                    const markdownContent = marked.parse(content);
+                    content = `
+                    <!DOCTYPE html>
+                    <html>
+                    <head><meta charset="UTF-8"></head>
+                    <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                        ${markdownContent}
+                    </body>
+                    </html>
+                    `;
+                }
+            }
+            
+            // Replace placeholders with sample data
+            content = content
+                .replace(/{{TITLE}}/g, 'Sample Title')
+                .replace(/{{CONTENT}}/g, 'This is sample content for preview purposes.')
+                .replace(/{{CTA_TEXT}}/g, 'Click Here')
+                .replace(/{{CTA_LINK}}/g, 'https://christianconservativestoday.com/election-map.html')
+                .replace(/{{PRAYER}}/g, 'Sample prayer text')
+                .replace(/{{ACTION_STEPS}}/g, '1. Step one<br>2. Step two<br>3. Step three')
+                .replace(/{{DATE}}/g, new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' }));
+            
+            const previewWindow = window.open('', 'Email Preview', 'width=700,height=800');
+            previewWindow.document.write(content);
+            previewWindow.document.close();
+        }
+
+        async function sendCampaign() {
+            const campaignId = document.getElementById('campaign-id').value.trim();
+            const subject = document.getElementById('campaign-subject').value.trim();
+            let content = '';
+            
+            // Get content based on current mode
+            if (currentMode === 'visual' && quillEditor) {
+                content = quillEditor.root.innerHTML;
+                // If using a template, wrap content back in full HTML structure
+                if (currentTemplate) {
+                    const template = EMAIL_TEMPLATES[currentTemplate];
+                    const bodyMatch = template.html.match(/<body[^>]*>(.*?)<\/body>/is);
+                    if (bodyMatch) {
+                        content = template.html.replace(bodyMatch[1], content);
+                    }
+                }
+            } else {
+                content = document.getElementById('campaign-content').value.trim();
+                if (currentMode === 'markdown') {
+                    content = marked.parse(content);
+                }
+            }
+            
+            if (!campaignId || !subject || !content) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            if (!confirm(`Send campaign "${subject}" to all active subscribers?`)) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/campaigns/send`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        campaign_id: campaignId,
+                        subject: subject,
+                        html_content: content
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    alert(`✓ Campaign sent!\n\nSent: ${result.sent}\nFailed: ${result.failed}`);
+                    document.getElementById('campaign-id').value = '';
+                    document.getElementById('campaign-subject').value = '';
+                    document.getElementById('campaign-content').value = '';
+                    loadAllData();
+                } else {
+                    alert('✗ Failed to send campaign: ' + result.error);
+                }
+            } catch (error) {
+                alert('✗ Error sending campaign');
+            }
+        }
+        
         function exportCSV() {
             const csv = [
                 ['Email', 'Status', 'Subscribed', 'Source', 'Opens', 'Clicks', 'Last Activity'],

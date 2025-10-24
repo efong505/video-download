@@ -39,13 +39,17 @@
         const urlParams = new URLSearchParams(window.location.search);
         const email = urlParams.get('email');
         
-        if (email) {
-            document.getElementById('email-display').innerHTML = 
-                '<strong>' + email + '</strong>';
-        } else {
-            document.getElementById('email-display').innerHTML = 
-                '<span class="text-danger">No email provided</span>';
-        }
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailDisplay = document.getElementById('email-display');
+            if (emailDisplay) {
+                if (email) {
+                    emailDisplay.innerHTML = '<strong>' + email + '</strong>';
+                } else {
+                    emailDisplay.innerHTML = '<span class="text-danger">No email provided</span>';
+                }
+            }
+        });
         
         async function confirmUnsubscribe() {
             if (!email) {
@@ -55,12 +59,17 @@
             
             try {
                 const response = await fetch(API_ENDPOINT + '/unsubscribe?email=' + encodeURIComponent(email), {
-                    method: 'GET'
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
                 });
                 
                 if (response.ok) {
-                    document.getElementById('unsubscribe-form').style.display = 'none';
-                    document.getElementById('success-message').style.display = 'block';
+                    const form = document.getElementById('unsubscribe-form');
+                    const success = document.getElementById('success-message');
+                    if (form) form.style.display = 'none';
+                    if (success) success.style.display = 'block';
                 } else {
                     alert('Failed to unsubscribe. Please try again.');
                 }

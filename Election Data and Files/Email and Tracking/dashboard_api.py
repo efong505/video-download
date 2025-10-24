@@ -55,6 +55,60 @@ def resubscribe(email):
     )
     return jsonify({'message': 'Resubscribed'})
 
+@app.route('/api/subscribers/<email>/resend', methods=['POST'])
+def resend_welcome(email):
+    """Resend welcome email"""
+    import base64
+    ses = boto3.client('ses', region_name='us-east-1')
+    DOMAIN = 'https://christianconservativestoday.com'
+    FROM_EMAIL = 'Christian Conservatives Today <contact@christianconservativestoday.com>'
+    
+    try:
+        response = subscribers_table.get_item(Key={'email': email})
+        if 'Item' not in response:
+            return jsonify({'error': 'Not found'}), 404
+        
+        campaign_id = 'welcome-email-resend'
+        tracking_id = base64.urlsafe_b64encode(f"{email}|{campaign_id}".encode()).decode()
+        pixel_url = f"{DOMAIN}/track/open/{tracking_id}"
+        election_map_data = f"{email}|{campaign_id}|{DOMAIN}/election-map.html"
+        election_map_link = f"{DOMAIN}/track/click/{base64.urlsafe_b64encode(election_map_data.encode()).decode()}"
+        unsubscribe_link = f"{DOMAIN}/unsubscribe?email={email}"
+        
+        html_body = f"""
+        <html>
+        <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
+            <div style="background: white; padding: 30px; border-radius: 10px;">
+                <h2 style="color: #667eea;">Welcome to Christian Conservatives Today!</h2>
+                <p>Thank you for subscribing to our election updates and voter guides!</p>
+                <ul>
+                    <li>Election updates and critical dates</li>
+                    <li>State-specific voter guides for all 50 states</li>
+                    <li>Pro-life, pro-family candidate information</li>
+                </ul>
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="{election_map_link}" style="display: inline-block; background: #667eea; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px;">View Interactive Election Map</a>
+                </div>
+                <hr style="margin: 30px 0;">
+                <p style="font-size: 12px; color: #999;"><a href="{unsubscribe_link}">Unsubscribe</a></p>
+            </div>
+            <img src="{pixel_url}" width="1" height="1" style="display:none;">
+        </body>
+        </html>
+        """
+        
+        ses.send_email(
+            Source=FROM_EMAIL,
+            Destination={'ToAddresses': [email]},
+            Message={
+                'Subject': {'Data': 'Welcome to Christian Conservatives Today!'},
+                'Body': {'Html': {'Data': html_body}}
+            }
+        )
+        return jsonify({'message': 'Email sent'})
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
 @app.route('/api/events', methods=['GET'])
 def get_events():
     """Get all events"""
@@ -69,6 +123,64 @@ def get_subscriber_events(email):
         ExpressionAttributeValues={':email': email}
     )
     return jsonify(response['Items'])
+
+@app.route('/api/campaigns/send', methods=['POST'])
+def send_campaign():
+    """Send email campaign to all active subscribers"""
+    import base64
+    from datetime import datetime
+    
+    data = request.json
+    subject = data.get('subject', '')
+    html_content = data.get('html_content', '')
+    campaign_id = data.get('campaign_id', f"campaign-{int(datetime.now().timestamp())}")
+    
+    if not subject or not html_content:
+        return jsonify({'error': 'Subject and content required'}), 400
+    
+    ses = boto3.client('ses', region_name='us-east-1')
+    DOMAIN = 'https://christianconservativestoday.com'
+    FROM_EMAIL = 'Christian Conservatives Today <contact@christianconservativestoday.com>'
+    
+    # Get all active subscribers
+    subs = subscribers_table.scan(
+        FilterExpression='#status = :status',
+        ExpressionAttributeNames={'#status': 'status'},
+        ExpressionAttributeValues={':status': 'active'}
+    )['Items']
+    
+    sent_count = 0
+    failed = []
+    
+    for sub in subs:
+        email = sub['email']
+        try:
+            # Add tracking
+            tracking_id = base64.urlsafe_b64encode(f"{email}|{campaign_id}".encode()).decode()
+            pixel_url = f"{DOMAIN}/track/open/{tracking_id}"
+            unsubscribe_link = f"{DOMAIN}/unsubscribe?email={email}"
+            
+            # Inject tracking into HTML
+            tracked_html = html_content.replace('</body>', f'<img src="{pixel_url}" width="1" height="1" style="display:none;"><p style="font-size:11px;color:#999;margin-top:20px;"><a href="{unsubscribe_link}">Unsubscribe</a></p></body>')
+            
+            ses.send_email(
+                Source=FROM_EMAIL,
+                Destination={'ToAddresses': [email]},
+                Message={
+                    'Subject': {'Data': subject},
+                    'Body': {'Html': {'Data': tracked_html}}
+                }
+            )
+            sent_count += 1
+        except Exception as e:
+            failed.append({'email': email, 'error': str(e)})
+    
+    return jsonify({
+        'message': f'Campaign sent to {sent_count} subscribers',
+        'sent': sent_count,
+        'failed': len(failed),
+        'failures': failed
+    })
 
 @app.route('/api/stats', methods=['GET'])
 def get_stats():
@@ -111,9 +223,11 @@ if __name__ == '__main__':
     print("  GET  /api/subscribers/<email>")
     print("  POST /api/subscribers/<email>/unsubscribe")
     print("  POST /api/subscribers/<email>/resubscribe")
+    print("  POST /api/subscribers/<email>/resend")
     print("  GET  /api/events")
     print("  GET  /api/events/<email>")
     print("  GET  /api/stats")
+    print("  POST /api/campaigns/send")
     print("\nPress Ctrl+C to stop\n")
     
     app.run(debug=True, port=5000)
