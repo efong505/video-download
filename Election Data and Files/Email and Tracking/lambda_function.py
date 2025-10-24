@@ -36,6 +36,8 @@ def lambda_handler(event, context):
     # Route to appropriate handler
     if path == '/subscribe' or (method == 'POST' and not path.startswith('/track')):
         return handle_subscription(event)
+    elif path == '/confirm':
+        return handle_confirmation(event)
     elif path == '/unsubscribe':
         return handle_unsubscribe(event)
     elif path.startswith('/track/open/'):
@@ -96,6 +98,8 @@ def handle_subscription(event):
     try:
         body = json.loads(event.get('body', '{}'))
         email = body.get('email', '').strip().lower()
+        first_name = body.get('first_name', '').strip()
+        last_name = body.get('last_name', '').strip()
         
         # Validate email
         if not email or '@' not in email or '.' not in email:
@@ -111,42 +115,61 @@ def handle_subscription(event):
                         'message': 'already_subscribed',
                         'email': email
                     })
+                elif existing.get('status') == 'pending':
+                    # Resend confirmation email
+                    send_confirmation_email(email, first_name)
+                    return cors_response(200, {
+                        'message': 'confirmation_resent',
+                        'email': email
+                    })
                 elif existing.get('status') == 'unsubscribed':
                     # Reactivate unsubscribed user
+                    update_expr = 'SET #status = :status, last_activity = :now'
+                    expr_values = {':status': 'pending', ':now': datetime.now().isoformat()}
+                    if first_name:
+                        update_expr += ', first_name = :fname'
+                        expr_values[':fname'] = first_name
+                    if last_name:
+                        update_expr += ', last_name = :lname'
+                        expr_values[':lname'] = last_name
+                    
                     subscribers_table.update_item(
                         Key={'email': email},
-                        UpdateExpression='SET #status = :status, last_activity = :now',
+                        UpdateExpression=update_expr,
                         ExpressionAttributeNames={'#status': 'status'},
-                        ExpressionAttributeValues={
-                            ':status': 'active',
-                            ':now': datetime.now().isoformat()
-                        }
+                        ExpressionAttributeValues=expr_values
                     )
-                    send_welcome_email(email)
-                    log_event(email, 'resubscribed', 'welcome-email')
+                    send_confirmation_email(email, first_name)
+                    log_event(email, 'resubscribed', 'confirmation-email')
                     return cors_response(200, {
-                        'message': 'resubscribed',
+                        'message': 'Subscription successful',
                         'email': email
                     })
         except Exception as e:
             print(f"Check existing subscriber error: {str(e)}")
         
-        # Store new subscriber in DynamoDB
-        subscribers_table.put_item(Item={
+        # Store new subscriber with pending status
+        item = {
             'email': email,
-            'status': 'active',
+            'status': 'pending',
             'subscribed_at': datetime.now().isoformat(),
             'source': 'election-map',
             'total_opens': 0,
             'total_clicks': 0,
             'last_activity': datetime.now().isoformat()
-        })
+        }
+        if first_name:
+            item['first_name'] = first_name
+        if last_name:
+            item['last_name'] = last_name
         
-        # Send welcome email with tracking
-        send_welcome_email(email)
+        subscribers_table.put_item(Item=item)
+        
+        # Send confirmation email
+        send_confirmation_email(email, first_name)
         
         # Log subscription event
-        log_event(email, 'subscribed', 'welcome-email')
+        log_event(email, 'pending', 'confirmation-email')
         
         return cors_response(200, {
             'message': 'Subscription successful',
@@ -250,6 +273,114 @@ def handle_click_tracking(event):
             'headers': {'Location': DOMAIN},
             'body': ''
         }
+
+def handle_confirmation(event):
+    """Handle email confirmation"""
+    try:
+        # Get email from query string
+        email = None
+        if 'queryStringParameters' in event and event['queryStringParameters']:
+            email = event['queryStringParameters'].get('email', '').strip().lower()
+        
+        if not email:
+            return cors_response(400, {'error': 'Email required'})
+        
+        # Update subscriber status to active
+        subscribers_table.update_item(
+            Key={'email': email},
+            UpdateExpression='SET #status = :status, confirmed_at = :date',
+            ExpressionAttributeNames={'#status': 'status'},
+            ExpressionAttributeValues={
+                ':status': 'active',
+                ':date': datetime.now().isoformat()
+            }
+        )
+        
+        # Send welcome email
+        send_welcome_email(email)
+        
+        # Log confirmation event
+        log_event(email, 'confirmed', 'welcome-email')
+        
+        return cors_response(200, {'message': 'Email confirmed', 'email': email})
+        
+    except Exception as e:
+        print(f"Confirmation error: {str(e)}")
+        return cors_response(500, {'error': 'Confirmation failed'})
+
+def send_confirmation_email(email, first_name=''):
+    """Send confirmation email with verify link"""
+    confirm_link = f"{DOMAIN}/confirm.html?email={email}"
+    greeting = f"Hi {first_name}!" if first_name else "Hello!"
+    
+    html_body = f"""
+    <html>
+    <head><meta charset="UTF-8"></head>
+    <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
+        <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+            <h2 style="color: #667eea; margin-top: 0;">Confirm Your Subscription 📧</h2>
+            
+            <p style="font-size: 16px; line-height: 1.6; color: #333;">
+                {greeting}
+            </p>
+            
+            <p style="font-size: 16px; line-height: 1.6; color: #333;">
+                Thank you for subscribing to Christian Conservatives Today!
+            </p>
+            
+            <p style="font-size: 16px; line-height: 1.6; color: #333;">
+                Please confirm your email address to start receiving election updates and voter guides.
+            </p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{confirm_link}" 
+                   style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                          color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; 
+                          font-weight: bold; font-size: 16px;">
+                    ✓ Confirm Subscription
+                </a>
+            </div>
+            
+            <p style="font-size: 14px; color: #666; line-height: 1.6;">
+                If you didn't sign up for this, you can safely ignore this email.
+            </p>
+            
+            <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
+            
+            <p style="font-size: 12px; color: #999;">
+                Christian Conservatives Today<br>
+                <a href="{DOMAIN}" style="color: #667eea;">Visit Website</a>
+            </p>
+        </div>
+    </body>
+    </html>
+    """
+    
+    text_body = f"""
+    Confirm Your Subscription
+    
+    Thank you for subscribing to Christian Conservatives Today!
+    
+    Please confirm your email address by clicking this link:
+    {confirm_link}
+    
+    If you didn't sign up for this, you can safely ignore this email.
+    
+    Christian Conservatives Today
+    {DOMAIN}
+    """
+    
+    ses.send_email(
+        Source=FROM_EMAIL,
+        Destination={'ToAddresses': [email]},
+        Message={
+            'Subject': {'Data': '✓ Confirm Your Subscription - Christian Conservatives Today'},
+            'Body': {
+                'Text': {'Data': text_body},
+                'Html': {'Data': html_body}
+            }
+        }
+    )
 
 def send_welcome_email(email):
     """Send welcome email with tracking pixels and links"""

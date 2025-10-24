@@ -8,11 +8,22 @@ const EMAIL_API_ENDPOINT = 'https://niexv1rw75.execute-api.us-east-1.amazonaws.c
 
 async function subscribeEmail() {
     const emailInput = document.getElementById('email-input');
+    const firstNameInput = document.getElementById('first-name-input');
+    const lastNameInput = document.getElementById('last-name-input');
+    
     const email = emailInput.value.trim();
+    const firstName = firstNameInput ? firstNameInput.value.trim() : '';
+    const lastName = lastNameInput ? lastNameInput.value.trim() : '';
 
     // Validate email format
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         alert('Please enter a valid email address.');
+        return;
+    }
+    
+    // Validate first name
+    if (!firstName) {
+        alert('Please enter your first name.');
         return;
     }
 
@@ -28,7 +39,11 @@ async function subscribeEmail() {
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ email: email })
+            body: JSON.stringify({ 
+                email: email,
+                first_name: firstName,
+                last_name: lastName
+            })
         });
 
         const data = await response.json();
@@ -49,6 +64,18 @@ async function subscribeEmail() {
                         </small>
                     </div>
                 `;
+            } else if (data.message === 'confirmation_resent') {
+                banner.innerHTML = `
+                    <div class="text-center py-3">
+                        <h5 class="text-info mb-2">✓ Confirmation Email Resent!</h5>
+                        <p class="mb-0">
+                            Check your inbox at <strong>${email}</strong>
+                        </p>
+                        <small class="text-muted">
+                            Please click the confirmation link to complete your subscription.
+                        </small>
+                    </div>
+                `;
             } else if (data.message === 'resubscribed') {
                 banner.innerHTML = `
                     <div class="text-center py-3">
@@ -62,15 +89,15 @@ async function subscribeEmail() {
                     </div>
                 `;
             } else {
-                // New subscription
+                // New subscription - pending confirmation
                 banner.innerHTML = `
                     <div class="text-center py-3">
-                        <h5 class="text-success mb-2">✓ Thank You for Subscribing!</h5>
+                        <h5 class="text-success mb-2">✓ Almost Done!</h5>
                         <p class="mb-0">
                             Confirmation email sent to <strong>${email}</strong>
                         </p>
                         <small class="text-muted">
-                            Check your inbox (and spam folder) for your welcome email.
+                            Please check your inbox and click the confirmation link to complete your subscription.
                         </small>
                     </div>
                 `;
