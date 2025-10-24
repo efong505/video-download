@@ -91,12 +91,34 @@ def handle_subscription(event):
         # Check if already subscribed
         try:
             response = subscribers_table.get_item(Key={'email': email})
-            if 'Item' in response and response['Item'].get('status') == 'active':
-                return cors_response(200, {'message': 'Already subscribed', 'email': email})
-        except:
-            pass
+            if 'Item' in response:
+                existing = response['Item']
+                if existing.get('status') == 'active':
+                    return cors_response(200, {
+                        'message': 'already_subscribed',
+                        'email': email
+                    })
+                elif existing.get('status') == 'unsubscribed':
+                    # Reactivate unsubscribed user
+                    subscribers_table.update_item(
+                        Key={'email': email},
+                        UpdateExpression='SET #status = :status, last_activity = :now',
+                        ExpressionAttributeNames={'#status': 'status'},
+                        ExpressionAttributeValues={
+                            ':status': 'active',
+                            ':now': datetime.now().isoformat()
+                        }
+                    )
+                    send_welcome_email(email)
+                    log_event(email, 'resubscribed', 'welcome-email')
+                    return cors_response(200, {
+                        'message': 'resubscribed',
+                        'email': email
+                    })
+        except Exception as e:
+            print(f"Check existing subscriber error: {str(e)}")
         
-        # Store subscriber in DynamoDB
+        # Store new subscriber in DynamoDB
         subscribers_table.put_item(Item={
             'email': email,
             'status': 'active',

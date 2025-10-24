@@ -482,7 +482,7 @@
                         content = marked.parse(content);
                     }
                     // Extract body content from full HTML templates
-                    const bodyMatch = content.match(/<body[^>]*>(.*?)<\/body>/is);
+                    const bodyMatch = content.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
                     if (bodyMatch) {
                         content = bodyMatch[1];
                     }
@@ -494,7 +494,7 @@
                 // If switching from visual to HTML and we have a template, reconstruct full HTML
                 if (currentMode === 'visual' && currentTemplate) {
                     const template = EMAIL_TEMPLATES[currentTemplate];
-                    const bodyMatch = template.html.match(/<body[^>]*>(.*?)<\/body>/is);
+                    const bodyMatch = template.html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
                     if (bodyMatch) {
                         content = template.html.replace(bodyMatch[1], content);
                     }
@@ -523,7 +523,7 @@
             
             // Load template in current mode
             if (currentMode === 'visual') {
-                const bodyMatch = template.html.match(/<body[^>]*>(.*?)<\/body>/is);
+                const bodyMatch = template.html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
                 if (quillEditor && bodyMatch) {
                     quillEditor.root.innerHTML = bodyMatch[1];
                 }
@@ -562,7 +562,7 @@
                 // If using a template, wrap content back in full HTML structure
                 if (currentTemplate) {
                     const template = EMAIL_TEMPLATES[currentTemplate];
-                    const bodyMatch = template.html.match(/<body[^>]*>(.*?)<\/body>/is);
+                    const bodyMatch = template.html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
                     if (bodyMatch) {
                         content = template.html.replace(bodyMatch[1], content);
                     }
@@ -620,7 +620,7 @@
                 // If using a template, wrap content back in full HTML structure
                 if (currentTemplate) {
                     const template = EMAIL_TEMPLATES[currentTemplate];
-                    const bodyMatch = template.html.match(/<body[^>]*>(.*?)<\/body>/is);
+                    const bodyMatch = template.html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
                     if (bodyMatch) {
                         content = template.html.replace(bodyMatch[1], content);
                     }

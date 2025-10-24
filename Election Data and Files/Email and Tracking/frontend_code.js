@@ -34,19 +34,47 @@ async function subscribeEmail() {
         const data = await response.json();
 
         if (response.ok) {
-            // Show success message
             const banner = document.getElementById('email-capture-banner');
-            banner.innerHTML = `
-                <div class="text-center py-3">
-                    <h5 class="text-success mb-2">✓ Thank You for Subscribing!</h5>
-                    <p class="mb-0">
-                        Confirmation email sent to <strong>${email}</strong>
-                    </p>
-                    <small class="text-muted">
-                        Check your inbox (and spam folder) for your welcome email.
-                    </small>
-                </div>
-            `;
+            
+            // Check if already subscribed
+            if (data.message === 'already_subscribed') {
+                banner.innerHTML = `
+                    <div class="text-center py-3">
+                        <h5 class="text-info mb-2">✓ Already Subscribed!</h5>
+                        <p class="mb-0">
+                            <strong>${email}</strong> is already on our mailing list.
+                        </p>
+                        <small class="text-muted">
+                            You'll continue receiving election updates and voter guides.
+                        </small>
+                    </div>
+                `;
+            } else if (data.message === 'resubscribed') {
+                banner.innerHTML = `
+                    <div class="text-center py-3">
+                        <h5 class="text-success mb-2">✓ Welcome Back!</h5>
+                        <p class="mb-0">
+                            You've been resubscribed! Confirmation email sent to <strong>${email}</strong>
+                        </p>
+                        <small class="text-muted">
+                            Check your inbox (and spam folder) for your welcome email.
+                        </small>
+                    </div>
+                `;
+            } else {
+                // New subscription
+                banner.innerHTML = `
+                    <div class="text-center py-3">
+                        <h5 class="text-success mb-2">✓ Thank You for Subscribing!</h5>
+                        <p class="mb-0">
+                            Confirmation email sent to <strong>${email}</strong>
+                        </p>
+                        <small class="text-muted">
+                            Check your inbox (and spam folder) for your welcome email.
+                        </small>
+                    </div>
+                `;
+            }
 
             // Track subscription in Google Analytics (if available)
             if (typeof gtag !== 'undefined') {
