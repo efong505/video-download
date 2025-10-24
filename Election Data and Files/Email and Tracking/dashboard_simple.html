@@ -90,11 +90,30 @@
 
             <!-- Subscribers Tab -->
             <div class="tab-pane fade" id="subscribers">
+                <div class="card shadow-sm mb-3">
+                    <div class="card-header bg-success text-white"><strong>➕ Add New Subscriber</strong></div>
+                    <div class="card-body">
+                        <div class="row g-2">
+                            <div class="col-md-3">
+                                <input type="text" id="new-first-name" class="form-control" placeholder="First Name *">
+                            </div>
+                            <div class="col-md-3">
+                                <input type="text" id="new-last-name" class="form-control" placeholder="Last Name">
+                            </div>
+                            <div class="col-md-4">
+                                <input type="email" id="new-email" class="form-control" placeholder="Email *">
+                            </div>
+                            <div class="col-md-2">
+                                <button class="btn btn-success w-100" onclick="addSubscriber()">Add</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="card shadow-sm">
                     <div class="card-header bg-light d-flex justify-content-between align-items-center">
                         <strong>All Subscribers</strong>
                         <div>
-                            <input type="text" id="search-input" class="form-control form-control-sm d-inline-block me-2" style="width: 250px;" placeholder="🔍 Search email...">
+                            <input type="text" id="search-input" class="form-control form-control-sm d-inline-block me-2" style="width: 250px;" placeholder="🔍 Search...">
                             <button class="btn btn-sm btn-success" onclick="exportCSV()">📥 Export CSV</button>
                             <button class="btn btn-sm btn-primary" onclick="loadAllData()">🔄 Refresh</button>
                         </div>
@@ -104,6 +123,7 @@
                             <table class="table table-hover mb-0">
                                 <thead class="table-light">
                                     <tr>
+                                        <th>Name</th>
                                         <th>Email</th>
                                         <th>Status</th>
                                         <th>Subscribed</th>
@@ -113,7 +133,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="subscribers-table">
-                                    <tr><td colspan="6" class="text-center py-4">Loading...</td></tr>
+                                    <tr><td colspan="7" class="text-center py-4">Loading...</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -323,32 +343,114 @@
         }
 
         function renderSubscribersTable(subscribers) {
-            const html = subscribers.map(s => `
+            const html = subscribers.map(s => {
+                const name = [s.first_name, s.last_name].filter(Boolean).join(' ') || '-';
+                return `
                 <tr class="subscriber-row" onclick="showDetails('${s.email}')">
+                    <td>${name}</td>
                     <td>${s.email}</td>
                     <td><span class="badge bg-${s.status === 'active' ? 'success' : 'secondary'}">${s.status}</span></td>
                     <td>${new Date(s.subscribed_at).toLocaleDateString()}</td>
                     <td>${s.total_opens || 0}</td>
                     <td>${s.total_clicks || 0}</td>
                     <td>
-                        <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); resendEmail('${s.email}')">Resend</button>
+                        <button class="btn btn-sm btn-info" onclick="event.stopPropagation(); editSubscriber('${s.email}', '${(s.first_name || '').replace(/'/g, "\\'")}',' ${(s.last_name || '').replace(/'/g, "\\'")}')" title="Edit">✏️</button>
+                        <button class="btn btn-sm btn-primary" onclick="event.stopPropagation(); resendEmail('${s.email}')" title="Resend">📧</button>
                         ${s.status === 'active' 
-                            ? `<button class="btn btn-sm btn-danger" onclick="event.stopPropagation(); unsubscribe('${s.email}')">Unsubscribe</button>`
-                            : `<button class="btn btn-sm btn-success" onclick="event.stopPropagation(); resubscribe('${s.email}')">Resubscribe</button>`
+                            ? `<button class="btn btn-sm btn-warning" onclick="event.stopPropagation(); unsubscribe('${s.email}')" title="Unsubscribe">🚫</button>`
+                            : `<button class="btn btn-sm btn-success" onclick="event.stopPropagation(); resubscribe('${s.email}')" title="Resubscribe">✅</button>`
                         }
+                        <button class="btn btn-sm btn-danger" onclick="event.stopPropagation(); deleteSubscriber('${s.email}')" title="Delete">🗑️</button>
                     </td>
                 </tr>
-            `).join('');
+            `}).join('');
 
             document.getElementById('subscribers-table').innerHTML = html || 
-                '<tr><td colspan="6" class="text-center py-4">No subscribers</td></tr>';
+                '<tr><td colspan="7" class="text-center py-4">No subscribers</td></tr>';
         }
 
         function filterSubscribers(query) {
+            const q = query.toLowerCase();
             const filtered = allSubscribers.filter(s => 
-                s.email.toLowerCase().includes(query.toLowerCase())
+                s.email.toLowerCase().includes(q) ||
+                (s.first_name || '').toLowerCase().includes(q) ||
+                (s.last_name || '').toLowerCase().includes(q)
             );
             renderSubscribersTable(filtered);
+        }
+        
+        async function addSubscriber() {
+            const firstName = document.getElementById('new-first-name').value.trim();
+            const lastName = document.getElementById('new-last-name').value.trim();
+            const email = document.getElementById('new-email').value.trim();
+            
+            if (!firstName || !email) {
+                alert('First name and email are required');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/subscribers`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email, first_name: firstName, last_name: lastName})
+                });
+                
+                if (response.ok) {
+                    alert('✓ Subscriber added!');
+                    document.getElementById('new-first-name').value = '';
+                    document.getElementById('new-last-name').value = '';
+                    document.getElementById('new-email').value = '';
+                    loadAllData();
+                } else {
+                    const data = await response.json();
+                    alert('✗ ' + (data.error || 'Failed'));
+                }
+            } catch (error) {
+                alert('✗ Error adding subscriber');
+            }
+        }
+        
+        async function editSubscriber(email, firstName, lastName) {
+            const newFirstName = prompt('First Name:', firstName);
+            if (newFirstName === null) return;
+            
+            const newLastName = prompt('Last Name:', lastName);
+            if (newLastName === null) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/subscribers/${email}`, {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({first_name: newFirstName, last_name: newLastName})
+                });
+                
+                if (response.ok) {
+                    alert('✓ Updated!');
+                    loadAllData();
+                } else {
+                    alert('✗ Failed');
+                }
+            } catch (error) {
+                alert('✗ Error');
+            }
+        }
+        
+        async function deleteSubscriber(email) {
+            if (!confirm(`Delete ${email}?\n\nThis cannot be undone!`)) return;
+            
+            try {
+                const response = await fetch(`${API_BASE}/subscribers/${email}`, {method: 'DELETE'});
+                
+                if (response.ok) {
+                    alert('✓ Deleted!');
+                    loadAllData();
+                } else {
+                    alert('✗ Failed');
+                }
+            } catch (error) {
+                alert('✗ Error');
+            }
         }
 
         async function showDetails(email) {

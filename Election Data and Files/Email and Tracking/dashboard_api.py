@@ -182,6 +182,75 @@ def send_campaign():
         'failures': failed
     })
 
+@app.route('/api/subscribers', methods=['POST'])
+def add_subscriber():
+    """Manually add a subscriber"""
+    data = request.json
+    email = data.get('email', '').strip().lower()
+    first_name = data.get('first_name', '').strip()
+    last_name = data.get('last_name', '').strip()
+    
+    if not email:
+        return jsonify({'error': 'Email required'}), 400
+    
+    # Check if exists
+    response = subscribers_table.get_item(Key={'email': email})
+    if 'Item' in response:
+        return jsonify({'error': 'Email already exists'}), 400
+    
+    item = {
+        'email': email,
+        'status': 'active',
+        'subscribed_at': datetime.now().isoformat(),
+        'source': 'manual-dashboard',
+        'total_opens': 0,
+        'total_clicks': 0,
+        'last_activity': datetime.now().isoformat()
+    }
+    if first_name:
+        item['first_name'] = first_name
+    if last_name:
+        item['last_name'] = last_name
+    
+    subscribers_table.put_item(Item=item)
+    return jsonify({'message': 'Subscriber added', 'email': email})
+
+@app.route('/api/subscribers/<email>', methods=['PUT'])
+def update_subscriber(email):
+    """Update subscriber details"""
+    data = request.json
+    first_name = data.get('first_name', '').strip()
+    last_name = data.get('last_name', '').strip()
+    
+    update_expr = 'SET '
+    expr_values = {}
+    expr_names = {}
+    
+    if first_name:
+        update_expr += 'first_name = :fname, '
+        expr_values[':fname'] = first_name
+    if last_name:
+        update_expr += 'last_name = :lname, '
+        expr_values[':lname'] = last_name
+    
+    update_expr = update_expr.rstrip(', ')
+    
+    if not expr_values:
+        return jsonify({'error': 'No fields to update'}), 400
+    
+    subscribers_table.update_item(
+        Key={'email': email},
+        UpdateExpression=update_expr,
+        ExpressionAttributeValues=expr_values
+    )
+    return jsonify({'message': 'Subscriber updated'})
+
+@app.route('/api/subscribers/<email>', methods=['DELETE'])
+def delete_subscriber(email):
+    """Delete a subscriber"""
+    subscribers_table.delete_item(Key={'email': email})
+    return jsonify({'message': 'Subscriber deleted'})
+
 @app.route('/api/stats', methods=['GET'])
 def get_stats():
     """Get overall statistics"""
@@ -221,6 +290,9 @@ if __name__ == '__main__':
     print("\nAvailable endpoints:")
     print("  GET  /api/subscribers")
     print("  GET  /api/subscribers/<email>")
+    print("  POST /api/subscribers (add new)")
+    print("  PUT  /api/subscribers/<email> (edit)")
+    print("  DELETE /api/subscribers/<email>")
     print("  POST /api/subscribers/<email>/unsubscribe")
     print("  POST /api/subscribers/<email>/resubscribe")
     print("  POST /api/subscribers/<email>/resend")
