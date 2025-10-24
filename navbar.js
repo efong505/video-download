@@ -13,7 +13,11 @@ function initNavbar() {
         {page: 'news', label: 'News', emoji: '📰', fa: 'fa-newspaper', public: true},
         {page: 'election-map', label: 'Election Map', emoji: '🗺️', fa: 'fa-map', public: true},
         {page: 'resources', label: 'Resources', emoji: '📚', fa: 'fa-book-open', public: false},
-        {page: 'admin', label: 'Admin', emoji: '⚙️', fa: 'fa-cog', roles: ['admin', 'super_user']}
+        {page: 'authors', label: 'Authors', emoji: '👥', fa: 'fa-users', adminOnly: true},
+        {page: 'user-upload', label: 'Upload Video', emoji: '⬆️', fa: 'fa-upload', adminOnly: true},
+        {page: 'admin-contributors', label: 'Contributors', emoji: '🗺️', fa: 'fa-map-marked', adminOnly: true},
+        {page: 'admin-resources', label: 'Manage Resources', emoji: '📚', fa: 'fa-tasks', adminOnly: true},
+        {page: 'admin-templates', label: 'Templates', emoji: '📄', fa: 'fa-file-alt', adminOnly: true}
     ];
     
     const token = localStorage.getItem('auth_token');
@@ -34,14 +38,16 @@ function initNavbar() {
     allLinks.forEach(link => {
         if (link.page === currentPage) return;
         if (!isLoggedIn && !link.public) return;
-        if (link.roles && (!user || !link.roles.includes(user.role))) return;
+        
+        // Skip admin-only links - they're in secondary menu on admin page
+        if (link.adminOnly) return;
         
         const icon = iconStyle === 'fontawesome' ? `<i class="fas ${link.fa} me-1"></i>` : link.emoji + ' ';
         html += `<li class="nav-item"><a class="nav-link" href="${link.page}.html">${icon}${link.label}</a></li>`;
     });
     
-    // Add My Page link only on profile page
-    if (currentPage === 'profile' && isLoggedIn) {
+    // Add My Page link on profile and authors pages
+    if ((currentPage === 'profile' || currentPage === 'authors') && isLoggedIn) {
         const myPageIcon = iconStyle === 'fontawesome' ? '<i class="fas fa-file-alt me-1"></i>' : '📄 ';
         const myPageUrl = `user-page.html?user=${encodeURIComponent(user.email)}`;
         html += `<li class="nav-item"><a class="nav-link" href="${myPageUrl}">${myPageIcon}My Page</a></li>`;
@@ -64,8 +70,8 @@ function initNavbar() {
                 </a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="profile.html">${profileIcon}Profile</a></li>
-                    ${currentPage !== 'profile' ? `<li><a class="dropdown-item" href="${myPageUrl}">${myPageIcon}My Page</a></li>` : ''}
-                    ${user.role === 'admin' || user.role === 'super_user' ? `<li><a class="dropdown-item" href="admin.html">${adminIcon}Admin Dashboard</a></li>` : ''}
+                    ${currentPage !== 'profile' && currentPage !== 'authors' ? `<li><a class="dropdown-item" href="${myPageUrl}">${myPageIcon}My Page</a></li>` : ''}
+                    ${(user.role === 'admin' || user.role === 'super_user') && currentPage !== 'admin' ? `<li><a class="dropdown-item" href="admin.html">${adminIcon}Admin Dashboard</a></li>` : ''}
                     <li><hr class="dropdown-divider"></li>
                     <li><a class="dropdown-item" href="#" onclick="logout()">${logoutIcon}Logout</a></li>
                 </ul>
@@ -81,5 +87,5 @@ function initNavbar() {
 function logout() {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_data');
-    window.location.reload();
+    window.location.href = 'login.html';
 }

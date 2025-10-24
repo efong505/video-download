@@ -10,6 +10,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 20px 0;
+            padding-top: 90px;
             margin-bottom: 30px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
@@ -130,11 +131,23 @@
     </style>
 </head>
 <body>
+    <!-- Unified Navbar -->
+    <div id="navbar-container" data-page="authors"></div>
+    <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            });
+    </script>
+    
     <div class="dashboard-header">
         <div class="container">
             <div class="dashboard-nav">
                 <h1 class="nav-brand">👥 Authors</h1>
-                <div class="nav-links" id="nav-links">
+                <div class="nav-links" id="nav-links-old" style="display:none;">
                     <a href="/" class="nav-link">🏠 Home</a>
                     <a href="videos.html" class="nav-link">🎬 Videos</a>
                     <a href="articles.html" class="nav-link">📝 Articles</a>
@@ -191,20 +204,7 @@
                 return;
             }
             
-            // Add admin link if user is admin or super_user
-            if (userData) {
-                const user = JSON.parse(userData);
-                if (user.role === 'admin' || user.role === 'super_user') {
-                    const navLinks = document.getElementById('nav-links');
-                    if (navLinks) {
-                        const adminLink = document.createElement('a');
-                        adminLink.href = 'admin.html';
-                        adminLink.className = 'nav-link';
-                        adminLink.innerHTML = '⚙️ Admin';
-                        navLinks.insertBefore(adminLink, navLinks.lastElementChild);
-                    }
-                }
-            }
+            // Admin link is now handled by unified navbar
             
             loadAuthors();
         });
