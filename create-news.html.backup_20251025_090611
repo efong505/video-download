@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit News - Christian Conservatives Today</title>
+    <title>Create News - Christian Conservatives Today</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/form-styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <style>
@@ -44,15 +43,11 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             margin-bottom: 30px;
         }
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .form-label {
             font-weight: 600;
             color: #2c3e50;
             margin-bottom: 8px;
         }
-
-        */
         .form-control, .form-select {
             border: 2px solid #e9ecef;
             border-radius: 10px;
@@ -63,8 +58,6 @@
             border-color: #3498db;
             box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
         }
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .btn-primary {
             background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             border: none;
@@ -73,18 +66,10 @@
             font-weight: 600;
             transition: all 0.3s ease;
         }
-
-        */
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
         }
-
-        */
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .btn-secondary {
             background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
             border: none;
@@ -93,16 +78,10 @@
             font-weight: 600;
             transition: all 0.3s ease;
         }
-
-        */
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .btn-secondary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(149, 165, 166, 0.4);
         }
-
-        */
         .breaking-news-toggle {
             background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
             border: none;
@@ -175,20 +154,23 @@
             <button onclick="logout()" class="nav-btn" style="background: rgba(231, 76, 60, 0.8);"><i class="fas fa-sign-out-alt"></i> Logout</button>
         </div>
 
-        <!-- Edit News Form -->
+        <!-- Create News Form -->
         <div class="form-container">
             <h2 class="text-center mb-4" style="color: #2c3e50;">
-                <i class="fas fa-edit"></i> Edit News Article
+                <i class="fas fa-plus-circle"></i> Create News Article
             </h2>
 
             <form id="newsForm">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                         <div class="mb-3">
                             <label for="title" class="form-label">Title *</label>
                             <input type="text" class="form-control" id="title" required>
                         </div>
                     </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label for="category" class="form-label">Category</label>
@@ -197,9 +179,26 @@
                                 <option value="politics">Politics</option>
                                 <option value="christian">Christian News</option>
                                 <option value="election">Election Coverage</option>
+                                <option value="state-election">State Elections</option>
                                 <option value="breaking">Breaking News</option>
                                 <option value="commentary">Commentary</option>
+                                <option value="world">World News</option>
+                                <option value="local">Local News</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="state" class="form-label">State (Optional)</label>
+                            <select class="form-select" id="state">
+                                <option value="">None</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="scheduled_publish" class="form-label">Schedule Publish (Optional)</label>
+                            <input type="datetime-local" class="form-control" id="scheduled_publish">
                         </div>
                     </div>
                 </div>
@@ -272,7 +271,7 @@
 
                 <div class="text-center">
                     <button type="submit" class="btn btn-primary me-3">
-                        <i class="fas fa-save"></i> Update News Article
+                        <i class="fas fa-save"></i> Create News Article
                     </button>
                     <button type="button" class="btn btn-secondary" onclick="window.location.href='news.html'">
                         <i class="fas fa-times"></i> Cancel
@@ -289,9 +288,10 @@
         var quill;
         var tags = [];
         var isBreaking = false;
-        var newsId = null;
 
+        // Initialize Quill editor
         document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
             var token = localStorage.getItem('auth_token');
             var userData = localStorage.getItem('user_data');
             var userRole = userData ? JSON.parse(userData).role : null;
@@ -301,16 +301,9 @@
                 window.location.href = 'login.html';
                 return;
             }
-
-            // Get news ID from URL
-            var urlParams = new URLSearchParams(window.location.search);
-            newsId = urlParams.get('id');
             
-            if (!newsId) {
-                alert('No news article specified');
-                window.location.href = 'news.html';
-                return;
-            }
+            // Populate state dropdown
+            populateStateDropdown();
 
             // Initialize Quill
             quill = new Quill('#editor', {
@@ -336,56 +329,26 @@
                     this.value = '';
                 }
             });
-
-            // Load news article
-            loadNews();
         });
-
-        function loadNews() {
-            var token = localStorage.getItem('auth_token');
+        
+        function populateStateDropdown() {
+            var states = [
+                'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
+                'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
+                'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan',
+                'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+                'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio',
+                'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
+                'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
+                'Wisconsin', 'Wyoming'
+            ];
             
-            fetch(NEWS_API + '?action=get&news_id=' + newsId, {
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
-            })
-            .then(function(response) { return response.json(); })
-            .then(function(news) {
-                if (news.error) {
-                    alert('Error loading news: ' + news.error);
-                    window.location.href = 'news.html';
-                    return;
-                }
-                
-                // Populate form
-                document.getElementById('title').value = news.title;
-                document.getElementById('category').value = news.category || 'general';
-                document.getElementById('visibility').value = news.visibility || 'public';
-                document.getElementById('status').value = news.status || 'published';
-                document.getElementById('summary').value = news.summary || '';
-                document.getElementById('external_url').value = news.external_url || '';
-                document.getElementById('featured_image').value = news.featured_image || '';
-                
-                // Set content
-                var delta = quill.clipboard.convert(news.content || '');
-                quill.setContents(delta);
-                
-                // Set tags
-                tags = news.tags || [];
-                renderTags();
-                
-                // Set breaking news status
-                isBreaking = news.is_breaking || false;
-                if (isBreaking) {
-                    var button = document.getElementById('breakingToggle');
-                    button.classList.add('active');
-                    button.innerHTML = '<i class="fas fa-check"></i> Breaking News Enabled';
-                }
-            })
-            .catch(function(error) {
-                console.error('Error:', error);
-                alert('Failed to load news article');
-                window.location.href = 'news.html';
+            var select = document.getElementById('state');
+            states.forEach(function(state) {
+                var option = document.createElement('option');
+                option.value = state.toLowerCase().replace(/ /g, '-');
+                option.textContent = state;
+                select.appendChild(option);
             });
         }
 
@@ -405,9 +368,11 @@
             var container = document.getElementById('tagContainer');
             var tagInput = document.getElementById('tagInput');
             
+            // Clear existing tags
             var existingTags = container.querySelectorAll('.tag-item');
             existingTags.forEach(function(tag) { tag.remove(); });
             
+            // Add tags
             tags.forEach(function(tag) {
                 var tagElement = document.createElement('span');
                 tagElement.className = 'tag-item';
@@ -431,28 +396,32 @@
 
         document.getElementById('newsForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            updateNews();
+            createNews();
         });
 
-        function updateNews() {
+        function createNews() {
             var token = localStorage.getItem('auth_token');
             
+            var scheduledPublish = document.getElementById('scheduled_publish').value;
+            var state = document.getElementById('state').value;
+            
             var newsData = {
-                news_id: newsId,
                 title: document.getElementById('title').value,
                 content: quill.root.innerHTML,
                 summary: document.getElementById('summary').value,
                 category: document.getElementById('category').value,
+                state: state,
                 visibility: document.getElementById('visibility').value,
                 status: document.getElementById('status').value,
                 is_breaking: isBreaking,
                 external_url: document.getElementById('external_url').value,
                 featured_image: document.getElementById('featured_image').value,
+                scheduled_publish: scheduledPublish ? new Date(scheduledPublish).toISOString() : '',
                 tags: tags
             };
 
-            fetch(NEWS_API + '?action=update', {
-                method: 'PUT',
+            fetch(NEWS_API + '?action=create', {
+                method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + token
@@ -464,13 +433,13 @@
                 if (data.error) {
                     alert('Error: ' + data.error);
                 } else {
-                    alert('News article updated successfully!');
+                    alert('News article created successfully!');
                     window.location.href = 'news.html';
                 }
             })
             .catch(function(error) {
                 console.error('Error:', error);
-                alert('Failed to update news article');
+                alert('Failed to create news article');
             });
         }
 
@@ -485,9 +454,11 @@
                 var imageData = e.target.result;
                 var token = localStorage.getItem('auth_token');
                 
+                // Show preview
                 document.getElementById('imagePreview').innerHTML = 
                     '<img src="' + imageData + '" style="max-width: 200px; border-radius: 10px;">';
                 
+                // Upload to S3
                 fetch(NEWS_API + '?action=upload', {
                     method: 'POST',
                     headers: {

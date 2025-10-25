@@ -229,27 +229,15 @@
             margin: 2px;
         }
 
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
-
         .btn-primary {
             background: #667eea;
             color: white;
         }
 
-
-        */
-
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
-
         .btn-danger {
             background: #dc3545;
             color: white;
         }
-
-
-        */
 
         .btn-warning {
             background: #ffc107;
@@ -260,20 +248,11 @@
             opacity: 0.9;
         }
 
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
-
         .loading {
             text-align: center;
             padding: 40px;
             color: #666;
         }
-
-
-        */
-
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
 
         .error {
             background: #f8d7da;
@@ -283,12 +262,6 @@
             margin: 10px 0;
         }
 
-
-        */
-
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
-
         .success {
             background: #d4edda;
             color: #155724;
@@ -296,9 +269,6 @@
             border-radius: 4px;
             margin: 10px 0;
         }
-
-
-        */
 
         .modal {
             display: none;
@@ -352,7 +322,6 @@
         }
     </style>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/form-styles.css">
     <style>
         body {
             padding-top: 112px;

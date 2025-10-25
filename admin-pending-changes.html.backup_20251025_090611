@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Pending Changes - Admin</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f5f5f5; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h1 { color: #333; margin-bottom: 30px; }
+        .change-card { background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; padding: 20px; margin-bottom: 20px; }
+        .change-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .change-type { background: #6366f1; color: white; padding: 5px 12px; border-radius: 4px; font-size: 14px; }
+        .change-meta { color: #666; font-size: 14px; }
+        .change-data { background: white; padding: 15px; border-radius: 4px; margin: 15px 0; }
+        .data-field { margin-bottom: 10px; }
+        .data-label { font-weight: bold; color: #555; }
+        .data-value { color: #333; margin-left: 10px; }
+        .actions { display: flex; gap: 10px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; }
+        .btn-approve { background: #10b981; color: white; }
+        .btn-deny { background: #ef4444; color: white; }
+        .btn:hover { opacity: 0.9; }
+        .empty { text-align: center; color: #999; padding: 40px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Review Pending Changes</h1>
+        <p><a href="admin-contributors.html" style="color: #6366f1;">← Back to Admin Dashboard</a></p>
+        <div id="changes-list"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors';
+        
+        async function loadPendingChanges() {
+            const token = localStorage.getItem('auth_token');
+            try {
+                const response = await fetch(`${API_URL}?resource=pending-changes`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                const changes = await response.json();
+                console.log('Loaded changes:', changes);
+            
+            const container = document.getElementById('changes-list');
+            if (!changes.length) {
+                container.innerHTML = '<div class="empty">No pending changes to review</div>';
+                return;
+            }
+            
+                container.innerHTML = changes.map(change => `
+                <div class="change-card">
+                    <div class="change-header">
+                        <span class="change-type">${change.change_type.replace(/_/g, ' ').toUpperCase()}</span>
+                        <span class="change-meta">State: ${change.state} | By: ${change.submitted_by}</span>
+                    </div>
+                    <div class="change-data">
+                        ${Object.entries(change.data).map(([key, value]) => `
+                            <div class="data-field">
+                                <span class="data-label">${key}:</span>
+                                <span class="data-value">${typeof value === 'object' ? JSON.stringify(value) : value}</span>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-approve" onclick="reviewChange('${change.change_id}', 'approve')">Approve</button>
+                        <button class="btn btn-deny" onclick="reviewChange('${change.change_id}', 'deny')">Deny</button>
+                    </div>
+                </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading pending changes:', error);
+                document.getElementById('changes-list').innerHTML = `<div class="empty">Error loading changes: ${error.message}</div>`;
+            }
+        }
+        
+        async function reviewChange(changeId, action) {
+            const token = localStorage.getItem('auth_token');
+            await fetch(`${API_URL}?resource=pending-changes`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ change_id: changeId, action })
+            });
+            alert(`Change ${action}d successfully`);
+            loadPendingChanges();
+        }
+        
+        loadPendingChanges();
+    </script>
+</body>
+</html>

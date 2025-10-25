@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>User Videos - Ekewaka</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/card-styles.css">
     <style>
         .user-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -13,8 +12,6 @@
             padding: 40px 0;
             margin-bottom: 30px;
         }
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .video-card {
             position: relative;
             cursor: pointer;
@@ -25,18 +22,10 @@
             background: white;
             margin-bottom: 20px;
         }
-
-        */
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .video-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
-
-        */
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .thumbnail-container {
             position: relative;
             width: 100%;
@@ -44,19 +33,11 @@
             background: #000;
             overflow: hidden;
         }
-
-        */
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .thumbnail {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
-        */
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .play-button {
             position: absolute;
             top: 50%;
@@ -73,25 +54,15 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
-
-        */
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .play-button:hover {
             background: rgba(102,126,234,1);
             transform: translate(-50%, -50%) scale(1.1);
         }
-
-        */
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .video-player {
             display: none;
             width: 100%;
             height: 200px;
         }
-
-        */
         .video-title {
             padding: 15px;
             background: white;
@@ -110,8 +81,6 @@
             font-size: 12px;
             padding: 4px 8px;
         }
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .article-card {
             background: white;
             border-radius: 12px;
@@ -121,16 +90,10 @@
             transition: all 0.3s ease;
             height: 100%;
         }
-
-        */
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .article-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 25px rgba(0,0,0,0.15);
         }
-
-        */
         .article-meta {
             color: #666;
             font-size: 0.9rem;
