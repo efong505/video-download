@@ -12,7 +12,6 @@
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/common-styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
@@ -207,19 +206,15 @@
             transform: scale(1.1);
         }
 
-        /* MOVED TO common-styles.css
-.nav-link {
+        .nav-link {
             color: var(--text-dark) !important;
             font-weight: 500;
             transition: color 0.3s ease;
         }
-*/
 
-        /* MOVED TO common-styles.css
-.nav-link:hover {
+        .nav-link:hover {
             color: var(--primary-color) !important;
         }
-*/
 
         .stats-section {
             background: var(--bg-light);

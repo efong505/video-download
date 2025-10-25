@@ -71,7 +71,7 @@ def main():
     # Common selectors (used in 3+ pages)
     common_selectors = {sel: files for sel, files in selector_usage.items() if len(files) >= 3}
     
-    print(f"📊 SUMMARY")
+    print(f"SUMMARY")
     print(f"   Total pages analyzed: {len(file_css)}")
     print(f"   Unique CSS selectors: {len(selector_usage)}")
     print(f"   Common selectors (3+ pages): {len(common_selectors)}")
@@ -86,7 +86,7 @@ def main():
     sorted_common = sorted(common_selectors.items(), key=lambda x: len(x[1]), reverse=True)
     
     for selector, files in sorted_common[:20]:  # Top 20
-        print(f"🎯 {selector}")
+        print(f"TARGET: {selector}")
         print(f"   Used in {len(files)} pages ({len(files)/len(file_css)*100:.1f}%)")
         print(f"   Pages: {', '.join(sorted(files)[:5])}{'...' if len(files) > 5 else ''}")
         print()
@@ -112,7 +112,7 @@ def main():
     
     for signature, files in sorted_duplicates[:10]:  # Top 10
         selector, props = signature.split('::', 1)
-        print(f"🔄 {selector}")
+        print(f"DUPLICATE: {selector}")
         print(f"   Duplicated in {len(files)} pages")
         print(f"   Properties: {props[:100]}{'...' if len(props) > 100 else ''}")
         print(f"   Pages: {', '.join(sorted(files)[:5])}{'...' if len(files) > 5 else ''}")
@@ -124,14 +124,14 @@ def main():
     print("=" * 80)
     print()
     
-    print("✅ HIGH PRIORITY (50%+ usage):")
+    print("HIGH PRIORITY (50%+ usage):")
     high_priority = [sel for sel, files in common_selectors.items() if len(files) >= len(file_css) * 0.5]
     for selector in sorted(high_priority)[:10]:
         files = selector_usage[selector]
         print(f"   - {selector} ({len(files)} pages)")
     print()
     
-    print("⚠️  MEDIUM PRIORITY (25-50% usage):")
+    print("MEDIUM PRIORITY (25-50% usage):")
     medium_priority = [sel for sel, files in common_selectors.items() 
                       if len(file_css) * 0.25 <= len(files) < len(file_css) * 0.5]
     for selector in sorted(medium_priority)[:10]:
@@ -139,7 +139,7 @@ def main():
         print(f"   - {selector} ({len(files)} pages)")
     print()
     
-    print("💡 POTENTIAL SAVINGS:")
+    print("POTENTIAL SAVINGS:")
     total_rules = sum(len(rules) for rules in file_css.values())
     duplicate_rules = sum(len(files) - 1 for files in duplicates.values())
     print(f"   Total CSS rules: {total_rules}")
