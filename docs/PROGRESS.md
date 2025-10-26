@@ -3507,3 +3507,82 @@ NEXT STEPS:
 - ✅ All files uploaded to S3 successfully
 
 **Status**: Domain migration to christianconservativestoday.com complete across all platform components (documentation, frontend, backend, Lambda functions). All share links, video embeds, and API endpoints now use the new domain.
+
+
+## Video Thumbnail Sizing Fix ✅ COMPLETE (January 2025)
+
+### Issue Summary
+**Problem**: Video thumbnails displaying at incorrect sizes on live site (christianconservativestoday.com) despite working correctly locally.
+
+**Symptoms**:
+- Initial: Thumbnails showing at full resolution (1280x720) instead of 200px height
+- After first fix: Thumbnails stretched to 1116x200 (wrong aspect ratio)
+- After second fix: Thumbnails centered with black bars on sides (1140x1158 container)
+- After third fix: Thumbnails back to 1116x200 stretched
+
+### Root Cause Analysis
+**Problem**: CSS conflict between inline styles in videos.html and external card-styles.css
+- `card-styles.css` had `.thumbnail-container { padding-top: 56.25%; }` creating 16:9 aspect ratio container
+- Inline `!important` rules in videos.html were not sufficient to override external stylesheet
+- Local version worked because it wasn't loading card-styles.css from S3
+
+### Technical Details
+**Conflicting CSS**:
+```css
+/* card-styles.css (external) - BEFORE FIX */
+.thumbnail-container {
+    padding-top: 56.25%;  /* Creates 16:9 aspect ratio, causes stretching */
+}
+
+/* videos.html (inline) - NOT WORKING */
+.thumbnail-container {
+    height: 200px !important;
+    padding-top: 0 !important;  /* Tried to override but failed */
+}
+```
+
+### Solution Implemented
+**Fix**: Updated card-styles.css to use fixed height instead of percentage-based padding
+```css
+/* card-styles.css (external) - AFTER FIX */
+.thumbnail-container {
+    height: 200px;  /* Fixed height instead of padding-top: 56.25% */
+}
+```
+
+**Why This Works**:
+- Removes percentage-based padding that was creating oversized containers
+- Uses fixed 200px height for consistent thumbnail sizing
+- Eliminates need for `!important` overrides in inline styles
+- Fixes issue at the source (external stylesheet) instead of fighting with overrides
+
+### Files Modified
+- `assets/css/card-styles.css` - Changed `.thumbnail-container` from `padding-top: 56.25%` to `height: 200px`
+- `videos.html` - Kept inline styles with `!important` flags for additional safety
+
+### Deployment
+**S3 Upload**:
+- Uploaded card-styles.css to my-video-downloads-bucket/assets/css/
+- File size: 3.0 KiB
+
+**CloudFront Invalidation**:
+- Distribution ID: E3N00R2D2NE9C5 (christianconservativestoday.com)
+- Invalidation ID: I5KZFB3BH7AKAXWO0SWDM2814B
+- Path: /assets/css/card-styles.css
+- Status: InProgress → Complete
+
+### Key Insights
+**Lesson Learned**: When external stylesheets conflict with inline styles, fix the external stylesheet at the source rather than fighting with `!important` overrides.
+
+**CSS Specificity**: External stylesheet rules can override inline styles when using percentage-based sizing (padding-top) because the browser calculates the final size differently than fixed heights.
+
+**Testing Gap**: Local testing didn't catch the issue because local version wasn't loading card-styles.css from S3. Always test with production asset URLs.
+
+### Verification
+- ✅ Thumbnails display at correct 200px height
+- ✅ No stretching or black bars
+- ✅ Proper aspect ratio maintained with object-fit: cover
+- ✅ Videos display side-by-side in horizontal scroll
+- ✅ Fix works across all pages using card-styles.css
+
+**Status**: Video thumbnail sizing issue completely resolved by fixing card-styles.css padding-top conflict. Thumbnails now display correctly at 200px height on live site matching local behavior.

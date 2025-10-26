@@ -22,7 +22,7 @@
 .thumbnail-container {
     position: relative;
     width: 100%;
-    padding-top: 56.25%;
+    height: 200px;
     overflow: hidden;
     background: #000;
 }
