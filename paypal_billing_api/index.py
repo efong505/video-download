@@ -224,8 +224,8 @@ def create_subscription(event):
             'application_context': {
                 'brand_name': 'Video Downloader',
                 'user_action': 'SUBSCRIBE_NOW',
-                'return_url': body.get('return_url', 'https://d271vky579caz9.cloudfront.net/profile.html'),
-                'cancel_url': body.get('cancel_url', 'https://d271vky579caz9.cloudfront.net/profile.html')
+                'return_url': body.get('return_url', 'https://christianconservativestoday.com/profile.html'),
+                'cancel_url': body.get('cancel_url', 'https://christianconservativestoday.com/profile.html')
             }
         }
         

@@ -481,7 +481,7 @@ articles-table:
 ## Key System Information
 - **Platform Name**: Christian Conservative Video Platform
 - **Super User**: super@admin.com / SuperSecure123!
-- **CloudFront URL**: https://d271vky579caz9.cloudfront.net
+- **CloudFront URL**: https://christianconservativestoday.com
 - **Architecture**: Serverless AWS (Lambda, S3, DynamoDB, CloudFront)
 - **Authentication**: JWT with 24-hour expiration
 - **Database**: DynamoDB tables for users, video-metadata, download-jobs, articles ✅
@@ -945,7 +945,7 @@ articles-table:
 - PayPal Sandbox Client ID: AU8sbnkVvvCSFzZooSwDCsfdVvuln82gK2kZvloeNtWd63ETi0dE_lkjVxvy2FJC1HqcD5GkRXSmjiZv
 - PayPal API Base URL: https://api-m.sandbox.paypal.com (sandbox mode)
 - Webhook URL: https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal?action=webhook
-- Product Images: https://d271vky579caz9.cloudfront.net/images/[plan-name].jpg
+- Product Images: https://christianconservativestoday.com/images/[plan-name].jpg
 
 **Files Modified**: 
 - `paypal_billing_api/index.py` - Updated with sandbox credentials

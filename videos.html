@@ -95,8 +95,6 @@
         }
 
         */
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .thumbnail-container {
             position: relative;
             width: 100%;
@@ -104,17 +102,11 @@
             background: #000;
             overflow: hidden;
         }
-
-        */
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .thumbnail {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
-
-        */
         /* CONSOLIDATED TO card-styles.css or form-styles.css
 
         .play-button {
@@ -410,7 +402,7 @@
     </div>
 
     <script>
-        const BUCKET_URL = 'https://d271vky579caz9.cloudfront.net';
+        const BUCKET_URL = 'https://christianconservativestoday.com';
         const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
         const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
         
@@ -528,7 +520,7 @@
             const col = document.createElement('div');
             col.className = 'video-card-wrapper';
             
-            const embedUrl = `https://d271vky579caz9.cloudfront.net/embed.html?v=${filename}&t=${encodeURIComponent(title)}`;
+            const embedUrl = `https://christianconservativestoday.com/embed.html?v=${filename}&t=${encodeURIComponent(title)}`;
             
             if (videoType === 'local') {
                 col.innerHTML = `
@@ -1000,14 +992,33 @@
         
         function copyEmbedLink(embedUrl) {
             navigator.clipboard.writeText(embedUrl).then(() => {
-                const message = document.createElement('div');
-                message.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 10px 20px; border-radius: 4px; z-index: 1000;';
-                message.textContent = 'Embed link copied to clipboard!';
-                document.body.appendChild(message);
-                setTimeout(() => message.remove(), 3000);
+                showNotification('✅ Link copied to clipboard!', 'success');
             }).catch(() => {
                 prompt('Copy this embed link:', embedUrl);
             });
+        }
+        
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#28a745' : '#dc3545'};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 10000;
+                font-weight: 500;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
         }
         
         function formatFileSize(bytes) {

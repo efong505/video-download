@@ -10,7 +10,7 @@ import tempfile
 
 s3_client = boto3.client('s3')
 BUCKET = 'my-video-downloads-bucket'
-CLOUDFRONT_URL = 'https://d271vky579caz9.cloudfront.net'
+CLOUDFRONT_URL = 'https://christianconservativestoday.com'
 
 def generate_thumbnail_from_url(video_url, output_path):
     """Generate thumbnail from video URL using ffmpeg"""

@@ -41,7 +41,7 @@
 
 ### Features Implemented:
 - **Embedded Video Player**: Clean, minimal video player at `/embed.html`
-- **Shareable Links**: Format `https://d271vky579caz9.cloudfront.net/embed.html?v=filename.mp4`
+- **Shareable Links**: Format `https://christianconservativestoday.com/embed.html?v=filename.mp4`
 - **Public Video Access**: Embedded videos work without authentication for public videos
 - **Privacy Respect**: Private videos cannot be embedded
 - **Share Buttons**: Added to both admin dashboard and videos page

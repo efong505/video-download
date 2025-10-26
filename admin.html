@@ -1361,7 +1361,7 @@
                 const sizeInMB = (video.size / (1024 * 1024)).toFixed(1);
                 const tags = video.tags.length > 0 ? video.tags.join(', ') : 'No tags';
 
-                const embedUrl = `https://d271vky579caz9.cloudfront.net/embed.html?v=${video.filename}&t=${encodeURIComponent(video.title)}`;
+                const embedUrl = `https://christianconservativestoday.com/embed.html?v=${video.filename}&t=${encodeURIComponent(video.title)}`;
                 const owner = video.owner || 'system';
                 const visibility = video.visibility || 'public';
                 const videoType = video.video_type || 'local';
@@ -1718,7 +1718,7 @@
             document.getElementById('view-video-title').textContent = title;
 
             if (videoType === 'local') {
-                const videoUrl = `https://d271vky579caz9.cloudfront.net/videos/${filename}`;
+                const videoUrl = `https://christianconservativestoday.com/videos/${filename}`;
                 const player = document.getElementById('view-video-player');
                 const source = document.getElementById('view-video-source');
 

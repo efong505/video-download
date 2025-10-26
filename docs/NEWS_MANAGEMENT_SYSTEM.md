@@ -477,7 +477,7 @@ Comprehensive news management system with breaking news banners, scheduled publi
 - Runtime: Python 3.x
 - DynamoDB table: news-table
 - S3 bucket: my-video-downloads-bucket
-- CloudFront: d271vky579caz9.cloudfront.net
+- CloudFront: christianconservativestoday.com
 
 ### API Gateway
 - Endpoint: https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news

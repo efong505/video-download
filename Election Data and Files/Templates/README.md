@@ -167,9 +167,91 @@ Ted Cruz,Texas,U.S. Senate,Republican,Conservative senator...,https://tedcruz.or
 
 **Note:** Python upload scripts provide more control and are recommended for comprehensive state data.
 
+## ⚠️ CRITICAL: Data Accuracy Verification
+
+### The Number Matching Problem
+
+**IMPORTANT:** When using AI to generate upload scripts, the AI may write incorrect numbers in the summary text!
+
+**Example of the Problem:**
+```python
+races = [{...}, {...}, {...}]  # 40 actual races
+candidates = [{...}, {...}]  # 30 actual candidates
+
+summary = {
+    "content": """
+    Total Races Documented: 120  ← AI WROTE WRONG NUMBER!
+    Total Candidates Profiled: 300  ← AI WROTE WRONG NUMBER!
+    """
+}
+```
+
+### Why This Matters
+
+The upload script:
+- ✅ Uploads 40 races to the `races` table (correct)
+- ✅ Uploads 30 candidates to the `candidates` table (correct)
+- ❌ Uploads text saying "120 races" to the `state-summaries` table (WRONG!)
+
+The website displays whatever text is in the summary, so users see "120 races" even though only 40 exist!
+
+### MANDATORY Verification Before Upload
+
+**Before running ANY upload script:**
+
+1. **Count the races array:**
+   ```python
+   races = [{...}, {...}, {...}]  # Count: 40 items
+   ```
+
+2. **Count the candidates array:**
+   ```python
+   candidates = [{...}, {...}]  # Count: 30 items
+   ```
+
+3. **Verify the summary text matches:**
+   ```python
+   summary = {
+       "content": """
+       Total Races Documented: 40  ← MUST match races count!
+       Total Candidates Profiled: 30  ← MUST match candidates count!
+       """
+   }
+   ```
+
+4. **If numbers don't match, edit the summary text before running!**
+
+### Tools Available
+
+**If you forget to verify and upload wrong numbers:**
+
+```bash
+# Check for discrepancies across all states
+python audit_all_states_data.py
+
+# Automatically fix all summaries to match database
+python fix_all_state_summaries.py
+```
+
+**For detailed instructions, see:**
+- `HOW_TO_USE_PROMPT.md` - Complete verification guide
+- `ELECTION_DATA_ACCURACY_SUMMARY.md` - Full explanation of the system
+
+### Updated AI Prompt
+
+The `full_prompt.md` template has been updated with:
+- Explicit instructions to count arrays: `len(races)` and `len(candidates)`
+- Verification checklist before submitting
+- Examples of correct vs incorrect counting
+
+**Always use the updated prompt template!**
+
+---
+
 ## Version History
 
 - v1.0 (January 2025) - Initial template creation
 - Templates based on Hawaii, California, Virginia, New Jersey, Texas, New Mexico, Pennsylvania formats
 - Standardized for consistency across all 50 states
 - Christian conservative perspective emphasized throughout
+- v1.1 (January 2025) - Added data accuracy verification requirements and tools

@@ -38,8 +38,10 @@ This folder contains all documentation, tutorials, and guides for the Christian 
 
 ### Election System ⭐ NEW!
 - **[DEPLOYMENT_ELECTION_SYSTEM.md](DEPLOYMENT_ELECTION_SYSTEM.md)** - Election system deployment guide
+- **[ELECTION_DATA_ACCURACY_SUMMARY.md](../ELECTION_DATA_ACCURACY_SUMMARY.md)** ⭐ NEW! - Data accuracy crisis fix and prevention
 - **[ELECTION_DATA_WORKFLOW.md](../Election Data and Files/ELECTION_DATA_WORKFLOW.md)** - Annual election cycle workflow
 - **[FORMATTING_RULES.md](../Election Data and Files/Templates/FORMATTING_RULES.md)** - State summary formatting standards
+- **[HOW_TO_USE_PROMPT.md](../Election Data and Files/Templates/HOW_TO_USE_PROMPT.md)** ⭐ NEW! - AI prompt verification guide
 - **[AI_PROMPT_TEMPLATE.md](../Election Data and Files/Templates/AI_PROMPT_TEMPLATE.md)** - AI-assisted content creation
 
 ### News Management
@@ -190,6 +192,14 @@ This folder contains all documentation, tutorials, and guides for the Christian 
 - Email subscription system with AWS SES integration
 - Open/click tracking for newsletters
 
+### Election Data Accuracy Fix ✅
+- **Data Accuracy Crisis Resolved**: Fixed 43 out of 50 states with incorrect race/candidate counts
+- **Root Cause**: AI-generated upload scripts had hardcoded wrong numbers in summary text
+- **Solution**: Created fix_all_state_summaries.py to count actual database records and update summaries
+- **Prevention**: Updated AI prompt template with explicit counting instructions and verification checklist
+- **Tools Created**: audit_all_states_data.py, fix_all_state_summaries.py, delete_hawaii_data.py
+- **Documentation**: Comprehensive guides (ELECTION_DATA_ACCURACY_SUMMARY.md, HOW_TO_USE_PROMPT.md)
+
 ### Mobile Optimization ✅
 - Footer text visibility fix
 - Articles page mobile optimization with responsive grid
@@ -283,8 +293,7 @@ This folder contains all documentation, tutorials, and guides for the Christian 
 ## Support & Contact
 
 ### Platform Access
-- **Website**: https://videos.mytestimony.click
-- **CloudFront CDN**: https://d271vky579caz9.cloudfront.net
+- **Website**: https://christianconservativestoday.com
 - **Demo Login**: admin@test.com / AdminPass123!
 
 ### Documentation

@@ -2,8 +2,8 @@
 
 ## 📊 Database Summary
 
-**Total Races Documented:** 140+ races across Virginia
-**Total Candidates Profiled:** 25+ major candidates
+**Total Races Documented:** 7 races across Virginia
+**Total Candidates Profiled:** 27 candidates
 **Election Dates:** 
 - November 5, 2025 (General Election - Governor, Lt. Governor, Attorney General, All 140 Legislature Seats)
 

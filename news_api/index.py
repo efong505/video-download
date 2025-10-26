@@ -14,7 +14,7 @@ users_table = dynamodb.Table('users')
 # Configuration
 JWT_SECRET = 'your-jwt-secret-key'
 S3_BUCKET = 'my-video-downloads-bucket'
-CLOUDFRONT_URL = 'https://d271vky579caz9.cloudfront.net'
+CLOUDFRONT_URL = 'https://christianconservativestoday.com'
 
 def lambda_handler(event, context):
     # CORS headers

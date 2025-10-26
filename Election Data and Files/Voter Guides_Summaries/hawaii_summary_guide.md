@@ -2,8 +2,8 @@
 
 ## 📊 Database Summary
 
-**Total Races Documented:** 50+ races across Hawaii
-**Total Candidates Profiled:** 8+ major candidates
+**Total Races Documented:** 53 races across Hawaii
+**Total Candidates Profiled:** 54 candidates
 **Election Dates:** 
 - August 8, 2026 (Primary Election)
 - November 3, 2026 (General Election - State/County)

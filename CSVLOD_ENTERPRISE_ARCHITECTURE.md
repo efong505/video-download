@@ -6,7 +6,7 @@
 **Date**: January 2025  
 **Framework**: Svyatoslav Kotusev CSVLOD Model  
 **Organization**: Christian Conservatives Today  
-**Platform URL**: https://videos.mytestimony.click
+**Platform URL**: https://christianconservativestoday.com
 
 ---
 

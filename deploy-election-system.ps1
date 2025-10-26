@@ -206,7 +206,7 @@ Write-Host "✅ HTML Files Updated & Uploaded" -ForegroundColor White
 Write-Host "✅ Navigation Links Added" -ForegroundColor White
 Write-Host ""
 Write-Host "API URL: $apiUrl" -ForegroundColor Cyan
-Write-Host "Public Page: https://d271vky579caz9.cloudfront.net/election-map.html" -ForegroundColor Cyan
-Write-Host "Admin Page: https://d271vky579caz9.cloudfront.net/admin-contributors.html" -ForegroundColor Cyan
+Write-Host "Public Page: https://christianconservativestoday.com/election-map.html" -ForegroundColor Cyan
+Write-Host "Admin Page: https://christianconservativestoday.com/admin-contributors.html" -ForegroundColor Cyan
 Write-Host ""
 Write-Host "🎉 State Election Contributor System is LIVE!" -ForegroundColor Green

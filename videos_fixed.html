@@ -213,7 +213,7 @@
     </div>
 
     <script>
-        const BUCKET_URL = 'https://d271vky579caz9.cloudfront.net';
+        const BUCKET_URL = 'https://christianconservativestoday.com';
         const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
         const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
         
@@ -306,7 +306,7 @@
             const col = document.createElement('div');
             col.className = 'col-md-4';
             
-            const embedUrl = `https://d271vky579caz9.cloudfront.net/embed.html?v=${filename}&t=${encodeURIComponent(title)}`;
+            const embedUrl = `https://christianconservativestoday.com/embed.html?v=${filename}&t=${encodeURIComponent(title)}`;
             const typeBadge = videoType === 'local' ? '' : `<span style="background: #007bff; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; position: absolute; top: 5px; right: 5px; z-index: 10;">${videoType.toUpperCase()}</span>`;
             
             if (videoType === 'local') {

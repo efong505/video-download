@@ -203,8 +203,8 @@ Create 20,000-25,000 character markdown guide with this EXACT structure:
 
 ## 📊 Database Summary
 
-**Total Races Documented:** [NUMBER from your races array]
-**Total Candidates Profiled:** [NUMBER from your candidates array]
+**Total Races Documented:** [EXACT COUNT: len(races) - COUNT THE ACTUAL NUMBER OF ITEMS IN YOUR RACES ARRAY]
+**Total Candidates Profiled:** [EXACT COUNT: len(candidates) - COUNT THE ACTUAL NUMBER OF ITEMS IN YOUR CANDIDATES ARRAY]
 **Election Dates:**
 - [DATE] ([ELECTION TYPE])
 - [DATE] ([ELECTION TYPE])
@@ -483,6 +483,17 @@ Ready to run: `python upload_[state]_data.py`
 ---
 
 **NOW CREATE COMPLETE DATA FOR: [STATE NAME]**
+
+**CRITICAL VERIFICATION BEFORE SUBMITTING:**
+1. Count your races array: len(races) = ?
+2. Count your candidates array: len(candidates) = ?
+3. Verify the Database Summary section uses THESE EXACT NUMBERS
+4. DO NOT use estimated numbers like "100+" or "50-60" - use EXACT counts
+5. The numbers in the summary MUST match len(races) and len(candidates)
+
+**Example:**
+If races array has 23 items, write: "Total Races Documented: 23"
+If candidates array has 45 items, write: "Total Candidates Profiled: 45"
 ```
 
 ---

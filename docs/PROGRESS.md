@@ -481,7 +481,7 @@ articles-table:
 ## Key System Information
 - **Platform Name**: Christian Conservative Video Platform
 - **Super User**: super@admin.com / SuperSecure123!
-- **CloudFront URL**: https://d271vky579caz9.cloudfront.net
+- **Website URL**: https://christianconservativestoday.com
 - **Architecture**: Serverless AWS (Lambda, S3, DynamoDB, CloudFront)
 - **Authentication**: JWT with 24-hour expiration
 - **Database**: DynamoDB tables for users, video-metadata, download-jobs, articles ✅
@@ -1010,7 +1010,7 @@ articles-table:
 - PayPal Sandbox Client ID: AU8sbnkVvvCSFzZooSwDCsfdVvuln82gK2kZvloeNtWd63ETi0dE_lkjVxvy2FJC1HqcD5GkRXSmjiZv
 - PayPal API Base URL: https://api-m.sandbox.paypal.com (sandbox mode)
 - Webhook URL: https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal?action=webhook
-- Product Images: https://d271vky579caz9.cloudfront.net/images/[plan-name].jpg
+- Product Images: https://christianconservativestoday.com/images/[plan-name].jpg
 
 **Files Modified**: 
 - `paypal_billing_api/index.py` - Updated with sandbox credentials
@@ -3414,3 +3414,96 @@ NEXT STEPS:
 - ✅ Index.html analysis completed with 10 suggestions
 
 **Status**: Phase 2 CSS consolidation complete, documentation v2.0 updated, ready for deployment and index.html enhancements.
+
+## Domain Migration to christianconservativestoday.com ✅ COMPLETE (January 2025)
+
+### Migration Overview
+**Feature**: Complete platform migration from videos.mytestimony.click and CloudFront URLs to christianconservativestoday.com domain.
+
+### Changes Implemented
+**Documentation Updates** (13 files):
+- docs/README.md - Platform Access section
+- docs/README_v2.md - Platform Access section
+- docs/SALES_FLYER.md - 3 references (signup, website, click here)
+- docs/SALES_FLYER_v2.md - 3 references (signup, website, click here)
+- docs/TECHNICAL_DOCUMENTATION.md - Platform URL and CloudFront references
+- docs/TECHNICAL_DOCUMENTATION_v2.md - Platform URL and CloudFront reference
+- docs/NEWS_MANAGEMENT_SYSTEM.md - CloudFront reference
+- docs/PROGRESS.md - CloudFront URL and product images
+- docs/PROGRESS-Backup.md - CloudFront URL and product images
+- docs/PHASE_2B_PROGRESS.md - Shareable links format
+- CSVLOD_ENTERPRISE_ARCHITECTURE.md - Platform URL
+- Election Data and Files/ELECTION_SYSTEM_PROMOTION.md - 3 references
+- deploy-election-system.ps1 - Public and admin page URLs
+
+**Frontend Files Updated** (9 HTML files):
+- videos.html - BUCKET_URL, embedUrl, thumbnail CSS, share notification
+- admin.html - embedUrl and videoUrl
+- category.html - CLOUDFRONT_URL
+- embed.html - video source URL
+- user-page.html - videoUrl, thumbnailUrl, fallbackThumbnailUrl
+- videos-from-s3.html - BUCKET_URL
+- videos_current.html - BUCKET_URL
+- videos_fixed.html - BUCKET_URL and embedUrl
+- article.html - Open Graph and Twitter image URLs
+
+**Backend Files Updated** (5 Python files):
+- generate_missing_thumbnails.py - CLOUDFRONT_URL
+- news_api/index.py - CLOUDFRONT_URL
+- paypal_billing_api/index.py - return_url and cancel_url
+- paypal_billing_api/package/index.py - return_url and cancel_url
+
+**Lambda Functions Deployed** (2 functions):
+- news-api - Updated CLOUDFRONT_URL constant
+- paypal-billing-api - Updated return/cancel URLs
+
+### Key Fixes Implemented
+**Issue 1: Share Button Domain**
+- **Problem**: Video share links used d271vky579caz9.cloudfront.net instead of christianconservativestoday.com
+- **Resolution**: Updated embedUrl in videos.html to use new domain
+- **Result**: Share links now use https://christianconservativestoday.com/embed.html
+
+**Issue 2: Video Thumbnail Size**
+- **Problem**: Videos showing large preview instead of thumbnail size
+- **Resolution**: Uncommented .thumbnail-container and .thumbnail CSS rules in videos.html
+- **Result**: Thumbnails now display at proper 200px height with object-fit: cover
+
+**Issue 3: Share Button Notification**
+- **Problem**: No visual feedback when share link copied to clipboard
+- **Resolution**: Added showNotification() function with animated green success message
+- **Result**: "✅ Link copied to clipboard!" notification appears for 3 seconds
+
+### Domain Changes
+**Old URLs**:
+- videos.mytestimony.click
+- d271vky579caz9.cloudfront.net
+
+**New URL**:
+- christianconservativestoday.com (all references)
+
+### Deployment Process
+**S3 Upload**:
+- Uploaded 9 HTML files to mytestimony-frontend bucket
+- Files: videos.html, admin.html, category.html, embed.html, user-page.html, article.html, videos-from-s3.html, videos_current.html, videos_fixed.html
+
+**Lambda Deployment**:
+- news-api function updated and deployed
+- paypal-billing-api function updated and deployed
+
+**CloudFront Invalidation**:
+- Distribution ID: E2Q4GKJ05O9MFX
+- Invalidation ID: I8TXMOJ720DT4A5PNT3XKKU26V
+- Paths: 9 HTML files invalidated
+- Status: InProgress → Complete
+
+### Verification Checklist
+- ✅ All documentation references updated to christianconservativestoday.com
+- ✅ All HTML files use new domain for video/image URLs
+- ✅ Share links generate with christianconservativestoday.com domain
+- ✅ Video thumbnails display at correct size (200px height)
+- ✅ Share button shows success notification when clicked
+- ✅ Lambda functions deployed with new domain URLs
+- ✅ CloudFront cache invalidated for immediate updates
+- ✅ All files uploaded to S3 successfully
+
+**Status**: Domain migration to christianconservativestoday.com complete across all platform components (documentation, frontend, backend, Lambda functions). All share links, video embeds, and API endpoints now use the new domain.

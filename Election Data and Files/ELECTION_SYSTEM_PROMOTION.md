@@ -7,7 +7,7 @@
 
 The **Christian Conservative Election Tracking System** is a comprehensive, interactive platform designed to mobilize Christian conservative voters through state-by-state election coverage, candidate profiles, and downloadable voter guides. Built on AWS serverless architecture, this system provides real-time election data, verified state correspondents, and biblical voter resources to help Christians make informed decisions at the ballot box.
 
-**Platform URL:** https://videos.mytestimony.click/election-map.html
+**Platform URL:** https://christianconservativestoday.com/election-map.html
 
 ---
 
@@ -341,7 +341,7 @@ A **one-stop election hub** that provides:
 
 ### General Inquiries
 **Email:** info@mytestimony.click  
-**Website:** https://videos.mytestimony.click
+**Website:** https://christianconservativestoday.com
 
 ### State Correspondent Applications
 **Email:** correspondents@mytestimony.click  
@@ -353,7 +353,7 @@ A **one-stop election hub** that provides:
 
 ### Candidate Profile Submissions
 **Email:** candidates@mytestimony.click  
-**Online Form:** https://videos.mytestimony.click/admin-contributors.html
+**Online Form:** https://christianconservativestoday.com/admin-contributors.html
 
 ### Technical Support
 **Email:** support@mytestimony.click  

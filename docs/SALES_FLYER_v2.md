@@ -167,7 +167,7 @@
 ## 🚀 **GET STARTED IN MINUTES**
 
 ### 1️⃣ **SIGN UP FREE**
-Create your account at **videos.mytestimony.click**
+Create your account at **christianconservativestoday.com**
 
 ### 2️⃣ **UPLOAD CONTENT**
 Add videos, write articles, integrate Bible verses
@@ -198,7 +198,7 @@ Upgrade as your ministry grows
 ## 📞 **READY TO TRANSFORM YOUR MINISTRY?**
 
 ### 🌐 **TRY IT NOW - FREE!**
-**Website**: https://videos.mytestimony.click (Christian Conservatives Today)
+**Website**: https://christianconservativestoday.com
 **Demo Login**: admin@test.com / AdminPass123!
 
 ### 📧 **CONTACT US**
@@ -246,7 +246,7 @@ Share your faith and values without fear of suppression.
 **Join hundreds of pastors, commentators, and ministry leaders who have already transformed their digital presence.**
 
 ### 🚀 **START YOUR FREE TRIAL NOW**
-**Click here**: https://videos.mytestimony.click
+**Click here**: https://christianconservativestoday.com
 
 ### 📱 **Questions? Call Us Today!**
 **Get answers from our ministry-focused support team**

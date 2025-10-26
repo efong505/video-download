@@ -43,7 +43,7 @@
 ```
 ┌─────────────────────────────────────────────────────────────────┐
 │                         USER INTERFACE                          │
-│  (CloudFront CDN: https://d271vky579caz9.cloudfront.net)       │
+│  (CloudFront CDN: https://christianconservativestoday.com)      │
 │                                                                  │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐      │
 │  │ index.   │  │ videos.  │  │ articles.│  │ admin.   │      │
@@ -553,7 +553,7 @@ my-video-downloads-bucket/
     └── video2_thumb_3.jpg
 ```
 
-**CloudFront Distribution**: https://d271vky579caz9.cloudfront.net
+**CloudFront Distribution**: https://christianconservativestoday.com
 - **Origin**: S3 bucket
 - **Caching**: Enabled for videos and thumbnails
 - **HTTPS**: Required
@@ -1606,7 +1606,6 @@ Christian Conservatives Today is a fully serverless, scalable platform built on 
 
 ---
 
-**Platform URL**: https://videos.mytestimony.click  
-**CloudFront CDN**: https://d271vky579caz9.cloudfront.net  
+**Platform URL**: https://christianconservativestoday.com  
 **Documentation Version**: 1.0  
 **Last Updated**: January 2025

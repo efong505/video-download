@@ -319,7 +319,7 @@ Indexes: email-index, category-index, state-index
 
 S3 Buckets:
   - my-video-downloads-bucket (videos, thumbnails, static files)
-  - CloudFront Distribution: https://d271vky579caz9.cloudfront.net
+  - CloudFront Distribution: https://christianconservativestoday.com
 
 API Gateway:
   - REST APIs: 8+ endpoints
@@ -402,7 +402,6 @@ Christian Conservatives Today v2.0 represents a significant evolution from the o
 
 ---
 
-**Platform URL**: https://videos.mytestimony.click  
-**CloudFront CDN**: https://d271vky579caz9.cloudfront.net  
+**Platform URL**: https://christianconservativestoday.com  
 **Documentation Version**: 2.0  
 **Last Updated**: January 2025
