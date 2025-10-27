@@ -145,3 +145,20 @@
     color: #666;
     font-size: 0.9rem;
 }
+
+@media (max-width: 416px) {
+    .container {
+        padding: 0 10px;
+    }
+}
+
+@media (max-width: 399px) {
+    .admin-secondary-menu {
+        padding-top: 43px;
+        margin-top: 22px;
+    }
+    .header {
+        padding-top: 70px;
+    }
+    
+}

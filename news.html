@@ -34,18 +34,15 @@
             transition: all 0.3s ease;
             border-left: 5px solid #3498db;
         }
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .horizontal-scroll-container {
             display: flex;
+            flex-wrap: nowrap;
             overflow-x: auto;
             gap: 20px;
             padding: 10px 0;
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
         }
-
-        */
         .horizontal-scroll-container::-webkit-scrollbar {
             height: 8px;
         }
@@ -63,6 +60,7 @@
         .news-card-wrapper {
             flex: 0 0 400px;
             min-width: 400px;
+            max-width: 400px;
         }
         .category-section-header {
             color: #2c3e50;
@@ -71,14 +69,17 @@
             margin: 30px 0 15px 0;
             padding-bottom: 10px;
             border-bottom: 3px solid #3498db;
+            display: block;
+            width: 100%;
+            clear: both;
         }
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .scroll-wrapper {
             position: relative;
+            display: block;
+            width: 100%;
+            clear: both;
+            margin-bottom: 30px;
         }
-
-        */
         /* CONSOLIDATED TO card-styles.css or form-styles.css
 
         .scroll-btn {
@@ -411,11 +412,11 @@
             // Display each category
             var categoryIndex = 0;
             Object.keys(groupedNews).sort().forEach(function(category) {
+                html += '<div class="category-section" style="display: block; width: 100%; clear: both; margin-bottom: 40px;">';
                 html += '<h3 class="category-section-header">' + category.toUpperCase() + '</h3>';
                 html += '<div class="scroll-wrapper">';
                 html += '<button class="scroll-btn scroll-btn-left" onclick="scrollCategory(' + categoryIndex + ', -420)">◀</button>';
                 html += '<div class="horizontal-scroll-container" id="news-scroll-' + categoryIndex + '">';
-                categoryIndex++;
                 
                 groupedNews[category].forEach(function(news) {
                     var isBreaking = news.is_breaking;
@@ -470,14 +471,17 @@
                     html += '<a href="' + news.external_url + '" target="_blank" class="external-link">';
                     html += '<i class="fas fa-external-link-alt"></i> Original Source</a>';
                 }
-                html += '</div>';
+                html += '</div>'; // Close actions div
+                html += '</div>'; // Close news-card
                 html += '</div>'; // Close news-card-wrapper
+                });
+                
+                html += '</div>'; // Close horizontal-scroll-container
+                html += '<button class="scroll-btn scroll-btn-right" onclick="scrollCategory(' + categoryIndex + ', 420)">▶</button>';
+                html += '</div>'; // Close scroll-wrapper
+                html += '</div>'; // Close category-section
+                categoryIndex++;
             });
-            
-            html += '</div>'; // Close horizontal-scroll-container
-            html += '<button class="scroll-btn scroll-btn-right" onclick="scrollCategory(' + (categoryIndex - 1) + ', 420)">▶</button>';
-            html += '</div>'; // Close scroll-wrapper
-        });
             
             container.innerHTML = html;
             
