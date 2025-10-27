@@ -87,16 +87,16 @@ We'd love to collaborate with [Organization Name] to get this tool into the hand
 - Link on your website
 - Joint webinar/training
 
-**View the Tool:** [YOUR-URL]/election-map.html
+**View the Tool:** [https://christianconservativestoday.com/election-map.html](https://christianconservativestoday.com/election-map.html)
 
 This is a non-commercial project—our only goal is helping Christians vote informed and engaged. No strings attached.
 
 Would you be open to a 15-minute call to discuss how we might work together?
 
 In His service,
-[Your Name]
-[Your Contact Info]
-[Your Website]
+Edward Fong
+505-639-8100
+[https://christianconservativestoday.com](https://christianconservativestoday.com)
 
 ---
 
