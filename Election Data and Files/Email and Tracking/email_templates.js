@@ -1,6 +1,6 @@
 // Professional Email Templates for Campaigns
 
-const EMAIL_TEMPLATES = {
+var EMAIL_TEMPLATES = {
     // Template 1: Election Update (Purple Gradient)
     election_update: {
         name: "Election Update",
@@ -230,3 +230,7 @@ const EMAIL_TEMPLATES = {
 </html>`
     }
 };
+
+if (typeof window !== 'undefined') {
+    window.EMAIL_TEMPLATES = EMAIL_TEMPLATES;
+}

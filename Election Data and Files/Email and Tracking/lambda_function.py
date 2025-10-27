@@ -184,7 +184,8 @@ def handle_open_tracking(event):
     """Track email opens via 1x1 pixel"""
     try:
         # Extract tracking ID from URL path
-        tracking_id = event['path'].split('/')[-1]
+        path = event.get('rawPath', event.get('path', ''))
+        tracking_id = path.split('/')[-1]
         
         # Decode to get email and campaign
         email, campaign_id = decode_tracking_id(tracking_id)
@@ -234,7 +235,10 @@ def handle_click_tracking(event):
     """Track link clicks and redirect to destination"""
     try:
         # Extract tracking ID from URL path
-        tracking_id = event['path'].split('/')[-1]
+        path = event.get('rawPath', event.get('path', ''))
+        tracking_id = path.split('/')[-1]
+        
+        print(f"Click tracking - Path: {path}, Tracking ID: {tracking_id}")
         
         # Decode to get email, campaign, and destination URL
         email, campaign_id, destination_url = decode_click_tracking_id(tracking_id)
@@ -332,14 +336,19 @@ def send_confirmation_email(email, first_name=''):
                 Please confirm your email address to start receiving election updates and voter guides.
             </p>
             
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="{confirm_link}" 
-                   style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                          color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; 
-                          font-weight: bold; font-size: 16px;">
-                    ✓ Confirm Subscription
-                </a>
-            </div>
+            <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0;">
+                <tr>
+                    <td align="center">
+                        <a href="{confirm_link}" 
+                           style="display: inline-block; padding: 15px 40px; background-color: #667eea; 
+                                  color: #ffffff !important; text-decoration: none; font-weight: bold; 
+                                  font-size: 16px; border-radius: 5px; mso-padding-alt: 0; 
+                                  font-family: Arial, sans-serif;">
+                            <span style="color: #ffffff !important;">✓ Confirm Subscription</span>
+                        </a>
+                    </td>
+                </tr>
+            </table>
             
             <p style="font-size: 14px; color: #666; line-height: 1.6;">
                 If you didn't sign up for this, you can safely ignore this email.
@@ -388,10 +397,10 @@ def send_welcome_email(email):
     
     # Generate tracking pixel URL
     tracking_id = encode_tracking_id(email, campaign_id)
-    pixel_url = f"{DOMAIN}/track/open/{tracking_id}"
+    pixel_url = f"{API_GATEWAY}/track/open/{tracking_id}"
     
-    # Generate tracked links
-    election_map_link = create_tracked_link(email, campaign_id, f"{DOMAIN}/election-map.html")
+    # Direct links (no click tracking)
+    election_map_link = f"{DOMAIN}/election-map.html"
     unsubscribe_link = f"{DOMAIN}/unsubscribe.html?email={email}"
     
     # HTML email body

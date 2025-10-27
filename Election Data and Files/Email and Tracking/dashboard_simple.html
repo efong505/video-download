@@ -177,12 +177,24 @@
                                         <input type="radio" class="btn-check" name="content-mode" id="mode-markdown">
                                         <label class="btn btn-outline-primary" for="mode-markdown" onclick="switchMode('markdown')">📄 Markdown</label>
                                     </div>
-                                    <small class="text-muted d-block mt-1">💡 Switch between modes anytime. Visual mode renders HTML for editing.</small>
+                                    <small class="text-muted d-block mt-1">💡 Visual mode preserves full HTML styling. Use HTML mode to edit template code.</small>
                                 </div>
                                 <div class="mb-3">
                                     <label class="form-label">Email Content</label>
                                     <div id="editor-container-visual" style="display: block;">
-                                        <div id="quill-editor"></div>
+                                        <div id="editor-toolbar" style="border: 1px solid #dee2e6; border-bottom: none; border-radius: 8px 8px 0 0; padding: 8px; background: #f8f9fa;">
+                                            <button type="button" onclick="formatDoc('bold')" class="btn btn-sm btn-light" title="Bold"><b>B</b></button>
+                                            <button type="button" onclick="formatDoc('italic')" class="btn btn-sm btn-light" title="Italic"><i>I</i></button>
+                                            <button type="button" onclick="formatDoc('underline')" class="btn btn-sm btn-light" title="Underline"><u>U</u></button>
+                                            <button type="button" onclick="formatDoc('insertUnorderedList')" class="btn btn-sm btn-light" title="Bullet List">• List</button>
+                                            <button type="button" onclick="formatDoc('insertOrderedList')" class="btn btn-sm btn-light" title="Numbered List">1. List</button>
+                                            <button type="button" onclick="formatDoc('justifyLeft')" class="btn btn-sm btn-light" title="Align Left">⬅</button>
+                                            <button type="button" onclick="formatDoc('justifyCenter')" class="btn btn-sm btn-light" title="Align Center">↔</button>
+                                            <button type="button" onclick="formatDoc('justifyRight')" class="btn btn-sm btn-light" title="Align Right">➡</button>
+                                            <button type="button" onclick="insertLink()" class="btn btn-sm btn-light" title="Insert Link">🔗</button>
+                                            <button type="button" onclick="formatDoc('removeFormat')" class="btn btn-sm btn-light" title="Clear Formatting">✖</button>
+                                        </div>
+                                        <div id="rich-html-editor" contenteditable="true" style="border: 1px solid #dee2e6; border-radius: 0 0 8px 8px; padding: 15px; min-height: 400px; max-height: 600px; overflow-y: auto; background: white;"></div>
                                     </div>
                                     <div id="editor-container-code" style="display: none;">
                                         <textarea id="campaign-content" class="form-control" rows="12" placeholder="Enter your content here..."></textarea>
@@ -535,32 +547,29 @@
         }
 
         let currentMode = 'visual';
-        let quillEditor = null;
+        let richEditor = null;
         
-        // Initialize Quill on page load
         document.addEventListener('DOMContentLoaded', () => {
             loadAllData();
             document.getElementById('search-input').addEventListener('input', (e) => {
                 filterSubscribers(e.target.value);
             });
             
-            // Initialize Quill
-            quillEditor = new Quill('#quill-editor', {
-                theme: 'snow',
-                modules: {
-                    toolbar: [
-                        [{ 'header': [1, 2, 3, false] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'color': [] }, { 'background': [] }],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        [{ 'align': [] }],
-                        ['link', 'image'],
-                        ['clean']
-                    ]
-                }
-            });
+            richEditor = document.getElementById('rich-html-editor');
         });
         let currentTemplate = '';
+        
+        function formatDoc(cmd, value = null) {
+            document.execCommand(cmd, false, value);
+            richEditor.focus();
+        }
+        
+        function insertLink() {
+            const url = prompt('Enter URL:');
+            if (url) {
+                formatDoc('createLink', url);
+            }
+        }
 
         function switchMode(mode) {
             const visualContainer = document.getElementById('editor-container-visual');
@@ -569,8 +578,8 @@
             
             // Get current content
             let content = '';
-            if (currentMode === 'visual' && quillEditor) {
-                content = quillEditor.root.innerHTML;
+            if (currentMode === 'visual' && richEditor) {
+                content = richEditor.innerHTML;
             } else {
                 content = codeTextarea.value;
             }
@@ -579,18 +588,33 @@
             if (mode === 'visual') {
                 visualContainer.style.display = 'block';
                 codeContainer.style.display = 'none';
-                if (quillEditor) {
+                if (richEditor) {
                     if (currentMode === 'markdown' && content && !content.startsWith('<')) {
                         content = marked.parse(content);
                     }
-                    // Extract body content from full HTML templates
                     const bodyMatch = content.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
                     if (bodyMatch) {
                         content = bodyMatch[1];
                     }
-                    quillEditor.root.innerHTML = content;
+                    richEditor.innerHTML = content;
                 }
-            } else {
+            } else if (mode === 'markdown') {
+                visualContainer.style.display = 'none';
+                codeContainer.style.display = 'block';
+                // Convert HTML to markdown
+                if (currentMode === 'visual') {
+                    content = htmlToMarkdown(content);
+                } else if (currentMode === 'html') {
+                    // Extract body content if full HTML, then convert
+                    const bodyMatch = content.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+                    if (bodyMatch) {
+                        content = htmlToMarkdown(bodyMatch[1]);
+                    } else {
+                        content = htmlToMarkdown(content);
+                    }
+                }
+                codeTextarea.value = content;
+            } else { // HTML mode
                 visualContainer.style.display = 'none';
                 codeContainer.style.display = 'block';
                 // If switching from visual to HTML and we have a template, reconstruct full HTML
@@ -600,11 +624,53 @@
                     if (bodyMatch) {
                         content = template.html.replace(bodyMatch[1], content);
                     }
+                } else if (currentMode === 'markdown') {
+                    // Convert markdown to HTML
+                    content = marked.parse(content);
                 }
                 codeTextarea.value = content;
             }
             
             currentMode = mode;
+        }
+        
+        function htmlToMarkdown(html) {
+            // Simple HTML to Markdown converter
+            let md = html;
+            
+            // Headers
+            md = md.replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1\n\n');
+            md = md.replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n\n');
+            md = md.replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n\n');
+            
+            // Bold and italic
+            md = md.replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**');
+            md = md.replace(/<b[^>]*>(.*?)<\/b>/gi, '**$1**');
+            md = md.replace(/<em[^>]*>(.*?)<\/em>/gi, '*$1*');
+            md = md.replace(/<i[^>]*>(.*?)<\/i>/gi, '*$1*');
+            
+            // Links
+            md = md.replace(/<a[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/gi, '[$2]($1)');
+            
+            // Lists
+            md = md.replace(/<li[^>]*>(.*?)<\/li>/gi, '- $1\n');
+            md = md.replace(/<\/ul>/gi, '\n');
+            md = md.replace(/<\/ol>/gi, '\n');
+            md = md.replace(/<ul[^>]*>/gi, '');
+            md = md.replace(/<ol[^>]*>/gi, '');
+            
+            // Paragraphs
+            md = md.replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n');
+            md = md.replace(/<br\s*\/?>/gi, '\n');
+            
+            // Remove remaining HTML tags
+            md = md.replace(/<[^>]+>/g, '');
+            
+            // Clean up extra whitespace
+            md = md.replace(/\n{3,}/g, '\n\n');
+            md = md.trim();
+            
+            return md;
         }
 
         function loadTemplate() {
@@ -619,16 +685,29 @@
                 return;
             }
             
+            if (typeof EMAIL_TEMPLATES === 'undefined') {
+                alert('Error: Email templates not loaded. Refresh the page.');
+                return;
+            }
+            
             currentTemplate = templateKey;
             const template = EMAIL_TEMPLATES[templateKey];
+            
+            if (!template) {
+                alert('Error: Template not found: ' + templateKey);
+                return;
+            }
+            
             previewBtn.style.display = 'block';
             
-            // Load template in current mode
             if (currentMode === 'visual') {
                 const bodyMatch = template.html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
-                if (quillEditor && bodyMatch) {
-                    quillEditor.root.innerHTML = bodyMatch[1];
+                if (richEditor && bodyMatch) {
+                    richEditor.innerHTML = bodyMatch[1];
                 }
+            } else if (currentMode === 'markdown') {
+                const bodyMatch = template.html.match(/<body[^>]*>([\s\S]*?)<\/body>/i);
+                document.getElementById('campaign-content').value = htmlToMarkdown(bodyMatch ? bodyMatch[1] : template.html);
             } else {
                 document.getElementById('campaign-content').value = template.html;
             }
@@ -659,8 +738,8 @@
             let content = '';
             
             // Get content based on current mode
-            if (currentMode === 'visual' && quillEditor) {
-                content = quillEditor.root.innerHTML;
+            if (currentMode === 'visual' && richEditor) {
+                content = richEditor.innerHTML;
                 // If using a template, wrap content back in full HTML structure
                 if (currentTemplate) {
                     const template = EMAIL_TEMPLATES[currentTemplate];
@@ -717,8 +796,8 @@
             let content = '';
             
             // Get content based on current mode
-            if (currentMode === 'visual' && quillEditor) {
-                content = quillEditor.root.innerHTML;
+            if (currentMode === 'visual' && richEditor) {
+                content = richEditor.innerHTML;
                 // If using a template, wrap content back in full HTML structure
                 if (currentTemplate) {
                     const template = EMAIL_TEMPLATES[currentTemplate];

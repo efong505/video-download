@@ -61,6 +61,7 @@ def resend_welcome(email):
     import base64
     ses = boto3.client('ses', region_name='us-east-1')
     DOMAIN = 'https://christianconservativestoday.com'
+    API_GATEWAY = 'https://niexv1rw75.execute-api.us-east-1.amazonaws.com'
     FROM_EMAIL = 'Christian Conservatives Today <contact@christianconservativestoday.com>'
     
     try:
@@ -70,10 +71,10 @@ def resend_welcome(email):
         
         campaign_id = 'welcome-email-resend'
         tracking_id = base64.urlsafe_b64encode(f"{email}|{campaign_id}".encode()).decode()
-        pixel_url = f"{DOMAIN}/track/open/{tracking_id}"
+        pixel_url = f"{API_GATEWAY}/track/open/{tracking_id}"
         election_map_data = f"{email}|{campaign_id}|{DOMAIN}/election-map.html"
-        election_map_link = f"{DOMAIN}/track/click/{base64.urlsafe_b64encode(election_map_data.encode()).decode()}"
-        unsubscribe_link = f"{DOMAIN}/unsubscribe?email={email}"
+        election_map_link = f"{API_GATEWAY}/track/click/{base64.urlsafe_b64encode(election_map_data.encode()).decode()}"
+        unsubscribe_link = f"{DOMAIN}/unsubscribe.html?email={email}"
         
         html_body = f"""
         <html>
@@ -155,13 +156,32 @@ def send_campaign():
     for sub in subs:
         email = sub['email']
         try:
-            # Add tracking
+            # Add tracking pixel
             tracking_id = base64.urlsafe_b64encode(f"{email}|{campaign_id}".encode()).decode()
-            pixel_url = f"{DOMAIN}/track/open/{tracking_id}"
-            unsubscribe_link = f"{DOMAIN}/unsubscribe?email={email}"
+            API_GATEWAY = 'https://niexv1rw75.execute-api.us-east-1.amazonaws.com'
+            pixel_url = f"{API_GATEWAY}/track/open/{tracking_id}"
+            unsubscribe_link = f"{DOMAIN}/unsubscribe.html?email={email}"
             
-            # Inject tracking into HTML
-            tracked_html = html_content.replace('</body>', f'<img src="{pixel_url}" width="1" height="1" style="display:none;"><p style="font-size:11px;color:#999;margin-top:20px;"><a href="{unsubscribe_link}">Unsubscribe</a></p></body>')
+            # Add click tracking to all links
+            import re
+            tracked_html = html_content
+            
+            # Find all href links
+            def replace_link(match):
+                original_url = match.group(1)
+                # Skip if already a tracking link or unsubscribe link
+                if 'track/click' in original_url or 'unsubscribe' in original_url:
+                    return match.group(0)
+                # Create tracked link
+                link_data = f"{email}|{campaign_id}|{original_url}"
+                tracked_id = base64.urlsafe_b64encode(link_data.encode()).decode()
+                tracked_url = f"{API_GATEWAY}/track/click/{tracked_id}"
+                return f'href="{tracked_url}"'
+            
+            tracked_html = re.sub(r'href="([^"]+)"', replace_link, tracked_html)
+            
+            # Inject tracking pixel and unsubscribe
+            tracked_html = tracked_html.replace('</body>', f'<img src="{pixel_url}" width="1" height="1" style="display:none;"><p style="font-size:11px;color:#999;margin-top:20px;"><a href="{unsubscribe_link}">Unsubscribe</a></p></body>')
             
             ses.send_email(
                 Source=FROM_EMAIL,
