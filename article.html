@@ -121,19 +121,18 @@
             }
             
             try {
-                const response = await fetch(ARTICLES_API + '?action=get&article_id=' + articleId);
+                const authToken = localStorage.getItem('auth_token');
+                const headers = authToken ? {'Authorization': 'Bearer ' + authToken} : {};
+                
+                const response = await fetch(ARTICLES_API + '?action=get&article_id=' + articleId, {headers});
                 const data = await response.json();
                 
                 if (data.article) {
-                    // Check if article is public or user is authenticated
-                    const isPublic = data.article.visibility === 'public';
-                    const isAuthenticated = localStorage.getItem('auth_token');
-                    
-                    if (isPublic || isAuthenticated) {
-                        displayArticle(data.article, isAuthenticated);
-                    } else {
-                        showLoginPrompt();
-                    }
+                    displayArticle(data.article, authToken);
+                } else if (response.status === 401) {
+                    showLoginPrompt();
+                } else if (response.status === 403) {
+                    showNoAccessMessage();
                 } else {
                     document.getElementById('article-container').innerHTML = '<div class="alert alert-danger">Article not found</div>';
                 }
@@ -396,6 +395,15 @@
                 '<p>This article requires login to view. Please sign in to access this content.</p>' +
                 '<a href="login.html" class="btn btn-primary me-2">🔑 Login</a>' +
                 '<a href="register.html" class="btn btn-outline-primary">📝 Sign Up Free</a>' +
+            '</div>';
+        }
+        
+        function showNoAccessMessage() {
+            const container = document.getElementById('article-container');
+            container.innerHTML = '<div class="alert alert-danger text-center">' +
+                '<h4>🚫 Access Denied</h4>' +
+                '<p>This is a private article. Only the author and administrators can view this content.</p>' +
+                '<a href="articles.html" class="btn btn-primary">← Back to Articles</a>' +
             '</div>';
         }
         

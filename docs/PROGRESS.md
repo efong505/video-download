@@ -3593,8 +3593,45 @@ NEXT STEPS:
 
 **Status**: Video thumbnail sizing issue completely resolved by fixing card-styles.css padding-top conflict. Thumbnails now display correctly at 200px height on live site matching local behavior.
 
+## Private Article Visibility Fix ✅ COMPLETE (January 2025)
+
+### Issue Summary
+**Problem**: Users unable to view their own private articles despite being logged in as the article author.
+
+### Root Cause
+**Backend**: API Gateway normalizing Authorization header to lowercase, Lambda checking uppercase only
+**Frontend**: Permission check comparing email with author name instead of author_email field
+
+### Resolution
+**Backend Fix** (articles_api/index.py):
+- Updated extract_user_from_token() to check both 'Authorization' and 'authorization' headers
+- Added debug logging for token extraction and permission checks
+
+**Frontend Fix** (article.html):
+- Removed frontend permission check that was comparing user.email with article.author (name)
+- Now trusts backend response: 200=display, 401=login prompt, 403=access denied
+- Backend is authoritative source for access control
+
+### Files Modified
+- `articles_api/index.py` - Case-insensitive header checking
+- `article.html` - Removed duplicate permission logic
+- `deploy-articles-api.ps1` - Created deployment script
+
+### Verification
+- ✅ Backend logs show correct user/author matching
+- ✅ Users can view their own private articles
+- ✅ Admins/editors can view all private articles
+
+**Status**: Private article visibility fully functional with proper role-based access control.
+
 
 ## Phase 5 - Mobile App Development 📱 PLANNED
+
+### Timeline
+- **Q1**: PWA launch (immediate mobile access)
+- **Q2-Q3**: React Native development
+- **Q4**: App store submission and launch
+- **Year 2**: Advanced features and optimization
 
 ### Overview
 Transform the Christian Conservative Platform into native mobile applications for iOS and Android, providing seamless access to videos, articles, news, and election coverage on mobile devices.

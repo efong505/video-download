@@ -551,8 +551,19 @@ def get_article(event):
             user_email = user_info['email']
             user_role = user_info['role']
             article_author_email = article.get('author_email', '')
+            article_author = article.get('author', '')
             
-            if user_role not in ['super_user', 'admin'] and user_email != article_author_email:
+            # DEBUG LOGGING
+            print(f"DEBUG: user_email={user_email}, user_role={user_role}")
+            print(f"DEBUG: article_author_email={article_author_email}, article_author={article_author}")
+            
+            # Allow access if: admin/super_user/editor, or email matches author_email, or email matches author field
+            is_admin = user_role in ['super_user', 'admin', 'editor']
+            is_author = user_email == article_author_email or user_email == article_author
+            
+            print(f"DEBUG: is_admin={is_admin}, is_author={is_author}")
+            
+            if not (is_admin or is_author):
                 return {
                     'statusCode': 403,
                     'headers': cors_headers(),
@@ -744,8 +755,13 @@ def convert_decimals(obj):
 def extract_user_from_token(event):
     """Extract user information from JWT token"""
     try:
-        auth_header = event.get('headers', {}).get('Authorization', '')
-        if not auth_header.startswith('Bearer '):
+        headers = event.get('headers', {})
+        # API Gateway may normalize headers to lowercase
+        auth_header = headers.get('Authorization') or headers.get('authorization', '')
+        
+        print(f"DEBUG: auth_header={auth_header[:50] if auth_header else 'None'}...")  # Log first 50 chars
+        
+        if not auth_header or not auth_header.startswith('Bearer '):
             return None
         
         token = auth_header.split(' ')[1]
@@ -758,12 +774,15 @@ def extract_user_from_token(event):
         payload_data += '=' * (4 - len(payload_data) % 4)
         payload = json.loads(base64.urlsafe_b64decode(payload_data))
         
+        print(f"DEBUG: Decoded token - email={payload.get('email')}, role={payload.get('role')}")
+        
         return {
             'user_id': payload.get('user_id'),
             'email': payload.get('email'),
             'role': payload.get('role')
         }
-    except Exception:
+    except Exception as e:
+        print(f"DEBUG: Token extraction error: {str(e)}")
         return None
 
 def get_user_name(email):

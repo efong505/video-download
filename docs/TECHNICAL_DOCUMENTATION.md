@@ -19,11 +19,13 @@
 
 ### Key Metrics
 - **Architecture**: 100% Serverless (AWS Lambda, S3, DynamoDB, CloudFront)
-- **Lambda Functions**: 9 microservices
-- **Database Tables**: 4 DynamoDB tables
+- **Lambda Functions**: 15+ microservices
+- **Database Tables**: 15+ DynamoDB tables
 - **Storage**: S3 with CloudFront CDN
 - **Authentication**: JWT-based with 24-hour expiration
-- **User Roles**: 3-tier system (Super User > Admin > User)
+- **User Roles**: 4-tier system (Super User > Admin > Editor > User)
+- **Election Coverage**: ALL 50 US STATES (290+ races, 197+ candidates)
+- **Email System**: AWS SES with open/click tracking
 
 ### Technology Stack
 - **Backend**: Python 3.9+ (AWS Lambda)
@@ -242,7 +244,7 @@ ENTERPRISE TIER
 
 ## AWS Services Integration
 
-### Lambda Functions (9 Total)
+### Lambda Functions (15+ Total)
 
 #### 1. auth-api
 **Purpose**: User authentication and JWT management
@@ -434,6 +436,143 @@ ENTERPRISE TIER
 
 **AWS Access**: AWS Bedrock (Claude Instant model)
 
+#### 10. news-api
+**Purpose**: News article management with scheduled publishing
+**Trigger**: API Gateway (GET/POST/PUT/DELETE /news)
+**Runtime**: Python 3.9
+**Memory**: 512 MB
+**Timeout**: 60 seconds
+
+**Key Functions**:
+- `create_news()`: Create news articles with scheduled publishing
+- `list_news()`: List news with filtering by topic, state, status
+- `get_news()`: Retrieve single news article
+- `update_news()`: Modify existing news articles
+- `delete_news()`: Remove news articles (role-based permissions)
+
+**Features**:
+- Breaking news banners
+- Scheduled publishing with auto-status logic
+- State-specific election coverage
+- External link support
+- Topic-based categorization
+
+**AWS Access**: DynamoDB (news table)
+
+#### 11. resources-api
+**Purpose**: Resource library management with categories
+**Trigger**: API Gateway (GET/POST/PUT/DELETE /resources)
+**Runtime**: Python 3.9
+**Memory**: 512 MB
+**Timeout**: 60 seconds
+
+**Key Functions**:
+- `create_resource()`: Add new resources to library
+- `list_resources()`: List resources with category filtering
+- `update_resource()`: Edit resource details
+- `delete_resource()`: Remove resources
+
+**Features**:
+- Emoji icons for 47 category keywords
+- Category bulk rename
+- Auto-summary with AWS Bedrock
+- Empty category cleanup
+
+**AWS Access**: DynamoDB (resources table)
+
+#### 12. contributors-api
+**Purpose**: State election coverage and contributor management
+**Trigger**: API Gateway (GET/POST/PUT/DELETE /contributors)
+**Runtime**: Python 3.9
+**Memory**: 512 MB
+**Timeout**: 60 seconds
+
+**Key Functions**:
+- Manage contributors (state correspondents)
+- Manage races (290+ across all 50 states)
+- Manage candidates (197+ with comprehensive profiles)
+- Manage state summaries (comprehensive voter guides)
+- Manage pending changes (editor approval workflow)
+
+**Features**:
+- ALL 50 US STATES coverage
+- CSV bulk import for races and candidates
+- Editor role system with approval workflow
+- Bypass approval toggle for trusted editors
+- Auto-role assignment
+
+**AWS Access**: DynamoDB (contributors, races, candidates, state-summaries, pending-changes tables)
+
+#### 13. email-subscription-handler
+**Purpose**: Email subscription and tracking system
+**Trigger**: API Gateway HTTP API (POST /subscribe, GET /track/open, GET /track/click)
+**Runtime**: Python 3.12
+**Memory**: 256 MB
+**Timeout**: 30 seconds
+
+**Key Functions**:
+- `handle_subscription()`: Process email subscriptions
+- `track_open()`: Log email open events via 1x1 pixel
+- `track_click()`: Log click events via redirect URLs
+- `send_welcome_email()`: Automated welcome email with tracking
+
+**Features**:
+- AWS SES integration
+- Open tracking (1x1 pixel)
+- Click tracking (redirect URLs)
+- Newsletter campaigns
+- Analytics dashboard
+- 95% cheaper than Mailchimp
+
+**AWS Access**: DynamoDB (email-subscribers, email-events tables), AWS SES
+
+#### 14. video-list-api
+**Purpose**: Video listing and filtering
+**Trigger**: API Gateway (GET /video-list)
+**Runtime**: Python 3.9
+**Memory**: 512 MB
+**Timeout**: 60 seconds
+
+**Key Functions**:
+- `list_videos()`: Paginated video listing
+- Filter by category, tags, visibility
+- Sort by date, title, views
+
+**AWS Access**: DynamoDB (video-metadata table)
+
+#### 15. article-analysis-api
+**Purpose**: Article analytics and view tracking
+**Trigger**: API Gateway (POST /article-analysis)
+**Runtime**: Python 3.9
+**Memory**: 256 MB
+**Timeout**: 30 seconds
+
+**Key Functions**:
+- `track_view()`: Increment article view count
+- `get_analytics()`: Retrieve article statistics
+- `get_top_articles()`: Most viewed articles
+- `get_category_stats()`: Performance by category
+
+**AWS Access**: DynamoDB (articles table)
+**Purpose**: URL content extraction and AI summarization
+**Trigger**: API Gateway (POST /url-analysis)
+**Runtime**: Python 3.9
+**Memory**: 512 MB
+**Timeout**: 30 seconds
+
+**Key Functions**:
+- `analyze_url()`: Extract meta tags and generate AI summary
+- `extract_text_content()`: Parse HTML for main content
+- `generate_ai_summary()`: AWS Bedrock Claude integration
+
+**Features**:
+- **Meta Tag Extraction**: Title, description, Open Graph image (always active)
+- **AI Summarization**: Optional AWS Bedrock integration (toggle via environment variable)
+- **Christian Perspective**: Summaries highlight biblical relevance
+- **Cost Control**: Enable/disable AI via USE_AI_SUMMARY environment variable
+
+**AWS Access**: AWS Bedrock (Claude Instant model)
+
 
 ### DynamoDB Tables
 
@@ -514,6 +653,213 @@ ENTERPRISE TIER
 ```
 
 #### 4. download-jobs Table
+**Primary Key**: job_id (String)
+
+**Schema**:
+```json
+{
+  "job_id": "uuid",
+  "url": "https://youtube.com/watch?v=...",
+  "filename": "output.mp4",
+  "title": "Video Title",
+  "tags": ["tag1", "tag2"],
+  "status": "pending|processing|downloading|completed|failed",
+  "progress": 75,
+  "error_message": "Error details if failed",
+  "started_at": "2024-01-01T00:00:00Z",
+  "updated_at": "2024-01-01T00:05:00Z",
+  "completed_at": "2024-01-01T00:10:00Z"
+}
+```
+
+#### 5. comments Table
+**Primary Key**: comment_id (String)
+
+**Schema**:
+```json
+{
+  "comment_id": "uuid",
+  "article_id": "uuid",
+  "user_email": "user@example.com",
+  "user_name": "John Doe",
+  "content": "Comment text",
+  "parent_comment_id": "uuid (for nested replies)",
+  "status": "approved|pending|rejected",
+  "created_at": "2024-01-01T00:00:00Z",
+  "updated_at": "2024-01-01T00:00:00Z"
+}
+```
+
+#### 6. news Table
+**Primary Key**: news_id (String)
+
+**Schema**:
+```json
+{
+  "news_id": "uuid",
+  "title": "News Title",
+  "content": "News content",
+  "topic": "politics|culture|religious_freedom|family|pro_life",
+  "state": "State name (optional)",
+  "external_url": "https://...",
+  "is_breaking": true,
+  "status": "published|scheduled|draft",
+  "publish_date": "2024-01-01T00:00:00Z",
+  "created_at": "2024-01-01T00:00:00Z"
+}
+```
+
+#### 7. resources Table
+**Primary Key**: resource_id (String)
+
+**Schema**:
+```json
+{
+  "resource_id": "uuid",
+  "name": "Resource Name",
+  "category": "Category Name",
+  "url": "https://...",
+  "description": "Resource description",
+  "created_at": "2024-01-01T00:00:00Z"
+}
+```
+
+#### 8. contributors Table
+**Primary Key**: contributor_id (String)
+
+**Schema**:
+```json
+{
+  "contributor_id": "uuid",
+  "user_email": "user@example.com",
+  "first_name": "John",
+  "last_name": "Doe",
+  "phone_number": "+1234567890",
+  "state": "State Name",
+  "bio": "Contributor bio",
+  "verified": true,
+  "status": "active|inactive",
+  "bypass_approval": false
+}
+```
+
+#### 9. races Table
+**Primary Key**: race_id (String)
+
+**Schema**:
+```json
+{
+  "race_id": "uuid",
+  "state": "State Name",
+  "office": "U.S. Senate|Governor|etc.",
+  "election_date": "2025-11-04",
+  "race_type": "primary|general|special|runoff",
+  "description": "Race description"
+}
+```
+
+#### 10. candidates Table
+**Primary Key**: candidate_id (String)
+
+**Schema**:
+```json
+{
+  "candidate_id": "uuid",
+  "race_id": "uuid",
+  "name": "Candidate Name",
+  "state": "State Name",
+  "office": "U.S. Senate",
+  "party": "Republican|Democrat|Independent|etc.",
+  "bio": "Candidate biography",
+  "faith_statement": "Faith statement text",
+  "positions": {
+    "abortion": "pro-life",
+    "guns": "strong-support",
+    "immigration": "border-security"
+  },
+  "endorsements": ["NRA", "Right to Life"],
+  "website": "https://...",
+  "voting_record_url": "https://..."
+}
+```
+
+#### 11. state-summaries Table
+**Primary Key**: state (String)
+
+**Schema**:
+```json
+{
+  "state": "State Name",
+  "title": "State 2025-2026 Elections Guide",
+  "election_year": "2025-2026",
+  "content": "Comprehensive voter guide (15,000-30,000 chars)",
+  "updated_at": "2024-01-01T00:00:00Z"
+}
+```
+
+#### 12. pending-changes Table
+**Primary Key**: change_id (String)
+
+**Schema**:
+```json
+{
+  "change_id": "uuid",
+  "change_type": "candidate|race|event|summary",
+  "data": {},
+  "submitted_by": "user@example.com",
+  "submitted_at": "2024-01-01T00:00:00Z",
+  "status": "pending|approved|denied",
+  "state": "State Name",
+  "reviewed_by": "admin@example.com",
+  "reviewed_at": "2024-01-01T00:00:00Z"
+}
+```
+
+#### 13. email-subscribers Table
+**Primary Key**: email (String)
+
+**Schema**:
+```json
+{
+  "email": "user@example.com",
+  "status": "active|unsubscribed",
+  "subscribed_at": "2024-01-01T00:00:00Z",
+  "source": "election-map",
+  "total_opens": 5,
+  "total_clicks": 3,
+  "last_activity": "2024-01-01T00:00:00Z"
+}
+```
+
+#### 14. email-events Table
+**Primary Key**: event_id (String)
+**Sort Key**: timestamp (Number)
+
+**Schema**:
+```json
+{
+  "event_id": "uuid",
+  "timestamp": 1704153600,
+  "email": "user@example.com",
+  "event_type": "subscribed|opened|clicked",
+  "campaign_id": "campaign-uuid",
+  "date": "2024-01-01",
+  "metadata": "{}"
+}
+```
+
+#### 15. templates Table
+**Primary Key**: template_id (String)
+
+**Schema**:
+```json
+{
+  "template_id": "uuid",
+  "name": "Template Name",
+  "content": "Template HTML content",
+  "created_at": "2024-01-01T00:00:00Z"
+}
+```
 **Primary Key**: job_id (String)
 
 **Schema**:
@@ -1580,20 +1926,86 @@ Total: ~$120-135/month
 
 ---
 
+## Recent Major Enhancements (2024-2025)
+
+### Election Tracking System - ALL 50 STATES COMPLETE ✅
+**Comprehensive nationwide election coverage**:
+- **290+ Races**: Federal, statewide, state legislature, municipal across all 50 states
+- **197+ Candidates**: Detailed profiles with faith statements, policy positions, endorsements
+- **50 State Voter Guides**: 15,000-30,000 character comprehensive guides with Christian conservative perspective
+- **Interactive US Map**: Click-to-view state-specific election data
+- **Editor Role System**: Distributed content management with approval workflow
+- **CSV Bulk Import**: Automated race and candidate data uploads
+- **Dual-Mode Editor**: Markdown and rich text editing for voter guides
+
+### Email Subscription & Tracking System ✅
+**Professional email marketing with analytics**:
+- **AWS SES Integration**: contact@christianconservativestoday.com
+- **Open Tracking**: 1x1 pixel tracking for email opens
+- **Click Tracking**: Redirect URLs with engagement analytics
+- **Newsletter System**: Bulk email campaigns to subscribers
+- **Analytics Dashboard**: Open rates, click rates, engagement metrics
+- **Cost Efficiency**: 95% cheaper than Mailchimp ($1 per 10,000 emails)
+
+### Advanced Content Features ✅
+**Enhanced user engagement and content management**:
+- **Comment System**: User comments with moderation tools, nested replies, bulk actions
+- **Article Analytics**: View tracking, top articles dashboard, category performance stats
+- **Social Sharing**: Facebook, Twitter, LinkedIn integration with Open Graph meta tags
+- **Markdown Support**: Dual-mode editing (WYSIWYG/Markdown) with bidirectional conversion
+- **Featured Images**: Open Graph integration for rich social media previews
+- **Related Articles**: Algorithm-based recommendations using category, tags, author matching
+- **Public Article Access**: Non-authenticated viewing for ministry outreach
+
+### UI/UX Enhancements ✅
+**Modern, responsive design improvements**:
+- **Horizontal Scrolling UI**: Netflix-style content browsing on videos, articles, news, resources
+- **Unified Navigation**: navbar.html/navbar.js components with role-based access control
+- **Mobile Optimization**: Responsive design with progressive breakpoints (768px, 576px, 422px)
+- **CSS Consolidation**: 75+ duplicate rules removed (23.6% reduction) into shared stylesheets
+- **Authentication Standardization**: Consistent localStorage keys (auth_token, user_data)
+
+### Resource Management System ✅
+**Enhanced organization and automation**:
+- **Emoji Icons**: 47 category keywords with automatic emoji selection
+- **Edit Functionality**: Complete CRUD operations for resources
+- **Category Bulk Rename**: Organizational flexibility
+- **Auto-Summary**: AWS Bedrock AI-powered descriptions from URLs
+- **Empty Category Cleanup**: Automatic maintenance
+
+### News Management System ✅
+**Comprehensive news coverage**:
+- **Breaking News Banners**: Priority content highlighting
+- **Scheduled Publishing**: Auto-status logic for future publication dates
+- **State-Specific Coverage**: Election and local news by state
+- **External Link Support**: Aggregation from trusted sources
+- **Topic Categorization**: Politics, culture, religious freedom, family, pro-life
+
 ## Conclusion
 
-Christian Conservatives Today is a fully serverless, scalable platform built on AWS that combines video hosting, article publishing, and community engagement. The architecture leverages AWS Lambda for compute, DynamoDB for data storage, S3 for media storage, and CloudFront for content delivery, resulting in a cost-effective, high-performance solution.
+Christian Conservatives Today has evolved into a comprehensive, enterprise-grade serverless platform built on AWS that combines video hosting, article publishing, nationwide election tracking, and community engagement. The architecture leverages AWS Lambda for compute, DynamoDB for data storage, S3 for media storage, and CloudFront for content delivery, resulting in a cost-effective, high-performance solution.
 
 ### Key Achievements
 - ✅ 100% serverless architecture
-- ✅ 9 microservices (Lambda functions)
-- ✅ 3-tier role-based access control
+- ✅ 15+ microservices (Lambda functions)
+- ✅ 15+ DynamoDB tables
+- ✅ 4-tier role-based access control (Super User > Admin > Editor > User)
 - ✅ PayPal subscription integration
 - ✅ Bible verse integration with multiple translations
 - ✅ Automatic thumbnail generation
 - ✅ External video embedding
 - ✅ Full-text article search
 - ✅ Public article access for ministry outreach
+- ✅ ALL 50 US STATES election coverage (290+ races, 197+ candidates)
+- ✅ Email subscription system with open/click tracking
+- ✅ Comment system with moderation
+- ✅ Article analytics and view tracking
+- ✅ Social sharing integration
+- ✅ Markdown support with dual-mode editing
+- ✅ Horizontal scrolling UI (Netflix-style)
+- ✅ CSS consolidation (23.6% reduction)
+- ✅ Unified navigation system
+- ✅ Mobile optimization
 
 ### Future Enhancements
 - Angular frontend conversion (Phase 4)
