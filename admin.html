@@ -3439,12 +3439,17 @@
                 item.addEventListener('dragover', handleDragOver);
                 item.addEventListener('drop', handleDrop);
                 item.addEventListener('dragend', handleDragEnd);
+                item.addEventListener('touchstart', handleTouchStart, {passive: false});
+                item.addEventListener('touchmove', handleTouchMove, {passive: false});
+                item.addEventListener('touchend', handleTouchEnd);
 
                 container.appendChild(item);
             });
         }
 
         let draggedElement = null;
+        let touchDragVideoItem = null;
+        let touchStartVideoY = 0;
 
         function handleDragStart(e) {
             if (window.innerWidth <= 768) {
@@ -3484,6 +3489,48 @@
                 const numberSpan = item.querySelector('span');
                 numberSpan.textContent = `${index + 1}.`;
             });
+        }
+
+        function handleTouchStart(e) {
+            touchDragVideoItem = e.currentTarget;
+            touchStartVideoY = e.touches[0].clientY;
+            touchDragVideoItem.style.opacity = '0.5';
+            touchDragVideoItem.style.transform = 'scale(1.05)';
+            touchDragVideoItem.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+        }
+
+        function handleTouchMove(e) {
+            if (!touchDragVideoItem) return;
+            e.preventDefault();
+            const touchY = e.touches[0].clientY;
+            const items = Array.from(document.querySelectorAll('.category-order-item'));
+            const dragIndex = items.indexOf(touchDragVideoItem);
+            
+            items.forEach((item, index) => {
+                if (item === touchDragVideoItem) return;
+                const rect = item.getBoundingClientRect();
+                if (touchY > rect.top && touchY < rect.bottom) {
+                    if (index < dragIndex) {
+                        item.parentNode.insertBefore(touchDragVideoItem, item);
+                    } else {
+                        item.parentNode.insertBefore(touchDragVideoItem, item.nextSibling);
+                    }
+                }
+            });
+        }
+
+        function handleTouchEnd(e) {
+            if (touchDragVideoItem) {
+                touchDragVideoItem.style.opacity = '1';
+                touchDragVideoItem.style.transform = '';
+                touchDragVideoItem.style.boxShadow = '';
+                const items = document.querySelectorAll('.category-order-item');
+                items.forEach((item, index) => {
+                    const numberSpan = item.querySelector('span');
+                    numberSpan.textContent = `${index + 1}.`;
+                });
+                touchDragVideoItem = null;
+            }
         }
 
         function saveCategoryOrder() {
