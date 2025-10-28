@@ -31,7 +31,7 @@ An interactive election map specifically designed for Christian conservative vot
 - Church announcements
 - Ministry newsletters
 
-**Try It Here:** [YOUR-URL]/election-map.html
+**Try It Here:** [https://christianconservativestoday.com/election-map.html](https://christianconservativestoday.com/election-map.html)
 
 **How You Can Use It:**
 1. Project it during announcements
@@ -45,9 +45,9 @@ We're not endorsing specific candidates—just providing comprehensive informati
 
 Would you be willing to share this with your congregation? I'm happy to provide any additional materials or answer questions.
 
-Serving Him,
-[Your Name]
-[Your Contact Info]
+Your brother in Christ,
+Edwar Fong
+505-639-8100
 
 P.S. - We've already created comprehensive guides for all 50 states, with special focus on the 36 gubernatorial races and 6,000+ state legislature seats up for election.
 
@@ -87,16 +87,16 @@ We'd love to collaborate with [Organization Name] to get this tool into the hand
 - Link on your website
 - Joint webinar/training
 
-**View the Tool:** [YOUR-URL]/election-map.html
+**View the Tool:** [https://christianconservativestoday.com/election-map.html](https://christianconservativestoday.com/election-map.html)
 
 This is a non-commercial project—our only goal is helping Christians vote informed and engaged. No strings attached.
 
 Would you be open to a 15-minute call to discuss how we might work together?
 
 In His service,
-[Your Name]
-[Your Contact Info]
-[Your Website]
+Edward Fong
+505-639-8100
+[https://christianconservativestoday.com](https://christianconservativestoday.com)
 
 ---
 
@@ -131,7 +131,7 @@ We've built the first comprehensive interactive election map specifically for Ch
 - State-specific data/insights
 - Screenshots and demo for articles
 
-**Demo the Tool:** [YOUR-URL]/election-map.html
+**Demo the Tool:** [https://christianconservativestoday.com/election-map.html](https://christianconservativestoday.com/election-map.html)
 
 Would this be a good fit for [show name/publication]? Happy to work around your schedule.
 
@@ -173,12 +173,12 @@ We built an interactive election map that shows:
 
 It's 100% free, no registration, no monetization. Just trying to help Christians vote informed.
 
-Check it out: [URL]
+Check it out: [https://christianconservativestoday.com/election-map.html](https://christianconservativestoday.com/election-map.html)
 
 If you think it's valuable, would you share with your followers?
 
 Thanks for considering!
-[Your Name]
+Edward Fong
 
 ---
 
@@ -202,12 +202,12 @@ Here's what makes it unique:
 **Why it matters:**
 Most Christians only vote in presidential elections. But state legislatures are where the real battles on life, family, and freedom are won or lost.
 
-**Try it here:** [URL]
+**Try it here:** [https://christianconservativestoday.com/election-map.html](https://christianconservativestoday.com/election-map.html)
 
 If you think this would help your audience, I'd be honored if you'd share it. No strings attached—it's a free resource, no monetization.
 
 Thanks for all you do!
-[Your Name]
+Edward Fong
 
 ---
 
@@ -229,12 +229,12 @@ I know you're busy, so I'll keep this brief:
 - Covers all 50 states, all 2025-2026 races
 - 100% free, no registration
 
-**One-Minute Demo:** [YOUR-URL]/election-map.html
+**One-Minute Demo:** [https://christianconservativestoday.com/election-map.html](https://christianconservativestoday.com/election-map.html)
 
 Would this be helpful for your congregation? If not, no worries—I just wanted to make sure you had the opportunity.
 
 Blessings,
-[Your Name]
+Edward Fong
 
 P.S. - If you'd prefer I not follow up again, just let me know. I completely understand!
 
@@ -269,8 +269,8 @@ We'll send periodic updates on new features and election developments. If you'd 
 "Therefore, my beloved brothers, be steadfast, immovable, always abounding in the work of the Lord, knowing that in the Lord your labor is not in vain." - 1 Corinthians 15:58
 
 Grateful for your partnership,
-[Your Name]
-[Your Contact Info]
+Edward Fong
+505-639-8100
 
 ---
 
@@ -299,12 +299,12 @@ As homeschoolers, we're always looking for quality civics resources that align w
 - Downloadable voter guides (great for reports!)
 - Mobile-friendly
 
-**Try It:** [YOUR-URL]/election-map.html
+**Try It:** [https://christianconservativestoday.com/election-map.html](https://christianconservativestoday.com/election-map.html)
 
 Perfect for high school government classes or family discussions around the dinner table!
 
 Blessings,
-[Your Name]
+Edward Fong
 
 ---
 
@@ -331,7 +331,7 @@ An interactive map with complete information on every Virginia race, including:
 - Voting records (for incumbents)
 - Endorsements from Christian organizations
 
-**Access Virginia's Guide:** [YOUR-URL]/election-map.html (click Virginia)
+**Access Virginia's Guide:** [https://christianconservativestoday.com/election-map.html](https://christianconservativestoday.com/election-map.html) (click Virginia)
 
 **Download PDF:** Complete 25-page voter guide for printing
 
@@ -344,7 +344,7 @@ An interactive map with complete information on every Virginia race, including:
 Virginia's future depends on informed Christian voters. Will you help spread the word?
 
 For God and Virginia,
-[Your Name]
+Edward Fong
 
 ---
 
@@ -378,11 +378,11 @@ For God and Virginia,
 
 ## EMAIL SIGNATURE
 
-[Your Name]
-[Title/Role]
-Christian Conservative Election Map Project
-Email: [your email]
-Website: [your website]
-Phone: [your phone] (optional)
+Edward Fong
+Owner and Developer
+Christian Conservatives Today Election Map Project
+Email: contact@christianconservativestoday.com
+Website: https://christianconservativestoday.com 
+Phone: 505-639-8100 
 
 "When the righteous increase, the people rejoice, but when the wicked rule, the people groan." - Proverbs 29:2
