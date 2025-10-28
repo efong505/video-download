@@ -233,26 +233,16 @@
         </div>
     </div>
 
+    <script src="assets/js/common-utils.js"></script>
     <script>
-        const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
-        const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
-        const PAYPAL_API = 'https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal';
-        
         let currentUser = null;
-        let authToken = null;
         let subscriptionData = null;
 
         // Initialize page
         window.addEventListener('load', function() {
-            authToken = localStorage.getItem('auth_token');
-            const userData = localStorage.getItem('user_data');
+            if (!requireAuth()) return;
             
-            if (!authToken || !userData) {
-                window.location.href = 'login.html';
-                return;
-            }
-            
-            currentUser = JSON.parse(userData);
+            currentUser = getUserData();
             
             // Update welcome message
             const fullName = [currentUser.first_name, currentUser.last_name].filter(n => n).join(' ');
@@ -309,12 +299,8 @@
             }
             
             try {
-                const response = await fetch(`${AUTH_API}?action=change_password`, {
+                const response = await apiRequest(`${API_ENDPOINTS.AUTH}?action=change_password`, {
                     method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`,
-                        'Content-Type': 'application/json'
-                    },
                     body: JSON.stringify({
                         current_password: currentPassword,
                         new_password: newPassword
@@ -324,6 +310,7 @@
                 const data = await response.json();
                 
                 if (response.ok) {
+                    showNotification('Password changed successfully!', 'success');
                     showMessage('Password changed successfully!', 'success');
                     // Clear form
                     document.getElementById('current-password').value = '';
@@ -350,7 +337,7 @@
                 if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
                     // Still fetch usage stats for display
                     try {
-                        const usageResponse = await fetch(`${PAYPAL_API}?action=usage&user_id=${currentUser.user_id}`);
+                        const usageResponse = await apiRequest(`${API_ENDPOINTS.PAYPAL}?action=usage&user_id=${currentUser.user_id}`);
                         const usageData = await usageResponse.json();
                         
                         if (usageResponse.ok) {
@@ -394,14 +381,14 @@
                 }
                 
                 // Get subscription data from PayPal API
-                const response = await fetch(`${PAYPAL_API}?action=subscription_status&user_id=${currentUser.user_id}`);
+                const response = await apiRequest(`${API_ENDPOINTS.PAYPAL}?action=subscription_status&user_id=${currentUser.user_id}`);
                 const data = await response.json();
                 
                 if (response.ok) {
                     console.log('Subscription data:', data);
                     
                     // Get usage stats
-                    const usageResponse = await fetch(`${PAYPAL_API}?action=usage&user_id=${currentUser.user_id}`);
+                    const usageResponse = await apiRequest(`${API_ENDPOINTS.PAYPAL}?action=usage&user_id=${currentUser.user_id}`);
                     const usageData = await usageResponse.json();
                     
                     if (usageResponse.ok) {
@@ -517,11 +504,8 @@
                 // Clean URL for return/cancel URLs
                 const cleanUrl = window.location.origin + window.location.pathname;
                 
-                const response = await fetch(`${PAYPAL_API}?action=create_subscription`, {
+                const response = await apiRequest(`${API_ENDPOINTS.PAYPAL}?action=create_subscription`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
                     body: JSON.stringify({
                         user_id: currentUser.user_id,
                         tier: tier,
@@ -550,11 +534,8 @@
             }
             
             try {
-                const response = await fetch(`${PAYPAL_API}?action=cancel_subscription`, {
+                const response = await apiRequest(`${API_ENDPOINTS.PAYPAL}?action=cancel_subscription`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
                     body: JSON.stringify({
                         user_id: currentUser.user_id
                     })
@@ -575,11 +556,8 @@
         
         async function activateSubscription(subscriptionId) {
             try {
-                const response = await fetch(`${PAYPAL_API}?action=activate_subscription&subscription_id=${subscriptionId}&user_id=${currentUser.user_id}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
+                const response = await apiRequest(`${API_ENDPOINTS.PAYPAL}?action=activate_subscription&subscription_id=${subscriptionId}&user_id=${currentUser.user_id}`, {
+                    method: 'POST'
                 });
                 
                 const data = await response.json();

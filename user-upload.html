@@ -577,8 +577,70 @@
                 messagesDiv.innerHTML = '';
             }, 5000);
         }
+
+        function showQuotaModal(data) {
+            const usage = data.current_usage || {};
+            const storageUsedGB = (usage.storage_used / (1024**3)).toFixed(2);
+            const storageLimitGB = (usage.storage_limit / (1024**3)).toFixed(1);
+            const storagePercent = usage.storage_limit > 0 ? ((usage.storage_used / usage.storage_limit) * 100).toFixed(1) : 0;
+            const videoPercent = usage.video_limit > 0 ? ((usage.video_count / usage.video_limit) * 100).toFixed(1) : 0;
+            
+            document.getElementById('quota-modal-message').innerHTML = `
+                <strong>${data.message}</strong><br>
+                <p class="mt-2">You need to either upgrade your plan or delete some videos to make room for new uploads.</p>
+            `;
+            
+            document.getElementById('quota-modal-usage').innerHTML = `
+                <h6>Current Usage:</h6>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span><strong>Storage:</strong></span>
+                        <span>${storageUsedGB} GB / ${storageLimitGB} GB (${storagePercent}%)</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar ${storagePercent >= 90 ? 'bg-danger' : 'bg-warning'}" style="width: ${Math.min(storagePercent, 100)}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span><strong>Videos:</strong></span>
+                        <span>${usage.video_count} / ${usage.video_limit} (${videoPercent}%)</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar ${videoPercent >= 90 ? 'bg-danger' : 'bg-warning'}" style="width: ${Math.min(videoPercent, 100)}%"></div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('quota-modal').style.display = 'block';
+        }
+
+        function closeQuotaModal() {
+            document.getElementById('quota-modal').style.display = 'none';
+        }
     </script>
     
+    <!-- Quota Exceeded Modal -->
+    <div class="modal" id="quota-modal" tabindex="-1" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">⚠️ Storage Limit Reached</h5>
+                    <button type="button" class="btn-close btn-close-white" onclick="closeQuotaModal()"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="quota-modal-message"></p>
+                    <div id="quota-modal-usage" class="mt-3"></div>
+                </div>
+                <div class="modal-footer">
+                    <a href="profile.html#subscription" class="btn btn-primary">💎 Upgrade Plan</a>
+                    <a href="user-page.html?user=${encodeURIComponent(currentUser?.email || '')}" class="btn btn-secondary">🗑️ Manage Videos</a>
+                    <button type="button" class="btn btn-outline-secondary" onclick="closeQuotaModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

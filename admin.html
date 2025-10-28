@@ -410,11 +410,6 @@
                 white-space: nowrap;
                 -webkit-overflow-scrolling: touch;
             }
-
-            .category-order-item,
-            .resource-category-order-item {
-                pointer-events: none;
-            }
         }
     </style>
 </head>
@@ -730,11 +725,9 @@
                                 style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
                         </div>
                         <div class="form-group">
-                            <label>Category:</label>
-                            <select id="resource-category" required
-                                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-                                <option value="">Select Category</option>
-                            </select>
+                            <label>Categories:</label>
+                            <div id="resource-category"></div>
+                            <small style="color: #666;">Select one or more categories</small>
                         </div>
                         <div class="form-group">
                             <label>Website URL:</label>
@@ -1892,7 +1885,8 @@
                         force_fargate: forceFargate,
                         tags: tags,
                         owner: currentUser.email,
-                        visibility: visibility
+                        visibility: visibility,
+                        role: currentUser.role
                     })
                 });
 
@@ -1902,6 +1896,8 @@
                     document.getElementById('videos-message').innerHTML =
                         '<div class="success">Download started! Check the Download Status page for progress.</div>';
                     closeModal('download-video-modal');
+                } else if (response.status === 403 && data.error === 'Storage quota exceeded') {
+                    showQuotaExceededModal(data);
                 } else {
                     throw new Error(data.error || 'Download failed');
                 }
@@ -2796,13 +2792,14 @@
         }
 
         function populateCategorySelect(categories) {
-            const select = document.getElementById('resource-category');
-            select.innerHTML = '<option value="">Select Category</option>';
+            const container = document.getElementById('resource-category');
+            container.innerHTML = '';
+            container.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; padding: 10px; background: white;';
             categories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category;
-                option.textContent = category;
-                select.appendChild(option);
+                const label = document.createElement('label');
+                label.style.cssText = 'display: flex; align-items: center; cursor: pointer;';
+                label.innerHTML = `<input type="checkbox" class="resource-category-checkbox" value="${category}" style="margin-right: 8px;"> ${category}`;
+                container.appendChild(label);
             });
         }
 
@@ -2944,12 +2941,13 @@
             const editingId = form.dataset.editingId;
 
             const name = document.getElementById('resource-name').value.trim();
-            const category = document.getElementById('resource-category').value;
+            const checkboxes = document.querySelectorAll('.resource-category-checkbox:checked');
+            const categories = Array.from(checkboxes).map(cb => cb.value);
             const url = document.getElementById('resource-url').value.trim();
             const description = document.getElementById('resource-description').value.trim();
 
-            if (!name || !category || !url) {
-                document.getElementById('resources-message').innerHTML = '<div class="error">Please fill in name, category, and URL</div>';
+            if (!name || categories.length === 0 || !url) {
+                document.getElementById('resources-message').innerHTML = '<div class="error">Please fill in name, at least one category, and URL</div>';
                 return;
             }
 
@@ -2961,7 +2959,7 @@
                     body: JSON.stringify({
                         id: editingId || Date.now().toString(),
                         name: name,
-                        category: category,
+                        category: categories,
                         url: url,
                         description: description
                     })
@@ -3025,10 +3023,11 @@
                 const contentDiv = document.createElement('div');
                 contentDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: start;';
 
+                const cats = Array.isArray(resource.category) ? resource.category.join(', ') : resource.category;
                 contentDiv.innerHTML = `
                     <div style="flex-grow: 1;">
                         <h5 style="margin-bottom: 5px;">${resource.name}</h5>
-                        <p style="margin-bottom: 5px;"><strong>Category:</strong> ${resource.category}</p>
+                        <p style="margin-bottom: 5px;"><strong>Categories:</strong> ${cats}</p>
                         <p style="margin-bottom: 5px;"><strong>URL:</strong> <a href="${resource.url}" target="_blank">${resource.url}</a></p>
                         <p style="margin-bottom: 0;"><strong>Description:</strong> ${resource.description || 'No description'}</p>
                     </div>
@@ -3114,7 +3113,10 @@
 
         function editResource(resource) {
             document.getElementById('resource-name').value = resource.name;
-            document.getElementById('resource-category').value = resource.category;
+            document.querySelectorAll('.resource-category-checkbox').forEach(cb => {
+                const cats = Array.isArray(resource.category) ? resource.category : [resource.category];
+                cb.checked = cats.includes(cb.value);
+            });
             document.getElementById('resource-url').value = resource.url;
             document.getElementById('resource-description').value = resource.description || '';
 
@@ -3193,23 +3195,23 @@
                 item.className = 'resource-category-order-item';
                 item.draggable = true;
                 item.dataset.category = category;
-                item.style.cssText = 'background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px 15px; margin: 5px; display: inline-flex; align-items: center; gap: 10px; cursor: move; user-select: none;';
+                item.style.cssText = 'background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; cursor: move; user-select: none;';
 
                 const numberSpan = document.createElement('span');
                 numberSpan.style.cssText = 'color: #666;';
                 numberSpan.textContent = `${index + 1}.`;
 
                 const nameSpan = document.createElement('span');
-                nameSpan.style.cssText = 'font-weight: 500;';
+                nameSpan.style.cssText = 'font-weight: 500; flex-grow: 1;';
                 nameSpan.textContent = category;
 
                 const dragIcon = document.createElement('span');
-                dragIcon.style.cssText = 'color: #999;';
+                dragIcon.style.cssText = 'color: #999; margin-left: auto;';
                 dragIcon.textContent = '☰';
 
                 const editBtn = document.createElement('button');
                 editBtn.textContent = '✏️';
-                editBtn.style.cssText = 'background: #ffc107; border: none; color: white; border-radius: 3px; padding: 2px 6px; cursor: pointer; font-size: 12px;';
+                editBtn.style.cssText = 'background: #ffc107; border: none; color: white; border-radius: 3px; padding: 2px 6px; cursor: pointer; font-size: 12px; margin-left: 8px;';
                 editBtn.onclick = (e) => {e.stopPropagation(); editResourceCategory(category);};
 
                 item.appendChild(numberSpan);
@@ -3221,6 +3223,9 @@
                 item.addEventListener('dragover', handleResourceDragOver);
                 item.addEventListener('drop', handleResourceDrop);
                 item.addEventListener('dragend', handleResourceDragEnd);
+                item.addEventListener('touchstart', handleResourceTouchStart, {passive: false});
+                item.addEventListener('touchmove', handleResourceTouchMove, {passive: false});
+                item.addEventListener('touchend', handleResourceTouchEnd);
 
                 container.appendChild(item);
             });
@@ -3298,6 +3303,51 @@
                 const numberSpan = item.querySelector('span');
                 numberSpan.textContent = `${index + 1}.`;
             });
+        }
+
+        let touchDragItem = null;
+        let touchStartY = 0;
+
+        function handleResourceTouchStart(e) {
+            touchDragItem = e.currentTarget;
+            touchStartY = e.touches[0].clientY;
+            touchDragItem.style.opacity = '0.5';
+            touchDragItem.style.transform = 'scale(1.05)';
+            touchDragItem.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+        }
+
+        function handleResourceTouchMove(e) {
+            if (!touchDragItem) return;
+            e.preventDefault();
+            const touchY = e.touches[0].clientY;
+            const items = Array.from(document.querySelectorAll('.resource-category-order-item'));
+            const dragIndex = items.indexOf(touchDragItem);
+            
+            items.forEach((item, index) => {
+                if (item === touchDragItem) return;
+                const rect = item.getBoundingClientRect();
+                if (touchY > rect.top && touchY < rect.bottom) {
+                    if (index < dragIndex) {
+                        item.parentNode.insertBefore(touchDragItem, item);
+                    } else {
+                        item.parentNode.insertBefore(touchDragItem, item.nextSibling);
+                    }
+                }
+            });
+        }
+
+        function handleResourceTouchEnd(e) {
+            if (touchDragItem) {
+                touchDragItem.style.opacity = '1';
+                touchDragItem.style.transform = '';
+                touchDragItem.style.boxShadow = '';
+                const items = document.querySelectorAll('.resource-category-order-item');
+                items.forEach((item, index) => {
+                    const numberSpan = item.querySelector('span');
+                    numberSpan.textContent = `${index + 1}.`;
+                });
+                touchDragItem = null;
+            }
         }
 
         async function saveResourceCategoryOrder() {
@@ -3989,6 +4039,51 @@
             return '📁'; // Default emoji
         }
 
+        function showQuotaExceededModal(data) {
+            const usage = data.current_usage || {};
+            const storageUsedGB = (usage.storage_used / (1024**3)).toFixed(2);
+            const storageLimitGB = (usage.storage_limit / (1024**3)).toFixed(1);
+            const storagePercent = usage.storage_limit > 0 ? ((usage.storage_used / usage.storage_limit) * 100).toFixed(1) : 0;
+            const videoPercent = usage.video_limit > 0 ? ((usage.video_count / usage.video_limit) * 100).toFixed(1) : 0;
+            
+            document.getElementById('quota-message').innerHTML = `
+                <p style="font-size: 1.1rem;">${data.message}</p>
+                <p>You need to either upgrade your plan or delete some videos to make room for new uploads.</p>
+            `;
+            
+            document.getElementById('quota-usage').innerHTML = `
+                <h4 style="margin-bottom: 15px;">Current Usage:</h4>
+                <div style="margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span><strong>Storage:</strong></span>
+                        <span>${storageUsedGB} GB / ${storageLimitGB} GB (${storagePercent}%)</span>
+                    </div>
+                    <div style="background: #e9ecef; height: 20px; border-radius: 10px; overflow: hidden;">
+                        <div style="background: ${storagePercent >= 90 ? '#dc3545' : '#ffc107'}; height: 100%; width: ${Math.min(storagePercent, 100)}%; transition: width 0.3s;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span><strong>Videos:</strong></span>
+                        <span>${usage.video_count} / ${usage.video_limit} (${videoPercent}%)</span>
+                    </div>
+                    <div style="background: #e9ecef; height: 20px; border-radius: 10px; overflow: hidden;">
+                        <div style="background: ${videoPercent >= 90 ? '#dc3545' : '#ffc107'}; height: 100%; width: ${Math.min(videoPercent, 100)}%; transition: width 0.3s;"></div>
+                    </div>
+                </div>
+            `;
+            
+            closeModal('download-video-modal');
+            document.getElementById('quota-exceeded-modal').style.display = 'block';
+        }
+        
+        function manageVideos() {
+            closeModal('quota-exceeded-modal');
+            showTab('videos');
+            document.getElementById('videos-message').innerHTML = 
+                '<div class="error">Please delete some videos to free up space for new uploads.</div>';
+        }
+
         // Close modals when clicking outside
         window.onclick = function (event) {
             if (event.target.classList.contains('modal')) {
@@ -3996,6 +4091,21 @@
             }
         }
     </script>
+    <!-- Quota Exceeded Modal -->
+    <div id="quota-exceeded-modal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close" onclick="closeModal('quota-exceeded-modal')">&times;</span>
+            <h3 style="color: #dc3545;">⚠️ Storage Limit Reached</h3>
+            <div id="quota-message" style="margin: 20px 0;"></div>
+            <div id="quota-usage" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0;"></div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="window.location.href='profile.html#subscription'" style="flex: 1;">💎 Upgrade Plan</button>
+                <button class="btn" onclick="manageVideos()" style="flex: 1; background: #6c757d; color: white;">🗑️ Delete Videos</button>
+                <button class="btn" onclick="closeModal('quota-exceeded-modal')" style="background: #f8f9fa;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

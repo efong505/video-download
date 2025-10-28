@@ -45,6 +45,9 @@ def list_resources(headers):
     for resource in resources:
         if 'resource_id' in resource and resource['resource_id'] not in ['_category_order', '_categories']:
             resource['id'] = resource['resource_id']
+            # Convert string category to array for backward compatibility
+            if 'category' in resource and isinstance(resource['category'], str):
+                resource['category'] = [resource['category']]
     # Filter out the category order and categories items
     resources = [r for r in resources if r.get('resource_id') not in ['_category_order', '_categories']]
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps(resources, default=str)}
@@ -59,6 +62,12 @@ def create_resource(event, headers):
     
     if not all([resource_id, name, category, url]):
         return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'Missing required fields'})}
+    
+    # Ensure category is always an array
+    if isinstance(category, str):
+        category = [category]
+    elif not isinstance(category, list):
+        category = []
     
     table.put_item(Item={
         'resource_id': resource_id,
@@ -80,6 +89,12 @@ def update_resource(event, headers):
     
     if not all([resource_id, name, category, url]):
         return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'Missing required fields'})}
+    
+    # Ensure category is always an array
+    if isinstance(category, str):
+        category = [category]
+    elif not isinstance(category, list):
+        category = []
     
     table.put_item(Item={
         'resource_id': resource_id,

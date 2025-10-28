@@ -1,6 +1,4 @@
 {
-  "queryStringParameters": {
-    "action": "test"
-  },
-  "httpMethod": "GET"
+  "httpMethod": "POST",
+  "body": "{\"url\":\"https://rumble.com/v70t3vw-test.html\",\"owner\":\"test@test.com\"}"
 }

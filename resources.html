@@ -408,10 +408,13 @@
             // Group resources by category
             const groupedResources = {};
             resources.forEach(resource => {
-                if (!groupedResources[resource.category]) {
-                    groupedResources[resource.category] = [];
-                }
-                groupedResources[resource.category].push(resource);
+                const cats = Array.isArray(resource.category) ? resource.category : [resource.category];
+                cats.forEach(cat => {
+                    if (!groupedResources[cat]) {
+                        groupedResources[cat] = [];
+                    }
+                    groupedResources[cat].push(resource);
+                });
             });
             
             // Get category order from API or localStorage fallback

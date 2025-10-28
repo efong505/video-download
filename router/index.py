@@ -35,6 +35,7 @@ def lambda_handler(event, context):
         body = json.loads(event.get('body', '{}'))
         url = body.get('url')
         owner_email = body.get('owner', 'system')
+        user_role = body.get('role', '')
         
         if not url:
             return {
@@ -43,17 +44,20 @@ def lambda_handler(event, context):
                 'body': json.dumps({'error': 'Missing url parameter'})
             }
         
-        # Check storage quota for non-system users
-        if owner_email != 'system':
+        # Check storage quota for non-system users (skip for admins and super_users)
+        if owner_email != 'system' and user_role not in ['admin', 'super_user']:
             quota_check = check_storage_quota(owner_email)
             if not quota_check['allowed']:
+                # Convert Decimal values in usage dict
+                usage = {k: (int(v) if isinstance(v, Decimal) and v % 1 == 0 else float(v) if isinstance(v, Decimal) else v) 
+                        for k, v in quota_check.get('usage', {}).items()}
                 return {
                     'statusCode': 403,
                     'headers': {'Access-Control-Allow-Origin': '*'},
                     'body': json.dumps({
                         'error': 'Storage quota exceeded',
                         'message': quota_check['message'],
-                        'current_usage': quota_check['usage']
+                        'current_usage': usage
                     })
                 }
         
@@ -93,6 +97,12 @@ def lambda_handler(event, context):
         except Exception as e:
             print(f"Failed to send initiation notification: {e}")
         
+        # Convert any Decimal values to int/float for JSON serialization
+        def decimal_default(obj):
+            if isinstance(obj, Decimal):
+                return int(obj) if obj % 1 == 0 else float(obj)
+            raise TypeError
+        
         # Just invoke the downloader Lambda directly
         lambda_client = boto3.client('lambda')
         lambda_client.invoke(
@@ -107,7 +117,7 @@ def lambda_handler(event, context):
                 'tags': body.get('tags', []),
                 'owner': body.get('owner', 'system'),
                 'visibility': body.get('visibility', 'public')
-            })
+            }, default=decimal_default)
         )
         
         return {
