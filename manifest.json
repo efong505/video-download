@@ -1,7 +1,7 @@
 {
-  "name": "Christian Conservative Platform",
-  "short_name": "CC Platform",
-  "description": "Christian Conservative Video Platform - Faith, Politics, and Ministry Content",
+  "name": "Christian Conservatives Today",
+  "short_name": "CCT",
+  "description": "Christian Conservatives Today - Faith-Based News, Election Coverage, and Ministry Content",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#667eea",

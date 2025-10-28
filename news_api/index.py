@@ -339,6 +339,13 @@ def update_news(event, headers):
                     update_expression += f', {field} = :{field}'
                     expression_values[f':{field}'] = body[field]
         
+        # Handle author change (admin only)
+        if 'author' in body:
+            new_author_email = body['author']
+            update_expression += ', author = :author, author_name = :author_name'
+            expression_values[':author'] = new_author_email
+            expression_values[':author_name'] = get_user_name(new_author_email)
+        
         update_kwargs = {
             'Key': {'news_id': news_id},
             'UpdateExpression': update_expression,
