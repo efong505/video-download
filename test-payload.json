@@ -1,1 +1,6 @@
-{"httpMethod":"GET","queryStringParameters":{"action":"templates"}}
+{
+  "queryStringParameters": {
+    "action": "test"
+  },
+  "httpMethod": "GET"
+}

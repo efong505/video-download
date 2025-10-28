@@ -9,9 +9,19 @@ users_table = dynamodb.Table('users')
 
 # PayPal Configuration - Use environment variables for security
 import os
-PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID', 'your-paypal-client-id')
-PAYPAL_CLIENT_SECRET = os.environ.get('PAYPAL_CLIENT_SECRET', 'your-paypal-client-secret')
-PAYPAL_BASE_URL = os.environ.get('PAYPAL_BASE_URL', 'https://api-m.sandbox.paypal.com')
+
+# Get PayPal credentials from environment variables
+PAYPAL_CLIENT_ID = os.environ.get('PAYPAL_CLIENT_ID')
+PAYPAL_CLIENT_SECRET = os.environ.get('PAYPAL_CLIENT_SECRET')
+PAYPAL_BASE_URL = os.environ.get('PAYPAL_BASE_URL', 'https://api-m.paypal.com')
+
+# Validate credentials are set
+if not PAYPAL_CLIENT_ID or not PAYPAL_CLIENT_SECRET:
+    print('WARNING: PayPal credentials not configured. Set PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET environment variables.')
+
+# Log environment (without exposing secrets)
+print(f'PayPal Environment: {"LIVE" if "sandbox" not in PAYPAL_BASE_URL else "SANDBOX"}')
+print(f'PayPal Base URL: {PAYPAL_BASE_URL}')
 
 # Subscription tier configurations
 SUBSCRIPTION_TIERS = {
@@ -84,6 +94,9 @@ def lambda_handler(event, context):
 
 def get_paypal_access_token():
     """Get PayPal access token for API calls"""
+    if not PAYPAL_CLIENT_ID or not PAYPAL_CLIENT_SECRET:
+        raise Exception('PayPal credentials not configured. Set PAYPAL_CLIENT_ID and PAYPAL_CLIENT_SECRET environment variables.')
+    
     auth_string = f"{PAYPAL_CLIENT_ID}:{PAYPAL_CLIENT_SECRET}"
     auth_bytes = auth_string.encode('ascii')
     auth_b64 = base64.b64encode(auth_bytes).decode('ascii')
@@ -95,12 +108,16 @@ def get_paypal_access_token():
     
     data = 'grant_type=client_credentials'
     
+    print(f'Requesting PayPal access token from {PAYPAL_BASE_URL}')
     response = requests.post(f'{PAYPAL_BASE_URL}/v1/oauth2/token', headers=headers, data=data)
     
     if response.status_code == 200:
+        print('✓ PayPal access token obtained successfully')
         return response.json()['access_token']
     else:
-        raise Exception(f'Failed to get PayPal access token: {response.text}')
+        error_msg = f'Failed to get PayPal access token (Status {response.status_code}): {response.text}'
+        print(f'✗ {error_msg}')
+        raise Exception(error_msg)
 
 def create_subscription_plan(tier, access_token):
     """Create PayPal subscription plan"""
@@ -673,65 +690,50 @@ def cancel_subscription(event):
 def test_paypal_connection():
     """Test PayPal API connection"""
     try:
+        print('Testing PayPal API connection...')
+        
+        # Check credentials
+        if not PAYPAL_CLIENT_ID or not PAYPAL_CLIENT_SECRET:
+            return {
+                'statusCode': 500,
+                'headers': cors_headers(),
+                'body': json.dumps({
+                    'status': 'error',
+                    'message': 'PayPal credentials not configured',
+                    'environment': 'NOT_CONFIGURED',
+                    'base_url': PAYPAL_BASE_URL
+                })
+            }
+        
+        # Get access token
         access_token = get_paypal_access_token()
         
-        # Check recent subscription status
-        subscription_id = 'I-J6R67NVLMNF1'  # Most recent subscription
-        headers = {
-            'Authorization': f'Bearer {access_token}',
-            'Content-Type': 'application/json'
+        # Determine environment
+        is_sandbox = 'sandbox' in PAYPAL_BASE_URL
+        environment = 'SANDBOX' if is_sandbox else 'LIVE'
+        
+        return {
+            'statusCode': 200,
+            'headers': cors_headers(),
+            'body': json.dumps({
+                'status': 'success',
+                'message': f'PayPal API connection successful ({environment})',
+                'environment': environment,
+                'base_url': PAYPAL_BASE_URL,
+                'client_id': f'{PAYPAL_CLIENT_ID[:10]}...' if PAYPAL_CLIENT_ID else 'NOT_SET',
+                'credentials_configured': True
+            })
         }
-        
-        response = requests.get(
-            f'{PAYPAL_BASE_URL}/v1/billing/subscriptions/{subscription_id}',
-            headers=headers
-        )
-        
-        if response.status_code == 200:
-            subscription = response.json()
-            status = subscription['status']
-            
-            # If active, update user record
-            if status == 'ACTIVE':
-                users_table.update_item(
-                    Key={'user_id': '051f56aa-3bc5-4328-8252-2f78e756b011'},
-                    UpdateExpression='SET subscription_tier = :tier, subscription_status = :status, storage_limit = :storage, video_limit = :videos, updated_at = :updated',
-                    ExpressionAttributeValues={
-                        ':tier': 'premium',
-                        ':status': 'active',
-                        ':storage': 26843545600,  # 25GB
-                        ':videos': 500,
-                        ':updated': datetime.utcnow().isoformat()
-                    }
-                )
-            
-            return {
-                'statusCode': 200,
-                'headers': cors_headers(),
-                'body': json.dumps({
-                    'status': 'success',
-                    'message': 'PayPal API connection successful',
-                    'subscription_status': status,
-                    'subscription_id': subscription_id
-                })
-            }
-        else:
-            return {
-                'statusCode': 200,
-                'headers': cors_headers(),
-                'body': json.dumps({
-                    'status': 'success',
-                    'message': 'PayPal API connection successful',
-                    'subscription_error': response.text
-                })
-            }
     except Exception as e:
+        print(f'PayPal connection test failed: {str(e)}')
         return {
             'statusCode': 500,
             'headers': cors_headers(),
             'body': json.dumps({
                 'status': 'error',
-                'message': f'PayPal API connection failed: {str(e)}'
+                'message': f'PayPal API connection failed: {str(e)}',
+                'environment': 'SANDBOX' if 'sandbox' in PAYPAL_BASE_URL else 'LIVE',
+                'base_url': PAYPAL_BASE_URL
             })
         }
 
