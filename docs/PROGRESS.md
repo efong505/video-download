@@ -3586,3 +3586,161 @@ NEXT STEPS:
 - ✅ Fix works across all pages using card-styles.css
 
 **Status**: Video thumbnail sizing issue completely resolved by fixing card-styles.css padding-top conflict. Thumbnails now display correctly at 200px height on live site matching local behavior.
+
+
+## Phase 5 - Mobile App Development 📱 PLANNED
+
+### Overview
+Transform the Christian Conservative Platform into native mobile applications for iOS and Android, providing seamless access to videos, articles, news, and election coverage on mobile devices.
+
+### Recommended Approach: React Native
+**Single codebase for both iOS and Android platforms**
+
+### Implementation Strategy
+
+#### Phase 5.1 - Progressive Web App (PWA) - Quick Win
+- [ ] Convert existing site to PWA
+- [ ] Add service worker for offline support
+- [ ] Create manifest.json for app-like experience
+- [ ] Enable "Add to Home Screen" functionality
+- [ ] Implement offline article caching
+- [ ] Add push notification support
+- **Timeline**: 1-2 weeks
+- **Cost**: Minimal
+
+#### Phase 5.2 - React Native Development
+- [ ] Set up React Native project structure
+- [ ] Integrate AWS Amplify for authentication
+- [ ] Connect to existing Lambda APIs (no backend changes needed)
+- [ ] Implement video streaming (react-native-video)
+- [ ] Build article reader with offline caching
+- [ ] Add push notifications (Firebase/AWS SNS)
+- [ ] Implement state election tracking
+- [ ] Create news feed with topic filtering
+- [ ] Build user profile and authentication
+- [ ] Add search and filtering capabilities
+- [ ] Implement social sharing features
+- **Timeline**: 2-3 months
+- **Cost**: $15,000-$40,000
+
+### Mobile App Features
+
+#### Core Features
+- **Video Streaming**: Watch sermons, political commentary, and ministry content
+- **Article Reading**: Access blog posts and articles with offline support
+- **News Feed**: Breaking news, state elections, Christian updates
+- **State Election Tracking**: Interactive map and state-specific coverage
+- **Push Notifications**: Breaking news alerts and election updates
+- **User Authentication**: Secure login with existing AWS Cognito
+- **Offline Mode**: Download articles and videos for offline viewing
+- **Search & Filter**: Find content by topic, state, category, tags
+
+#### Enhanced Features
+- **Bible Verse Lookup**: Integrated scripture search
+- **Bookmarks & Favorites**: Save content for later
+- **Share to Social Media**: Facebook, Twitter, email sharing
+- **Dark Mode**: Eye-friendly reading at night
+- **Download Manager**: Manage offline video downloads
+- **Comment System**: Engage with articles and videos
+- **Contributor Profiles**: Follow state correspondents
+- **Election Calendar**: Track upcoming races and dates
+
+### Technical Architecture
+
+#### Frontend
+- **Framework**: React Native
+- **State Management**: Redux or Context API
+- **Navigation**: React Navigation
+- **Video Player**: react-native-video
+- **Offline Storage**: AsyncStorage / SQLite
+- **Push Notifications**: Firebase Cloud Messaging / AWS SNS
+
+#### Backend (No Changes Required)
+- **APIs**: Existing AWS Lambda functions
+- **Authentication**: AWS Cognito
+- **Storage**: S3 for videos and images
+- **Database**: DynamoDB
+- **CDN**: CloudFront for fast delivery
+
+#### AWS Integration
+- AWS Amplify for mobile SDK
+- S3 video streaming (existing)
+- Lambda API endpoints (existing)
+- DynamoDB queries (existing)
+- CloudFront CDN (existing)
+- SNS for push notifications (new)
+
+### App Store Deployment
+
+#### Apple App Store
+- Developer account: $99/year
+- Review process: 1-2 weeks
+- Content guidelines compliance
+- In-app purchase setup (for subscriptions)
+
+#### Google Play Store
+- Developer account: $25 one-time
+- Review process: 1-3 days
+- Less restrictive policies
+- Faster approval process
+
+### Development Phases
+
+**Phase 5.1: PWA (Immediate)**
+- Quick mobile access
+- No app store approval needed
+- Instant updates
+- Works on all devices
+
+**Phase 5.2: React Native App (3-6 months)**
+- True native experience
+- App store presence
+- Full offline capabilities
+- Push notifications
+- Better performance
+
+**Phase 5.3: Advanced Features (6-12 months)**
+- Video downloads
+- Advanced offline mode
+- Live streaming integration
+- In-app donations
+- Enhanced social features
+
+### Cost Breakdown
+
+**PWA Development**: $0-$2,000
+- DIY or small contractor
+- Minimal changes to existing code
+
+**React Native Development**: $15,000-$40,000
+- Full mobile app development
+- Both iOS and Android
+- All core features
+
+**Alternative (Native Apps)**: $50,000-$100,000
+- Separate Swift (iOS) and Kotlin (Android)
+- Best performance but highest cost
+- Two separate codebases
+
+### Success Metrics
+- App downloads and active users
+- Video watch time on mobile
+- Article engagement rates
+- Push notification open rates
+- User retention and daily active users
+- App store ratings and reviews
+- Mobile subscription conversions
+
+### Competitive Advantages
+- First Christian conservative platform with comprehensive mobile app
+- State-by-state election coverage on mobile
+- Offline access to faith-based content
+- Push notifications for breaking Christian news
+- Integrated Bible verse lookup
+- Ministry and church resource hub in your pocket
+
+### Timeline
+- **Q1**: PWA launch (immediate mobile access)
+- **Q2-Q3**: React Native development
+- **Q4**: App store submission and launch
+- **Year 2**: Advanced features and optimization

@@ -46,6 +46,15 @@ function initNavbar() {
         html += `<li class="nav-item"><a class="nav-link" href="${link.page}.html">${icon}${link.label}</a></li>`;
     });
     
+    // Add Upload Video link only on videos page for logged-in users
+    if (currentPage === 'videos' && isLoggedIn) {
+        const uploadLink = allLinks.find(l => l.page === 'user-upload');
+        if (uploadLink) {
+            const icon = iconStyle === 'fontawesome' ? `<i class="fas ${uploadLink.fa} me-1"></i>` : uploadLink.emoji + ' ';
+            html += `<li class="nav-item"><a class="nav-link" href="${uploadLink.page}.html">${icon}${uploadLink.label}</a></li>`;
+        }
+    }
+    
     // Add My Page link on profile and authors pages
     if ((currentPage === 'profile' || currentPage === 'authors') && isLoggedIn) {
         const myPageIcon = iconStyle === 'fontawesome' ? '<i class="fas fa-file-alt me-1"></i>' : '📄 ';
