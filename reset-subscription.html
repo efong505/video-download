@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reset User Subscription - Admin Tool</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 40px;
+            background: #f5f5f5;
+        }
+        .tool-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .btn-reset {
+            background: #dc3545;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            font-weight: 600;
+        }
+        .btn-reset:hover {
+            background: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="tool-card">
+        <h1 style="color: #dc3545; margin-bottom: 20px;">🔧 Reset User Subscription</h1>
+        <p class="text-muted">This tool resets a user's subscription to clean free tier state. Use this when a user is stuck in "pending" status.</p>
+        
+        <div id="message-container"></div>
+        
+        <div class="mb-3">
+            <label class="form-label">User Email:</label>
+            <input type="email" id="user-email" class="form-control" placeholder="Enter user email">
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">User ID:</label>
+            <input type="text" id="user-id" class="form-control" placeholder="Enter user ID">
+            <small class="text-muted">You need either email or user ID</small>
+        </div>
+        
+        <button class="btn-reset" onclick="resetSubscription()">Reset to Free Tier</button>
+        <a href="admin.html#subscriptions" class="btn btn-primary" style="margin-left: 10px;">← Back to Subscriptions</a>
+        
+        <hr class="my-4">
+        
+        <h5>What this does:</h5>
+        <ul>
+            <li>Sets subscription_tier = 'free'</li>
+            <li>Sets subscription_status = 'active'</li>
+            <li>Sets storage_limit = 2GB</li>
+            <li>Sets video_limit = 50</li>
+            <li>Clears subscription_id</li>
+            <li>Clears payment_provider</li>
+            <li>Clears next_billing_date</li>
+        </ul>
+    </div>
+
+    <script>
+        const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
+        const PAYPAL_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/paypal';
+        
+        async function resetSubscription() {
+            const email = document.getElementById('user-email').value.trim();
+            const userId = document.getElementById('user-id').value.trim();
+            
+            if (!email && !userId) {
+                showMessage('Please enter either email or user ID', 'danger');
+                return;
+            }
+            
+            try {
+                let targetUserId = userId;
+                
+                if (!targetUserId && email) {
+                    showMessage('Looking up user...', 'info');
+                    
+                    const authToken = localStorage.getItem('auth_token');
+                    if (!authToken) {
+                        showMessage('Not authenticated. Please login first.', 'danger');
+                        return;
+                    }
+                    
+                    const response = await fetch(`${ADMIN_API}?action=users`, {
+                        headers: {'Authorization': `Bearer ${authToken}`}
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok && data.users) {
+                        const user = data.users.find(u => u.email === email);
+                        if (user) {
+                            targetUserId = user.user_id;
+                            showMessage(`Found user: ${email} (ID: ${targetUserId})`, 'info');
+                        } else {
+                            showMessage('User not found with that email', 'danger');
+                            return;
+                        }
+                    } else {
+                        throw new Error('Failed to lookup user');
+                    }
+                }
+                
+                showMessage('Resetting subscription...', 'info');
+                
+                const authToken = localStorage.getItem('auth_token');
+                const response = await fetch(`${ADMIN_API}?action=user_subscription`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: targetUserId,
+                        subscription_tier: 'free',
+                        subscription_status: 'active',
+                        storage_limit: 2147483648,
+                        video_limit: 50,
+                        next_billing_date: null
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showMessage(`✅ Success! ${data.message}`, 'success');
+                    document.getElementById('user-email').value = '';
+                    document.getElementById('user-id').value = '';
+                } else {
+                    throw new Error(data.error || 'Failed to reset subscription');
+                }
+            } catch (error) {
+                showMessage(`❌ Error: ${error.message}`, 'danger');
+                console.error('Reset error:', error);
+            }
+        }
+        
+        function showMessage(message, type) {
+            const container = document.getElementById('message-container');
+            container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+        }
+    </script>
+</body>
+</html>

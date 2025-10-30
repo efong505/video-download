@@ -486,19 +486,21 @@
                     User</button>
                 <div id="users-message"></div>
                 <div id="users-loading" class="loading">Loading users...</div>
-                <table id="users-table" class="data-table" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>Role</th>
-                            <th>Created</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="users-tbody"></tbody>
-                </table>
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <table id="users-table" class="data-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Created</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody"></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Videos Tab -->
@@ -842,6 +844,10 @@
             <!-- Subscriptions Tab -->
             <div id="subscriptions" class="tab-pane">
                 <h2>Subscription Management</h2>
+                <div style="margin-bottom: 20px;">
+                    <a href="reset-subscription.html" class="btn btn-warning" target="_blank">🔧 Reset User Subscription</a>
+                    <small style="color: #666; margin-left: 10px;">Use this tool to fix users stuck in "pending" status</small>
+                </div>
                 <div class="stats-grid" style="margin-bottom: 30px;">
                     <div class="stat-card">
                         <div class="stat-number" id="total-subscribers">-</div>
@@ -1208,6 +1214,17 @@
 
             loadAllTags();
             loadOverview();
+            
+            // Check for hash in URL to open specific tab
+            setTimeout(() => {
+                const hash = window.location.hash.substring(1);
+                if (hash && document.getElementById(hash)) {
+                    const tabElement = document.querySelector('.tab[onclick*="' + hash + '"]');
+                    if (tabElement) {
+                        tabElement.click();
+                    }
+                }
+            }, 100);
         });
 
         function showTab(tabName) {
@@ -1216,7 +1233,12 @@
             document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
 
             // Show selected tab
-            event.target.classList.add('active');
+            if (typeof event !== 'undefined' && event.target) {
+                event.target.classList.add('active');
+            } else {
+                const tabElement = document.querySelector('.tab[onclick*="' + tabName + '"]');
+                if (tabElement) tabElement.classList.add('active');
+            }
             document.getElementById(tabName).classList.add('active');
 
             // Load data for tab
