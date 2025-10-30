@@ -72,7 +72,9 @@ def lambda_handler(event, context):
 
 def verify_token(event):
     try:
-        auth_header = event.get('headers', {}).get('Authorization', '')
+        headers = event.get('headers', {})
+        # Handle case-insensitive headers
+        auth_header = headers.get('Authorization') or headers.get('authorization', '')
         if not auth_header.startswith('Bearer '): return None
         token = auth_header.split(' ')[1]
         parts = token.split('.')
@@ -83,7 +85,9 @@ def verify_token(event):
         exp = payload.get('exp', 0)
         if exp < datetime.utcnow().timestamp(): return None
         return payload
-    except: return None
+    except Exception as e:
+        print(f"Token verification error: {e}")
+        return None
 
 def verify_admin_token(event):
     user_info = verify_token(event)
