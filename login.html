@@ -290,13 +290,10 @@
                             }
                         }, 1000);
                     } else if (!isLoginMode) {
-                        messageDiv.innerHTML = `<div class="message success">Account created successfully! You can now login.</div>`;
+                        messageDiv.innerHTML = `<div class="message success">Account created successfully! Redirecting to login...</div>`;
                         setTimeout(() => {
-                            isLoginMode = true;
-                            document.getElementById('toggle-mode').click();
-                            document.getElementById('email').value = email;
-                            document.getElementById('password').value = password;
-                        }, 2000);
+                            window.location.href = `login.html?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`;
+                        }, 1500);
                     }
                 } else {
                     messageDiv.innerHTML = `<div class="message error">${data.error}</div>`;
@@ -307,7 +304,7 @@
             }
         });
 
-        // Check if already logged in
+        // Check if already logged in or pre-populate from URL params
         window.addEventListener('load', function() {
             const token = localStorage.getItem('auth_token');
             const userData = localStorage.getItem('user_data');
@@ -316,6 +313,18 @@
             if (token && user) {
                 document.getElementById('message').innerHTML = 
                     `<div class="message success">Already logged in as ${user.email}</div>`;
+            }
+            
+            // Pre-populate credentials from URL params (after registration)
+            const urlParams = new URLSearchParams(window.location.search);
+            const emailParam = urlParams.get('email');
+            const passwordParam = urlParams.get('password');
+            
+            if (emailParam && passwordParam) {
+                document.getElementById('email').value = emailParam;
+                document.getElementById('password').value = passwordParam;
+                document.getElementById('message').innerHTML = 
+                    `<div class="message success">Account created! Click Login to continue.</div>`;
             }
         });
     </script>
