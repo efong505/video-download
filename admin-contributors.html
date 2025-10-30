@@ -523,13 +523,15 @@
 
         async function loadUsers() {
             try {
-                const response = await fetch(API + '?resource=users', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
+                // Use admin API instead of contributors API for user list
+                const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
+                const response = await fetch(ADMIN_API + '?action=users', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
                 const data = await response.json();
-                if (data.error || !Array.isArray(data)) {
+                if (data.error || !data.users) {
                     console.error('Failed to load users:', data.error || 'Invalid response');
                     allUsers = [];
                 } else {
-                    allUsers = data;
+                    allUsers = data.users;
                     console.log('Loaded users:', allUsers);
                 }
                 populateUserDropdown();
