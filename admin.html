@@ -558,20 +558,22 @@
                 </div>
                 <div id="videos-message"></div>
                 <div id="videos-loading" class="loading">Loading videos...</div>
-                <table id="videos-table" class="data-table" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>Filename</th>
-                            <th>Title</th>
-                            <th>Owner</th>
-                            <th>Visibility</th>
-                            <th>Size</th>
-                            <th>Tags</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="videos-tbody"></tbody>
-                </table>
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <table id="videos-table" class="data-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Filename</th>
+                                <th>Title</th>
+                                <th>Owner</th>
+                                <th>Visibility</th>
+                                <th>Size</th>
+                                <th>Tags</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="videos-tbody"></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Analytics Tab -->
@@ -594,19 +596,21 @@
 
                 <h3>Top 10 Most Viewed Articles</h3>
                 <div id="analytics-loading" class="loading">Loading analytics...</div>
-                <table id="analytics-table" class="data-table" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Title</th>
-                            <th>Author</th>
-                            <th>Category</th>
-                            <th>Views</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="analytics-tbody"></tbody>
-                </table>
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <table id="analytics-table" class="data-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Category</th>
+                                <th>Views</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="analytics-tbody"></tbody>
+                    </table>
+                </div>
 
                 <h3 style="margin-top: 40px;">Category Performance</h3>
                 <div id="category-stats-container" style="margin-top: 20px;">
@@ -799,20 +803,22 @@
                 </div>
                 <div id="comments-message"></div>
                 <div id="comments-loading" class="loading">Loading comments...</div>
-                <table id="comments-table" class="data-table" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox" id="select-all-comments" onchange="toggleAllComments()"></th>
-                            <th>Author</th>
-                            <th>Article</th>
-                            <th>Content</th>
-                            <th>Date</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="comments-tbody"></tbody>
-                </table>
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <table id="comments-table" class="data-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="select-all-comments" onchange="toggleAllComments()"></th>
+                                <th>Author</th>
+                                <th>Article</th>
+                                <th>Content</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comments-tbody"></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- News Tab -->
@@ -825,20 +831,22 @@
                 </div>
                 <div id="news-message"></div>
                 <div id="news-loading" class="loading">Loading news...</div>
-                <table id="news-table" class="data-table" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Category</th>
-                            <th>Author</th>
-                            <th>Status</th>
-                            <th>Breaking</th>
-                            <th>Created</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="news-tbody"></tbody>
-                </table>
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <table id="news-table" class="data-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Author</th>
+                                <th>Status</th>
+                                <th>Breaking</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="news-tbody"></tbody>
+                    </table>
+                </div>
             </div>
 
             <!-- Subscriptions Tab -->
@@ -864,20 +872,22 @@
                 </div>
                 <div id="subscriptions-message"></div>
                 <div id="subscriptions-loading" class="loading">Loading subscriptions...</div>
-                <table id="subscriptions-table" class="data-table" style="display: none;">
-                    <thead>
-                        <tr>
-                            <th>User</th>
-                            <th>Email</th>
-                            <th>Tier</th>
-                            <th>Status</th>
-                            <th>Usage</th>
-                            <th>Next Billing</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="subscriptions-tbody"></tbody>
-                </table>
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <table id="subscriptions-table" class="data-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Tier</th>
+                                <th>Status</th>
+                                <th>Usage</th>
+                                <th>Next Billing</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subscriptions-tbody"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
