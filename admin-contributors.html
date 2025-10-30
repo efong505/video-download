@@ -687,13 +687,19 @@
 
         let editingContributorId = null;
         
-        function showAddContributor() {
+        async function showAddContributor() {
             const userData = localStorage.getItem('user_data');
             const userRole = userData ? JSON.parse(userData).role : null;
             editingContributorId = null;
             document.getElementById('contributorModalTitle').textContent = 'Add Contributor';
             document.getElementById('contributorForm').reset();
             document.getElementById('bypass-approval-section').style.display = userRole === 'editor' ? 'none' : 'block';
+            
+            // Ensure users are loaded before showing modal
+            if (allUsers.length === 0) {
+                await loadUsers();
+            }
+            
             new bootstrap.Modal(document.getElementById('contributorModal')).show();
         }
         
