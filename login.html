@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Downloader - Login</title>
+    <title>Christian Conservatives Today - Login</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             margin: 0;
             padding: 20px;
@@ -18,15 +18,59 @@
         .container {
             background: white;
             padding: 40px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-radius: 15px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
             width: 100%;
-            max-width: 400px;
+            max-width: 450px;
+        }
+        .logo-section {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .logo {
+            width: 80px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+        .site-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c5aa0;
+            margin-bottom: 8px;
+        }
+        .site-tagline {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 20px;
+            line-height: 1.4;
         }
         h1 {
             text-align: center;
             color: #333;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
+            font-size: 1.8rem;
+        }
+        .page-description {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        .benefits {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            font-size: 0.85rem;
+        }
+        .benefits ul {
+            margin: 8px 0 0 0;
+            padding-left: 20px;
+        }
+        .benefits li {
+            margin-bottom: 5px;
+            color: #555;
         }
         .form-group {
             margin-bottom: 20px;
@@ -84,16 +128,41 @@
         .admin-link {
             text-align: center;
             margin-top: 20px;
+            font-size: 0.9rem;
         }
         .admin-link a {
             color: #667eea;
             text-decoration: none;
+            transition: color 0.3s;
+        }
+        .admin-link a:hover {
+            color: #5a6fd8;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="logo-section">
+            <img src="techcrosslogo.jpg" alt="Christian Conservatives Today" class="logo">
+            <div class="site-title">Christian Conservatives Today</div>
+            <div class="site-tagline">Faith-Based Content, Election Resources & Civic Engagement</div>
+        </div>
+        
         <h1 id="form-title">Login</h1>
+        <div class="page-description" id="page-description">
+            Sign in to access your account
+        </div>
+        
+        <div class="benefits" id="benefits-section" style="display: none;">
+            <strong>Why Register?</strong>
+            <ul>
+                <li>📹 Upload and manage your videos</li>
+                <li>📖 Access exclusive articles and resources</li>
+                <li>🗺️ Download comprehensive voter guides</li>
+                <li>✝️ Connect with faith-based community</li>
+            </ul>
+        </div>
+        
         <div id="message"></div>
         
         <form id="auth-form">
@@ -125,8 +194,9 @@
         </div>
         
         <div class="admin-link">
-            <a href="admin.html">Admin Dashboard</a> | 
-            <a href="videos.html">Video Gallery</a>
+            <a href="index.html">← Back to Home</a> | 
+            <a href="news.html">News</a> | 
+            <a href="election-map.html">Election Map</a>
         </div>
     </div>
 
@@ -137,6 +207,8 @@
         document.getElementById('toggle-mode').addEventListener('click', function() {
             isLoginMode = !isLoginMode;
             const title = document.getElementById('form-title');
+            const description = document.getElementById('page-description');
+            const benefits = document.getElementById('benefits-section');
             const submitBtn = document.getElementById('submit-btn');
             const toggleLink = document.getElementById('toggle-mode');
             const firstNameGroup = document.getElementById('first-name-group');
@@ -146,6 +218,8 @@
             
             if (isLoginMode) {
                 title.textContent = 'Login';
+                description.textContent = 'Sign in to access your account';
+                benefits.style.display = 'none';
                 submitBtn.textContent = 'Login';
                 toggleLink.textContent = "Don't have an account? Register here";
                 firstNameGroup.style.display = 'none';
@@ -153,8 +227,10 @@
                 firstNameInput.required = false;
                 lastNameInput.required = false;
             } else {
-                title.textContent = 'Register';
-                submitBtn.textContent = 'Register';
+                title.textContent = 'Create Account';
+                description.textContent = 'Join our faith-based community today';
+                benefits.style.display = 'block';
+                submitBtn.textContent = 'Create Account';
                 toggleLink.textContent = 'Already have an account? Login here';
                 firstNameGroup.style.display = 'block';
                 lastNameGroup.style.display = 'block';
@@ -198,9 +274,8 @@
                 const data = await response.json();
                 
                 if (response.ok) {
-                    messageDiv.innerHTML = `<div class="message success">${data.message}</div>`;
-                    
                     if (isLoginMode && data.token) {
+                        messageDiv.innerHTML = `<div class="message success">Login successful! Redirecting...</div>`;
                         localStorage.setItem('auth_token', data.token);
                         localStorage.setItem('user_data', JSON.stringify(data.user));
                         
@@ -211,6 +286,14 @@
                                 window.location.href = 'videos.html';
                             }
                         }, 1000);
+                    } else if (!isLoginMode) {
+                        messageDiv.innerHTML = `<div class="message success">Account created successfully! You can now login.</div>`;
+                        setTimeout(() => {
+                            isLoginMode = true;
+                            document.getElementById('toggle-mode').click();
+                            document.getElementById('email').value = email;
+                            document.getElementById('password').value = password;
+                        }, 2000);
                     }
                 } else {
                     messageDiv.innerHTML = `<div class="message error">${data.error}</div>`;
