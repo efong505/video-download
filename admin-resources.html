@@ -243,8 +243,20 @@
             }
         });
 
-        function loadResources() {
-            // Load from localStorage for now
+        async function loadResources() {
+            try {
+                // Try to load from API first
+                const response = await fetch(`${RESOURCES_API}?action=list`);
+                if (response.ok) {
+                    const resources = await response.json();
+                    displayResources(resources);
+                    return;
+                }
+            } catch (error) {
+                console.log('API not available, using localStorage:', error);
+            }
+            
+            // Fallback to localStorage
             let resources = JSON.parse(localStorage.getItem('admin_resources') || '[]');
             
             // If no resources in localStorage, use sample data
