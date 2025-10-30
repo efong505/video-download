@@ -1,0 +1,210 @@
+    {
+        "name": "Claire Swift",
+        "state": "New Jersey",
+        "office": "General Assembly District 2 Seat 2",
+        "party": "R",
+        "status": "active",
+        "bio": "Claire Swift is a Republican candidate for the New Jersey General Assembly in District 2 Seat 2. With a background in business and community service, Swift has been involved in local Republican politics, advocating for fiscal responsibility and economic growth in South Jersey. She emphasizes reducing property taxes and supporting small businesses affected by state regulations. Swift's campaign focuses on practical solutions to everyday issues like affordability and public safety. No detailed 200-300 word bio available from Ballotpedia or official sources at this time; limited public information exists.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.claireswiftnj.com",
+        "positions": {
+            "ABORTION": "Supports restrictions on late-term abortions and parental notification laws, emphasizing protection of the unborn while respecting life.",
+            "EDUCATION": "Advocates for school choice, parental rights in curriculum, and increased funding for vocational training programs.",
+            "RELIGIOUS-FREEDOM": "Strong supporter of religious liberties, opposing mandates that infringe on faith-based organizations and individuals.",
+            "GUNS": "Defends Second Amendment rights, supporting concealed carry and opposing strict gun control measures.",
+            "TAXES": "Pushes for property tax relief, spending cuts, and eliminating unnecessary state expenditures.",
+            "IMMIGRATION": "Favors secure borders and enforcement of immigration laws, prioritizing legal immigration pathways.",
+            "FAMILY-VALUES": "Promotes traditional family structures, opposing policies that undermine parental authority and family units.",
+            "ELECTION-INTEGRITY": "Calls for voter ID requirements, paper ballots, and audits to ensure transparent elections."
+        },
+        "endorsements": ["New Jersey Republican Party", "South Jersey Chamber of Commerce", "National Rifle Association"]
+    },
+    {
+        "name": "Chris Konawel",
+        "state": "New Jersey",
+        "office": "General Assembly District 2 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "Chris Konawel is a Democratic candidate for General Assembly District 2 Seat 2. A longtime resident of Atlantic County, Konawel has experience in public service and community organizing. He focuses on expanding access to healthcare, environmental protection along the Jersey Shore, and investing in infrastructure. His platform includes raising the minimum wage and supporting workers' rights. No detailed bio from official sources; campaign highlights local economic development.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.chriskonawelnj.com",
+        "positions": {
+            "ABORTION": "Pro-choice, supports reproductive rights and access to abortion services without restrictions.",
+            "EDUCATION": "Advocates for fully funded public schools, teacher pay raises, and universal pre-K programs.",
+            "RELIGIOUS-FREEDOM": "Supports separation of church and state, protecting individual rights while ensuring no discrimination.",
+            "GUNS": "Favors universal background checks, assault weapon bans, and red flag laws for public safety.",
+            "TAXES": "Proposes taxing the wealthy more to fund social services and reduce reliance on property taxes.",
+            "IMMIGRATION": "Supports pathways to citizenship for undocumented immigrants and sanctuary state policies.",
+            "FAMILY-VALUES": "Emphasizes inclusive family policies, LGBTQ+ rights, and support for working families.",
+            "ELECTION-INTEGRITY": "Promotes expanded voting access, mail-in ballots, and measures against voter suppression."
+        },
+        "endorsements": ["New Jersey Democratic Party", "Sierra Club", "Planned Parenthood"]
+    },
+    {
+        "name": "Dave Bailey Jr.",
+        "state": "New Jersey",
+        "office": "General Assembly District 3 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Dave Bailey Jr. is running as a Democrat for General Assembly District 3 Seat 1. A veteran and small business owner in Cumberland County, Bailey prioritizes veterans' affairs, job creation, and agricultural support in rural areas. His campaign addresses opioid crisis response and mental health services. Limited bio details available.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Supports women's right to choose and access to reproductive healthcare.",
+            "EDUCATION": "Focuses on equitable funding for rural schools and career-technical education.",
+            "RELIGIOUS-FREEDOM": "Defends First Amendment rights for all faiths without government interference.",
+            "GUNS": "Supports reasonable gun safety laws including background checks.",
+            "TAXES": "Aims to lower taxes for working families through economic development.",
+            "IMMIGRATION": "Advocates for comprehensive reform and humane border policies.",
+            "FAMILY-VALUES": "Promotes family-supporting policies like paid leave and childcare.",
+            "ELECTION-INTEGRITY": "Supports secure, accessible voting systems."
+        },
+        "endorsements": ["New Jersey AFL-CIO", "Veterans of Foreign Wars", "Farm Bureau"]
+    },
+    {
+        "name": "Dan Hutchison",
+        "state": "New Jersey",
+        "office": "General Assembly District 3 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Dan Hutchison, Democratic candidate for District 3 Seat 1, brings experience in local government and environmental advocacy. He campaigns on clean energy initiatives, flood protection for coastal communities, and affordable housing. No extensive bio from sources.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Pro-choice stance, protecting access to abortion and contraception.",
+            "EDUCATION": "Invests in public education and reducing class sizes.",
+            "RELIGIOUS-FREEDOM": "Upholds religious freedoms alongside anti-discrimination protections.",
+            "GUNS": "Endorses stricter gun control to prevent violence.",
+            "TAXES": "Seeks progressive taxation to fund public services.",
+            "IMMIGRATION": "Favors inclusive policies and DREAMer protections.",
+            "FAMILY-VALUES": "Supports diverse family structures and equality.",
+            "ELECTION-INTEGRITY": "Advocates for modernized, fair election processes."
+        },
+        "endorsements": ["Environmental Defense Fund", "New Jersey Education Association", "Democratic National Committee"]
+    },
+    {
+        "name": "Bethanne McCarthy Patrick",
+        "state": "New Jersey",
+        "office": "General Assembly District 3 Seat 2",
+        "party": "R",
+        "status": "active",
+        "bio": "Bethanne McCarthy Patrick is a Republican contender for District 3 Seat 2. A former prosecutor, she focuses on law and order, combating crime, and supporting law enforcement. Her platform includes tax cuts and deregulation for businesses. Limited public bio.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.bethannepatrick.com",
+        "positions": {
+            "ABORTION": "Pro-life, supports limits on abortion and adoption incentives.",
+            "EDUCATION": "Promotes parental choice and charter schools.",
+            "RELIGIOUS-FREEDOM": "Strong advocate for faith-based exemptions from regulations.",
+            "GUNS": "Second Amendment defender, opposing new restrictions.",
+            "TAXES": "Committed to reducing taxes and government waste.",
+            "IMMIGRATION": "Enforces immigration laws strictly.",
+            "FAMILY-VALUES": "Upholds traditional values and family protections.",
+            "ELECTION-INTEGRITY": "Demands voter ID and election security measures."
+        },
+        "endorsements": ["New Jersey State Troopers Fraternal Association", "National Federation of Independent Business", "Family Policy Alliance"]
+    },
+    {
+        "name": "Amanda Esposito",
+        "state": "New Jersey",
+        "office": "General Assembly District 3 Seat 2",
+        "party": "R",
+        "status": "active",
+        "bio": "Amanda Esposito, Republican for District 3 Seat 2, has a background in healthcare and community leadership. She addresses healthcare access, senior care, and economic revitalization in South Jersey.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Supports pro-life policies with exceptions for health.",
+            "EDUCATION": "Advocates for school vouchers and standards improvement.",
+            "RELIGIOUS-FREEDOM": "Protects religious institutions' rights.",
+            "GUNS": "Supports responsible gun ownership rights.",
+            "TAXES": "Focuses on tax relief for families and seniors.",
+            "IMMIGRATION": "Prioritizes legal immigration and border security.",
+            "FAMILY-VALUES": "Promotes strong family policies.",
+            "ELECTION-INTEGRITY": "Calls for transparent voting procedures."
+        },
+        "endorsements": ["AARP", "Local Chamber of Commerce", "Republican National Committee"]
+    },
+    {
+        "name": "William F. Moen Jr.",
+        "state": "New Jersey",
+        "office": "General Assembly District 4 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "William F. Moen Jr. is a Democratic candidate for District 4 Seat 1. Involved in labor unions and local politics, he champions workers' rights, infrastructure improvements, and environmental justice in Camden County.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Defends reproductive rights fully.",
+            "EDUCATION": "Pushes for increased education funding.",
+            "RELIGIOUS-FREEDOM": "Ensures balanced religious protections.",
+            "GUNS": "Supports gun violence prevention measures.",
+            "TAXES": "Favors fair tax system for equity.",
+            "IMMIGRATION": "Supports immigrant communities and reform.",
+            "FAMILY-VALUES": "Inclusive support for all families.",
+            "ELECTION-INTEGRITY": "Expands voting rights."
+        },
+        "endorsements": ["AFL-CIO", "NAACP", "Planned Parenthood Action Fund"]
+    },
+    {
+        "name": "Cody D. Miller",
+        "state": "New Jersey",
+        "office": "General Assembly District 4 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "Cody D. Miller, Democrat for District 4 Seat 2, focuses on youth engagement, mental health, and urban development in Gloucester and Camden areas.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Pro-choice advocate.",
+            "EDUCATION": "Emphasizes mental health in schools.",
+            "RELIGIOUS-FREEDOM": "Protects diverse beliefs.",
+            "GUNS": "For stricter controls.",
+            "TAXES": "Progressive reforms.",
+            "IMMIGRATION": "Humane policies.",
+            "FAMILY-VALUES": "Supportive of modern families.",
+            "ELECTION-INTEGRITY": "Secure and accessible elections."
+        },
+        "endorsements": ["Youth Vote NJ", "Mental Health Association", "Democratic Party"]
+    },
+    {
+        "name": "Constance Ditzel",
+        "state": "New Jersey",
+        "office": "General Assembly District 4",
+        "party": "R",
+        "status": "active",
+        "bio": "Constance Ditzel is a Republican candidate for District 4. A community activist, she prioritizes public safety, small business support, and fiscal conservatism.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Pro-life position.",
+            "EDUCATION": "School choice proponent.",
+            "RELIGIOUS-FREEDOM": "Defends faith rights.",
+            "GUNS": "Gun rights supporter.",
+            "TAXES": "Tax reduction advocate.",
+            "IMMIGRATION": "Law enforcement focus.",
+            "FAMILY-VALUES": "Traditional values.",
+            "ELECTION-INTEGRITY": "Voter integrity measures."
+        },
+        "endorsements": ["Local GOP", "Business Associations"]
+    },
+    {
+        "name": "Louis D. Greenwald",
+        "state": "New Jersey",
+        "office": "General Assembly District 5 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Louis D. Greenwald, incumbent Democrat for District 5 Seat 1, has served since 2000. As Assembly Majority Leader, he focuses on budget matters, healthcare, and economic policy in Burlington County. Extensive legislative experience includes chairing committees on appropriations.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.assemblydeman6.com",
+        "positions": {
+            "ABORTION": "Strong pro-choice record.",
+            "EDUCATION": "Supports public school funding.",
+            "RELIGIOUS-FREEDOM": "Balanced approach.",
+            "GUNS": "Gun safety laws.",
+            "TAXES": "Targets relief for middle class.",
+            "IMMIGRATION": "Protects immigrant rights.",
+            "FAMILY-VALUES": "Family leave expansions.",
+            "ELECTION-INTEGRITY": "Voting access improvements."
+        },
+        "endorsements": ["New Jersey State AFL-CIO", "New Jersey Education Association", "Planned Parenthood"]
+    }

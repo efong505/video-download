@@ -1,0 +1,210 @@
+    {
+        "name": "Ras Baraka",
+        "state": "New Jersey",
+        "office": "Governor",
+        "party": "D",
+        "status": "active",
+        "bio": "Ras Jua Baraka (born April 9, 1970) is an American educator, author, and politician serving as the 40th and current mayor of Newark, New Jersey, since 2014. He was previously a member of the Municipal Council of Newark and served as principal of Central High School in Newark. Baraka is the son of poet and activist Amiri Baraka and is known for his progressive policies and focus on reducing crime and improving education in Newark. During his tenure as mayor, he has implemented initiatives such as universal pre-K, reentry programs for formerly incarcerated individuals, and efforts to address affordable housing and economic development. Baraka announced his candidacy for governor of New Jersey in June 2024, emphasizing equity, criminal justice reform, and investment in urban communities. He has a bachelor's degree in political science from Howard University and a master's in education from Saint Peter's University.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://rasbaraka.com",
+        "positions": {
+            "ABORTION": "Supports reproductive rights and access to abortion services; opposes restrictions that limit women's healthcare choices.",
+            "EDUCATION": "Strong advocate for fully funded public schools, universal pre-K, and free community college; prioritizes equity in education funding.",
+            "RELIGIOUS-FREEDOM": "Supports separation of church and state; no specific statements on religious liberty issues.",
+            "GUNS": "Favors stricter gun control measures, including universal background checks, assault weapon bans, and red flag laws.",
+            "TAXES": "Supports progressive taxation, including a millionaire's tax to fund education and social programs.",
+            "IMMIGRATION": "Advocates for sanctuary cities, driver's licenses for undocumented immigrants, and pathways to citizenship.",
+            "FAMILY-VALUES": "Promotes policies supporting working families, paid family leave, and affordable childcare.",
+            "ELECTION-INTEGRITY": "Supports automatic voter registration, early voting, and measures to increase voter access."
+        },
+        "endorsements": ["New Jersey Education Association", "Working Families Party", "Progressive Democrats"]
+    },
+    {
+        "name": "Steve Fulop",
+        "state": "New Jersey",
+        "office": "Governor",
+        "party": "D",
+        "status": "active",
+        "bio": "Steven Michael Fulop (born February 28, 1977) is the 41st and current mayor of Jersey City, New Jersey, serving since 2013. A former U.S. Marine, Fulop served in Iraq and worked in finance at Goldman Sachs before entering politics. He was elected to the Jersey City Council in 2005 and became mayor after defeating incumbent Healy. Fulop's administration has focused on economic development, public safety, and government transparency, including pay-to-play reforms and open data initiatives. He has overseen significant growth in Jersey City, with new developments and improved credit ratings. Fulop launched his gubernatorial campaign in April 2023, positioning himself as a pragmatic progressive with a focus on affordability, public safety, and innovation. He holds a bachelor's degree from Binghamton University and an MBA from NYU Stern.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://stevefulop.com",
+        "positions": {
+            "ABORTION": "Strong supporter of abortion rights; pledges to protect reproductive freedom in New Jersey.",
+            "EDUCATION": "Advocates for increased school funding, teacher pay raises, and expanded pre-K programs.",
+            "RELIGIOUS-FREEDOM": "No specific public positions; generally supports civil liberties.",
+            "GUNS": "Supports comprehensive gun safety laws, including background checks and safe storage requirements.",
+            "TAXES": "Favors targeted tax relief for middle-class families; supports corporate accountability.",
+            "IMMIGRATION": "Supports immigrant-friendly policies, including in-state tuition for undocumented students.",
+            "FAMILY-VALUES": "Promotes paid family leave, affordable housing, and child tax credits.",
+            "ELECTION-INTEGRITY": "Advocates for expanded voting access and campaign finance reform."
+        },
+        "endorsements": ["Jersey City Education Association", "AFL-CIO", "Planned Parenthood Action Fund"]
+    },
+    {
+        "name": "Bill Spadea",
+        "state": "New Jersey",
+        "office": "Governor",
+        "party": "R",
+        "status": "active",
+        "bio": "William Spadea is a radio host, entrepreneur, and political candidate in New Jersey. He hosts the morning show on New Jersey 101.5 (WKXW) and previously worked in real estate and media. Spadea ran for Congress in 2004 as a Republican in the 12th District, losing in the primary. He announced his candidacy for governor in June 2024, focusing on reducing taxes, improving public safety, and opposing progressive policies. Spadea has been critical of Governor Murphy's handling of COVID-19, property taxes, and affordability issues. He positions himself as a conservative outsider challenging the establishment. Spadea graduated from Boston University with a degree in communications.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://billspadea.com",
+        "positions": {
+            "ABORTION": "Opposes late-term abortions; supports parental notification and some restrictions.",
+            "EDUCATION": "Advocates for school choice, vouchers, and reducing state control over local districts.",
+            "RELIGIOUS-FREEDOM": "Strong supporter of religious liberty protections for individuals and organizations.",
+            "GUNS": "Defends Second Amendment rights; opposes new gun control measures.",
+            "TAXES": "Pledges to cut property taxes, eliminate estate tax, and reduce government spending.",
+            "IMMIGRATION": "Supports strict enforcement of immigration laws and opposes sanctuary state policies.",
+            "FAMILY-VALUES": "Promotes traditional family structures and opposes gender ideology in schools.",
+            "ELECTION-INTEGRITY": "Calls for voter ID, paper ballots, and audits to ensure secure elections."
+        },
+        "endorsements": ["New Jersey Second Amendment Society", "Conservative Party", "Talk Radio Network"]
+    },
+    {
+        "name": "Jon Bramnick",
+        "state": "New Jersey",
+        "office": "Governor",
+        "party": "R",
+        "status": "active",
+        "bio": "Jon Bramnick (born February 24, 1953) is a New Jersey politician, attorney, and comedian serving in the General Assembly since 2003, representing the 21st District. He was the Republican Minority Leader from 2012 to 2022. Bramnick is known for his moderate stance and bipartisan approach, often working across the aisle. A practicing attorney, he specializes in personal injury law and has argued cases before the New Jersey Supreme Court. Bramnick announced his gubernatorial bid in November 2023, emphasizing fiscal responsibility, education reform, and public safety. He supports term limits and ethics reform. Bramnick graduated from Syracuse University and earned his J.D. from Hofstra University.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://bramnickforgovernor.com",
+        "positions": {
+            "ABORTION": "Personally pro-life but supports current New Jersey law allowing choice.",
+            "EDUCATION": "Supports increased funding for public schools and expansion of charter schools.",
+            "RELIGIOUS-FREEDOM": "Advocates for protections against discrimination based on religious beliefs.",
+            "GUNS": "Supports background checks and red flag laws but defends gun ownership rights.",
+            "TAXES": "Proposes property tax relief and incentives for businesses to stay in New Jersey.",
+            "IMMIGRATION": "Supports legal immigration and border security; pragmatic on DREAMers.",
+            "FAMILY-VALUES": "Focuses on affordability for families; supports traditional values with inclusivity.",
+            "ELECTION-INTEGRITY": "Endorses voter ID and measures to prevent fraud while expanding access."
+        },
+        "endorsements": ["New Jersey Business & Industry Association", "Moderate Republicans", "Fraternal Order of Police"]
+    },
+    {
+        "name": "Erik K. Simonsen",
+        "state": "New Jersey",
+        "office": "General Assembly District 1 Seat 1",
+        "party": "R",
+        "status": "active",
+        "bio": "Erik K. Simonsen is the incumbent Republican Assemblyman for Legislative District 1, serving since 2020. A former teacher and mayor of Lower Township, Simonsen has focused on property tax relief, veterans' issues, and coastal community concerns. He serves on the Assembly Education, Transportation, and Military committees. Simonsen is a U.S. Air Force veteran and holds a degree in education from Rowan University. He is running for re-election in 2025 alongside Antwan McClellan.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Supports parental consent and limits on late-term procedures.",
+            "EDUCATION": "Advocates for local control, school safety, and vocational training.",
+            "RELIGIOUS-FREEDOM": "Supports protections for religious expression in public spaces.",
+            "GUNS": "Strong Second Amendment advocate; opposes additional restrictions.",
+            "TAXES": "Pushes for property tax caps and senior deductions.",
+            "IMMIGRATION": "Favors enforcement of federal immigration laws.",
+            "FAMILY-VALUES": "Promotes policies supporting traditional families and parental rights.",
+            "ELECTION-INTEGRITY": "Supports voter ID and election security measures."
+        },
+        "endorsements": ["Cape May County GOP", "NJEA (past support)", "Veterans of Foreign Wars"]
+    },
+    {
+        "name": "Carolyn Rush",
+        "state": "New Jersey",
+        "office": "General Assembly District 1 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Carolyn Rush is a Democratic candidate for the New Jersey General Assembly in District 1. A community activist and former educator, Rush has focused on environmental protection, affordable healthcare, and workers' rights. She previously ran for office in local elections and is endorsed by progressive organizations. Rush emphasizes climate resilience for coastal communities and equity in education funding.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Strong supporter of reproductive rights and access to services.",
+            "EDUCATION": "Advocates for fully funded schools and free pre-K.",
+            "RELIGIOUS-FREEDOM": "Supports separation of church and state.",
+            "GUNS": "Favors universal background checks and assault weapon bans.",
+            "TAXES": "Supports progressive taxation to fund social services.",
+            "IMMIGRATION": "Advocates for immigrant rights and sanctuary policies.",
+            "FAMILY-VALUES": "Promotes LGBTQ+ inclusion and family leave policies.",
+            "ELECTION-INTEGRITY": "Supports expanded voting access and mail-in ballots."
+        },
+        "endorsements": ["Sierra Club", "Planned Parenthood", "CWA Local"]
+    },
+    {
+        "name": "Antwan McClellan",
+        "state": "New Jersey",
+        "office": "General Assembly District 1 Seat 2",
+        "party": "R",
+        "status": "active",
+        "bio": "Antwan McClellan is the incumbent Republican Assemblyman for District 1, serving since 2020. A former Cape May City Council member, McClellan is the first African American Republican to serve in the Assembly from South Jersey. He focuses on economic development, public safety, and tourism. McClellan serves on the Commerce and Economic Development Committee and is running for re-election with Erik Simonsen.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Supports some restrictions and alternatives to abortion.",
+            "EDUCATION": "Favors school choice and increased vocational programs.",
+            "RELIGIOUS-FREEDOM": "Advocates for religious liberty in schools and businesses.",
+            "GUNS": "Defends Second Amendment rights; opposes new controls.",
+            "TAXES": "Seeks property tax relief and business incentives.",
+            "IMMIGRATION": "Supports legal immigration and border security.",
+            "FAMILY-VALUES": "Promotes traditional values and community support.",
+            "ELECTION-INTEGRITY": "Endorses voter verification and audit processes."
+        },
+        "endorsements": ["Cape May County Chamber", "NJ Realtors", "GOP Leadership"]
+    },
+    {
+        "name": "Maureen Rowan",
+        "state": "New Jersey",
+        "office": "General Assembly District 1 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "Maureen Rowan is a Democratic candidate for General Assembly in District 1. A small business owner and community leader, Rowan has advocated for environmental protection, mental health services, and affordable housing. She previously served on local boards and is running on a platform of progressive change for South Jersey's working families.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Advocates for full access to reproductive healthcare.",
+            "EDUCATION": "Supports increased funding and teacher support.",
+            "RELIGIOUS-FREEDOM": "No specific positions; supports civil rights.",
+            "GUNS": "Calls for stricter gun laws and community safety.",
+            "TAXES": "Favors taxing the wealthy to fund public services.",
+            "IMMIGRATION": "Supports inclusive policies for immigrants.",
+            "FAMILY-VALUES": "Focuses on equity and support for all families.",
+            "ELECTION-INTEGRITY": "Advocates for voter access and transparency."
+        },
+        "endorsements": ["Democratic Progressive Caucus", "Environmental Groups", "Labor Unions"]
+    },
+    {
+        "name": "Don Guardian",
+        "state": "New Jersey",
+        "office": "General Assembly District 2 Seat 1",
+        "party": "R",
+        "status": "active",
+        "bio": "Don Guardian is a Republican candidate for General Assembly in District 2 and former mayor of Atlantic City (2014-2017). Known for stabilizing the city's finances during a fiscal crisis, Guardian is a moderate Republican with experience in tourism and economic development. He previously served as executive director of the Atlantic City Special Improvement District.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Supports choice with reasonable limits.",
+            "EDUCATION": "Advocates for vocational training and school funding.",
+            "RELIGIOUS-FREEDOM": "Supports protections for faith-based organizations.",
+            "GUNS": "Balanced approach; supports safety and rights.",
+            "TAXES": "Focuses on economic growth to reduce tax burden.",
+            "IMMIGRATION": "Pragmatic; supports legal pathways.",
+            "FAMILY-VALUES": "Promotes community and economic stability.",
+            "ELECTION-INTEGRITY": "Supports secure and accessible elections."
+        },
+        "endorsements": ["Atlantic County GOP", "Business Associations", "Tourism Industry"]
+    },
+    {
+        "name": "Heather Simmons",
+        "state": "New Jersey",
+        "office": "General Assembly District 2 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Heather Simmons is a Democratic candidate for General Assembly in District 2. A Glassboro councilwoman and community advocate, Simmons focuses on education, healthcare access, and environmental justice. She has a background in public service and is endorsed by local Democratic organizations.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Strong advocate for reproductive freedom.",
+            "EDUCATION": "Pushes for equitable school funding.",
+            "RELIGIOUS-FREEDOM": "Supports individual rights and separation.",
+            "GUNS": "Favors comprehensive gun reform.",
+            "TAXES": "Supports progressive policies for services.",
+            "IMMIGRATION": "Advocates for welcoming communities.",
+            "FAMILY-VALUES": "Promotes inclusivity and support programs.",
+            "ELECTION-INTEGRITY": "Endorses expanded voting rights."
+        },
+        "endorsements": ["Gloucester County Democrats", "Education Unions", "Progressive Groups"]
+    }

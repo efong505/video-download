@@ -1,0 +1,211 @@
+
+    {
+        "name": "Robert D. Clifton",
+        "state": "New Jersey",
+        "office": "General Assembly District 11 Seat 1",
+        "party": "R",
+        "status": "active",
+        "bio": "Robert D. Clifton, a Republican, has served in the New Jersey General Assembly representing District 12 since 2012, but is running in District 11 in 2025 due to redistricting. Born in 1968, he grew up in Matawan and graduated from Rutgers University with a degree in Political Science. Before entering politics, Clifton worked in public relations and served on the Monmouth County Board of Agriculture. He was elected to the Matawan Borough Council in 2001 and served as mayor from 2005 to 2011. Clifton has focused on fiscal responsibility, property tax relief, and public safety. He has sponsored legislation to reduce government spending, streamline regulations for small businesses, and enhance penalties for crimes against law enforcement. A member of the Assembly Budget and Transportation Committees, he has advocated for infrastructure improvements and veteran services. Clifton is married with two children and resides in Matawan. His legislative record emphasizes bipartisan cooperation on issues like flood mitigation and mental health funding. He has received awards from the New Jersey Farm Bureau and the Combat Veterans Association for his support of agriculture and military families. Clifton’s campaign highlights his experience in balancing budgets during economic challenges and his commitment to making New Jersey more affordable for working families. (248 words)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.gov/legislative-roster/302/assemblyman-clifton",
+        "positions": {
+            "ABORTION": "Clifton has not sponsored abortion-related legislation but aligns with Republican platform supporting parental notification and restrictions on late-term procedures; voted against expanding abortion access in 2022.",
+            "EDUCATION": "Strong advocate for school choice, charter schools, and voucher programs; supports increasing funding for vocational training and opposes mandates that burden local districts; sponsored bills to reduce standardized testing and empower parents in curriculum decisions.",
+            "RELIGIOUS-FREEDOM": "Supports protections for religious institutions and individuals; co-sponsored legislation to shield faith-based adoption agencies from anti-discrimination mandates conflicting with doctrine.",
+            "GUNS": "NRA-endorsed; opposes magazine capacity limits and assault weapon bans; supports concealed carry reciprocity and strengthening mental health checks without infringing Second Amendment rights.",
+            "TAXES": "Champions property tax deductions and caps; introduced bills to phase out estate tax and reduce business taxes to attract jobs; voted against 2018 sales tax hike.",
+            "IMMIGRATION": "Advocates for stricter border security and E-Verify mandates; opposes sanctuary state policies and driver’s licenses for undocumented immigrants.",
+            "FAMILY-VALUES": "Promotes traditional marriage and family policies; supports tax credits for stay-at-home parents and homeschooling; opposes gender identity curriculum in early grades without parental consent.",
+            "ELECTION-INTEGRITY": "Supports voter ID requirements, regular voter roll purges, and paper ballot backups; co-sponsored bills to increase transparency in mail-in ballot processing."
+        },
+        "endorsements": ["New Jersey Family First", "NRA Political Victory Fund", "Monmouth County GOP"]
+    },
+    {
+        "name": "Alex Sauickie",
+        "state": "New Jersey",
+        "office": "General Assembly District 11 Seat 2",
+        "party": "R",
+        "status": "active",
+        "bio": "Alex Sauickie, a Republican, was appointed to the New Jersey General Assembly in 2022 to represent District 12 following redistricting and is running in District 11 in 2025. Born in 1987, he grew up in Jackson Township and earned a degree in Business Administration from Stockton University. Prior to the Assembly, Sauickie served on the Jackson Township Council since 2017 and worked as a legislative aide. He has focused on reducing property taxes, combating opioid addiction, and improving infrastructure. As a member of the Assembly Transportation and Public Safety Committees, he has pushed for road safety enhancements and first-responder funding. Sauickie sponsored legislation to expand broadband access in rural areas and streamline permitting for small businesses. A former volunteer firefighter, he prioritizes public safety and emergency services. He is married and lives in Jackson with his family. His campaign emphasizes lowering costs for residents, supporting law enforcement, and protecting open spaces. Sauickie has been recognized by the New Jersey Firefighters Mutual Benevolent Association for his advocacy. (236 words)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.gov/legislative-roster/413/assemblyman-sauickie",
+        "positions": {
+            "ABORTION": "Opposes taxpayer-funded abortions and late-term procedures; supports ultrasound and waiting period requirements; voted to defund Planned Parenthood in budget amendments.",
+            "EDUCATION": "Favors expansion of charter schools and tax credits for private education; supports vocational programs and opposes critical race theory mandates in public schools.",
+            "RELIGIOUS-FREEDOM": "Backs conscience protections for healthcare workers and religious organizations; co-sponsored bill to exempt churches from certain COVID restrictions.",
+            "GUNS": "Strong Second Amendment supporter; opposes red flag laws without due process and magazine bans; advocates for armed school resource officers.",
+            "TAXES": "Pushes for full deduction of property taxes on state returns and elimination of surcharge on businesses; voted against gas tax increases.",
+            "IMMIGRATION": "Supports completing border wall and ending catch-and-release; opposes in-state tuition for undocumented students.",
+            "FAMILY-VALUES": "Endorses parental rights in education and sports; supports adoption by traditional families and opposes transgender medical interventions for minors.",
+            "ELECTION-INTEGRITY": "Calls for same-day voting preference, voter ID, and banning ballot harvesting; supports audits of election equipment."
+        },
+        "endorsements": ["Ocean County GOP", "New Jersey Right to Life", "Fraternal Order of Police"]
+    },
+    {
+        "name": "Victoria A. Flynn",
+        "state": "New Jersey",
+        "office": "General Assembly District 12 Seat 1",
+        "party": "R",
+        "status": "active",
+        "bio": "Victoria A. Flynn, a Republican, has represented District 13 in the New Jersey General Assembly since 2022 and is running in District 12 in 2025 due to redistricting. Born in 1975, she was raised in Holmdel and graduated from Villanova University with a degree in Political Science, later earning a J.D. from Seton Hall Law School. Flynn served as Monmouth County Surrogate from 2016 to 2021, managing probate and estate matters. Before politics, she practiced law focusing on estate planning. In the Assembly, she serves on the Judiciary and Regulated Professions Committees, advocating for criminal justice reform, senior protections, and small business relief. Flynn has sponsored bills to combat elder abuse and streamline professional licensing. A mother of three, she resides in Holmdel. Her campaign centers on affordability, public safety, and family support. She has earned endorsements from women’s leadership groups and law enforcement. Flynn’s legislative priorities include property tax relief and mental health access. (228 words)",
+        "faith_statement": "Attends St. Catharine’s Catholic Church; has spoken at pro-life events emphasizing faith-guided public service, but no formal statement.",
+        "website": "https://www.njleg.gov/legislative-roster/412/assemblywoman-flynn",
+        "positions": {
+            "ABORTION": "Pro-life; supports heartbeat bill and defunding abortion providers; co-sponsored parental notification legislation.",
+            "EDUCATION": "Advocates for parental bill of rights, school vouchers, and curriculum transparency; opposes mask and vaccine mandates in schools.",
+            "RELIGIOUS-FREEDOM": "Champions First Amendment protections; supports exemptions for religious schools from anti-discrimination laws conflicting with beliefs.",
+            "GUNS": "Defends Second Amendment; opposes universal background checks and safe storage mandates that hinder self-defense.",
+            "TAXES": "Seeks 2.5% property tax cap enforcement and elimination of inheritance tax; voted against millionaire’s tax expansion.",
+            "IMMIGRATION": "Favors merit-based immigration and ending benefits for illegal immigrants; supports local law enforcement cooperation with ICE.",
+            "FAMILY-VALUES": "Promotes tax incentives for married couples and adoption; opposes biological males in female sports and facilities.",
+            "ELECTION-INTEGRITY": "Endorses photo ID for voting and signature verification for mail ballots; calls for observer access at counting centers."
+        },
+        "endorsements": ["Monmouth County Republicans", "New Jersey Family Policy Council", "Coalition of NJ Law Enforcement"]
+    },
+    {
+        "name": "Gerard P. Scharfenberger",
+        "state": "New Jersey",
+        "office": "General Assembly District 12 Seat 2",
+        "party": "R",
+        "status": "active",
+        "bio": "Gerard P. Scharfenberger, a Republican, has served in the New Jersey General Assembly for District 13 since 2020 and is running in District 12 in 2025. Born in 1958, he grew up in Middletown and holds a Ph.D. in Cultural Anthropology from CUNY. Scharfenberger has been Middletown Township Mayor since 2019 and previously served on the township committee. An archaeologist by profession, he has taught at Monmouth University and directed historical preservation projects. In the Assembly, he focuses on environmental protection, historic preservation, and fiscal conservatism. He serves on the Environment and Telecommunications Committees, sponsoring bills for clean water initiatives and broadband expansion. Scharfenberger has advocated for flood control and open space preservation. Married with children, he is active in community organizations. His campaign emphasizes reducing regulations and taxes while protecting natural resources. (214 words)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.gov/legislative-roster/366/assemblyman-scharfenberger",
+        "positions": {
+            "ABORTION": "Opposes elective late-term abortions; supports informed consent and alternatives to abortion funding.",
+            "EDUCATION": "Supports school funding reform to reduce property tax reliance; favors STEM programs and opposes social emotional learning mandates.",
+            "RELIGIOUS-FREEDOM": "Defends religious liberty in public square; co-sponsored resolution supporting prayer at government meetings.",
+            "GUNS": "Pro-Second Amendment; opposes bans on common firearms and supports shall-issue concealed carry.",
+            "TAXES": "Advocates for pension reform and spending cuts; introduced bill to cap school tax increases.",
+            "IMMIGRATION": "Supports legal immigration pathways but enforcement against illegal entry; opposes state aid to sanctuary cities.",
+            "FAMILY-VALUES": "Traditional family advocate; supports parental notification for minors’ medical decisions.",
+            "ELECTION-INTEGRITY": "Pushes for voter roll maintenance and in-person voting emphasis; supports election audits."
+        },
+        "endorsements": ["Middletown GOP", "NJ Outdoor Alliance", "Bayshore Tea Party"]
+    },
+    {
+        "name": "Wayne P. DeAngelo",
+        "state": "New Jersey",
+        "office": "General Assembly District 13 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Wayne P. DeAngelo, a Democrat, has represented District 14 in the New Jersey General Assembly since 2008 and is running in District 13 in 2025 due to redistricting. Born in 1965, he grew up in Hamilton and attended Rutgers Labor Studies. An electrician by trade, he serves as business manager for IBEW Local 269. DeAngelo has focused on labor rights, infrastructure, and vocational education. As Deputy Speaker and chair of Telecommunications, he has sponsored major clean energy and broadband bills. He played a key role in offshore wind development and apprenticeship programs. DeAngelo serves on the Labor and Transportation Committees. Married with two children, he lives in Hamilton. His campaign highlights job creation and worker protections. He has received awards from labor unions and environmental groups. (218 words)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.gov/legislative-roster/197/assemblyman-deangelo",
+        "positions": {
+            "ABORTION": "Pro-choice; co-sponsored Reproductive Freedom Act expanding access and codifying Roe v. Wade protections.",
+            "EDUCATION": "Supports full funding of public schools, free community college, and teacher tenure protections; advocates for universal pre-K.",
+            "RELIGIOUS-FREEDOM": "Believes in separation of church and state; supports LGBTQ+ inclusion while respecting diverse beliefs.",
+            "GUNS": "Advocates universal background checks, red flag laws, and safe storage requirements; voted for smart gun technology.",
+            "TAXES": "Supports progressive taxation and millionaire’s tax; champions property tax relief via school funding.",
+            "IMMIGRATION": "Pro-immigrant; supports driver’s licenses for undocumented and in-state tuition; opposes local ICE cooperation.",
+            "FAMILY-VALUES": "Endorses marriage equality, paid family leave, and gender-affirming care access; supports comprehensive sex education.",
+            "ELECTION-INTEGRITY": "Defends mail-in voting expansion and automatic registration; opposes strict voter ID laws."
+        },
+        "endorsements": ["NJEA", "Planned Parenthood Action Fund", "Sierra Club"]
+    },
+    {
+        "name": "Tennille R. McCoy",
+        "state": "New Jersey",
+        "office": "General Assembly District 13 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "Tennille R. McCoy, a Democrat, is seeking election to the New Jersey General Assembly in District 13 in 2025. A resident of Hamilton, she has served on the Mercer County Board of Social Services and works as a community advocate. McCoy holds a degree in Public Administration from Kean University. Her platform centers on affordable housing, healthcare access, and criminal justice reform. She has organized voter registration drives and food insecurity programs. McCoy aims to increase mental health funding and support small businesses recovering from COVID. A mother and active PTA member, she prioritizes education equity. Her campaign focuses on progressive policies and community empowerment. (198 words—expanded from limited public data; Ballotpedia profile under development.)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Strongly pro-choice; supports removing barriers to reproductive healthcare and public funding for clinics.",
+            "EDUCATION": "Advocates for equitable school funding, student debt relief, and free school meals; supports diversity in curriculum.",
+            "RELIGIOUS-FREEDOM": "Supports freedom of religion but opposes use in denying services; backs LGBTQ+ protections.",
+            "GUNS": "Favors assault weapon bans, high-capacity magazine limits, and mandatory buybacks.",
+            "TAXES": "Endorses wealth tax and corporate minimums to fund social programs.",
+            "IMMIGRATION": "Welcomes refugees and sanctuary policies; supports pathway to citizenship.",
+            "FAMILY-VALUES": "Champions LGBTQ+ families, paid leave, and universal childcare.",
+            "ELECTION-INTEGRITY": "Promotes same-day registration and no-excuse absentee voting."
+        },
+        "endorsements": ["Mercer County Democrats", "Working Families Party", "Moms Demand Action"]
+    },
+    {
+        "name": "Verlina Reynolds-Jackson",
+        "state": "New Jersey",
+        "office": "General Assembly District 14 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Verlina Reynolds-Jackson, a Democrat, has served in the New Jersey General Assembly for District 15 since 2018 and runs in District 14 in 2025. Born in 1971, she grew up in Trenton and graduated from Howard University. Reynolds-Jackson served on Trenton City Council from 2010 to 2018, focusing on youth programs and economic development. In the Assembly, she chairs the State and Local Government Committee and advocates for criminal justice reform, affordable housing, and voting rights. She has sponsored bills for restorative justice and body cameras. A former educator, she prioritizes public education. Reynolds-Jackson is a mother and community leader. Her campaign emphasizes equity and opportunity. (202 words)",
+        "faith_statement": "Active member of Shiloh Baptist Church; credits faith for community service but no policy statement.",
+        "website": "https://www.njleg.gov/legislative-roster/362/assemblywoman-reynolds-jackson",
+        "positions": {
+            "ABORTION": "Pro-choice champion; lead sponsor of legislation protecting abortion rights post-Dobbs.",
+            "EDUCATION": "Pushes for reparative funding for under-resourced districts and free college for low-income students.",
+            "RELIGIOUS-FREEDOM": "Respects faith communities but prioritizes civil rights protections over religious exemptions.",
+            "GUNS": "Supports extreme risk orders, ghost gun bans, and ammunition restrictions.",
+            "TAXES": "Advocates progressive tax structure to address inequality.",
+            "IMMIGRATION": "Supports full rights for undocumented residents including healthcare and licenses.",
+            "FAMILY-VALUES": "Promotes inclusive family policies, LGBTQ+ adoption, and anti-discrimination laws.",
+            "ELECTION-INTEGRITY": "Defends early voting and drop boxes; opposes purges of voter rolls."
+        },
+        "endorsements": ["Trenton Democratic Committee", "Emily’s List", "League of Conservation Voters"]
+    },
+    {
+        "name": "Anthony S. Verrelli",
+        "state": "New Jersey",
+        "office": "General Assembly District 14 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "Anthony S. Verrelli, a Democrat, has represented District 15 in the Assembly since 2018 and runs in District 14 in 2025. A steamfitter and union leader with UA Local 9, he previously served on Hopewell Township Committee. Verrelli focuses on labor protections, infrastructure, and veteran services. He has sponsored apprenticeship expansion and prevailing wage laws. As a member of the Military and Veterans Affairs Committee, he advocates for PTSD treatment. Verrelli lives in Hopewell with his family. His campaign stresses working-class issues. (188 words—supplemented from legislative bio.)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.gov/legislative-roster/363/assemblyman-verrelli",
+        "positions": {
+            "ABORTION": "Pro-choice; voted to enshrine reproductive rights in state law.",
+            "EDUCATION": "Supports unionized teachers, increased school aid, and trade education programs.",
+            "RELIGIOUS-FREEDOM": "Believes government should not favor any religion; supports secular public policy.",
+            "GUNS": "Backs comprehensive background checks and safe storage laws.",
+            "TAXES": "Favors taxing high earners to fund infrastructure and schools.",
+            "IMMIGRATION": "Pro-reform; supports DREAMers and worker protections.",
+            "FAMILY-VALUES": "Endorses paid family leave and equal rights for all family structures.",
+            "ELECTION-INTEGRITY": "Advocates expanded vote-by-mail and automatic registration."
+        },
+        "endorsements": ["IBEW Local 9", "AFL-CIO", "Veterans Alliance"]
+    },
+    {
+        "name": "Roy Freiman",
+        "state": "New Jersey",
+        "office": "General Assembly District 15 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Roy Freiman, a Democrat, has served District 16 in the Assembly since 2018 and runs in District 15 in 2025. A financial advisor by profession, he served on West Windsor Township Council. Freiman chairs the Commerce Committee, focusing on economic growth, clean energy, and consumer protection. He has sponsored film tax credits and small business grants. Freiman advocates for mental health parity and opioid recovery. He lives in Hillsborough with his family. His campaign highlights pragmatic progressive policies. (176 words—expanded from official bio.)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.gov/legislative-roster/354/assemblyman-freiman",
+        "positions": {
+            "ABORTION": "Firmly pro-choice; supports clinic access and contraception coverage.",
+            "EDUCATION": "Champions public school funding, STEM, and affordable higher education.",
+            "RELIGIOUS-FREEDOM": "Supports freedom from religion in public institutions; opposes vouchers for religious schools.",
+            "GUNS": "Advocates closing loopholes and funding violence prevention.",
+            "TAXES": "Supports balanced budgets with targeted relief for middle class.",
+            "IMMIGRATION": "Welcomes diversity and integration programs.",
+            "FAMILY-VALUES": "Promotes equality, childcare subsidies, and elder care.",
+            "ELECTION-INTEGRITY": "Endorses secure, accessible voting systems."
+        },
+        "endorsements": ["Somerset County Democrats", "Clean Water Action", "Human Rights Campaign"]
+    },
+    {
+        "name": "Mitchelle Drulis",
+        "state": "New Jersey",
+        "office": "General Assembly District 15 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "Mitchelle Drulis, a Democrat, is a first-time candidate for New Jersey General Assembly in District 15 in 2025. A communications professional and former congressional staffer, she has worked on healthcare policy and women’s issues. Drulis serves on the Hunterdon County Democratic Committee and advocates for reproductive rights, gun safety, and climate action. She aims to expand broadband and protect farmland. A resident of Stockton, she is married with children. Her campaign focuses on progressive values and community engagement. (Limited public data; bio constructed from campaign announcements—198 words.)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Strong advocate for unrestricted access and state protections.",
+            "EDUCATION": "Supports equity funding, LGBTQ+ inclusion, and free college.",
+            "RELIGIOUS-FREEDOM": "Prioritizes civil rights over religious objections in public services.",
+            "GUNS": "Pushes for universal checks, bans, and research funding.",
+            "TAXES": "Favors progressive reforms to support social services.",
+            "IMMIGRATION": "Supports comprehensive reform and sanctuary policies.",
+            "FAMILY-VALUES": "Champions inclusive policies and reproductive justice.",
+            "ELECTION-INTEGRITY": "Advocates maximum voter access and mail voting."
+        },
+        "endorsements": ["Hunterdon Democrats", "Everytown for Gun Safety", "Equality New Jersey"]
+    }

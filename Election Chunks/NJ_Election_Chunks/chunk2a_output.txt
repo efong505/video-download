@@ -1,0 +1,211 @@
+    {
+        "name": "Cory Booker",
+        "state": "New Jersey",
+        "office": "U.S. Senate",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Cory Booker (born April 27, 1969) is the senior U.S. Senator from New Jersey, serving since 2013. Raised in a middle-class family in New Jersey, Booker attended Stanford University on a football scholarship, earning a bachelor's in political science and master's in sociology. He studied at Oxford as a Rhodes Scholar and graduated from Yale Law School. After law school, Booker worked as a program director for a Newark nonprofit, providing legal aid to low-income tenants. In 1998, he was elected to the Newark City Council, becoming council president in 2002. He ran for mayor in 2002 but lost amid allegations of impropriety by incumbent Sharpe James. Booker won the mayoralty in 2006, serving until 2013. As mayor, he reduced the city budget deficit from $180 million to $73 million, doubled affordable housing development, and improved public safety metrics. Appointed to the Senate in 2013 after Frank Lautenberg's death, Booker won special and full-term elections. In the Senate, he has focused on criminal justice reform, co-sponsoring the First Step Act; cannabis legalization; and racial equity. He ran for president in 2020, emphasizing unity and 'love in action.' Booker chairs the Senate Democratic Strategic Communications Committee. He lives in Newark's Central Ward, remains unmarried, and is known for his veganism and fitness. [Ballotpedia, Booker.senate.gov]<grok:\"render_inline_citation\"><argument name=\"citation_id\">0</argument</grok:<grok: name=\"citation_id\">5</argument</grok:<grok: name=\"citation_id\">7</argument</grok:",
+        "faith_statement": "Raised in the black church tradition in an African Methodist Episcopal church; attends a Baptist church. 'I am a Christian who roots my personal faith in Christianity... I prefer to hang out with nice, kind atheists than mean Christians any day.' [Religion News Service]",
+        "website": "https://www.booker.senate.gov",
+        "positions": {
+            "ABORTION": "Strong pro-choice advocate. Supports codifying Roe v. Wade, repealing Hyde Amendment to allow federal funding for abortions, creating White House Office of Reproductive Freedom, ensuring birth control coverage under ACA.",
+            "EDUCATION": "Supports universal pre-K, increased funding for public schools, student debt relief, affordable college, opposes for-profit charters.",
+            "RELIGIOUS-FREEDOM": "Respects all faiths but prioritizes LGBTQ+ rights and separation of church/state; questioned judge on religion in LGBTQ context; promotes interfaith dialogue.",
+            "GUNS": "Strong gun control: universal background checks, assault weapons ban, federal gun licensing, close boyfriend loophole, hold manufacturers accountable.",
+            "TAXES": "Raise taxes on wealthy/corporations; supports fair trade protecting workers; opposes tax cuts for rich.",
+            "IMMIGRATION": "Comprehensive reform: pathway to citizenship for Dreamers/undocumented, end family separation, humane policies, close private detention.",
+            "FAMILY-VALUES": "Supports paid family leave, affordable childcare/healthcare, LGBTQ+ equality including marriage; views family through social justice lens.",
+            "ELECTION-INTEGRITY": "Make Election Day holiday, restore Voting Rights Act, expand access; opposes voter suppression."
+        },
+        "endorsements": ["Planned Parenthood", "NARAL Pro-Choice America", "Everytown for Gun Safety"]
+    },
+    {
+        "name": "Curtis Bashaw",
+        "state": "New Jersey",
+        "office": "U.S. Senate",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Curtis Bashaw is a hotelier, entrepreneur, and preservationist from Cape May, NJ. Raised in Cherry Hill and Cape May by attorney/developer father Keith Bashaw and mother from preacher family, he summered at grandfather Rev. Carl McIntire's Christian Admiral Bible Conference properties. Bashaw earned BA from Wheaton College (philosophy) and MBA from Wharton. He rescued family landmark Congress Hall Hotel from bankruptcy in 1990s, investing millions for $25M renovation reopening 2002; now CEO Cape Resorts, employing 1,000+, operating iconic NJ properties. Openly gay, married to Will Riccio 20+ years. Self-funded 2024 Senate run as outsider against Dem monopoly. Emphasizes fiscal discipline, business experience. [Ballotpedia, campaign site]<grok:\"render_inline_citation\"><argument name=\"citation_id\">40</argument</grok:<grok: name=\"citation_id\">42</argument</grok:",
+        "faith_statement": "Raised in evangelical Christian family; grandfather fundamentalist preacher Carl McIntire, founder Bible Presbyterian Church; attended conservative Christian Wheaton College. No specific personal faith statement disclosed.",
+        "website": "https://curtisbashawforsenate.com",
+        "positions": {
+            "ABORTION": "Pro-choice: 'Woman’s purview... between her and doctor.' Supports access to healthcare/birth control/IVF; opposes fed govt interference; backs Roe codification.",
+            "EDUCATION": "Parents' rights paramount; govt not co-parent; transparency in schools.",
+            "RELIGIOUS-FREEDOM": "Supports individual freedoms; people of faith don't want schools keeping secrets from parents.",
+            "GUNS": "No specific; standard GOP support 2A inferred.",
+            "TAXES": "Cut taxes; fiscal discipline to grow economy.",
+            "IMMIGRATION": "Secure border first; deport violent criminals/terrorists; legal immigration streamlined; pro-immigration if legal.",
+            "FAMILY-VALUES": "Freedom/domestic tranquility in homes; parents decide for minors.",
+            "ELECTION-INTEGRITY": "No specific."
+        },
+        "endorsements": ["U.S. Chamber of Commerce", "NJ State Troopers Fraternal Association", "Chris Christie"]
+    },
+    {
+        "name": "Christina Khalil",
+        "state": "New Jersey",
+        "office": "U.S. Senate",
+        "party": "Green",
+        "status": "active",
+        "bio": "Christina Khalil, born 1990 in Pottsville, PA, lifelong NJ resident post-move. Graduated Saddle Brook HS, BA Psychology Ramapo College. Worked drug court intern/liaison, clinician, frontline COVID healthcare. Green Party nominee. Focuses affordability, universal healthcare, ending corruption. [Ballotpedia]<grok:\"render_inline_citation\"><argument name=\"citation_id\">85</argument</grok:",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://khalilforsenate.com",
+        "positions": {
+            "ABORTION": "Green Party pro-choice.",
+            "EDUCATION": "Fully fund public ed.",
+            "RELIGIOUS-FREEDOM": "Protect all freedoms.",
+            "GUNS": "Common-sense reforms.",
+            "TAXES": "Tax wealthy; one job affords needs.",
+            "IMMIGRATION": "Humane reform.",
+            "FAMILY-VALUES": "Affordable living.",
+            "ELECTION-INTEGRITY": "End corruption."
+        },
+        "endorsements": ["Green Party of NJ"]
+    },
+    {
+        "name": "Kenneth Kaplan",
+        "state": "New Jersey",
+        "office": "U.S. Senate",
+        "party": "Libertarian",
+        "status": "active",
+        "bio": "Kenneth Kaplan, serial Libertarian nominee (Gov 2013, Senate 2012/2024). Emphasizes liberty, small govt. [Ballotpedia]<grok:\"render_inline_citation\"><argument name=\"citation_id\">95</argument</grok:",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Pro-choice; govt out.",
+            "EDUCATION": "School choice; end Dept Ed.",
+            "RELIGIOUS-FREEDOM": "Absolute 1A.",
+            "GUNS": "Shall not infringe.",
+            "TAXES": "Flat/low; abolish IRS.",
+            "IMMIGRATION": "Open borders w/ ID.",
+            "FAMILY-VALUES": "Govt-free.",
+            "ELECTION-INTEGRITY": "Ranked choice; end gerry."
+        },
+        "endorsements": ["Libertarian Party"]
+    },
+    {
+        "name": "Donald Norcross",
+        "state": "New Jersey",
+        "office": "U.S. House District 1",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Donald Norcross (b.1958 Camden) electrician, labor leader IBEW Local 351 pres, Southern NJ AFL-CIO head. Brother George Norcross III. Elected Assembly 2009, Senate 2010-14. House since 2014 special. Family man. Fights worker rights. [Ballotpedia, house.gov]<grok:\"render_inline_citation\"><argument name=\"citation_id\">80</argument</grok:",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://norcross.house.gov",
+        "positions": {
+            "ABORTION": "Pro-choice.",
+            "EDUCATION": "Apprenticeships, workforce.",
+            "RELIGIOUS-FREEDOM": "Standard Dem.",
+            "GUNS": "Control.",
+            "TAXES": "Worker-friendly.",
+            "IMMIGRATION": "Reform.",
+            "FAMILY-VALUES": "Paid leave.",
+            "ELECTION-INTEGRITY": "Access."
+        },
+        "endorsements": ["AFL-CIO", "IBEW", "NJEA"]
+    },
+    {
+        "name": "Teddy Liddell",
+        "state": "New Jersey",
+        "office": "U.S. House District 1",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Theodore 'Teddy' Liddell, West Point grad, Army Capt, attorney (Columbia MBA, St Louis JD). Married Relesha, 5 kids. Biopharma lawyer. Frequent candidate. Servant leader vs inflation/crime/border. [Ballotpedia, campaign]<grok:\"render_inline_citation\"><argument name=\"citation_id\">105</argument</grok:",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://teddyliddellforcongress.com",
+        "positions": {
+            "ABORTION": "Pro-life inferred.",
+            "EDUCATION": "Parents/schools.",
+            "RELIGIOUS-FREEDOM": "Protect.",
+            "GUNS": "2A.",
+            "TAXES": "Cut.",
+            "IMMIGRATION": "Secure border.",
+            "FAMILY-VALUES": "Traditional.",
+            "ELECTION-INTEGRITY": "Secure."
+        },
+        "endorsements": []
+    },
+    {
+        "name": "Joe Salerno",
+        "state": "New Jersey",
+        "office": "U.S. House District 2",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Joe Salerno, Cape May businessman. Won crowded Dem primary 2024. Focuses South Jersey issues. [Ballotpedia, campaign]<grok:\"render_inline_citation\"><argument name=\"citation_id\">120</argument</grok:",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://joesalernoforcongress.com",
+        "positions": {
+            "ABORTION": "Pro-choice.",
+            "EDUCATION": "Fund public.",
+            "RELIGIOUS-FREEDOM": "Protect.",
+            "GUNS": "Control.",
+            "TAXES": "Middle class cuts.",
+            "IMMIGRATION": "Reform.",
+            "FAMILY-VALUES": "Support families.",
+            "ELECTION-INTEGRITY": "Access."
+        },
+        "endorsements": ["Cape May Dems"]
+    },
+    {
+        "name": "Jeff Van Drew",
+        "state": "New Jersey",
+        "office": "U.S. House District 2",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Jefferson Van Drew, former Dem state Sen/Asm, switched GOP 2019 over impeachment. Dentist background. Veteran advocate. [Ballotpedia]<grok:\"render_inline_citation\"><argument name=\"citation_id\">130</argument</grok:",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://vandrew.house.gov",
+        "positions": {
+            "ABORTION": "Pro-life.",
+            "EDUCATION": "School choice.",
+            "RELIGIOUS-FREEDOM": "Strong support.",
+            "GUNS": "2A.",
+            "TAXES": "Cuts.",
+            "IMMIGRATION": "Secure border.",
+            "FAMILY-VALUES": "Traditional.",
+            "ELECTION-INTEGRITY": "Voter ID."
+        },
+        "endorsements": ["NRA", "FOP"]
+    },
+    {
+        "name": "Herb Conaway",
+        "state": "New Jersey",
+        "office": "U.S. House District 3",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Herbert Conaway Jr. (b.1963), physician, Air Force Capt, lawyer. Princeton BA, Jefferson MD, Rutgers JD. Assembly since 1998; won House 2024. Bordentown native. [Ballotpedia]<grok:\"render_inline_citation\"><argument name=\"citation_id\">145</argument</grok:",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Pro-choice.",
+            "EDUCATION": "Public funding.",
+            "RELIGIOUS-FREEDOM": "LGBTQ+ priority.",
+            "GUNS": "Control.",
+            "TAXES": "Fair share.",
+            "IMMIGRATION": "Pathway.",
+            "FAMILY-VALUES": "Healthcare.",
+            "ELECTION-INTEGRITY": "Expand access."
+        },
+        "endorsements": ["VoteVets"]
+    },
+    {
+        "name": "Rajesh Mohan",
+        "state": "New Jersey",
+        "office": "U.S. House District 3",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Dr. Rajesh Mohan, quadruple-board certified interventional cardiologist, MBA. Transformed failing hospital. Holmdel resident, wife Nandini, 2 sons. [Ballotpedia, campaign]<grok:\"render_inline_citation\"><argument name=\"citation_id\">135</argument</grok:",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://mohanforuscongress.com",
+        "positions": {
+            "ABORTION": "Pro-life inferred.",
+            "EDUCATION": "Choice.",
+            "RELIGIOUS-FREEDOM": "Protect.",
+            "GUNS": "2A.",
+            "TAXES": "Cut; domestic mfg.",
+            "IMMIGRATION": "Shut border; legal.",
+            "FAMILY-VALUES": "Secure future.",
+            "ELECTION-INTEGRITY": "Secure."
+        },
+        "endorsements": ["Monmouth/Burlington GOP"]
+    }
+
