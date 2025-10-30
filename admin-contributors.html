@@ -1281,17 +1281,23 @@
         async function updatePendingCount() {
             try {
                 const response = await fetch(API + '?resource=pending-changes', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
+                if (!response.ok) {
+                    console.log('Pending changes not accessible (may require admin role)');
+                    return;
+                }
                 const changes = await response.json();
-                const count = changes.length;
-                const badge = document.getElementById('pending-count-badge');
-                if (count > 0) {
-                    badge.textContent = count;
-                    badge.style.display = 'inline';
-                } else {
-                    badge.style.display = 'none';
+                if (Array.isArray(changes)) {
+                    const count = changes.length;
+                    const badge = document.getElementById('pending-count-badge');
+                    if (count > 0) {
+                        badge.textContent = count;
+                        badge.style.display = 'inline';
+                    } else {
+                        badge.style.display = 'none';
+                    }
                 }
             } catch (e) {
-                console.error('Failed to load pending count:', e);
+                console.log('Failed to load pending count:', e);
             }
         }
         
