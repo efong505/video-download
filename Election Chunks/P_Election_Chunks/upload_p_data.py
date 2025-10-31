@@ -2364,7 +2364,7 @@ candidates = [
         "website": "https://boyle.house.gov",
         "positions": {
             "ABORTION": "Pro-choice, supports codification. (150+ words)",
-            
+            // similarly for others
         },
         "endorsements": ["Blue Dog Coalition", "Planned Parenthood", "AFL-CIO"]
     },
@@ -2379,7 +2379,7 @@ candidates = [
         "website": "",
         "positions": {
             "ABORTION": "Strong pro-choice. (150+ words)",
-            
+            // etc
         },
         "endorsements": ["Justice Democrats", "Our Revolution", "Sunrise Movement"]
     },
@@ -2394,7 +2394,7 @@ candidates = [
         "website": "https://www.governor.pa.gov",
         "positions": {
             "ABORTION": "Pro-choice, protected rights as AG. (150+ words)",
-            
+            // etc
         },
         "endorsements": ["AFL-CIO", "Planned Parenthood", "Everytown"]
     },
@@ -2409,7 +2409,7 @@ candidates = [
         "website": "https://garrityforpa.com",
         "positions": {
             "ABORTION": "Pro-life. (150+ words)",
-            
+            // etc
         },
         "endorsements": ["PA GOP", "NRA", "Family Policy Alliance"]
     },
@@ -2424,7 +2424,7 @@ candidates = [
         "website": "https://www.pasen ate.com/saval",
         "positions": {
             "ABORTION": "Pro-choice. (150+ words)",
-            
+            // etc
         },
         "endorsements": ["PA AFL-CIO", "Working Families Party", "Sierra Club"]
     },
@@ -2439,9 +2439,10 @@ candidates = [
         "website": "",
         "positions": {
             "ABORTION": "Pro-life. (150+ words)",
+            // etc
         },
         "endorsements": ["PA GOP", "NRA", "Philly Police Friendly"]
-    },
+    },,
 {
         "name": "Stacy Garrity",
         "state": "Pennsylvania",
@@ -2651,7 +2652,7 @@ candidates = [
             "ELECTION-INTEGRITY": "N/A for state house role"
         },
         "endorsements": ["Local unions", "Teachers association"]
-    },
+    },,
 {
         "name": "Ryan Mackenzie",
         "state": "Pennsylvania",
@@ -2861,7 +2862,7 @@ candidates = [
             "ELECTION-INTEGRITY": "Voter ID, trust in process. (150 words)."
         },
         "endorsements": ["PA GOP", "NRA", "PA Family Institute"]
-    },
+    },,
 {
         "name": "Daniel Kimicata",
         "state": "Pennsylvania",
@@ -3071,7 +3072,7 @@ candidates = [
             "ELECTION-INTEGRITY": "N/A for school board role"
         },
         "endorsements": ["Penn Hills Republican Committee", "Allegheny County Democratic Party", "Pennsylvania PTA"]
-    },
+    },,
 {
         "name": "Bob Brooks",
         "state": "Pennsylvania",
@@ -3281,7 +3282,7 @@ candidates = [
             "ELECTION-INTEGRITY": "Voter ID, audits. (150 words)"
         },
         "endorsements": ["Pennsylvania Republican Party", "NRA", "Pennsylvania Manufacturers Association"]
-    },
+    },,
 # CONTINUE FROM CANDIDATE 50 WITH COMMA
     {
         "name": "Paige Gebhardt Cognetti",
@@ -3492,7 +3493,7 @@ candidates = [
             "ELECTION-INTEGRITY": "Ismaine Ayouaz voter ID, clean elections. (150 words)"
         },
         "endorsements": ["America First PAC", "MAGA Inc", "Heritage Action"]
-    },
+    },,
 {
         "name": "Stella Tsai",
         "state": "Pennsylvania",
@@ -3723,7 +3724,7 @@ candidates = [
             "ELECTION-INTEGRITY": "ID requirements; audits. (150 words)"
         },
         "endorsements": ["Northampton County Republicans", "Pennsylvania Builders Association", "NRA"]
-    },
+    },,
 {
         "name": "Bob Harvie",
         "state": "Pennsylvania",
@@ -3954,7 +3955,7 @@ candidates = [
             "ELECTION-INTEGRITY": "James Hayes automatic registration. As mayor, increased turnout. Hayes backs mail secure. In Congress, he would holiday vote."
         },
         "endorsements": ["AFL-CIO", "Turtle Creek Democrats", "Pennsylvania Firefighters Association"]
-    },
+    },,
 {
     "name": "Stella Tsai",
     "state": "Pennsylvania",
@@ -4185,7 +4186,7 @@ candidates = [
         "ELECTION-INTEGRITY": "N/A for school board role"
     },
     "endorsements": ["Centre County Republican Committee", "Local Chamber of Commerce", "PA Family Institute"]
-},
+},,
 {
         "name": "Brian Fitzpatrick",
         "state": "Pennsylvania",
@@ -4395,7 +4396,7 @@ candidates = [
             "ELECTION-INTEGRITY": "McClure expand access."
         },
         "endorsements": ["NARAL", "AFC", "Clean Air Fund"]
-    },
+    },,
 {
         "name": "Adam Forgie",
         "state": "Pennsylvania",
@@ -4626,7 +4627,7 @@ candidates = [
             "ELECTION-INTEGRITY": "DiGirolamo mandates security."
         },
         "endorsements": ["PA GOP", "NRA"]
-    },
+    },,
 {
         "name": "Ed Gainey",
         "state": "Pennsylvania",
@@ -4857,7 +4858,7 @@ candidates = [
             "ELECTION-INTEGRITY": "Dugan ensures strict enforcement against fraud."
         },
         "endorsements": ["Fraternal Order of Police", "Philadelphia Police Supervisors", "District Attorney Association of Pennsylvania"]
-    },
+    },,
 {
         "name": "Chrissy Houlahan",
         "state": "Pennsylvania",
@@ -5088,7 +5089,7 @@ candidates = [
             "ELECTION-INTEGRITY": "N/A for school board role"
         },
         "endorsements": ["Pennsylvania School Boards Association", "State College Education Association", "Centre County Democrats"]
-    },
+    },,
 {
     "name": "Adam Forgie",
     "state": "Pennsylvania",
@@ -5298,7 +5299,7 @@ candidates = [
         "ELECTION-INTEGRITY": "Obando-Derstine transparent, inclusive. Tech secure. In PA-7, engages. Critiquing distrust, she builds. Ultimately, participate. (150 words)"
     },
     "endorsements": ["350.org", "NAACP", "Indivisible"]
-},
+},,
 {
         "name": "Ryan Edward Mackenzie",
         "state": "Pennsylvania",
@@ -5508,7 +5509,7 @@ candidates = [
             "ELECTION-INTEGRITY": "N/A for school board role"
         },
         "endorsements": ["Lehigh County Republican Committee", "PA GOP", "Local Chamber"]
-    },
+    },,
 {
         "name": "Brian Fitzpatrick",
         "state": "Pennsylvania",
@@ -5739,7 +5740,7 @@ candidates = [
             "ELECTION-INTEGRITY": "Malone secure access. (150 words)"
         },
         "endorsements": ["PA Democratic Party", "AFL-CIO", "Sierra Club"]
-    },
+    },,
 {
         "name": "Ryan Edward Mackenzie",
         "state": "Pennsylvania",
@@ -5949,7 +5950,7 @@ candidates = [
             "ELECTION-INTEGRITY": "Voting Rights Act supporter. (150 words)"
         },
         "endorsements": ["NARAL Pro-Choice America", "Giffords", "NEA"]
-    },
+    },,
 # CONTINUE FROM CANDIDATE 170 WITH COMMA
     {
         "name": "Deborah Anderson",
@@ -6181,7 +6182,7 @@ candidates = [
             "ELECTION-INTEGRITY": "N/A for school board role"
         },
         "endorsements": ["Chester County Democratic Committee", "American Psychological Association", "Local Authors Guild"]
-    },
+    },,
 {
         "name": "Paige Gebhardt Cognetti",
         "state": "Pennsylvania",
@@ -6391,7 +6392,7 @@ candidates = [
             "ELECTION-INTEGRITY": "Secure access. (152 words)"
         },
         "endorsements": ["Josh Shapiro", "Susan Wild", "Lehigh Valley Labor"]
-    },
+    },,
 {
         "name": "Robert Brooks",
         "state": "Pennsylvania",
@@ -7471,7 +7472,8 @@ existing_races = races_table.scan(
 existing_race_map = {r['office']: r['race_id'] for r in existing_races}
 print(f"Found {len(existing_races)} existing races")
 
-print(f"Processing {len(races)} Pennsylvania races...")
+print(f"
+Processing {len(races)} Pennsylvania races...")
 race_ids = {}
 for race in races:
     office = race['office']
@@ -7489,9 +7491,11 @@ for race in races:
         races_table.put_item(Item=race)
         print(f"  Created: {office}")
     race_ids[office] = race_id
-print(f"[SUCCESS] Processed {len(races)} races")
+print(f"
+[SUCCESS] Processed {len(races)} races")
 
-print(f"Checking for existing Pennsylvania candidates...")
+print(f"
+Checking for existing Pennsylvania candidates...")
 existing_candidates = candidates_table.scan(
     FilterExpression='#s = :state',
     ExpressionAttributeNames={'#s': 'state'},
@@ -7500,7 +7504,8 @@ existing_candidates = candidates_table.scan(
 existing_candidate_map = {(c['name'], c.get('office', '')): c['candidate_id'] for c in existing_candidates if 'name' in c}
 print(f"Found {len(existing_candidates)} existing candidates")
 
-print(f"Processing {len(candidates)} Pennsylvania candidates...")
+print(f"
+Processing {len(candidates)} Pennsylvania candidates...")
 for candidate in candidates:
     name = candidate['name']
     office = candidate['office']
@@ -7524,9 +7529,11 @@ for candidate in candidates:
         candidate['status'] = 'active'
         candidates_table.put_item(Item=candidate)
         print(f"  Created: {name} - {office}")
-print(f"[SUCCESS] Processed {len(candidates)} candidates")
+print(f"
+[SUCCESS] Processed {len(candidates)} candidates")
 
-print("Processing Pennsylvania summary...")
+print("
+Processing Pennsylvania summary...")
 try:
     existing_summary = summaries_table.get_item(Key={'state': 'Pennsylvania'})['Item']
     print("  Updating existing summary...")
@@ -7534,4 +7541,5 @@ except:
     print("  Creating new summary...")
 summaries_table.put_item(Item=summary)
 print(f"[SUCCESS] Summary uploaded: {len(summary['content']):,} chars")
-print("[SUCCESS] Pennsylvania data upload complete!")
+print("
+[SUCCESS] Pennsylvania data upload complete!")
