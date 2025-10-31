@@ -73,20 +73,29 @@ def lambda_handler(event, context):
 def verify_token(event):
     try:
         headers = event.get('headers', {})
-        # Handle case-insensitive headers
         auth_header = headers.get('Authorization') or headers.get('authorization', '')
-        if not auth_header.startswith('Bearer '): return None
+        if not auth_header.startswith('Bearer '):
+            print(f"No Bearer token found")
+            return None
         token = auth_header.split(' ')[1]
         parts = token.split('.')
-        if len(parts) != 3: return None
+        if len(parts) != 3:
+            print(f"Invalid token format: {len(parts)} parts")
+            return None
         payload_data = parts[1]
         payload_data += '=' * (4 - len(payload_data) % 4)
         payload = json.loads(base64.urlsafe_b64decode(payload_data))
+        print(f"Decoded payload: {payload}")
         exp = payload.get('exp', 0)
-        if exp < datetime.utcnow().timestamp(): return None
+        if exp < datetime.utcnow().timestamp():
+            print(f"Token expired: {exp} < {datetime.utcnow().timestamp()}")
+            return None
+        print(f"Token valid. Role: {payload.get('role')}")
         return payload
     except Exception as e:
         print(f"Token verification error: {e}")
+        import traceback
+        print(traceback.format_exc())
         return None
 
 def verify_admin_token(event):
@@ -120,8 +129,10 @@ def has_bypass_approval(user_email):
 def create_contributor(event, headers):
     user_info = verify_admin_token(event)
     if not user_info:
-        return {'statusCode': 403, 'headers': headers, 'body': json.dumps({'error': 'Admin access required'})}
+        print(f"Admin verification failed. Headers: {event.get('headers', {})}")
+        return {'statusCode': 403, 'headers': headers, 'body': json.dumps({'error': 'Admin access required. Your session may have expired - please log out and log back in.'})}
     
+    print(f"Creating contributor. User: {user_info.get('email')}, Role: {user_info.get('role')}")
     body = json.loads(event['body'])
     contributor_id = str(uuid.uuid4())
     user_email = body['user_email']

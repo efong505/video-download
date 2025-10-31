@@ -2851,6 +2851,64 @@ Get-LMPolicy -FunctionName 'email-subscription-handler' -Region us-east-1
 **Status**: Unified navigation system and authentication standardization fully operational across entire platform. All pages now use consistent navbar template with standardized localStorage keys, providing seamless user experience and simplified maintenance.
 
 
+## News Article Author Display Fix ✅ COMPLETE (January 2025)
+
+### Issue Summary
+**Problem**: News articles displaying email addresses (e.g., "super@admin.com") instead of author names (e.g., "Edward Fong").
+
+### Root Cause Analysis
+**Backend Issue**: news_api Lambda function had correct logic to set `author_name` field, but existing news articles in database didn't have this field populated.
+
+**Database Schema**: Users table uses `user_id` as primary key (not `email`), requiring scan operation to look up names by email.
+
+### Resolution Process
+1. **Lambda Function Fix**: Verified news_api/index.py correctly sets `author_name` when creating/updating articles
+2. **get_user_name() Fix**: Updated function to scan users table by email instead of using get_item with wrong key
+3. **Migration Script**: Created update_news_author_names.py to backfill existing articles
+4. **Deployment**: Deployed updated news-api Lambda function to AWS
+5. **Data Migration**: Ran script to update all 4 existing news articles with proper author names
+
+### Technical Implementation
+**Files Modified**:
+- `news_api/index.py` - Verified author_name logic in create/update functions
+- `update_news_author_names.py` - Migration script with proper user lookup
+- `deploy-news-api.ps1` - Deployment script for Lambda function
+
+**Key Fix**:
+```python
+# Before (broken - wrong primary key)
+response = users_table.get_item(Key={'email': email})
+
+# After (working - scan by email)
+response = users_table.scan(
+    FilterExpression='email = :email',
+    ExpressionAttributeValues={':email': email}
+)
+```
+
+### Migration Results
+**Articles Updated**: 4 news articles
+- "GOP Eyes the Nuclear Option" - super@admin.com → Edward Fong
+- "ICE Raids Intensify in Chicago" - super@admin.com → Edward Fong
+- "Test News" - super@admin.com → Edward Fong
+- "Democrats' Shutdown Strategy" - super@admin.com → Edward Fong
+
+### Future Prevention
+**Pattern Documented**: When users table uses user_id as primary key, always scan by email for name lookups. This same pattern applies to:
+- Articles API (already fixed)
+- Admin API (already fixed)
+- News API (now fixed)
+- Any future APIs that need user name display
+
+### Verification
+- ✅ news-api Lambda function deployed with correct logic
+- ✅ get_user_name() function uses scan instead of get_item
+- ✅ All 4 existing news articles updated with author names
+- ✅ New news articles will automatically get author_name field
+- ✅ Edit-news.html author changes now update author_name correctly
+
+**Status**: News article author display fully functional - all articles now show "Edward Fong" instead of "super@admin.com". Future articles will automatically populate author_name field on creation/update.
+
 ## Admin Templates Page Syntax Error Resolution ✅ COMPLETE (January 2025)
 
 ### Issue Summary

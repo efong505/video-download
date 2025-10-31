@@ -445,7 +445,8 @@
                 
                 // Meta info
                 html += '<div class="news-meta">';
-                html += '<i class="fas fa-user"></i> ' + (news.author_name || news.author) + ' | ';
+                var authorDisplay = news.author_name || news.author || 'Unknown';
+                html += '<i class="fas fa-user"></i> ' + authorDisplay + ' | ';
                 html += '<i class="fas fa-calendar"></i> ' + formatDate(news.created_at) + ' | ';
                 html += '<i class="fas fa-eye"></i> ' + (news.view_count || 0) + ' views';
                 if (news.state) {
