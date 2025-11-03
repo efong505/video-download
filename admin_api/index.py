@@ -481,20 +481,28 @@ def get_upload_url(event):
     body = json.loads(event['body'])
     filename = body['filename']
     
-    # Generate presigned URL for S3 upload with proper content type
-    content_type = 'video/mp4'
-    if filename.lower().endswith('.webm'):
+    # Determine content type based on file extension
+    content_type = 'text/html'
+    if filename.lower().endswith('.mp4'):
+        content_type = 'video/mp4'
+    elif filename.lower().endswith('.webm'):
         content_type = 'video/webm'
     elif filename.lower().endswith('.mov'):
         content_type = 'video/quicktime'
     elif filename.lower().endswith('.avi'):
         content_type = 'video/x-msvideo'
+    elif filename.lower().endswith('.html'):
+        content_type = 'text/html'
+    elif filename.lower().endswith('.jpg') or filename.lower().endswith('.jpeg'):
+        content_type = 'image/jpeg'
+    elif filename.lower().endswith('.png'):
+        content_type = 'image/png'
     
     upload_url = s3_client.generate_presigned_url(
         'put_object',
         Params={
             'Bucket': 'my-video-downloads-bucket',
-            'Key': f'videos/{filename}',
+            'Key': filename,
             'ContentType': content_type,
             'ContentDisposition': 'inline'
         },
