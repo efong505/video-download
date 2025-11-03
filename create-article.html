@@ -854,8 +854,15 @@ Code block
             .then(function(response) { return response.json(); })
             .then(function(data) {
                 if (data.article_id) {
-                    alert('Article published successfully!');
-                    window.location.href = 'articles.html';
+                    // Generate preview HTML for social media
+                    generateAndUploadPreview(data.article_id, title, content, featuredImage).then(function() {
+                        alert('Article published successfully!');
+                        window.location.href = 'articles.html';
+                    }).catch(function(error) {
+                        console.error('Preview generation error:', error);
+                        alert('Article published successfully!');
+                        window.location.href = 'articles.html';
+                    });
                 } else {
                     alert('Error publishing article: ' + (data.error || 'Unknown error'));
                 }
@@ -1067,6 +1074,85 @@ Empty line creates new paragraph
                 }
             }
             alert('✅ URL data applied! You can now edit and customize the content.');
+        }
+        
+        function generateAndUploadPreview(articleId, title, content, featuredImage) {
+            return new Promise(function(resolve, reject) {
+                try {
+                    var tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = content;
+                    var plainText = tempDiv.textContent || tempDiv.innerText || '';
+                    var excerpt = plainText.substring(0, 160);
+                    
+                    var imageUrl = 'https://d271vky579caz9.cloudfront.net/techcrosslogo.jpg';
+                    if (featuredImage && !featuredImage.startsWith('data:')) {
+                        imageUrl = featuredImage;
+                    }
+                    
+                    var previewHtml = '<!DOCTYPE html>\n' +
+'<html lang="en">\n' +
+'<head>\n' +
+'<meta charset="UTF-8">\n' +
+'<meta property="og:type" content="article">\n' +
+'<meta property="og:site_name" content="Christian Conservatives Today">\n' +
+'<meta property="og:title" content="' + escapeHtml(title) + '">\n' +
+'<meta property="og:description" content="' + escapeHtml(excerpt) + '">\n' +
+'<meta property="og:url" content="https://christianconservativestoday.com/previews/article-' + articleId + '.html">\n' +
+'<meta property="og:image" content="' + imageUrl + '">\n' +
+'<meta property="og:image:secure_url" content="' + imageUrl + '">\n' +
+'<meta property="og:image:type" content="image/jpeg">\n' +
+'<meta property="og:image:width" content="1200">\n' +
+'<meta property="og:image:height" content="630">\n' +
+'<meta name="twitter:card" content="summary_large_image">\n' +
+'<meta name="twitter:title" content="' + escapeHtml(title) + '">\n' +
+'<meta name="twitter:description" content="' + escapeHtml(excerpt) + '">\n' +
+'<meta name="twitter:image" content="' + imageUrl + '">\n' +
+'<meta http-equiv="refresh" content="0;url=/article.html?id=' + articleId + '">\n' +
+'<title>' + escapeHtml(title) + ' - Christian Conservatives Today</title>\n' +
+'</head>\n' +
+'<body>\n' +
+'<scr' + 'ipt>window.location.href="/article.html?id=' + articleId + '";</scr' + 'ipt>\n' +
+'<p>Redirecting to article...</p>\n' +
+'</body>\n' +
+'</html>';
+                    
+                    uploadPreviewToS3(articleId, previewHtml).then(resolve).catch(reject);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        }
+        
+        function escapeHtml(text) {
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function uploadPreviewToS3(articleId, htmlContent) {
+            return fetch(ADMIN_API + '?action=upload_url', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + authToken
+                },
+                body: JSON.stringify({
+                    filename: 'previews/article-' + articleId + '.html',
+                    content_type: 'text/html'
+                })
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.upload_url) {
+                    return fetch(data.upload_url, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'text/html'
+                        },
+                        body: htmlContent
+                    });
+                }
+            });
         }
         
         function logout() {

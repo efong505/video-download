@@ -437,6 +437,214 @@ python update_news_author_names.py
 
 ---
 
+## Issue 11: Facebook Share Image Not Displaying
+
+**Symptom**: When sharing articles on Facebook, title and text appear but featured image is missing
+
+**Root Causes**: 
+1. Articles had base64-encoded images stored in DynamoDB (Facebook can't access data: URLs)
+2. Wrong CloudFront domain in preview generation code
+3. Images uploaded to S3 but not publicly accessible via correct CloudFront URL
+
+**Solution**: Convert base64 images to S3 and use correct CloudFront domain
+
+### Step 1: Convert base64 images to S3
+
+```powershell
+python convert_base64_to_s3.py
+```
+
+This script:
+- Scans all articles for base64 featured images
+- Uploads them to S3 at `article-images/{article_id}.jpg`
+- Updates articles table with CloudFront HTTPS URLs
+
+### Step 2: Fix CloudFront domain
+
+Correct CloudFront domain for `my-video-downloads-bucket`: `d271vky579caz9.cloudfront.net`
+
+Update in:
+- `convert_base64_to_s3.py`
+- `regenerate_all_article_previews.py`
+- `edit-article.html`
+- `create-article.html`
+
+### Step 3: Update existing articles
+
+```powershell
+python fix_cloudfront_urls.py
+```
+
+Replaces old CloudFront domain with correct one in all articles.
+
+### Step 4: Regenerate all previews
+
+```powershell
+python regenerate_all_article_previews.py
+```
+
+Generates preview HTML files with correct image URLs.
+
+### Step 5: Deploy updated HTML files
+
+```powershell
+aws s3 cp edit-article.html s3://my-video-downloads-bucket/
+aws s3 cp create-article.html s3://my-video-downloads-bucket/
+```
+
+**Verification**:
+1. Edit an article (don't change featured image)
+2. Check preview file in S3: `previews/article-{id}.html`
+3. Verify og:image has correct CloudFront URL
+4. Test in Facebook Sharing Debugger: https://developers.facebook.com/tools/debug/
+5. Should show article image, not logo
+
+**Key Points**:
+- Featured images must be HTTPS URLs, not base64
+- CloudFront domain: `d271vky579caz9.cloudfront.net`
+- Images stored at: `article-images/{article_id}.jpg`
+- Preview generation automatically skips base64 and uses logo as fallback
+- When editing articles, preview regenerates with current featured_image from database
+
+---
+
+## Issue 12: Share Buttons Using Article URL Instead of Preview URL
+
+**Symptom**: Clicking Facebook/Twitter share buttons shares article URL instead of preview URL
+
+**Root Cause**: Share button functions were using `window.location.href` instead of preview URL
+2. Preview generation missing from create-article.html and edit-article.html
+3. Base64 images in featured_image field (Facebook can't access base64 data URLs)
+
+**Fix**: Update share functions to use preview URL
+
+### For news-article.html:
+
+In `setupSharing()` function:
+```javascript
+function setupSharing(news) {
+    var previewUrl = 'https://christianconservativestoday.com/previews/news-' + currentNewsId + '.html';
+    // Use previewUrl in all share buttons instead of currentUrl
+}
+```
+
+In `copyLink()` function:
+```javascript
+function copyLink() {
+    var previewUrl = 'https://christianconservativestoday.com/previews/news-' + currentNewsId + '.html';
+    navigator.clipboard.writeText(previewUrl).then(function() {
+        alert('Link copied to clipboard!');
+    }).catch(function() {
+        var textArea = document.createElement('textarea');
+        textArea.value = previewUrl;
+        // ... rest of fallback code
+    });
+}
+```
+
+In `copyLinkForInstagram()` function:
+```javascript
+function copyLinkForInstagram() {
+    var previewUrl = 'https://christianconservativestoday.com/previews/news-' + currentNewsId + '.html';
+    navigator.clipboard.writeText(previewUrl).then(function() {
+        // ... rest of code
+    });
+}
+```
+
+### For article.html:
+
+In `displayArticle()` function:
+```javascript
+const previewUrl = 'https://christianconservativestoday.com/previews/article-' + article.article_id + '.html';
+// Use previewUrl in share buttons and input field
+```
+
+Update `window.currentArticle` object:
+```javascript
+window.currentArticle = {
+    title: article.title,
+    excerpt: excerpt,
+    url: previewUrl,  // Changed from currentUrl
+    author: article.author
+};
+```
+
+**Deployment**:
+```powershell
+aws s3 cp news-article.html s3://my-video-downloads-bucket/news-article.html --content-type "text/html"
+aws s3 cp article.html s3://my-video-downloads-bucket/article.html --content-type "text/html"
+```
+
+**Verification**:
+1. Open any news article or article page
+2. Click copy link button - should copy preview URL (contains `/previews/`)
+3. Click Facebook share - should share preview URL
+4. Test preview URL in Facebook Sharing Debugger - should show featured image
+5. Preview URL should redirect to actual article after meta tags are read
+
+**Complete Solution**:
+
+### 1. Fix Share Buttons (article.html, news-article.html, articles.html)
+Replace all share functions to use preview URLs instead of article URLs.
+
+### 2. Add Automatic Preview Generation
+
+**create-article.html**: Add after article creation success:
+```javascript
+if (data.article_id) {
+    generateAndUploadPreview(data.article_id, title, content, featuredImage).then(function() {
+        alert('Article published successfully!');
+        window.location.href = 'articles.html';
+    });
+}
+```
+
+**edit-article.html**: Add after article update success:
+```javascript
+if (response.ok) {
+    await generateAndUploadPreview(updateData);
+    alert('Article updated successfully!');
+    window.location.href = 'articles.html';
+}
+```
+
+**create-news.html & edit-news.html**: Same pattern as articles.
+
+### 3. Fix Base64 Image Handling
+
+Update preview generation scripts to skip base64 images:
+
+**generate_article_preview.py**:
+```python
+if featured_image and not featured_image.startswith('data:'):
+    image_url = featured_image
+else:
+    image_url = 'https://d3oo5w3ywcz1uh.cloudfront.net/techcrosslogo.jpg'
+```
+
+**generate_news_preview.py**: Same fix.
+
+**JavaScript preview generation**: Check `!featuredImage.startsWith('data:')` before using.
+
+**Deployment**:
+```powershell
+aws s3 cp create-article.html s3://my-video-downloads-bucket/
+aws s3 cp edit-article.html s3://my-video-downloads-bucket/
+aws s3 cp article.html s3://my-video-downloads-bucket/
+aws s3 cp news-article.html s3://my-video-downloads-bucket/
+aws s3 cp articles.html s3://my-video-downloads-bucket/
+```
+
+**Why This Matters**:
+- Social media crawlers need preview URLs to read proper meta tags
+- Facebook/Twitter can't access base64 data URLs - need real HTTPS image URLs
+- Preview URLs have article-specific images and descriptions
+- Preview URLs redirect users to actual article after crawlers read meta tags
+- Automatic generation ensures previews always exist and are up-to-date
+
+---
+
 ## Quick Reference Commands
 
 ```powershell

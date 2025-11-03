@@ -338,24 +338,24 @@
         }
 
         function setupSharing(news) {
-            var currentUrl = window.location.href;
+            var previewUrl = 'https://christianconservativestoday.com/previews/news-' + currentNewsId + '.html';
             var title = encodeURIComponent(news.title);
             var summary = encodeURIComponent(news.summary || news.title);
             
             var shareHtml = '';
-            shareHtml += '<a href="https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(currentUrl) + '" target="_blank" class="share-btn facebook">';
+            shareHtml += '<a href="https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(previewUrl) + '" target="_blank" class="share-btn facebook">';
             shareHtml += '<i class="fab fa-facebook-f"></i></a>';
             
-            shareHtml += '<a href="https://twitter.com/intent/tweet?url=' + encodeURIComponent(currentUrl) + '&text=' + title + '" target="_blank" class="share-btn twitter">';
+            shareHtml += '<a href="https://twitter.com/intent/tweet?url=' + encodeURIComponent(previewUrl) + '&text=' + title + '" target="_blank" class="share-btn twitter">';
             shareHtml += '<i class="fab fa-twitter"></i></a>';
             
-            shareHtml += '<a href="https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(currentUrl) + '" target="_blank" class="share-btn linkedin">';
+            shareHtml += '<a href="https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(previewUrl) + '" target="_blank" class="share-btn linkedin">';
             shareHtml += '<i class="fab fa-linkedin-in"></i></a>';
             
             shareHtml += '<button class="share-btn" style="background: #E4405F;" onclick="copyLinkForInstagram()">';
             shareHtml += '<i class="fab fa-instagram"></i></button>';
             
-            shareHtml += '<a href="https://truthsocial.com/share?url=' + encodeURIComponent(currentUrl) + '&title=' + title + '" target="_blank" class="share-btn" style="background: #FF0000;">';
+            shareHtml += '<a href="https://truthsocial.com/share?url=' + encodeURIComponent(previewUrl) + '&title=' + title + '" target="_blank" class="share-btn" style="background: #FF0000;">';
             shareHtml += '<i class="fas fa-flag-usa"></i></a>';
             
             shareHtml += '<button class="share-btn" onclick="copyLink()">';
@@ -365,11 +365,12 @@
         }
 
         function copyLink() {
-            navigator.clipboard.writeText(window.location.href).then(function() {
+            var previewUrl = 'https://christianconservativestoday.com/previews/news-' + currentNewsId + '.html';
+            navigator.clipboard.writeText(previewUrl).then(function() {
                 alert('Link copied to clipboard!');
             }).catch(function() {
                 var textArea = document.createElement('textarea');
-                textArea.value = window.location.href;
+                textArea.value = previewUrl;
                 document.body.appendChild(textArea);
                 textArea.select();
                 document.execCommand('copy');
@@ -379,11 +380,12 @@
         }
         
         function copyLinkForInstagram() {
-            navigator.clipboard.writeText(window.location.href).then(function() {
+            var previewUrl = 'https://christianconservativestoday.com/previews/news-' + currentNewsId + '.html';
+            navigator.clipboard.writeText(previewUrl).then(function() {
                 alert('📷 Link copied! Paste it in your Instagram bio or story. Instagram doesn\'t support direct web links in posts.');
             }).catch(function() {
                 var textArea = document.createElement('textarea');
-                textArea.value = window.location.href;
+                textArea.value = previewUrl;
                 document.body.appendChild(textArea);
                 textArea.select();
                 document.execCommand('copy');

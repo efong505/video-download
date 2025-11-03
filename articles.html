@@ -934,11 +934,11 @@
                     
                     <div class="share-buttons">
                         <small class="text-muted d-block mb-2">📢 Share:</small>
-                        <a href="#" onclick="shareArticle('facebook', '${safeArticleId}', '${safeTitle}'); return false;" class="share-btn share-btn-facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" onclick="shareArticle('twitter', '${safeArticleId}', '${safeTitle}'); return false;" class="share-btn share-btn-twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" onclick="shareArticle('linkedin', '${safeArticleId}', '${safeTitle}'); return false;" class="share-btn" style="background: #0077b5;"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://christianconservativestoday.com/previews/article-' + safeArticleId + '.html')}" target="_blank" class="share-btn share-btn-facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent('https://christianconservativestoday.com/previews/article-' + safeArticleId + '.html')}&text=${encodeURIComponent(safeTitle)}" target="_blank" class="share-btn share-btn-twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://christianconservativestoday.com/previews/article-' + safeArticleId + '.html')}" target="_blank" class="share-btn" style="background: #0077b5;"><i class="fab fa-linkedin-in"></i></a>
                         <button onclick="copyLinkForInstagram('${safeArticleId}')" class="share-btn" style="background: #E4405F;"><i class="fab fa-instagram"></i></button>
-                        <a href="#" onclick="shareArticle('truthsocial', '${safeArticleId}', '${safeTitle}'); return false;" class="share-btn" style="background: #FF0000;"><i class="fas fa-flag-usa"></i></a>
+                        <a href="https://truthsocial.com/share?url=${encodeURIComponent('https://christianconservativestoday.com/previews/article-' + safeArticleId + '.html')}&title=${encodeURIComponent(safeTitle)}" target="_blank" class="share-btn" style="background: #FF0000;"><i class="fas fa-flag-usa"></i></a>
                         <button onclick="copyArticleLink('${safeArticleId}', this)" class="share-btn share-btn-copy"><i class="fas fa-link"></i></button>
                     </div>
                     
@@ -1170,8 +1170,8 @@
         }
         
         function shareArticle(platform, articleId, articleTitle) {
-            const articleUrl = `${window.location.origin}/article.html?id=${articleId}`;
-            const encodedUrl = encodeURIComponent(articleUrl);
+            const previewUrl = `https://christianconservativestoday.com/previews/article-${articleId}.html`;
+            const encodedUrl = encodeURIComponent(previewUrl);
             const encodedTitle = encodeURIComponent(articleTitle);
             
             let shareUrl = '';
@@ -1198,13 +1198,13 @@
         }
         
         function copyLinkForInstagram(articleId) {
-            const articleUrl = `${window.location.origin}/article.html?id=${articleId}`;
+            const previewUrl = `https://christianconservativestoday.com/previews/article-${articleId}.html`;
             
-            navigator.clipboard.writeText(articleUrl).then(() => {
+            navigator.clipboard.writeText(previewUrl).then(() => {
                 alert('📷 Link copied! Paste it in your Instagram bio or story. Instagram doesn\'t support direct web links in posts.');
             }).catch(() => {
                 const tempInput = document.createElement('input');
-                tempInput.value = articleUrl;
+                tempInput.value = previewUrl;
                 document.body.appendChild(tempInput);
                 tempInput.select();
                 document.execCommand('copy');
@@ -1214,11 +1214,11 @@
         }
         
         function copyArticleLink(articleId, buttonElement) {
-            const articleUrl = `${window.location.origin}/article.html?id=${articleId}`;
+            const previewUrl = `https://christianconservativestoday.com/previews/article-${articleId}.html`;
             
             // Create temporary input to copy text
             const tempInput = document.createElement('input');
-            tempInput.value = articleUrl;
+            tempInput.value = previewUrl;
             document.body.appendChild(tempInput);
             tempInput.select();
             tempInput.setSelectionRange(0, 99999);
@@ -1243,7 +1243,7 @@
                         buttonElement.classList.remove('copied');
                     }, 2000);
                 }).catch(() => {
-                    alert('Please manually copy this link: ' + articleUrl);
+                    alert('Please manually copy this link: ' + previewUrl);
                 });
             } finally {
                 document.body.removeChild(tempInput);

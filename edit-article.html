@@ -720,6 +720,17 @@ Code block
                 const data = await response.json();
                 
                 if (response.ok) {
+                    // Fetch updated article to get current featured_image
+                    const articleResponse = await fetch(ARTICLES_API + '?action=get&article_id=' + articleId, {
+                        headers: { 'Authorization': 'Bearer ' + authToken }
+                    });
+                    const articleData = await articleResponse.json();
+                    
+                    // Generate preview with complete article data
+                    await generateAndUploadPreview({
+                        ...updateData,
+                        featured_image: articleData.article?.featured_image || updateData.featured_image
+                    });
                     alert('Article updated successfully!');
                     window.location.href = 'articles.html';
                 } else {
@@ -917,6 +928,87 @@ Empty line creates new paragraph
                 return marked.parse(markdownText);
             } else {
                 return quill.root.innerHTML;
+            }
+        }
+        
+        async function generateAndUploadPreview(articleData) {
+            try {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = articleData.content;
+                const plainText = tempDiv.textContent || tempDiv.innerText || '';
+                const excerpt = plainText.substring(0, 160);
+                
+                let imageUrl = 'https://d271vky579caz9.cloudfront.net/techcrosslogo.jpg';
+                if (articleData.featured_image && !articleData.featured_image.startsWith('data:')) {
+                    imageUrl = articleData.featured_image;
+                }
+                
+                const previewHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Christian Conservatives Today">
+<meta property="og:title" content="${escapeHtml(articleData.title)}">
+<meta property="og:description" content="${escapeHtml(excerpt)}">
+<meta property="og:url" content="https://christianconservativestoday.com/previews/article-${articleData.article_id}.html">
+<meta property="og:image" content="${imageUrl}">
+<meta property="og:image:secure_url" content="${imageUrl}">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${escapeHtml(articleData.title)}">
+<meta name="twitter:description" content="${escapeHtml(excerpt)}">
+<meta name="twitter:image" content="${imageUrl}">
+<meta http-equiv="refresh" content="0;url=/article.html?id=${articleData.article_id}">
+<title>${escapeHtml(articleData.title)} - Christian Conservatives Today</title>
+</head>
+<body>
+<scr`+`ipt>window.location.href="/article.html?id=${articleData.article_id}";</scr`+`ipt>
+<p>Redirecting to article...</p>
+</body>
+</html>`;
+                
+                await uploadPreviewToS3(articleData.article_id, previewHtml);
+            } catch (error) {
+                console.error('Error generating preview:', error);
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        async function uploadPreviewToS3(articleId, htmlContent) {
+            try {
+                const response = await fetch(ADMIN_API + '?action=upload_url', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + authToken
+                    },
+                    body: JSON.stringify({
+                        filename: `previews/article-${articleId}.html`,
+                        content_type: 'text/html'
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.upload_url) {
+                    await fetch(data.upload_url, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'text/html'
+                        },
+                        body: htmlContent
+                    });
+                }
+            } catch (error) {
+                console.error('Error uploading preview:', error);
             }
         }
         

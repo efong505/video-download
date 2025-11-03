@@ -173,7 +173,7 @@
             const plainText = tempDiv.textContent || tempDiv.innerText || '';
             const excerpt = plainText.substring(0, 150) + (plainText.length > 150 ? '...' : '');
             
-            const currentUrl = window.location.href;
+            const previewUrl = 'https://christianconservativestoday.com/previews/article-' + article.article_id + '.html';
             
             // Show login prompt for non-authenticated users viewing public articles
             const loginPrompt = !isAuthenticated ? 
@@ -201,15 +201,15 @@
                     '<h5>📢 Share this article</h5>' +
                     '<p class="text-muted mb-3">Help spread the word about this Christian conservative content</p>' +
                     '<div class="mb-3">' +
-                        '<a href="#" onclick="shareOnFacebook()" class="share-button share-facebook"><i class="fab fa-facebook-f"></i></a>' +
-                        '<a href="#" onclick="shareOnTwitter()" class="share-button share-twitter"><i class="fab fa-twitter"></i></a>' +
-                        '<a href="#" onclick="shareOnLinkedIn()" class="share-button share-linkedin"><i class="fab fa-linkedin-in"></i></a>' +
+                        '<a href="https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(previewUrl) + '" target="_blank" class="share-button share-facebook"><i class="fab fa-facebook-f"></i></a>' +
+                        '<a href="https://twitter.com/intent/tweet?url=' + encodeURIComponent(previewUrl) + '&text=' + encodeURIComponent(article.title) + '" target="_blank" class="share-button share-twitter"><i class="fab fa-twitter"></i></a>' +
+                        '<a href="https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(previewUrl) + '" target="_blank" class="share-button share-linkedin"><i class="fab fa-linkedin-in"></i></a>' +
                         '<button onclick="copyLinkForInstagram()" class="share-button" style="background: #E4405F;" id="instagram-btn"><i class="fab fa-instagram"></i></button>' +
-                        '<a href="https://truthsocial.com/share?url=' + encodeURIComponent(currentUrl) + '&title=' + encodeURIComponent(article.title) + '" target="_blank" class="share-button" style="background: #FF0000;"><i class="fas fa-flag-usa"></i></a>' +
+                        '<a href="https://truthsocial.com/share?url=' + encodeURIComponent(previewUrl) + '&title=' + encodeURIComponent(article.title) + '" target="_blank" class="share-button" style="background: #FF0000;"><i class="fas fa-flag-usa"></i></a>' +
                         '<button onclick="copyLink()" class="share-button share-copy" id="copy-btn"><i class="fas fa-link"></i></button>' +
                     '</div>' +
                     '<div>' +
-                        '<input type="text" id="article-url" class="copy-link-input" value="' + currentUrl + '" readonly>' +
+                        '<input type="text" id="article-url" class="copy-link-input" value="' + previewUrl + '" readonly>' +
                     '</div>' +
                 '</div>' +
                 '<div class="related-articles-section mt-5 mb-4">' +
@@ -236,7 +236,7 @@
             window.currentArticle = {
                 title: article.title,
                 excerpt: excerpt,
-                url: currentUrl,
+                url: previewUrl,
                 author: article.author
             };
             

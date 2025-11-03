@@ -1,39 +1,33 @@
 import boto3
-import sys
 import re
 
 s3 = boto3.client('s3')
 dynamodb = boto3.resource('dynamodb')
 articles_table = dynamodb.Table('articles')
 
-if len(sys.argv) < 2:
-    print("Usage: python generate_article_preview.py <article_id>")
-    sys.exit(1)
+# Get all articles
+response = articles_table.scan()
+articles = response['Items']
 
-article_id = sys.argv[1]
+print(f"Found {len(articles)} articles. Regenerating previews...\n")
 
-# Get article
-response = articles_table.get_item(Key={'article_id': article_id})
-if 'Item' not in response:
-    print(f"Article {article_id} not found")
-    sys.exit(1)
-
-article = response['Item']
-title = article.get('title', '')
-content = article.get('content', '')
-featured_image = article.get('featured_image', '')
-
-# Extract plain text from HTML
-plain_text = re.sub('<[^<]+?>', '', content)
-excerpt = plain_text[:160]
-
-# Use featured image if available and not base64, otherwise use logo
-if featured_image and not featured_image.startswith('data:'):
-    image_url = featured_image
-else:
-    image_url = 'https://christianconservativestoday.com/techcrosslogo.jpg'
-
-preview_html = f'''<!DOCTYPE html>
+for article in articles:
+    article_id = article.get('article_id')
+    title = article.get('title', '')
+    content = article.get('content', '')
+    featured_image = article.get('featured_image', '')
+    
+    # Extract plain text
+    plain_text = re.sub('<[^<]+?>', '', content)
+    excerpt = plain_text[:160]
+    
+    # Skip base64, use logo
+    if featured_image and not featured_image.startswith('data:'):
+        image_url = featured_image
+    else:
+        image_url = 'https://d271vky579caz9.cloudfront.net/techcrosslogo.jpg'
+    
+    preview_html = f'''<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -59,15 +53,17 @@ preview_html = f'''<!DOCTYPE html>
 <p>Redirecting to article...</p>
 </body>
 </html>'''
+    
+    # Upload to S3
+    s3.put_object(
+        Bucket='my-video-downloads-bucket',
+        Key=f'previews/article-{article_id}.html',
+        Body=preview_html.encode('utf-8'),
+        ContentType='text/html',
+        CacheControl='no-cache'
+    )
+    
+    print(f"Regenerated preview for: {title[:50]}")
 
-# Upload to S3
-s3.put_object(
-    Bucket='my-video-downloads-bucket',
-    Key=f'previews/article-{article_id}.html',
-    Body=preview_html.encode('utf-8'),
-    ContentType='text/html',
-    CacheControl='no-cache'
-)
-
-print(f"Preview created: https://christianconservativestoday.com/previews/article-{article_id}.html")
-print(f"Share this URL on Facebook/Twitter")
+print(f"\nDone! Regenerated {len(articles)} article previews")
+print("All previews now use HTTPS image URLs")
