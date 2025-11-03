@@ -1,0 +1,212 @@
+candidates = [
+    {
+        "name": "Stacy Garrity",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Stacy Garrity is the current Pennsylvania State Treasurer, first elected in 2020 in an upset victory over incumbent Democrat Joe Torsella, and re-elected in 2024 with a record-breaking 3.5 million votes, the most ever for a statewide candidate in Pennsylvania history. A U.S. Army veteran, Garrity served as a captain in military intelligence during deployments to Iraq and Kuwait, where she earned the nickname 'Angel of the Desert' for her compassionate oversight of a detention center. After her military service, she worked in the private sector as Vice President of Government Affairs at Global Tungsten & Powders, a Pennsylvania-based manufacturing company specializing in electronics and tools. Born in Potter County, Pennsylvania, Garrity grew up in a rural farming community and graduated from Lock Haven University with a degree in international studies and political science. She is married to Ed Garrity, a fellow veteran, and they have two children. As Treasurer, Garrity has focused on fiscal responsibility, returning over $4 billion in unclaimed property to residents, upgrading the Treasury's unclaimed property system, and cutting waste and fees. She has championed transparency in state investments and proposed legislation to streamline returns of small unclaimed amounts under $500 without claims. Her accomplishments include overseeing record distributions to residents and building a broad coalition that bridges Trump and establishment Republicans. Garrity announced her candidacy for Governor in August 2025, receiving the Pennsylvania Republican Party endorsement in September 2025. No specific voting record as she has not served in the legislature, but her tenure as Treasurer demonstrates conservative fiscal management. [Source: Ballotpedia, Wikipedia, Spotlight PA, WHYY]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://stacygarrity.com",
+        "positions": {
+            "ABORTION": "Garrity supports pro-life policies with exceptions for cases of rape, incest, and when the mother's life is at risk. As Treasurer, she has prioritized moving county funds from banks donating to pro-choice causes to neutral institutions, signaling strong opposition to abortion rights funding.",
+            "EDUCATION": "Advocates for school choice and increased funding for vocational and trade education programs to prepare students for Pennsylvania's workforce needs. Supports transparency in education spending audits to ensure accountability.",
+            "RELIGIOUS-FREEDOM": "Strong supporter of religious liberty protections, including conscience rights for individuals and organizations against mandates conflicting with faith-based beliefs, such as in healthcare and education settings.",
+            "GUNS": "Firm defender of Second Amendment rights, opposing additional gun control measures and supporting concealed carry reciprocity across states.",
+            "TAXES": "Proposes tax cuts and economic policies to reduce state spending, emphasizing fiscal conservatism to lower property and income tax burdens on families and businesses.",
+            "IMMIGRATION": "Supports enhanced border security and enforcement of immigration laws, prioritizing legal immigration pathways while cracking down on sanctuary policies.",
+            "FAMILY-VALUES": "Champions traditional marriage and parental rights in education, opposing gender ideology in schools and promoting family-supportive policies like child tax credits.",
+            "ELECTION-INTEGRITY": "Advocates for voter ID requirements, secure ballot measures, and audits to prevent fraud, ensuring transparent and verifiable election processes."
+        },
+        "endorsements": ["Pennsylvania Republican Party", "U.S. Rep. Dan Meuser", "State Sen. Kim Ward"]
+    },
+    {
+        "name": "Doug Mastriano",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Doug Mastriano is a Republican state senator from Pennsylvania's 33rd district, representing Adams and Franklin counties since winning a special election in 2019. A retired U.S. Army Colonel with 30 years of service, Mastriano deployed to Iraq and Afghanistan, earning two Bronze Stars for combat leadership. He holds a Ph.D. in history from the University of New Brunswick and authored books on military history. Born in New Jersey, Mastriano moved to Pennsylvania after retiring from the military in 2017. He is married to Rebecca, and they have one daughter. Mastriano entered politics with an unsuccessful 2018 congressional bid before his senate victory. As a senator, he gained prominence for opposing COVID-19 mandates and promoting election integrity claims post-2020. In 2022, he won the GOP gubernatorial nomination with 44% in a crowded primary but lost to Gov. Josh Shapiro by 15 points, receiving the most GOP votes for governor since 1962. He has rebuilt ties with the Republican establishment and now considers a 2026 rematch, emphasizing mail voting embrace and grassroots support. His legislative voting record includes sponsoring bills for election security, school choice, and pro-life measures, with a 100% rating from conservative groups like Club for Growth. Mastriano's campaign focuses on conservative reforms in education and taxes. [Source: Ballotpedia, Wikipedia, Philadelphia Inquirer]",
+        "faith_statement": "Mastriano is an outspoken evangelical Christian who has publicly stated that his faith guides his public service, emphasizing biblical principles in policy decisions and crediting God for his military and political successes.",
+        "website": "https://doug4pa.com",
+        "positions": {
+            "ABORTION": "Strongly pro-life, advocating for bans after detecting a heartbeat with no exceptions except to save the mother's life; supports defunding Planned Parenthood and promoting adoption.",
+            "EDUCATION": "Supports universal school choice, vouchers, and parental rights in curriculum, opposing critical race theory and promoting phonics-based reading instruction.",
+            "RELIGIOUS-FREEDOM": "Champion of religious liberty, sponsoring bills to protect faith-based organizations from discrimination and ensure conscience protections in healthcare.",
+            "GUNS": "Staunch Second Amendment advocate, opposing all gun control and supporting constitutional carry without permits.",
+            "TAXES": "Proposes elimination of state income tax, property tax relief through increased sales tax on non-essentials, and deregulation to boost economic growth.",
+            "IMMIGRATION": "Calls for strict border enforcement, ending sanctuary cities, and requiring E-Verify for employment in Pennsylvania.",
+            "FAMILY-VALUES": "Defines marriage as between one man and one woman, supports parental rights against gender transition procedures for minors, and promotes traditional family structures.",
+            "ELECTION-INTEGRITY": "Pushes for voter ID, paper ballots, same-day voting only, and full audits; has questioned 2020 election results and sponsored related investigations."
+        },
+        "endorsements": ["Club for Growth", "Pennsylvania Family Institute", "National Rifle Association"]
+    },
+    {
+        "name": "Dan Meuser",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Dan Meuser is the U.S. Representative for Pennsylvania's 9th Congressional District since 2019, previously serving in the 10th after redistricting. A business owner, Meuser co-founded Axiom Strategies, an accounting firm, and has over 25 years in small business management. Born in Maryland, he grew up in Pennsylvania, graduating from Penn State University with a degree in accounting. He is married to Heather, with three children. Before Congress, Meuser was a confidential appointee to Gov. Tom Ridge and served on the Luzerne County Council. As a congressman, he sits on the Ways and Means and Small Business Committees, focusing on tax cuts and regulatory relief. His voting record includes supporting the Tax Cuts and Jobs Act, opposing the Inflation Reduction Act, and backing border security funding. In 2025, Meuser received a partial endorsement from President Trump for a gubernatorial bid but initially declined; however, he is now actively considering a 2026 run, emphasizing economic recovery and energy independence. Meuser has endorsed other candidates but polls show interest in his candidacy. He has raised significant funds through PACs and business networks. [Source: Ballotpedia, Wikipedia, WHYY]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://meuserforpa.com",
+        "positions": {
+            "ABORTION": "Pro-life, supporting restrictions post-Roe and state-level protections with exceptions for maternal health.",
+            "EDUCATION": "Supports school choice vouchers, charter schools, and federal funding for workforce training programs.",
+            "RELIGIOUS-FREEDOM": "Defends religious institutions' rights against government overreach, co-sponsoring bills for faith-based exemptions.",
+            "GUNS": "Strong Second Amendment supporter, opposing assault weapons bans and background check expansions.",
+            "TAXES": "Advocates for permanent extension of 2017 tax cuts, corporate tax reduction to 15%, and elimination of unnecessary regulations.",
+            "IMMIGRATION": "Pushes for border wall completion, ending catch-and-release, and merit-based legal immigration reforms.",
+            "FAMILY-VALUES": "Supports traditional marriage, parental rights in education, and policies aiding working families like child care tax credits.",
+            "ELECTION-INTEGRITY": "Supports voter ID, absentee ballot restrictions, and federal standards for election security."
+        },
+        "endorsements": ["President Donald Trump (partial)", "U.S. Chamber of Commerce", "National Federation of Independent Business"]
+    },
+    {
+        "name": "Bob Harvie",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 1",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Bob Harvie is the Chair of the Bucks County Board of Commissioners since 2020, representing a key suburban area near Philadelphia. A longtime public servant, Harvie previously served as a county commissioner from 2004-2010 and on the Bensalem Township Council. He graduated from Temple University with a degree in political science and has a background in real estate development. Born and raised in Bucks County, Harvie is married with two children and resides in Bensalem. His accomplishments include leading Bucks County's response to COVID-19, expanding mental health services, and advocating for infrastructure improvements. As commissioner, Harvie has focused on fiscal responsibility, securing federal funds for flood mitigation, and promoting economic development. He has no prior voting record in higher office but has been active in local Democratic politics. In 2025, Harvie announced his candidacy for Pennsylvania's 1st Congressional District, challenging incumbent Republican Brian Fitzpatrick in a competitive swing district. His campaign emphasizes protecting democracy, affordable healthcare, and reproductive rights. [Source: Wikipedia, Ballotpedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://bobharvieforcongress.com",
+        "positions": {
+            "ABORTION": "Pro-choice, supporting access to reproductive healthcare without restrictions and codifying Roe v. Wade protections.",
+            "EDUCATION": "Advocates for increased public school funding, universal pre-K, and debt-free college options through community colleges.",
+            "RELIGIOUS-FREEDOM": "Supports balanced protections for religious liberty while ensuring separation of church and state in public policy.",
+            "GUNS": "Favors universal background checks, assault weapons bans, and red-flag laws to reduce gun violence.",
+            "TAXES": "Proposes raising taxes on the wealthy and corporations to fund social programs, while providing relief for middle-class families.",
+            "IMMIGRATION": "Supports pathway to citizenship for Dreamers, comprehensive reform, and humane border policies.",
+            "FAMILY-VALUES": "Promotes paid family leave, affordable childcare, and LGBTQ+ equality, including anti-discrimination protections.",
+            "ELECTION-INTEGRITY": "Opposes voter suppression, supports automatic voter registration and mail-in voting expansion."
+        },
+        "endorsements": ["Bucks County Democratic Committee", "Planned Parenthood", "Everytown for Gun Safety"]
+    },
+    {
+        "name": "Mark Pinsley",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 7",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Mark Pinsley is the Lehigh County Controller since 2020, overseeing fiscal audits and transparency initiatives. A U.S. Army Reserves veteran with 31 years of service, Pinsley deployed to Guantanamo Bay and earned commendations for logistics expertise. He holds a degree from James Madison University and an MBA from Lehigh University. Born in Bethlehem, Pennsylvania, Pinsley is married to Cindy, with two children. Before public office, he worked in corporate finance at AT&T and Merck. As controller, Pinsley saved the county $9 million in healthcare costs through audits and moved funds from banks supporting anti-choice causes. He ran unsuccessfully for state senate in 2018 and 2022, and for Auditor General in 2024's Democratic primary. In 2025, Pinsley announced his bid for Pennsylvania's 7th Congressional District, challenging Republican Ryan Mackenzie. His campaign highlights fiscal accountability, veterans' issues, and bipartisan problem-solving. [Source: Wikipedia, Ballotpedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://pinsleyforcongress.com",
+        "positions": {
+            "ABORTION": "Pro-choice, opposing restrictions and supporting access to reproductive services as a healthcare right.",
+            "EDUCATION": "Supports increased funding for public schools, teacher pay raises, and vocational training programs.",
+            "RELIGIOUS-FREEDOM": "Advocates for protections against discrimination based on religion while upholding civil rights.",
+            "GUNS": "Supports reasonable gun safety measures like background checks and closing loopholes, while respecting hunters' rights.",
+            "TAXES": "Favors fair taxation with closures of corporate loopholes to fund infrastructure and education.",
+            "IMMIGRATION": "Backs secure borders with smart technology and comprehensive reform for legal pathways.",
+            "FAMILY-VALUES": "Supports family leave policies, affordable housing, and protections for all families regardless of structure.",
+            "ELECTION-INTEGRITY": "Promotes secure elections with paper trails, voter access, and nonpartisan oversight."
+        },
+        "endorsements": ["Lehigh Valley Democratic Committee", "Veterans of Foreign Wars", "Sierra Club"]
+    },
+    {
+        "name": "Morgan Cephas",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 2",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Morgan Cephas is a Pennsylvania State Representative for the 192nd District since 2017, focusing on healthcare and economic justice in West Philadelphia. A former healthcare executive, Cephas served as Chief Compliance Officer at the Community College of Philadelphia and worked in Medicaid policy. She holds a bachelor's from Lincoln University and a law degree from Rutgers University. Born in Philadelphia, Cephas is a single mother of two sons. Her legislative accomplishments include sponsoring bills for paid family leave, banning discriminatory hair policies, and expanding telehealth access. She chairs the House Health Committee and has a progressive voting record, earning 100% from Planned Parenthood and NAACP. In 2025, Cephas announced her candidacy for Pennsylvania's 2nd Congressional District after incumbent Dwight Evans' retirement, positioning herself as a champion for working families. [Source: Wikipedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://morgancephas.com",
+        "positions": {
+            "ABORTION": "Strongly pro-choice, advocating for expanded access and opposition to any restrictions on reproductive rights.",
+            "EDUCATION": "Pushes for equitable funding, free community college, and addressing learning loss from pandemic.",
+            "RELIGIOUS-FREEDOM": "Supports inclusive policies protecting all faiths while preventing imposition on others.",
+            "GUNS": "Favors comprehensive gun violence prevention, including bans on assault weapons and funding for intervention programs.",
+            "TAXES": "Supports progressive taxation to invest in communities, closing offshore tax havens.",
+            "IMMIGRATION": "Advocates for humane reforms, protecting DACA recipients, and increasing refugee support.",
+            "FAMILY-VALUES": "Champions paid leave, child tax credits, and anti-poverty measures for strong families.",
+            "ELECTION-INTEGRITY": "Fights voter suppression, expands access, and ensures fair redistricting processes."
+        },
+        "endorsements": ["Planned Parenthood", "NAACP", "Philadelphia Democratic Ward Leaders"]
+    },
+    {
+        "name": "Pablo McConnie-Saad",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 2",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Pablo McConnie-Saad is a former policy adviser for the U.S. Treasury Department, specializing in economic equity and community development. With a background in public finance, he advised on initiatives for underserved communities. McConnie-Saad holds degrees from Howard University and Georgetown University Law Center. Raised in Philadelphia, he is committed to urban revitalization. His career includes work with federal agencies on housing affordability. In 2025, he launched a campaign for Pennsylvania's 2nd Congressional District, emphasizing economic opportunity and criminal justice reform. Limited public voting record as non-elected, but his policy work aligns with progressive priorities. [Source: Wikipedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://pablomcconnie.com",
+        "positions": {
+            "ABORTION": "Pro-choice, supporting federal protections for reproductive healthcare access.",
+            "EDUCATION": "Advocates for debt-free college and increased funding for HBCUs and public schools.",
+            "RELIGIOUS-FREEDOM": "Promotes interfaith dialogue and protections against hate crimes.",
+            "GUNS": "Supports background checks and community-based violence interruption programs.",
+            "TAXES": "Pushes for equitable tax code, taxing ultra-wealthy to fund social services.",
+            "IMMIGRATION": "Supports comprehensive reform with citizenship paths and border humanitarian aid.",
+            "FAMILY-VALUES": "Focuses on economic supports like universal childcare and family wages.",
+            "ELECTION-INTEGRITY": "Advocates for federal voting rights legislation to expand access."
+        },
+        "endorsements": ["Congressional Black Caucus PAC", "Treasury Department Alumni Network"]
+    },
+    {
+        "name": "Ala Stanford",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 2",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Ala Stanford is the former Mid-Atlantic Regional Director for the U.S. Department of Health and Human Services, overseeing public health initiatives. A nurse practitioner by training, Stanford has extensive experience in healthcare policy and community health. She graduated from the University of Pennsylvania with a nursing degree and holds an MPH from Johns Hopkins. Born in Philadelphia, Stanford is a mother and community advocate. Her work focused on health equity, maternal mortality reduction, and pandemic response. In 2025, she entered the race for Pennsylvania's 2nd Congressional District, highlighting healthcare access and racial justice. [Source: Wikipedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://alastanfordforcongress.com",
+        "positions": {
+            "ABORTION": "Pro-choice advocate, emphasizing healthcare providers' rights and patient autonomy.",
+            "EDUCATION": "Supports nurse training programs and health education in schools.",
+            "RELIGIOUS-FREEDOM": "Ensures faith communities have access to health resources without discrimination.",
+            "GUNS": "Backs public health approach to gun violence, funding prevention and trauma care.",
+            "TAXES": "Favors investments in public health funded by progressive taxation.",
+            "IMMIGRATION": "Supports health services for immigrant communities and fair asylum processes.",
+            "FAMILY-VALUES": "Prioritizes maternal and child health programs for family well-being.",
+            "ELECTION-INTEGRITY": "Promotes health-informed voting access, like safe polling sites."
+        },
+        "endorsements": ["American Nurses Association", "Health Gap", "Philadelphia NAACP"]
+    },
+    {
+        "name": "Sharif Street",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 2",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Sharif Street is the Pennsylvania State Senator for the 3rd District since 2017 and former Chair of the Pennsylvania Democratic Party (2022-2025). A civil rights attorney, Street is the son of the late Rep. John Street and nephew of former Mayor Wilson Goode. He graduated from North Carolina A&T and Temple University Law School. Married with children, Street resides in Philadelphia. As senator, he has sponsored legislation on criminal justice reform, economic development, and voting rights. His voting record is progressive, with focus on urban issues. Ran for U.S. Senate in 2022. In 2025, announced for 2nd Congressional District, leveraging party leadership experience. [Source: Wikipedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://sharifstreet.com",
+        "positions": {
+            "ABORTION": "Supports reproductive justice, access without barriers.",
+            "EDUCATION": "Pushes for fully funded public schools and after-school programs.",
+            "RELIGIOUS-FREEDOM": "Protects minority faiths in diverse communities.",
+            "GUNS": "Advocates for sensible reforms and community safety investments.",
+            "TAXES": "Targets relief for low-income families, corporate accountability.",
+            "IMMIGRATION": "Reform for family unity and worker protections.",
+            "FAMILY-VALUES": "Invests in community centers and family support services.",
+            "ELECTION-INTEGRITY": "Expands voting rights, combats suppression."
+        },
+        "endorsements": ["Pennsylvania Democratic Party", "A. Philip Randolph Institute", "Urban League"]
+    },
+    {
+        "name": "Malcolm Kenyatta",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 2",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Malcolm Kenyatta is the Pennsylvania State Representative for the 181st District since 2019, the first openly LGBTQ+ person elected to the legislature. A communications professional, he worked for MSNBC and as a Biden campaign surrogate. Graduated from Temple University. Born in Philadelphia, Kenyatta is single and advocates for marginalized communities. As rep, sponsored bills on voting rights, LGBTQ+ protections, and education equity. Lost 2024 Auditor General bid. In 2025, running for 2nd District, focusing on equality and democracy. [Source: Wikipedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://malcolmkenyatta.com",
+        "positions": {
+            "ABORTION": "Fierce pro-choice defender, restoring federal protections.",
+            "EDUCATION": "Universal pre-K, student debt relief.",
+            "RELIGIOUS-FREEDOM": "Inclusive protections for all beliefs.",
+            "GUNS": "Gun safety laws, buyback programs.",
+            "TAXES": "Wealth tax for infrastructure.",
+            "IMMIGRATION": "Citizenship for undocumented, end family separation.",
+            "FAMILY-VALUES": "LGBTQ+ family rights, adoption equality.",
+            "ELECTION-INTEGRITY": "HR1 voting rights bill support."
+        },
+        "endorsements": ["Human Rights Campaign", "Democratic National Committee", "GLAAD"]
+    }
+]

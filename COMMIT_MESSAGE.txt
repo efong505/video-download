@@ -1,42 +1,16 @@
-Fix mobile header spacing issues and prepare CSS/JS consolidation
+Fix 4 recurring issues: scripture lookup, JWT expiration, author names, and navbar
 
-FIXES:
-- Fixed mobile header spacing on videos.html, articles.html, resources.html
-- Fixed mobile header spacing on admin-templates.html, admin-resources.html
-- Fixed admin.html header to account for both navbar and secondary menu on mobile
-- Changed spacing from desktop-default to mobile-only media queries (@max-width: 991px)
-- Added Android-specific padding (@max-width: 422px) for very small screens
+- Deploy articles-api with requests library to fix scripture lookup
+- Add token-validator.js to check JWT expiration on page load
+- Run migration scripts to update article/news author names (7 records updated)
+- Replace old menu with unified navbar in edit-article.html
+- Update FIX_RECURRING_ISSUES_GUIDE.md with all fixes and commands
 
-TECHNICAL CHANGES:
-- Moved padding-top and margin-top into @media queries for mobile-only application
-- Desktop views now display with normal spacing (no extra padding)
-- Mobile views properly account for fixed navbar (56px) and secondary menu (~49px on admin)
-- All pages manually tested and verified working correctly
+Files modified:
+- articles_api/ (deployed with dependencies)
+- admin.html, create-article.html, edit-article.html (added token validator)
+- assets/js/token-validator.js (new)
+- update_article_author_names.py (new migration script)
+- FIX_RECURRING_ISSUES_GUIDE.md (comprehensive fix documentation)
 
-CONSOLIDATION PREP:
-- Created compare-inline-css.py script to analyze inline CSS across all pages
-- Script extracts CSS rules, identifies duplicates, and calculates consolidation potential
-- Prepared for Phase 1 of CSS/JS consolidation plan
-- Ready to generate detailed comparison report for shared styles
-
-FILES MODIFIED:
-- videos.html - Mobile-only header spacing
-- articles.html - Mobile-only header spacing  
-- resources.html - Mobile-only header spacing
-- admin-templates.html - Mobile-only header spacing
-- admin-resources.html - Mobile-only header spacing
-- admin.html - Mobile header spacing with secondary menu adjustment
-
-FILES CREATED:
-- compare-inline-css.py - CSS analysis and comparison tool
-
-DOCUMENTATION:
-- CSS-JS-AUDIT-REPORT.md - Already exists (31 pages analyzed)
-- CSS-JS-CONSOLIDATION-PLAN.md - Already exists (5-week implementation plan)
-- Ready to generate CSS-INLINE-COMPARISON.md with detailed findings
-
-NEXT STEPS:
-1. Run compare-inline-css.py to generate comparison report
-2. Review findings and identify high-priority shared styles
-3. Create common-styles.css with truly shared CSS
-4. Begin incremental page updates (Phase 2 of consolidation plan)
+All fixes tested and deployed to S3.

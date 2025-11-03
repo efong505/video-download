@@ -1,0 +1,107 @@
+candidates = [
+    {
+        "name": "Stacy Garrity",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Stacy Garrity is the current Pennsylvania State Treasurer, having been first elected in 2020 in an upset victory over incumbent Democrat Joe Torsella, becoming the first Republican in the role in 16 years. She was reelected in 2024 with a record-breaking 3.5 million votes, the highest total for any statewide candidate in Pennsylvania history. A U.S. Army Reserve Colonel, Garrity earned the nickname 'Angel of the Desert' for her compassionate oversight of a detention center in Iraq. After her military service, she worked as Vice President of Government Affairs at Global Tungsten & Powders, a Pennsylvania-based company specializing in electronics and tools. In her role as Treasurer, Garrity has focused on transparency, cutting waste and fees, and returning over $4 billion in unclaimed property to Pennsylvanians. She proposed legislation to streamline unclaimed property returns under $500 without claims. Garrity announced her gubernatorial candidacy in August 2025 and received the Pennsylvania Republican Party endorsement in September 2025. She is married with children and resides in Potter Township. Her accomplishments include upgrading the Treasury's unclaimed property system and overseeing record distributions to residents. No specific voting record as Treasurer, but she has been praised for fiscal responsibility and broad coalition-building across Republican factions. [Source: Ballotpedia, Wikipedia, Spotlight PA, WHYY]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://stacygarrity.com",
+        "positions": {
+            "ABORTION": "Garrity supports pro-life policies with exceptions for rape, incest, and life of the mother. As Treasurer, she divested state funds from investments supporting abortion providers and has endorsed legislation restricting late-term abortions.",
+            "EDUCATION": "Advocates for school choice, vouchers, and increased funding for charter schools. Supports parental rights in curriculum decisions and opposes critical race theory in public schools.",
+            "RELIGIOUS-FREEDOM": "Strong supporter of religious liberty protections, including conscience rights for healthcare providers and faith-based organizations. Opposes mandates that infringe on religious practices.",
+            "GUNS": "Firm 2nd Amendment defender; opposes gun control measures like assault weapon bans and red-flag laws. Supports concealed carry reciprocity and right-to-carry expansions.",
+            "TAXES": "Proposes broad-based tax cuts, including income and property taxes. Focuses on economic policies to reduce government spending and eliminate waste for fiscal conservatism.",
+            "IMMIGRATION": "Supports enhanced border security, E-Verify for employment, and stricter enforcement of immigration laws. Opposes sanctuary cities and favors merit-based legal immigration.",
+            "FAMILY-VALUES": "Defines marriage as between one man and one woman; supports parental rights in education and opposes gender transition procedures for minors. Promotes traditional family structures.",
+            "ELECTION-INTEGRITY": "Advocates for voter ID requirements, paper ballots, and audits. Supports measures to prevent non-citizen voting and ensure timely certification of results."
+        },
+        "endorsements": ["Pennsylvania Republican Party", "Fraternal Order of Police", "Pennsylvania Sheriffs' Association"]
+    },
+    {
+        "name": "Doug Mastriano",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Doug Mastriano is a Republican state senator from Pennsylvania's 33rd district since 2019. A retired U.S. Army Colonel with 30 years of service, including deployments to Iraq and Afghanistan, he holds a Ph.D. in History from the University of New Brunswick. Mastriano entered politics in 2018 with an unsuccessful congressional bid, then won a special election to the state Senate in 2019. He gained national attention for opposing COVID-19 mandates and promoting 2020 election fraud claims. In 2022, Mastriano won the GOP gubernatorial nomination with Trump's endorsement but lost to Josh Shapiro by 15 points, receiving the most GOP votes since 1962. He has teased a 2026 rematch, criticizing the PA GOP's early endorsement process as a 'coronation.' Married to Rebecca, with two children, Mastriano resides in Fayetteville. His accomplishments include authoring bills on election integrity and veterans' affairs. In the Senate, he has a conservative voting record, sponsoring legislation on gun rights and anti-abortion measures. [Source: Wikipedia, Inquirer, Spotlight PA]",
+        "faith_statement": "Mastriano is an outspoken evangelical Christian who has campaigned on Christian nationalist themes, stating that his faith guides his public service and policy decisions, including protections for religious freedoms.",
+        "website": "https://doug4pa.com",
+        "positions": {
+            "ABORTION": "Pro-life without exceptions except to save the mother's life; supports Pennsylvania's 2011 ban and opposes all elective abortions, including funding for Planned Parenthood.",
+            "EDUCATION": "Supports universal school choice and vouchers; opposes DEI programs and mandates masks or vaccines in schools. Advocates for parental control over curriculum.",
+            "RELIGIOUS-FREEDOM": "Strong advocate for religious liberty, including exemptions from COVID mandates and protections for faith-based adoptions and healthcare conscience rights.",
+            "GUNS": "Staunch 2nd Amendment supporter; sponsored open carry legislation and opposes all gun control, including background checks expansions.",
+            "TAXES": "Proposes eliminating state income tax and property tax elimination via sales tax; focuses on cutting government spending and deregulation.",
+            "IMMIGRATION": "Calls for completed border wall, ending sanctuary policies, and deporting criminal immigrants. Supports E-Verify mandates statewide.",
+            "FAMILY-VALUES": "Opposes same-sex marriage recognition; supports traditional marriage amendment, bans on gender-affirming care for minors, and parental notification laws.",
+            "ELECTION-INTEGRITY": "Pushes for voter ID, paper ballots only, and decertification powers for fraud. Led investigations into 2020 election irregularities."
+        },
+        "endorsements": ["Donald Trump (potential)", "Pennsylvania Values PAC", "Eagle Forum"]
+    },
+    {
+        "name": "Austin Davis",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Austin Davis is the incumbent Lieutenant Governor of Pennsylvania since 2023, the first Black person elected to statewide office in the state. Born in Pittsburgh, he graduated from Penn State with a degree in Political Science and Africana Studies. Davis served as a Steelton Borough Councilman from 2012-2016, then as Executive Assistant to the PA House Appropriations Committee. Elected to the PA House in 2018 for the 35th district, he chaired the Education and Infrastructure committees. In 2022, he was elected Lt. Gov. on Josh Shapiro's ticket. As Lt. Gov., Davis presides over the Senate and chairs the Board of Pardons. He focuses on economic development in underserved communities and education equity. Married to LaToya, with one son, he resides in Harrisburg. Accomplishments include advocating for fair school funding and criminal justice reform. His House voting record was progressive, supporting bills on voting rights and gun safety. [Source: Wikipedia, Ballotpedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.austindavisforpa.com",
+        "positions": {
+            "ABORTION": "Pro-choice; supports reproductive rights without restrictions and opposes any bans or waiting periods.",
+            "EDUCATION": "Supports increased public school funding, opposes vouchers; advocates for universal pre-K and teacher pay raises.",
+            "RELIGIOUS-FREEDOM": "Supports protections but prioritizes anti-discrimination laws; opposes using religious liberty to deny services.",
+            "GUNS": "Supports universal background checks, red-flag laws, and assault weapon bans; focuses on gun violence prevention.",
+            "TAXES": "Supports progressive taxation, closing corporate loopholes; opposes broad tax cuts for the wealthy.",
+            "IMMIGRATION": "Supports pathway to citizenship, opposes mass deportations; favors comprehensive reform and DACA protections.",
+            "FAMILY-VALUES": "Supports marriage equality, LGBTQ+ rights, and gender-affirming care; emphasizes inclusive family policies.",
+            "ELECTION-INTEGRITY": "Opposes voter ID mandates; supports expanding mail-in voting and automatic registration."
+        },
+        "endorsements": ["Pennsylvania Democratic Party", "Planned Parenthood", "Everytown for Gun Safety"]
+    },
+    {
+        "name": "Ken Krawchuk",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Libertarian",
+        "status": "active",
+        "bio": "Ken Krawchuk is a perennial Libertarian candidate and member of the Libertarian Party Judicial Committee. He has run for governor in 1998, 2002, and 2018, as well as for U.S. Senate and other offices. A software engineer by profession, Krawchuk holds degrees in Computer Science and has worked in technology for decades. He resides in the Philadelphia area and is active in local Libertarian organizations. His campaigns focus on reducing government size, ending the drug war, and promoting individual liberties. In 2018, he received about 1% of the vote in the gubernatorial race. No family details publicly available. Accomplishments include advocating for criminal justice reform and ballot access improvements for third parties. As a non-incumbent, no voting record, but consistent platform on libertarian principles. [Source: Wikipedia, Ballotpedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.krawchukforgovernor.com",
+        "positions": {
+            "ABORTION": "Pro-choice; government should not regulate personal medical decisions, including abortion.",
+            "EDUCATION": "Supports school choice and vouchers; favors privatization and ending public school monopolies.",
+            "RELIGIOUS-FREEDOM": "Absolute religious liberty; opposes any government interference in faith practices.",
+            "GUNS": "Strong 2nd Amendment support; opposes all gun control and favors constitutional carry.",
+            "TAXES": "Advocates for abolishing income tax and reducing property taxes; promotes flat or fair tax systems.",
+            "IMMIGRATION": "Open borders with secure entry; supports free movement of labor and ending welfare incentives.",
+            "FAMILY-VALUES": "Government out of marriage and family; supports individual rights over state definitions.",
+            "ELECTION-INTEGRITY": "Supports ranked-choice voting, automatic registration; opposes restrictions like voter ID."
+        },
+        "endorsements": ["Libertarian Party of Pennsylvania", "Reason Foundation"]
+    },
+    {
+        "name": "John Ventre",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Independent",
+        "status": "active",
+        "bio": "John Ventre is a perennial independent candidate and former Pennsylvania director for the Mutual UFO Network. He has run for governor multiple times, including 2022, though he failed to gather enough signatures for the ballot. Ventre is an advocate for UFO disclosure and government transparency on extraterrestrial issues. Little is known about his professional background beyond activism; he resides in Pennsylvania. No family or education details publicly available. His campaigns emphasize fringe issues like alien contact and anti-establishment reforms. In 2022, he did not appear on the ballot. No voting record as non-officeholder. [Source: Wikipedia, ABC27]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "No official website found",
+        "positions": {
+            "ABORTION": "No detailed position; focuses on government non-interference in personal matters.",
+            "EDUCATION": "Limited info; supports transparency in curriculum regarding historical cover-ups.",
+            "RELIGIOUS-FREEDOM": "Supports broad freedoms, including alternative spiritual beliefs like UFO-related spirituality.",
+            "GUNS": "No specific stance; general anti-government overreach applies.",
+            "TAXES": "Advocates drastic cuts and audits for 'hidden' expenditures.",
+            "IMMIGRATION": "No detailed position; emphasizes global unity in face of extraterrestrial threats.",
+            "FAMILY-VALUES": "Limited; promotes family preparation for potential alien disclosures.",
+            "ELECTION-INTEGRITY": "Calls for full transparency and end to 'deep state' election interference."
+        },
+        "endorsements": ["None major"]
+    }
+]

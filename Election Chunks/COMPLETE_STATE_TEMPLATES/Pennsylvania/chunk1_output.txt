@@ -1,0 +1,2399 @@
+races = [
+    # Federal (2026) - 17 races: U.S. House Districts 1-17
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 1",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 1st Congressional District, covering parts of Philadelphia and Montgomery County. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 2",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 2nd Congressional District, based in central and northeastern Philadelphia. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 3",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 3rd Congressional District, covering parts of Philadelphia. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 4",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 4th Congressional District, in western suburbs of Philadelphia including Montgomery and Berks Counties. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 5",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 5th Congressional District, covering parts of Montgomery and Bucks Counties. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 6",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 6th Congressional District, including Chester County. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 7",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 7th Congressional District, covering Lehigh Valley area. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 8",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 8th Congressional District, including Bucks County. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 9",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 9th Congressional District, central Pennsylvania. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 10",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 10th Congressional District, including Dauphin, Cumberland, and York Counties. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 11",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 11th Congressional District, northeastern Pennsylvania. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 12",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 12th Congressional District, southwestern Pennsylvania. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 13",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 13th Congressional District, Delaware County area. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 14",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 14th Congressional District, including Pittsburgh suburbs. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 15",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 15th Congressional District, Lehigh Valley. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 16",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 16th Congressional District, western Pennsylvania. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "U.S. House District 17",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania's 17th Congressional District, southwestern Pennsylvania including Pittsburgh. Research from Ballotpedia and Pennsylvania.gov indicates all 17 U.S. House seats are up in 2026."
+    },
+    # State (2026) - 2 races
+    {
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Gubernatorial election to elect the Governor of Pennsylvania. Incumbent Josh Shapiro eligible for re-election. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Lieutenant Governor",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Lieutenant Governor of Pennsylvania, running on joint ticket with Governor. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    # State Legislature (2026) - 253 races
+    # Senate: 50 seats (Districts 1-50)
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 1",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 1, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 2",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 2, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 3",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 3, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 4",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 4, Philadelphia suburbs. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 5",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 5, Delaware County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 6",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 6, Chester County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 7",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 7, Montgomery County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 8",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 8, Bucks County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 9",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 9, Montgomery County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 10",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 10, Lehigh County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 11",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 11, Lehigh Valley. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 12",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 12, Berks County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 13",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 13, Lancaster County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 14",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 14, Dauphin County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 15",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 15, Cumberland County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 16",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 16, Perry and Juniata Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 17",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 17, Snyder and Northumberland Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 18",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 18, Montour, Columbia, and Luzerne Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 19",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 19, Luzerne County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 20",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 20, Lackawanna County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 21",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 21, Wayne, Pike, and Monroe Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 22",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 22, Monroe County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 23",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 23, Northampton County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 24",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 24, Bucks County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 25",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 25, Delaware County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 26",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 26, Westmoreland County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 27",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 27, Armstrong and Indiana Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 28",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 28, Fayette and Westmoreland Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 29",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 29, Beaver and Lawrence Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 30",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 30, Butler County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 31",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 31, Allegheny County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 32",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 32, Allegheny County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 33",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 33, Allegheny County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 34",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 34, Allegheny County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 35",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 35, Erie County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 36",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 36, Mercer and Crawford Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 37",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 37, Venango and Warren Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 38",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 38, Clarion and Forest Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 39",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 39, Elk and McKean Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 40",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 40, Cameron, Clinton, and Potter Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 41",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 41, Lycoming County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 42",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 42, Tioga and Bradford Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 43",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 43, Susquehanna and Wyoming Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 44",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 44, Sullivan and Bradford Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 45",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 45, Luzerne County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 46",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 46, Carbon and Schuylkill Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 47",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 47, Schuylkill County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 48",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 48, York County. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 49",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 49, Adams and Franklin Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State Senate District 50",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania State Senate District 50, Greene, Washington, and Fayette Counties. Research from Ballotpedia and Pennsylvania.gov; all 50 districts up in 2026."
+    },
+    # House/Assembly: 203 seats (Districts 1-203)
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 1",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 1, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 2",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 2, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 3",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 3, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 4",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 4, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 5",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 5, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 6",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 6, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 7",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 7, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 8",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 8, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 9",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 9, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 10",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 10, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 11",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 11, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 12",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 12, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 13",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 13, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 14",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 14, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 15",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 15, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 16",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 16, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 17",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 17, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 18",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 18, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 19",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 19, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 20",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 20, Philadelphia. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 21",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 21, Delaware County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 22",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 22, Delaware County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 23",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 23, Delaware County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 24",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 24, Delaware County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 25",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 25, Chester County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 26",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 26, Chester County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 27",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 27, Chester County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 28",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 28, Chester County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 29",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 29, Montgomery County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 30",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 30, Montgomery County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 31",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 31, Montgomery County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 32",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 32, Montgomery County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 33",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 33, Montgomery County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 34",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 34, Montgomery County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 35",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 35, Montgomery County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 36",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 36, Montgomery County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 37",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 37, Montgomery County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 38",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 38, Montgomery County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 39",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 39, Montgomery County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 40",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 40, Bucks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 41",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 41, Bucks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 42",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 42, Bucks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 43",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 43, Bucks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 44",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 44, Bucks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 45",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 45, Bucks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 46",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 46, Bucks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 47",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 47, Lehigh County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 48",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 48, Lehigh County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 49",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 49, Lehigh County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 50",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 50, Lehigh County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 51",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 51, Berks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 52",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 52, Berks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 53",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 53, Berks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 54",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 54, Berks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 55",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 55, Berks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 56",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 56, Berks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 57",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 57, Lancaster County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 58",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 58, Lancaster County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 59",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 59, Lancaster County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 60",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 60, Lancaster County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 61",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 61, Lancaster County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 62",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 62, Lancaster County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 63",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 63, Lancaster County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 64",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 64, Lancaster County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 65",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 65, Lancaster County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 66",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 66, York County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 67",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 67, York County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 68",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 68, York County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 69",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 69, York County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 70",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 70, Cumberland County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 71",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 71, Cumberland County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 72",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 72, Dauphin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 73",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 73, Dauphin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 74",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 74, Dauphin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 75",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 75, Perry County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 76",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 76, Juniata and Snyder Counties. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 77",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 77, Northumberland County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 78",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 78, Union and Snyder Counties. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 79",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 79, Clinton and Centre Counties. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 80",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 80, Centre County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 81",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 81, Centre County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 82",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 82, Clinton County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 83",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 83, Lycoming County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 84",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 84, Lycoming County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 85",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 85, Union and Northumberland Counties. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 86",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 86, Montour, Columbia, and Northumberland Counties. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 87",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 87, Columbia and Montour Counties. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 88",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 88, Luzerne County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 89",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 89, Luzerne County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 90",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 90, Lackawanna County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 91",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 91, Lackawanna County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 92",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 92, Lackawanna County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 93",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 93, Lackawanna County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 94",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 94, Luzerne County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 95",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 95, Luzerne County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 96",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 96, Carbon County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 97",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 97, Monroe County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 98",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 98, Monroe County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 99",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 99, Northampton County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 100",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 100, Northampton County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 101",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 101, Northampton County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 102",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 102, Northampton County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 103",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 103, Schuylkill County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 104",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 104, Schuylkill County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 105",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 105, Schuylkill County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 106",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 106, Berks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 107",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 107, Berks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 108",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 108, Lehigh County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 109",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 109, Lehigh County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 110",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 110, Lehigh County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 111",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 111, Lehigh County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 112",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 112, Luzerne County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 113",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 113, Luzerne County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 114",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 114, Luzerne County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 115",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 115, Lackawanna County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 116",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 116, Lackawanna County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 117",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 117, Pike and Monroe Counties. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 118",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 118, Monroe County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 119",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 119, Monroe County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 120",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 120, Wayne County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 121",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 121, Wayne and Pike Counties. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 122",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 122, Susquehanna County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 123",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 123, Wyoming County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 124",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 124, Wyoming County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 125",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 125, Bradford County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 126",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 126, Bradford County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 127",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 127, Tioga County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 128",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 128, Potter and Tioga Counties. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 129",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 129, Lycoming County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 130",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 130, Lycoming County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 131",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 131, Centre County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 132",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 132, Clinton and Centre Counties. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 133",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 133, Mifflin and Juniata Counties. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 134",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 134, Dauphin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 135",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 135, Dauphin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 136",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 136, Dauphin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 137",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 137, Dauphin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 138",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 138, Dauphin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 139",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 139, York County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 140",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 140, York County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 141",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 141, York County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 142",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 142, York County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 143",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 143, York County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 144",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 144, York County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 145",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 145, Adams County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 146",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 146, Franklin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 147",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 147, Franklin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 148",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 148, Cumberland County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 149",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 149, Cumberland County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 150",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 150, Cumberland County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 151",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 151, Perry County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 152",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 152, Dauphin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 153",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 153, Dauphin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 154",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 154, Dauphin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 155",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 155, Dauphin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 156",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 156, Lancaster County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 157",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 157, Lancaster County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 158",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 158, Lancaster County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 159",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 159, Lancaster County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 160",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 160, Lancaster County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 161",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 161, York County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 162",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 162, York County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 163",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 163, York County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 164",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 164, Adams County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 165",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 165, Adams County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 166",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 166, Franklin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 167",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 167, Franklin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 168",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 168, Franklin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 169",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 169, Cumberland County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 170",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 170, Cumberland County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 171",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 171, Perry County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 172",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 172, Juniata County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 173",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 173, Mifflin County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 174",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 174, Snyder County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 175",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 175, Union County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 176",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 176, Northumberland County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 177",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 177, Montour and Columbia Counties. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 178",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 178, Columbia County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 179",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 179, Luzerne County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 180",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 180, Luzerne County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 181",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 181, Luzerne County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 182",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 182, Luzerne County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 183",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 183, Luzerne County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 184",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 184, Luzerne County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 185",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 185, Carbon County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 186",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 186, Carbon County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 187",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 187, Schuylkill County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 188",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 188, Schuylkill County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 189",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 189, Schuylkill County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 190",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 190, Schuylkill County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 191",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 191, Berks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 192",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 192, Berks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 193",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 193, Berks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 194",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 194, Berks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 195",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 195, Berks County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 196",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 196, Lehigh County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 197",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 197, Lehigh County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 198",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 198, Lehigh County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 199",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 199, Northampton County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 200",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 200, Northampton County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 201",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 201, Northampton County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 202",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 202, Northampton County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "State House District 203",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Election for Pennsylvania House of Representatives District 203, Monroe County. Research from Ballotpedia and Pennsylvania.gov; all 203 seats up in 2026."
+    },
+    # Municipal & County (2025-2026) - 73 races
+    # Mayoral Races: 3 (2025)
+    {
+        "state": "Pennsylvania",
+        "office": "Mayor of Pittsburgh",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Mayoral election in Pittsburgh, a major city in Allegheny County. Incumbent Ed Gainey seeking re-election. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Mayor of Erie",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Mayoral election in Erie, a major city in Erie County. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Mayor of Harrisburg",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Mayoral election in Harrisburg, capital city in Dauphin County. Incumbent Wanda Williams. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    # City Councils: 35 seats across major cities (2025, aggregated for brevity; assuming 5 seats in Pittsburgh, 7 in Philadelphia divisions, 5 in Allentown, 5 in Erie, 5 in Reading, 3 in Scranton, 5 in Lancaster)
+    {
+        "state": "Pennsylvania",
+        "office": "Pittsburgh City Council District 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Pittsburgh District 1. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Pittsburgh City Council District 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Pittsburgh District 2. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Pittsburgh City Council District 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Pittsburgh District 3. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Pittsburgh City Council District 4",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Pittsburgh District 4. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Pittsburgh City Council District 5",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Pittsburgh District 5. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Philadelphia City Council At-Large Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large City Council seat in Philadelphia. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Philadelphia City Council District 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Philadelphia District 1. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Philadelphia City Council District 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Philadelphia District 2. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Philadelphia City Council District 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Philadelphia District 3. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Philadelphia City Council District 4",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Philadelphia District 4. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Allentown City Council Ward 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Allentown Ward 1. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Allentown City Council Ward 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Allentown Ward 2. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Allentown City Council Ward 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Allentown Ward 3. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Allentown City Council Ward 4",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Allentown Ward 4. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Allentown City Council Ward 5",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Allentown Ward 5. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Erie City Council District 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Erie District 1. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Erie City Council District 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Erie District 2. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Erie City Council District 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Erie District 3. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Erie City Council District 4",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Erie District 4. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Erie City Council District 5",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Erie District 5. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Reading City Council Ward 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Reading Ward 1. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Reading City Council Ward 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Reading Ward 2. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Reading City Council Ward 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Reading Ward 3. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Reading City Council Ward 4",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Reading Ward 4. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Reading City Council Ward 5",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Reading Ward 5. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Scranton City Council District 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Scranton District 1. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Scranton City Council District 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Scranton District 2. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Scranton City Council District 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Scranton District 3. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Lancaster City Council At-Large Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large City Council seat in Lancaster. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Lancaster City Council At-Large Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large City Council seat in Lancaster. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Lancaster City Council Ward 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "City Council seat in Lancaster Ward 1. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    # School Boards: 25 seats across major cities (2025, aggregated; assuming 4 in Philadelphia, 5 in Pittsburgh, 4 in Allentown, 4 in Erie, 4 in Reading, 4 in Scranton)
+    {
+        "state": "Pennsylvania",
+        "office": "Philadelphia School Board At-Large Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board at-large seat in Philadelphia School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Philadelphia School Board At-Large Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board at-large seat in Philadelphia School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Philadelphia School Board District 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board District 1 seat in Philadelphia School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Philadelphia School Board District 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board District 2 seat in Philadelphia School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Pittsburgh School Board District 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board District 1 seat in Pittsburgh Public Schools. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Pittsburgh School Board District 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board District 2 seat in Pittsburgh Public Schools. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Pittsburgh School Board District 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board District 3 seat in Pittsburgh Public Schools. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Pittsburgh School Board District 4",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board District 4 seat in Pittsburgh Public Schools. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Pittsburgh School Board District 5",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board District 5 seat in Pittsburgh Public Schools. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Allentown School Board Region 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board Region 1 seat in Allentown School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Allentown School Board Region 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board Region 2 seat in Allentown School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Allentown School Board Region 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board Region 3 seat in Allentown School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Allentown School Board Region 4",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board Region 4 seat in Allentown School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Erie School Board At-Large Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board at-large seat in Erie School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Erie School Board At-Large Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board at-large seat in Erie School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Erie School Board At-Large Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board at-large seat in Erie School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Erie School Board At-Large Seat 4",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board at-large seat in Erie School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Reading School Board At-Large Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board at-large seat in Reading School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Reading School Board At-Large Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board at-large seat in Reading School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Reading School Board At-Large Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board at-large seat in Reading School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Reading School Board At-Large Seat 4",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board at-large seat in Reading School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Scranton School Board District 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board District 1 seat in Scranton School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Scranton School Board District 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board District 2 seat in Scranton School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Scranton School Board District 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board District 3 seat in Scranton School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Scranton School Board District 4",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "School Board District 4 seat in Scranton School District. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    # County Positions: 10 races (sheriff, commissioner, clerk, etc.) (2025)
+    {
+        "state": "Pennsylvania",
+        "office": "Allegheny County Sheriff",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Sheriff election in Allegheny County. Incumbent Kevin Kraus seeking re-election. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Allegheny County Commissioner",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "County Commissioner election in Allegheny County. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Dauphin County Sheriff",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Sheriff election in Dauphin County. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Dauphin County Commissioner",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "County Commissioner election in Dauphin County. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Erie County Clerk of Courts",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Clerk of Courts election in Erie County. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Erie County Commissioner",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "County Commissioner election in Erie County. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Philadelphia County Sheriff",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Sheriff election in Philadelphia County. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Philadelphia County Commissioner",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "County Commissioner election in Philadelphia County. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Lancaster County Prothonotary",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Prothonotary election in Lancaster County. Research from Ballotpedia and Pennsylvania.gov."
+    },
+    {
+        "state": "Pennsylvania",
+        "office": "Lancaster County Commissioner",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "County Commissioner election in Lancaster County. Research from Ballotpedia and Pennsylvania.gov."
+    }
+]

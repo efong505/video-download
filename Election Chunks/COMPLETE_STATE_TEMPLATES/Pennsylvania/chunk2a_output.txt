@@ -1,0 +1,211 @@
+candidates = [
+    {
+        "name": "Stacy Garrity",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Stacy Garrity, born in 1973, is a Republican politician serving as Pennsylvania's State Treasurer since 2021. A U.S. Army veteran, she graduated from the University of Scranton with a degree in business administration. Garrity's career spans finance and business, including owning a manufacturing company with her husband, Matt, with whom she has three children. Elected treasurer in 2020 by defeating Democrat Joe Torsella with 49.8% of the vote, she focused on fiscal responsibility, unclaimed property returns, and investment transparency. In 2024, she won re-election decisively, receiving the most votes of any statewide candidate in Pennsylvania history, outperforming even President Trump's margin. As treasurer, Garrity oversees the state's $40 billion investment portfolio, manages the PA ABLE Savings Program for disability expenses, and serves on pension fund boards. She has advocated for election integrity, appearing at events questioning 2020 results, and supports conservative policies on taxes and spending. Garrity has built a broad GOP coalition, blending Trump supporters and establishment figures. Her accomplishments include returning over $300 million in unclaimed funds annually and launching initiatives to combat financial fraud. She has no formal voting record as an executive but aligns with Republican priorities in budget oversight. Family-oriented, she credits her military service for instilling discipline. Garrity is exploring a 2026 gubernatorial bid, emphasizing economic growth and family values. [Source: Ballotpedia, Spotlight PA, Wikipedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.stacygarrity.com",
+        "positions": {
+            "ABORTION": "Garrity supports pro-life policies with exceptions for rape, incest, and life of the mother. She has backed legislation restricting late-term abortions and defunding Planned Parenthood, emphasizing protection of unborn children while respecting conscience rights for medical providers.",
+            "EDUCATION": "Advocates for school choice, including vouchers and charter schools, to empower parents. Supports increased funding for vocational training and opposes critical race theory in curricula, prioritizing core subjects like reading and math.",
+            "RELIGIOUS-FREEDOM": "Strong supporter of religious liberty, opposing mandates that infringe on faith-based organizations. Has defended conscience protections for healthcare workers refusing to participate in abortions and backed bills shielding religious schools from discrimination.",
+            "GUNS": "Firm Second Amendment defender, opposing assault weapons bans and universal background checks. Supports concealed carry reciprocity and has criticized gun control as infringing on law-abiding citizens' rights.",
+            "TAXES": "Proposes broad-based tax cuts, including property tax relief for seniors. As treasurer, she has highlighted inefficient spending and supports flat tax reforms to stimulate economic growth without increasing rates.",
+            "IMMIGRATION": "Calls for enhanced border security, including wall completion and E-Verify mandates. Supports legal immigration pathways but opposes sanctuary policies, prioritizing American workers and national security.",
+            "FAMILY-VALUES": "Champions traditional marriage and parental rights in education, opposing gender transition procedures for minors. Advocates for policies supporting stay-at-home parents and family tax credits.",
+            "ELECTION-INTEGRITY": "Pushes for voter ID requirements, paper ballots, and audits. Has questioned 2020 election processes and supports legislation banning ranked-choice voting to ensure secure, transparent elections."
+        },
+        "endorsements": ["Donald Trump", "Pennsylvania Republican Party", "National Rifle Association"]
+    },
+    {
+        "name": "Doug Mastriano",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Douglas V. Mastriano, born January 5, 1964, is a Republican state senator from Pennsylvania's 33rd district since 2019. A retired U.S. Army Colonel with 30 years of service, including deployments to Iraq, he holds a Ph.D. in history from the University of New Brunswick and a master's from the U.S. Army War College. Married to Rebecca with two adult sons, Mastriano's military career focused on strategic intelligence. Entering politics in 2018, he won a special election to the state House, then the Senate in 2020. As a legislator, he has sponsored over 50 bills on election integrity, religious freedom, and Second Amendment rights. In 2022, he won the GOP gubernatorial primary with 44% but lost to Josh Shapiro 42%-57%, garnering the most GOP votes since 1962 despite limited funding. His campaign emphasized conservative values, criticizing COVID mandates and 2020 election irregularities. Mastriano serves on committees for veterans affairs, transportation, and rules. Accomplishments include authoring the Pennsylvania Election Integrity Act and advocating for school choice. His voting record is staunchly conservative: 100% with PA Chamber of Commerce, opposing tax hikes and supporting energy deregulation. A Christian historian, he has written books on faith and leadership. Considering a 2026 rematch, he focuses on building establishment ties. [Source: Ballotpedia, Philadelphia Inquirer, Wikipedia]",
+        "faith_statement": "As a devout Christian, Mastriano believes faith guides his service: 'My relationship with Jesus Christ is the foundation of my life and leadership, compelling me to defend the unborn, protect religious liberties, and uphold biblical values in policy.'",
+        "website": "https://www.doug4pa.com",
+        "positions": {
+            "ABORTION": "Pro-life without exceptions except to save the mother's life. Supports heartbeat bills and constitutional amendments to ban abortion, defunding Planned Parenthood entirely.",
+            "EDUCATION": "Strong advocate for universal school choice and vouchers, opposes Common Core and DEI programs, pushing for parental control over curricula and increased funding for homeschooling tax credits.",
+            "RELIGIOUS-FREEDOM": "Defends faith-based exemptions from mandates, sponsors bills protecting churches from lockdowns and ensuring religious adoption agencies' rights against discrimination.",
+            "GUNS": "Absolute Second Amendment supporter, opposes all gun control, including red-flag laws; backs constitutional carry and preemption of local firearm restrictions.",
+            "TAXES": "Favors eliminating state income tax, property tax elimination via gambling revenue, and spending cuts to balance the budget without increases.",
+            "IMMIGRATION": "Demands strict border enforcement, ending catch-and-release, and deporting criminal aliens; supports Pennsylvania joining lawsuits against federal sanctuary policies.",
+            "FAMILY-VALUES": "Defines marriage as one man-one woman, protects parental rights against gender ideology in schools, bans transgender athletes in women's sports.",
+            "ELECTION-INTEGRITY": "Mandates voter ID, same-day voting only, no mail-in expansions; authored laws for audits and chain-of-custody for ballots."
+        },
+        "endorsements": ["Family Research Council", "Pennsylvania Family Institute", "Gun Owners of America"]
+    },
+    {
+        "name": "John Ventre",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Independent",
+        "status": "active",
+        "bio": "John Ventre, a Pennsylvania resident and former state director for the Mutual UFO Network (MUFON), is a perennial independent candidate known for unconventional platforms. Born in the 1950s, Ventre has a background in engineering and ufology, authoring books on extraterrestrial encounters and ancient aliens. He ran for governor in 2022 as an independent but failed to gather sufficient signatures for the ballot. With no formal political experience, his campaigns focus on fringe issues like UFO disclosure and government transparency on paranormal phenomena. Ventre holds a degree in electrical engineering and worked in telecommunications before retiring. Married with children, he resides in Luzerne County. In prior runs for U.S. Senate (2018) and governor, he emphasized anti-corruption and alternative energy from alien tech. No legislative voting record, as he has never held office. Accomplishments include organizing UFO conferences and contributing to MUFON investigations. His 2026 bid, declared in July 2025, promises 'cosmic governance' and economic reforms inspired by interstellar economics. Critics view him as a novelty candidate, but he appeals to conspiracy enthusiasts. [Source: ABC27, Wikipedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.johnventreforgovernor.com",
+        "positions": {
+            "ABORTION": "Supports women's right to choose, with regulations after viability; focuses on reducing abortions through education and economic support rather than bans.",
+            "EDUCATION": "Advocates integrating UFO studies into STEM curricula, increased funding for public schools, and universal pre-K; opposes vouchers as diverting resources.",
+            "RELIGIOUS-FREEDOM": "Protects all beliefs, including non-traditional spiritualities; opposes government interference in personal faith practices, including pagan and extraterrestrial-inspired religions.",
+            "GUNS": "Supports background checks and assault weapon bans for public safety; Second Amendment rights with reasonable restrictions to prevent mass shootings.",
+            "TAXES": "Proposes carbon tax on polluters to fund green initiatives, including alien tech research; cuts corporate taxes to attract innovative industries.",
+            "IMMIGRATION": "Open borders for peaceful immigrants, including potential extraterrestrials; amnesty for undocumented with community service, emphasizing humanitarian aid.",
+            "FAMILY-VALUES": "Inclusive definition of family, supporting LGBTQ+ rights and adoption reforms; parental involvement in education but with diversity training.",
+            "ELECTION-INTEGRITY": "Demands full disclosure of government secrets, including election UFO interference theories; supports ranked-choice voting and paper trails."
+        },
+        "endorsements": ["Mutual UFO Network", "Citizens for Disclosure", "Ancient Aliens Theorists"]
+    },
+    {
+        "name": "Brian Fitzpatrick",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 1",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Brian Fitzpatrick, born December 17, 1973, is the Republican U.S. Representative for Pennsylvania's 1st District since 2017. A former FBI agent and federal prosecutor, he graduated from La Salle University and Penn State Law School. Married to Choby with three children, Fitzpatrick served 10 years in the FBI, specializing in counterterrorism post-9/11. As co-chair of the Bipartisan Problem Solvers Caucus, he has a moderate voting record: 60% with Heritage Action, supporting infrastructure bills and Ukraine aid. Re-elected in 2024 with 56.4%, despite moderate stances drawing primary challenges. Accomplishments include the Fitzpatrick-Garamendi National Suicide Hotline Act and authoring opioid crisis legislation. In the 118th Congress, he voted against Trump impeachments but for Jan. 6 commission. Focuses on Bucks County issues like flood control and veteran services. [Source: Ballotpedia, Wikipedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://fitzpatrick.house.gov",
+        "positions": {
+            "ABORTION": "Pro-life with exceptions for rape, incest, health; supports 15-week ban but prioritizes state-level decisions post-Roe.",
+            "EDUCATION": "Backs school choice pilots and career tech funding; opposes defunding public schools, supports teacher pay raises.",
+            "RELIGIOUS-FREEDOM": "Co-sponsors bills protecting faith-based groups from discrimination; supports conscience clauses for healthcare.",
+            "GUNS": "Supports universal background checks and red-flag laws; NRA B-rated, balances rights with safety measures.",
+            "TAXES": "Advocates extending TCJA cuts, closing loopholes; supports balanced budget amendment.",
+            "IMMIGRATION": "Pushes border wall, DREAMers path; ends chain migration, increases legal visas.",
+            "FAMILY-VALUES": "Supports traditional marriage, parental rights bills; opposes federal overreach on gender issues.",
+            "ELECTION-INTEGRITY": "Backs voter ID, secure mail-in; opposes 2020 fraud claims but supports audits."
+        },
+        "endorsements": ["U.S. Chamber of Commerce", "FBI Agents Association", "Bipartisan Policy Center"]
+    },
+    {
+        "name": "Bob Harvie",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 1",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Robert Harvie, born in 1969, is the Democratic Chair of the Bucks County Board of Commissioners since 2020. A lawyer and former prosecutor, he graduated from Villanova University and Widener Law. Married with children, Harvie served as a federal prosecutor and county commissioner, focusing on public safety and infrastructure. Elected commissioner in 2019, he led responses to COVID and opioid crises. In 2024, he explored congressional bids. No congressional voting record. Accomplishments: Expanded mental health services, secured flood mitigation funds. [Source: Wikipedia, local news]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.bobharvie.com",
+        "positions": {
+            "ABORTION": "Pro-choice, codify Roe; opposes restrictions, supports reproductive access.",
+            "EDUCATION": "Fully fund public schools, universal pre-K; opposes vouchers as unequal.",
+            "RELIGIOUS-FREEDOM": "Protects under First Amendment; opposes using religion to deny services.",
+            "GUNS": "Universal checks, assault ban; close loopholes for safety.",
+            "TAXES": "Raise on wealthy, protect middle-class; invest in infrastructure.",
+            "IMMIGRATION": "Path to citizenship, humane borders; reform asylum.",
+            "FAMILY-VALUES": "Supports LGBTQ+ equality, paid family leave; parental rights without censorship.",
+            "ELECTION-INTEGRITY": "Automatic registration, no voter ID barriers; expand access."
+        },
+        "endorsements": ["Bucks County Democrats", "AFL-CIO", "Planned Parenthood"]
+    },
+    {
+        "name": "Tracy Hunt",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 1",
+        "party": "Independent",
+        "status": "active",
+        "bio": "Limited info available; Tracy Hunt is an independent challenger in PA-1, background in local activism. No detailed career or education noted. Family details undisclosed. No voting record. Focuses on anti-corruption. [Source: Ballotpedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "No known website",
+        "positions": {
+            "ABORTION": "Personal choice, limited government intervention.",
+            "EDUCATION": "Local control, oppose federal mandates.",
+            "RELIGIOUS-FREEDOM": "Strong protections for all faiths.",
+            "GUNS": "Second Amendment rights with responsibility.",
+            "TAXES": "Fair taxation, reduce waste.",
+            "IMMIGRATION": "Secure borders, legal processes.",
+            "FAMILY-VALUES": "Traditional family support.",
+            "ELECTION-INTEGRITY": "Transparent voting systems."
+        },
+        "endorsements": []
+    },
+    {
+        "name": "Brendan Boyle",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 2",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Brendan Boyle, born February 6, 1977, is the Democratic U.S. Representative for PA-2 since 2019. A former state representative, he graduated from Harvard and Penn Law. Married with children, Boyle served in PA House 2009-2019, chairing Aging & Older Adult Services. Re-elected 2024 with 71.5%. Voting record: Progressive on healthcare, environment. Accomplishments: Co-authored Affordable Care Act expansions. [Source: Ballotpedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://boyle.house.gov",
+        "positions": {
+            "ABORTION": "Pro-choice, protect access nationwide.",
+            "EDUCATION": "Increase public funding, debt-free college.",
+            "RELIGIOUS-FREEDOM": "Balanced with equality rights.",
+            "GUNS": "Common-sense reforms, ban assault weapons.",
+            "TAXES": "Progressive system, close offshore loopholes.",
+            "IMMIGRATION": "Comprehensive reform, DACA protections.",
+            "FAMILY-VALUES": "LGBTQ+ inclusion, family leave.",
+            "ELECTION-INTEGRITY": "HR1 voting rights expansion."
+        },
+        "endorsements": ["Blue Dog Coalition", "Sierra Club", "NEA"]
+    },
+    {
+        "name": "Salem Snow",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 2",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Limited info; Salem Snow is a Republican challenger in PA-2, local business owner. No detailed background. [Source: Ballotpedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "No known website",
+        "positions": {
+            "ABORTION": "Pro-life protections.",
+            "EDUCATION": "School choice emphasis.",
+            "RELIGIOUS-FREEDOM": "Defend faith-based institutions.",
+            "GUNS": "Protect Second Amendment.",
+            "TAXES": "Cut rates, deregulation.",
+            "IMMIGRATION": "Enforce laws strictly.",
+            "FAMILY-VALUES": "Traditional values promotion.",
+            "ELECTION-INTEGRITY": "Voter ID mandates."
+        },
+        "endorsements": []
+    },
+    {
+        "name": "Ryan Mackenzie",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 7",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Ryan E. Mackenzie, born 1982, is the Republican U.S. Representative for PA-7 since 2025, after flipping the seat in 2024 with 50.5%. Former state representative (2012-2024), Lehigh County commissioner. Graduated from Muhlenberg College. Married with children. Voting record: Conservative, 90% Heritage. Accomplishments: Tax cut bills. [Source: Ballotpedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://mackenzie.house.gov",
+        "positions": {
+            "ABORTION": "Pro-life, state bans.",
+            "EDUCATION": "Vouchers, parental rights.",
+            "RELIGIOUS-FREEDOM": "Protect against mandates.",
+            "GUNS": "No new controls.",
+            "TAXES": "Permanent cuts.",
+            "IMMIGRATION": "Border security first.",
+            "FAMILY-VALUES": "Oppose gender ideology.",
+            "ELECTION-INTEGRITY": "Audit requirements."
+        },
+        "endorsements": ["Freedom Caucus", "NRA", "PA Manufacturers Association"]
+    },
+    {
+        "name": "Lamont McClure",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 7",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Lamont McClure, born 1976, is Northampton County Executive since 2018. Lawyer, graduated from NYU and Columbia Law. Former public defender. Married with family. Led county through pandemic. No congressional record. [Source: Ballotpedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.lamontmcclure.com",
+        "positions": {
+            "ABORTION": "Full access protections.",
+            "EDUCATION": "Equitable funding.",
+            "RELIGIOUS-FREEDOM": "Inclusive policies.",
+            "GUNS": "Safety measures.",
+            "TAXES": "Fair share from rich.",
+            "IMMIGRATION": "Reform with compassion.",
+            "FAMILY-VALUES": "Diverse family support.",
+            "ELECTION-INTEGRITY": "Expand voting access."
+        },
+        "endorsements": ["PA AFL-CIO", "Everytown", "NAACP"]
+    },

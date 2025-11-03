@@ -11,27 +11,27 @@
 
 **TOTAL FOR PART 1: 14,000 words minimum**
 
-## CRITICAL ANTI-ABBREVIATION RULES:
+## 🚨 CRITICAL ANTI-ABBREVIATION RULES:
 
 ### ABSOLUTELY FORBIDDEN:
-- NO "[REPEAT FOR Districts...]"
-- NO "[Full format]"
-- NO "[Continue...]"
-- NO "etc." or "..."
-- NO "D" or "R" abbreviations
+- ❌ "[REPEAT FOR Districts...]"
+- ❌ "[Full format]"
+- ❌ "[Continue...]"
+- ❌ "etc." or "..."
+- ❌ "D" or "R" abbreviations
 
 ### ABSOLUTELY REQUIRED:
-- Write EVERY House district completely
-- Write EVERY school board completely
-- Full paragraphs, no shortcuts
-- Spell out "Democrat" and "Republican"
+- ✅ Write EVERY House district completely
+- ✅ Write EVERY school board completely
+- ✅ Full paragraphs, no shortcuts
+- ✅ Spell out "Democrat" and "Republican"
 
 ## OUTPUT FORMAT:
 
 ```markdown
 # Pennsylvania 2025-2026 Elections - Complete Christian Conservatives Today Guide
 
-## Database Summary
+## 📊 Database Summary
 
 **Total Races Documented:** [NUMBER]
 **Total Candidates Profiled:** [NUMBER]
@@ -41,25 +41,33 @@
 
 ---
 
-## PENNSYLVANIA POLITICAL LANDSCAPE
+## 🔴 PENNSYLVANIA POLITICAL LANDSCAPE
 
 [Write 5-7 full paragraphs. MINIMUM 2,000 words]
 
 ---
 
-[FEDERAL RACES - FULL FORMAT FOR EACH]
+## 🔴 2026 FEDERAL RACES
+
+[FULL FORMAT FOR EACH RACE]
 
 ---
 
-[STATE RACES - FULL FORMAT FOR EACH]
+## 🔴 2025 STATE RACES
+
+[FULL FORMAT FOR EACH RACE]
 
 ---
 
-[SCHOOL BOARD RACES - FULL FORMAT FOR EACH]
+## 🔴 2025 SCHOOL BOARD RACES
+
+[FULL FORMAT FOR EACH RACE]
 
 ---
 
-[MUNICIPAL RACES - FULL FORMAT FOR EACH]
+## 🔴 2025 MUNICIPAL RACES
+
+[FULL FORMAT FOR EACH RACE]
 
 ---
 

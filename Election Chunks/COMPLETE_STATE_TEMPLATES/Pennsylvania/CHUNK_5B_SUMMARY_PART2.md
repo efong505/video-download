@@ -11,28 +11,28 @@
 
 **TOTAL FOR PART 2: 11,500+ words minimum**
 
-## CRITICAL ANTI-ABBREVIATION RULES:
+## 🚨 CRITICAL ANTI-ABBREVIATION RULES:
 
 ### ABSOLUTELY FORBIDDEN:
-- NO "[Continue...]"
-- NO "etc." or "..."
-- NO abbreviations
+- ❌ "[Continue...]"
+- ❌ "etc." or "..."
+- ❌ abbreviations
 
 ### ABSOLUTELY REQUIRED:
-- Write ALL 8 key issues completely
-- Full prose, no shortcuts
-- Complete scripture quotes
+- ✅ Write ALL 8 key issues completely
+- ✅ Full prose, no shortcuts
+- ✅ Complete scripture quotes
 
 ## OUTPUT FORMAT:
 
 ```markdown
-## COUNTY ELECTIONS
+## 🔴 COUNTY ELECTIONS
 
 [Full paragraphs on county races]
 
 ---
 
-## KEY ISSUES FOR PENNSYLVANIA CHRISTIAN CONSERVATIVES
+## 🔴 KEY ISSUES FOR PENNSYLVANIA CHRISTIAN CONSERVATIVES
 
 ### Life & Family
 [3-4 paragraphs conservative position]
@@ -63,32 +63,32 @@
 
 ---
 
-## CHURCH MOBILIZATION STRATEGY
+## 🔴 CHURCH MOBILIZATION STRATEGY
 
 [Full paragraphs on what pastors can do]
 [Full paragraphs on what members can do]
 
 ---
 
-## CRITICAL DATES
+## 🔴 CRITICAL DATES
 
 [Full paragraphs explaining each date]
 
 ---
 
-## RESOURCES
+## 🔴 RESOURCES
 
 [Full paragraphs on each resource]
 
 ---
 
-## BOTTOM LINE
+## 🔴 BOTTOM LINE
 
 [Full paragraphs on what's at stake]
 
 ---
 
-## PRAYER POINTS
+## 🔴 PRAYER POINTS
 
 [Full paragraphs with scripture]
 

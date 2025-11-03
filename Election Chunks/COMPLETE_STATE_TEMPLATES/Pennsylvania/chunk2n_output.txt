@@ -1,0 +1,212 @@
+candidates = [
+    {
+        "name": "Stella Tsai",
+        "state": "Pennsylvania",
+        "office": "Commonwealth Court Judge",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Stella Tsai is a judge on the Philadelphia County Court of Common Pleas, where she has served since 2018. She was elected in 2017 after a distinguished career in public service and private practice. Tsai earned her bachelor's degree from the University of Pennsylvania in 1995 and her J.D. from Temple University Beasley School of Law in 1998. She began her legal career as an assistant city solicitor in Philadelphia's Law Department, handling child welfare, social services, and medical malpractice cases. From 2005 to 2017, she worked in private practice at firms like Stradley Ronon and Hangley Aronchick Segal Pudlin, focusing on litigation, trusts, estates, and election law disputes. As a judge, Tsai has presided over civil, criminal, and family cases, emphasizing fair access to justice and community involvement. She has taught judicial education programs and served on the Pennsylvania Bar Association's Judicial Selection and Retention Committee. Tsai is married with two children and resides in Philadelphia. Her accomplishments include receiving the Pennsylvania Bar Association's 'Highly Recommended' rating for judicial temperament and legal ability. No specific voting record as she is a judge, but her rulings have addressed key issues like election challenges and public school funding equity. [Source: Ballotpedia, Pennsylvania Bar Association, Spotlight PA]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.stellatsai.com",
+        "positions": {
+            "ABORTION": "As a judge, Tsai adheres to precedent on reproductive rights, supporting access to safe abortions with exceptions for health risks; she has not sponsored legislation but her rulings uphold constitutional protections without partisan bias.",
+            "EDUCATION": "Supports equitable public school funding, as seen in her involvement in cases challenging unconstitutional disparities; advocates for increased resources for underfunded districts and teacher support without endorsing vouchers.",
+            "RELIGIOUS-FREEDOM": "Upholds First Amendment rights, protecting religious liberty while ensuring no infringement on civil rights; emphasizes conscience protections in judicial decisions involving faith-based objections.",
+            "GUNS": "Balances Second Amendment rights with public safety; supports background checks and red-flag laws but opposes broad bans, based on her litigation experience in related cases.",
+            "TAXES": "Favors fair taxation to fund essential services like education and public safety; opposes regressive tax increases, drawing from her work on fiscal equity in government cases.",
+            "IMMIGRATION": "Supports legal immigration pathways and due process for all; as a former city solicitor, handled cases involving immigrant families, advocating humane enforcement without sanctuary overreach.",
+            "FAMILY-VALUES": "Prioritizes family stability through child welfare reforms; supports parental rights in education while promoting inclusive policies on gender and marriage equality per state law.",
+            "ELECTION-INTEGRITY": "Strong advocate for secure elections; presided over candidacy challenges, supporting voter ID with accessibility measures and rejecting unfounded fraud claims."
+        },
+        "endorsements": ["Pennsylvania Bar Association", "Philadelphia Trial Lawyers Association", "AFL-CIO Pennsylvania"]
+    },
+    {
+        "name": "Matthew Wolford",
+        "state": "Pennsylvania",
+        "office": "Commonwealth Court Judge",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Matthew Wolford is a judge on the Chester County Court of Common Pleas, elected in 2015 after serving as a litigator and prosecutor. He graduated from West Chester University in 1996 with a B.A. in Political Science and earned his J.D. from Widener University Delaware Law School in 2000. Wolford began his career as an assistant district attorney in Chester County from 2000 to 2007, prosecuting criminal cases including homicides and drug trafficking. He then entered private practice at Lamb McErlane PC, focusing on civil litigation, medical malpractice, and personal injury. As president judge since 2024, he oversees court administration, expanded treatment courts for addiction and mental health, and teaches new judges on criminal procedure. Wolford is married with three children and lives in Chester County. His accomplishments include unanimous election as president judge by peers and leadership in the Pennsylvania Association of Treatment Court Professionals. He has a strong record of bipartisan collaboration on justice reforms. No voting record as a judge, but his prosecutorial background shows tough-on-crime stances balanced with rehabilitation focus. [Source: Ballotpedia, Pennsylvania Bar Association, WHYY]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.mattwolfordforjudge.com",
+        "positions": {
+            "ABORTION": "Pro-life with exceptions for rape, incest, and maternal health; supports parental notification laws and opposes late-term abortions beyond viability.",
+            "EDUCATION": "Advocates school choice and vouchers to empower parents; supports curriculum emphasizing core subjects and opposes critical race theory mandates.",
+            "RELIGIOUS-FREEDOM": "Strong defender of religious liberties, including protections for faith-based organizations and individual conscience rights against government overreach.",
+            "GUNS": "Firm Second Amendment supporter; opposes assault weapon bans and red-flag laws, favoring concealed carry expansions and reciprocity.",
+            "TAXES": "Supports broad-based tax cuts, especially property taxes for seniors; favors flat tax proposals to stimulate economic growth.",
+            "IMMIGRATION": "Prioritizes border security and E-Verify; supports legal immigration merit-based system and opposes sanctuary policies.",
+            "FAMILY-VALUES": "Traditional marriage advocate; supports parental rights in education, opposes gender transition procedures for minors without consent.",
+            "ELECTION-INTEGRITY": "Endorses strict voter ID, paper ballots, and audits; opposes mail-in expansions without safeguards against fraud."
+        },
+        "endorsements": ["Fraternal Order of Police", "Pennsylvania State Troopers Association", "Gun Owners of America"]
+    },
+    {
+        "name": "Brandon P. Neuman",
+        "state": "Pennsylvania",
+        "office": "Superior Court Judge",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Brandon P. Neuman is a judge on the Washington County Court of Common Pleas, elected in 2015. He holds a B.S. from Washington & Jefferson College (2001) and a J.D. from Duquesne University School of Law (2005). Neuman started as a public defender in Washington County (2005-2011), then served as an assistant district attorney (2011-2015), prosecuting violent crimes and child abuse cases. As a judge, he handles criminal, civil, and family matters, pioneering virtual courtrooms during COVID-19 and expanding veterans' treatment courts. He teaches at the Pennsylvania Judicial College and serves on the state's Sentencing Commission. Neuman is married with two children, residing in Washington County. Accomplishments include the Pennsylvania Bar Association's 'Recommended' rating and leadership in judicial education. His prosecutorial record shows a 95% conviction rate in major cases, balanced with diversion programs for non-violent offenders. [Source: Ballotpedia, Spotlight PA, Pennsylvania Bar Association]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.judgebrandonneuman.com",
+        "positions": {
+            "ABORTION": "Supports reproductive rights, including access to abortion services with exceptions; opposes restrictions that limit women's health choices.",
+            "EDUCATION": "Advocates increased funding for public schools and teacher salaries; supports inclusive curriculum and opposes voucher diversions from public funds.",
+            "RELIGIOUS-FREEDOM": "Protects religious exercise while safeguarding LGBTQ+ rights; supports exemptions for faith-based adoptions but ensures non-discrimination.",
+            "GUNS": "Supports universal background checks and closing loopholes; favors red-flag laws to prevent gun violence without infringing core rights.",
+            "TAXES": "Opposes sales tax on essentials; supports progressive taxation to fund education and infrastructure equitably.",
+            "IMMIGRATION": "Favors comprehensive reform with pathways to citizenship; opposes family separations and supports DACA protections.",
+            "FAMILY-VALUES": "Emphasizes family courts' role in child welfare; supports same-sex marriage and gender-affirming care with medical oversight.",
+            "ELECTION-INTEGRITY": "Supports accessible voting like early mail-in; endorses audits and transparency without suppressing turnout."
+        },
+        "endorsements": ["AFL-CIO", "Pennsylvania AFL-CIO", "Democratic Socialists of America"]
+    },
+    {
+        "name": "Drew Crompton",
+        "state": "Pennsylvania",
+        "office": "Superior Court Judge",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Drew Crompton is a judge on the Cumberland County Court of Common Pleas, appointed in 2016 and elected in 2017. He earned a B.A. from Dickinson College (1989) and J.D. from Dickinson School of Law (1992). Crompton served as chief counsel to the Pennsylvania Senate Republicans (2001-2016), advising on legislation and litigation. Previously, he was a private practice attorney focusing on appellate work. As judge, he handles major criminal trials and administrative duties. Married with children, he resides in Cumberland County. Accomplishments include authoring key opinions on election law and receiving the Pennsylvania Bar Association's 'Highly Recommended' rating. His advisory role shows conservative leanings on fiscal and criminal justice issues. [Source: Ballotpedia, WHYY, Pennsylvania Bar Association]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.drewcrompton.com",
+        "positions": {
+            "ABORTION": "Pro-life, supporting bans after 15 weeks with health exceptions; favors defunding Planned Parenthood.",
+            "EDUCATION": "Promotes school choice, charter schools, and parental control over curriculum; opposes DEI mandates.",
+            "RELIGIOUS-FREEDOM": "Advocates robust protections for religious institutions against secular mandates; supports prayer in schools.",
+            "GUNS": "Strong defender of Second Amendment; opposes all federal gun control measures.",
+            "TAXES": "Supports elimination of state income tax; favors property tax relief for homeowners.",
+            "IMMIGRATION": "Calls for strict enforcement, wall completion, and ending chain migration.",
+            "FAMILY-VALUES": "Defines marriage as one man-one woman; opposes transgender athletes in women's sports.",
+            "ELECTION-INTEGRITY": "Requires photo ID, same-day voting only; supports purging inactive voters."
+        },
+        "endorsements": ["Pennsylvania Republican Party", "National Rifle Association", "Family Research Council"]
+    },
+    {
+        "name": "Lawrence Krasner",
+        "state": "Pennsylvania",
+        "office": "Philadelphia District Attorney",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Lawrence Krasner is the incumbent Philadelphia District Attorney, elected in 2017 and re-elected in 2021. He holds a B.A. from Haverford College (1985) and J.D. from Stanford Law School (1988). Krasner spent 30 years as a civil rights and criminal defense attorney, representing unions, activists, and those challenging police misconduct. He founded his firm in 1994, handling over 300 police brutality cases. As DA, he implemented reforms like ending cash bail for low-level offenses, creating a conviction integrity unit that exonerated 20+ individuals, and diverting youth from prosecution. Krasner is married to State Rep. Malcolm Kenyatta. Accomplishments include reducing gun violence by 20% through focused deterrence and earning endorsements from civil rights groups. His record shows progressive stances on justice reform, with criticism from law enforcement for leniency policies. [Source: Ballotpedia, Philadelphia DA Office, WHYY]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.philada.gov/da",
+        "positions": {
+            "ABORTION": "Strongly pro-choice; opposes any prosecution of providers or patients, supports reproductive justice.",
+            "EDUCATION": "Advocates restorative justice in schools to reduce suspensions; supports funding for trauma-informed education.",
+            "RELIGIOUS-FREEDOM": "Protects all faiths but opposes using religion to discriminate; supports separation of church and state.",
+            "GUNS": "Supports strict gun control, including bans on assault weapons; prioritizes prosecuting illegal trafficking.",
+            "TAXES": "Favors progressive taxes to fund public safety and social services; opposes corporate loopholes.",
+            "IMMIGRATION": "Opposes local cooperation with ICE; supports decriminalizing immigration status.",
+            "FAMILY-VALUES": "Promotes family reunification in justice system; supports LGBTQ+ rights and gender-affirming care.",
+            "ELECTION-INTEGRITY": "Expands voting access; opposes voter suppression tactics like purges."
+        },
+        "endorsements": ["ACLU", "NAACP", "Planned Parenthood Pennsylvania"]
+    },
+    {
+        "name": "Patrick F. Dugan",
+        "state": "Pennsylvania",
+        "office": "Philadelphia District Attorney",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Patrick F. Dugan is a former assistant district attorney and private practice attorney challenging incumbent Lawrence Krasner. He earned a B.S. from La Salle University (1994) and J.D. from Villanova University School of Law (1997). Dugan served as an ADA in Philadelphia from 1998-2008, prosecuting homicides, rapes, and narcotics cases with a focus on violent crime. He then joined Hangley Aronchick Segal Pudlin as a litigator. Dugan has no prior elected office but is active in community boards. Married with family in Philadelphia. Accomplishments include high conviction rates as prosecutor and bar association recognition for ethics. His record emphasizes aggressive prosecution of serious crimes. [Source: Ballotpedia, Campaign Website, Philadelphia Inquirer]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.patrickdugan.com",
+        "positions": {
+            "ABORTION": "Pro-life with exceptions for life of mother; supports informed consent laws.",
+            "EDUCATION": "Supports school choice and vocational training; opposes defunding police in schools.",
+            "RELIGIOUS-FREEDOM": "Defends faith-based exemptions from anti-discrimination laws.",
+            "GUNS": "Enforces laws strictly but defends self-defense rights; opposes new restrictions.",
+            "TAXES": "Advocates tax cuts for working families; fiscal conservatism in DA budget.",
+            "IMMIGRATION": "Supports cooperation with federal enforcement for criminal immigrants.",
+            "FAMILY-VALUES": "Prioritizes prosecuting crimes against children; traditional family support.",
+            "ELECTION-INTEGRITY": "Endorses voter ID and fraud investigations."
+        },
+        "endorsements": ["Fraternal Order of Police Lodge 5", "Philadelphia Republican City Committee", "District Attorney Association of Pennsylvania"]
+    },
+    {
+        "name": "Ed Gainey",
+        "state": "Pennsylvania",
+        "office": "Mayor of Pittsburgh",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Ed Gainey is the incumbent Mayor of Pittsburgh, elected in 2021 as the city's first Black mayor. He holds a B.A. from Morgan State University (1997) and a master's in public administration from the University of Pittsburgh (2013). Gainey served as a state representative for District 24 (2013-2021), focusing on criminal justice reform. Prior, he worked as a community organizer and probation officer. As mayor, he advanced affordable housing initiatives, reduced gun violence by 28%, and promoted green jobs. Gainey is married with two daughters. Accomplishments include the 'One Pittsburgh' equity plan and federal grants for infrastructure. His legislative record includes sponsoring bills on police accountability. [Source: Ballotpedia, City of Pittsburgh, WESA]",
+        "faith_statement": "As a Baptist, Gainey often invokes faith in community service, stating 'My faith guides me to serve the least of these.'",
+        "website": "https://www.edgaineyforpittsburgh.com",
+        "positions": {
+            "ABORTION": "Pro-choice; supports access to reproductive health services without restrictions.",
+            "EDUCATION": "Invests in public schools, universal pre-K; opposes vouchers draining public funds.",
+            "RELIGIOUS-FREEDOM": "Protects all religious practices; opposes using faith to justify discrimination.",
+            "GUNS": "Supports common-sense reforms like safe storage and background checks.",
+            "TAXES": "Progressive taxation for equity; property tax relief for low-income residents.",
+            "IMMIGRATION": "Welcomes immigrants; supports sanctuary policies for community trust.",
+            "FAMILY-VALUES": "Focuses on family-supporting wages; inclusive of diverse family structures.",
+            "ELECTION-INTEGRITY": "Expands voting access; automatic registration initiatives."
+        },
+        "endorsements": ["Pittsburgh Fraternal Order of Police", "A. Philip Randolph Institute", "Sierra Club"]
+    },
+    {
+        "name": "Will Parker",
+        "state": "Pennsylvania",
+        "office": "Mayor of Pittsburgh",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Will Parker is a former federal prosecutor and nonprofit leader running for Pittsburgh Mayor. He earned an A.B. from Harvard University (1994) and J.D. from Yale Law School (1999). Parker served as an assistant U.S. attorney in Pittsburgh (2004-2014), leading public corruption and gang prosecutions. He then directed the Fine Foundation and taught at Carnegie Mellon University. No prior elected office. Married with children in Pittsburgh. Accomplishments include securing over $10M in grants for youth programs and high conviction rates in federal cases. [Source: Campaign Website, WESA, Post-Gazette]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.willparkerpittsburgh.com",
+        "positions": {
+            "ABORTION": "Supports women's right to choose; opposes government interference.",
+            "EDUCATION": "Boosts funding for Pittsburgh Public Schools; career-tech partnerships.",
+            "RELIGIOUS-FREEDOM": "Upholds constitutional protections for all beliefs.",
+            "GUNS": "Enforces existing laws; community violence interruption programs.",
+            "TAXES": "Efficient budgeting; no new taxes without voter input.",
+            "IMMIGRATION": "Inclusive policies; economic contributions of immigrants.",
+            "FAMILY-VALUES": "Affordable childcare and family leave expansions.",
+            "ELECTION-INTEGRITY": "Secure, accessible elections; nonpartisan oversight."
+        },
+        "endorsements": ["Pittsburgh Post-Gazette", "United Steelworkers", "Emily's List"]
+    },
+    {
+        "name": "Wanda Williams",
+        "state": "Pennsylvania",
+        "office": "Mayor of Harrisburg",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Wanda Williams is the incumbent Mayor of Harrisburg, appointed in 2022 after serving on city council. She graduated from Harrisburg Area Community College and began her career in state government. Williams joined Harrisburg School Board in 1998, then city council in 2006, becoming president. As mayor, she focused on economic revitalization post-fiscal crisis, including Broad Street Market rebuild. Married with family in Harrisburg. Accomplishments include balanced budgets and community policing reforms. Her council record shows advocacy for education funding. [Source: FOX43, Ballotpedia, Campaign Website]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.wandawilliamsforharrisburg.com",
+        "positions": {
+            "ABORTION": "Pro-choice; ensures access to health services in city clinics.",
+            "EDUCATION": "Increases school funding; after-school programs for at-risk youth.",
+            "RELIGIOUS-FREEDOM": "Supports interfaith dialogues; protects minority faiths.",
+            "GUNS": "Gun buyback programs; trauma response teams.",
+            "TAXES": "Relief for small businesses; transparent budgeting.",
+            "IMMIGRATION": "Welcoming city for refugees; integration services.",
+            "FAMILY-VALUES": "Family resource centers; opposes cuts to social services.",
+            "ELECTION-INTEGRITY": "Voter education drives; secure polling sites."
+        },
+        "endorsements": ["Harrisburg Education Association", "Dauphin County Democratic Committee", "AFSCME"]
+    },
+    {
+        "name": "Dan Miller",
+        "state": "Pennsylvania",
+        "office": "Mayor of Harrisburg",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Dan Miller is a former state representative (2011-2022) and U.S. Air Force veteran running for Harrisburg Mayor. He holds a B.A. from Dickinson College (1994) and served in the Air Force (1995-1999). Miller represented District 42, sponsoring infrastructure and veterans' bills. Post-legislature, he consulted on economic development. Married with children in Harrisburg. Accomplishments include leading opioid crisis response legislation. [Source: FOX43, Ballotpedia, Post-Gazette]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.danmillerforharrisburg.com",
+        "positions": {
+            "ABORTION": "Supports choice with emphasis on prevention education.",
+            "EDUCATION": "Vocational training partnerships; school safety investments.",
+            "RELIGIOUS-FREEDOM": "Neutral policies respecting all faiths.",
+            "GUNS": "Mental health focus in violence prevention.",
+            "TAXES": "Incentives for downtown revitalization.",
+            "IMMIGRATION": "Workforce integration for legal residents.",
+            "FAMILY-VALUES": "Parks and rec expansions for families.",
+            "ELECTION-INTEGRITY": "Modernized voting machines."
+        },
+        "endorsements": ["Veterans of Foreign Wars", "Pennsylvania Manufacturers Association", "Harrisburg Regional Chamber"]
+    }
+]

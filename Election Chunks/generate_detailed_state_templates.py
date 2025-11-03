@@ -6,56 +6,606 @@ based on each state's actual congressional districts and elections.
 """
 
 STATE_INFO = {
-    "Alabama": {"districts": 7, "senate_year": None, "gov_year": 2026, "assembly_districts": 105, "senate_districts": 35},
-    "Alaska": {"districts": 1, "senate_year": None, "gov_year": 2026, "assembly_districts": 40, "senate_districts": 20},
-    "Arizona": {"districts": 9, "senate_year": None, "gov_year": 2026, "assembly_districts": 30, "senate_districts": 30},
-    "Arkansas": {"districts": 4, "senate_year": None, "gov_year": 2026, "assembly_districts": 100, "senate_districts": 35},
-    "California": {"districts": 52, "senate_year": None, "gov_year": 2026, "assembly_districts": 80, "senate_districts": 40},
-    "Colorado": {"districts": 8, "senate_year": None, "gov_year": 2026, "assembly_districts": 65, "senate_districts": 35},
-    "Connecticut": {"districts": 5, "senate_year": None, "gov_year": 2026, "assembly_districts": 151, "senate_districts": 36},
-    "Delaware": {"districts": 1, "senate_year": 2026, "gov_year": None, "assembly_districts": 41, "senate_districts": 21},
-    "Florida": {"districts": 28, "senate_year": None, "gov_year": 2026, "assembly_districts": 120, "senate_districts": 40},
-    "Georgia": {"districts": 14, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 180, "senate_districts": 56},
-    "Hawaii": {"districts": 2, "senate_year": None, "gov_year": 2026, "assembly_districts": 51, "senate_districts": 25},
-    "Idaho": {"districts": 2, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 70, "senate_districts": 35},
-    "Illinois": {"districts": 17, "senate_year": None, "gov_year": 2026, "assembly_districts": 118, "senate_districts": 59},
-    "Indiana": {"districts": 9, "senate_year": None, "gov_year": 2026, "assembly_districts": 100, "senate_districts": 50},
-    "Iowa": {"districts": 4, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 100, "senate_districts": 50},
-    "Kansas": {"districts": 4, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 125, "senate_districts": 40},
-    "Kentucky": {"districts": 6, "senate_year": None, "gov_year": 2027, "assembly_districts": 100, "senate_districts": 38},
-    "Louisiana": {"districts": 6, "senate_year": 2026, "gov_year": 2027, "assembly_districts": 105, "senate_districts": 39},
-    "Maine": {"districts": 2, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 151, "senate_districts": 35},
-    "Maryland": {"districts": 8, "senate_year": None, "gov_year": 2026, "assembly_districts": 141, "senate_districts": 47},
-    "Massachusetts": {"districts": 9, "senate_year": None, "gov_year": 2026, "assembly_districts": 160, "senate_districts": 40},
-    "Michigan": {"districts": 13, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 110, "senate_districts": 38},
-    "Minnesota": {"districts": 8, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 134, "senate_districts": 67},
-    "Mississippi": {"districts": 4, "senate_year": 2026, "gov_year": 2027, "assembly_districts": 122, "senate_districts": 52},
-    "Missouri": {"districts": 8, "senate_year": None, "gov_year": 2026, "assembly_districts": 163, "senate_districts": 34},
-    "Montana": {"districts": 2, "senate_year": None, "gov_year": 2026, "assembly_districts": 100, "senate_districts": 50},
-    "Nebraska": {"districts": 3, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 49, "senate_districts": 0},
-    "Nevada": {"districts": 4, "senate_year": None, "gov_year": 2026, "assembly_districts": 42, "senate_districts": 21},
-    "New Hampshire": {"districts": 2, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 400, "senate_districts": 24},
-    "New Jersey": {"districts": 12, "senate_year": 2026, "gov_year": 2025, "assembly_districts": 40, "senate_districts": 40},
-    "New Mexico": {"districts": 3, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 70, "senate_districts": 42},
-    "New York": {"districts": 26, "senate_year": None, "gov_year": 2026, "assembly_districts": 150, "senate_districts": 63},
-    "North Carolina": {"districts": 14, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 120, "senate_districts": 50},
-    "North Dakota": {"districts": 1, "senate_year": None, "gov_year": 2026, "assembly_districts": 94, "senate_districts": 47},
-    "Ohio": {"districts": 15, "senate_year": None, "gov_year": 2026, "assembly_districts": 99, "senate_districts": 33},
-    "Oklahoma": {"districts": 5, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 101, "senate_districts": 48},
-    "Oregon": {"districts": 6, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 60, "senate_districts": 30},
-    "Pennsylvania": {"districts": 17, "senate_year": None, "gov_year": 2026, "assembly_districts": 203, "senate_districts": 50},
-    "Rhode Island": {"districts": 2, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 75, "senate_districts": 38},
-    "South Carolina": {"districts": 7, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 124, "senate_districts": 46},
-    "South Dakota": {"districts": 1, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 70, "senate_districts": 35},
-    "Tennessee": {"districts": 9, "senate_year": None, "gov_year": 2026, "assembly_districts": 99, "senate_districts": 33},
-    "Texas": {"districts": 38, "senate_year": None, "gov_year": 2026, "assembly_districts": 150, "senate_districts": 31},
-    "Utah": {"districts": 4, "senate_year": None, "gov_year": 2026, "assembly_districts": 75, "senate_districts": 29},
-    "Vermont": {"districts": 1, "senate_year": None, "gov_year": 2026, "assembly_districts": 150, "senate_districts": 30},
-    "Virginia": {"districts": 11, "senate_year": 2026, "gov_year": 2025, "assembly_districts": 100, "senate_districts": 40},
-    "Washington": {"districts": 10, "senate_year": None, "gov_year": 2026, "assembly_districts": 98, "senate_districts": 49},
-    "West Virginia": {"districts": 2, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 100, "senate_districts": 34},
-    "Wisconsin": {"districts": 8, "senate_year": None, "gov_year": 2026, "assembly_districts": 99, "senate_districts": 33},
-    "Wyoming": {"districts": 1, "senate_year": 2026, "gov_year": 2026, "assembly_districts": 60, "senate_districts": 30}
+    "Alabama": {
+        "districts": 7,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 105,
+        "senate_districts": 35,
+        "major_cities": ["Huntsville", "Birmingham", "Montgomery", "Mobile", "Tuscaloosa"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Alaska": {
+        "districts": 1,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 40,
+        "senate_districts": 20,
+        "major_cities": ["Anchorage", "Fairbanks", "Juneau", "Wasilla", "Sitka"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Arizona": {
+        "districts": 9,
+        "senate_year": None,
+        "gov_year": 2026,
+        "assembly_districts": 30,  # 30 districts, 2 seats each
+        "senate_districts": 30,
+        "major_cities": ["Phoenix", "Tucson", "Mesa", "Chandler", "Gilbert"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Arkansas": {
+        "districts": 4,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 100,
+        "senate_districts": 35,
+        "major_cities": ["Little Rock", "Fayetteville", "Fort Smith", "Springdale", "Jonesboro"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "California": {
+        "districts": 52,
+        "senate_year": None,
+        "gov_year": 2026,
+        "assembly_districts": 80,
+        "senate_districts": 40,
+        "major_cities": ["Los Angeles", "San Diego", "San Jose", "San Francisco", "Fresno"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Colorado": {
+        "districts": 8,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 65,
+        "senate_districts": 35,
+        "major_cities": ["Denver", "Colorado Springs", "Aurora", "Fort Collins", "Lakewood"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Connecticut": {
+        "districts": 5,
+        "senate_year": None,
+        "gov_year": 2026,
+        "assembly_districts": 151,
+        "senate_districts": 36,
+        "major_cities": ["Bridgeport", "Stamford", "New Haven", "Hartford", "Waterbury"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Delaware": {
+        "districts": 1,
+        "senate_year": 2026,
+        "gov_year": None,
+        "assembly_districts": 41,
+        "senate_districts": 21,
+        "major_cities": ["Wilmington", "Dover", "Newark", "Middletown", "Milford"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Florida": {
+        "districts": 28,
+        "senate_year": None,
+        "gov_year": 2026,
+        "assembly_districts": 120,
+        "senate_districts": 40,
+        "major_cities": ["Jacksonville", "Miami", "Tampa", "Orlando", "St. Petersburg"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Georgia": {
+        "districts": 14,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 180,
+        "senate_districts": 56,
+        "major_cities": ["Atlanta", "Columbus", "Augusta", "Macon", "Savannah"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Hawaii": {
+        "districts": 2,
+        "senate_year": None,
+        "gov_year": 2026,
+        "assembly_districts": 51,
+        "senate_districts": 25,
+        "major_cities": ["Honolulu", "East Honolulu", "Pearl City", "Hilo", "Waipahu"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Idaho": {
+        "districts": 2,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 35,  # 35 districts, 2 seats each
+        "senate_districts": 35,
+        "major_cities": ["Boise", "Meridian", "Nampa", "Caldwell", "Idaho Falls"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Illinois": {
+        "districts": 17,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 118,
+        "senate_districts": 59,
+        "major_cities": ["Chicago", "Aurora", "Joliet", "Naperville", "Rockford"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Indiana": {
+        "districts": 9,
+        "senate_year": None,
+        "gov_year": None,
+        "assembly_districts": 100,
+        "senate_districts": 50,
+        "major_cities": ["Indianapolis", "Fort Wayne", "Evansville", "Fishers", "South Bend"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Iowa": {
+        "districts": 4,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 100,
+        "senate_districts": 50,
+        "major_cities": ["Des Moines", "Cedar Rapids", "Davenport", "Sioux City", "Iowa City"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Kansas": {
+        "districts": 4,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 125,
+        "senate_districts": 40,
+        "major_cities": ["Wichita", "Overland Park", "Kansas City", "Olathe", "Topeka"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Kentucky": {
+        "districts": 6,
+        "senate_year": 2026,
+        "gov_year": 2027,
+        "assembly_districts": 100,
+        "senate_districts": 38,
+        "major_cities": ["Louisville", "Lexington", "Bowling Green", "Owensboro", "Covington"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Louisiana": {
+        "districts": 6,
+        "senate_year": 2026,
+        "gov_year": 2027,
+        "assembly_districts": 105,
+        "senate_districts": 39,
+        "major_cities": ["New Orleans", "Baton Rouge", "Shreveport", "Lafayette", "Lake Charles"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Maine": {
+        "districts": 2,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 151,
+        "senate_districts": 35,
+        "major_cities": ["Portland", "Lewiston", "Bangor", "South Portland", "Auburn"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Maryland": {
+        "districts": 8,
+        "senate_year": None,
+        "gov_year": None,
+        "assembly_districts": 141,
+        "senate_districts": 47,
+        "major_cities": ["Baltimore", "Frederick", "Gaithersburg", "Rockville", "Bowie"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Massachusetts": {
+        "districts": 9,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 160,
+        "senate_districts": 40,
+        "major_cities": ["Boston", "Worcester", "Springfield", "Cambridge", "Lowell"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Michigan": {
+        "districts": 13,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 110,
+        "senate_districts": 38,
+        "major_cities": ["Detroit", "Grand Rapids", "Warren", "Sterling Heights", "Ann Arbor"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Minnesota": {
+        "districts": 8,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 134,
+        "senate_districts": 67,
+        "major_cities": ["Minneapolis", "Saint Paul", "Rochester", "Duluth", "Bloomington"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Mississippi": {
+        "districts": 4,
+        "senate_year": 2026,
+        "gov_year": 2027,
+        "assembly_districts": 122,
+        "senate_districts": 52,
+        "major_cities": ["Jackson", "Gulfport", "Southaven", "Hattiesburg", "Biloxi"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Missouri": {
+        "districts": 8,
+        "senate_year": None,
+        "gov_year": None,
+        "assembly_districts": 163,
+        "senate_districts": 34,
+        "major_cities": ["Kansas City", "Saint Louis", "Springfield", "Columbia", "Independence"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Montana": {
+        "districts": 2,
+        "senate_year": 2026,
+        "gov_year": None,
+        "assembly_districts": 100,
+        "senate_districts": 50,
+        "major_cities": ["Billings", "Missoula", "Great Falls", "Bozeman", "Butte"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Nebraska": {
+        "districts": 3,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 0,  # Unicameral
+        "senate_districts": 49,
+        "major_cities": ["Omaha", "Lincoln", "Bellevue", "Grand Island", "Kearney"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Nevada": {
+        "districts": 4,
+        "senate_year": None,
+        "gov_year": 2026,
+        "assembly_districts": 42,
+        "senate_districts": 21,
+        "major_cities": ["Las Vegas", "Henderson", "North Las Vegas", "Reno", "Sparks"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "New Hampshire": {
+        "districts": 2,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 400,
+        "senate_districts": 24,
+        "major_cities": ["Manchester", "Nashua", "Concord", "Rochester", "Dover"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "New Jersey": {
+        "districts": 12,
+        "senate_year": 2026,
+        "gov_year": 2025,
+        "assembly_districts": 40,  # As per example
+        "senate_districts": 40,
+        "major_cities": ["Newark", "Jersey City", "Paterson", "Elizabeth", "Trenton"],
+        "school_board_seats": 22,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 9
+    },
+    "New Mexico": {
+        "districts": 3,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 70,
+        "senate_districts": 42,
+        "major_cities": ["Albuquerque", "Las Cruces", "Rio Rancho", "Santa Fe", "Roswell"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "New York": {
+        "districts": 26,
+        "senate_year": None,
+        "gov_year": 2026,
+        "assembly_districts": 150,
+        "senate_districts": 63,
+        "major_cities": ["New York", "Buffalo", "Yonkers", "Rochester", "Syracuse"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "North Carolina": {
+        "districts": 14,
+        "senate_year": 2026,
+        "gov_year": None,
+        "assembly_districts": 120,
+        "senate_districts": 50,
+        "major_cities": ["Charlotte", "Raleigh", "Greensboro", "Durham", "Winston-Salem"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "North Dakota": {
+        "districts": 1,
+        "senate_year": None,
+        "gov_year": None,
+        "assembly_districts": 94,
+        "senate_districts": 47,
+        "major_cities": ["Fargo", "Bismarck", "Grand Forks", "Minot", "West Fargo"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Ohio": {
+        "districts": 15,
+        "senate_year": None,
+        "gov_year": 2026,
+        "assembly_districts": 99,
+        "senate_districts": 33,
+        "major_cities": ["Columbus", "Cleveland", "Cincinnati", "Toledo", "Akron"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Oklahoma": {
+        "districts": 5,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 101,
+        "senate_districts": 48,
+        "major_cities": ["Oklahoma City", "Tulsa", "Norman", "Broken Arrow", "Edmond"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Oregon": {
+        "districts": 6,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 60,
+        "senate_districts": 30,
+        "major_cities": ["Portland", "Eugene", "Salem", "Gresham", "Hillsboro"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Pennsylvania": {
+        "districts": 17,
+        "senate_year": None,
+        "gov_year": 2026,
+        "assembly_districts": 203,
+        "senate_districts": 50,
+        "major_cities": ["Philadelphia", "Pittsburgh", "Allentown", "Reading", "Erie"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Rhode Island": {
+        "districts": 2,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 75,
+        "senate_districts": 38,
+        "major_cities": ["Providence", "Warwick", "Cranston", "Pawtucket", "East Providence"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "South Carolina": {
+        "districts": 7,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 124,
+        "senate_districts": 46,
+        "major_cities": ["Charleston", "Columbia", "North Charleston", "Mount Pleasant", "Rock Hill"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "South Dakota": {
+        "districts": 1,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 35,  # 35 districts, 2 seats each
+        "senate_districts": 35,
+        "major_cities": ["Sioux Falls", "Rapid City", "Aberdeen", "Brookings", "Watertown"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Tennessee": {
+        "districts": 9,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 99,
+        "senate_districts": 33,
+        "major_cities": ["Nashville", "Memphis", "Knoxville", "Chattanooga", "Clarksville"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Texas": {
+        "districts": 38,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 150,
+        "senate_districts": 31,
+        "major_cities": ["Houston", "San Antonio", "Dallas", "Austin", "Fort Worth"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Utah": {
+        "districts": 4,
+        "senate_year": None,
+        "gov_year": None,
+        "assembly_districts": 75,
+        "senate_districts": 29,
+        "major_cities": ["Salt Lake City", "West Valley City", "West Jordan", "Provo", "St. George"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Vermont": {
+        "districts": 1,
+        "senate_year": None,
+        "gov_year": 2026,
+        "assembly_districts": 150,
+        "senate_districts": 30,
+        "major_cities": ["Burlington", "South Burlington", "Rutland", "Essex Junction", "Barre"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Virginia": {
+        "districts": 11,
+        "senate_year": None,
+        "gov_year": 2025,
+        "assembly_districts": 100,
+        "senate_districts": 40,
+        "major_cities": ["Virginia Beach", "Chesapeake", "Norfolk", "Richmond", "Newport News"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Washington": {
+        "districts": 10,
+        "senate_year": None,
+        "gov_year": None,
+        "assembly_districts": 98,
+        "senate_districts": 49,
+        "major_cities": ["Seattle", "Spokane", "Tacoma", "Vancouver", "Bellevue"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "West Virginia": {
+        "districts": 2,
+        "senate_year": 2026,
+        "gov_year": None,
+        "assembly_districts": 100,
+        "senate_districts": 34,
+        "major_cities": ["Charleston", "Huntington", "Morgantown", "Parkersburg", "Wheeling"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Wisconsin": {
+        "districts": 8,
+        "senate_year": None,
+        "gov_year": 2026,
+        "assembly_districts": 99,
+        "senate_districts": 33,
+        "major_cities": ["Milwaukee", "Madison", "Green Bay", "Kenosha", "Racine"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    },
+    "Wyoming": {
+        "districts": 1,
+        "senate_year": 2026,
+        "gov_year": 2026,
+        "assembly_districts": 62,
+        "senate_districts": 31,
+        "major_cities": ["Cheyenne", "Casper", "Gillette", "Laramie", "Rock Springs"],
+        "school_board_seats": 25,
+        "city_council_seats": 35,
+        "mayoral_races": 3,
+        "county_races": 10
+    }
 }
 
 import os
@@ -68,13 +618,18 @@ def generate_chunk1_detailed(state, info):
     gov_year = info['gov_year']
     assembly = info['assembly_districts']
     senate_districts = info['senate_districts']
+    school_boards = info.get('school_board_seats', 15)
+    city_councils = info.get('city_council_seats', 20)
+    mayors = info.get('mayoral_races', 3)
+    county = info.get('county_races', 10)
     
     # Calculate race counts
     federal_races = (1 if senate_year else 0) + districts
-    state_races = 2 if gov_year == 2025 else 0
-    legislature_races = assembly + senate_districts if gov_year == 2025 else 0
+    state_races = 2 if gov_year in [2025, 2026, 2027] else 0
+    legislature_races = assembly + senate_districts if gov_year in [2025, 2026, 2027] else 0
+    municipal_races = school_boards + city_councils + mayors + county
     
-    total_races = federal_races + state_races + legislature_races + 20  # +20 for school/county
+    total_races = federal_races + state_races + legislature_races + municipal_races
     
     template = f"""# CHUNK 1: {state.upper()} RACES ARRAY ONLY
 
@@ -105,20 +660,23 @@ def generate_chunk1_detailed(state, info):
         template += f"1-{federal_races}. U.S. House Districts 1-{districts} (ALL {districts})\n\n"
     
     if state_races > 0:
-        template += f"""### State (2025) - {state_races} races
+        template += f"""### State ({gov_year}) - {state_races} races
 Governor, Lieutenant Governor
 
 """
     
     if legislature_races > 0:
-        template += f"""### State Legislature (2025) - {legislature_races} races
+        template += f"""### State Legislature ({gov_year}) - {legislature_races} races
 - House/Assembly: {assembly} seats (Districts 1-{assembly})
 - Senate: {senate_districts} seats (Districts 1-{senate_districts})
 
 """
     
-    template += f"""### School Boards + County (2025) - ~20 races
-Major city school boards and county positions
+    template += f"""### Municipal & County (2025-2026) - {municipal_races} races
+- School Boards: {school_boards} seats across major cities
+- City Councils: {city_councils} seats across major cities
+- Mayoral Races: {mayors} races
+- County Positions: {county} races (sheriff, commissioner, clerk, etc.)
 
 ## FORMAT:
 

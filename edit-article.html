@@ -10,6 +10,7 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="assets/js/token-validator.js"></script>
     <style>
         /* MOVED TO common-styles.css
 .dashboard-header {
@@ -150,24 +151,22 @@
     </style>
 </head>
 <body>
-    <div class="dashboard-header">
+    <!-- Unified Navbar -->
+    <div id="navbar-container" data-page="edit-article"></div>
+    <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            })
+            .catch(err => console.error('Failed to load navbar:', err));
+    </script>
+    
+    <div class="dashboard-header" style="margin-top: 0;">
         <div class="container">
-            <div class="dashboard-nav">
-                <h1 class="nav-brand">✏️ Edit Article</h1>
-                <div class="nav-links" id="nav-links">
-                    <a href="/" class="nav-link">🏠 Home</a>
-                    <a href="category.html" class="nav-link">📂 Categories</a>
-                    <a href="videos.html" class="nav-link">🎬 Videos</a>
-                    <a href="articles.html" class="nav-link">📝 Articles</a>
-                    <a href="create-article.html" class="nav-link">✍️ Write Article</a>
-                    <a href="authors.html" class="nav-link">👥 Authors</a>
-                    <a href="resources.html" class="nav-link">📚 Resources</a>
-                    <a href="user-upload.html" class="nav-link">⬆️ Upload Video</a>
-                    <a href="profile.html" class="nav-link">👤 Profile</a>
-                    <a href="#" onclick="viewMyPage()" class="nav-link">📄 My Page</a>
-                    <a href="#" onclick="logout()" class="nav-link logout">🚪 Logout</a>
-                </div>
-            </div>
+            <h1 class="mb-0">✏️ Edit Article</h1>
         </div>
     </div>
 
@@ -923,29 +922,7 @@ Empty line creates new paragraph
             }
         }
         
-        function logout() {
-            localStorage.removeItem('auth_token');
-            localStorage.removeItem('user_data');
-            window.location.href = 'login.html';
-        }
-        
-        // Add admin link if user is admin or super_user
-        document.addEventListener('DOMContentLoaded', function() {
-            const userData = localStorage.getItem('user_data');
-            if (userData) {
-                const user = JSON.parse(userData);
-                if (user.role === 'admin' || user.role === 'super_user') {
-                    const navLinks = document.getElementById('nav-links');
-                    if (navLinks) {
-                        const adminLink = document.createElement('a');
-                        adminLink.href = 'admin.html';
-                        adminLink.className = 'nav-link';
-                        adminLink.innerHTML = '⚙️ Admin';
-                        navLinks.insertBefore(adminLink, navLinks.lastElementChild);
-                    }
-                }
-            }
-        });
+
     </script>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>

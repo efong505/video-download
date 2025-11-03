@@ -1,0 +1,23 @@
+candidates = [
+    {
+        "name": "Stacy Garrity",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Stacy Garrity is a retired U.S. Army Reserve colonel and the current Pennsylvania State Treasurer, serving since 2021. Born in Pennsylvania, she graduated from Misericordia University with a degree in accounting and later earned an MBA. Garrity's military career spanned over 30 years, including deployments to Iraq where she managed logistics and detention facilities, earning the nickname 'Angel of the Desert' for her compassionate leadership. After retiring from the Army, she worked in the private sector at Global Tungsten & Powders Corp., rising to vice president of government affairs. In 2020, she upset the incumbent to become the first Republican Treasurer in 16 years. As Treasurer, Garrity has overseen more than $170 billion in state assets, implemented transparency measures, cut waste, and returned over $1 billion in unclaimed property to residents. She launched the Money Match program, saving taxpayers nearly $10 million, and chairs the national ABLE Savings Plans Network for individuals with disabilities. Garrity has also focused on returning military decorations to veterans, repatriating over 450 items including Purple Hearts. Her tenure includes upgrades to the unclaimed property system and fiscal oversight of programs like the 529 College Savings Plan, saving account holders $17 million. In 2024, she won re-election with a record 3.5 million votes, the highest for any statewide candidate in Pennsylvania history. Garrity announced her gubernatorial bid in August 2025, emphasizing fiscal responsibility and government accountability. [From Ballotpedia, Wikipedia, and campaign site.]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://garrityforpa.com",
+        "positions": {
+            "ABORTION": "Garrity has not publicly detailed a specific stance on abortion in her gubernatorial campaign, but as a Republican, she aligns with party efforts to restrict late-term abortions and support parental notification laws. During her Treasurer tenure, she focused on fiscal issues rather than social policy.",
+            "EDUCATION": "Supports expanding school choice and vouchers to empower parents, increase funding for vocational training, and ensure transparency in education spending. As Treasurer, she has overseen savings programs like the 529 plan to make college more affordable.",
+            "RELIGIOUS-FREEDOM": "Advocates for protections of religious liberty, including conscience rights for faith-based organizations and exemptions from mandates conflicting with religious beliefs, consistent with Republican platforms.",
+            "GUNS": "Strong Second Amendment supporter, opposing gun control measures and advocating for concealed carry reciprocity and protection of law-abiding gun owners' rights.",
+            "TAXES": "Proposes tax cuts, elimination of waste, and fiscal reforms to lower rates and stimulate economic growth. Highlights her record of saving taxpayers millions through Treasury efficiencies.",
+            "IMMIGRATION": "Supports border security enhancements, enforcement of immigration laws, and opposition to sanctuary policies, emphasizing legal immigration pathways.",
+            "FAMILY-VALUES": "Promotes traditional marriage, parental rights in education, and policies supporting families, including protections against gender ideology in schools.",
+            "ELECTION-INTEGRITY": "Backs voter ID requirements, secure ballot measures, and audits to ensure transparent elections, drawing from her oversight of state finances."
+        },
+        "endorsements": ["Pennsylvania Republican Party", "State Sen. Scott Martin", "U.S. Rep. Dan Meuser"]
+    }
+]
