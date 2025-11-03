@@ -12,6 +12,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="CCT">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/card-styles.css">
     <link rel="stylesheet" href="assets/css/common-styles.css">
     <style>
@@ -341,18 +342,26 @@
             border-top: 1px solid #eee;
         }
         .share-btn {
-            display: inline-block;
-            padding: 5px 10px;
-            margin-right: 8px;
-            border-radius: 15px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px;
+            margin-right: 6px;
+            margin-bottom: 6px;
+            border-radius: 50%;
             text-decoration: none;
             color: white;
-            font-size: 0.8rem;
+            font-size: 16px;
+            width: 36px;
+            height: 36px;
+            border: none;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
         .share-btn:hover {
-            transform: translateY(-1px);
+            transform: translateY(-2px) scale(1.1);
             color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
         .share-btn-facebook { background: #1877f2; }
         .share-btn-twitter { background: #1da1f2; }
@@ -925,9 +934,12 @@
                     
                     <div class="share-buttons">
                         <small class="text-muted d-block mb-2">📢 Share:</small>
-                        <a href="#" onclick="shareArticle('facebook', '${safeArticleId}', '${safeTitle}')" class="share-btn share-btn-facebook">📘 Facebook</a>
-                        <a href="#" onclick="shareArticle('twitter', '${safeArticleId}', '${safeTitle}')" class="share-btn share-btn-twitter">🐦 Twitter</a>
-                        <button onclick="copyArticleLink('${safeArticleId}', this)" class="share-btn share-btn-copy">🔗 Copy</button>
+                        <a href="#" onclick="shareArticle('facebook', '${safeArticleId}', '${safeTitle}'); return false;" class="share-btn share-btn-facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" onclick="shareArticle('twitter', '${safeArticleId}', '${safeTitle}'); return false;" class="share-btn share-btn-twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" onclick="shareArticle('linkedin', '${safeArticleId}', '${safeTitle}'); return false;" class="share-btn" style="background: #0077b5;"><i class="fab fa-linkedin-in"></i></a>
+                        <button onclick="copyLinkForInstagram('${safeArticleId}')" class="share-btn" style="background: #E4405F;"><i class="fab fa-instagram"></i></button>
+                        <a href="#" onclick="shareArticle('truthsocial', '${safeArticleId}', '${safeTitle}'); return false;" class="share-btn" style="background: #FF0000;"><i class="fas fa-flag-usa"></i></a>
+                        <button onclick="copyArticleLink('${safeArticleId}', this)" class="share-btn share-btn-copy"><i class="fas fa-link"></i></button>
                     </div>
                     
                     ${(currentUser && safeArticleId && (currentUser.role === 'admin' || currentUser.role === 'super_user' || article.author === currentUser.email || article.author === currentUser.name)) ? 
@@ -1175,11 +1187,30 @@
                 case 'linkedin':
                     shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
                     break;
+                case 'truthsocial':
+                    shareUrl = `https://truthsocial.com/share?url=${encodedUrl}&title=${encodedTitle}`;
+                    break;
             }
             
             if (shareUrl) {
                 window.open(shareUrl, '_blank', 'width=600,height=400');
             }
+        }
+        
+        function copyLinkForInstagram(articleId) {
+            const articleUrl = `${window.location.origin}/article.html?id=${articleId}`;
+            
+            navigator.clipboard.writeText(articleUrl).then(() => {
+                alert('📷 Link copied! Paste it in your Instagram bio or story. Instagram doesn\'t support direct web links in posts.');
+            }).catch(() => {
+                const tempInput = document.createElement('input');
+                tempInput.value = articleUrl;
+                document.body.appendChild(tempInput);
+                tempInput.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempInput);
+                alert('📷 Link copied! Paste it in your Instagram bio or story.');
+            });
         }
         
         function copyArticleLink(articleId, buttonElement) {
@@ -1194,21 +1225,21 @@
             
             try {
                 document.execCommand('copy');
-                buttonElement.textContent = '✓ Copied!';
+                buttonElement.innerHTML = '<i class="fas fa-check"></i>';
                 buttonElement.classList.add('copied');
                 
                 setTimeout(() => {
-                    buttonElement.textContent = '🔗 Copy';
+                    buttonElement.innerHTML = '<i class="fas fa-link"></i>';
                     buttonElement.classList.remove('copied');
                 }, 2000);
             } catch (err) {
                 // Fallback for browsers that don't support execCommand
                 navigator.clipboard.writeText(articleUrl).then(() => {
-                    buttonElement.textContent = '✓ Copied!';
+                    buttonElement.innerHTML = '<i class="fas fa-check"></i>';
                     buttonElement.classList.add('copied');
                     
                     setTimeout(() => {
-                        buttonElement.textContent = '🔗 Copy';
+                        buttonElement.innerHTML = '<i class="fas fa-link"></i>';
                         buttonElement.classList.remove('copied');
                     }, 2000);
                 }).catch(() => {

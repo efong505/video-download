@@ -4,6 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>News Article - Christian Conservatives Today</title>
+    <meta name="description" content="Read breaking Christian conservative news with biblical perspective.">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Christian Conservatives Today">
+    <meta property="og:title" content="Breaking Christian Conservative News - Biblical Perspective">
+    <meta property="og:description" content="Stay informed with faith-based news coverage. Breaking stories analyzed through a Christian conservative lens with biblical commentary.">
+    <meta property="og:url" content="https://christianconservativestoday.com/news-article.html">
+    <meta property="og:image" content="https://christianconservativestoday.com/techcrosslogo.jpg">
+    <meta property="og:image:secure_url" content="https://christianconservativestoday.com/techcrosslogo.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Christian Conservative News">
+    <meta name="twitter:description" content="Read breaking Christian conservative news with biblical perspective.">
+    <meta name="twitter:image" content="https://christianconservativestoday.com/techcrosslogo.jpg">
+    <meta name="twitter:image:alt" content="Christian Conservatives Today Logo">
     
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="/manifest.json">
@@ -106,17 +126,23 @@
             background: #3498db;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 25px;
-            margin-right: 10px;
+            padding: 10px 15px;
+            border-radius: 50%;
+            margin-right: 8px;
             margin-bottom: 10px;
             text-decoration: none;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
             transition: all 0.3s ease;
+            font-size: 18px;
         }
         .share-btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.1);
             color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
         .share-btn.facebook { background: #3b5998; }
         .share-btn.twitter { background: #1da1f2; }
@@ -318,16 +344,22 @@
             
             var shareHtml = '';
             shareHtml += '<a href="https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(currentUrl) + '" target="_blank" class="share-btn facebook">';
-            shareHtml += '<i class="fab fa-facebook-f"></i> Facebook</a>';
+            shareHtml += '<i class="fab fa-facebook-f"></i></a>';
             
             shareHtml += '<a href="https://twitter.com/intent/tweet?url=' + encodeURIComponent(currentUrl) + '&text=' + title + '" target="_blank" class="share-btn twitter">';
-            shareHtml += '<i class="fab fa-twitter"></i> Twitter</a>';
+            shareHtml += '<i class="fab fa-twitter"></i></a>';
             
             shareHtml += '<a href="https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(currentUrl) + '" target="_blank" class="share-btn linkedin">';
-            shareHtml += '<i class="fab fa-linkedin-in"></i> LinkedIn</a>';
+            shareHtml += '<i class="fab fa-linkedin-in"></i></a>';
+            
+            shareHtml += '<button class="share-btn" style="background: #E4405F;" onclick="copyLinkForInstagram()">';
+            shareHtml += '<i class="fab fa-instagram"></i></button>';
+            
+            shareHtml += '<a href="https://truthsocial.com/share?url=' + encodeURIComponent(currentUrl) + '&title=' + title + '" target="_blank" class="share-btn" style="background: #FF0000;">';
+            shareHtml += '<i class="fas fa-flag-usa"></i></a>';
             
             shareHtml += '<button class="share-btn" onclick="copyLink()">';
-            shareHtml += '<i class="fas fa-link"></i> Copy Link</button>';
+            shareHtml += '<i class="fas fa-link"></i></button>';
             
             document.getElementById('shareButtons').innerHTML = shareHtml;
         }
@@ -336,7 +368,6 @@
             navigator.clipboard.writeText(window.location.href).then(function() {
                 alert('Link copied to clipboard!');
             }).catch(function() {
-                // Fallback for older browsers
                 var textArea = document.createElement('textarea');
                 textArea.value = window.location.href;
                 document.body.appendChild(textArea);
@@ -344,6 +375,20 @@
                 document.execCommand('copy');
                 document.body.removeChild(textArea);
                 alert('Link copied to clipboard!');
+            });
+        }
+        
+        function copyLinkForInstagram() {
+            navigator.clipboard.writeText(window.location.href).then(function() {
+                alert('📷 Link copied! Paste it in your Instagram bio or story. Instagram doesn\'t support direct web links in posts.');
+            }).catch(function() {
+                var textArea = document.createElement('textarea');
+                textArea.value = window.location.href;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('📷 Link copied! Paste it in your Instagram bio or story.');
             });
         }
 

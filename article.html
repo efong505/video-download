@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">Article - Christian Conservative Platform</title>
+    <meta name="description" content="Read Christian conservative articles with biblical perspective and faith-based commentary.">
     
     <!-- PWA Meta Tags -->
     <link rel="manifest" href="/manifest.json">
@@ -13,19 +14,25 @@
     <meta name="apple-mobile-web-app-title" content="CCT">
     
     <!-- Open Graph Meta Tags for Social Sharing -->
-    <meta property="og:title" content="" id="og-title">
-    <meta property="og:description" content="" id="og-description">
-    <meta property="og:image" content="https://christianconservativestoday.com/images/logo.png" id="og-image">
-    <meta property="og:url" content="" id="og-url">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="Christian Conservatives Today">
+    <meta property="og:title" content="Christian Conservative Articles - Faith-Based Commentary" id="og-title">
+    <meta property="og:description" content="Explore biblical perspectives on current events, politics, and culture. Join our Christian conservative community for faith-based articles and voter guides." id="og-description">
+    <meta property="og:url" content="https://christianconservativestoday.com/article.html" id="og-url">
+    <meta property="og:image" content="https://christianconservativestoday.com/techcrosslogo.jpg" id="og-image">
+    <meta property="og:image:secure_url" content="https://christianconservativestoday.com/techcrosslogo.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="" id="twitter-title">
-    <meta name="twitter:description" content="" id="twitter-description">
-    <meta name="twitter:image" content="https://christianconservativestoday.com/images/logo.png" id="twitter-image">
+    <meta name="twitter:title" content="Christian Conservative Article" id="twitter-title">
+    <meta name="twitter:description" content="Read Christian conservative articles with biblical perspective and faith-based commentary." id="twitter-description">
+    <meta name="twitter:image" content="https://christianconservativestoday.com/techcrosslogo.jpg" id="twitter-image">
+    <meta name="twitter:image:alt" content="Christian Conservatives Today Logo">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         body {
             padding-top: 80px;
@@ -52,19 +59,24 @@
             text-align: center;
         }
         .share-button {
-            display: inline-block;
-            padding: 10px 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
             margin: 5px;
-            border-radius: 25px;
+            border-radius: 50%;
             text-decoration: none;
             color: white;
             font-weight: 500;
             transition: all 0.3s ease;
             border: none;
             cursor: pointer;
+            width: 45px;
+            height: 45px;
+            font-size: 20px;
         }
         .share-button:hover {
-            transform: translateY(-2px);
+            transform: translateY(-2px) scale(1.1);
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             color: white;
         }
@@ -189,10 +201,12 @@
                     '<h5>📢 Share this article</h5>' +
                     '<p class="text-muted mb-3">Help spread the word about this Christian conservative content</p>' +
                     '<div class="mb-3">' +
-                        '<a href="#" onclick="shareOnFacebook()" class="share-button share-facebook">📘 Facebook</a>' +
-                        '<a href="#" onclick="shareOnTwitter()" class="share-button share-twitter">🐦 Twitter</a>' +
-                        '<a href="#" onclick="shareOnLinkedIn()" class="share-button share-linkedin">💼 LinkedIn</a>' +
-                        '<button onclick="copyLink()" class="share-button share-copy" id="copy-btn">🔗 Copy Link</button>' +
+                        '<a href="#" onclick="shareOnFacebook()" class="share-button share-facebook"><i class="fab fa-facebook-f"></i></a>' +
+                        '<a href="#" onclick="shareOnTwitter()" class="share-button share-twitter"><i class="fab fa-twitter"></i></a>' +
+                        '<a href="#" onclick="shareOnLinkedIn()" class="share-button share-linkedin"><i class="fab fa-linkedin-in"></i></a>' +
+                        '<button onclick="copyLinkForInstagram()" class="share-button" style="background: #E4405F;" id="instagram-btn"><i class="fab fa-instagram"></i></button>' +
+                        '<a href="https://truthsocial.com/share?url=' + encodeURIComponent(currentUrl) + '&title=' + encodeURIComponent(article.title) + '" target="_blank" class="share-button" style="background: #FF0000;"><i class="fas fa-flag-usa"></i></a>' +
+                        '<button onclick="copyLink()" class="share-button share-copy" id="copy-btn"><i class="fas fa-link"></i></button>' +
                     '</div>' +
                     '<div>' +
                         '<input type="text" id="article-url" class="copy-link-input" value="' + currentUrl + '" readonly>' +
@@ -347,6 +361,15 @@
             if (article.featured_image) {
                 document.getElementById('og-image').setAttribute('content', article.featured_image);
                 document.getElementById('twitter-image').setAttribute('content', article.featured_image);
+                
+                // Add image type meta tag if not exists
+                let ogImageType = document.querySelector('meta[property="og:image:type"]');
+                if (!ogImageType) {
+                    ogImageType = document.createElement('meta');
+                    ogImageType.setAttribute('property', 'og:image:type');
+                    document.head.appendChild(ogImageType);
+                }
+                ogImageType.setAttribute('content', 'image/jpeg');
             }
             
             // Update Twitter tags
@@ -383,13 +406,35 @@
             
             try {
                 document.execCommand('copy');
-                copyBtn.textContent = '✓ Copied!';
+                copyBtn.innerHTML = '<i class="fas fa-check"></i>';
                 copyBtn.classList.add('copied');
                 
                 setTimeout(function() {
-                    copyBtn.textContent = '🔗 Copy Link';
+                    copyBtn.innerHTML = '<i class="fas fa-link"></i>';
                     copyBtn.classList.remove('copied');
                 }, 2000);
+            } catch (err) {
+                alert('Please manually copy the link from the text box');
+            }
+        }
+        
+        function copyLinkForInstagram() {
+            const urlInput = document.getElementById('article-url');
+            const instagramBtn = document.getElementById('instagram-btn');
+            
+            urlInput.select();
+            urlInput.setSelectionRange(0, 99999);
+            
+            try {
+                document.execCommand('copy');
+                instagramBtn.innerHTML = '<i class="fas fa-check"></i>';
+                instagramBtn.style.background = '#28a745';
+                alert('📷 Link copied! Paste it in your Instagram bio or story. Instagram doesn\'t support direct web links in posts.');
+                
+                setTimeout(function() {
+                    instagramBtn.innerHTML = '<i class="fab fa-instagram"></i>';
+                    instagramBtn.style.background = '#E4405F';
+                }, 3000);
             } catch (err) {
                 alert('Please manually copy the link from the text box');
             }

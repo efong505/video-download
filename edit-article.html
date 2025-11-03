@@ -722,8 +722,7 @@ Code block
                 const data = await response.json();
                 
                 if (response.ok) {
-                    alert('Article updated successfully!');
-                    window.location.href = 'articles.html';
+                    generateAndUploadPreview(articleId, updateData.title, updateData.content, updateData.featured_image);
                 } else {
                     alert('Error updating article: ' + data.error);
                 }
@@ -731,6 +730,75 @@ Code block
                 console.error('Error updating article:', error);
                 alert('Error updating article. Please try again.');
             }
+        }
+        
+        function generateAndUploadPreview(articleId, title, content, featuredImage) {
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = content;
+            const plainText = tempDiv.textContent || tempDiv.innerText;
+            const excerpt = plainText.substring(0, 160);
+            const imageUrl = featuredImage || 'https://christianconservativestoday.com/techcrosslogo.jpg';
+            
+            const previewHTML = '<!DOCTYPE html>\n<html lang="en">\n<head>\n' +
+                '<meta charset="UTF-8">\n' +
+                '<meta property="og:type" content="article">\n' +
+                '<meta property="og:site_name" content="Christian Conservatives Today">\n' +
+                '<meta property="og:title" content="' + escapeHtml(title) + '">\n' +
+                '<meta property="og:description" content="' + escapeHtml(excerpt) + '">\n' +
+                '<meta property="og:url" content="https://christianconservativestoday.com/previews/article-' + articleId + '.html">\n' +
+                '<meta property="og:image" content="' + imageUrl + '">\n' +
+                '<meta property="og:image:secure_url" content="' + imageUrl + '">\n' +
+                '<meta property="og:image:type" content="image/jpeg">\n' +
+                '<meta property="og:image:width" content="1200">\n' +
+                '<meta property="og:image:height" content="630">\n' +
+                '<meta name="twitter:card" content="summary_large_image">\n' +
+                '<meta name="twitter:title" content="' + escapeHtml(title) + '">\n' +
+                '<meta name="twitter:description" content="' + escapeHtml(excerpt) + '">\n' +
+                '<meta name="twitter:image" content="' + imageUrl + '">\n' +
+                '<meta http-equiv="refresh" content="0;url=/article.html?id=' + articleId + '">\n' +
+                '<title>' + escapeHtml(title) + ' - Christian Conservatives Today</title>\n' +
+                '</head>\n<body>\n' +
+                '<script>window.location.href="/article.html?id=' + articleId + '";</script>\n' +
+                '<p>Redirecting to article...</p>\n' +
+                '</body>\n</html>';
+            
+            uploadPreviewToS3(articleId, previewHTML);
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function uploadPreviewToS3(articleId, previewHTML) {
+            const filename = 'previews/article-' + articleId + '.html';
+            
+            fetch(ADMIN_API + '?action=upload_url', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + authToken
+                },
+                body: JSON.stringify({ filename: filename })
+            })
+            .then(response => response.json())
+            .then(data => {
+                return fetch(data.upload_url, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'text/html' },
+                    body: previewHTML
+                });
+            })
+            .then(() => {
+                alert('Article updated successfully!');
+                window.location.href = 'articles.html';
+            })
+            .catch(error => {
+                console.error('Preview upload error:', error);
+                alert('Article updated but preview page failed. Article is still accessible.');
+                window.location.href = 'articles.html';
+            });
         }
 
         let currentVerse = null;

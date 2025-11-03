@@ -554,6 +554,36 @@ ENTERPRISE TIER
 - `get_category_stats()`: Performance by category
 
 **AWS Access**: DynamoDB (articles table)
+
+#### 16. article-meta-tags-edge (Lambda@Edge)
+**Purpose**: Dynamic Open Graph meta tags for social media crawlers
+**Trigger**: CloudFront Viewer Request
+**Runtime**: Python 3.12
+**Memory**: 128 MB
+**Timeout**: 5 seconds
+**Region**: us-east-1 (Lambda@Edge requirement)
+
+**Key Functions**:
+- `lambda_handler()`: Intercept crawler requests
+- `is_crawler()`: Detect social media bots by user-agent
+- `get_article()`: Fetch article data from DynamoDB
+- `generate_response()`: Return HTML with article-specific meta tags
+
+**Supported Crawlers**:
+- Facebook (facebookexternalhit)
+- Twitter (twitterbot)
+- LinkedIn (linkedinbot)
+- Slack (slackbot)
+- WhatsApp (whatsapp)
+
+**Features**:
+- Article-specific og:image, og:title, og:description
+- Kill switch via ENABLE_DYNAMIC_META environment variable
+- Cost: ~$0.0001 for 50 shares/month (free tier)
+- Instant disable capability
+
+**AWS Access**: DynamoDB (articles, news tables), CloudFront (edge locations)
+
 **Purpose**: URL content extraction and AI summarization
 **Trigger**: API Gateway (POST /url-analysis)
 **Runtime**: Python 3.9
