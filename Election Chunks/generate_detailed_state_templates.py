@@ -709,17 +709,90 @@ TOTAL RACES: {total_races}
     
     return template
 
+def get_state_size(districts):
+    """Determine state size based on congressional districts"""
+    if districts >= 20:
+        return "Large", 25, 200
+    elif districts >= 10:
+        return "Medium", 15, 150
+    else:
+        return "Small", 5, 100
+
+def generate_candidate_chunks(state, num_chunks, max_candidates):
+    """Generate candidate chunk templates"""
+    chunks = []
+    candidates_per_chunk = max_candidates // num_chunks
+    
+    letters = 'abcdefghijklmnopqrstuvwxyz'
+    for i in range(num_chunks):
+        letter = letters[i]
+        chunk_num = i + 1
+        
+        template = f"""# CHUNK 2{letter.upper()}: {state.upper()} CANDIDATES (Part {chunk_num}/{num_chunks})
+
+## TASK: Provide UP TO {candidates_per_chunk} candidates for {state}
+
+**CRITICAL**: Only include candidates who have PUBLICLY DECLARED for 2025-2026 races.
+
+**DO NOT:**
+- ❌ Invent fake candidates
+- ❌ Include candidates from previous elections unless they've declared for 2025-2026
+- ❌ Duplicate candidates from other chunks
+
+**DO:**
+- ✅ Research actual declared candidates from Ballotpedia, campaign websites, news sources
+- ✅ Include complete bio, positions, endorsements
+- ✅ Include race_id linking to races from CHUNK_1
+- ✅ Verify all information is accurate and sourced
+
+## FORMAT:
+
+```python
+candidates = [
+    {{
+        "state": "{state}",
+        "office": "U.S. Senate",
+        "name": "Candidate Name",
+        "party": "Republican",
+        "bio": "Detailed bio...",
+        "positions": {{
+            "abortion": "Position...",
+            "immigration": "Position...",
+            "economy": "Position..."
+        }},
+        "endorsements": ["Organization 1", "Organization 2"],
+        "website": "https://...",
+        "faith_statement": "Statement..."
+    }},
+    # UP TO {candidates_per_chunk} candidates
+]
+```
+
+**START OUTPUT NOW - CANDIDATES ARRAY ONLY**
+"""
+        chunks.append((f"CHUNK_2{letter.upper()}_CANDIDATES.md", template))
+    
+    return chunks
+
 # Generate for all states
 output_dir = "COMPLETE_STATE_TEMPLATES"
 for state, info in STATE_INFO.items():
     state_dir = os.path.join(output_dir, state.replace(" ", "_"))
     os.makedirs(state_dir, exist_ok=True)
     
+    # Generate CHUNK_1 (races)
     chunk1_content = generate_chunk1_detailed(state, info)
-    
     with open(os.path.join(state_dir, "CHUNK_1_RACES.md"), 'w', encoding='utf-8') as f:
         f.write(chunk1_content)
     
-    print(f"Generated {state}")
+    # Generate candidate chunks based on state size
+    size_name, num_chunks, max_candidates = get_state_size(info['districts'])
+    candidate_chunks = generate_candidate_chunks(state, num_chunks, max_candidates)
+    
+    for filename, content in candidate_chunks:
+        with open(os.path.join(state_dir, filename), 'w', encoding='utf-8') as f:
+            f.write(content)
+    
+    print(f"Generated {state} ({size_name}): 1 race file + {num_chunks} candidate files")
 
-print(f"\nGenerated detailed CHUNK_1 for all 50 states")
+print(f"\nGenerated detailed templates for all 50 states with state-size-based candidate chunks")
