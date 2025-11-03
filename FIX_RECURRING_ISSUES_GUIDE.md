@@ -252,38 +252,52 @@ aws s3 cp edit-news.html s3://my-video-downloads-bucket/
 
 ## Issue 9: Social Media Previews Not Working
 
-**Symptom**: Sharing articles/news on Facebook/Twitter shows no image or title
+**Symptom**: Sharing articles/news on Facebook/Twitter shows no image or title, or shows generic logo instead of featured image
 
 **Root Cause**: 
 1. Base64 data URLs in og:image tags (social crawlers can't access)
 2. Missing static preview HTML files for crawlers
+3. Preview generation in edit forms causes script tag syntax errors
 
-**Fix**: Generate static preview HTML with proper meta tags
+**SOLUTION**: Use Python script to generate previews manually
 
-### Files Modified:
-- create-article.html - Added generateAndUploadPreview() function
-- edit-article.html - Added preview generation on update
-- create-news.html - Added preview generation
-- edit-news.html - Added preview generation
+### Why Manual Script Works:
+1. Avoids script tag syntax errors in HTML
+2. Uses article's featured_image (HTTPS URL) instead of base64 or generic logo
+3. Generates clean HTML without JavaScript complications
+4. Can be run anytime to regenerate previews
 
-### Key Changes:
-1. Use CloudFront URL for og:image: `https://d3oo5w3ywcz1uh.cloudfront.net/techcrosslogo.jpg`
-2. Generate minimal HTML at `/previews/article-{id}.html` or `/previews/news-{id}.html`
-3. Split script tags in strings: `'<scr'+'ipt>'` to avoid syntax errors
+### Script: generate_news_preview.py
 
-**Deployment**:
+Created at root of Downloader folder. Uses article's featured_image if available, otherwise falls back to logo.
+
+**Usage**:
 ```powershell
-aws s3 cp create-article.html s3://my-video-downloads-bucket/
-aws s3 cp edit-article.html s3://my-video-downloads-bucket/
-aws s3 cp create-news.html s3://my-video-downloads-bucket/
-aws s3 cp edit-news.html s3://my-video-downloads-bucket/
+python generate_news_preview.py <news_id>
 ```
 
+**Example**:
+```powershell
+python generate_news_preview.py 12310e90-31c1-4b33-aaa5-43911ce8504d
+```
+
+**Output**:
+- Creates `/previews/news-{id}.html` in S3
+- Prints shareable URL
+- Use that URL for Facebook/Twitter sharing
+
 **Verification**:
-1. Create/edit article or news
-2. Check S3 for `/previews/article-{id}.html` or `/previews/news-{id}.html`
-3. Test URL in Facebook Sharing Debugger: https://developers.facebook.com/tools/debug/
-4. Should show proper title, description, and image
+1. Run script with news_id
+2. Copy the preview URL from output
+3. Test in Facebook Sharing Debugger: https://developers.facebook.com/tools/debug/
+4. Should show article title, excerpt, and featured image
+5. Share the preview URL (not the regular article URL) on social media
+
+**Key Points**:
+- Preview URL redirects to actual article
+- Social crawlers read meta tags before redirect
+- Must use preview URL for sharing, not regular article URL
+- Regenerate preview anytime article is updated
 
 ---
 
@@ -434,6 +448,9 @@ python update_article_author_names.py
 
 # Fix news author names
 python update_news_author_names.py
+
+# Generate social media preview for news
+python generate_news_preview.py <news_id>
 
 # Fix duplicate candidates
 cd "Election Chunks/COMPLETE_STATE_TEMPLATES/Pennsylvania"

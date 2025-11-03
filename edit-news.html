@@ -162,19 +162,10 @@
 
             <form id="newsForm">
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-8">
                         <div class="mb-3">
                             <label for="title" class="form-label">Title *</label>
                             <input type="text" class="form-control" id="title" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-8">
-                        <div class="mb-3">
-                            <label for="author" class="form-label">Author *</label>
-                            <input type="text" class="form-control" id="author" required placeholder="Enter author name">
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -352,7 +343,6 @@
                 
                 // Populate form
                 document.getElementById('title').value = news.title;
-                document.getElementById('author').value = news.author_name || news.author || '';
                 document.getElementById('category').value = news.category || 'general';
                 document.getElementById('visibility').value = news.visibility || 'public';
                 document.getElementById('status').value = news.status || 'published';
@@ -434,7 +424,6 @@
             var newsData = {
                 news_id: newsId,
                 title: document.getElementById('title').value,
-                author_name: document.getElementById('author').value,
                 content: quill.root.innerHTML,
                 summary: document.getElementById('summary').value,
                 category: document.getElementById('category').value,
@@ -459,7 +448,8 @@
                 if (data.error) {
                     alert('Error: ' + data.error);
                 } else {
-                    generateAndUploadPreview(newsId, newsData.title, newsData.content, newsData.featured_image);
+                    alert('News article updated successfully!');
+                    window.location.href = 'news.html';
                 }
             })
             .catch(function(error) {
@@ -508,77 +498,6 @@
                 });
             };
             reader.readAsDataURL(file);
-        }
-
-        function generateAndUploadPreview(newsId, title, content, featuredImage) {
-            var tempDiv = document.createElement('div');
-            tempDiv.innerHTML = content;
-            var plainText = tempDiv.textContent || tempDiv.innerText;
-            var excerpt = plainText.substring(0, 160);
-            var imageUrl = 'https://d3oo5w3ywcz1uh.cloudfront.net/techcrosslogo.jpg';
-            
-            var previewHTML = '<!DOCTYPE html>\n<html lang="en">\n<head>\n' +
-                '<meta charset="UTF-8">\n' +
-                '<meta property="og:type" content="article">\n' +
-                '<meta property="og:site_name" content="Christian Conservatives Today">\n' +
-                '<meta property="og:title" content="' + escapeHtml(title) + '">\n' +
-                '<meta property="og:description" content="' + escapeHtml(excerpt) + '">\n' +
-                '<meta property="og:url" content="https://christianconservativestoday.com/previews/news-' + newsId + '.html">\n' +
-                '<meta property="og:image" content="' + imageUrl + '">\n' +
-                '<meta property="og:image:secure_url" content="' + imageUrl + '">\n' +
-                '<meta property="og:image:type" content="image/jpeg">\n' +
-                '<meta property="og:image:width" content="1200">\n' +
-                '<meta property="og:image:height" content="630">\n' +
-                '<meta name="twitter:card" content="summary_large_image">\n' +
-                '<meta name="twitter:title" content="' + escapeHtml(title) + '">\n' +
-                '<meta name="twitter:description" content="' + escapeHtml(excerpt) + '">\n' +
-                '<meta name="twitter:image" content="' + imageUrl + '">\n' +
-                '<meta http-equiv="refresh" content="0;url=/news-article.html?id=' + newsId + '">\n' +
-                '<title>' + escapeHtml(title) + ' - Christian Conservatives Today</title>\n' +
-                '</head>\n<body>\n' +
-                '<scr'+'ipt>window.location.href="/news-article.html?id=' + newsId + '";</scr'+'ipt>\n' +
-                '<p>Redirecting to article...</p>\n' +
-                '</body>\n</html>';
-            
-            uploadPreviewToS3(newsId, previewHTML);
-        }
-        
-        function escapeHtml(text) {
-            var div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        function uploadPreviewToS3(newsId, previewHTML) {
-            var ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
-            var token = localStorage.getItem('auth_token');
-            var filename = 'previews/news-' + newsId + '.html';
-            
-            fetch(ADMIN_API + '?action=upload_url', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + token
-                },
-                body: JSON.stringify({ filename: filename })
-            })
-            .then(function(response) { return response.json(); })
-            .then(function(data) {
-                return fetch(data.upload_url, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'text/html' },
-                    body: previewHTML
-                });
-            })
-            .then(function() {
-                alert('News article updated successfully!');
-                window.location.href = 'news.html';
-            })
-            .catch(function(error) {
-                console.error('Preview upload error:', error);
-                alert('News article updated but preview page failed. Article is still accessible.');
-                window.location.href = 'news.html';
-            });
         }
 
         function logout() {
