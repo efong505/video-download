@@ -611,7 +611,7 @@
             tempDiv.innerHTML = content;
             var plainText = tempDiv.textContent || tempDiv.innerText;
             var excerpt = plainText.substring(0, 160);
-            var imageUrl = 'https://d3oo5w3ywcz1uh.cloudfront.net/techcrosslogo.jpg';
+            var imageUrl = featuredImage || 'https://d3oo5w3ywcz1uh.cloudfront.net/techcrosslogo.jpg';
             
             var previewHTML = '<!DOCTYPE html>\n<html lang="en">\n<head>\n' +
                 '<meta charset="UTF-8">\n' +
