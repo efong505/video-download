@@ -788,10 +788,9 @@ def extract_user_from_token(event):
 def get_user_name(email):
     """Get user's display name from users table"""
     try:
-        # Query using email index since email is not the primary key
-        response = users_table.query(
-            IndexName='email-index',
-            KeyConditionExpression='email = :email',
+        # Scan users table filtering by email since email-index may not exist
+        response = users_table.scan(
+            FilterExpression='email = :email',
             ExpressionAttributeValues={':email': email}
         )
         

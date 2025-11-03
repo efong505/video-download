@@ -222,6 +222,118 @@ python update_summary_counts.py
 
 ---
 
+## Issue 8: Edit News Page Shows Blank Fields
+
+**Symptom**: When editing a news article, all form fields appear blank
+
+**Root Cause**: API returns news object directly, not wrapped in `{news: {...}}`
+
+**Fix**: In edit-news.html, change:
+```javascript
+.then(function(news) {
+```
+To:
+```javascript
+.then(function(data) {
+    var news = data.news || data;
+```
+
+**Deployment**:
+```powershell
+aws s3 cp edit-news.html s3://my-video-downloads-bucket/
+```
+
+**Verification**:
+1. Go to news.html
+2. Click edit on any news article
+3. All fields should populate correctly
+
+---
+
+## Issue 9: Social Media Previews Not Working
+
+**Symptom**: Sharing articles/news on Facebook/Twitter shows no image or title
+
+**Root Cause**: 
+1. Base64 data URLs in og:image tags (social crawlers can't access)
+2. Missing static preview HTML files for crawlers
+
+**Fix**: Generate static preview HTML with proper meta tags
+
+### Files Modified:
+- create-article.html - Added generateAndUploadPreview() function
+- edit-article.html - Added preview generation on update
+- create-news.html - Added preview generation
+- edit-news.html - Added preview generation
+
+### Key Changes:
+1. Use CloudFront URL for og:image: `https://d3oo5w3ywcz1uh.cloudfront.net/techcrosslogo.jpg`
+2. Generate minimal HTML at `/previews/article-{id}.html` or `/previews/news-{id}.html`
+3. Split script tags in strings: `'<scr'+'ipt>'` to avoid syntax errors
+
+**Deployment**:
+```powershell
+aws s3 cp create-article.html s3://my-video-downloads-bucket/
+aws s3 cp edit-article.html s3://my-video-downloads-bucket/
+aws s3 cp create-news.html s3://my-video-downloads-bucket/
+aws s3 cp edit-news.html s3://my-video-downloads-bucket/
+```
+
+**Verification**:
+1. Create/edit article or news
+2. Check S3 for `/previews/article-{id}.html` or `/previews/news-{id}.html`
+3. Test URL in Facebook Sharing Debugger: https://developers.facebook.com/tools/debug/
+4. Should show proper title, description, and image
+
+---
+
+## Issue 10: News Articles Showing Email Instead of Author Name
+
+**Symptom**: News articles display author email (e.g., "super@admin.com") instead of name
+
+**Root Cause**: news_api Lambda get_user_name() using get_item() which requires exact key match, but users table may not have email as primary key
+
+**Fix**: Update news_api/index.py get_user_name() to use scan() with FilterExpression
+
+```python
+def get_user_name(email):
+    """Get user's display name from users table"""
+    try:
+        response = users_table.scan(
+            FilterExpression='email = :email',
+            ExpressionAttributeValues={':email': email}
+        )
+        users = response.get('Items', [])
+        if users:
+            user = users[0]
+            first_name = user.get('first_name', '')
+            last_name = user.get('last_name', '')
+            if first_name and last_name:
+                return f"{first_name} {last_name}"
+            elif first_name:
+                return first_name
+            elif last_name:
+                return last_name
+        return email
+    except Exception:
+        return email
+```
+
+**Deployment**:
+```powershell
+cd news_api
+zip -r ../news_api.zip .
+cd ..
+aws lambda update-function-code --function-name news_api --zip-file fileb://news_api.zip
+```
+
+**Verification**:
+1. Create new news article
+2. Check news.html - should show author name not email
+3. Run migration script if needed: `python update_news_author_names.py`
+
+---
+
 ## Quick Reference Commands
 
 ```powershell

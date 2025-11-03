@@ -532,6 +532,8 @@
             .then(function(data) {
                 if (data.error) {
                     alert('Error: ' + data.error);
+                } else if (data.news_id) {
+                    generateAndUploadPreview(data.news_id, newsData.title, newsData.content, newsData.featured_image);
                 } else {
                     alert('News article created successfully!');
                     window.location.href = 'news.html';
@@ -585,6 +587,77 @@
                 });
             };
             reader.readAsDataURL(file);
+        }
+
+        function generateAndUploadPreview(newsId, title, content, featuredImage) {
+            var tempDiv = document.createElement('div');
+            tempDiv.innerHTML = content;
+            var plainText = tempDiv.textContent || tempDiv.innerText;
+            var excerpt = plainText.substring(0, 160);
+            var imageUrl = 'https://d3oo5w3ywcz1uh.cloudfront.net/techcrosslogo.jpg';
+            
+            var previewHTML = '<!DOCTYPE html>\n<html lang="en">\n<head>\n' +
+                '<meta charset="UTF-8">\n' +
+                '<meta property="og:type" content="article">\n' +
+                '<meta property="og:site_name" content="Christian Conservatives Today">\n' +
+                '<meta property="og:title" content="' + escapeHtml(title) + '">\n' +
+                '<meta property="og:description" content="' + escapeHtml(excerpt) + '">\n' +
+                '<meta property="og:url" content="https://christianconservativestoday.com/previews/news-' + newsId + '.html">\n' +
+                '<meta property="og:image" content="' + imageUrl + '">\n' +
+                '<meta property="og:image:secure_url" content="' + imageUrl + '">\n' +
+                '<meta property="og:image:type" content="image/jpeg">\n' +
+                '<meta property="og:image:width" content="1200">\n' +
+                '<meta property="og:image:height" content="630">\n' +
+                '<meta name="twitter:card" content="summary_large_image">\n' +
+                '<meta name="twitter:title" content="' + escapeHtml(title) + '">\n' +
+                '<meta name="twitter:description" content="' + escapeHtml(excerpt) + '">\n' +
+                '<meta name="twitter:image" content="' + imageUrl + '">\n' +
+                '<meta http-equiv="refresh" content="0;url=/news-article.html?id=' + newsId + '">\n' +
+                '<title>' + escapeHtml(title) + ' - Christian Conservatives Today</title>\n' +
+                '</head>\n<body>\n' +
+                '<script>window.location.href="/news-article.html?id=' + newsId + '";</script>\n' +
+                '<p>Redirecting to article...</p>\n' +
+                '</body>\n</html>';
+            
+            uploadPreviewToS3(newsId, previewHTML);
+        }
+        
+        function escapeHtml(text) {
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        function uploadPreviewToS3(newsId, previewHTML) {
+            var ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
+            var token = localStorage.getItem('auth_token');
+            var filename = 'previews/news-' + newsId + '.html';
+            
+            fetch(ADMIN_API + '?action=upload_url', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify({ filename: filename })
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                return fetch(data.upload_url, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'text/html' },
+                    body: previewHTML
+                });
+            })
+            .then(function() {
+                alert('News article published successfully!');
+                window.location.href = 'news.html';
+            })
+            .catch(function(error) {
+                console.error('Preview upload error:', error);
+                alert('News article published but preview page failed. Article is still accessible.');
+                window.location.href = 'news.html';
+            });
         }
 
         function logout() {

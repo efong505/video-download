@@ -98,17 +98,25 @@ def verify_admin_token(event):
     return None
 
 def get_user_name(email):
-    """Get user's full name from email"""
+    """Get user's display name from users table"""
     try:
-        response = users_table.get_item(Key={'email': email})
-        if 'Item' in response:
-            user = response['Item']
+        response = users_table.scan(
+            FilterExpression='email = :email',
+            ExpressionAttributeValues={':email': email}
+        )
+        users = response.get('Items', [])
+        if users:
+            user = users[0]
             first_name = user.get('first_name', '')
             last_name = user.get('last_name', '')
-            if first_name or last_name:
-                return f"{first_name} {last_name}".strip()
+            if first_name and last_name:
+                return f"{first_name} {last_name}"
+            elif first_name:
+                return first_name
+            elif last_name:
+                return last_name
         return email
-    except:
+    except Exception:
         return email
 
 def create_news(event, headers):

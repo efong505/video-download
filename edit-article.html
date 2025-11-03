@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Article - Christian Conservative Platform</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/form-styles.css">
     <link rel="stylesheet" href="assets/css/common-styles.css">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="assets/js/token-validator.js"></script>
     <style>
         /* MOVED TO common-styles.css
 .dashboard-header {
@@ -722,7 +720,8 @@ Code block
                 const data = await response.json();
                 
                 if (response.ok) {
-                    generateAndUploadPreview(articleId, updateData.title, updateData.content, updateData.featured_image);
+                    alert('Article updated successfully!');
+                    window.location.href = 'articles.html';
                 } else {
                     alert('Error updating article: ' + data.error);
                 }
@@ -730,75 +729,6 @@ Code block
                 console.error('Error updating article:', error);
                 alert('Error updating article. Please try again.');
             }
-        }
-        
-        function generateAndUploadPreview(articleId, title, content, featuredImage) {
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = content;
-            const plainText = tempDiv.textContent || tempDiv.innerText;
-            const excerpt = plainText.substring(0, 160);
-            const imageUrl = featuredImage || 'https://christianconservativestoday.com/techcrosslogo.jpg';
-            
-            const previewHTML = '<!DOCTYPE html>\n<html lang="en">\n<head>\n' +
-                '<meta charset="UTF-8">\n' +
-                '<meta property="og:type" content="article">\n' +
-                '<meta property="og:site_name" content="Christian Conservatives Today">\n' +
-                '<meta property="og:title" content="' + escapeHtml(title) + '">\n' +
-                '<meta property="og:description" content="' + escapeHtml(excerpt) + '">\n' +
-                '<meta property="og:url" content="https://christianconservativestoday.com/previews/article-' + articleId + '.html">\n' +
-                '<meta property="og:image" content="' + imageUrl + '">\n' +
-                '<meta property="og:image:secure_url" content="' + imageUrl + '">\n' +
-                '<meta property="og:image:type" content="image/jpeg">\n' +
-                '<meta property="og:image:width" content="1200">\n' +
-                '<meta property="og:image:height" content="630">\n' +
-                '<meta name="twitter:card" content="summary_large_image">\n' +
-                '<meta name="twitter:title" content="' + escapeHtml(title) + '">\n' +
-                '<meta name="twitter:description" content="' + escapeHtml(excerpt) + '">\n' +
-                '<meta name="twitter:image" content="' + imageUrl + '">\n' +
-                '<meta http-equiv="refresh" content="0;url=/article.html?id=' + articleId + '">\n' +
-                '<title>' + escapeHtml(title) + ' - Christian Conservatives Today</title>\n' +
-                '</head>\n<body>\n' +
-                '<script>window.location.href="/article.html?id=' + articleId + '";</script>\n' +
-                '<p>Redirecting to article...</p>\n' +
-                '</body>\n</html>';
-            
-            uploadPreviewToS3(articleId, previewHTML);
-        }
-        
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-        
-        function uploadPreviewToS3(articleId, previewHTML) {
-            const filename = 'previews/article-' + articleId + '.html';
-            
-            fetch(ADMIN_API + '?action=upload_url', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + authToken
-                },
-                body: JSON.stringify({ filename: filename })
-            })
-            .then(response => response.json())
-            .then(data => {
-                return fetch(data.upload_url, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'text/html' },
-                    body: previewHTML
-                });
-            })
-            .then(() => {
-                alert('Article updated successfully!');
-                window.location.href = 'articles.html';
-            })
-            .catch(error => {
-                console.error('Preview upload error:', error);
-                alert('Article updated but preview page failed. Article is still accessible.');
-                window.location.href = 'articles.html';
-            });
         }
 
         let currentVerse = null;
@@ -988,6 +918,12 @@ Empty line creates new paragraph
             } else {
                 return quill.root.innerHTML;
             }
+        }
+        
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
         }
         
 

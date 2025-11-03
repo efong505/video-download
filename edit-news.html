@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit News - Christian Conservatives Today</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/form-styles.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <style>
         .dashboard-nav {
             background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
@@ -45,15 +43,11 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
             margin-bottom: 30px;
         }
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .form-label {
             font-weight: 600;
             color: #2c3e50;
             margin-bottom: 8px;
         }
-
-        */
         .form-control, .form-select {
             border: 2px solid #e9ecef;
             border-radius: 10px;
@@ -64,8 +58,6 @@
             border-color: #3498db;
             box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
         }
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .btn-primary {
             background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
             border: none;
@@ -74,18 +66,10 @@
             font-weight: 600;
             transition: all 0.3s ease;
         }
-
-        */
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
         }
-
-        */
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .btn-secondary {
             background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
             border: none;
@@ -94,16 +78,10 @@
             font-weight: 600;
             transition: all 0.3s ease;
         }
-
-        */
-        /* CONSOLIDATED TO card-styles.css or form-styles.css
-
         .btn-secondary:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(149, 165, 166, 0.4);
         }
-
-        */
         .breaking-news-toggle {
             background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
             border: none;
@@ -227,13 +205,6 @@
                     </div>
                 </div>
 
-                <div class="mb-3" id="author-field" style="display: none;">
-                    <label for="article-author" class="form-label">Author (Admin Only)</label>
-                    <select id="article-author" class="form-select">
-                        <option value="">Loading users...</option>
-                    </select>
-                </div>
-
                 <div class="mb-3">
                     <label class="form-label">Breaking News</label>
                     <div>
@@ -275,14 +246,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Content *</label>
-                    <div class="mb-2">
-                        <div class="form-check form-switch">
-                            <input class="form-check-input" type="checkbox" id="markdownMode" onchange="toggleMarkdownMode()">
-                            <label class="form-check-label" for="markdownMode">📝 Markdown Mode</label>
-                        </div>
-                    </div>
                     <div id="editor"></div>
-                    <textarea id="markdown-content" class="form-control" style="height: 300px; display: none; font-family: 'Courier New', monospace;" placeholder="Write your news in Markdown..."></textarea>
                 </div>
 
                 <div class="text-center">
@@ -301,13 +265,10 @@
     <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
     <script>
         var NEWS_API = 'https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news';
-        var ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
         var quill;
         var tags = [];
         var isBreaking = false;
         var newsId = null;
-        var isMarkdownMode = false;
-        var allUsers = [];
 
         document.addEventListener('DOMContentLoaded', function() {
             var token = localStorage.getItem('auth_token');
@@ -355,54 +316,14 @@
                 }
             });
 
-            // Load users for admin/super users
-            if (userRole === 'admin' || userRole === 'super_user') {
-                document.getElementById('author-field').style.display = 'block';
-                loadUsers();
-            }
-
             // Load news article
             loadNews();
         });
 
-        function loadUsers() {
-            var token = localStorage.getItem('auth_token');
-            
-            fetch(ADMIN_API + '?action=users', {
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
-            })
-            .then(function(response) { return response.json(); })
-            .then(function(data) {
-                if (data.users && Array.isArray(data.users)) {
-                    allUsers = data.users;
-                    populateAuthorDropdown(data.users);
-                } else {
-                    console.error('No users found');
-                }
-            })
-            .catch(function(error) {
-                console.error('Error loading users:', error);
-            });
-        }
-        
-        function populateAuthorDropdown(users) {
-            var authorSelect = document.getElementById('article-author');
-            authorSelect.innerHTML = '<option value="">Select Author...</option>';
-            
-            users.forEach(function(user) {
-                var option = document.createElement('option');
-                option.value = user.email;
-                var displayName = user.first_name && user.last_name ? 
-                    user.first_name + ' ' + user.last_name : user.email;
-                option.textContent = displayName + ' (' + user.email + ')';
-                authorSelect.appendChild(option);
-            });
-        }
-
         function loadNews() {
             var token = localStorage.getItem('auth_token');
+            
+            console.log('Loading news ID:', newsId);
             
             fetch(NEWS_API + '?action=get&news_id=' + newsId, {
                 headers: {
@@ -410,7 +331,10 @@
                 }
             })
             .then(function(response) { return response.json(); })
-            .then(function(news) {
+            .then(function(data) {
+                console.log('API Response:', data);
+                var news = data.news || data;
+                console.log('News object:', news);
                 if (news.error) {
                     alert('Error loading news: ' + news.error);
                     window.location.href = 'news.html';
@@ -440,16 +364,6 @@
                     var button = document.getElementById('breakingToggle');
                     button.classList.add('active');
                     button.innerHTML = '<i class="fas fa-check"></i> Breaking News Enabled';
-                }
-                
-                // Set author if admin/super user
-                var userData = localStorage.getItem('user_data');
-                var userRole = userData ? JSON.parse(userData).role : null;
-                if (['admin', 'super_user'].includes(userRole)) {
-                    var authorSelect = document.getElementById('article-author');
-                    if (authorSelect && news.author) {
-                        authorSelect.value = news.author;
-                    }
                 }
             })
             .catch(function(error) {
@@ -504,68 +418,13 @@
             updateNews();
         });
 
-        function toggleMarkdownMode() {
-            var markdownCheckbox = document.getElementById('markdownMode');
-            var quillEditor = document.getElementById('editor');
-            var markdownTextarea = document.getElementById('markdown-content');
-            
-            isMarkdownMode = markdownCheckbox.checked;
-            
-            if (isMarkdownMode) {
-                var markdownText = convertHtmlToMarkdown(quill.root.innerHTML);
-                markdownTextarea.value = markdownText;
-                quillEditor.style.display = 'none';
-                markdownTextarea.style.display = 'block';
-            } else {
-                var htmlContent = marked.parse(markdownTextarea.value);
-                quill.root.innerHTML = htmlContent;
-                quillEditor.style.display = 'block';
-                markdownTextarea.style.display = 'none';
-            }
-        }
-        
-        function convertHtmlToMarkdown(html) {
-            return html
-                .replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1\n\n')
-                .replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n\n')
-                .replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n\n')
-                .replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**')
-                .replace(/<b[^>]*>(.*?)<\/b>/gi, '**$1**')
-                .replace(/<em[^>]*>(.*?)<\/em>/gi, '*$1*')
-                .replace(/<i[^>]*>(.*?)<\/i>/gi, '*$1*')
-                .replace(/<a[^>]*href=["'](.*?)["'][^>]*>(.*?)<\/a>/gi, '[$2]($1)')
-                .replace(/<blockquote[^>]*>(.*?)<\/blockquote>/gi, '> $1\n\n')
-                .replace(/<ul[^>]*>([\s\S]*?)<\/ul>/gi, function(match, content) {
-                    return content.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, '- $1\n') + '\n';
-                })
-                .replace(/<ol[^>]*>([\s\S]*?)<\/ol>/gi, function(match, content) {
-                    var counter = 1;
-                    return content.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, function(match, item) {
-                        return (counter++) + '. ' + item + '\n';
-                    }) + '\n';
-                })
-                .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n')
-                .replace(/<br[^>]*>/gi, '\n')
-                .replace(/<[^>]+>/g, '')
-                .replace(/\n{3,}/g, '\n\n')
-                .trim();
-        }
-        
-        function getCurrentContent() {
-            if (isMarkdownMode) {
-                return marked.parse(document.getElementById('markdown-content').value);
-            } else {
-                return quill.root.innerHTML;
-            }
-        }
-
         function updateNews() {
             var token = localStorage.getItem('auth_token');
             
             var newsData = {
                 news_id: newsId,
                 title: document.getElementById('title').value,
-                content: getCurrentContent(),
+                content: quill.root.innerHTML,
                 summary: document.getElementById('summary').value,
                 category: document.getElementById('category').value,
                 visibility: document.getElementById('visibility').value,
@@ -575,16 +434,6 @@
                 featured_image: document.getElementById('featured_image').value,
                 tags: tags
             };
-            
-            // Include author change if admin/super user
-            var userData = localStorage.getItem('user_data');
-            var userRole = userData ? JSON.parse(userData).role : null;
-            if (['admin', 'super_user'].includes(userRole)) {
-                var newAuthorEmail = document.getElementById('article-author').value;
-                if (newAuthorEmail) {
-                    newsData.author = newAuthorEmail;
-                }
-            }
 
             fetch(NEWS_API + '?action=update', {
                 method: 'PUT',
