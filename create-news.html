@@ -193,6 +193,15 @@
                 </div>
 
                 <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="author" class="form-label">Author *</label>
+                            <input type="text" class="form-control" id="author" required placeholder="Enter author name">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-md-4">
                         <div class="mb-3">
                             <label for="category" class="form-label">Category</label>
@@ -341,6 +350,13 @@
                 alert('Admin access required');
                 window.location.href = 'login.html';
                 return;
+            }
+            
+            // Pre-fill author with current user's name
+            if (userData) {
+                var user = JSON.parse(userData);
+                var authorName = (user.first_name && user.last_name) ? user.first_name + ' ' + user.last_name : user.email;
+                document.getElementById('author').value = authorName;
             }
             
             // Populate state dropdown
@@ -507,6 +523,7 @@
             
             var newsData = {
                 title: document.getElementById('title').value,
+                author_name: document.getElementById('author').value,
                 content: getCurrentContent(),
                 summary: document.getElementById('summary').value,
                 category: document.getElementById('category').value,

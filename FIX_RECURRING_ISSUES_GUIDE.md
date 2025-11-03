@@ -287,14 +287,20 @@ aws s3 cp edit-news.html s3://my-video-downloads-bucket/
 
 ---
 
-## Issue 10: News Articles Showing Email Instead of Author Name
+## Issue 10: News Articles Showing Email Instead of Author Name (PERMANENT FIX)
 
-**Symptom**: News articles display author email (e.g., "super@admin.com") instead of name
+**Symptom**: News articles display author email (e.g., "super@admin.com") instead of name, and issue keeps recurring
 
-**Root Cause**: news_api Lambda get_user_name() using get_item() which requires exact key match, but users table may not have email as primary key
+**Root Causes**: 
+1. news_api Lambda get_user_name() using get_item() instead of scan()
+2. No author field in create/edit forms - author was auto-set from JWT token
+3. Existing records lack author_name field
 
-**Fix**: Update news_api/index.py get_user_name() to use scan() with FilterExpression
+**Permanent Solution**: Add editable author field to forms
 
+### Step 1: Fix news_api Lambda get_user_name()
+
+Update `news_api/index.py`:
 ```python
 def get_user_name(email):
     """Get user's display name from users table"""
@@ -319,18 +325,101 @@ def get_user_name(email):
         return email
 ```
 
-**Deployment**:
-```powershell
-cd news_api
-zip -r ../news_api.zip .
-cd ..
-aws lambda update-function-code --function-name news_api --zip-file fileb://news_api.zip
+### Step 2: Update create_news() to accept author_name from frontend
+
+In `news_api/index.py` create_news():
+```python
+# Get author_name from request or derive from email
+author_name = body.get('author_name', '')
+if not author_name:
+    author_name = get_user_name(user_info['email'])
+
+news_item = {
+    'news_id': news_id,
+    'title': body['title'],
+    ...
+    'author': user_info['email'],
+    'author_name': author_name,
+    ...
+}
 ```
 
+### Step 3: Update update_news() to accept author_name
+
+Add 'author_name' to fields list:
+```python
+fields = ['title', 'content', 'summary', 'category', 'tags', 'state', 'visibility', 
+         'is_breaking', 'external_url', 'featured_image', 'scheduled_publish', 'status', 'author_name']
+```
+
+### Step 4: Add author field to create-news.html
+
+After title field:
+```html
+<div class="row">
+    <div class="col-md-12">
+        <div class="mb-3">
+            <label for="author" class="form-label">Author *</label>
+            <input type="text" class="form-control" id="author" required placeholder="Enter author name">
+        </div>
+    </div>
+</div>
+```
+
+In DOMContentLoaded, pre-fill with current user:
+```javascript
+if (userData) {
+    var user = JSON.parse(userData);
+    var authorName = (user.first_name && user.last_name) ? user.first_name + ' ' + user.last_name : user.email;
+    document.getElementById('author').value = authorName;
+}
+```
+
+In createNews(), add to newsData:
+```javascript
+author_name: document.getElementById('author').value,
+```
+
+### Step 5: Add author field to edit-news.html
+
+Same as create-news.html, plus in loadNews():
+```javascript
+document.getElementById('author').value = news.author_name || news.author || '';
+```
+
+In updateNews(), add to newsData:
+```javascript
+author_name: document.getElementById('author').value,
+```
+
+**Deployment**:
+```powershell
+# Deploy Lambda
+cd news_api
+powershell -Command "Compress-Archive -Path * -DestinationPath ..\news_api.zip -Force"
+cd ..
+aws lambda update-function-code --function-name news-api --zip-file fileb://news_api.zip
+
+# Push HTML files
+aws s3 cp create-news.html s3://my-video-downloads-bucket/
+aws s3 cp edit-news.html s3://my-video-downloads-bucket/
+
+# Backfill existing records
+python update_news_author_names.py
+```
+
+**Why This is Permanent**:
+1. Author field is now editable in UI - admins can fix it anytime
+2. Field auto-fills with current user's name on create
+3. Lambda accepts author_name directly from frontend
+4. No dependency on automatic email-to-name conversion
+5. Migration script available for bulk fixes
+
 **Verification**:
-1. Create new news article
-2. Check news.html - should show author name not email
-3. Run migration script if needed: `python update_news_author_names.py`
+1. Create new news article - author field should show your name
+2. Edit existing news - author field should be editable
+3. Change author name and save - should persist
+4. Check news.html - should display author names not emails
 
 ---
 

@@ -146,6 +146,11 @@ def create_news(event, headers):
             except:
                 pass
         
+        # Get author_name from request or derive from email
+        author_name = body.get('author_name', '')
+        if not author_name:
+            author_name = get_user_name(user_info['email'])
+        
         news_item = {
             'news_id': news_id,
             'title': body['title'],
@@ -155,7 +160,7 @@ def create_news(event, headers):
             'tags': body.get('tags', []),
             'state': body.get('state', ''),
             'author': user_info['email'],
-            'author_name': get_user_name(user_info['email']),
+            'author_name': author_name,
             'visibility': body.get('visibility', 'public'),
             'is_breaking': body.get('is_breaking', False),
             'external_url': body.get('external_url', ''),
@@ -334,7 +339,7 @@ def update_news(event, headers):
         
         # Update fields if provided
         fields = ['title', 'content', 'summary', 'category', 'tags', 'state', 'visibility', 
-                 'is_breaking', 'external_url', 'featured_image', 'scheduled_publish', 'status']
+                 'is_breaking', 'external_url', 'featured_image', 'scheduled_publish', 'status', 'author_name']
         
         for field in fields:
             if field in body:
@@ -346,13 +351,6 @@ def update_news(event, headers):
                 else:
                     update_expression += f', {field} = :{field}'
                     expression_values[f':{field}'] = body[field]
-        
-        # Handle author change (admin only)
-        if 'author' in body:
-            new_author_email = body['author']
-            update_expression += ', author = :author, author_name = :author_name'
-            expression_values[':author'] = new_author_email
-            expression_values[':author_name'] = get_user_name(new_author_email)
         
         update_kwargs = {
             'Key': {'news_id': news_id},

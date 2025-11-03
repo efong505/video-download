@@ -162,10 +162,19 @@
 
             <form id="newsForm">
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                         <div class="mb-3">
                             <label for="title" class="form-label">Title *</label>
                             <input type="text" class="form-control" id="title" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="mb-3">
+                            <label for="author" class="form-label">Author *</label>
+                            <input type="text" class="form-control" id="author" required placeholder="Enter author name">
                         </div>
                     </div>
                     <div class="col-md-4">
@@ -343,6 +352,7 @@
                 
                 // Populate form
                 document.getElementById('title').value = news.title;
+                document.getElementById('author').value = news.author_name || news.author || '';
                 document.getElementById('category').value = news.category || 'general';
                 document.getElementById('visibility').value = news.visibility || 'public';
                 document.getElementById('status').value = news.status || 'published';
@@ -424,6 +434,7 @@
             var newsData = {
                 news_id: newsId,
                 title: document.getElementById('title').value,
+                author_name: document.getElementById('author').value,
                 content: quill.root.innerHTML,
                 summary: document.getElementById('summary').value,
                 category: document.getElementById('category').value,
