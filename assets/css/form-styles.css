@@ -146,6 +146,14 @@
     font-size: 0.9rem;
 }
 
+
+@media (max-width: 1199px) {
+    .admin-secndary-menu  {
+        top: 30px;
+    }
+}
+
+
 @media (max-width: 416px) {
     .container {
         padding: 0 10px;
@@ -159,6 +167,19 @@
     }
     .header {
         padding-top: 70px;
+        margin-top: 80px;
     }
     
 }
+
+@media (max-width:312px) {
+    
+    .header {
+        padding-top: 80px;
+        margin-top: 200px;
+    }
+    
+}
+
+
+

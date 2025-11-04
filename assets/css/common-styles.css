@@ -75,6 +75,12 @@ body {
     background: rgba(220,53,69,1);
 }
 
+@media (min-width: 1200px) {
+     .container {
+    max-width: 1160px !important;
+  }
+}
+
 /* Tablet responsive - used in 11 pages */
 @media (max-width: 768px) {
     .nav-brand {
@@ -114,8 +120,21 @@ body {
 /* Android mobile fix - used in multiple pages */
 @media (max-width: 422px) {
     .dashboard-header {
-        padding-top: 35px;
-        margin-top: 80px;
+        padding-top: 45px;
+        margin-top: 80px !important;
     }
+    
 }
 
+
+@media (max-width: 312px) {
+    div.header {
+        margin-top: 280px;
+    }
+}
+@media (max-width: 591px) {
+    div.header {
+        padding: 74px 0 20px 0;
+        margin-top: 36px;
+    }
+}

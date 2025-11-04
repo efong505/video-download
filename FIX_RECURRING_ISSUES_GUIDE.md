@@ -651,41 +651,202 @@ aws s3 cp articles.html s3://my-video-downloads-bucket/
 
 **Root Causes**:
 1. API Gateway missing GET method (only POST configured)
-2. Lambda execution role lacks DynamoDB permissions
-3. CORS headers in Lambda not sufficient without API Gateway methods
+2. Lambda missing invoke permissions from API Gateway
+3. Lambda execution role lacks DynamoDB permissions
+4. CORS headers in Lambda not sufficient without API Gateway methods
 
-**Fix**:
+**Complete Fix Checklist**:
 
 ### Step 1: Add GET method to API Gateway
 ```powershell
-aws apigateway put-method --rest-api-id <api-id> --resource-id <resource-id> --http-method GET --authorization-type NONE
+# Get API and resource IDs first
+aws apigatewayv2 get-apis
+aws apigatewayv2 get-routes --api-id <api-id>
+
+# Add GET method
+aws apigatewayv2 create-route --api-id <api-id> --route-key "GET /prayer" --target "integrations/<integration-id>"
 ```
 
-### Step 2: Integrate GET method with Lambda
+### Step 2: Grant Lambda invoke permission from API Gateway
 ```powershell
-aws apigateway put-integration --rest-api-id <api-id> --resource-id <resource-id> --http-method GET --type AWS_PROXY --integration-http-method POST --uri "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:<account-id>:function:<function-name>/invocations"
+# CRITICAL: Lambda needs permission for API Gateway to invoke it
+aws lambda add-permission `
+  --function-name prayer_api `
+  --statement-id apigateway-get-invoke `
+  --action lambda:InvokeFunction `
+  --principal apigateway.amazonaws.com `
+  --source-arn "arn:aws:execute-api:us-east-1:<account-id>:<api-id>/*/*/prayer"
 ```
 
 ### Step 3: Add DynamoDB permissions to Lambda role
 ```powershell
-aws iam attach-role-policy --role-name lambda-execution-role --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+# Find Lambda role name
+aws lambda get-function --function-name prayer_api --query 'Configuration.Role'
+
+# Attach DynamoDB policy
+aws iam attach-role-policy --role-name <lambda-role-name> --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
 ```
 
-### Step 4: Deploy API Gateway changes
+### Step 4: Verify Lambda CORS headers
+Ensure Lambda function has proper CORS headers in ALL responses:
+```python
+headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+    'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS'
+}
+
+# Handle OPTIONS preflight
+if event.get('httpMethod') == 'OPTIONS':
+    return {'statusCode': 200, 'headers': headers, 'body': ''}
+```
+
+### Step 5: Deploy API Gateway changes
 ```powershell
+# For API Gateway v2 (HTTP API)
+aws apigatewayv2 create-deployment --api-id <api-id> --stage-name prod
+
+# For API Gateway v1 (REST API)
 aws apigateway create-deployment --rest-api-id <api-id> --stage-name prod
 ```
 
 **Verification**:
-1. Test GET request in browser or Postman
+1. Test GET request in browser console:
+```javascript
+fetch('https://<api-id>.execute-api.us-east-1.amazonaws.com/prod/prayer?action=list')
+  .then(r => r.json())
+  .then(console.log)
+```
 2. Should return 200 with proper CORS headers
 3. No 403 errors
+4. Check CloudWatch logs for any errors
+
+**Common Mistakes**:
+- ❌ Only adding POST method, forgetting GET
+- ❌ Forgetting Lambda invoke permission (causes 403 even with CORS headers)
+- ❌ Not deploying API Gateway after changes
+- ❌ Lambda role missing DynamoDB permissions
+- ❌ CORS headers only in some responses, not all
 
 **Key Points**:
 - Lambda CORS headers alone aren't enough - API Gateway needs proper methods configured
 - GET requests need separate method configuration from POST
+- Lambda needs explicit invoke permission from API Gateway (most common cause of 403)
 - Lambda role needs explicit DynamoDB permissions
 - Always deploy API Gateway after configuration changes
+- Test both GET and POST methods separately
+
+**Real Example (Prayer API)**:
+```powershell
+# 1. Added GET route
+aws apigatewayv2 create-route --api-id cayl9dmtaf --route-key "GET /prayer" --target "integrations/kcmhqxd"
+
+# 2. Added invoke permission (THIS WAS THE KEY FIX)
+aws lambda add-permission `
+  --function-name prayer_api `
+  --statement-id apigateway-get-invoke `
+  --action lambda:InvokeFunction `
+  --principal apigateway.amazonaws.com `
+  --source-arn "arn:aws:execute-api:us-east-1:371751795928:cayl9dmtaf/*/*/prayer"
+
+# 3. Added DynamoDB permissions
+aws iam attach-role-policy --role-name lambda-execution-role --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+
+# 4. Deployed API
+aws apigatewayv2 create-deployment --api-id cayl9dmtaf --stage-name prod
+```
+
+---
+
+## Issue 14: DynamoDB Reserved Keyword Error on Update
+
+**Symptom**: Lambda UpdateItem operation fails with error: "Attribute name is a reserved keyword; reserved keyword: location" (or status, state, name, etc.)
+
+**Root Cause**: DynamoDB has reserved keywords that cannot be used directly in UpdateExpression without ExpressionAttributeNames
+
+**Common Reserved Keywords**: location, status, state, name, timestamp, date, year, month, day, comment, data, value, key, type, order, group, user, role, path, size, format, version, connection
+
+**Fix**: Use ExpressionAttributeNames to map placeholder names to actual field names
+
+### Before (Causes Error):
+```python
+def update_event(event, headers):
+    body = json.loads(event['body'])
+    event_id = body['event_id']
+    
+    update_expr = 'SET '
+    expr_values = {}
+    updates = []
+    
+    fields = ['title', 'location', 'status']  # location and status are reserved
+    
+    for field in fields:
+        if field in body:
+            updates.append(f'{field} = :{field}')  # ❌ Direct use of reserved keyword
+            expr_values[f':{field}'] = body[field]
+    
+    update_expr += ', '.join(updates)
+    
+    events_table.update_item(
+        Key={'event_id': event_id},
+        UpdateExpression=update_expr,
+        ExpressionAttributeValues=expr_values  # ❌ Missing ExpressionAttributeNames
+    )
+```
+
+### After (Fixed):
+```python
+def update_event(event, headers):
+    body = json.loads(event['body'])
+    event_id = body['event_id']
+    
+    update_expr = 'SET '
+    expr_values = {}
+    expr_names = {}  # ✅ Add expression attribute names
+    updates = []
+    
+    fields = ['title', 'location', 'status']
+    
+    for field in fields:
+        if field in body:
+            updates.append(f'#{field} = :{field}')  # ✅ Use placeholder with #
+            expr_values[f':{field}'] = body[field]
+            expr_names[f'#{field}'] = field  # ✅ Map placeholder to actual field
+    
+    update_expr += ', '.join(updates)
+    
+    events_table.update_item(
+        Key={'event_id': event_id},
+        UpdateExpression=update_expr,
+        ExpressionAttributeNames=expr_names,  # ✅ Include attribute names
+        ExpressionAttributeValues=expr_values
+    )
+```
+
+**Key Changes**:
+1. Add `expr_names = {}` dictionary
+2. Use `#{field}` instead of `{field}` in UpdateExpression
+3. Map each field: `expr_names[f'#{field}'] = field`
+4. Include `ExpressionAttributeNames=expr_names` in update_item()
+
+**Best Practice**: Always use ExpressionAttributeNames for ALL fields in UpdateExpression, not just reserved keywords. This prevents future issues if DynamoDB adds new reserved keywords.
+
+**Deployment**:
+```powershell
+# Package and deploy Lambda
+cd events_api
+powershell -Command "Compress-Archive -Path index.py,requirements.txt -DestinationPath ../events_api.zip -Force"
+cd ..
+aws lambda update-function-code --function-name events_api --zip-file fileb://events_api.zip
+```
+
+**Verification**:
+1. Try updating an item with reserved keyword field (e.g., location, status)
+2. Should succeed without ValidationException
+3. Check CloudWatch logs for successful update
+
+**Real Example (Events API)**:
+Fixed events_api update_event() function to use ExpressionAttributeNames for all fields including 'location' and 'status' reserved keywords.
 
 ---
 
