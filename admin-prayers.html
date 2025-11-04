@@ -20,7 +20,13 @@
     </nav>
 
     <div class="container-fluid my-4">
-        <h2 class="mb-4">Prayer Request Moderation</h2>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">Prayer Request Moderation</h2>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="moderationToggle" onchange="toggleModeration()">
+                <label class="form-check-label" for="moderationToggle">Require Approval</label>
+            </div>
+        </div>
 
         <ul class="nav nav-tabs mb-4">
             <li class="nav-item">
@@ -68,6 +74,7 @@
 
         $(document).ready(function() {
             checkAuth();
+            loadConfig();
             loadPrayers();
 
             $('.nav-link[data-tab]').click(function(e) {
@@ -80,10 +87,20 @@
         });
 
         function checkAuth() {
-            const token = localStorage.getItem('adminToken');
-            if (!token) {
-                window.location.href = 'admin.html';
+            const token = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+            if (!token || !userData) {
+                alert('Please log in as admin');
+                window.location.href = 'login.html';
+                return false;
             }
+            const user = JSON.parse(userData);
+            if (user.role !== 'admin' && user.role !== 'super_user') {
+                alert('Admin access required');
+                window.location.href = 'index.html';
+                return false;
+            }
+            return true;
         }
 
         function loadPrayers() {
@@ -91,6 +108,10 @@
             
             $.get(`${API_URL}?action=list&status=${status}`, function(data) {
                 displayPrayers(data.prayers || []);
+            });
+            
+            // Load all prayers for accurate counts
+            $.get(`${API_URL}?action=list`, function(data) {
                 updateCounts(data.prayers || []);
             });
         }
@@ -209,6 +230,34 @@
                 }),
                 success: function() {
                     loadPrayers();
+                }
+            });
+        }
+
+        function loadConfig() {
+            $.get(`${API_URL}?action=get_config`, function(data) {
+                $('#moderationToggle').prop('checked', data.require_moderation);
+            });
+        }
+
+        function toggleModeration() {
+            const requireModeration = $('#moderationToggle').is(':checked');
+            
+            $.ajax({
+                url: API_URL,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    action: 'set_config',
+                    require_moderation: requireModeration
+                }),
+                success: function() {
+                    const msg = requireModeration ? 'Moderation enabled - new prayers require approval' : 'Moderation disabled - new prayers auto-approved';
+                    alert(msg);
+                },
+                error: function() {
+                    alert('Failed to update configuration');
+                    $('#moderationToggle').prop('checked', !requireModeration);
                 }
             });
         }

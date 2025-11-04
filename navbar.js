@@ -12,6 +12,7 @@ function initNavbar() {
         {page: 'articles', label: 'Articles', emoji: '📖', fa: 'fa-book', public: true},
         {page: 'news', label: 'News', emoji: '📰', fa: 'fa-newspaper', public: true},
         {page: 'election-map', label: 'Election Map', emoji: '🗺️', fa: 'fa-map', public: true},
+        {page: 'prayer-wall', label: 'Prayer Wall', emoji: '🙏', fa: 'fa-praying-hands', public: true},
         {page: 'resources', label: 'Resources', emoji: '📚', fa: 'fa-book-open', public: true},
         {page: 'authors', label: 'Authors', emoji: '👥', fa: 'fa-users', adminOnly: true},
         {page: 'user-upload', label: 'Upload Video', emoji: '⬆️', fa: 'fa-upload', adminOnly: true},

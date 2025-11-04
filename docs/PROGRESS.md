@@ -1210,7 +1210,7 @@ articles-table:
 ## Advanced Ministry Tools Implementation - Phase 1 ✅ COMPLETE (January 2025)
 
 ### Prayer Request System Implementation
-**Status**: Phase 1 complete - Prayer Request System fully operational
+**Status**: Phase 1 complete - Prayer Request System fully operational with moderation toggle
 
 **Backend Components**:
 - ✅ DynamoDB table created: `prayer-requests` with request_id primary key

@@ -1,10 +1,14 @@
 import json
 import boto3
 import uuid
+import os
 from datetime import datetime
 
 dynamodb = boto3.resource('dynamodb')
 prayer_table = dynamodb.Table('prayer-requests')
+
+# Toggle moderation: set to 'true' to require approval, 'false' for auto-approve
+REQUIRE_MODERATION = os.environ.get('REQUIRE_MODERATION', 'false').lower() == 'true'
 
 def lambda_handler(event, context):
     headers = {
@@ -33,6 +37,10 @@ def lambda_handler(event, context):
             return update_prayer(event, headers)
         elif action == 'delete':
             return delete_prayer(event, headers)
+        elif action == 'get_config':
+            return get_config(headers)
+        elif action == 'set_config':
+            return set_config(event, headers)
         else:
             return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'Invalid action'})}
     
@@ -50,7 +58,7 @@ def create_prayer(event, headers):
         'state': body.get('state', ''),
         'submitted_by': body['submitted_by'],
         'submitted_by_name': body.get('submitted_by_name', 'Anonymous'),
-        'status': 'active',
+        'status': 'pending' if REQUIRE_MODERATION else 'active',
         'privacy': body.get('privacy', 'public'),
         'prayer_count': 0,
         'created_at': datetime.utcnow().isoformat()
@@ -130,3 +138,18 @@ def delete_prayer(event, headers):
     prayer_table.delete_item(Key={'request_id': request_id})
     
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Prayer request deleted'})}
+
+def get_config(headers):
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'require_moderation': REQUIRE_MODERATION})}
+
+def set_config(event, headers):
+    body = json.loads(event['body'])
+    require_moderation = body.get('require_moderation', False)
+    
+    lambda_client = boto3.client('lambda')
+    lambda_client.update_function_configuration(
+        FunctionName='prayer_api',
+        Environment={'Variables': {'REQUIRE_MODERATION': 'true' if require_moderation else 'false'}}
+    )
+    
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Configuration updated', 'require_moderation': require_moderation})}
