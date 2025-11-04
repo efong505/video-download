@@ -645,6 +645,50 @@ aws s3 cp articles.html s3://my-video-downloads-bucket/
 
 ---
 
+## Issue 13: New Lambda API Returns 403 CORS Error
+
+**Symptom**: New Lambda API returns 403 Forbidden with CORS error, even though Lambda has CORS headers
+
+**Root Causes**:
+1. API Gateway missing GET method (only POST configured)
+2. Lambda execution role lacks DynamoDB permissions
+3. CORS headers in Lambda not sufficient without API Gateway methods
+
+**Fix**:
+
+### Step 1: Add GET method to API Gateway
+```powershell
+aws apigateway put-method --rest-api-id <api-id> --resource-id <resource-id> --http-method GET --authorization-type NONE
+```
+
+### Step 2: Integrate GET method with Lambda
+```powershell
+aws apigateway put-integration --rest-api-id <api-id> --resource-id <resource-id> --http-method GET --type AWS_PROXY --integration-http-method POST --uri "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:<account-id>:function:<function-name>/invocations"
+```
+
+### Step 3: Add DynamoDB permissions to Lambda role
+```powershell
+aws iam attach-role-policy --role-name lambda-execution-role --policy-arn arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess
+```
+
+### Step 4: Deploy API Gateway changes
+```powershell
+aws apigateway create-deployment --rest-api-id <api-id> --stage-name prod
+```
+
+**Verification**:
+1. Test GET request in browser or Postman
+2. Should return 200 with proper CORS headers
+3. No 403 errors
+
+**Key Points**:
+- Lambda CORS headers alone aren't enough - API Gateway needs proper methods configured
+- GET requests need separate method configuration from POST
+- Lambda role needs explicit DynamoDB permissions
+- Always deploy API Gateway after configuration changes
+
+---
+
 ## Quick Reference Commands
 
 ```powershell
