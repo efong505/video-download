@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Videos - Show All</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>🔍 Debug: All Videos (Including Uncategorized)</h1>
+        <p class="text-muted">This page shows ALL videos from the TAG API, including those without tags</p>
+        
+        <div id="loading" class="text-center my-5">
+            <div class="spinner-border" role="status"></div>
+            <p>Loading all videos...</p>
+        </div>
+        
+        <div id="stats" class="alert alert-info" style="display: none;"></div>
+        
+        <div id="videos-table-container" style="display: none;">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Filename</th>
+                        <th>Title</th>
+                        <th>Tags</th>
+                        <th>Owner</th>
+                        <th>Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="videos-tbody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
+        const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
+        
+        async function loadAllVideos() {
+            try {
+                const userData = localStorage.getItem('user_data');
+                const authToken = localStorage.getItem('auth_token');
+                const userEmail = userData ? JSON.parse(userData).email : '';
+                const userRole = userData ? JSON.parse(userData).role : '';
+                
+                console.log('=== LOADING FROM MULTIPLE SOURCES ===');
+                
+                // Try TAG API
+                console.log('1. Trying TAG API...');
+                const tagResponse = await fetch(`${TAG_API}?action=list&user=${encodeURIComponent(userEmail)}&role=${encodeURIComponent(userRole)}`);
+                const tagData = await tagResponse.json();
+                console.log('TAG API Response:', tagData);
+                
+                // Try ADMIN API
+                console.log('2. Trying ADMIN API...');
+                const adminResponse = await fetch(`${ADMIN_API}?action=videos`, {
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+                const adminData = await adminResponse.json();
+                console.log('ADMIN API Response:', adminData);
+                
+                // Compare results
+                const tagVideos = tagData.videos || [];
+                const adminVideos = adminData.videos || [];
+                
+                console.log('TAG API video count:', tagVideos.length);
+                console.log('ADMIN API video count:', adminVideos.length);
+                
+                // Find videos in TAG API but not in ADMIN API
+                const tagFilenames = new Set(tagVideos.map(v => v.filename));
+                const adminFilenames = new Set(adminVideos.map(v => v.filename));
+                
+                const onlyInTag = tagVideos.filter(v => !adminFilenames.has(v.filename));
+                const onlyInAdmin = adminVideos.filter(v => !tagFilenames.has(v.filename));
+                
+                console.log('Videos ONLY in TAG API (ghost videos):', onlyInTag.length);
+                console.log('Videos ONLY in ADMIN API:', onlyInAdmin.length);
+                
+                if (onlyInTag.length > 0) {
+                    console.log('Ghost videos:', onlyInTag);
+                }
+                
+                // Use ADMIN API as source of truth (shows everything)
+                if (adminVideos.length > 0) {
+                    displayVideos(adminVideos, onlyInTag);
+                } else if (tagVideos.length > 0) {
+                    displayVideos(tagVideos, []);
+                } else {
+                    document.getElementById('loading').innerHTML = '<p class="text-danger">No videos found in either API</p>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loading').innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+            }
+        }
+        
+        function displayVideos(videos, ghostVideos = []) {
+            document.getElementById('loading').style.display = 'none';
+            
+            // Show stats
+            const uncategorized = videos.filter(v => !v.tags || v.tags.length === 0);
+            const ghostFilenames = new Set(ghostVideos.map(v => v.filename));
+            
+            const statsDiv = document.getElementById('stats');
+            statsDiv.innerHTML = `
+                <strong>Total Videos:</strong> ${videos.length}<br>
+                <strong>Videos with Tags:</strong> ${videos.length - uncategorized.length}<br>
+                <strong>Videos WITHOUT Tags (Uncategorized):</strong> ${uncategorized.length}<br>
+                <strong style="color: red;">Ghost Videos (on frontend but not admin):</strong> ${ghostVideos.length}
+            `;
+            statsDiv.style.display = 'block';
+            
+            // Display table
+            const tbody = document.getElementById('videos-tbody');
+            tbody.innerHTML = '';
+            
+            videos.forEach(video => {
+                const row = document.createElement('tr');
+                const tags = video.tags && video.tags.length > 0 ? video.tags.join(', ') : '<span class="badge bg-warning">NO TAGS</span>';
+                const videoType = video.video_type || 'local';
+                const isGhost = ghostFilenames.has(video.filename);
+                
+                if (isGhost) {
+                    row.style.backgroundColor = '#ffcccc';
+                }
+                
+                row.innerHTML = `
+                    <td><small>${video.filename}</small>${isGhost ? ' <span class="badge bg-danger">GHOST</span>' : ''}</td>
+                    <td>${video.title}</td>
+                    <td>${tags}</td>
+                    <td>${video.owner || 'system'}</td>
+                    <td><span class="badge bg-${videoType === 'local' ? 'primary' : 'info'}">${videoType}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-warning me-1" onclick='editVideo(${JSON.stringify(video)})'>Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteVideo('${video.filename}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            
+            document.getElementById('videos-table-container').style.display = 'block';
+        }
+        
+        function editVideo(video) {
+            const currentTags = video.tags && video.tags.length > 0 ? video.tags.join(', ') : '';
+            const newTags = prompt(`Edit tags for: ${video.title}\n\nEnter tags (comma-separated):\nExamples: news, politics, sermons`, currentTags);
+            
+            if (newTags === null) return; // User cancelled
+            
+            const tagsArray = newTags.split(',').map(t => t.trim()).filter(t => t);
+            
+            if (tagsArray.length === 0) {
+                alert('Please enter at least one tag');
+                return;
+            }
+            
+            updateVideoTags(video.filename, video.title, tagsArray, video.owner, video.visibility, video.video_type, video.external_url);
+        }
+        
+        async function updateVideoTags(filename, title, tags, owner, visibility, videoType, externalUrl) {
+            try {
+                const response = await fetch(`${TAG_API}?action=add_video`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        video_id: filename,
+                        filename: filename,
+                        title: title,
+                        tags: tags,
+                        owner: owner || 'system',
+                        visibility: visibility || 'public',
+                        video_type: videoType || 'local',
+                        external_url: externalUrl || ''
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert(`✅ Tags updated successfully!\n\nNew tags: ${tags.join(', ')}`);
+                    location.reload();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to update'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        async function deleteVideo(filename) {
+            if (!confirm(`Delete video: ${filename}?`)) return;
+            
+            const authToken = localStorage.getItem('auth_token');
+            try {
+                const response = await fetch(`${ADMIN_API}?action=video&filename=${encodeURIComponent(filename)}`, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Video deleted successfully!');
+                    location.reload();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to delete'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        // Load on page load
+        document.addEventListener('DOMContentLoaded', loadAllVideos);
+    </script>
+</body>
+</html>

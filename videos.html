@@ -399,16 +399,7 @@
                 <p>No videos found.</p>
             </div>
             
-            <!-- Load More Button -->
-            <div class="text-center mt-4" id="load-more-container" style="display: none;">
-                <button id="load-more-btn" class="btn btn-primary btn-lg" style="border-radius: 25px; padding: 12px 30px;">
-                    📥 Load More Videos
-                </button>
-                <div id="loading-more" class="mt-3" style="display: none;">
-                    <div class="spinner-border spinner-border-sm" role="status"></div>
-                    <span class="ms-2">Loading more videos...</span>
-                </div>
-            </div>
+
         </div>
     </div>
 
@@ -419,10 +410,6 @@
         
         let allVideos = [];
         let filteredVideos = [];
-        let currentPage = 1;
-        let currentCategory = 'all';
-        let hasMore = true;
-        const videosPerPage = 24;
         
         async function checkAuth() {
             const token = localStorage.getItem('auth_token');
@@ -455,13 +442,13 @@
             }
         }
         
-        async function loadVideos(page = 1, category = 'all', append = false) {
+        async function loadVideos() {
             try {
                 const userData = localStorage.getItem('user_data');
                 const userEmail = userData ? JSON.parse(userData).email : '';
                 const userRole = userData ? JSON.parse(userData).role : '';
                 
-                const tagResponse = await fetch(`${TAG_API}?action=list&user=${encodeURIComponent(userEmail)}&role=${encodeURIComponent(userRole)}&page=${page}&limit=${videosPerPage}&category=${category}`);
+                const tagResponse = await fetch(`${TAG_API}?action=list&user=${encodeURIComponent(userEmail)}&role=${encodeURIComponent(userRole)}`);
                 const tagData = await tagResponse.json();
                 
                 console.log('TAG API response:', tagData);
@@ -470,12 +457,7 @@
                 
                 if (tagData.videos && tagData.videos.length > 0) {
                     let videosWithMetadata = tagData.videos;
-                    hasMore = tagData.has_more || false;
-                    
-                    if (append) {
-                        allVideos = [...allVideos, ...videosWithMetadata];
-                    } else {
-                        allVideos = videosWithMetadata;
+                    allVideos = videosWithMetadata;
                         
                         // Calculate stats only on first load
                         const allTags = new Set();
@@ -490,34 +472,25 @@
                             }
                         });
                         
-                        document.getElementById('total-videos').textContent = tagData.total_count || videosWithMetadata.length;
-                        document.getElementById('total-size').textContent = formatFileSize(totalSize);
-                        document.getElementById('total-tags').textContent = allTags.size;
-                        document.getElementById('stats-bar').style.display = 'flex';
-                        
-                        setupTagFilter(allTags);
-                        setupSearch();
-                        setupCategoryFilter();
-                    }
+                    document.getElementById('total-videos').textContent = tagData.total_count || videosWithMetadata.length;
+                    document.getElementById('total-size').textContent = formatFileSize(totalSize);
+                    document.getElementById('total-tags').textContent = allTags.size;
+                    document.getElementById('stats-bar').style.display = 'flex';
+                    
+                    setupTagFilter(allTags);
+                    setupSearch();
+                    setupCategoryFilter();
                     
                     filteredVideos = [...allVideos];
-                    displayVideos(append ? videosWithMetadata : filteredVideos, append);
+                    displayVideos(filteredVideos);
                     
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('videos-container').style.display = 'flex';
                     document.getElementById('search-filter-bar').style.display = 'block';
                     document.getElementById('category-bar').style.display = 'block';
-                    
-                    // Show/hide load more button
-                    if (hasMore) {
-                        document.getElementById('load-more-container').style.display = 'block';
-                    } else {
-                        document.getElementById('load-more-container').style.display = 'none';
-                    }
-                } else if (!append) {
+                } else {
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('no-videos').style.display = 'block';
-                    document.getElementById('load-more-container').style.display = 'none';
                 }
                 
             } catch (error) {
@@ -733,18 +706,6 @@
             });
         }
         
-        async function loadMoreVideos() {
-            document.getElementById('loading-more').style.display = 'block';
-            document.getElementById('load-more-btn').style.display = 'none';
-            
-            currentPage++;
-            await loadVideos(currentPage, currentCategory, true);
-            
-            document.getElementById('loading-more').style.display = 'none';
-            if (hasMore) {
-                document.getElementById('load-more-btn').style.display = 'block';
-            }
-        }
         
         function playExternalVideo(button, embedSrc) {
             const card = button.closest('.video-card');
@@ -835,32 +796,11 @@
             return sorted;
         }
 
-        function displayVideos(videos, append = false) {
+        function displayVideos(videos) {
             const container = document.getElementById('videos-container');
-            if (!append) {
-                container.innerHTML = '';
-            }
+            container.innerHTML = '';
             
             console.log('Displaying videos:', videos);
-            
-            if (append) {
-                // For appended videos (load more), just add them without grouping
-                for (const video of videos) {
-                    const videoType = video.video_type || 'local';
-                    const externalUrl = video.external_url || '';
-                    
-                    if (videoType === 'local') {
-                        const baseName = video.filename.replace('.mp4', '');
-                        const videoUrl = `${BUCKET_URL}/videos/${video.filename}`;
-                        const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb_2.jpg`;
-                        const fallbackThumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
-                        
-                        createVideoCard(container, video.title, videoUrl, thumbnailUrl, fallbackThumbnailUrl, video.filename, videoType, externalUrl);
-                    } else {
-                        createVideoCard(container, video.title, '', '', '', video.filename, videoType, externalUrl);
-                    }
-                }
-            } else {
                 // Group videos by their primary tag for initial display
                 const groupedVideos = {};
                 const uncategorized = [];
@@ -992,7 +932,6 @@
                         rightBtn.style.display = row.scrollLeft < row.scrollWidth - row.clientWidth - 1 ? 'block' : 'none';
                     });
                 }
-            }
         }
         
         function clearFilters() {
@@ -1154,8 +1093,6 @@
             lastCategoryCheck = localStorage.getItem('category_order_changed') || '0';
         });
         
-        // Load more button event listener
-        document.getElementById('load-more-btn').addEventListener('click', loadMoreVideos);
     </script>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>

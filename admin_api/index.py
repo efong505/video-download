@@ -218,42 +218,49 @@ def get_all_videos(event):
     current_role = current_user.get('role')
     current_email = current_user.get('email')
     
-    # Get videos from S3
-    s3_response = s3_client.list_objects_v2(
-        Bucket='my-video-downloads-bucket',
-        Prefix='videos/'
-    )
-    
     videos = []
-    if 'Contents' in s3_response:
-        for obj in s3_response['Contents']:
-            if obj['Key'] != 'videos/':
-                filename = obj['Key'].replace('videos/', '')
-                
-                # Get metadata if available
+    
+    # Get ALL videos from metadata table (includes both local and external)
+    metadata_response = metadata_table.scan()
+    
+    for metadata in metadata_response.get('Items', []):
+        visibility = metadata.get('visibility', 'public')
+        owner = metadata.get('owner', 'system')
+        video_type = metadata.get('video_type', 'local')
+        filename = metadata.get('filename', '')
+        
+        # Admin/Super users see all videos, others see only their own + public
+        if current_role in ['admin', 'super_user'] or visibility == 'public' or owner == current_email:
+            video_data = {
+                'filename': filename,
+                'tags': metadata.get('tags', []),
+                'title': metadata.get('title', filename.replace('.mp4', '')),
+                'owner': owner,
+                'visibility': visibility,
+                'video_type': video_type,
+                'external_url': metadata.get('external_url', '')
+            }
+            
+            # Get size from S3 for local videos only
+            if video_type == 'local':
                 try:
-                    metadata_response = metadata_table.get_item(
-                        Key={'video_id': filename}
+                    s3_obj = s3_client.head_object(
+                        Bucket='my-video-downloads-bucket',
+                        Key=f'videos/{filename}'
                     )
-                    metadata = metadata_response.get('Item', {})
+                    video_data['size'] = s3_obj['ContentLength']
+                    video_data['size_formatted'] = format_file_size(s3_obj['ContentLength'])
+                    video_data['last_modified'] = s3_obj['LastModified'].isoformat()
                 except:
-                    metadata = {}
-                
-                # Admin/Super users see all videos, others see only their own + public
-                visibility = metadata.get('visibility', 'public')
-                owner = metadata.get('owner', 'system')
-                
-                if current_role in ['admin', 'super_user'] or visibility == 'public' or owner == current_email:
-                    videos.append({
-                        'filename': filename,
-                        'size': obj['Size'],
-                        'size_formatted': format_file_size(obj['Size']),
-                        'last_modified': obj['LastModified'].isoformat(),
-                        'tags': metadata.get('tags', []),
-                        'title': metadata.get('title', filename.replace('.mp4', '')),
-                        'owner': owner,
-                        'visibility': visibility
-                    })
+                    video_data['size'] = 0
+                    video_data['size_formatted'] = '0 B'
+                    video_data['last_modified'] = metadata.get('created_at', '')
+            else:
+                video_data['size'] = 0
+                video_data['size_formatted'] = 'External'
+                video_data['last_modified'] = metadata.get('created_at', '')
+            
+            videos.append(video_data)
     
     return {
         'statusCode': 200,
@@ -432,9 +439,22 @@ def delete_video(event):
         }
     
     try:
-        # Check if it's an external video
-        metadata_response = metadata_table.get_item(Key={'video_id': filename})
-        metadata = metadata_response.get('Item', {})
+        # First, find the video_id by scanning for this filename
+        # This is necessary because video_id might not equal filename (e.g., old videos with UUID video_ids)
+        scan_response = metadata_table.scan(
+            FilterExpression='filename = :fn',
+            ExpressionAttributeValues={':fn': filename}
+        )
+        
+        if not scan_response.get('Items'):
+            return {
+                'statusCode': 404,
+                'headers': cors_headers(),
+                'body': json.dumps({'error': 'Video not found'})
+            }
+        
+        metadata = scan_response['Items'][0]
+        video_id = metadata['video_id']
         video_type = metadata.get('video_type', 'local')
         
         if video_type == 'local':
@@ -455,15 +475,16 @@ def delete_video(event):
                 except Exception as e:
                     print(f'Failed to delete thumbnail {i}: {e}')
         
-        # Delete metadata (for both local and external videos)
-        metadata_table.delete_item(Key={'video_id': filename})
+        # Delete metadata using the correct video_id primary key
+        metadata_table.delete_item(Key={'video_id': video_id})
         
         return {
             'statusCode': 200,
             'headers': cors_headers(),
             'body': json.dumps({
                 'message': 'Video deleted successfully',
-                'filename': filename
+                'filename': filename,
+                'video_id': video_id
             })
         }
         

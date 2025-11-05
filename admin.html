@@ -1358,7 +1358,10 @@
             document.getElementById('videos-table').style.display = 'none';
 
             try {
-                const response = await fetch(`${TAG_API}?action=list&user=${encodeURIComponent(currentUser.email)}&role=${encodeURIComponent(currentUser.role)}`);
+                // Use ADMIN API to get ALL videos (including those without tags)
+                const response = await fetch(`${ADMIN_API}?action=videos`, {
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
                 const data = await response.json();
 
                 if (response.ok) {
@@ -1393,7 +1396,8 @@
             videos.forEach(video => {
                 const row = document.createElement('tr');
                 const sizeInMB = (video.size / (1024 * 1024)).toFixed(1);
-                const tags = video.tags.length > 0 ? video.tags.join(', ') : 'No tags';
+                const videoTags = video.tags || []; // Handle null/undefined tags
+                const tags = videoTags.length > 0 ? videoTags.join(', ') : 'No tags';
 
                 const embedUrl = `https://christianconservativestoday.com/embed.html?v=${video.filename}&t=${encodeURIComponent(video.title)}`;
                 const owner = video.owner || 'system';
@@ -1440,7 +1444,8 @@
             tagFilter.innerHTML = '<option value="">All Tags</option>';
             const uniqueTags = new Set();
             allAdminVideos.forEach(video => {
-                video.tags.forEach(tag => uniqueTags.add(tag));
+                const videoTags = video.tags || [];
+                videoTags.forEach(tag => uniqueTags.add(tag));
             });
 
             Array.from(uniqueTags).sort().forEach(tag => {
@@ -1467,7 +1472,8 @@
                     video.title.toLowerCase().includes(searchTerm) ||
                     video.filename.toLowerCase().includes(searchTerm);
 
-                const matchesTag = !selectedTag || video.tags.includes(selectedTag);
+                const videoTags = video.tags || [];
+                const matchesTag = !selectedTag || videoTags.includes(selectedTag);
 
                 const matchesVisibility = !selectedVisibility ||
                     (video.visibility || 'public') === selectedVisibility;
@@ -2010,14 +2016,13 @@
             const visibility = document.getElementById('edit-video-visibility').value;
 
             try {
-                const response = await fetch(`${TAG_API}?action=add_video`, {
+                const response = await fetch(`${TAG_API}?action=update_video`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         video_id: filename,
-                        filename: filename,
                         title: title,
                         tags: tags,
                         owner: owner,

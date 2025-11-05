@@ -1045,3 +1045,148 @@ To prevent these issues from recurring:
 - `assets/js/token-validator.js` - JWT expiration checker
 - `update_article_author_names.py` - Article migration script
 - `update_news_author_names.py` - News migration script (already exists)
+
+## Issue 16: Video Delete Returns Success But Video Still Exists
+
+**Symptom**: Clicking delete on a video shows "Video deleted successfully" but video still appears in admin dashboard after refresh
+
+**Root Cause**: DynamoDB video-metadata table uses `video_id` as primary key, but older videos have UUID video_ids that don't match their filenames. The delete function was trying to delete using `filename` as the key, which silently failed.
+
+**Example**:
+- Filename: `test-video.mp4`
+- video_id: `57d3e0ff-0a87-44f0-8178-e559a00547d6` (UUID)
+- Delete tried: `Key={'video_id': 'test-video.mp4'}` ❌
+- Should be: `Key={'video_id': '57d3e0ff-0a87-44f0-8178-e559a00547d6'}` ✅
+
+**Why It Happened**:
+- Old videos created before standardization used UUIDs as video_id
+- New videos use filename as video_id
+- Delete function assumed video_id always equals filename
+- DynamoDB delete_item() doesn't throw error if key doesn't exist - just returns success
+
+**Fix**: Update admin_api delete_video() to scan for filename first, then delete using correct video_id
+
+### Before (Broken):
+```python
+def delete_video(event):
+    filename = query_params.get('filename')
+    
+    # Assumes video_id equals filename
+    metadata_response = metadata_table.get_item(Key={'video_id': filename})
+    metadata = metadata_response.get('Item', {})
+    
+    # Delete using filename as key (fails for old videos with UUID video_ids)
+    metadata_table.delete_item(Key={'video_id': filename})
+```
+
+### After (Fixed):
+```python
+def delete_video(event):
+    filename = query_params.get('filename')
+    
+    # Scan to find video by filename (handles both UUID and filename video_ids)
+    scan_response = metadata_table.scan(
+        FilterExpression='filename = :fn',
+        ExpressionAttributeValues={':fn': filename}
+    )
+    
+    if not scan_response.get('Items'):
+        return {'statusCode': 404, 'error': 'Video not found'}
+    
+    metadata = scan_response['Items'][0]
+    video_id = metadata['video_id']  # Get actual video_id (might be UUID)
+    
+    # Delete using correct video_id primary key
+    metadata_table.delete_item(Key={'video_id': video_id})
+```
+
+**Deployment**:
+```powershell
+cd admin_api
+powershell -Command "Compress-Archive -Path index.py -DestinationPath function.zip -Force"
+aws lambda update-function-code --function-name admin-api --zip-file fileb://function.zip
+```
+
+**Verification**:
+1. Find a video with UUID video_id: `aws dynamodb scan --table-name video-metadata --filter-expression "attribute_exists(video_id) AND video_id <> filename"`
+2. Try deleting it from admin dashboard
+3. Should delete successfully
+4. Verify it's gone: `aws dynamodb get-item --table-name video-metadata --key "{\"video_id\": {\"S\": \"<uuid>\"}}"`
+5. Should return empty response
+
+**Manual Fix for Stuck Videos**:
+```powershell
+# Find the video's actual video_id
+aws dynamodb scan --table-name video-metadata --filter-expression "filename = :fn" --expression-attribute-values "{\":fn\":{\"S\":\"test-video.mp4\"}}"
+
+# Delete using correct video_id
+aws dynamodb delete-item --table-name video-metadata --key "{\"video_id\": {\"S\": \"57d3e0ff-0a87-44f0-8178-e559a00547d6\"}}"
+```
+
+**Prevention**:
+1. Always use scan with FilterExpression when looking up by non-primary-key fields
+2. Never assume video_id equals filename
+3. Test delete function with both old (UUID) and new (filename) videos
+4. Add logging to show which video_id is being deleted
+
+**Key Takeaway**: DynamoDB delete_item() with wrong key silently succeeds without deleting anything. Always verify the primary key value before deleting.
+
+---
+
+
+## Issue 17: Videos Moving/Reordering After Editing in Admin Dashboard
+
+**Symptom**: When editing videos in the admin dashboard (especially those in the "Load More" section), videos appear to move to different positions or categories after saving.
+
+**Root Cause**: 
+- The `updateVideo()` function in admin.html was calling `TAG_API?action=add_video`
+- The `add_video` action uses DynamoDB's `put_item()` which **OVERWRITES** the entire item
+- This caused the `upload_date` to be reset to the current timestamp
+- Since videos.html sorts by `upload_date` (newest first), edited videos jumped to the top
+- This changed pagination boundaries, making videos appear in different positions
+
+**The Fix**:
+1. Changed `updateVideo()` to use `TAG_API?action=update_video` instead of `add_video`
+2. Changed HTTP method to POST (API Gateway accepts POST, not PUT)
+3. Updated TAG API's `update_video_tags()` function to:
+   - Handle title updates
+   - Use ExpressionAttributeNames for reserved keyword "owner"
+   - Only update specified fields with `update_item()`
+4. Now preserves original `upload_date`, `size`, and other metadata
+
+**Files Modified**:
+- `admin.html`: Changed updateVideo() to use update_video action with POST
+- `tag_api/index.py`: Fixed update_video_tags() to handle reserved keywords and title updates
+
+**Key Learning**: 
+- DynamoDB reserved keywords (like "owner") must use ExpressionAttributeNames
+- Always use `update_item()` for partial updates, never `put_item()`
+
+## Issue 18: Load More Button Removed - Horizontal Scrolling Sufficient
+
+**Symptom**: "Load More Videos" button was confusing users - they expected it to load more videos within categories, but it actually loaded more categories.
+
+**Root Cause**:
+- Pagination was designed for vertical scrolling
+- With horizontal scrolling per category, pagination became redundant
+- Users couldn't tell if videos were hidden or just in other categories
+
+**The Solution**:
+1. Removed "Load More" button and pagination logic from videos.html
+2. Updated TAG API to return ALL videos when no page/limit parameters provided
+3. All categories now load on initial page load
+4. Each category uses horizontal scrolling to show all videos
+5. Thumbnails use `loading="lazy"` for efficient bandwidth usage
+
+**Benefits**:
+- ✅ Simpler UX - no hidden content
+- ✅ All categories visible at once
+- ✅ Efficient loading - thumbnails lazy load as you scroll
+- ✅ Fast initial load - only visible thumbnails download
+- ✅ No confusing pagination
+
+**Files Modified**:
+- `videos.html`: Removed pagination variables, loadMoreVideos(), Load More button HTML
+- `tag_api/index.py`: Modified list_all_videos() to return all videos when no pagination params
+
+**Performance**: Page loads ALL video metadata but only downloads thumbnail images as they scroll into view (lazy loading).

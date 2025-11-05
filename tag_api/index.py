@@ -39,7 +39,7 @@ def lambda_handler(event, context):
             return get_videos_by_tag(event)
         elif method == 'GET' and action == 'get_all_tags':
             return get_all_tags(event)
-        elif method == 'PUT' and action == 'update_video':
+        elif (method == 'PUT' or method == 'POST') and action == 'update_video':
             return update_video_tags(event)
         elif method == 'GET' and action == 'list':
             return list_all_videos(event)
@@ -173,43 +173,79 @@ def get_all_tags(event):
 
 def update_video_tags(event):
     """Update tags for a video"""
-    body = json.loads(event['body'])
-    video_id = body['video_id']
-    new_tags = body['tags']
-    owner = body.get('owner')
-    visibility = body.get('visibility')
-    
-    update_expr = 'SET tags = :tags, updated_at = :updated'
-    expr_values = {
-        ':tags': new_tags,
-        ':updated': datetime.utcnow().isoformat()
-    }
-    
-    if owner:
-        update_expr += ', owner = :owner'
-        expr_values[':owner'] = owner
-    
-    if visibility:
-        update_expr += ', visibility = :visibility'
-        expr_values[':visibility'] = visibility
-    
-    table.update_item(
-        Key={'video_id': video_id},
-        UpdateExpression=update_expr,
-        ExpressionAttributeValues=expr_values
-    )
-    
-    return {
-        'statusCode': 200,
-        'headers': cors_headers(),
-        'body': json.dumps({
-            'message': 'Video updated',
-            'video_id': video_id,
-            'tags': new_tags,
-            'owner': owner,
-            'visibility': visibility
-        })
-    }
+    print(f"update_video_tags called")
+    try:
+        body = json.loads(event.get('body', '{}'))
+        print(f"Parsed body: {json.dumps(body)}")
+        
+        video_id = body.get('video_id')
+        if not video_id:
+            return {
+                'statusCode': 400,
+                'headers': cors_headers(),
+                'body': json.dumps({'error': 'video_id is required'})
+            }
+        
+        new_tags = body.get('tags', [])
+        title = body.get('title')
+        owner = body.get('owner')
+        visibility = body.get('visibility')
+        
+        update_expr = 'SET tags = :tags, updated_at = :updated'
+        expr_values = {
+            ':tags': new_tags,
+            ':updated': datetime.utcnow().isoformat()
+        }
+        expr_names = {}
+        
+        if title:
+            update_expr += ', title = :title'
+            expr_values[':title'] = title
+        
+        if owner:
+            update_expr += ', #owner = :owner'
+            expr_values[':owner'] = owner
+            expr_names['#owner'] = 'owner'
+        
+        if visibility:
+            update_expr += ', visibility = :visibility'
+            expr_values[':visibility'] = visibility
+        
+        print(f"Updating video_id={video_id}")
+        update_params = {
+            'Key': {'video_id': video_id},
+            'UpdateExpression': update_expr,
+            'ExpressionAttributeValues': expr_values
+        }
+        if expr_names:
+            update_params['ExpressionAttributeNames'] = expr_names
+        
+        table.update_item(**update_params)
+        print(f"Update successful")
+        
+        response = {
+            'statusCode': 200,
+            'headers': cors_headers(),
+            'body': json.dumps({
+                'message': 'Video updated',
+                'video_id': video_id,
+                'title': title,
+                'tags': new_tags,
+                'owner': owner,
+                'visibility': visibility
+            })
+        }
+        print(f"Returning response")
+        return response
+    except Exception as e:
+        print(f"ERROR in update_video_tags: {str(e)}")
+        import traceback
+        print(f"Traceback: {traceback.format_exc()}")
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
+        }
 
 def get_video_metadata(filename):
     """Get metadata for a specific video - public access for embedding"""
@@ -298,8 +334,8 @@ def list_all_videos(event):
     query_params = event.get('queryStringParameters') or {}
     user_email = query_params.get('user')
     user_role = query_params.get('role')
-    page = int(query_params.get('page', 1))
-    limit = int(query_params.get('limit', 24))
+    page = int(query_params.get('page', 1)) if query_params.get('page') else None
+    limit = int(query_params.get('limit', 0)) if query_params.get('limit') else 0
     category = query_params.get('category', 'all')
     
     response = table.scan()
@@ -365,25 +401,38 @@ def list_all_videos(event):
     # Sort by upload date (newest first)
     all_videos.sort(key=lambda x: x.get('upload_date', ''), reverse=True)
     
-    # Pagination
     total_count = len(all_videos)
-    start_index = (page - 1) * limit
-    end_index = start_index + limit
-    paginated_videos = all_videos[start_index:end_index]
     
-    return {
-        'statusCode': 200,
-        'headers': cors_headers(),
-        'body': json.dumps({
-            'videos': paginated_videos,
-            'count': len(paginated_videos),
-            'total_count': total_count,
-            'page': page,
-            'limit': limit,
-            'total_pages': (total_count + limit - 1) // limit,
-            'has_more': end_index < total_count
-        })
-    }
+    # Pagination only if page and limit are specified
+    if page and limit > 0:
+        start_index = (page - 1) * limit
+        end_index = start_index + limit
+        paginated_videos = all_videos[start_index:end_index]
+        
+        return {
+            'statusCode': 200,
+            'headers': cors_headers(),
+            'body': json.dumps({
+                'videos': paginated_videos,
+                'count': len(paginated_videos),
+                'total_count': total_count,
+                'page': page,
+                'limit': limit,
+                'total_pages': (total_count + limit - 1) // limit,
+                'has_more': end_index < total_count
+            })
+        }
+    else:
+        # Return all videos without pagination
+        return {
+            'statusCode': 200,
+            'headers': cors_headers(),
+            'body': json.dumps({
+                'videos': all_videos,
+                'count': total_count,
+                'total_count': total_count
+            })
+        }
 
 def create_article_via_tags(event):
     """Create article via TAG API to bypass CORS issues"""

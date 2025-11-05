@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Duplicate Videos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>🔍 Find Duplicate Videos</h1>
+        <p class="text-muted">This tool finds actual database duplicates (same filename, different video_id)</p>
+        
+        <div id="loading" class="text-center my-5">
+            <div class="spinner-border" role="status"></div>
+            <p>Scanning for duplicates...</p>
+        </div>
+        
+        <div id="results" style="display: none;">
+            <div class="alert alert-info" id="summary"></div>
+            
+            <div id="duplicates-container"></div>
+            
+            <div id="no-duplicates" class="alert alert-success" style="display: none;">
+                ✅ No duplicate videos found in database!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
+        
+        async function findDuplicates() {
+            try {
+                const authToken = localStorage.getItem('auth_token');
+                const response = await fetch(`${ADMIN_API}?action=videos`, {
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+                
+                const data = await response.json();
+                console.log('All videos:', data.videos);
+                
+                if (data.videos) {
+                    analyzeDuplicates(data.videos);
+                } else {
+                    document.getElementById('loading').innerHTML = '<p class="text-danger">Failed to load videos</p>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('loading').innerHTML = `<p class="text-danger">Error: ${error.message}</p>`;
+            }
+        }
+        
+        function analyzeDuplicates(videos) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            
+            // Group by filename
+            const filenameMap = {};
+            videos.forEach(video => {
+                const filename = video.filename;
+                if (!filenameMap[filename]) {
+                    filenameMap[filename] = [];
+                }
+                filenameMap[filename].push(video);
+            });
+            
+            // Find duplicates
+            const duplicates = {};
+            Object.keys(filenameMap).forEach(filename => {
+                if (filenameMap[filename].length > 1) {
+                    duplicates[filename] = filenameMap[filename];
+                }
+            });
+            
+            // Display results
+            const duplicateCount = Object.keys(duplicates).length;
+            document.getElementById('summary').innerHTML = `
+                <strong>Total Videos:</strong> ${videos.length}<br>
+                <strong>Unique Filenames:</strong> ${Object.keys(filenameMap).length}<br>
+                <strong>Duplicate Filenames:</strong> ${duplicateCount}
+            `;
+            
+            if (duplicateCount === 0) {
+                document.getElementById('no-duplicates').style.display = 'block';
+            } else {
+                displayDuplicates(duplicates);
+            }
+        }
+        
+        function displayDuplicates(duplicates) {
+            const container = document.getElementById('duplicates-container');
+            container.innerHTML = '<h3>Duplicate Videos Found:</h3>';
+            
+            Object.keys(duplicates).forEach(filename => {
+                const entries = duplicates[filename];
+                
+                const card = document.createElement('div');
+                card.className = 'card mb-3';
+                card.style.borderLeft = '4px solid #dc3545';
+                
+                let entriesHtml = '';
+                entries.forEach((entry, index) => {
+                    const tags = entry.tags && entry.tags.length > 0 ? entry.tags.join(', ') : 'No tags';
+                    entriesHtml += `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td><small>${entry.video_id || 'N/A'}</small></td>
+                            <td>${entry.title}</td>
+                            <td>${tags}</td>
+                            <td>${entry.owner || 'system'}</td>
+                            <td>
+                                <button class="btn btn-sm btn-danger" onclick="deleteByVideoId('${entry.video_id}', '${filename}')">Delete This</button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                card.innerHTML = `
+                    <div class="card-body">
+                        <h5 class="card-title">📹 ${filename}</h5>
+                        <p class="text-danger"><strong>${entries.length} duplicate entries found</strong></p>
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Video ID</th>
+                                    <th>Title</th>
+                                    <th>Tags</th>
+                                    <th>Owner</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${entriesHtml}
+                            </tbody>
+                        </table>
+                        <button class="btn btn-warning" onclick="keepNewest('${filename}')">Keep Newest, Delete Others</button>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+        }
+        
+        async function deleteByVideoId(videoId, filename) {
+            if (!confirm(`Delete this entry?\n\nVideo ID: ${videoId}\nFilename: ${filename}`)) return;
+            
+            const authToken = localStorage.getItem('auth_token');
+            try {
+                // Note: This requires updating the admin API to support deletion by video_id
+                const response = await fetch(`${ADMIN_API}?action=video&video_id=${encodeURIComponent(videoId)}`, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Entry deleted successfully!');
+                    location.reload();
+                } else {
+                    alert('Error: ' + (data.error || 'Failed to delete'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        }
+        
+        async function keepNewest(filename) {
+            alert('This feature requires backend support. For now, manually delete older entries.');
+        }
+        
+        document.addEventListener('DOMContentLoaded', findDuplicates);
+    </script>
+</body>
+</html>
