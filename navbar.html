@@ -43,10 +43,24 @@
     .nav-link:hover {
         color: #2c5aa0 !important;
     }
-    @media (min-width: 992px) and (max-width: 1199px) {
+    @media (min-width: 992px) and (max-width: 1399px) {
         .nav-link {
-            padding: 0.4rem 0.5rem !important;
-            font-size: 0.9rem;
+            padding: 0.4rem 0.4rem !important;
+            font-size: 0.85rem;
+        }
+        .navbar-brand {
+            font-size: 0.95rem;
+        }
+        .navbar-logo {
+            height: 28px;
+        }
+    }
+    @media (max-width: 991px) {
+        .navbar-nav {
+            padding-top: 1rem;
+        }
+        .nav-link {
+            padding: 0.5rem 0 !important;
         }
     }
 </style>

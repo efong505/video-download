@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prayer Wall - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { padding-top: 70px; }
+        .prayer-card { border-left: 4px solid #0d6efd; transition: transform 0.2s; }
+        .prayer-card:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .prayer-count { font-size: 1.2rem; color: #0d6efd; font-weight: bold; }
+        .category-badge { font-size: 0.85rem; }
+        .answered-card { border-left-color: #198754; background-color: #f0f9f4; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="prayer-wall"></div>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <h1 class="mb-4"><i class="fas fa-praying-hands me-2"></i>Prayer Wall</h1>
+                
+                <!-- Filters -->
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-4">
+                                <select id="categoryFilter" class="form-select">
+                                    <option value="">All Categories</option>
+                                    <option value="personal">Personal</option>
+                                    <option value="election">Election</option>
+                                    <option value="ministry">Ministry</option>
+                                    <option value="nation">Nation</option>
+                                    <option value="state">State</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select id="statusFilter" class="form-select">
+                                    <option value="active">Active</option>
+                                    <option value="answered">Answered</option>
+                                    <option value="">All</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <select id="stateFilter" class="form-select">
+                                    <option value="">All States</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prayer Requests -->
+                <div id="prayerList"></div>
+            </div>
+
+            <div class="col-lg-4">
+                <!-- Submit Prayer Request -->
+                <div class="card sticky-top" style="top: 20px;">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">Submit Prayer Request</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="prayerForm">
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="prayerTitle" placeholder="Title" required>
+                            </div>
+                            <div class="mb-3">
+                                <textarea class="form-control" id="prayerDescription" rows="4" placeholder="Prayer request details..." required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <select class="form-select" id="prayerCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="personal">Personal</option>
+                                    <option value="election">Election</option>
+                                    <option value="ministry">Ministry</option>
+                                    <option value="nation">Nation</option>
+                                    <option value="state">State</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="prayerName" placeholder="Your Name" required>
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" class="form-control" id="prayerEmail" placeholder="Your Email (optional)">
+                            </div>
+                            <div class="mb-3">
+                                <select class="form-select" id="prayerState">
+                                    <option value="">State (optional)</option>
+                                </select>
+                            </div>
+                            <div class="mb-3 form-check">
+                                <input type="checkbox" class="form-check-input" id="prayerPrivacy">
+                                <label class="form-check-label" for="prayerPrivacy">Keep anonymous</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">Submit Request</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            })
+            .catch(err => console.error('Failed to load navbar:', err));
+    </script>
+    <script>
+        const API_URL = 'https://cayl9dmtaf.execute-api.us-east-1.amazonaws.com/prod';
+        const states = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+
+        $(document).ready(function() {
+            populateStateDropdowns();
+            loadPrayers();
+
+            $('#categoryFilter, #statusFilter, #stateFilter').change(loadPrayers);
+            $('#prayerForm').submit(submitPrayer);
+        });
+
+        function populateStateDropdowns() {
+            states.forEach(state => {
+                $('#stateFilter, #prayerState').append(`<option value="${state}">${state}</option>`);
+            });
+        }
+
+        function loadPrayers() {
+            const category = $('#categoryFilter').val();
+            const status = $('#statusFilter').val();
+            const state = $('#stateFilter').val();
+
+            let url = `${API_URL}?action=list`;
+            if (category) url += `&category=${category}`;
+            if (status) url += `&status=${status}`;
+            if (state) url += `&state=${state}`;
+
+            $.get(url, function(data) {
+                displayPrayers(data.prayers || []);
+            }).fail(function() {
+                $('#prayerList').html('<div class="alert alert-danger">Failed to load prayers</div>');
+            });
+        }
+
+        function displayPrayers(prayers) {
+            if (prayers.length === 0) {
+                $('#prayerList').html('<div class="alert alert-info">No prayer requests found</div>');
+                return;
+            }
+
+            let html = '';
+            prayers.forEach(prayer => {
+                const isAnswered = prayer.status === 'answered';
+                const cardClass = isAnswered ? 'prayer-card answered-card' : 'prayer-card';
+                const categoryColors = {
+                    personal: 'primary', election: 'danger', ministry: 'success',
+                    nation: 'warning', state: 'info'
+                };
+                const badgeColor = categoryColors[prayer.category] || 'secondary';
+
+                html += `
+                    <div class="card mb-3 ${cardClass}">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-start mb-2">
+                                <h5 class="card-title mb-0">${escapeHtml(prayer.title)}</h5>
+                                <span class="badge bg-${badgeColor} category-badge">${prayer.category}</span>
+                            </div>
+                            <p class="card-text">${escapeHtml(prayer.description)}</p>
+                            ${prayer.testimony ? `<div class="alert alert-success mb-2"><strong>Answered!</strong> ${escapeHtml(prayer.testimony)}</div>` : ''}
+                            <div class="d-flex justify-content-between align-items-center">
+                                <small class="text-muted">
+                                    ${prayer.privacy === 'private' ? 'Anonymous' : escapeHtml(prayer.submitted_by_name)}
+                                    ${prayer.state ? ` • ${prayer.state}` : ''}
+                                    • ${formatDate(prayer.created_at)}
+                                </small>
+                                <div>
+                                    <span class="prayer-count me-2"><i class="fas fa-praying-hands"></i> ${prayer.prayer_count || 0}</span>
+                                    ${!isAnswered ? `<button class="btn btn-sm btn-primary" onclick="prayForRequest('${prayer.request_id}')">I Prayed</button>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            $('#prayerList').html(html);
+        }
+
+        function submitPrayer(e) {
+            e.preventDefault();
+
+            const data = {
+                action: 'create',
+                title: $('#prayerTitle').val(),
+                description: $('#prayerDescription').val(),
+                category: $('#prayerCategory').val(),
+                submitted_by_name: $('#prayerName').val(),
+                submitted_by: $('#prayerEmail').val() || 'anonymous@prayer.com',
+                state: $('#prayerState').val(),
+                privacy: $('#prayerPrivacy').is(':checked') ? 'private' : 'public'
+            };
+
+            $.ajax({
+                url: API_URL,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function() {
+                    alert('Prayer request submitted! It will appear after admin approval.');
+                    $('#prayerForm')[0].reset();
+                },
+                error: function() {
+                    alert('Failed to submit prayer request');
+                }
+            });
+        }
+
+        function prayForRequest(requestId) {
+            $.ajax({
+                url: API_URL,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ action: 'pray', request_id: requestId }),
+                success: function() {
+                    loadPrayers();
+                }
+            });
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diff = now - date;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            
+            if (days === 0) return 'Today';
+            if (days === 1) return 'Yesterday';
+            if (days < 7) return `${days} days ago`;
+            return date.toLocaleDateString();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

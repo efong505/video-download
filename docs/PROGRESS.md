@@ -684,7 +684,8 @@ articles-table:
 - [x] **Related articles suggestions** ✅ COMPLETE - Algorithm-based recommendations using category matching, shared tags, same author, and recency scoring to suggest top 3 related articles
 - [x] **State election contributor system** ✅ COMPLETE - Interactive state map with 50 states, state correspondent assignments with verification badges, Republican candidate profiles by state, election calendar with event types, contributor management dashboard, role-based access control, and local election coverage from verified contributors
 - [x] **Article analytics and view tracking** ✅ COMPLETE - View counts, top articles dashboard, category performance stats, analytics API endpoint
-- [ ] **Advanced ministry tools** - Enhanced features for ministry use (see Phase 3 item 4 above for full list)ARTICLE ENHANCEMENTS**: Draft/preview functionality, service notes template, study notes category, and editing capabilities
+- [x] **Newsletter System** ✅ COMPLETE - Professional email templates (5 designs), dual editor (visual/HTML), campaign management (4 segments), mail merge personalization, open tracking & analytics, subscriber management (CRUD), auto-digest generator, newsletter archive
+- [ ] **Advanced ministry tools** - Enhanced features for ministry use (see Phase 3 item 4 above for full list)
 - **ADMIN NAME MANAGEMENT**: Administrators can now edit user first and last names through the admin dashboard
 - **SYSTEM STABILITY**: Fixed access issues, improved external video handling, and enhanced user experience
 - **NAVIGATION OPTIMIZED**: Streamlined upload workflow and fixed broken links across the platform
@@ -1206,6 +1207,158 @@ articles-table:
 6. ✅ Verified "prophecy" category now appears in admin ordering interface
 
 **Verification**: ✅ Video category ordering system now fully functional - categories can be reordered in admin panel and changes immediately reflect on videos page with proper category grouping and display order
+
+## Newsletter System Implementation ✅ COMPLETE (January 2025)
+
+### System Overview
+**Feature**: Complete email newsletter system with professional templates, campaign management, mail merge, open tracking, and subscriber management.
+
+### Core Features Implemented
+**Professional Email Templates** (5 designs):
+- Modern Gradient - Purple gradient header with clean layout
+- Classic Newsletter - Traditional with sidebar style
+- Patriotic Theme - Red, white, blue design
+- Minimalist Clean - Simple elegant white space
+- Bold Impact - Eye-catching large typography
+- All templates mobile-responsive (600px max-width) with inline CSS
+
+**Dual Editor System**:
+- Visual Editor - contenteditable div with rich text toolbar (Bold, Italic, Underline, Lists, Alignment, Font Size, Color, Links)
+- HTML Editor - Raw HTML textarea for direct code editing
+- Both editors sync perfectly on tab switch
+- No style stripping (replaced Quill.js which sanitized HTML)
+
+**Campaign/Segment Management**:
+- 4 default campaigns: General, Election Updates, Prayer Requests, Events & Rallies
+- Campaign counts displayed on dashboard
+- Filter subscribers by campaign
+- Multi-campaign assignment per subscriber
+- Targeted newsletter sending by campaign
+
+**Mail Merge Personalization**:
+- {{first_name}} - Subscriber's first name
+- {{last_name}} - Subscriber's last name
+- {{email}} - Subscriber's email
+- {{unsubscribe_link}} - Auto-generated unsubscribe URL
+- Automatic replacement when sending
+
+**Open Tracking & Analytics**:
+- Tracking pixel in each email (1x1 transparent GIF)
+- Open count per subscriber (tracks multiple opens)
+- Last opened timestamp
+- Open rate percentage
+- Total opens across all recipients
+- Analytics dashboard with detailed view
+- Click "View Details" to see who opened, open counts, last opened time
+
+**Enhanced Subscriber Management**:
+- Required fields: Email, First Name
+- Optional fields: Last Name, Phone Number
+- Actions: Edit subscriber (name, phone, campaigns), Unsubscribe, Delete
+- Campaign assignment via checkboxes
+- Subscribers tab with full list and actions
+- Campaigns tab with counts and filtering
+
+**Auto-Digest Newsletter**:
+- Weekly automated newsletter generation
+- Pulls top 3 articles (by views)
+- Latest 3 news items
+- Top 3 prayer requests (by prayer count)
+- Next 3 upcoming events
+- Professional HTML template
+- Automatic sending to subscribers
+- Lambda: digest_generator
+
+**Newsletter Archive**:
+- Public page: newsletter-archive.html
+- Shows all sent newsletters
+- Search functionality
+- Share links with copy-to-clipboard
+- Individual newsletter viewing
+- Direct URL access via ?id= parameter
+
+### Technical Implementation
+**Database Schema**:
+- email_subscribers table: email (PK), first_name (required), last_name, phone, campaigns (list), status, subscribed_at, source
+- newsletter_analytics table: tracking_id (PK), newsletter_id, email, campaign, opened, open_count, last_opened_at, clicked, sent_at
+- newsletters table: newsletter_id (PK), title, subject, content, template_id, status, scheduled_send, created_by, created_at, sent_at, recipient_count, open_count, click_count
+- newsletter_templates table: template_id (PK), name, description, html, thumbnail, created_at
+
+**API Endpoints**:
+- get_subscriber - Get single subscriber details
+- update_subscriber - Update subscriber info and campaigns
+- delete_subscriber - Permanently delete subscriber
+- get_newsletter_analytics - Get analytics for specific newsletter
+- get_analytics - Get all analytics data
+
+**Lambda Functions**:
+- newsletter_api - Enhanced with campaign filtering, mail merge, tracking
+- digest_generator - Auto-generates weekly digest from platform content
+
+**Frontend Files**:
+- admin-newsletters.html - Enhanced with campaigns, analytics, subscriber management
+- subscribe.html - Updated with first name required, last name/phone optional
+- newsletter-archive.html - Public archive with search and share
+
+### Key Design Decisions
+**Why contenteditable instead of Quill?**
+- Quill strips inline styles and complex HTML
+- Email templates require inline CSS (external stylesheets don't work)
+- contenteditable preserves all HTML/CSS
+- Professional email builders (Mailchimp, SendGrid) use contenteditable
+- Rich text toolbar provides formatting without sanitization
+
+**Why campaigns instead of tags?**
+- Simpler for users to understand
+- Pre-defined segments for common use cases
+- Easy to filter and count
+- Supports multi-campaign assignment
+- Aligns with ministry focus areas
+
+**Why tracking pixel instead of link tracking?**
+- Opens are more important metric than clicks for newsletters
+- Tracking pixel is standard email analytics method
+- Counts multiple opens per user
+- Doesn't require modifying all links in content
+- Simple 1x1 transparent GIF implementation
+
+### Documentation Created
+- NEWSLETTER_ENHANCEMENTS.md - Complete feature documentation
+- NEWSLETTER_SYSTEM_GUIDE.md - User guide for newsletter features
+- AUTO_DIGEST_GUIDE.md - Complete guide for auto-digest system
+- FIX_RECURRING_ISSUES_GUIDE.md - Added Issue 15: Quill Editor Stripping Email Template Styling
+
+### Files Created/Modified
+**Created**:
+- digest_generator/index.py - Auto-digest Lambda function
+- update_subscriber_schema.py - Migration script for subscriber schema
+- newsletter-archive.html - Public newsletter archive
+- create_professional_templates.py - Template generation script
+- docs/NEWSLETTER_ENHANCEMENTS.md
+- docs/AUTO_DIGEST_GUIDE.md
+
+**Modified**:
+- newsletter_api/index.py - Enhanced with campaigns, mail merge, tracking
+- admin-newsletters.html - Complete UI overhaul with campaigns and analytics
+- subscribe.html - Updated schema with required/optional fields
+- navbar.js - Added newsletter archive link
+- FIX_RECURRING_ISSUES_GUIDE.md - Added Quill editor issue
+
+### Verification Checklist
+- ✅ Create newsletter with template
+- ✅ Edit in Visual tab, switch to HTML - styling preserved
+- ✅ Edit in HTML tab, switch to Visual - changes rendered
+- ✅ Send newsletter with mail merge tags
+- ✅ Verify {{first_name}} replaced in received email
+- ✅ Open email multiple times - open_count increments
+- ✅ View analytics - see open rates and details
+- ✅ Edit subscriber - change campaigns
+- ✅ Filter by campaign - see correct subscribers
+- ✅ Unsubscribe user - status changes
+- ✅ Delete subscriber - removed from database
+- ✅ Auto-digest generates and sends weekly
+
+**Status**: Newsletter system fully operational with professional templates, campaign management, mail merge, open tracking, subscriber management, auto-digest generator, and public archive.
 
 ## Advanced Ministry Tools Implementation - Phase 1 ✅ COMPLETE (January 2025)
 

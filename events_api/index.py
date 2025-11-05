@@ -68,6 +68,7 @@ def create_event(event, headers):
         'event_id': str(uuid.uuid4()),
         'title': body['title'],
         'description': body['description'],
+        'event_type': body.get('event_type', 'general'),
         'category': body.get('category', 'general'),
         'event_date': body['event_date'],
         'event_time': body.get('event_time', ''),
@@ -130,9 +131,9 @@ def update_event(event, headers):
     expr_names = {}
     updates = []
     
-    fields = ['title', 'description', 'category', 'event_date', 'event_time', 'location', 
+    fields = ['title', 'description', 'event_type', 'category', 'event_date', 'event_time', 'location', 
               'address', 'state', 'registration_required', 'registration_url', 'max_attendees',
-              'contact_email', 'contact_phone', 'image_url', 'status']
+              'contact_email', 'contact_phone', 'image_url', 'status', 'organizer']
     
     for field in fields:
         if field in body:

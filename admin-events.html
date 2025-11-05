@@ -12,10 +12,35 @@
     <div class="container my-5" style="margin-top: 5rem !important;">
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h1>📅 Manage Events</h1>
-            <button class="btn btn-primary" onclick="showCreateModal()">+ Create Event</button>
+            <div>
+                <button class="btn btn-primary" onclick="showCreateModal()">+ Create Event</button>
+                <button class="btn btn-success" onclick="showImportModal()">📥 Import CSV</button>
+                <button class="btn btn-info" onclick="syncElectionDates()">🗳️ Sync Election Dates</button>
+            </div>
         </div>
 
         <div id="eventsTable"></div>
+    </div>
+
+    <!-- Import CSV Modal -->
+    <div class="modal fade" id="importModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import Events from CSV</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Upload a CSV file with columns: title, description, category, event_date, event_time, location, address, state, contact_email, contact_phone, registration_url</p>
+                    <input type="file" class="form-control" id="csvFile" accept=".csv">
+                    <div id="importPreview" class="mt-3"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="importCSV()">Import</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Create/Edit Modal -->
@@ -38,7 +63,18 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label class="form-label">Category *</label>
+                            <label class="form-label">Event Type *</label>
+                            <select class="form-select" id="eventType">
+                                <option value="church">Church Service</option>
+                                <option value="rally">Rally</option>
+                                <option value="town_hall">Town Hall</option>
+                                <option value="prayer_meeting">Prayer Meeting</option>
+                                <option value="election">Election Event</option>
+                                <option value="general">General</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Category</label>
                             <select class="form-select" id="category">
                                 <option value="service">Church Service</option>
                                 <option value="conference">Conference</option>
@@ -47,12 +83,8 @@
                                 <option value="general">General</option>
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label">State</label>
-                            <select class="form-select" id="state">
-                                <option value="">Select State</option>
-                            </select>
-                        </div>
+                    </div>
+                    <div class="row">
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -177,11 +209,131 @@
             $('#eventId').val('');
             $('#title, #description, #location, #address, #contactEmail, #contactPhone, #imageUrl, #registrationUrl').val('');
             $('#eventDate, #eventTime').val('');
+            $('#eventType').val('general');
             $('#category').val('general');
             $('#state').val('');
             $('#registrationRequired').prop('checked', false);
             $('#maxAttendees').val('0');
             new bootstrap.Modal(document.getElementById('eventModal')).show();
+        }
+
+        function showImportModal() {
+            $('#csvFile').val('');
+            $('#importPreview').html('');
+            new bootstrap.Modal(document.getElementById('importModal')).show();
+        }
+
+        function importCSV() {
+            const file = document.getElementById('csvFile').files[0];
+            if (!file) {
+                alert('Please select a CSV file');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const lines = text.split('\n');
+                const headers = lines[0].split(',').map(h => h.trim());
+                
+                let imported = 0;
+                const user = JSON.parse(userData);
+                
+                for (let i = 1; i < lines.length; i++) {
+                    if (!lines[i].trim()) continue;
+                    
+                    const values = lines[i].split(',').map(v => v.trim());
+                    const event = {};
+                    headers.forEach((header, index) => {
+                        event[header] = values[index] || '';
+                    });
+                    
+                    const eventData = {
+                        action: 'create',
+                        title: event.title,
+                        description: event.description,
+                        event_type: event.event_type || 'general',
+                        category: event.category || 'general',
+                        event_date: event.event_date,
+                        event_time: event.event_time || '',
+                        location: event.location || '',
+                        address: event.address || '',
+                        state: event.state || '',
+                        contact_email: event.contact_email || '',
+                        contact_phone: event.contact_phone || '',
+                        registration_url: event.registration_url || '',
+                        registration_required: !!event.registration_url,
+                        max_attendees: 0,
+                        created_by: user.email
+                    };
+                    
+                    fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(eventData)
+                    }).then(() => imported++);
+                }
+                
+                setTimeout(() => {
+                    alert(`Imported ${imported} events!`);
+                    bootstrap.Modal.getInstance(document.getElementById('importModal')).hide();
+                    loadEvents();
+                }, 1000);
+            };
+            reader.readAsText(file);
+        }
+
+        async function syncElectionDates() {
+            if (!confirm('Sync election dates from the election database? This will create events for all upcoming elections.')) return;
+            
+            try {
+                // Fetch races from election database
+                const response = await fetch('https://cayl9dmtaf.execute-api.us-east-1.amazonaws.com/prod/contributors?action=get_races');
+                const data = await response.json();
+                
+                if (!data.races) {
+                    alert('No races found');
+                    return;
+                }
+                
+                const user = JSON.parse(userData);
+                let synced = 0;
+                
+                for (const race of data.races) {
+                    if (!race.election_date) continue;
+                    
+                    const eventData = {
+                        action: 'create',
+                        title: `${race.state} - ${race.office} Election`,
+                        description: `Election for ${race.office} in ${race.state}`,
+                        event_type: 'election',
+                        category: 'general',
+                        event_date: race.election_date,
+                        event_time: '',
+                        location: race.state,
+                        address: '',
+                        state: race.state,
+                        contact_email: '',
+                        contact_phone: '',
+                        registration_url: '',
+                        registration_required: false,
+                        max_attendees: 0,
+                        created_by: user.email
+                    };
+                    
+                    await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(eventData)
+                    });
+                    synced++;
+                }
+                
+                alert(`Synced ${synced} election dates!`);
+                loadEvents();
+            } catch (err) {
+                alert('Error syncing election dates: ' + err);
+            }
         }
 
         function editEvent(eventId) {
@@ -198,6 +350,7 @@
                     $('#eventId').val(event.event_id);
                     $('#title').val(event.title);
                     $('#description').val(event.description);
+                    $('#eventType').val(event.event_type || 'general');
                     $('#category').val(event.category);
                     $('#state').val(event.state || '');
                     $('#eventDate').val(event.event_date);
@@ -223,6 +376,7 @@
                 action: eventId ? 'update' : 'create',
                 title: $('#title').val(),
                 description: $('#description').val(),
+                event_type: $('#eventType').val(),
                 category: $('#category').val(),
                 event_date: $('#eventDate').val(),
                 event_time: $('#eventTime').val(),

@@ -850,6 +850,151 @@ Fixed events_api update_event() function to use ExpressionAttributeNames for all
 
 ---
 
+## Issue 15: Quill Editor Stripping Email Template Styling
+
+**Symptom**: Professional email templates with inline CSS lose all styling when loaded into Quill rich text editor
+
+**Root Cause**: Quill.js sanitizes and strips inline styles, complex HTML structures, and email-specific CSS for security. This is by design - Quill is meant for simple rich text, not preserving complex HTML like email templates.
+
+**Why This Happens**:
+- Quill removes inline styles (style="color: red;")
+- Quill strips div containers and complex layouts
+- Quill converts HTML to its own Delta format, losing original structure
+- Email templates need inline CSS (external stylesheets don't work in emails)
+- Quill's clipboard.dangerouslyPasteHTML() still sanitizes content
+
+**Failed Attempts**:
+1. ❌ Using quill.root.innerHTML = template - Quill immediately sanitizes on next render
+2. ❌ Using quill.clipboard.dangerouslyPasteHTML() - Still strips styles
+3. ❌ Using quill.clipboard.convert() with setContents() - Converts to Delta, loses HTML
+4. ❌ Delaying with setTimeout() - Quill sanitizes regardless of timing
+5. ❌ Using 'silent' parameter - Only prevents events, doesn't prevent sanitization
+
+**Solution**: Replace Quill with contenteditable div + formatting toolbar
+
+### Implementation:
+
+**Step 1: Remove Quill initialization**
+```javascript
+// OLD - Remove this
+quill = new Quill('#editor', {
+    theme: 'snow',
+    modules: { toolbar: [...] }
+});
+
+// NEW - Use contenteditable
+$('#editor').attr('contenteditable', 'true').css('background', 'white');
+```
+
+**Step 2: Add formatting toolbar**
+```html
+<div class="p-2 border-bottom bg-light">
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('bold')"><b>B</b></button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('italic')"><i>I</i></button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('underline')"><u>U</u></button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('insertUnorderedList')">• List</button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('insertOrderedList')">1. List</button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('justifyLeft')">Left</button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('justifyCenter')">Center</button>
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('justifyRight')">Right</button>
+    <select class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="formatDoc('fontSize', this.value); this.value=''">
+        <option value="">Font Size</option>
+        <option value="1">Small</option>
+        <option value="3">Normal</option>
+        <option value="5">Large</option>
+        <option value="7">Huge</option>
+    </select>
+    <input type="color" class="form-control form-control-sm d-inline-block" style="width: 50px;" onchange="formatDoc('foreColor', this.value)" title="Text Color">
+    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertLink()">🔗 Link</button>
+</div>
+<div id="editor" style="min-height: 300px; padding: 15px; overflow-y: auto;"></div>
+```
+
+**Step 3: Add formatting functions**
+```javascript
+function formatDoc(cmd, value = null) {
+    document.execCommand(cmd, false, value);
+    $('#editor').focus();
+}
+
+function insertLink() {
+    const url = prompt('Enter URL:');
+    if (url) {
+        document.execCommand('createLink', false, url);
+    }
+}
+```
+
+**Step 4: Add dual-tab editor (Visual + HTML)**
+```html
+<ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#visualEditor">Visual Editor</a></li>
+    <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#htmlEditor">HTML Editor</a></li>
+</ul>
+<div class="tab-content border border-top-0">
+    <div id="visualEditor" class="tab-pane fade show active">
+        <!-- Toolbar and contenteditable div here -->
+    </div>
+    <div id="htmlEditor" class="tab-pane fade">
+        <textarea id="htmlContent" class="form-control" rows="15" style="font-family: monospace;"></textarea>
+    </div>
+</div>
+```
+
+**Step 5: Sync editors on tab switch**
+```javascript
+$('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e) {
+    const target = $(e.target).attr('href');
+    if (target === '#htmlEditor') {
+        $('#htmlContent').val($('#editor').html());
+    } else if (target === '#visualEditor') {
+        $('#editor').html($('#htmlContent').val());
+    }
+});
+```
+
+**Step 6: Update save function**
+```javascript
+function saveNewsletter() {
+    const activeTab = $('.tab-pane.active').attr('id');
+    const content = activeTab === 'htmlEditor' ? $('#htmlContent').val() : $('#editor').html();
+    // Use content for saving
+}
+```
+
+**Benefits of This Solution**:
+- ✅ Preserves ALL HTML and inline CSS
+- ✅ Works with complex email templates
+- ✅ Visual editing with formatting toolbar
+- ✅ HTML tab for direct code editing
+- ✅ Both tabs stay in sync
+- ✅ No sanitization or style stripping
+- ✅ Uses native browser contenteditable (same as Mailchimp, SendGrid)
+
+**Why contenteditable Works**:
+- Browser's native contenteditable doesn't sanitize like Quill
+- document.execCommand() applies formatting without stripping existing styles
+- Direct HTML manipulation via .html() preserves everything
+- Professional email builders (Mailchimp, SendGrid) use contenteditable, not Quill
+
+**Deployment**:
+```powershell
+aws s3 cp admin-newsletters.html s3://my-video-downloads-bucket/
+```
+
+**Verification**:
+1. Click "Use Template" on any professional template
+2. Switch to Visual Editor tab - should see styled content
+3. Switch to HTML Editor tab - should see full HTML with inline styles
+4. Edit in Visual tab, switch to HTML - changes preserved
+5. Edit in HTML tab, switch to Visual - changes rendered
+6. Save newsletter - all styling preserved in database
+7. Send newsletter - recipients see full professional design
+
+**Key Takeaway**: Quill is great for simple rich text (blog posts, comments) but NOT for email templates. Use contenteditable + document.execCommand() for email editing.
+
+---
+
 ## Quick Reference Commands
 
 ```powershell
