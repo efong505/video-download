@@ -83,6 +83,18 @@ def lambda_handler(event, context):
             return delete_subscriber(event, headers)
         elif action == 'get_newsletter_analytics':
             return get_newsletter_analytics(event, headers)
+        elif action == 'add_subscriber':
+            return add_subscriber(event, headers)
+        elif action == 'bulk_import':
+            return bulk_import(event, headers)
+        elif action == 'create_campaign':
+            return create_campaign(event, headers)
+        elif action == 'list_campaigns':
+            return list_campaigns(event, headers)
+        elif action == 'update_campaign':
+            return update_campaign(event, headers)
+        elif action == 'delete_campaign':
+            return delete_campaign(event, headers)
         else:
             return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'Invalid action'})}
     
@@ -576,3 +588,114 @@ def get_newsletter_analytics(event, headers):
     analytics.sort(key=lambda x: x.get('open_count', 0), reverse=True)
     
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'analytics': analytics}, cls=DecimalEncoder)}
+
+def add_subscriber(event, headers):
+    body = json.loads(event['body'])
+    email = body['email']
+    
+    # Check if already exists
+    try:
+        response = subscribers_table.get_item(Key={'email': email})
+        if 'Item' in response:
+            return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'Email already exists'})}
+    except Exception as e:
+        print(f'Error checking email: {e}')
+    
+    subscriber = {
+        'email': email,
+        'first_name': body.get('first_name', ''),
+        'last_name': body.get('last_name', ''),
+        'phone': body.get('phone', ''),
+        'campaigns': body.get('campaigns', ['general']),
+        'status': 'active',
+        'subscribed_at': datetime.utcnow().isoformat(),
+        'confirmed_at': datetime.utcnow().isoformat(),
+        'source': 'admin'
+    }
+    
+    subscribers_table.put_item(Item=subscriber)
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Subscriber added'})}
+
+def bulk_import(event, headers):
+    body = json.loads(event['body'])
+    subscribers_data = body.get('subscribers', [])
+    
+    added = 0
+    skipped = 0
+    errors = []
+    
+    for sub in subscribers_data:
+        email = sub.get('email', '').strip().lower()
+        if not email:
+            skipped += 1
+            continue
+        
+        try:
+            response = subscribers_table.get_item(Key={'email': email})
+            if 'Item' in response:
+                skipped += 1
+                continue
+            
+            subscriber = {
+                'email': email,
+                'first_name': sub.get('first_name', '').strip(),
+                'last_name': sub.get('last_name', '').strip(),
+                'phone': sub.get('phone', '').strip(),
+                'campaigns': sub.get('campaigns', ['general']),
+                'status': 'active',
+                'subscribed_at': datetime.utcnow().isoformat(),
+                'confirmed_at': datetime.utcnow().isoformat(),
+                'source': 'bulk_import'
+            }
+            
+            subscribers_table.put_item(Item=subscriber)
+            added += 1
+        except Exception as e:
+            errors.append(f'{email}: {str(e)}')
+    
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({
+        'message': f'Import complete: {added} added, {skipped} skipped',
+        'added': added,
+        'skipped': skipped,
+        'errors': errors
+    })}
+
+def create_campaign(event, headers):
+    body = json.loads(event['body'])
+    campaigns_table = dynamodb.Table('newsletter_campaigns')
+    
+    campaign = {
+        'campaign_id': body.get('campaign_id', body['name'].lower().replace(' ', '_')),
+        'name': body['name'],
+        'description': body.get('description', ''),
+        'created_at': datetime.utcnow().isoformat()
+    }
+    
+    campaigns_table.put_item(Item=campaign)
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Campaign created'})}
+
+def list_campaigns(event, headers):
+    campaigns_table = dynamodb.Table('newsletter_campaigns')
+    response = campaigns_table.scan()
+    campaigns = response.get('Items', [])
+    campaigns.sort(key=lambda x: x.get('created_at', ''))
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'campaigns': campaigns}, cls=DecimalEncoder)}
+
+def update_campaign(event, headers):
+    body = json.loads(event['body'])
+    campaigns_table = dynamodb.Table('newsletter_campaigns')
+    
+    campaigns_table.update_item(
+        Key={'campaign_id': body['campaign_id']},
+        UpdateExpression='SET #name = :name, description = :desc',
+        ExpressionAttributeNames={'#name': 'name'},
+        ExpressionAttributeValues={':name': body['name'], ':desc': body.get('description', '')}
+    )
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Campaign updated'})}
+
+def delete_campaign(event, headers):
+    params = event.get('queryStringParameters') or {}
+    campaign_id = params.get('campaign_id')
+    campaigns_table = dynamodb.Table('newsletter_campaigns')
+    campaigns_table.delete_item(Key={'campaign_id': campaign_id})
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Campaign deleted'})}

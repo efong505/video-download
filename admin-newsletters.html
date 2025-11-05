@@ -102,6 +102,9 @@
                     </div>
                 </div>
 
+                <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addSubscriberModal">➕ Add Subscriber</button>
+                <button class="btn btn-primary mb-3 ms-2" data-bs-toggle="modal" data-bs-target="#bulkImportModal">📤 Bulk Import CSV</button>
+
                 <table class="table table-striped">
                     <thead>
                         <tr>
@@ -127,51 +130,11 @@
             <div id="campaigns" class="tab-pane fade">
                 <h4>Subscriber Segments</h4>
                 <p>Manage subscriber campaigns/segments for targeted newsletters.</p>
-                <div class="row mb-4">
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5>General</h5>
-                                <p class="text-muted">All subscribers</p>
-                                <span class="badge bg-primary" id="generalCount">0</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5>Election Updates</h5>
-                                <p class="text-muted">Election news</p>
-                                <span class="badge bg-info" id="electionCount">0</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5>Prayer Requests</h5>
-                                <p class="text-muted">Prayer updates</p>
-                                <span class="badge bg-warning" id="prayerCount">0</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5>Events & Rallies</h5>
-                                <p class="text-muted">Event notifications</p>
-                                <span class="badge bg-success" id="eventsCount">0</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#campaignModal" onclick="openNewCampaign()">➕ Create Campaign</button>
+                <div class="row mb-4" id="campaignCards"></div>
                 <h5>Manage Subscribers by Campaign</h5>
                 <select class="form-select mb-3" id="campaignFilter" onchange="filterByCampaign()">
                     <option value="all">All Subscribers</option>
-                    <option value="general">General</option>
-                    <option value="election">Election Updates</option>
-                    <option value="prayer">Prayer Requests</option>
-                    <option value="events">Events & Rallies</option>
                 </select>
                 <table class="table table-striped">
                     <thead>
@@ -300,6 +263,91 @@
         </div>
     </div>
 
+    <!-- Add Subscriber Modal -->
+    <div class="modal fade" id="addSubscriberModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Subscriber</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="newEmail" class="form-label">Email *</label>
+                        <input type="email" class="form-control" id="newEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newFirstName" class="form-label">First Name *</label>
+                        <input type="text" class="form-control" id="newFirstName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newLastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="newLastName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPhone" class="form-label">Phone</label>
+                        <input type="tel" class="form-control" id="newPhone">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Campaigns</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="newCampGeneral" value="general" checked>
+                            <label class="form-check-label" for="newCampGeneral">General</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="newCampElection" value="election">
+                            <label class="form-check-label" for="newCampElection">Election Updates</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="newCampPrayer" value="prayer">
+                            <label class="form-check-label" for="newCampPrayer">Prayer Requests</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="newCampEvents" value="events">
+                            <label class="form-check-label" for="newCampEvents">Events & Rallies</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="addNewSubscriber()">Add Subscriber</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Import Modal -->
+    <div class="modal fade" id="bulkImportModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Bulk Import Subscribers</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <strong>CSV Format:</strong> email, first_name, last_name, phone, campaigns<br>
+                        <strong>Example:</strong> john@example.com, John, Doe, 555-1234, general|election<br>
+                        <small>Campaigns: general, election, prayer, events (separate with | for multiple)</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="csvFile" class="form-label">Upload CSV File</label>
+                        <input type="file" class="form-control" id="csvFile" accept=".csv,.txt">
+                    </div>
+                    <div class="mb-3">
+                        <label for="csvText" class="form-label">Or Paste CSV Data</label>
+                        <textarea class="form-control" id="csvText" rows="10" placeholder="email,first_name,last_name,phone,campaigns"></textarea>
+                    </div>
+                    <div id="importPreview"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="processBulkImport()">Import Subscribers</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Edit Subscriber Modal -->
     <div class="modal fade" id="subscriberModal" tabindex="-1">
         <div class="modal-dialog">
@@ -345,6 +393,33 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" onclick="saveSubscriber()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Campaign Modal -->
+    <div class="modal fade" id="campaignModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="campaignModalTitle">Create Campaign</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="campaignId">
+                    <div class="mb-3">
+                        <label for="campaignName" class="form-label">Campaign Name *</label>
+                        <input type="text" class="form-control" id="campaignName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="campaignDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="campaignDescription" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="saveCampaign()">Save Campaign</button>
                 </div>
             </div>
         </div>
@@ -416,7 +491,7 @@
             loadNewsletters();
             loadSubscribers();
             loadTemplates();
-            loadCampaignCounts();
+            loadCampaigns();
             
             // Load analytics when tab is shown
             $('a[href="#analytics"]').on('shown.bs.tab', function() {
@@ -425,6 +500,7 @@
             
             // Load campaign subscribers when tab is shown
             $('a[href="#campaigns"]').on('shown.bs.tab', function() {
+                loadCampaigns();
                 filterByCampaign();
             });
             
@@ -737,17 +813,100 @@
             }
         }
 
-        function loadCampaignCounts() {
-            fetch(API_URL + '?action=list_subscribers')
+        function loadCampaigns() {
+            Promise.all([
+                fetch(API_URL + '?action=list_campaigns').then(r => r.json()),
+                fetch(API_URL + '?action=list_subscribers').then(r => r.json())
+            ]).then(([campaignsData, subscribersData]) => {
+                const campaigns = campaignsData.campaigns || [];
+                const subscribers = subscribersData.subscribers || [];
+                const active = subscribers.filter(s => s.status === 'active');
+                
+                $('#campaignCards').empty();
+                $('#campaignFilter').find('option:not(:first)').remove();
+                $('#campaign').empty();
+                
+                campaigns.forEach(c => {
+                    const count = active.filter(s => (s.campaigns || []).includes(c.campaign_id)).length;
+                    $('#campaignCards').append(`
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5>${c.name}</h5>
+                                    <p class="text-muted small">${c.description || ''}</p>
+                                    <span class="badge bg-primary">${count}</span>
+                                    <div class="mt-2">
+                                        <button class="btn btn-sm btn-outline-primary" onclick="editCampaign('${c.campaign_id}')">Edit</button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteCampaign('${c.campaign_id}')">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    $('#campaignFilter').append(`<option value="${c.campaign_id}">${c.name}</option>`);
+                    $('#campaign').append(`<option value="${c.campaign_id}">${c.name}</option>`);
+                });
+            });
+        }
+        
+        function openNewCampaign() {
+            $('#campaignModalTitle').text('Create Campaign');
+            $('#campaignId').val('');
+            $('#campaignName').val('');
+            $('#campaignDescription').val('');
+        }
+        
+        function editCampaign(id) {
+            fetch(API_URL + '?action=list_campaigns')
                 .then(r => r.json())
                 .then(data => {
-                    const subscribers = data.subscribers || [];
-                    const active = subscribers.filter(s => s.status === 'active');
-                    
-                    $('#generalCount').text(active.filter(s => (s.campaigns || ['general']).includes('general')).length);
-                    $('#electionCount').text(active.filter(s => (s.campaigns || []).includes('election')).length);
-                    $('#prayerCount').text(active.filter(s => (s.campaigns || []).includes('prayer')).length);
-                    $('#eventsCount').text(active.filter(s => (s.campaigns || []).includes('events')).length);
+                    const campaign = (data.campaigns || []).find(c => c.campaign_id === id);
+                    if (campaign) {
+                        $('#campaignModalTitle').text('Edit Campaign');
+                        $('#campaignId').val(campaign.campaign_id);
+                        $('#campaignName').val(campaign.name);
+                        $('#campaignDescription').val(campaign.description || '');
+                        $('#campaignModal').modal('show');
+                    }
+                });
+        }
+        
+        function saveCampaign() {
+            const id = $('#campaignId').val();
+            const name = $('#campaignName').val().trim();
+            if (!name) {
+                alert('Campaign name is required');
+                return;
+            }
+            
+            const data = {
+                action: id ? 'update_campaign' : 'create_campaign',
+                campaign_id: id || name.toLowerCase().replace(/\s+/g, '_'),
+                name: name,
+                description: $('#campaignDescription').val().trim()
+            };
+            
+            fetch(API_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+            .then(r => r.json())
+            .then(() => {
+                $('#campaignModal').modal('hide');
+                loadCampaigns();
+                alert('Campaign saved!');
+            });
+        }
+        
+        function deleteCampaign(id) {
+            if (!confirm('Delete this campaign? Subscribers will keep their assignments.')) return;
+            
+            fetch(API_URL + '?action=delete_campaign&campaign_id=' + id)
+                .then(r => r.json())
+                .then(() => {
+                    loadCampaigns();
+                    alert('Campaign deleted!');
                 });
         }
 
@@ -841,7 +1000,7 @@
             .then(() => {
                 $('#subscriberModal').modal('hide');
                 loadSubscribers();
-                loadCampaignCounts();
+                loadCampaigns();
                 filterByCampaign();
                 alert('Subscriber updated!');
             });
@@ -854,7 +1013,7 @@
                 .then(r => r.json())
                 .then(() => {
                     loadSubscribers();
-                    loadCampaignCounts();
+                    loadCampaigns();
                     alert('User unsubscribed!');
                 });
         }
@@ -866,10 +1025,114 @@
                 .then(r => r.json())
                 .then(() => {
                     loadSubscribers();
-                    loadCampaignCounts();
+                    loadCampaigns();
                     filterByCampaign();
                     alert('Subscriber deleted!');
                 });
+        }
+
+        function addNewSubscriber() {
+            const campaigns = [];
+            if ($('#newCampGeneral').is(':checked')) campaigns.push('general');
+            if ($('#newCampElection').is(':checked')) campaigns.push('election');
+            if ($('#newCampPrayer').is(':checked')) campaigns.push('prayer');
+            if ($('#newCampEvents').is(':checked')) campaigns.push('events');
+            
+            const data = {
+                action: 'add_subscriber',
+                email: $('#newEmail').val().trim().toLowerCase(),
+                first_name: $('#newFirstName').val().trim(),
+                last_name: $('#newLastName').val().trim(),
+                phone: $('#newPhone').val().trim(),
+                campaigns: campaigns
+            };
+            
+            fetch(API_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+            .then(r => r.json())
+            .then(result => {
+                if (result.error) {
+                    alert('Error: ' + result.error);
+                } else {
+                    $('#addSubscriberModal').modal('hide');
+                    $('#newEmail').val('');
+                    $('#newFirstName').val('');
+                    $('#newLastName').val('');
+                    $('#newPhone').val('');
+                    $('#newCampGeneral').prop('checked', true);
+                    $('#newCampElection').prop('checked', false);
+                    $('#newCampPrayer').prop('checked', false);
+                    $('#newCampEvents').prop('checked', false);
+                    loadSubscribers();
+                    loadCampaigns();
+                    alert('Subscriber added successfully!');
+                }
+            });
+        }
+
+        $('#csvFile').on('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#csvText').val(e.target.result);
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function processBulkImport() {
+            const csvText = $('#csvText').val().trim();
+            if (!csvText) {
+                alert('Please upload a CSV file or paste CSV data');
+                return;
+            }
+            
+            const lines = csvText.split('\n').filter(l => l.trim());
+            const subscribers = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line || line.toLowerCase().startsWith('email')) continue;
+                
+                const parts = line.split(',').map(p => p.trim());
+                if (parts.length < 1 || !parts[0]) continue;
+                
+                const campaigns = parts[4] ? parts[4].split('|').map(c => c.trim()) : ['general'];
+                
+                subscribers.push({
+                    email: parts[0].toLowerCase(),
+                    first_name: parts[1] || '',
+                    last_name: parts[2] || '',
+                    phone: parts[3] || '',
+                    campaigns: campaigns
+                });
+            }
+            
+            if (subscribers.length === 0) {
+                alert('No valid subscribers found in CSV');
+                return;
+            }
+            
+            if (!confirm(`Import ${subscribers.length} subscriber(s)?`)) return;
+            
+            fetch(API_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({action: 'bulk_import', subscribers: subscribers})
+            })
+            .then(r => r.json())
+            .then(result => {
+                $('#bulkImportModal').modal('hide');
+                $('#csvText').val('');
+                $('#csvFile').val('');
+                loadSubscribers();
+                loadCampaigns();
+                alert(result.message + (result.errors.length > 0 ? '\n\nErrors:\n' + result.errors.join('\n') : ''));
+            });
         }
 
         function filterByCampaign() {
@@ -904,35 +1167,24 @@
         }
 
         function viewNewsletterDetails(newsletterId, title) {
+            const container = $('#analyticsData');
+            container.html('<div class="text-center"><div class="spinner-border" role="status"></div><p>Loading details...</p></div>');
+            
             fetch(API_URL + '?action=get_newsletter_analytics&newsletter_id=' + newsletterId)
                 .then(r => r.json())
                 .then(data => {
                     const analytics = data.analytics || [];
-                    const container = $('#analyticsData');
                     
-                    let html = `
-                        <div class="card mb-3">
-                            <div class="card-header">
-                                <h5>${title} - Detailed Analytics</h5>
-                                <button class="btn btn-sm btn-secondary" onclick="loadAnalytics()">← Back</button>
+                    if (analytics.length === 0) {
+                        container.html(`
+                            <div class="alert alert-info">
+                                <h5>${title}</h5>
+                                <p>No tracking data available for this newsletter.</p>
+                                <button class="btn btn-secondary" onclick="loadAnalytics()">← Back</button>
                             </div>
-                            <div class="card-body">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Email</th>
-                                            <th>Name</th>
-                                            <th>Opens</th>
-                                            <th>Last Opened</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="detailsTable"></tbody>
-                                </table>
-                            </div>
-                        </div>
-                    `;
-                    
-                    container.html(html);
+                        `);
+                        return;
+                    }
                     
                     // Get subscriber details for each tracking record
                     const promises = analytics.map(a => 
@@ -943,23 +1195,45 @@
                     );
                     
                     Promise.all(promises).then(results => {
-                        const tbody = $('#detailsTable');
+                        let rows = '';
                         results.forEach(item => {
                             const sub = item.subscriber;
-                            const name = sub ? `${sub.first_name || ''} ${sub.last_name || ''}`.trim() : '-';
+                            const name = sub ? `${sub.first_name || ''} ${sub.last_name || ''}`.trim() || '-' : '-';
                             const lastOpened = item.last_opened_at ? new Date(item.last_opened_at).toLocaleString() : '-';
                             const openCount = item.open_count || 0;
                             const rowClass = item.opened ? '' : 'table-secondary';
                             
-                            tbody.append(`
+                            rows += `
                                 <tr class="${rowClass}">
                                     <td>${item.email}</td>
                                     <td>${name}</td>
                                     <td>${openCount}</td>
                                     <td>${lastOpened}</td>
                                 </tr>
-                            `);
+                            `;
                         });
+                        
+                        container.html(`
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h5>${title} - Detailed Analytics</h5>
+                                    <button class="btn btn-sm btn-secondary" onclick="loadAnalytics()">← Back</button>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Email</th>
+                                                <th>Name</th>
+                                                <th>Opens</th>
+                                                <th>Last Opened</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>${rows}</tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        `);
                     });
                 });
         }

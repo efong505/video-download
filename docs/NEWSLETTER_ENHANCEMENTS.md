@@ -67,6 +67,8 @@ Enhanced newsletter system with professional email templates, campaign managemen
 - Phone Number
 
 **Actions:**
+- Add subscriber manually (➕ Add Subscriber button)
+- Bulk import from CSV (📤 Bulk Import CSV button)
 - Edit subscriber (name, phone, campaigns)
 - Unsubscribe (changes status)
 - Delete (permanent removal)
@@ -133,6 +135,8 @@ sent_at (String)
 - `get_subscriber` - Get single subscriber details
 - `update_subscriber` - Update subscriber info and campaigns
 - `delete_subscriber` - Permanently delete subscriber
+- `add_subscriber` - Manually add single subscriber (admin)
+- `bulk_import` - Import multiple subscribers from CSV
 - `get_newsletter_analytics` - Get analytics for specific newsletter
 - `get_analytics` - Get all analytics data
 
@@ -193,12 +197,37 @@ sent_at (String)
 - [x] Delete subscriber - removed from database
 - [x] Auto-digest generates and sends weekly
 
+### 9. Manual Subscriber Addition
+- ➕ Add Subscriber button on Subscribers tab
+- Form fields: email, first name, last name, phone, campaigns
+- Validates email doesn't already exist
+- Sets status to 'active' immediately (no confirmation needed)
+- Source marked as 'admin'
+- Useful for adding subscribers from offline sources
+
+### 10. Bulk CSV Import
+- 📤 Bulk Import CSV button on Subscribers tab
+- Upload CSV file or paste CSV data directly
+- CSV Format: `email, first_name, last_name, phone, campaigns`
+- Campaigns separated by `|` (e.g., `general|election`)
+- Automatically skips duplicate emails
+- Shows import summary: added count, skipped count, errors
+- All imported subscribers set to 'active' status
+- Source marked as 'bulk_import'
+
+**CSV Example:**
+```csv
+email,first_name,last_name,phone,campaigns
+john@example.com,John,Doe,555-1234,general|election
+jane@example.com,Jane,Smith,555-5678,general|prayer|events
+bob@example.com,Bob,Johnson,,general
+```
+
 ## Future Enhancements (Not Implemented)
 - Link click tracking (would require URL rewriting)
 - A/B testing (subject line variants)
 - Scheduled sending (currently manual)
 - Custom campaign creation (currently 4 fixed campaigns)
-- Subscriber import from CSV
 - Email template builder (drag-and-drop blocks)
 - Bounce handling
 - Spam score checking
