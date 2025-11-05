@@ -258,6 +258,36 @@ def subscribe(event, headers):
     email = body['email']
     first_name = body.get('first_name', 'Friend')
     
+    # Check if email already exists
+    try:
+        response = subscribers_table.get_item(Key={'email': email})
+        if 'Item' in response:
+            existing = response['Item']
+            # If already active, return message
+            if existing.get('status') == 'active':
+                return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Already subscribed'})}
+            # If pending, resend confirmation
+            elif existing.get('status') == 'pending':
+                token = existing.get('confirmation_token')
+                if token:
+                    from email_templates import get_confirmation_email
+                    confirmation_link = f"https://christianconservativestoday.com/confirm-email.html?token={token}"
+                    html_content = get_confirmation_email(first_name, confirmation_link)
+                    try:
+                        ses.send_email(
+                            Source='noreply@christianconservativestoday.com',
+                            Destination={'ToAddresses': [email]},
+                            Message={
+                                'Subject': {'Data': 'Confirm Your Subscription - Christian Conservatives Today'},
+                                'Body': {'Html': {'Data': html_content}}
+                            }
+                        )
+                    except Exception as e:
+                        print(f'Failed to resend confirmation email: {e}')
+                    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Confirmation email resent'})}
+    except Exception as e:
+        print(f'Error checking existing subscriber: {e}')
+    
     # Generate confirmation token
     token = hashlib.sha256(f"{email}{datetime.utcnow().isoformat()}{uuid.uuid4()}".encode()).hexdigest()
     expires_at = (datetime.utcnow() + timedelta(hours=24)).isoformat()

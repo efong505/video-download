@@ -182,8 +182,14 @@
             })
             .then(r => r.json())
             .then(data => {
-                $('#message').html('<div class="alert alert-success"><i class="fas fa-check-circle me-2"></i>Successfully subscribed! Check your email to confirm your subscription.</div>');
-                $('#subscribeForm')[0].reset();
+                if (data.message === 'Already subscribed') {
+                    $('#message').html('<div class="alert alert-warning"><i class="fas fa-info-circle me-2"></i>This email address is already subscribed to our newsletter.</div>');
+                } else if (data.message === 'Confirmation email resent') {
+                    $('#message').html('<div class="alert alert-info"><i class="fas fa-envelope me-2"></i>Confirmation email resent! Please check your inbox.</div>');
+                } else {
+                    $('#message').html('<div class="alert alert-success"><i class="fas fa-check-circle me-2"></i>Successfully subscribed! Check your email to confirm your subscription.</div>');
+                    $('#subscribeForm')[0].reset();
+                }
             })
             .catch(err => {
                 $('#message').html('<div class="alert alert-danger"><i class="fas fa-exclamation-circle me-2"></i>Error subscribing. Please try again.</div>');
