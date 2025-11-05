@@ -752,44 +752,48 @@
         }
 
         function loadAnalytics() {
-            fetch(API_URL + '?action=get_analytics')
-                .then(r => r.json())
-                .then(data => {
-                    const analytics = data.analytics || [];
-                    const container = $('#analyticsData');
-                    container.empty();
-                    
-                    if (analytics.length === 0) {
-                        container.append('<p class="text-muted">No analytics data yet. Send a newsletter to see tracking data.</p>');
-                        return;
+            Promise.all([
+                fetch(API_URL + '?action=get_analytics').then(r => r.json()),
+                fetch(API_URL + '?action=list_newsletters').then(r => r.json())
+            ]).then(([analyticsData, newslettersData]) => {
+                const analytics = analyticsData.analytics || [];
+                const newsletters = newslettersData.newsletters || [];
+                const container = $('#analyticsData');
+                container.empty();
+                
+                if (analytics.length === 0) {
+                    container.append('<p class="text-muted">No analytics data yet. Send a newsletter to see tracking data.</p>');
+                    return;
+                }
+                
+                // Group by newsletter
+                const byNewsletter = {};
+                analytics.forEach(a => {
+                    if (!byNewsletter[a.newsletter_id]) {
+                        byNewsletter[a.newsletter_id] = [];
                     }
-                    
-                    // Group by newsletter
-                    const byNewsletter = {};
-                    analytics.forEach(a => {
-                        if (!byNewsletter[a.newsletter_id]) {
-                            byNewsletter[a.newsletter_id] = [];
-                        }
-                        byNewsletter[a.newsletter_id].push(a);
-                    });
-                    
-                    Object.keys(byNewsletter).forEach(nid => {
-                        const items = byNewsletter[nid];
-                        const opened = items.filter(i => i.opened).length;
-                        const totalOpens = items.reduce((sum, i) => sum + (i.open_count || 0), 0);
-                        const openRate = ((opened / items.length) * 100).toFixed(1);
-                        
-                        container.append(`
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <h5>Newsletter: ${nid.substring(0, 8)}...</h5>
-                                    <p><strong>Sent:</strong> ${items.length} | <strong>Opened:</strong> ${opened} (${openRate}%) | <strong>Total Opens:</strong> ${totalOpens}</p>
-                                    <button class="btn btn-sm btn-primary" onclick="viewNewsletterDetails('${nid}')">View Details</button>
-                                </div>
-                            </div>
-                        `);
-                    });
+                    byNewsletter[a.newsletter_id].push(a);
                 });
+                
+                Object.keys(byNewsletter).forEach(nid => {
+                    const items = byNewsletter[nid];
+                    const newsletter = newsletters.find(n => n.newsletter_id === nid);
+                    const title = newsletter ? newsletter.title : nid.substring(0, 8) + '...';
+                    const opened = items.filter(i => i.opened).length;
+                    const totalOpens = items.reduce((sum, i) => sum + (i.open_count || 0), 0);
+                    const openRate = ((opened / items.length) * 100).toFixed(1);
+                    
+                    container.append(`
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5>${title}</h5>
+                                <p><strong>Sent:</strong> ${items.length} | <strong>Opened:</strong> ${opened} (${openRate}%) | <strong>Total Opens:</strong> ${totalOpens}</p>
+                                <button class="btn btn-sm btn-primary" onclick="viewNewsletterDetails('${nid}', '${title.replace(/'/g, "\\'")}')">View Details</button>
+                            </div>
+                        </div>
+                    `);
+                });
+            });
         }
 
         function editSubscriber(email) {
@@ -899,13 +903,36 @@
                 });
         }
 
-        function viewNewsletterDetails(newsletterId) {
+        function viewNewsletterDetails(newsletterId, title) {
             fetch(API_URL + '?action=get_newsletter_analytics&newsletter_id=' + newsletterId)
                 .then(r => r.json())
                 .then(data => {
                     const analytics = data.analytics || [];
-                    const tbody = $('#opensTable');
-                    tbody.empty();
+                    const container = $('#analyticsData');
+                    
+                    let html = `
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                <h5>${title} - Detailed Analytics</h5>
+                                <button class="btn btn-sm btn-secondary" onclick="loadAnalytics()">← Back</button>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Email</th>
+                                            <th>Name</th>
+                                            <th>Opens</th>
+                                            <th>Last Opened</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="detailsTable"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                    
+                    container.html(html);
                     
                     // Get subscriber details for each tracking record
                     const promises = analytics.map(a => 
@@ -916,6 +943,7 @@
                     );
                     
                     Promise.all(promises).then(results => {
+                        const tbody = $('#detailsTable');
                         results.forEach(item => {
                             const sub = item.subscriber;
                             const name = sub ? `${sub.first_name || ''} ${sub.last_name || ''}`.trim() : '-';
@@ -932,8 +960,6 @@
                                 </tr>
                             `);
                         });
-                        
-                        $('#detailsModal').modal('show');
                     });
                 });
         }
