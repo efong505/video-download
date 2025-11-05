@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Calendar - Christian Conservative Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.css" rel="stylesheet">
+    <style>
+        @media (min-width: 1200px) {.container {max-width: 1160px !important;}}
+        .view-toggle {margin-bottom: 20px;}
+        .view-toggle .btn {margin-right: 10px;}
+        #calendar {background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);}
+        .fc-event {cursor: pointer;}
+        .event-type-election {background: #dc3545 !important; border-color: #dc3545 !important;}
+        .event-type-church {background: #0d6efd !important; border-color: #0d6efd !important;}
+        .event-type-rally {background: #ffc107 !important; border-color: #ffc107 !important; color: #000 !important;}
+        .event-type-prayer {background: #20c997 !important; border-color: #20c997 !important;}
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="events-calendar"></div>
+
+    <div class="container my-5" style="margin-top: 5rem !important;">
+        <h1 class="mb-4">📅 Events Calendar</h1>
+
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="view-toggle">
+                    <button class="btn btn-primary" onclick="changeView('dayGridMonth')">Month</button>
+                    <button class="btn btn-outline-primary" onclick="changeView('timeGridWeek')">Week</button>
+                    <button class="btn btn-outline-primary" onclick="changeView('timeGridDay')">Day</button>
+                    <button class="btn btn-outline-primary" onclick="changeView('listMonth')">List</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <select id="typeFilter" class="form-select">
+                    <option value="">All Types</option>
+                    <option value="election">Election Events</option>
+                    <option value="church">Church Services</option>
+                    <option value="rally">Rallies</option>
+                    <option value="town_hall">Town Halls</option>
+                    <option value="prayer_meeting">Prayer Meetings</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select id="stateFilter" class="form-select">
+                    <option value="">All States</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-success" onclick="exportToCalendar()">📥 Export to Calendar</button>
+            </div>
+        </div>
+
+        <div id="calendar"></div>
+    </div>
+
+    <!-- Event Modal -->
+    <div class="modal fade" id="eventModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventTitle"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="eventDetails"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="registerBtn" style="display:none;">Register</button>
+                    <button type="button" class="btn btn-success" onclick="addToMyCalendar()">Add to My Calendar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.9/index.global.min.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        const API_URL = 'https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/events';
+        let calendar;
+        let currentEvent;
+
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            });
+
+        const states = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+        states.forEach(state => {
+            $('#stateFilter').append(`<option value="${state}">${state}</option>`);
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const calendarEl = document.getElementById('calendar');
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: ''
+                },
+                events: loadCalendarEvents,
+                eventClick: function(info) {
+                    showEventModal(info.event);
+                },
+                height: 'auto'
+            });
+            calendar.render();
+        });
+
+        function loadCalendarEvents(fetchInfo, successCallback, failureCallback) {
+            const type = $('#typeFilter').val();
+            const state = $('#stateFilter').val();
+            let url = API_URL + '?action=list';
+            if (type) url += '&event_type=' + type;
+            if (state) url += '&state=' + state;
+
+            fetch(url)
+                .then(r => r.json())
+                .then(data => {
+                    const events = (data.events || []).map(event => ({
+                        id: event.event_id,
+                        title: event.title,
+                        start: event.event_date + (event.event_time ? 'T' + event.event_time : ''),
+                        extendedProps: event,
+                        className: 'event-type-' + (event.event_type || 'general')
+                    }));
+                    successCallback(events);
+                })
+                .catch(failureCallback);
+        }
+
+        function changeView(viewName) {
+            calendar.changeView(viewName);
+            $('.view-toggle .btn').removeClass('btn-primary').addClass('btn-outline-primary');
+            event.target.classList.remove('btn-outline-primary');
+            event.target.classList.add('btn-primary');
+        }
+
+        function showEventModal(calEvent) {
+            const event = calEvent.extendedProps;
+            currentEvent = event;
+            
+            $('#eventTitle').text(event.title);
+            
+            let html = `
+                <p><strong>Date:</strong> ${new Date(event.event_date).toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</p>
+                ${event.event_time ? `<p><strong>Time:</strong> ${event.event_time}</p>` : ''}
+                ${event.location ? `<p><strong>Location:</strong> ${event.location}</p>` : ''}
+                ${event.address ? `<p><strong>Address:</strong> ${event.address}</p>` : ''}
+                ${event.state ? `<p><strong>State:</strong> ${event.state}</p>` : ''}
+                ${event.organizer ? `<p><strong>Organizer:</strong> ${event.organizer}</p>` : ''}
+                <p><strong>Description:</strong></p>
+                <p>${event.description || 'No description available'}</p>
+                ${event.contact_email ? `<p><strong>Contact:</strong> ${event.contact_email}</p>` : ''}
+                ${event.contact_phone ? `<p><strong>Phone:</strong> ${event.contact_phone}</p>` : ''}
+            `;
+            
+            $('#eventDetails').html(html);
+            
+            if (event.registration_url) {
+                $('#registerBtn').show().off('click').on('click', function() {
+                    window.open(event.registration_url, '_blank');
+                });
+            } else {
+                $('#registerBtn').hide();
+            }
+            
+            new bootstrap.Modal(document.getElementById('eventModal')).show();
+        }
+
+        function addToMyCalendar() {
+            if (!currentEvent) return;
+            
+            const event = currentEvent;
+            const startDate = event.event_date.replace(/-/g, '') + (event.event_time ? 'T' + event.event_time.replace(/:/g, '') : '');
+            const endDate = startDate; // Same day event
+            
+            const icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+BEGIN:VEVENT
+DTSTART:${startDate}
+DTEND:${endDate}
+SUMMARY:${event.title}
+DESCRIPTION:${event.description || ''}
+LOCATION:${event.location || ''}${event.address ? ', ' + event.address : ''}
+END:VEVENT
+END:VCALENDAR`;
+            
+            const blob = new Blob([icsContent], {type: 'text/calendar'});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = event.title.replace(/[^a-z0-9]/gi, '_') + '.ics';
+            a.click();
+        }
+
+        function exportToCalendar() {
+            const type = $('#typeFilter').val();
+            const state = $('#stateFilter').val();
+            let url = API_URL + '?action=list';
+            if (type) url += '&event_type=' + type;
+            if (state) url += '&state=' + state;
+
+            fetch(url)
+                .then(r => r.json())
+                .then(data => {
+                    let icsContent = `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Christian Conservative Today//Events//EN
+`;
+                    
+                    (data.events || []).forEach(event => {
+                        const startDate = event.event_date.replace(/-/g, '') + (event.event_time ? 'T' + event.event_time.replace(/:/g, '') : '');
+                        icsContent += `BEGIN:VEVENT
+DTSTART:${startDate}
+SUMMARY:${event.title}
+DESCRIPTION:${event.description || ''}
+LOCATION:${event.location || ''}${event.address ? ', ' + event.address : ''}
+UID:${event.event_id}@christianconservativestoday.com
+END:VEVENT
+`;
+                    });
+                    
+                    icsContent += 'END:VCALENDAR';
+                    
+                    const blob = new Blob([icsContent], {type: 'text/calendar'});
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'events.ics';
+                    a.click();
+                });
+        }
+
+        $('#typeFilter, #stateFilter').on('change', function() {
+            calendar.refetchEvents();
+        });
+    </script>
+</body>
+</html>

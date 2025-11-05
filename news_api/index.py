@@ -8,8 +8,10 @@ import base64
 # Initialize AWS services
 dynamodb = boto3.resource('dynamodb')
 s3 = boto3.client('s3')
+lambda_client = boto3.client('lambda')
 news_table = dynamodb.Table('news-table')
 users_table = dynamodb.Table('users')
+subscribers_table = dynamodb.Table('email_subscribers')
 
 # Configuration
 JWT_SECRET = 'your-jwt-secret-key'
@@ -173,6 +175,13 @@ def create_news(event, headers):
         }
         
         news_table.put_item(Item=news_item)
+        
+        # Send notifications if published
+        if status == 'published':
+            try:
+                send_article_notifications(news_id, body['title'])
+            except Exception as e:
+                print(f"Failed to send notifications: {str(e)}")
         
         return {
             'statusCode': 200,
@@ -363,6 +372,15 @@ def update_news(event, headers):
         
         news_table.update_item(**update_kwargs)
         
+        # Send notifications if status changed to published
+        if 'status' in body and body['status'] == 'published':
+            try:
+                response = news_table.get_item(Key={'news_id': news_id})
+                if 'Item' in response:
+                    send_article_notifications(news_id, response['Item'].get('title', 'New Article'))
+            except Exception as e:
+                print(f"Failed to send notifications: {str(e)}")
+        
         return {
             'statusCode': 200,
             'headers': headers,
@@ -411,6 +429,34 @@ def delete_news(event, headers):
             'headers': headers,
             'body': json.dumps({'error': str(e)})
         }
+
+def send_article_notifications(news_id, title):
+    """Send notifications to subscribers about new article"""
+    try:
+        response = subscribers_table.scan(
+            FilterExpression='#status = :status',
+            ExpressionAttributeNames={'#status': 'status'},
+            ExpressionAttributeValues={':status': 'active'}
+        )
+        
+        for subscriber in response.get('Items', []):
+            try:
+                lambda_client.invoke(
+                    FunctionName='notifications_api',
+                    InvocationType='Event',
+                    Payload=json.dumps({
+                        'action': 'send_notification',
+                        'user_email': subscriber['email'],
+                        'notification_type': 'article_published',
+                        'title': 'New Article Published',
+                        'message': f'Check out our latest article: {title}',
+                        'link': f'/news.html?id={news_id}'
+                    })
+                )
+            except Exception as e:
+                print(f"Failed to notify {subscriber['email']}: {str(e)}")
+    except Exception as e:
+        print(f"Failed to send article notifications: {str(e)}")
 
 def upload_image(event, headers):
     """Upload image to S3"""

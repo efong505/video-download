@@ -313,22 +313,7 @@
     
     <div class="dashboard-header">
         <div class="container">
-            <div class="dashboard-nav">
-                <h1 class="nav-brand">🎬 Video Gallery</h1>
-                <div class="nav-links" id="nav-links" style="display:none;">
-                    <a href="/" class="nav-link">🏠 Home</a>
-                    <a href="category.html" class="nav-link">📂 Categories</a>
-                    <a href="articles.html" class="nav-link">📝 Articles</a>
-                    <a href="news.html" class="nav-link">📰 News</a>
-                    <a href="authors.html" class="nav-link">👥 Authors</a>
-                    <a href="election-map.html" class="nav-link">🗺️ Election Map</a>
-                    <a href="resources.html" class="nav-link">📚 Resources</a>
-                    <a href="user-upload.html" class="nav-link">⬆️ Upload Video</a>
-                    <a href="profile.html" class="nav-link">👤 Profile</a>
-                    <a href="#" onclick="viewMyPage()" class="nav-link">📄 My Page</a>
-                    <a href="#" onclick="logout()" class="nav-link logout">🚪 Logout</a>
-                </div>
-            </div>
+            <h1 class="text-center">🎬 Video Gallery</h1>
         </div>
     </div>
     
@@ -374,12 +359,22 @@
             
             <div class="search-filter-bar" style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: none;" id="search-filter-bar">
                 <div class="row g-3">
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <input type="text" id="search-input" class="form-control" placeholder="Search videos by title or filename..." style="border-radius: 25px;">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <select id="tag-filter" class="form-select" style="border-radius: 25px;">
                             <option value="">All Tags</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select id="sort-select" class="form-select" style="border-radius: 25px;">
+                            <option value="date-desc">📅 Newest First</option>
+                            <option value="date-asc">📅 Oldest First</option>
+                            <option value="title-asc">🔤 Title A-Z</option>
+                            <option value="title-desc">🔤 Title Z-A</option>
+                            <option value="size-desc">📦 Largest First</option>
+                            <option value="size-asc">📦 Smallest First</option>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -410,6 +405,7 @@
         
         let allVideos = [];
         let filteredVideos = [];
+        let currentSort = localStorage.getItem('video_sort_preference') || 'date-desc';
         
         async function checkAuth() {
             const token = localStorage.getItem('auth_token');
@@ -480,6 +476,7 @@
                     setupTagFilter(allTags);
                     setupSearch();
                     setupCategoryFilter();
+                    setupSort();
                     
                     filteredVideos = [...allVideos];
                     displayVideos(filteredVideos);
@@ -663,6 +660,37 @@
             searchInput.addEventListener('input', applyFilters);
         }
         
+        function setupSort() {
+            const sortSelect = document.getElementById('sort-select');
+            sortSelect.value = currentSort;
+            sortSelect.addEventListener('change', function() {
+                currentSort = this.value;
+                localStorage.setItem('video_sort_preference', currentSort);
+                applyFilters();
+            });
+        }
+        
+        function sortVideos(videos) {
+            const sorted = [...videos];
+            
+            switch(currentSort) {
+                case 'date-desc':
+                    return sorted.sort((a, b) => new Date(b.upload_date || 0) - new Date(a.upload_date || 0));
+                case 'date-asc':
+                    return sorted.sort((a, b) => new Date(a.upload_date || 0) - new Date(b.upload_date || 0));
+                case 'title-asc':
+                    return sorted.sort((a, b) => a.title.localeCompare(b.title));
+                case 'title-desc':
+                    return sorted.sort((a, b) => b.title.localeCompare(a.title));
+                case 'size-desc':
+                    return sorted.sort((a, b) => (parseInt(b.size) || 0) - (parseInt(a.size) || 0));
+                case 'size-asc':
+                    return sorted.sort((a, b) => (parseInt(a.size) || 0) - (parseInt(b.size) || 0));
+                default:
+                    return sorted;
+            }
+        }
+        
         function applyFilters() {
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
             const selectedTag = document.getElementById('tag-filter').value;
@@ -677,6 +705,7 @@
                 return matchesSearch && matchesTag;
             });
             
+            filteredVideos = sortVideos(filteredVideos);
             displayVideos(filteredVideos);
         }
         
@@ -846,7 +875,8 @@
                     const row = document.createElement('div');
                     row.className = 'horizontal-scroll-container';
                     
-                    groupedVideos[tag].forEach(video => {
+                    const sortedCategoryVideos = sortVideos(groupedVideos[tag]);
+                    sortedCategoryVideos.forEach(video => {
                         const videoType = video.video_type || 'local';
                         const externalUrl = video.external_url || '';
                         
@@ -901,7 +931,8 @@
                     const row = document.createElement('div');
                     row.className = 'horizontal-scroll-container';
                     
-                    uncategorized.forEach(video => {
+                    const sortedUncategorized = sortVideos(uncategorized);
+                    sortedUncategorized.forEach(video => {
                         const videoType = video.video_type || 'local';
                         const externalUrl = video.external_url || '';
                         

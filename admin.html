@@ -538,6 +538,9 @@
                     <button class="btn btn-primary" onclick="showExternalVideoModal()">🔗 Add External Video</button>
                     <a href="download-status.html" class="btn"
                         style="background: #28a745; color: white; text-decoration: none;">📊 Download Status</a>
+                    <button class="btn btn-danger" onclick="bulkDeleteVideos()" id="bulk-delete-videos-btn" disabled>🗑️ Delete Selected</button>
+                    <button class="btn btn-warning" onclick="bulkChangeVisibility()" id="bulk-visibility-btn" disabled>👁️ Change Visibility</button>
+                    <button class="btn" onclick="bulkChangeTags()" id="bulk-tags-btn" disabled style="background: #17a2b8; color: white;">🏷️ Update Tags</button>
                 </div>
 
                 <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none;"
@@ -571,6 +574,7 @@
                     <table id="videos-table" class="data-table" style="display: none;">
                         <thead>
                             <tr>
+                                <th><input type="checkbox" id="select-all-videos" onchange="toggleAllVideos()"></th>
                                 <th>Filename</th>
                                 <th>Title</th>
                                 <th>Owner</th>
@@ -1407,6 +1411,7 @@
                 const typeBadge = videoType === 'local' ? '' : `<span style="background: #007bff; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; margin-left: 5px;">${videoType.toUpperCase()}</span>`;
 
                 row.innerHTML = `
+                    <td><input type="checkbox" class="video-checkbox" value="${video.filename}"></td>
                     <td>${video.filename}${typeBadge}</td>
                     <td>${video.title}</td>
                     <td>${owner}</td>
@@ -1489,6 +1494,89 @@
             document.getElementById('admin-tag-filter').value = '';
             document.getElementById('admin-visibility-filter').value = '';
             applyAdminFilters();
+        }
+        
+        function toggleAllVideos() {
+            const selectAll = document.getElementById('select-all-videos');
+            const checkboxes = document.querySelectorAll('.video-checkbox');
+            checkboxes.forEach(cb => cb.checked = selectAll.checked);
+            updateBulkVideoButtons();
+        }
+        
+        function updateBulkVideoButtons() {
+            const selected = document.querySelectorAll('.video-checkbox:checked');
+            const btns = ['bulk-delete-videos-btn', 'bulk-visibility-btn', 'bulk-tags-btn'];
+            btns.forEach(id => document.getElementById(id).disabled = selected.length === 0);
+        }
+        
+        async function bulkDeleteVideos() {
+            const selected = Array.from(document.querySelectorAll('.video-checkbox:checked')).map(cb => cb.value);
+            if (!confirm(`Delete ${selected.length} video(s)?`)) return;
+            
+            for (const filename of selected) {
+                await fetch(`${ADMIN_API}?action=video&filename=${encodeURIComponent(filename)}`, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+            }
+            document.getElementById('videos-message').innerHTML = '<div class="success">Videos deleted</div>';
+            loadVideos();
+        }
+        
+        async function bulkChangeVisibility() {
+            const selected = Array.from(document.querySelectorAll('.video-checkbox:checked')).map(cb => cb.value);
+            const visibility = prompt('Set visibility to (public/private):', 'public');
+            if (!visibility || !['public', 'private'].includes(visibility)) return;
+            
+            for (const filename of selected) {
+                const video = allAdminVideos.find(v => v.filename === filename);
+                await fetch(`${TAG_API}?action=update_video`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        video_id: filename,
+                        title: video.title,
+                        tags: video.tags,
+                        owner: video.owner,
+                        visibility: visibility
+                    })
+                });
+            }
+            document.getElementById('videos-message').innerHTML = '<div class="success">Visibility updated</div>';
+            loadVideos();
+        }
+        
+        async function bulkChangeTags() {
+            const selected = Array.from(document.querySelectorAll('.video-checkbox:checked')).map(cb => cb.value);
+            const action = prompt('Add or Remove tags? (add/remove):', 'add');
+            if (!action || !['add', 'remove'].includes(action)) return;
+            
+            const tagsStr = prompt(`Enter tags to ${action} (comma-separated):`, '');
+            if (!tagsStr) return;
+            const tags = tagsStr.split(',').map(t => t.trim()).filter(t => t);
+            
+            for (const filename of selected) {
+                const video = allAdminVideos.find(v => v.filename === filename);
+                let newTags = [...video.tags];
+                if (action === 'add') {
+                    newTags = [...new Set([...newTags, ...tags])];
+                } else {
+                    newTags = newTags.filter(t => !tags.includes(t));
+                }
+                await fetch(`${TAG_API}?action=update_video`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        video_id: filename,
+                        title: video.title,
+                        tags: newTags,
+                        owner: video.owner,
+                        visibility: video.visibility
+                    })
+                });
+            }
+            document.getElementById('videos-message').innerHTML = '<div class="success">Tags updated</div>';
+            loadVideos();
         }
 
         function editUser(userId, email, role, firstName = '', lastName = '') {
@@ -3842,10 +3930,13 @@
             alert(`Comment Details:\n\nAuthor: ${author}\nArticle ID: ${articleId}\nContent: ${content}\nComment ID: ${commentId}`);
         }
 
-        // Add event listeners for comment checkboxes
+        // Add event listeners for checkboxes
         document.addEventListener('change', function (e) {
             if (e.target.classList.contains('comment-checkbox')) {
                 updateBulkActionButtons();
+            }
+            if (e.target.classList.contains('video-checkbox')) {
+                updateBulkVideoButtons();
             }
         });
 

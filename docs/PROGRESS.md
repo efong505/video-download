@@ -4424,3 +4424,94 @@ Transform the Christian Conservative Platform into native mobile applications fo
 - FIX_RECURRING_ISSUES_GUIDE.md - Documented both issues
 
 **Verification**: ✅ Videos stay in position after editing, all videos load on page load with lazy thumbnails
+
+
+## Upcoming Features - Next Development Phase 🔄 PLANNED
+
+### Video Management Enhancements (In Progress)
+
+#### Issue 19: Video Sorting System 🎯 NEXT
+**Priority**: High
+**Status**: Planned for immediate implementation
+
+**Features to Implement**:
+- Sort videos by: Upload Date (newest/oldest), Title (A-Z/Z-A), Duration, File Size
+- Persistent sort preference (localStorage)
+- Sort dropdown in videos.html with visual indicators
+- Apply sorting within each category section
+- Maintain horizontal scroll functionality
+
+**Technical Approach**:
+- Add sort dropdown to videos.html header
+- Implement sortVideos() function with multiple criteria
+- Store sort preference in localStorage
+- Update displayVideos() to respect sort order
+- Ensure compatibility with existing category grouping
+
+**Expected Impact**:
+- Improved content discovery
+- Better user experience for large video libraries
+- Easier to find recent uploads or specific content
+
+#### Issue 20: Bulk Video Editing 🎯 NEXT
+**Priority**: High
+**Status**: Planned after video sorting
+
+**Features to Implement**:
+- Multi-select checkboxes for videos in admin dashboard
+- "Select All" / "Deselect All" buttons
+- Bulk actions: Delete, Change Visibility, Update Tags, Change Owner
+- Confirmation dialogs for bulk operations
+- Progress indicators for batch processing
+- Undo functionality for accidental bulk changes
+
+**Technical Approach**:
+- Add checkbox column to admin video table
+- Implement selection state management
+- Create bulk action dropdown menu
+- Build batch processing functions in TAG API
+- Add transaction logging for bulk operations
+- Implement rollback capability
+
+**Expected Impact**:
+- Massive time savings for content management
+- Easier to organize large video libraries
+- Reduced risk of repetitive task errors
+- Better admin workflow efficiency
+
+### Additional Planned Enhancements
+
+#### Category Reordering (Future)
+- Drag-and-drop category reordering in admin panel
+- Visual feedback during drag operations
+- Save order to localStorage or DynamoDB
+- Apply order across all pages (videos, resources, articles)
+
+#### Video Analytics Dashboard (Future)
+- View counts per video
+- Most watched videos report
+- Category performance metrics
+- User engagement statistics
+- Download/embed tracking
+
+#### Advanced Search & Filtering (Future)
+- Full-text search across video titles and descriptions
+- Multi-tag filtering
+- Date range filtering
+- Duration filtering
+- Owner/uploader filtering
+- Saved search queries
+
+### Development Timeline
+**Week 1**: Video sorting system implementation and testing
+**Week 2**: Bulk video editing system implementation
+**Week 3**: Testing, bug fixes, and deployment
+**Week 4**: Documentation and user training materials
+
+### Success Metrics
+- Video sorting: 100% of users can sort by all criteria
+- Bulk editing: Reduce admin time by 70% for multi-video operations
+- User satisfaction: Positive feedback on improved video management
+- Performance: No degradation in page load times with new features
+
+**Status**: Video sorting and bulk editing are the next priority features for implementation, with clear technical approaches and expected impact documented for reference.

@@ -8,6 +8,8 @@ from decimal import Decimal
 dynamodb = boto3.resource('dynamodb')
 comments_table = dynamodb.Table('comments')
 users_table = dynamodb.Table('users')
+articles_table = dynamodb.Table('articles')
+lambda_client = boto3.client('lambda')
 
 def lambda_handler(event, context):
     headers = cors_headers()
@@ -85,6 +87,33 @@ def create_comment(event):
         }
         
         comments_table.put_item(Item=comment)
+        
+        # Send notification if this is a reply
+        if parent_id:
+            try:
+                parent_response = comments_table.get_item(Key={'comment_id': parent_id})
+                parent_comment = parent_response.get('Item')
+                if parent_comment and parent_comment.get('author_email') != user_info['email']:
+                    article_response = articles_table.get_item(Key={'article_id': article_id})
+                    article = article_response.get('Item', {})
+                    article_title = article.get('title', 'an article')
+                    
+                    lambda_client.invoke(
+                        FunctionName='notifications_api',
+                        InvocationType='Event',
+                        Payload=json.dumps({
+                            'body': json.dumps({
+                                'action': 'send_notification',
+                                'type': 'comment_reply',
+                                'recipient_email': parent_comment['author_email'],
+                                'subject': 'New Reply to Your Comment',
+                                'message': f"{author_name} replied to your comment on \"{article_title}\".",
+                                'link': f'https://christianconservativestoday.com/article.html?id={article_id}#comment-{comment_id}'
+                            })
+                        })
+                    )
+            except Exception as e:
+                print(f'Notification error: {e}')
         
         return {
             'statusCode': 200,

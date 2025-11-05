@@ -70,20 +70,10 @@ function initNavbar() {
         const userIcon = iconStyle === 'fontawesome' ? '<i class="fas fa-user me-1"></i>' : '👤 ';
         const profileIcon = iconStyle === 'fontawesome' ? '<i class="fas fa-user-circle me-2"></i>' : '👤 ';
         const myPageIcon = iconStyle === 'fontawesome' ? '<i class="fas fa-file-alt me-2"></i>' : '📄 ';
-        const notifIcon = iconStyle === 'fontawesome' ? '<i class="fas fa-bell me-2"></i>' : '🔔 ';
         const adminIcon = iconStyle === 'fontawesome' ? '<i class="fas fa-cog me-2"></i>' : '⚙️ ';
         const logoutIcon = iconStyle === 'fontawesome' ? '<i class="fas fa-sign-out-alt me-2"></i>' : '🚪 ';
         
         const myPageUrl = `user-page.html?user=${encodeURIComponent(user.email)}`;
-        
-        // Notification bell
-        html += `
-            <li class="nav-item">
-                <a class="nav-link position-relative" href="notification-settings.html">
-                    🔔
-                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notif-badge" style="display: none; font-size: 0.6rem;">0</span>
-                </a>
-            </li>`;
         
         html += `
             <li class="nav-item dropdown">
@@ -92,7 +82,6 @@ function initNavbar() {
                 </a>
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="profile.html">${profileIcon}Profile</a></li>
-                    <li><a class="dropdown-item" href="notification-settings.html">${notifIcon}Notification Settings</a></li>
                     ${currentPage !== 'profile' && currentPage !== 'authors' ? `<li><a class="dropdown-item" href="${myPageUrl}">${myPageIcon}My Page</a></li>` : ''}
                     ${(user.role === 'admin' || user.role === 'super_user') && currentPage !== 'admin' ? `<li><a class="dropdown-item" href="admin.html">${adminIcon}Admin Dashboard</a></li>` : ''}
                     <li><hr class="dropdown-divider"></li>
@@ -105,25 +94,6 @@ function initNavbar() {
     }
     
     navLinks.innerHTML = html;
-    
-    // Load unread notification count
-    if (isLoggedIn) {
-        loadNotificationCount(user.email);
-    }
-}
-
-function loadNotificationCount(email) {
-    fetch(`https://lc7w6ebg4m.execute-api.us-east-1.amazonaws.com/prod/notifications?action=get_user_notifications&email=${encodeURIComponent(email)}`)
-        .then(r => r.json())
-        .then(data => {
-            const unread = (data.notifications || []).filter(n => !n.read).length;
-            const badge = document.getElementById('notif-badge');
-            if (badge && unread > 0) {
-                badge.textContent = unread;
-                badge.style.display = 'inline-block';
-            }
-        })
-        .catch(err => console.log('Notification count error:', err));
 }
 
 function logout() {

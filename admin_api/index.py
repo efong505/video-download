@@ -7,6 +7,7 @@ import hashlib
 
 dynamodb = boto3.resource('dynamodb')
 s3_client = boto3.client('s3')
+lambda_client = boto3.client('lambda')
 users_table = dynamodb.Table('users')
 metadata_table = dynamodb.Table('video-metadata')
 
@@ -427,6 +428,34 @@ def delete_user(event):
         })
     }
 
+def send_admin_alert(alert_type, details):
+    """Send alert notification to all admins"""
+    try:
+        response = users_table.scan(
+            FilterExpression='#role IN (:admin, :super)',
+            ExpressionAttributeNames={'#role': 'role'},
+            ExpressionAttributeValues={':admin': 'admin', ':super': 'super_user'}
+        )
+        
+        for admin in response.get('Items', []):
+            try:
+                lambda_client.invoke(
+                    FunctionName='notifications_api',
+                    InvocationType='Event',
+                    Payload=json.dumps({
+                        'action': 'send_notification',
+                        'user_email': admin['email'],
+                        'notification_type': 'admin_alert',
+                        'title': f'Admin Alert: {alert_type}',
+                        'message': details,
+                        'link': '/admin.html'
+                    })
+                )
+            except Exception as e:
+                print(f"Failed to notify admin {admin['email']}: {str(e)}")
+    except Exception as e:
+        print(f"Failed to send admin alerts: {str(e)}")
+
 def delete_video(event):
     query_params = event.get('queryStringParameters') or {}
     filename = query_params.get('filename')
@@ -477,6 +506,12 @@ def delete_video(event):
         
         # Delete metadata using the correct video_id primary key
         metadata_table.delete_item(Key={'video_id': video_id})
+        
+        # Send admin alert
+        try:
+            send_admin_alert('video_deleted', f'Video deleted: {filename}')
+        except Exception as e:
+            print(f"Failed to send admin alert: {str(e)}")
         
         return {
             'statusCode': 200,

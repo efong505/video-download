@@ -6,6 +6,7 @@ from datetime import datetime
 
 dynamodb = boto3.resource('dynamodb')
 prayer_table = dynamodb.Table('prayer-requests')
+lambda_client = boto3.client('lambda')
 
 # Toggle moderation: set to 'true' to require approval, 'false' for auto-approve
 REQUIRE_MODERATION = os.environ.get('REQUIRE_MODERATION', 'false').lower() == 'true'
@@ -112,10 +113,13 @@ def update_prayer(event, headers):
     expr_names = {}
     updates = []
     
+    status_changed_to_answered = False
     if 'status' in body:
         updates.append('#status = :status')
         expr_values[':status'] = body['status']
         expr_names['#status'] = 'status'
+        if body['status'] == 'answered':
+            status_changed_to_answered = True
     if 'testimony' in body:
         updates.append('testimony = :testimony')
         expr_values[':testimony'] = body['testimony']
@@ -128,6 +132,29 @@ def update_prayer(event, headers):
         ExpressionAttributeValues=expr_values,
         ExpressionAttributeNames=expr_names if expr_names else None
     )
+    
+    # Send notification if prayer was marked as answered
+    if status_changed_to_answered:
+        try:
+            prayer_response = prayer_table.get_item(Key={'request_id': request_id})
+            prayer = prayer_response.get('Item', {})
+            if prayer.get('submitted_by'):
+                lambda_client.invoke(
+                    FunctionName='notifications_api',
+                    InvocationType='Event',
+                    Payload=json.dumps({
+                        'body': json.dumps({
+                            'action': 'send_notification',
+                            'type': 'prayer_update',
+                            'recipient_email': prayer['submitted_by'],
+                            'subject': 'Prayer Request Answered!',
+                            'message': f'Great news! Your prayer request "{prayer.get("title", "")}" has been marked as answered.',
+                            'link': 'https://christianconservativestoday.com/prayer-wall.html'
+                        })
+                    })
+                )
+        except Exception as e:
+            print(f'Notification error: {e}')
     
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Prayer request updated'})}
 

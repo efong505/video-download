@@ -4,36 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ekewaka Videos</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CCT">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/card-styles.css">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
     <style>
-        .dashboard-header {
+        /* MOVED TO common-styles.css
+.dashboard-header {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             padding: 20px 0;
+            padding-top: 100px;
             margin-bottom: 30px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
-        .dashboard-nav {
+*/
+        /* MOVED TO common-styles.css
+.dashboard-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 15px;
         }
-        .nav-brand {
+*/
+        /* MOVED TO common-styles.css
+.nav-brand {
             font-size: 1.8rem;
             font-weight: bold;
             margin: 0;
         }
-        .nav-links {
+*/
+        /* MOVED TO common-styles.css
+.nav-links {
             display: flex;
             gap: 20px;
             align-items: center;
             flex-wrap: wrap;
         }
+*/
         
 
-        .nav-link {
+        /* MOVED TO common-styles.css
+.nav-link {
             color: white;
             text-decoration: none;
             padding: 10px 20px;
@@ -42,19 +61,28 @@
             transition: all 0.3s ease;
             border: 1px solid rgba(255,255,255,0.2);
         }
-        .nav-link:hover {
+*/
+        /* MOVED TO common-styles.css
+.nav-link:hover {
             background: rgba(255,255,255,0.2);
             color: white;
             transform: translateY(-2px);
             box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
-        .nav-link.logout {
+*/
+        /* MOVED TO common-styles.css
+.nav-link.logout {
             background: rgba(220,53,69,0.8);
             border-color: rgba(220,53,69,0.9);
         }
-        .nav-link.logout:hover {
+*/
+        /* MOVED TO common-styles.css
+.nav-link.logout:hover {
             background: rgba(220,53,69,1);
         }
+*/
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
         .video-card {
             position: relative;
             cursor: pointer;
@@ -64,22 +92,34 @@
             transition: all 0.3s ease;
             background: white;
         }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
         .video-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         }
+
+        */
         .thumbnail-container {
             position: relative;
             width: 100%;
-            height: 200px;
+            height: 200px !important;
+            padding-top: 0 !important;
             background: #000;
             overflow: hidden;
         }
         .thumbnail {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
         }
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
         .play-button {
             position: absolute;
             top: 50%;
@@ -96,15 +136,25 @@
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
         .play-button:hover {
             background: rgba(102,126,234,1);
             transform: translate(-50%, -50%) scale(1.1);
         }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
         .video-player {
             display: none;
             width: 100%;
             height: 200px;
         }
+
+        */
         .video-title {
             padding: 15px;
             background: white;
@@ -122,6 +172,8 @@
             font-weight: bold;
             font-size: 1.2rem;
         }
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
         .horizontal-scroll-container {
             display: flex;
             overflow-x: auto;
@@ -130,6 +182,8 @@
             scroll-behavior: smooth;
             -webkit-overflow-scrolling: touch;
         }
+
+        */
         .horizontal-scroll-container::-webkit-scrollbar {
             height: 8px;
         }
@@ -148,9 +202,15 @@
             flex: 0 0 300px;
             min-width: 300px;
         }
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
         .scroll-wrapper {
             position: relative;
         }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
         .scroll-btn {
             position: absolute;
             top: 50%;
@@ -168,21 +228,39 @@
             display: none;
             box-shadow: 0 2px 8px rgba(0,0,0,0.15);
         }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
         .scroll-btn:hover {
             background: rgba(255,255,255,1);
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             transform: translateY(-50%) scale(1.05);
         }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
         .scroll-btn-left {
             left: -25px;
         }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
         .scroll-btn-right {
             right: -25px;
         }
+
+        */
         @media (min-width: 768px) {
+            /* CONSOLIDATED TO card-styles.css or form-styles.css
+
             .scroll-btn {
                 display: block;
             }
+
+            */
         }
         .loading {
             text-align: center;
@@ -221,11 +299,23 @@
     </style>
 </head>
 <body>
+    <!-- Unified Navbar - Revert: restore from videos.html.backup -->
+    <div id="navbar-container" data-page="videos"></div>
+    <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            });
+    </script>
+    
     <div class="dashboard-header">
         <div class="container">
             <div class="dashboard-nav">
                 <h1 class="nav-brand">🎬 Video Gallery</h1>
-                <div class="nav-links" id="nav-links">
+                <div class="nav-links" id="nav-links" style="display:none;">
                     <a href="/" class="nav-link">🏠 Home</a>
                     <a href="category.html" class="nav-link">📂 Categories</a>
                     <a href="articles.html" class="nav-link">📝 Articles</a>
@@ -284,12 +374,22 @@
             
             <div class="search-filter-bar" style="background: white; padding: 20px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); display: none;" id="search-filter-bar">
                 <div class="row g-3">
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <input type="text" id="search-input" class="form-control" placeholder="Search videos by title or filename..." style="border-radius: 25px;">
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <select id="tag-filter" class="form-select" style="border-radius: 25px;">
                             <option value="">All Tags</option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <select id="sort-select" class="form-select" style="border-radius: 25px;">
+                            <option value="date-desc">📅 Newest First</option>
+                            <option value="date-asc">📅 Oldest First</option>
+                            <option value="title-asc">🔤 Title A-Z</option>
+                            <option value="title-desc">🔤 Title Z-A</option>
+                            <option value="size-desc">📦 Largest First</option>
+                            <option value="size-asc">📦 Smallest First</option>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -309,30 +409,18 @@
                 <p>No videos found.</p>
             </div>
             
-            <!-- Load More Button -->
-            <div class="text-center mt-4" id="load-more-container" style="display: none;">
-                <button id="load-more-btn" class="btn btn-primary btn-lg" style="border-radius: 25px; padding: 12px 30px;">
-                    📥 Load More Videos
-                </button>
-                <div id="loading-more" class="mt-3" style="display: none;">
-                    <div class="spinner-border spinner-border-sm" role="status"></div>
-                    <span class="ms-2">Loading more videos...</span>
-                </div>
-            </div>
+
         </div>
     </div>
 
     <script>
-        const BUCKET_URL = 'https://d271vky579caz9.cloudfront.net';
+        const BUCKET_URL = 'https://christianconservativestoday.com';
         const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
         const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
         
         let allVideos = [];
         let filteredVideos = [];
-        let currentPage = 1;
-        let currentCategory = 'all';
-        let hasMore = true;
-        const videosPerPage = 24;
+        let currentSort = localStorage.getItem('video_sort_preference') || 'date-desc';
         
         async function checkAuth() {
             const token = localStorage.getItem('auth_token');
@@ -365,13 +453,13 @@
             }
         }
         
-        async function loadVideos(page = 1, category = 'all', append = false) {
+        async function loadVideos() {
             try {
                 const userData = localStorage.getItem('user_data');
                 const userEmail = userData ? JSON.parse(userData).email : '';
                 const userRole = userData ? JSON.parse(userData).role : '';
                 
-                const tagResponse = await fetch(`${TAG_API}?action=list&user=${encodeURIComponent(userEmail)}&role=${encodeURIComponent(userRole)}&page=${page}&limit=${videosPerPage}&category=${category}`);
+                const tagResponse = await fetch(`${TAG_API}?action=list&user=${encodeURIComponent(userEmail)}&role=${encodeURIComponent(userRole)}`);
                 const tagData = await tagResponse.json();
                 
                 console.log('TAG API response:', tagData);
@@ -380,12 +468,7 @@
                 
                 if (tagData.videos && tagData.videos.length > 0) {
                     let videosWithMetadata = tagData.videos;
-                    hasMore = tagData.has_more || false;
-                    
-                    if (append) {
-                        allVideos = [...allVideos, ...videosWithMetadata];
-                    } else {
-                        allVideos = videosWithMetadata;
+                    allVideos = videosWithMetadata;
                         
                         // Calculate stats only on first load
                         const allTags = new Set();
@@ -400,34 +483,26 @@
                             }
                         });
                         
-                        document.getElementById('total-videos').textContent = tagData.total_count || videosWithMetadata.length;
-                        document.getElementById('total-size').textContent = formatFileSize(totalSize);
-                        document.getElementById('total-tags').textContent = allTags.size;
-                        document.getElementById('stats-bar').style.display = 'flex';
-                        
-                        setupTagFilter(allTags);
-                        setupSearch();
-                        setupCategoryFilter();
-                    }
+                    document.getElementById('total-videos').textContent = tagData.total_count || videosWithMetadata.length;
+                    document.getElementById('total-size').textContent = formatFileSize(totalSize);
+                    document.getElementById('total-tags').textContent = allTags.size;
+                    document.getElementById('stats-bar').style.display = 'flex';
+                    
+                    setupTagFilter(allTags);
+                    setupSearch();
+                    setupCategoryFilter();
+                    setupSort();
                     
                     filteredVideos = [...allVideos];
-                    displayVideos(append ? videosWithMetadata : filteredVideos, append);
+                    displayVideos(filteredVideos);
                     
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('videos-container').style.display = 'flex';
                     document.getElementById('search-filter-bar').style.display = 'block';
                     document.getElementById('category-bar').style.display = 'block';
-                    
-                    // Show/hide load more button
-                    if (hasMore) {
-                        document.getElementById('load-more-container').style.display = 'block';
-                    } else {
-                        document.getElementById('load-more-container').style.display = 'none';
-                    }
-                } else if (!append) {
+                } else {
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('no-videos').style.display = 'block';
-                    document.getElementById('load-more-container').style.display = 'none';
                 }
                 
             } catch (error) {
@@ -441,7 +516,7 @@
             const col = document.createElement('div');
             col.className = 'video-card-wrapper';
             
-            const embedUrl = `https://d271vky579caz9.cloudfront.net/embed.html?v=${filename}&t=${encodeURIComponent(title)}`;
+            const embedUrl = `https://christianconservativestoday.com/embed.html?v=${filename}&t=${encodeURIComponent(title)}`;
             
             if (videoType === 'local') {
                 col.innerHTML = `
@@ -600,6 +675,37 @@
             searchInput.addEventListener('input', applyFilters);
         }
         
+        function setupSort() {
+            const sortSelect = document.getElementById('sort-select');
+            sortSelect.value = currentSort;
+            sortSelect.addEventListener('change', function() {
+                currentSort = this.value;
+                localStorage.setItem('video_sort_preference', currentSort);
+                applyFilters();
+            });
+        }
+        
+        function sortVideos(videos) {
+            const sorted = [...videos];
+            
+            switch(currentSort) {
+                case 'date-desc':
+                    return sorted.sort((a, b) => new Date(b.upload_date || 0) - new Date(a.upload_date || 0));
+                case 'date-asc':
+                    return sorted.sort((a, b) => new Date(a.upload_date || 0) - new Date(b.upload_date || 0));
+                case 'title-asc':
+                    return sorted.sort((a, b) => a.title.localeCompare(b.title));
+                case 'title-desc':
+                    return sorted.sort((a, b) => b.title.localeCompare(a.title));
+                case 'size-desc':
+                    return sorted.sort((a, b) => (parseInt(b.size) || 0) - (parseInt(a.size) || 0));
+                case 'size-asc':
+                    return sorted.sort((a, b) => (parseInt(a.size) || 0) - (parseInt(b.size) || 0));
+                default:
+                    return sorted;
+            }
+        }
+        
         function applyFilters() {
             const searchTerm = document.getElementById('search-input').value.toLowerCase();
             const selectedTag = document.getElementById('tag-filter').value;
@@ -614,6 +720,7 @@
                 return matchesSearch && matchesTag;
             });
             
+            filteredVideos = sortVideos(filteredVideos);
             displayVideos(filteredVideos);
         }
         
@@ -643,18 +750,6 @@
             });
         }
         
-        async function loadMoreVideos() {
-            document.getElementById('loading-more').style.display = 'block';
-            document.getElementById('load-more-btn').style.display = 'none';
-            
-            currentPage++;
-            await loadVideos(currentPage, currentCategory, true);
-            
-            document.getElementById('loading-more').style.display = 'none';
-            if (hasMore) {
-                document.getElementById('load-more-btn').style.display = 'block';
-            }
-        }
         
         function playExternalVideo(button, embedSrc) {
             const card = button.closest('.video-card');
@@ -745,32 +840,11 @@
             return sorted;
         }
 
-        function displayVideos(videos, append = false) {
+        function displayVideos(videos) {
             const container = document.getElementById('videos-container');
-            if (!append) {
-                container.innerHTML = '';
-            }
+            container.innerHTML = '';
             
             console.log('Displaying videos:', videos);
-            
-            if (append) {
-                // For appended videos (load more), just add them without grouping
-                for (const video of videos) {
-                    const videoType = video.video_type || 'local';
-                    const externalUrl = video.external_url || '';
-                    
-                    if (videoType === 'local') {
-                        const baseName = video.filename.replace('.mp4', '');
-                        const videoUrl = `${BUCKET_URL}/videos/${video.filename}`;
-                        const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb_2.jpg`;
-                        const fallbackThumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
-                        
-                        createVideoCard(container, video.title, videoUrl, thumbnailUrl, fallbackThumbnailUrl, video.filename, videoType, externalUrl);
-                    } else {
-                        createVideoCard(container, video.title, '', '', '', video.filename, videoType, externalUrl);
-                    }
-                }
-            } else {
                 // Group videos by their primary tag for initial display
                 const groupedVideos = {};
                 const uncategorized = [];
@@ -816,7 +890,8 @@
                     const row = document.createElement('div');
                     row.className = 'horizontal-scroll-container';
                     
-                    groupedVideos[tag].forEach(video => {
+                    const sortedCategoryVideos = sortVideos(groupedVideos[tag]);
+                    sortedCategoryVideos.forEach(video => {
                         const videoType = video.video_type || 'local';
                         const externalUrl = video.external_url || '';
                         
@@ -871,7 +946,8 @@
                     const row = document.createElement('div');
                     row.className = 'horizontal-scroll-container';
                     
-                    uncategorized.forEach(video => {
+                    const sortedUncategorized = sortVideos(uncategorized);
+                    sortedUncategorized.forEach(video => {
                         const videoType = video.video_type || 'local';
                         const externalUrl = video.external_url || '';
                         
@@ -902,7 +978,6 @@
                         rightBtn.style.display = row.scrollLeft < row.scrollWidth - row.clientWidth - 1 ? 'block' : 'none';
                     });
                 }
-            }
         }
         
         function clearFilters() {
@@ -913,14 +988,33 @@
         
         function copyEmbedLink(embedUrl) {
             navigator.clipboard.writeText(embedUrl).then(() => {
-                const message = document.createElement('div');
-                message.style.cssText = 'position: fixed; top: 20px; right: 20px; background: #28a745; color: white; padding: 10px 20px; border-radius: 4px; z-index: 1000;';
-                message.textContent = 'Embed link copied to clipboard!';
-                document.body.appendChild(message);
-                setTimeout(() => message.remove(), 3000);
+                showNotification('✅ Link copied to clipboard!', 'success');
             }).catch(() => {
                 prompt('Copy this embed link:', embedUrl);
             });
+        }
+        
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#28a745' : '#dc3545'};
+                color: white;
+                padding: 15px 25px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                z-index: 10000;
+                font-weight: 500;
+                animation: slideIn 0.3s ease;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
         }
         
         function formatFileSize(bytes) {
@@ -975,18 +1069,6 @@
         document.addEventListener('DOMContentLoaded', async function() {
             const isAuthenticated = await checkAuth();
             if (isAuthenticated) {
-                const userData = localStorage.getItem('user_data');
-                if (userData) {
-                    const user = JSON.parse(userData);
-                    if (user.role === 'admin' || user.role === 'super_user') {
-                        const navLinks = document.getElementById('nav-links');
-                        const adminLink = document.createElement('a');
-                        adminLink.href = 'admin.html';
-                        adminLink.className = 'nav-link';
-                        adminLink.textContent = '⚙️ Admin Dashboard';
-                        navLinks.insertBefore(adminLink, navLinks.lastElementChild);
-                    }
-                }
                 loadVideos();
                 
                 // Check for category order changes every 2 seconds
@@ -1057,10 +1139,9 @@
             lastCategoryCheck = localStorage.getItem('category_order_changed') || '0';
         });
         
-        // Load more button event listener
-        document.getElementById('load-more-btn').addEventListener('click', loadMoreVideos);
     </script>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="pwa-install.js"></script>
 </body>
 </html>
