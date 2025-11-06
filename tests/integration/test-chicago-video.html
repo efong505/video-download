@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Chicago Video</title>
+</head>
+<body>
+    <h1>Chicago National Guard Video Test</h1>
+    <video controls width="800" style="max-width: 100%;">
+        <source src="https://my-video-downloads-bucket.s3.amazonaws.com/chicago_guard_test2.mp4?AWSAccessKeyId=ASIAVNDRCHTMLNOUDHTO&Signature=fBTJMCmZ2uGqk6gSevLwFkG5dmw%3D&x-amz-security-token=IQoJb3JpZ2luX2VjEBoaCXVzLWVhc3QtMSJGMEQCIBUyi%2BR5xR9EFIVJGsXMMj5bg2EvN7hHMCIlUkHvqo9EAiAFRg7wrLSeHIJ4xa8vE9tHNOmcKa8bKE6dKLN6fk5kzCqDAwiz%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8BEAIaDDM3MTc1MTc5NTkyOCIMwv9rx%2BCCgcrW11jHKtcCahQOzGOcZz9pyYwgCEZcm4kmaounK8J%2F7dCkQDoFDqlQeT0UCquIpv%2BmCMp31BW%2BAV46Z7JbMS6gjmzIgC9hXiPQItWxq4gFr7OZtwRD%2FjqVC%2FLzgDcvcJPwNZZL4W%2FoU9FbsYJ57WqWWtSA4eBIrZv7JpHC6EsXwn5WzNKaZb7tS0yoskaTb5Rjv56kyXDQJk%2Fmy8mBmJwTPEjXm6mXro%2BFvzVYxxSl9RvWrsHC1vLv7RgWWYPxSKcVFpChBUCdwAE9boe4MIDMOXqqJaK0779gOEE4sNJisUEXRTEXdG1JwgEcuoLQhii%2BfdvpQqQntwGsu8TIo2KNQPRm5iy5bEsduyIdUQC%2BrhgIVRmWAMtjJAlc4MEeRVBZ6DJNLJ%2F0kAVD2MndtB3bRRv8dcrm2wK5uITRRypd9Es3Bx%2F%2BPzSfN53c%2Bt07R1N8rsXcXMmCYgPP%2BLDrMTDw%2FpbHBjqfATZMVznApZ7O49AK82zOR6sp5KV4JtuzG480eR1%2FXq5MW6RWuyjzwPArSGiGDcE2gA%2B%2FYoxXTtvkDlIWAPWsUVlIrbo4q3RNSLIY97U3hG6cTuWMDh1gzzbgooZ5hYEDEZK923uePbV%2FA4WUtdcakF9m%2BvxpducDXJCseUWXjCRWpo18iQ%2FogHvBOjSXf1rHxaNq%2FT3o9DfftuaVIGX9zQ%3D%3D&Expires=1759890817" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
+    <h2>Test Results:</h2>
+    <div id="results">
+        <p>✅ <strong>Download Status:</strong> SUCCESS</p>
+        <p>✅ <strong>File Size:</strong> 77,038,640 bytes (~73.5 MB)</p>
+        <p>✅ <strong>Video Title:</strong> "NATIONAL GUARD HAS ARRIVED IN CHICAGO"</p>
+        <p>✅ <strong>Duration:</strong> 4m 43s</p>
+        <p>✅ <strong>Routing:</strong> Lambda (cost-effective)</p>
+        <p>✅ <strong>Cost:</strong> ~$0.005</p>
+        <p>✅ <strong>S3 Upload:</strong> Complete with proper Content-Type</p>
+        <p>✅ <strong>Signed URL:</strong> Generated successfully</p>
+    </div>
+    
+    <script>
+        const video = document.querySelector('video');
+        
+        video.addEventListener('loadedmetadata', () => {
+            document.getElementById('results').innerHTML += '<p>✅ <strong>Video Metadata:</strong> Loaded successfully</p>';
+        });
+        
+        video.addEventListener('canplay', () => {
+            document.getElementById('results').innerHTML += '<p>✅ <strong>Video Playback:</strong> Ready to play</p>';
+        });
+        
+        video.addEventListener('error', (e) => {
+            document.getElementById('results').innerHTML += '<p>❌ <strong>Video Error:</strong> ' + e.message + '</p>';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test FFmpeg Converted Video</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        video { width: 100%; max-width: 800px; }
+        .status { margin: 10px 0; padding: 10px; border-radius: 4px; }
+        .success { background: #e8f5e8; border-left: 4px solid #4caf50; }
+        .error { background: #ffebee; border-left: 4px solid #f44336; }
+    </style>
+</head>
+<body>
+    <h1>✅ FFmpeg Lambda Conversion Test</h1>
+    
+    <h2>AWS Lambda + FFmpeg Converted Video</h2>
+    <video id="ffmpegVideo" controls>
+        <source src="chicago_guard_lambda_ffmpeg.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    <div id="ffmpegStatus" class="status">Loading FFmpeg converted video...</div>
+    
+    <h2>File Information</h2>
+    <div>
+        <p><strong>Original AWS File:</strong> 77,038,640 bytes (~73.5 MB)</p>
+        <p><strong>FFmpeg Converted:</strong> 45,639,150 bytes (~43.5 MB)</p>
+        <p><strong>Size Reduction:</strong> 40% smaller with ffmpeg conversion</p>
+        <p><strong>Conversion:</strong> H.264 video codec + AAC audio codec</p>
+    </div>
+    
+    <script>
+        const ffmpegVideo = document.getElementById('ffmpegVideo');
+        const ffmpegStatus = document.getElementById('ffmpegStatus');
+        
+        ffmpegVideo.addEventListener('loadedmetadata', () => {
+            ffmpegStatus.innerHTML = '✅ FFmpeg Video: Metadata loaded successfully';
+            ffmpegStatus.className = 'status success';
+        });
+        
+        ffmpegVideo.addEventListener('canplay', () => {
+            ffmpegStatus.innerHTML = '✅ FFmpeg Video: Ready to play - BROWSER COMPATIBLE!';
+            ffmpegStatus.className = 'status success';
+        });
+        
+        ffmpegVideo.addEventListener('error', (e) => {
+            ffmpegStatus.innerHTML = '❌ FFmpeg Video: ' + (e.message || 'Playback error');
+            ffmpegStatus.className = 'status error';
+        });
+    </script>
+</body>
+</html>

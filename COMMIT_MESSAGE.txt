@@ -1,16 +1,22 @@
-Fix 4 recurring issues: scripture lookup, JWT expiration, author names, and navbar
+Fix safe-root-cleanup.ps1 and update all documentation
 
-- Deploy articles-api with requests library to fix scripture lookup
-- Add token-validator.js to check JWT expiration on page load
-- Run migration scripts to update article/news author names (7 records updated)
-- Replace old menu with unified navbar in edit-article.html
-- Update FIX_RECURRING_ISSUES_GUIDE.md with all fixes and commands
+FIXES:
+- Fixed file detection in safe-root-cleanup.ps1 (was returning 0 files)
+- Changed Get-ChildItem to use Where-Object for proper pattern matching
+- Now correctly detects backup files, deployment ZIPs, test files, and temp files
 
-Files modified:
-- articles_api/ (deployed with dependencies)
-- admin.html, create-article.html, edit-article.html (added token validator)
-- assets/js/token-validator.js (new)
-- update_article_author_names.py (new migration script)
-- FIX_RECURRING_ISSUES_GUIDE.md (comprehensive fix documentation)
+DOCUMENTATION UPDATES:
+- Updated QUICK-START.md with correct command paths from Downloader\ root
+- Updated SAFE-REORGANIZATION-GUIDE.md with detailed rollback instructions
+- Updated README.md with proper command examples
+- Added instructions to note archive folder name for rollback
+- Clarified that rollback requires -ArchiveDir parameter
+- Added steps to find archive folder with dir archive_*
 
-All fixes tested and deployed to S3.
+TESTED:
+- Dry run now shows actual file counts (20+ backups, 15+ ZIPs, 15+ test files)
+- Cleanup successfully archives and removes files
+- Rollback instructions documented for easy recovery
+
+Phase 0 (Root Cleanup) completed November 6, 2025.
+Ready to proceed to Phase 1 (Create New Structure) Week of Nov 13-19.

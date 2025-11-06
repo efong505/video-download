@@ -112,11 +112,11 @@
    - View count tracking
    - Search and filtering capabilities
 
-4. [ ] **Advanced Ministry Tools & Features** - FUTURE PHASE
-   - Sermon Outline Generator (AI-assisted)
-   - Prayer Request System
-   - Event Calendar Integration
-   - Newsletter Builder
+4. [x] **Advanced Ministry Tools & Features** ✅ COMPLETE
+   - [x] Prayer Request System ✅ COMPLETE
+   - [x] Event Calendar Integration ✅ COMPLETE
+   - [x] Newsletter Builder ✅ COMPLETE
+   - [ ] Sermon Outline Generator (AI-assisted) - FUTURE
    - Social Media Scheduler
    - Discussion Forums
    - Bible Study Groups
@@ -694,6 +694,14 @@ articles-table:
   - Professional branded email templates
   - Real-time notification count badge in navbar
   - Respects user opt-in/opt-out preferences
+- [x] **Prayer Request System** ✅ COMPLETE - Public prayer wall, admin moderation, "I Prayed" tracking, category filtering, state-specific prayers, testimony system
+- [x] **Event Calendar Integration** ✅ COMPLETE - FullCalendar.js integration, event CRUD operations, CSV bulk import, election date sync, registration tracking, state/category filtering, ICS export
+- [x] **Video Sorting System** ✅ COMPLETE - 6 sort options (newest/oldest, title A-Z/Z-A, largest/smallest), localStorage persistence, applied to filtered videos and category sections
+- [x] **Bulk Video Editing** ✅ COMPLETE - Multi-select checkboxes, "Select All" functionality, 3 bulk actions (Delete Selected, Change Visibility, Update Tags)
+- [ ] **Video Analytics Dashboard** - Track video views, popular videos, watch time metrics
+- [ ] **Video Playlist/Collections** - Group videos into playlists or collections for better organization
+- [ ] **Batch Video Upload** - Upload multiple videos at once instead of one-by-one downloads
+- [ ] **Video Embed Codes** - Generate embed codes for sharing videos on other sites
 - [ ] **Advanced ministry tools** - Enhanced features for ministry use (see Phase 3 item 4 above for full list)
 - **ADMIN NAME MANAGEMENT**: Administrators can now edit user first and last names through the admin dashboard
 - **SYSTEM STABILITY**: Fixed access issues, improved external video handling, and enhanced user experience
@@ -4188,10 +4196,75 @@ NEXT STEPS:
 
 **Status**: PWA implementation complete and operational. Users can now install Christian Conservatives Today as a native-like app on mobile and desktop devices with offline support, push notifications, and fast loading via service worker caching.
 
-## Phase 5 - Mobile App Development 📱 PLANNED
+## Phase 5 - E-Commerce Shopping System 🛒 PLANNED
+
+### Overview
+**Feature**: Professional shopping experience with full cart, checkout, order tracking, and Stripe payment integration.
+
+### Implementation Plan
+**Timeline**: 4-5 weeks
+**Status**: Planning phase - ready for implementation
+
+### Core Features
+- **Product Catalog**: Professional product grid with images, prices, categories
+- **Shopping Cart**: Persistent cart with quantity adjustment and subtotal calculation
+- **Secure Checkout**: Stripe payment integration with multi-step process
+- **Order Management**: Order history, tracking numbers, status updates
+- **Admin Dashboard**: Product CRUD, inventory management, order fulfillment
+- **Analytics**: Sales reports, top products, revenue tracking
+
+### Database Tables (DynamoDB)
+- **products**: product_id, name, description, price, images, inventory, category, status
+- **orders**: order_id, user_email, items, total, status, shipping_address, tracking_number
+- **cart**: user_email, items (product_id, quantity), updated_at
+
+### Lambda Functions
+- **shop_api**: Product CRUD, cart management, order creation
+- **payment_api**: Stripe integration, payment processing, refunds
+
+### Frontend Pages
+- **shop.html**: Main store with product grid and filtering
+- **product.html**: Product details with image gallery
+- **cart.html**: Shopping cart with checkout button
+- **checkout.html**: Multi-step checkout with Stripe
+- **orders.html**: Order history and tracking
+- **admin-shop.html**: Admin product and order management
+
+### Product Categories
+1. Books - Christian conservative books, voter guides
+2. Apparel - T-shirts, hats, patriotic clothing
+3. Resources - Study guides, prayer journals
+4. Digital Downloads - E-books, PDFs, courses
+5. Merchandise - Mugs, stickers, accessories
+6. Ministry Tools - Church resources, sermon materials
+
+### Payment Integration
+- **Stripe**: Primary payment processor
+- **Features**: Credit/debit cards, Apple Pay, Google Pay
+- **Security**: PCI compliant, secure checkout
+- **Fees**: 2.9% + $0.30 per transaction
+
+### Cost Estimate
+- **AWS Services**: ~$11/month (Lambda, DynamoDB, S3, API Gateway)
+- **Stripe Fees**: 2.9% + $0.30 per transaction
+- **Example**: $100 order = $3.20 Stripe fee
+
+### Implementation Phases
+**Week 1**: Database tables + shop_api Lambda
+**Week 2**: Frontend pages (shop, product, cart)
+**Week 3**: Checkout + Stripe integration
+**Week 4**: Admin panel + order management
+**Week 5**: Testing + polish + deployment
+
+### Documentation
+- **SHOPPING_SYSTEM_PLAN.md**: Complete implementation plan with technical details
+
+**Status**: Ready for implementation - comprehensive plan documented
+
+## Phase 6 - Mobile App Development 📱 PLANNED
 
 ### Timeline
-- **Q1**: PWA launch (immediate mobile access)
+- **Q1**: PWA launch (immediate mobile access) ✅ COMPLETE
 - **Q2-Q3**: React Native development
 - **Q4**: App store submission and launch
 - **Year 2**: Advanced features and optimization
@@ -4524,3 +4597,139 @@ Transform the Christian Conservative Platform into native mobile applications fo
 - Performance: No degradation in page load times with new features
 
 **Status**: Video sorting and bulk editing are the next priority features for implementation, with clear technical approaches and expected impact documented for reference.
+
+
+## Phase 5 - Multi-Tenant Email Marketing System 📧 IN PROGRESS
+
+### Overview
+**Feature**: Individual users can manage their own email subscriber lists and send campaigns to their congregation/audience.
+
+### Implementation Plan
+**Timeline**: 4-6 weeks
+**Status**: Planning phase - design in progress
+
+### Current State (Platform-Level Email)
+**Existing System**:
+- Platform newsletter system operational
+- Sends emails from contact@christianconservativestoday.com
+- Platform-level subscriber management
+- Used for platform updates, voter guides, ministry news
+
+**Files**:
+- admin-newsletters.html - Platform admin interface
+- newsletter-api Lambda - Platform-level operations
+- email-subscribers table - Platform's email list
+
+### Planned Enhancement (User-Level Email)
+**New Capability**: Each user manages their own email campaigns
+
+**Key Features**:
+- User-specific subscriber lists (isolated data)
+- Campaign management per user
+- Email templates (5 professional designs)
+- Mail merge personalization
+- Open/click tracking per user
+- Analytics dashboard per user
+- Quota enforcement by subscription tier
+
+### Updated Pricing Strategy
+**FREE** - $0/month
+- 2GB storage, 50 videos
+- NO email campaigns
+
+**PREMIUM** - $19.99/month (was $9.99)
+- 25GB storage, 500 videos
+- **500 email subscribers**
+- **1,000 emails/month**
+
+**PRO** - $49.99/month (was $24.99)
+- 100GB storage, 2,000 videos
+- **5,000 email subscribers**
+- **10,000 emails/month**
+
+**ENTERPRISE** - $149.99/month (was $99.99)
+- Unlimited storage, videos
+- **Unlimited email subscribers**
+- **50,000 emails/month**
+
+### Value Proposition
+**Cost Comparison (Church with 2,000 subscribers)**:
+- Mailchimp Alone: $100/month
+- Our Platform (PRO): $49.99/month
+  - Includes video hosting ($75 value)
+  - Includes email marketing ($100 value)
+  - Includes election tracking ($100 value)
+  - **Total Value**: $275/month for $49.99!
+
+**Savings**: $50/month vs Mailchimp alone, $225/month vs separate tools
+
+### Technical Architecture (Planned)
+**Database Tables**:
+- user-email-subscribers: user_id#subscriber_email, first_name, last_name, status
+- user-email-campaigns: user_id#campaign_id, subject, content, template, stats
+- user-email-events: user_id#event_id, campaign_id, subscriber_email, event_type
+
+**Lambda Functions**:
+- user-email-api: User-level subscriber and campaign management
+- Enhanced newsletter-api: Multi-tenant support
+
+**Frontend Pages**:
+- user-email-campaigns.html: User email dashboard
+- user-email-subscribers.html: Subscriber management
+- user-email-analytics.html: Campaign analytics
+
+### Implementation Phases
+**Phase 1: Backend (2 weeks)**
+- Create new DynamoDB tables
+- Update newsletter-api for multi-tenancy
+- Add quota enforcement logic
+- Implement data isolation
+
+**Phase 2: Frontend (2 weeks)**
+- User email dashboard
+- Subscriber management interface
+- Campaign creation wizard
+- Analytics dashboard
+
+**Phase 3: Testing & Launch (1-2 weeks)**
+- Beta test with 5 churches
+- Fix bugs and issues
+- Create documentation
+- Launch to all users
+
+### Billing Integration
+**Approach**: Keep PayPal, update subscription tiers
+**Process**:
+1. Update PayPal subscription plans with new pricing
+2. Add email quota fields to users table
+3. Enforce quotas in Lambda functions
+4. Migrate existing users to new tiers
+
+**Alternative**: Migrate to Stripe later for better experience
+
+### Marketing Update (Sales Flyer v3.1)
+**Current Claim** (Misleading):
+> "📧 Email Marketing System - 95% cheaper than Mailchimp"
+
+**Updated Claim** (Accurate):
+> "📧 Email Marketing System (Coming Q2 2025)
+> 
+> Manage YOUR subscriber list and send campaigns to YOUR congregation.
+> 
+> ✅ 500-5,000+ subscribers (based on plan)
+> ✅ Professional email templates
+> ✅ Open & click tracking
+> ✅ Mail merge personalization
+> ✅ 95% cheaper than Mailchimp
+> 
+> **Save $50-300/month vs Mailchimp!**"
+
+### Status
+- ✅ Problem identified (platform-level vs user-level email)
+- ✅ Solution designed (multi-tenant architecture)
+- ✅ Pricing strategy updated (higher tiers, more value)
+- ✅ Marketing materials updated (v3.1 with "Coming Soon")
+- 🔄 Technical design in progress
+- ⏳ Implementation pending (4-6 weeks)
+
+**Next Steps**: Complete technical architecture design, then begin Phase 1 backend implementation.

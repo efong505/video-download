@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Old Video</title>
+</head>
+<body>
+    <h1>Testing Old Video That "Worked"</h1>
+    
+    <h2>POTUSonComey.mp4 (Updated Content-Type)</h2>
+    <video controls width="600">
+        <source src="https://my-video-downloads-bucket.s3.amazonaws.com/POTUSonComey.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
+    <h2>TrumpTestFixed.mp4 (New Download)</h2>
+    <video controls width="600">
+        <source src="https://my-video-downloads-bucket.s3.amazonaws.com/TrumpTestFixed.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
+    <h2>trump_local.mp4 (Local Script)</h2>
+    <video controls width="600">
+        <source src="https://my-video-downloads-bucket.s3.amazonaws.com/trump_local.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+    </video>
+    
+    <p>If only the local one works, then the issue is video codec compatibility.</p>
+</body>
+</html>
