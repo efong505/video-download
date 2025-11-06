@@ -23,19 +23,21 @@ This folder contains all documentation and implementation files for the e-commer
 
 ## Implementation Phases
 
-### Phase 1: Basic Shopping System (Weeks 1-5)
-Core e-commerce functionality:
-- Product catalog with categories
-- Shopping cart
-- Checkout with PayPal + Stripe
-- Order management
-- Admin product management
-- Customer reviews
+### Phase 1: Basic Shopping System (Weeks 1-6)
+Core e-commerce functionality with enterprise architecture:
+- **Week 1:** Database + SQS queues
+- **Week 2:** APIs + ElastiCache
+- **Week 3:** Payment + Circuit breakers + Rate limiting
+- **Week 4:** Frontend + API Gateway caching
+- **Week 5:** Checkout + Orders
+- **Week 6:** Admin interface
 
 **Status:** Not started
 
-### Phase 2: Smart Shopping & Marketing (Weeks 6-7)
+### Phase 2: Smart Shopping & Marketing (Weeks 7-8)
 Behavioral tracking and automated marketing:
+- **Week 7:** Behavioral tracking via SQS
+- **Week 8:** Marketing automation via SQS
 - Product view tracking
 - Abandoned cart recovery emails
 - Browse abandonment emails
@@ -43,6 +45,14 @@ Behavioral tracking and automated marketing:
 - Back in stock notifications
 - Personalized recommendations
 - Email preference center
+
+**Status:** Not started
+
+### Phase 3: Testing & Launch (Week 9)
+- Load testing (100 concurrent users)
+- Security audit
+- Monitoring verification
+- Production launch
 
 **Status:** Not started
 
@@ -72,11 +82,25 @@ The system supports BOTH PayPal and Stripe to maximize conversions:
 ## Cost Estimates
 
 ### AWS Costs (Monthly)
+
+**Original Plan:**
 - DynamoDB: ~$6
 - Lambda: ~$4.50
 - S3: ~$0.75
-- SES (emails): ~$1
+- SES: ~$1
 - **Total: ~$12.25/month**
+
+**With Architecture Improvements:**
+- DynamoDB: ~$3 (50% reduction from caching)
+- Lambda: ~$2.50 (44% reduction from caching)
+- S3: ~$0.75 (unchanged)
+- SES: ~$1 (unchanged)
+- SQS: ~$2 (4 queues + 4 DLQs)
+- ElastiCache: ~$15 (cache.t3.micro)
+- API Gateway Cache: ~$10 (0.5 GB)
+- **Total: ~$34.25/month**
+
+**Net Change:** +$22/month for enterprise-grade architecture
 
 ### Payment Processing Fees
 - Variable based on sales volume
@@ -96,6 +120,11 @@ The system supports BOTH PayPal and Stripe to maximize conversions:
 ✅ Customer reviews and ratings  
 ✅ Admin product management  
 ✅ Inventory tracking  
+✅ **SQS queues for async operations**  
+✅ **ElastiCache Redis for caching**  
+✅ **Circuit breakers for fault tolerance**  
+✅ **Rate limiting for API protection**  
+✅ **API Gateway caching for performance**  
 
 ### Smart Shopping (Phase 2)
 ✅ Product view tracking  
@@ -128,14 +157,18 @@ The system supports BOTH PayPal and Stripe to maximize conversions:
 ## Lambda Functions
 
 ### Phase 1 Functions
-1. **shop_api** - Product CRUD operations
-2. **cart_api** - Shopping cart management
-3. **order_api** - Order processing
-4. **payment_api** - PayPal + Stripe integration
+1. **shop_api** - Product CRUD operations (with caching)
+2. **cart_api** - Shopping cart management (with caching)
+3. **order_api** - Order processing (with SQS)
+4. **payment_api** - PayPal + Stripe integration (with circuit breakers)
+5. **order_processor** - SQS consumer for order processing
+6. **payment_processor** - SQS consumer for payment processing
+7. **email_sender** - SQS consumer for email sending
+8. **inventory_updater** - SQS consumer for inventory updates
 
 ### Phase 2 Functions
-5. **tracking_api** - Behavioral tracking
-6. **marketing_automation_api** - Automated emails (scheduled daily)
+9. **tracking_api** - Behavioral tracking (via SQS)
+10. **marketing_automation_api** - Automated emails (scheduled daily, via SQS)
 
 ---
 
@@ -230,9 +263,10 @@ Refer to:
 
 ## Timeline
 
-**Phase 1:** 5 weeks  
-**Phase 2:** 2 weeks  
-**Total:** 7 weeks to full implementation
+**Phase 1:** 6 weeks (Basic Shopping + Architecture)  
+**Phase 2:** 2 weeks (Smart Shopping + Marketing)  
+**Phase 3:** 1 week (Testing + Launch)  
+**Total:** 9 weeks to full implementation
 
 **Start Date:** TBD  
 **Phase 1 Launch:** TBD  
