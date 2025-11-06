@@ -503,12 +503,12 @@ Access voter guides for all 50 states: [link]
 **Theme**: Major Feature
 **Content**:
 ```
-📧 EMAIL MARKETING: 95% CHEAPER THAN MAILCHIMP!
+📧 EMAIL MARKETING (COMING Q2 2025): 95% CHEAPER THAN MAILCHIMP!
 
-Mailchimp (10K subscribers): $299/month
-Christian Conservatives Today: $24.99/month
+Mailchimp (5K subscribers): $100/month
+Christian Conservatives Today: $49.99/month
 
-SAVE: $274/month ($3,288/year!) 🎉
+SAVE: $50/month ($600/year!) 🎉
 
 ✅ 5 professional templates
 ✅ Mail merge personalization
@@ -528,19 +528,17 @@ Start saving: [link]
 **Theme**: Template Showcase
 **Content**:
 ```
-🎨 5 PROFESSIONAL EMAIL TEMPLATES:
+📧 EMAIL MARKETING FEATURES (COMING Q2 2025):
 
-1️⃣ Modern Gradient
-2️⃣ Classic
-3️⃣ Patriotic
-4️⃣ Minimalist
-5️⃣ Bold Impact
+✅ User-level campaign management
+✅ Subscriber list management
+✅ Professional templates
+✅ Mail merge personalization
+✅ Open & click tracking
 
-All included FREE with your subscription!
+Join the waitlist to be notified when it launches!
 
-No design skills needed. Just add your content and send!
-
-Try them: [link]
+Learn more: [link]
 
 #EmailTemplates #ProfessionalDesign #EasyMarketing
 ```
@@ -553,17 +551,16 @@ Try them: [link]
 **Theme**: Feature Tutorial
 **Content**:
 ```
-📧 HOW TO: Send Your First Email Campaign
+📧 EMAIL MARKETING COMING Q2 2025
 
-1️⃣ Choose a template
-2️⃣ Add your content
-3️⃣ Personalize with merge tags
-4️⃣ Select your audience
-5️⃣ Send or schedule!
+Manage your own subscriber lists!
+✅ 500 subscribers (Premium)
+✅ 5,000 subscribers (PRO)
+✅ Unlimited subscribers (Enterprise)
 
-Track opens and clicks in real-time! 📊
+95% cheaper than Mailchimp!
 
-Start now: [link]
+Join waitlist: [link]
 
 #EmailCampaign #Tutorial #MinistryMarketing
 ```
@@ -576,16 +573,16 @@ Start now: [link]
 **Theme**: Engagement Poll
 **Content**:
 ```
-📊 POLL: How much do you pay for email marketing?
+📊 POLL: Would you use email marketing if it was 95% cheaper?
 
-A) $0 (not using it)
-B) $1-50/month
-C) $51-150/month
-D) $150+/month
+A) Yes! Sign me up!
+B) Maybe, tell me more
+C) Already using something else
+D) Not interested
 
 Comment below! 👇
 
-(We can save you 95%! 😊)
+(Coming Q2 2025! 😊)
 
 #EmailMarketing #CostComparison #MinistryBudget
 ```
@@ -600,11 +597,11 @@ Comment below! 👇
 ```
 ⭐ SUCCESS STORY ⭐
 
-"We saved $500/month switching from Mailchimp. Same features, 95% cheaper!"
+"Can't wait for the email marketing feature! Managing our own subscriber lists will save us hundreds per month!"
 
 - Ministry Director, Faith Action Network
 
-Calculate your savings: [link]
+Join the waitlist: [link]
 
 #CostSavings #EmailMarketing #MinistrySuccess
 ```
@@ -617,19 +614,19 @@ Calculate your savings: [link]
 **Theme**: Weekend Feature
 **Content**:
 ```
-✨ WEEKEND FEATURE: Auto-Digest Newsletter
+✨ WEEKEND FEATURE: Email Marketing Coming Q2 2025
 
-Automatically generate weekly newsletters from your latest:
-📝 Articles
-🎥 Videos
-🗳️ Election updates
-🙏 Prayer requests
+Manage your own subscriber lists:
+📝 Create campaigns
+🎯 Target your audience
+📊 Track performance
+💰 Save 95% vs Mailchimp
 
-Set it once, runs automatically! ⚙️
+Premium: 500 subscribers
+PRO: 5,000 subscribers
+Enterprise: Unlimited
 
-Save hours every week!
-
-Learn more: [link]
+Join waitlist: [link]
 
 #Automation #Newsletter #TimeSaver
 ```

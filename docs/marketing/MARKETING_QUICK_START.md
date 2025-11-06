@@ -18,7 +18,7 @@ This guide provides a **step-by-step action plan** to launch your marketing effo
 ### Day 1: Marketing Materials Setup
 **Time**: 3 hours
 
-- [ ] Review sales flyer v3.0 ✅
+- [ ] Review sales flyer v3.1 ✅
 - [ ] Review one-page marketing overview ✅
 - [ ] Create Google Drive folder for all marketing materials
 - [ ] Set up Canva account for graphics

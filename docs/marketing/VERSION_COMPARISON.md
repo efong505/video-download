@@ -17,9 +17,9 @@ This document compares the three versions of the sales flyer to show the evoluti
 **Focus**: Enhanced features + election system
 **Length**: ~7 pages
 
-### SALES_FLYER_v3.md (v3.0) ⭐ CURRENT
+### SALES_FLYER_v3.1.md (v3.1) ⭐ CURRENT
 **Created**: January 2025
-**Focus**: Complete platform with all advanced features
+**Focus**: Complete platform with email marketing coming Q2 2025
 **Length**: ~10 pages
 
 ---
@@ -32,7 +32,7 @@ This document compares the three versions of the sales flyer to show the evoluti
 | **Article Publishing** | ✅ Basic | ✅ Dual-mode | ✅ Dual-mode |
 | **Bible Integration** | ✅ Yes | ✅ Yes | ✅ Yes |
 | **Election Tracking** | ❌ No | ✅ 50 States | ✅ 50 States + Guides |
-| **Email Marketing** | ❌ No | ❌ No | ✅ Full System |
+| **Email Marketing** | ❌ No | ❌ No | ✅ Coming Q2 2025 |
 | **Prayer Wall** | ❌ No | ❌ No | ✅ Yes |
 | **Event Calendar** | ❌ No | ❌ No | ✅ Yes |
 | **Email Notifications** | ❌ No | ❌ No | ✅ 4 Types |
@@ -76,13 +76,21 @@ This document compares the three versions of the sales flyer to show the evoluti
 
 ## 💰 PRICING COMPARISON
 
-### All Versions (Same Pricing)
+### Pricing Evolution
+
+**v1.0 & v2.0 Pricing:**
 - **FREE**: 2GB, 50 videos, $0/month
 - **PREMIUM**: 25GB, 500 videos, $9.99/month
 - **PRO**: 100GB, 2,000 videos, $24.99/month
 - **ENTERPRISE**: Unlimited, $99.99/month
 
-**Note**: Features included at each tier have expanded significantly in v3.0
+**v3.1 Pricing (Updated):**
+- **FREE**: 2GB, 50 videos, $0/month
+- **PREMIUM**: 25GB, 500 videos, $19.99/month (500 email subscribers)
+- **PRO**: 100GB, 2,000 videos, $49.99/month (5,000 email subscribers)
+- **ENTERPRISE**: Unlimited, $149.99/month (unlimited email subscribers)
+
+**Note**: Pricing increased to reflect email marketing value (Coming Q2 2025)
 
 ---
 
@@ -111,14 +119,14 @@ This document compares the three versions of the sales flyer to show the evoluti
 - Authentication standardization
 - Dual-mode editor (WYSIWYG/Markdown)
 
-### v2.0 → v3.0 (Revolutionary Updates)
-✅ **Email Marketing System** ⭐ FLAGSHIP
+### v2.0 → v3.1 (Revolutionary Updates)
+✅ **Email Marketing System** ⭐ FLAGSHIP (COMING Q2 2025)
 - 95% cheaper than Mailchimp
-- 5 professional templates
+- User-level campaign management
+- Subscriber list management
+- Professional templates
 - Mail merge personalization
 - Open/click tracking
-- Auto-digest newsletter
-- Newsletter archive
 
 ✅ **Prayer Request System** ⭐ NEW
 - Public prayer wall
@@ -169,11 +177,11 @@ This document compares the three versions of the sales flyer to show the evoluti
 - Email Marketing: No
 - Community Features: Enhanced
 
-### v3.0 Statistics ⭐ CURRENT
+### v3.1 Statistics ⭐ CURRENT
 - Lambda Functions: **19** (+10)
 - DynamoDB Tables: **18** (+14)
 - Election Coverage: **50 states + guides**
-- Email Marketing: **Full system**
+- Email Marketing: **Coming Q2 2025**
 - Community Features: **Advanced**
 
 **Additional Stats**:
@@ -195,8 +203,8 @@ This document compares the three versions of the sales flyer to show the evoluti
 "Transform Your Ministry's Digital Presence Today!"
 (Same, but with enhanced subtitle)
 
-### v3.0 Tagline ⭐ CURRENT
-"The Complete Ministry Platform - Video, Articles, Elections, Email & Community"
+### v3.1 Tagline ⭐ CURRENT
+"The Complete Ministry Platform - Video, Articles, Elections, Email (Coming Q2 2025) & Community"
 
 **Key Message Evolution**:
 - v1.0: "Platform for Christian content creators"
@@ -213,8 +221,8 @@ This document compares the three versions of the sales flyer to show the evoluti
 ### v2.0
 "Revolutionary platform where faith meets technology, and your voice matters"
 
-### v3.0 ⭐ CURRENT
-"The ONLY all-in-one platform combining video hosting, article publishing, nationwide election tracking, email marketing, and community engagement - all in one place!"
+### v3.1 ⭐ CURRENT
+"The ONLY all-in-one platform combining video hosting, article publishing, nationwide election tracking, email marketing (Coming Q2 2025), and community engagement - all in one place!"
 
 **Key Differentiator**: v3.0 emphasizes being the ONLY complete solution
 
@@ -233,13 +241,14 @@ This document compares the three versions of the sales flyer to show the evoluti
 3. David - Bible study templates
 4. Rev. Johnson - Election tracking ⭐ NEW
 
-### v3.0 (6 Testimonials) ⭐ CURRENT
+### v3.1 (5 Testimonials) ⭐ CURRENT
 1. Pastor Mike - Bible integration
 2. Sarah - No censorship
 3. David - Bible study templates
 4. Rev. Johnson - Election tracking
-5. Ministry Director - Email cost savings ⭐ NEW
-6. Pastor Lisa - Prayer wall community ⭐ NEW
+5. Pastor Lisa - Prayer wall community
+
+**Note**: Email marketing testimonial removed (feature coming Q2 2025)
 
 ---
 
@@ -259,14 +268,14 @@ This document compares the three versions of the sales flyer to show the evoluti
 - **Election tracking (50 states)** ⭐ NEW
 - **Advanced analytics** ⭐ NEW
 
-### v3.0 Advantages ⭐ CURRENT
+### v3.1 Advantages ⭐ CURRENT
 - No censorship
 - Bible integration
 - All-in-one platform
 - Cost-effective
 - Election tracking (50 states)
 - Advanced analytics
-- **95% cheaper email marketing** ⭐ NEW
+- **95% cheaper email marketing (Coming Q2 2025)** ⭐ NEW
 - **Prayer wall & community** ⭐ NEW
 - **Event calendar** ⭐ NEW
 - **PWA support** ⭐ NEW
@@ -283,12 +292,12 @@ This document compares the three versions of the sales flyer to show the evoluti
 - Only if you don't need email marketing
 - Only if you don't need community features
 
-### Use v3.0 If: ⭐ RECOMMENDED
+### Use v3.1 If: ⭐ RECOMMENDED
 - ✅ **Always use this version**
 - Most comprehensive
 - Most up-to-date
 - Best value proposition
-- Complete feature set
+- Accurate email marketing timeline (Q2 2025)
 
 ---
 
@@ -310,14 +319,14 @@ This document compares the three versions of the sales flyer to show the evoluti
 - Advanced analytics ✅
 - Missing: Email marketing, prayer wall, event calendar, PWA
 
-### v3.0: 100% Complete ⭐ CURRENT
+### v3.1: 95% Complete ⭐ CURRENT
 - Advanced video management ✅
 - Dual-mode article publishing ✅
 - Bible integration ✅
 - User authentication ✅
 - Election tracking (50 states + guides) ✅
 - Advanced analytics ✅
-- Email marketing system ✅
+- Email marketing system ⏳ Coming Q2 2025
 - Prayer request system ✅
 - Event calendar ✅
 - Email notifications ✅
@@ -337,25 +346,25 @@ This document compares the three versions of the sales flyer to show the evoluti
 - Election data: Save $100/month vs services
 - **Total Savings**: ~$175/month
 
-### v3.0 Cost Savings ⭐ CURRENT
+### v3.1 Cost Savings ⭐ CURRENT
 - Video hosting: Save $75/month vs Vimeo
 - Election data: Save $100/month vs services
-- **Email marketing: Save $274/month vs Mailchimp** ⭐ NEW
+- **Email marketing: Save $50/month vs Mailchimp (Coming Q2 2025)** ⭐ NEW
 - Event management: Save $25/month
-- **Total Savings**: ~$474/month ($5,688/year!)
+- **Total Savings**: ~$250/month ($3,000/year!)
 
 ---
 
 ## 🚀 RECOMMENDATION
 
-### ✅ USE SALES_FLYER_v3.md
+### ✅ USE SALES_FLYER_v3.1.md
 
 **Why?**
 1. **Most Complete**: All features documented
 2. **Most Current**: January 2025 updates
 3. **Best Value Prop**: Emphasizes being ONLY complete solution
-4. **Strongest Differentiators**: Email marketing, prayer wall, PWA
-5. **Highest Cost Savings**: $474/month vs competitors
+4. **Strongest Differentiators**: Email marketing (Q2 2025), prayer wall, PWA
+5. **Accurate Timeline**: Email marketing coming Q2 2025
 6. **Most Testimonials**: 6 success stories
 7. **Clearest Messaging**: "Complete Ministry Platform"
 
@@ -372,9 +381,9 @@ This document compares the three versions of the sales flyer to show the evoluti
 
 ## 📋 MIGRATION CHECKLIST
 
-If you're currently using v1.0 or v2.0, update to v3.0:
+If you're currently using v1.0, v2.0, or v3.0, update to v3.1:
 
-- [ ] Replace old sales flyer with v3.0
+- [ ] Replace old sales flyer with v3.1
 - [ ] Update website copy
 - [ ] Update email templates
 - [ ] Update social media bios
@@ -392,25 +401,28 @@ If you're currently using v1.0 or v2.0, update to v3.0:
 - Enhanced UI/UX
 - Better mobile optimization
 
-### v2.0 → v3.0 ⭐ MAJOR LEAP
-- Added email marketing (95% cost savings!)
+### v2.0 → v3.1 ⭐ MAJOR LEAP
+- Added email marketing (Coming Q2 2025 - 95% cost savings!)
 - Added prayer wall (community building)
 - Added event calendar (engagement)
 - Added PWA support (native app experience)
 - Enhanced election system (comprehensive guides)
+- Updated pricing to reflect email marketing value
 
 ### Bottom Line
-**v3.0 is not just an update - it's a complete transformation!**
+**v3.1 is not just an update - it's a complete transformation!**
 
 The platform went from:
 - "Video and article platform" (v1.0)
 - to "Video, article, and election platform" (v2.0)
-- to **"Complete all-in-one ministry platform"** (v3.0) ⭐
+- to **"Complete all-in-one ministry platform"** (v3.1) ⭐
+
+**v3.0 → v3.1**: Updated pricing and accurate email marketing timeline (Q2 2025)
 
 ---
 
-**🚀 Always use SALES_FLYER_v3.md going forward!**
+**🚀 Always use SALES_FLYER_v3.1.md going forward!**
 
 ---
 
-*Version comparison created January 2025*
+*Version comparison updated January 2025 (v3.1)*

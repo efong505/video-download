@@ -32,12 +32,12 @@ Stop juggling multiple expensive platforms. Get everything your ministry needs i
 - Faith statements and policy positions
 - Christian conservative perspective
 
-### 📧 **Email Marketing**
+### 📧 **Email Marketing** (COMING Q2 2025)
 - **95% cheaper than Mailchimp**
-- 5 professional templates
+- User-level campaign management
+- Subscriber list management
+- Professional templates
 - Mail merge personalization
-- Open and click tracking
-- Auto-digest newsletters
 
 ### 🙏 **Community Features**
 - Prayer request wall
@@ -53,11 +53,12 @@ Stop juggling multiple expensive platforms. Get everything your ministry needs i
 | Plan | Storage | Videos | Price |
 |------|---------|--------|-------|
 | **FREE** | 2GB | 50 | $0/mo |
-| **PREMIUM** | 25GB | 500 | $9.99/mo |
-| **PRO** | 100GB | 2,000 | $24.99/mo |
-| **ENTERPRISE** | Unlimited | Unlimited | $99.99/mo |
+| **PREMIUM** | 25GB | 500 | $19.99/mo |
+| **PRO** | 100GB | 2,000 | $49.99/mo |
+| **ENTERPRISE** | Unlimited | Unlimited | $149.99/mo |
 
-**All plans include**: Bible integration, election tracking, email marketing, prayer wall, event calendar
+**All plans include**: Bible integration, election tracking, prayer wall, event calendar
+**Email marketing**: Coming Q2 2025 (500, 5,000, unlimited subscribers per tier)
 
 ---
 
@@ -87,15 +88,15 @@ New features added regularly based on user feedback
 
 ### Traditional Setup (Monthly)
 - Video Hosting (Vimeo): $75
-- Email Marketing (Mailchimp): $50
+- Email Marketing (Mailchimp): $100
 - Website Hosting: $30
 - Election Data Service: $100
 - Event Management: $25
-- **TOTAL: $280/month**
+- **TOTAL: $330/month**
 
 ### Christian Conservatives Today
-- **Everything Included: $24.99/month (PRO)**
-- **SAVE: $255/month ($3,060/year)**
+- **Everything Included: $49.99/month (PRO)**
+- **SAVE: $280/month ($3,360/year)**
 
 ---
 

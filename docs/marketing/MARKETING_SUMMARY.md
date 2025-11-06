@@ -2,13 +2,15 @@
 
 ## Overview
 
-This document provides a complete overview of all marketing materials created for Christian Conservatives Today v3.0.
+This document provides a complete overview of all marketing materials created for Christian Conservatives Today v3.1.
+
+**Last Updated**: January 2025 (v3.1)
 
 ---
 
 ## 📁 MARKETING MATERIALS CREATED
 
-### 1. **SALES_FLYER_v3.md** ✅
+### 1. **SALES_FLYER_v3.1.md** ✅
 **Purpose**: Comprehensive sales document highlighting all platform features
 **Length**: ~8 pages
 **Use Cases**:
@@ -27,7 +29,7 @@ This document provides a complete overview of all marketing materials created fo
 
 **Highlights**:
 - ALL 50 STATES election coverage
-- Email marketing (95% cheaper than Mailchimp)
+- Email marketing (Coming Q2 2025 - 95% cheaper than Mailchimp)
 - Prayer request system
 - Event calendar
 - PWA support
@@ -59,7 +61,7 @@ This document provides a complete overview of all marketing materials created fo
 - **Phase 3** (Months 7-9): Acceleration - 600 users
 - **Phase 4** (Months 10-12): Optimization - 1,000 users
 
-**Target**: 1,000 paying subscribers, $10,000 MRR by month 12
+**Target**: 1,000 paying subscribers, $30,000 MRR by month 12
 
 ---
 
@@ -284,7 +286,7 @@ This document provides a complete overview of all marketing materials created fo
 
 ### Month 12 Targets
 - Users: 1,000+
-- MRR: $10,000+
+- MRR: $30,000+
 - Website traffic: 20,000+
 - Email subscribers: 10,000+
 - Social media followers: 2,000+

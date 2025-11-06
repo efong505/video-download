@@ -21,7 +21,7 @@ Welcome to Christian Conservatives Today! We're thrilled to have you join our co
 ✅ Professional video hosting (YouTube, Rumble, Facebook)
 ✅ Bible-integrated article editor (KJV, ASV, YLT)
 ✅ Complete 50-state election tracking
-✅ Email marketing (95% cheaper than Mailchimp)
+✅ Email marketing (Coming Q2 2025 - 95% cheaper than Mailchimp)
 ✅ Prayer wall and community features
 
 **Getting Started is Easy:**
@@ -29,7 +29,7 @@ Welcome to Christian Conservatives Today! We're thrilled to have you join our co
 1. **Upload Your First Video** - Support for YouTube, Rumble, and Facebook
 2. **Write Your First Article** - Use our Bible-integrated editor
 3. **Explore Election Tracking** - Access all 50 state voter guides
-4. **Set Up Email Campaigns** - Choose from 5 professional templates
+4. **Set Up Email Campaigns** - Coming Q2 2025
 
 **Quick Start Guide**: [Link to tutorial]
 **Video Walkthrough**: [Link to demo video]
@@ -202,11 +202,11 @@ P.S. Election season is here! Don't miss this opportunity to mobilize your congr
 
 ---
 
-## EMAIL 5: Email Marketing Features (Day 8)
+## EMAIL 5: Email Marketing Features - COMING Q2 2025 (Day 8)
 
-**Subject**: 📧 Save 95% on Email Marketing (vs Mailchimp)
+**Subject**: 📧 Email Marketing Coming Q2 2025 - Save 95% vs Mailchimp
 
-**Preview Text**: Professional email campaigns for $1 per 10,000 emails...
+**Preview Text**: User-level email campaigns launching soon...
 
 **Body**:
 
@@ -220,13 +220,13 @@ If you're using Mailchimp, Constant Contact, or similar services, you're probabl
 
 **What if I told you we could do it for 95% less?**
 
-**📧 Our Email Marketing System**
+**📧 Our Email Marketing System (COMING Q2 2025)**
 - **$1 per 10,000 emails** (vs $50+ with Mailchimp)
-- 5 professional templates
+- User-level campaign management
+- Subscriber list management per user
+- Professional templates
 - Mail merge personalization
 - Open and click tracking
-- Campaign management
-- Auto-digest newsletters
 
 **🎨 Professional Templates**
 1. Modern Gradient
@@ -244,15 +244,15 @@ If you're using Mailchimp, Constant Contact, or similar services, you're probabl
 
 **💰 Cost Comparison**
 
-**Mailchimp (10,000 subscribers)**: $299/month
-**Christian Conservatives Today**: $24.99/month (PRO plan)
-**YOUR SAVINGS**: $274/month ($3,288/year)
+**Mailchimp (5,000 subscribers)**: $100/month
+**Christian Conservatives Today**: $49.99/month (PRO plan)
+**YOUR SAVINGS**: $50/month ($600/year)
 
 **Real Success Story:**
 *"We saved $500/month switching from Mailchimp. Same features, 95% cheaper!"* - Ministry Director, Faith Action Network
 
-**Start Your First Campaign:**
-[CTA Button: Create Email Campaign]
+**Join the Waitlist:**
+[CTA Button: Get Notified When Email Marketing Launches]
 
 **Watch This Tutorial**: [Link to email marketing demo]
 
@@ -363,7 +363,7 @@ Over the past 12 days, you've learned about:
 ✅ Professional video management
 ✅ Bible-integrated article publishing
 ✅ Complete 50-state election tracking
-✅ Email marketing (95% cheaper than Mailchimp)
+✅ Email marketing (Coming Q2 2025 - 95% cheaper than Mailchimp)
 ✅ Prayer walls and community features
 
 **Now it's time to make a decision.**
@@ -372,9 +372,9 @@ Over the past 12 days, you've learned about:
 
 **Get Your First Month FREE** on any Premium plan!
 
-- **PREMIUM**: $9.99/month → **FREE for 30 days**
-- **PRO**: $24.99/month → **FREE for 30 days**
-- **ENTERPRISE**: $99.99/month → **FREE for 30 days**
+- **PREMIUM**: $19.99/month → **FREE for 30 days**
+- **PRO**: $49.99/month → **FREE for 30 days**
+- **ENTERPRISE**: $149.99/month → **FREE for 30 days**
 
 **Plus, Get These Bonuses:**
 🎁 Setup assistance included
@@ -392,24 +392,24 @@ Over the past 12 days, you've learned about:
 
 **What You Get:**
 
-**PREMIUM ($9.99/month after free month)**
+**PREMIUM ($19.99/month after free month)**
 - 25GB storage, 500 videos
 - Priority processing
 - Advanced analytics
-- Email campaigns (1,000 subscribers)
+- Email campaigns (500 subscribers) - Coming Q2 2025
 
-**PRO ($24.99/month after free month)** ⭐ MOST POPULAR
+**PRO ($49.99/month after free month)** ⭐ MOST POPULAR
 - 100GB storage, 2,000 videos
 - API access
 - Bulk operations
-- Email campaigns (10,000 subscribers)
+- Email campaigns (5,000 subscribers) - Coming Q2 2025
 - Auto-digest newsletter
 
-**ENTERPRISE ($99.99/month after free month)**
+**ENTERPRISE ($149.99/month after free month)**
 - UNLIMITED storage and videos
 - White-label options
 - Dedicated support
-- UNLIMITED email subscribers
+- UNLIMITED email subscribers - Coming Q2 2025
 - Full election system access
 
 **🚨 This Offer Expires in 48 Hours**

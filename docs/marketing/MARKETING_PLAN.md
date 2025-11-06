@@ -3,8 +3,9 @@
 ## Executive Summary
 
 **Goal**: Acquire 1,000 paying subscribers within 12 months
+**Last Updated**: January 2025 (v3.1)
 **Target Market**: Christian churches, ministries, political commentators, and conservative activists
-**Unique Value Proposition**: The ONLY all-in-one platform combining video hosting, article publishing, nationwide election tracking, email marketing, and community engagement for Christian conservatives
+**Unique Value Proposition**: The ONLY all-in-one platform combining video hosting, article publishing, nationwide election tracking, email marketing (Coming Q2 2025), and community engagement for Christian conservatives
 
 ---
 
@@ -257,7 +258,7 @@
 - Month 11: 875 subscribers ($8,750 MRR)
 - Month 12: 1,000 subscribers ($10,000 MRR)
 
-*Assumes average $10/month per subscriber (mix of Free, Premium, Pro, Enterprise)*
+*Assumes average $30/month per subscriber (mix of Free, Premium, Pro, Enterprise)*
 
 ---
 
@@ -581,7 +582,7 @@
 ## 🚀 IMMEDIATE ACTION ITEMS (Next 30 Days)
 
 ### Week 1: Marketing Materials
-- [ ] Finalize sales flyer v3.0 ✅
+- [ ] Finalize sales flyer v3.1 ✅
 - [ ] Create one-page overview
 - [ ] Design feature comparison chart
 - [ ] Write email drip campaign (7 emails)
