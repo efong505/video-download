@@ -24,11 +24,13 @@ This plan upgrades Christian Conservatives Today from **7.5/10** to **9/10** in 
   - Tested and verified working
   - Monitoring in place
 
-### Week 2: Caching Layer (ElastiCache)
+### Week 2: Caching Layer (ElastiCache) - DEFERRED FOR LOW TRAFFIC
 - **Effort:** 12-16 hours
 - **Impact:** Very High (80% cost reduction, 90% faster)
 - **Risk:** Medium (requires VPC configuration)
 - **Cost:** +$15/month, saves $100/month on DynamoDB
+- **Status:** ⏸️ Deferred until traffic reaches 10K DynamoDB reads/day
+- **Monitoring:** Automated threshold monitoring via monitor-cache-threshold.ps1
 
 ### Week 3: Circuit Breakers & Rate Limiting
 - **Effort:** 6-8 hours
@@ -36,11 +38,13 @@ This plan upgrades Christian Conservatives Today from **7.5/10** to **9/10** in 
 - **Risk:** Low (code-level changes only)
 - **Cost:** $0
 
-### Week 4: API Gateway Caching
+### Week 4: API Gateway Caching - DEFERRED FOR LOW TRAFFIC
 - **Effort:** 2-4 hours
 - **Impact:** High (instant performance boost)
 - **Risk:** Very Low (AWS managed feature)
 - **Cost:** +$25/month, saves $80/month on Lambda
+- **Status:** ⏸️ Deferred until traffic reaches 100K API requests/day
+- **Monitoring:** Automated threshold monitoring via monitor-cache-threshold.ps1
 
 ### Month 2: Lambda Refactoring (Optional)
 - **Effort:** 20-30 hours
@@ -54,11 +58,11 @@ This plan upgrades Christian Conservatives Today from **7.5/10** to **9/10** in 
 
 | Priority | Improvement | Effort | Impact | ROI | Status |
 |----------|------------|--------|--------|-----|--------|
-| 🔥 P1 | SQS Queues | Low | High | ⭐⭐⭐⭐⭐ | ✅ Phase 1 Done |
-| 🔥 P1 | ElastiCache | Medium | Very High | ⭐⭐⭐⭐⭐ | ⏭️ Next |
-| 🔥 P1 | API Gateway Cache | Low | High | ⭐⭐⭐⭐⭐ | ⏸️ Pending |
-| ⚡ P2 | Circuit Breakers | Low | Medium | ⭐⭐⭐⭐ | ⏸️ Pending |
-| ⚡ P2 | Rate Limiting | Low | Medium | ⭐⭐⭐⭐ | ⏸️ Pending |
+| 🔥 P1 | SQS Queues | Low | High | ⭐⭐⭐⭐⭐ | ✅ Phase 1-2 Done |
+| 🔥 P1 | Circuit Breakers | Low | Medium | ⭐⭐⭐⭐ | ⏭️ Next |
+| 🔥 P1 | Rate Limiting | Low | Medium | ⭐⭐⭐⭐ | ⏸️ Pending |
+| ⚡ P2 | ElastiCache | Medium | Very High | ⭐⭐⭐⭐⭐ | ⏸️ Deferred (low traffic) |
+| ⚡ P2 | API Gateway Cache | Low | High | ⭐⭐⭐⭐⭐ | ⏸️ Deferred (low traffic) |
 | 📋 P3 | Lambda Refactoring | High | Medium | ⭐⭐⭐ | ⏸️ Optional |
 
 ---
@@ -159,10 +163,12 @@ This folder contains:
 - **Monitoring:** Commands documented in scripts/README.md
 
 ### ⏭️ Next Steps
-1. Monitor Phase 1 for 24 hours
-2. Proceed to Phase 2: Connect video downloader to SQS
+1. ✅ Monitor Phase 1 for 24 hours
+2. ✅ Proceed to Phase 2: Connect video downloader to SQS
 3. Continue with Phases 3-4 (email, analytics)
-4. Move to Week 2: ElastiCache implementation
+4. Implement Circuit Breakers and Rate Limiting (zero cost)
+5. Run monitor-cache-threshold.ps1 weekly to check if caching is needed
+6. Enable ElastiCache/API Cache only when traffic justifies cost
 
 ## Getting Started
 
@@ -236,17 +242,20 @@ aws sqs get-queue-attributes --queue-url https://sqs.us-east-1.amazonaws.com/371
 - CloudFront: $30 (100GB transfer)
 - **Total: $430/month**
 
-### Projected Costs After Improvements
-- Lambda: $120 (-40% from caching)
-- DynamoDB: $50 (-67% from ElastiCache)
-- ElastiCache: $15 (cache.t3.micro)
+### Projected Costs After Improvements (Low Traffic Optimization)
+- Lambda: $200 (unchanged - low traffic)
+- DynamoDB: $150 (unchanged - low traffic)
 - SQS: $5 (1M messages)
 - S3: $50 (unchanged)
 - CloudFront: $30 (unchanged)
-- API Gateway Cache: $25 (0.5GB cache)
-- **Total: $295/month**
+- ElastiCache: $0 (deferred until 10K reads/day)
+- API Gateway Cache: $0 (deferred until 100K requests/day)
+- **Total: $435/month**
 
-### Net Savings: $135/month (31% reduction)
+### Net Cost: +$5/month (SQS only)
+### Future Savings: $135/month when traffic justifies caching
+
+**Note:** Caching costs $40/month but saves $135/month at high traffic. At low traffic, caching costs more than it saves. Automated monitoring alerts when to enable.
 
 ---
 

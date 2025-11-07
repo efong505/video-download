@@ -4,11 +4,13 @@
 
 ---
 
-## Overall Progress: 8/50 hours (16%)
+## Overall Progress: 10/34 hours (29%) - Low Traffic Optimization
 
 ```
-[████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 16%
+[██████████████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 29%
 ```
+
+**Note:** Timeline adjusted for low-traffic site. Caching deferred until traffic justifies cost.
 
 ---
 
@@ -34,11 +36,11 @@
 
 ---
 
-## Week 1: SQS Message Queues ⏳ IN PROGRESS (Phase 1/4 Complete)
+## Week 1: SQS Message Queues ⏳ IN PROGRESS (Phase 1-2/4 Complete)
 
-**Status:** ⏳ 25% complete (Phase 1 done, Phases 2-4 pending)  
-**Time Spent:** 6 hours  
-**Remaining:** 6 hours  
+**Status:** ⏳ 50% complete (Phases 1-2 done and tested, Phases 3-4 pending)  
+**Time Spent:** 8 hours  
+**Remaining:** 4 hours  
 **Target Dates:** Nov 6-16, 2025
 
 ### Phase 1: Thumbnail Generator ✅ COMPLETE (Nov 6, 2025)
@@ -50,10 +52,12 @@
 - [x] Verify no messages in DLQ (✅ 0 messages)
 - [x] Add monitoring documentation
 
-### Phase 2: Video Downloader ⏭️ NEXT
-- [ ] Connect downloader Lambda to video-processing-queue
-- [ ] Test video download via queue
-- [ ] Monitor for 24 hours
+### Phase 2: Video Downloader ✅ COMPLETE (Nov 6, 2025)
+- [x] Connect downloader Lambda to video-processing-queue
+- [x] Event source mapping created (UUID: d0eeca71-acbb-4ebd-aa6e-bcdd8f9654ed)
+- [x] Created monitor-video-queue.ps1 for real-time monitoring
+- [x] Test video download via queue ✅ Working - video processed successfully
+- [x] Monitor confirmed: Queue: 0, In-Flight: 0, DLQ: 0 (clean processing)
 
 ### Phase 3: Digest Generator ⏸️ PENDING
 - [ ] Connect digest-generator Lambda to email-queue
@@ -63,13 +67,21 @@
 
 ---
 
-## Week 2: ElastiCache Redis ⏸️ PENDING
+## Week 2: ElastiCache Redis ⏸️ DEFERRED (Low Traffic)
 
-**Status:** ⏸️ Waiting for Week 1  
+**Status:** ⏸️ Deferred until traffic reaches 2M DynamoDB reads/day (realistic break-even)  
 **Estimated Time:** 16 hours  
-**Target Dates:** Nov 17-23, 2025
+**Cost:** $15/month (only cost-effective at high traffic)
 
-### Tasks:
+### Automated Monitoring:
+- [x] Created monitor-cache-threshold.ps1 (manual)
+- [x] Created auto-cache-monitor Lambda (automatic)
+- [x] Deploy auto-cache-monitor Lambda ✅ Nov 6, 2025
+- [x] Updated thresholds to realistic break-even points (2M reads/day, 500K requests/day)
+- [ ] Test automatic threshold detection
+- [ ] Verify auto-enable works when threshold reached
+
+### Tasks (when traffic justifies):
 - [ ] Read 02-ELASTICACHE-IMPLEMENTATION.md
 - [ ] Create/verify VPC
 - [ ] Create security group
@@ -105,13 +117,21 @@
 
 ---
 
-## Week 4: API Gateway Caching ⏸️ PENDING
+## Week 4: API Gateway Caching ⏸️ DEFERRED (Low Traffic)
 
-**Status:** ⏸️ Waiting for Week 3  
+**Status:** ⏸️ Deferred until traffic reaches 500K API requests/day (realistic break-even)  
 **Estimated Time:** 6 hours  
-**Target Dates:** Dec 1-7, 2025
+**Cost:** $25/month (only cost-effective at high traffic)
 
-### Tasks:
+### Automated Monitoring:
+- [x] Created monitor-cache-threshold.ps1 (manual)
+- [x] Created auto-cache-monitor Lambda (automatic)
+- [x] Deploy auto-cache-monitor Lambda ✅ Nov 6, 2025
+- [x] Updated thresholds to realistic break-even points (2M reads/day, 500K requests/day)
+- [ ] Test automatic threshold detection
+- [ ] Verify auto-enable works when threshold reached
+
+### Tasks (when traffic justifies):
 - [ ] Read 05-API-GATEWAY-CACHING.md
 - [ ] Enable cache on API Gateway (0.5 GB)
 - [ ] Configure per-route caching
@@ -173,26 +193,35 @@
 |-------|--------|------|-----------------|
 | Root Cleanup | ✅ Done | 2h | Nov 6, 2025 |
 | Week 1: SQS Phase 1 | ✅ Done | 6h | Nov 6, 2025 |
-| Week 1: SQS Phases 2-4 | ⏭️ Next | 6h | Target: Nov 16 |
-| Week 2: Cache | ⏸️ Pending | 16h | Target: Nov 23 |
-| Week 3: Fault Tolerance | ⏸️ Pending | 10h | Target: Nov 30 |
-| Week 4: API Cache | ⏸️ Pending | 6h | Target: Dec 7 |
-| **Total** | **16% done** | **46h** | **Target: Dec 7** |
+| Week 1: SQS Phase 2 | ✅ Done | 2h | Nov 6, 2025 |
+| Week 1: SQS Phases 3-4 | ⏭️ Next | 4h | Target: Nov 16 |
+| Week 3: Circuit Breakers | ⏸️ Pending | 6h | Target: Nov 23 |
+| Week 3: Rate Limiting | ⏸️ Pending | 4h | Target: Nov 30 |
+| Cache Monitoring | ✅ Done | 2h | Nov 6, 2025 |
+| ElastiCache | ⏸️ Deferred | 16h | When traffic justifies |
+| API Gateway Cache | ⏸️ Deferred | 6h | When traffic justifies |
+| **Total** | **29% done** | **34h** | **Target: Nov 30** |
 
 ---
 
 ## Next Action
 
-**Continue Week 1: SQS Phase 2 (Video Downloader)**
+**Test Video Downloader (Phase 2) & Continue to Phases 3-4**
 
 ```powershell
 cd C:\Users\Ed\Documents\Programming\AWS\Downloader\Architecture-Improvements\scripts
 
-# Continue with Phase 2
-.\gradual-rollout.ps1 -Phase 2
+# Test video downloader
+# (Upload a video via admin interface and verify it processes)
 
-# Monitor queue
-aws sqs get-queue-attributes --queue-url https://sqs.us-east-1.amazonaws.com/371751795928/video-processing-queue --attribute-names ApproximateNumberOfMessages --region us-east-1
+# Monitor video queue
+.\monitor-video-queue.ps1
+
+# Check cache thresholds weekly
+.\monitor-cache-threshold.ps1
+
+# Continue with Phase 3 (email)
+.\gradual-rollout.ps1 -Phase 3
 ```
 
 ---
@@ -203,8 +232,17 @@ aws sqs get-queue-attributes --queue-url https://sqs.us-east-1.amazonaws.com/371
 - 72 Python files organized into subdirectories
 - 26 deployment ZIPs archived
 - SQS Phase 1 complete and working
-- Event source mapping: 41a1a556-5860-4b2c-9abe-da17fb5b85f5
+- SQS Phase 2 complete and tested (video downloader working via queue)
+- Event source mappings:
+  - Thumbnail: 41a1a556-5860-4b2c-9abe-da17fb5b85f5
+  - Video: d0eeca71-acbb-4ebd-aa6e-bcdd8f9654ed
 - Thumbnail generation via queue tested successfully
+- Created automated cache threshold monitoring
+- Deployed auto-cache-monitor Lambda (runs daily at 2 AM UTC)
+- Updated thresholds to realistic break-even points:
+  - ElastiCache: 2M DynamoDB reads/day
+  - API Gateway Cache: 500K API requests/day
+- Caching will auto-enable when traffic justifies cost
 - Zero downtime, backward compatible
 
 ---

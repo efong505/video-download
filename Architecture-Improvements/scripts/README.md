@@ -36,6 +36,40 @@ These scripts enable **zero-risk** SQS implementation with gradual rollout and e
 
 ## Scripts Overview
 
+### 0. monitor-cache-threshold.ps1
+**Purpose:** Automated monitoring to determine when caching becomes cost-effective  
+**Risk:** Zero - read-only monitoring  
+**Time:** 2 minutes  
+**Frequency:** Run weekly or set up Task Scheduler
+
+**Example:**
+```powershell
+# Check current traffic and get recommendations
+.\monitor-cache-threshold.ps1
+```
+
+**What it does:**
+- Checks last 24 hours of DynamoDB reads and API requests
+- Calculates projected monthly costs with and without caching
+- Alerts when traffic reaches 80% of threshold (warning)
+- Recommends enabling caching when traffic reaches threshold:
+  - ElastiCache: 10,000 DynamoDB reads/day
+  - API Gateway Cache: 100,000 API requests/day
+- Saves daily report for tracking trends
+- Shows projected savings when caching is enabled
+
+**Thresholds:**
+- **ElastiCache:** Enable at 10K DynamoDB reads/day (saves money at this traffic level)
+- **API Gateway Cache:** Enable at 100K API requests/day (saves money at this traffic level)
+- **Warning:** Alert at 80% of threshold (8K reads or 80K requests)
+
+**Output:**
+- Current traffic levels
+- Projected monthly costs (with and without caching)
+- Clear recommendations (ENABLE NOW or Keep disabled)
+- Percentage of threshold reached
+- Daily report saved to file
+
 ### 1. safe-sqs-deploy.ps1
 **Purpose:** Create SQS queues without modifying Lambda functions  
 **Risk:** Zero - only creates infrastructure  
@@ -345,8 +379,15 @@ After successful SQS rollout:
 1. Monitor for 1 week
 2. Verify DLQs remain empty
 3. Check CloudWatch metrics
-4. Proceed to Week 2: ElastiCache Redis
-5. Read `02-ELASTICACHE-IMPLEMENTATION.md`
+4. **Run cache threshold monitoring weekly:**
+   ```powershell
+   .\monitor-cache-threshold.ps1
+   ```
+5. Enable caching only when traffic justifies cost:
+   - ElastiCache: When reaching 10K DynamoDB reads/day
+   - API Gateway Cache: When reaching 100K API requests/day
+6. Proceed to Circuit Breakers and Rate Limiting (zero cost)
+7. Read `03-CIRCUIT-BREAKERS.md` and `04-RATE-LIMITING.md`
 
 ---
 
