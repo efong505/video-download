@@ -17,8 +17,11 @@ $dlqs = @(
 
 foreach ($dlq in $dlqs) {
     Write-Host "Creating $dlq..." -ForegroundColor Gray
-    aws sqs create-queue --queue-name $dlq --region $region --attributes MessageRetentionPeriod=1209600
+    aws sqs create-queue --queue-name $dlq --region $region --attributes MessageRetentionPeriod=1209600 | Out-Null
 }
+
+# Wait a moment for queues to be created
+Start-Sleep -Seconds 2
 
 # Get DLQ ARNs
 Write-Host "`nGetting DLQ ARNs..." -ForegroundColor Yellow
@@ -34,28 +37,25 @@ foreach ($dlq in $dlqs) {
 Write-Host "`nCreating Main Queues..." -ForegroundColor Yellow
 
 $queues = @(
-    @{Name="order-processing-queue"; DLQ="order-processing-dlq"; Timeout=300},
-    @{Name="payment-processing-queue"; DLQ="payment-processing-dlq"; Timeout=300},
-    @{Name="email-notification-queue"; DLQ="email-notification-dlq"; Timeout=120},
-    @{Name="inventory-update-queue"; DLQ="inventory-update-dlq"; Timeout=60}
+    @{Name="order-processing-queue"; DLQ="order-processing-dlq"; Timeout="300"},
+    @{Name="payment-processing-queue"; DLQ="payment-processing-dlq"; Timeout="300"},
+    @{Name="email-notification-queue"; DLQ="email-notification-dlq"; Timeout="120"},
+    @{Name="inventory-update-queue"; DLQ="inventory-update-dlq"; Timeout="60"}
 )
 
 foreach ($queue in $queues) {
     Write-Host "Creating $($queue.Name)..." -ForegroundColor Gray
     
-    $redrivePolicy = @{
-        deadLetterTargetArn = $dlqArns[$queue.DLQ]
-        maxReceiveCount = 3
-    } | ConvertTo-Json -Compress
+    $redrivePolicy = '{""deadLetterTargetArn"":""' + $dlqArns[$queue.DLQ] + '"",""maxReceiveCount"":3}'
     
-    $attributes = @{
-        VisibilityTimeout = $queue.Timeout
-        MessageRetentionPeriod = 345600  # 4 days
-        RedrivePolicy = $redrivePolicy
-    } | ConvertTo-Json -Compress
-    
-    aws sqs create-queue --queue-name $queue.Name --region $region --attributes $attributes
+    aws sqs create-queue `
+        --queue-name $queue.Name `
+        --region $region `
+        --attributes "VisibilityTimeout=$($queue.Timeout)" "MessageRetentionPeriod=345600" "RedrivePolicy=$redrivePolicy" | Out-Null
 }
+
+# Wait for queues to be created
+Start-Sleep -Seconds 2
 
 # Display Queue URLs
 Write-Host "`nQueue URLs:" -ForegroundColor Green

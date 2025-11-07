@@ -270,8 +270,14 @@
 
                         <div class="mb-3">
                             <label class="form-label">Featured Image</label>
-                            <input type="file" id="featured-image" class="form-control" accept="image/*">
-                            <div class="form-text">Optional: Upload a featured image for social media sharing and article preview</div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <input type="url" class="form-control" id="featured-image-url" placeholder="https://example.com/image.jpg or upload below">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="file" class="form-control" id="featured-image-file" accept="image/*">
+                                </div>
+                            </div>
                             <div id="featured-image-preview" class="mt-2"></div>
                         </div>
 
@@ -359,6 +365,7 @@ Code block
         var AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
         var ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';
         var URL_ANALYSIS_API = 'https://q65k3dbpd7.execute-api.us-east-1.amazonaws.com/prod/analyze';
+        var ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
         
         var currentUser = null;
         var authToken = null;
@@ -570,18 +577,36 @@ Code block
         });
         
         function setupFeaturedImageHandler() {
-            var featuredImageInput = document.getElementById('featured-image');
+            var featuredImageInput = document.getElementById('featured-image-file');
             featuredImageInput.addEventListener('change', function(e) {
                 var file = e.target.files[0];
                 if (file) {
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-                        compressImage(e.target.result, function(compressedDataUrl) {
-                            showFeaturedImagePreview(compressedDataUrl);
-                        });
-                    };
-                    reader.readAsDataURL(file);
+                    uploadImageToS3(file);
                 }
+            });
+        }
+        
+        function uploadImageToS3(file) {
+            var formData = new FormData();
+            formData.append('file', file);
+            fetch(ADMIN_API + '?action=upload_image', {
+                method: 'POST',
+                headers: {'Authorization': 'Bearer ' + authToken},
+                body: formData
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.url) {
+                    document.getElementById('featured-image-url').value = data.url;
+                    showFeaturedImagePreview(data.url);
+                    alert('Image uploaded to S3 successfully!');
+                } else {
+                    alert('Error uploading image: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(function(error) {
+                console.error('Upload error:', error);
+                alert('Failed to upload image');
             });
         }
         
@@ -598,7 +623,8 @@ Code block
         }
         
         function removeFeaturedImage() {
-            document.getElementById('featured-image').value = '';
+            document.getElementById('featured-image-url').value = '';
+            document.getElementById('featured-image-file').value = '';
             document.getElementById('featured-image-preview').innerHTML = '';
         }
 
@@ -810,27 +836,14 @@ Code block
             var tags = document.getElementById('article-tags').value.split(',').map(function(tag) { return tag.trim(); }).filter(function(tag) { return tag; });
             var visibility = document.getElementById('article-visibility').value;
             var content = getCurrentContent();
-            var featuredImageInput = document.getElementById('featured-image');
+            var featuredImageUrl = document.getElementById('featured-image-url').value.trim();
             
             if (!title || !content) {
                 alert('Please fill in the title and content');
                 return;
             }
             
-            // Get featured image if uploaded
-            if (featuredImageInput.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    compressImage(e.target.result, function(compressedDataUrl) {
-                        submitArticle(title, category, tags, visibility, content, compressedDataUrl);
-                    });
-                };
-                reader.readAsDataURL(featuredImageInput.files[0]);
-                return; // Exit here, submitArticle will be called from the reader callback
-            }
-            
-            // No featured image, submit directly
-            submitArticle(title, category, tags, visibility, content, '');
+            submitArticle(title, category, tags, visibility, content, featuredImageUrl);
         });
         
         function submitArticle(title, category, tags, visibility, content, featuredImage) {
@@ -1083,39 +1096,11 @@ Empty line creates new paragraph
                     tempDiv.innerHTML = content;
                     var plainText = tempDiv.textContent || tempDiv.innerText || '';
                     var excerpt = plainText.substring(0, 160);
-                    
                     var imageUrl = 'https://d271vky579caz9.cloudfront.net/techcrosslogo.jpg';
                     if (featuredImage && !featuredImage.startsWith('data:')) {
                         imageUrl = featuredImage;
                     }
-                    
-                    var previewHtml = '<!DOCTYPE html>\n' +
-'<html lang="en">\n' +
-'<head>\n' +
-'<meta charset="UTF-8">\n' +
-'<meta property="og:type" content="article">\n' +
-'<meta property="og:site_name" content="Christian Conservatives Today">\n' +
-'<meta property="og:title" content="' + escapeHtml(title) + '">\n' +
-'<meta property="og:description" content="' + escapeHtml(excerpt) + '">\n' +
-'<meta property="og:url" content="https://christianconservativestoday.com/previews/article-' + articleId + '.html">\n' +
-'<meta property="og:image" content="' + imageUrl + '">\n' +
-'<meta property="og:image:secure_url" content="' + imageUrl + '">\n' +
-'<meta property="og:image:type" content="image/jpeg">\n' +
-'<meta property="og:image:width" content="1200">\n' +
-'<meta property="og:image:height" content="630">\n' +
-'<meta name="twitter:card" content="summary_large_image">\n' +
-'<meta name="twitter:title" content="' + escapeHtml(title) + '">\n' +
-'<meta name="twitter:description" content="' + escapeHtml(excerpt) + '">\n' +
-'<meta name="twitter:image" content="' + imageUrl + '">\n' +
-'<meta http-equiv="refresh" content="0;url=/article.html?id=' + articleId + '">\n' +
-'<title>' + escapeHtml(title) + ' - Christian Conservatives Today</title>\n' +
-'</head>\n' +
-'<body>\n' +
-'<scr' + 'ipt>window.location.href="/article.html?id=' + articleId + '";</scr' + 'ipt>\n' +
-'<p>Redirecting to article...</p>\n' +
-'</body>\n' +
-'</html>';
-                    
+                    var previewHtml = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta property="og:type" content="article"><meta property="og:site_name" content="Christian Conservatives Today"><meta property="og:title" content="' + escapeHtml(title) + '"><meta property="og:description" content="' + escapeHtml(excerpt) + '"><meta property="og:url" content="https://christianconservativestoday.com/previews/article-' + articleId + '.html"><meta property="og:image" content="' + imageUrl + '"><meta property="og:image:secure_url" content="' + imageUrl + '"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="' + escapeHtml(title) + '"><meta name="twitter:description" content="' + escapeHtml(excerpt) + '"><meta name="twitter:image" content="' + imageUrl + '"><meta http-equiv="refresh" content="0;url=/article.html?id=' + articleId + '"><title>' + escapeHtml(title) + ' - Christian Conservatives Today</title></head><body><scr' + 'ipt>window.location.href="/article.html?id=' + articleId + '";</scr' + 'ipt><p>Redirecting to article...</p></body></html>';
                     uploadPreviewToS3(articleId, previewHtml).then(resolve).catch(reject);
                 } catch (error) {
                     reject(error);

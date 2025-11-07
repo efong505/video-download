@@ -219,8 +219,14 @@
 
                         <div class="mb-3">
                             <label class="form-label">Featured Image</label>
-                            <input type="file" id="featured-image" class="form-control" accept="image/*">
-                            <div class="form-text">Optional: Upload a new featured image for social media sharing and article preview</div>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <input type="url" class="form-control" id="featured-image-url" placeholder="https://example.com/image.jpg or upload below">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="file" class="form-control" id="featured-image-file" accept="image/*">
+                                </div>
+                            </div>
                             <div id="featured-image-preview" class="mt-2"></div>
                         </div>
 
@@ -350,19 +356,53 @@ Code block
         });
 
         function setupFeaturedImageHandler() {
-            const featuredImageInput = document.getElementById('featured-image');
+            const featuredImageInput = document.getElementById('featured-image-file');
             featuredImageInput.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        compressImage(e.target.result, function(compressedDataUrl) {
-                            showFeaturedImagePreview(compressedDataUrl);
-                        });
-                    };
-                    reader.readAsDataURL(file);
+                    uploadImageToS3(file);
                 }
             });
+        }
+        
+        function uploadImageToS3(file) {
+            console.log('Uploading image to S3...');
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Data = e.target.result.split(',')[1];
+                const fileExt = file.name.split('.').pop().toLowerCase();
+                
+                fetch(ADMIN_API + '?action=upload_image', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + authToken
+                    },
+                    body: JSON.stringify({
+                        file_data: base64Data,
+                        file_ext: fileExt
+                    })
+                })
+                .then(response => {
+                    console.log('Upload response status:', response.status);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Upload response data:', data);
+                    if (data.url) {
+                        document.getElementById('featured-image-url').value = data.url;
+                        document.getElementById('featured-image-preview').innerHTML = 
+                            '<div class="alert alert-success">Image uploaded successfully! URL: ' + data.url + '</div>';
+                    } else {
+                        alert('Error uploading image: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(error => {
+                    console.error('Upload error:', error);
+                    alert('Failed to upload image');
+                });
+            };
+            reader.readAsDataURL(file);
         }
         
         function showFeaturedImagePreview(dataUrl) {
@@ -629,7 +669,16 @@ Code block
             
             // Show existing featured image if present
             if (article.featured_image) {
-                showExistingFeaturedImage(article.featured_image);
+                console.log('Featured image found:', article.featured_image);
+                document.getElementById('featured-image-url').value = article.featured_image;
+                if (!article.featured_image.startsWith('data:')) {
+                    console.log('Showing existing featured image preview');
+                    showExistingFeaturedImage(article.featured_image);
+                } else {
+                    console.log('Skipping base64 image preview');
+                }
+            } else {
+                console.log('No featured image found in article data');
             }
         }
         
@@ -643,6 +692,7 @@ Code block
                         '<button type="button" class="btn btn-sm btn-outline-danger ms-2" onclick="removeExistingFeaturedImage()">Remove</button>' +
                     '</div>' +
                 '</div>';
+            console.log('Featured image preview HTML set');
         }
         
         function removeExistingFeaturedImage() {
@@ -659,7 +709,7 @@ Code block
             const tags = document.getElementById('article-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
             const visibility = document.getElementById('article-visibility').value;
             const content = getCurrentContent();
-            const featuredImageInput = document.getElementById('featured-image');
+            const featuredImageUrl = document.getElementById('featured-image-url').value.trim();
             
             let updateData = {
                 article_id: articleId,
@@ -670,25 +720,10 @@ Code block
                 visibility: visibility
             };
             
-            // Handle featured image update
-            const previewDiv = document.getElementById('featured-image-preview');
-            if (previewDiv.getAttribute('data-remove-existing') === 'true') {
-                // User wants to remove existing image
-                updateData.featured_image = '';
-            } else if (featuredImageInput.files[0]) {
-                // User uploaded a new image - compress and include it
-                const file = featuredImageInput.files[0];
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    compressImage(e.target.result, function(compressedDataUrl) {
-                        updateData.featured_image = compressedDataUrl;
-                        submitArticleUpdate(updateData);
-                    });
-                };
-                reader.readAsDataURL(file);
-                return; // Exit here, submitArticleUpdate will be called from the callback
+            // Include featured image URL if present
+            if (featuredImageUrl) {
+                updateData.featured_image = featuredImageUrl;
             }
-            // If no changes to featured image, don't include it in update
             
             // Include author change if admin/super user
             if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
@@ -937,39 +972,11 @@ Empty line creates new paragraph
                 tempDiv.innerHTML = articleData.content;
                 const plainText = tempDiv.textContent || tempDiv.innerText || '';
                 const excerpt = plainText.substring(0, 160);
-                
                 let imageUrl = 'https://d271vky579caz9.cloudfront.net/techcrosslogo.jpg';
                 if (articleData.featured_image && !articleData.featured_image.startsWith('data:')) {
                     imageUrl = articleData.featured_image;
                 }
-                
-                const previewHtml = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta property="og:type" content="article">
-<meta property="og:site_name" content="Christian Conservatives Today">
-<meta property="og:title" content="${escapeHtml(articleData.title)}">
-<meta property="og:description" content="${escapeHtml(excerpt)}">
-<meta property="og:url" content="https://christianconservativestoday.com/previews/article-${articleData.article_id}.html">
-<meta property="og:image" content="${imageUrl}">
-<meta property="og:image:secure_url" content="${imageUrl}">
-<meta property="og:image:type" content="image/jpeg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="${escapeHtml(articleData.title)}">
-<meta name="twitter:description" content="${escapeHtml(excerpt)}">
-<meta name="twitter:image" content="${imageUrl}">
-<meta http-equiv="refresh" content="0;url=/article.html?id=${articleData.article_id}">
-<title>${escapeHtml(articleData.title)} - Christian Conservatives Today</title>
-</head>
-<body>
-<scr`+`ipt>window.location.href="/article.html?id=${articleData.article_id}";</scr`+`ipt>
-<p>Redirecting to article...</p>
-</body>
-</html>`;
-                
+                const previewHtml = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta property="og:type" content="article"><meta property="og:site_name" content="Christian Conservatives Today"><meta property="og:title" content="' + escapeHtml(articleData.title) + '"><meta property="og:description" content="' + escapeHtml(excerpt) + '"><meta property="og:url" content="https://christianconservativestoday.com/previews/article-' + articleData.article_id + '.html"><meta property="og:image" content="' + imageUrl + '"><meta property="og:image:secure_url" content="' + imageUrl + '"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="' + escapeHtml(articleData.title) + '"><meta name="twitter:description" content="' + escapeHtml(excerpt) + '"><meta name="twitter:image" content="' + imageUrl + '"><meta http-equiv="refresh" content="0;url=/article.html?id=' + articleData.article_id + '"><title>' + escapeHtml(articleData.title) + ' - Christian Conservatives Today</title></head><body><scr' + 'ipt>window.location.href="/article.html?id=' + articleData.article_id + '";</scr' + 'ipt><p>Redirecting to article...</p></body></html>';
                 await uploadPreviewToS3(articleData.article_id, previewHtml);
             } catch (error) {
                 console.error('Error generating preview:', error);

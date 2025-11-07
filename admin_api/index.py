@@ -35,6 +35,13 @@ def lambda_handler(event, context):
                 return auth_result
             return get_upload_url(event)
         
+        # Handle upload_image with regular user token verification
+        if method == 'POST' and action == 'upload_image':
+            auth_result = verify_token_only(event)
+            if auth_result['statusCode'] != 200:
+                return auth_result
+            return upload_image(event)
+        
         # Verify admin token for all other requests
         auth_result = verify_admin_token(event)
         if auth_result['statusCode'] != 200:
@@ -531,6 +538,95 @@ def delete_video(event):
                 'error': f'Failed to delete video: {str(e)}',
                 'filename': filename
             })
+        }
+
+def upload_image(event):
+    """Handle image upload to S3 from base64 JSON data"""
+    import uuid
+    import re
+    
+    try:
+        body_str = event.get('body', '{}')
+        is_base64 = event.get('isBase64Encoded', False)
+        
+        print(f"isBase64Encoded: {is_base64}, body length: {len(body_str) if body_str else 0}")
+        
+        # Try to parse as JSON first (new format)
+        try:
+            body = json.loads(body_str)
+            file_data_base64 = body.get('file_data')
+            file_ext = body.get('file_ext', 'jpg')
+            
+            if file_data_base64:
+                # New JSON format
+                file_data = base64.b64decode(file_data_base64)
+                print(f"Using JSON format, file_ext: {file_ext}")
+            else:
+                raise ValueError("No file_data in JSON")
+        except (json.JSONDecodeError, ValueError):
+            # Old multipart format - body is base64 encoded multipart data
+            print("Falling back to multipart format")
+            
+            if is_base64:
+                body_bytes = base64.b64decode(body_str)
+            else:
+                body_bytes = body_str.encode('latin-1')
+            
+            # Extract file from multipart
+            content_type = event.get('headers', {}).get('content-type', '') or event.get('headers', {}).get('Content-Type', '')
+            boundary_match = re.search(r'boundary=([^;\s]+)', content_type)
+            if not boundary_match:
+                raise ValueError('No boundary in multipart')
+            
+            boundary = boundary_match.group(1).encode('ascii')
+            parts = body_bytes.split(b'--' + boundary)
+            
+            file_data = None
+            file_ext = 'jpg'
+            
+            for part in parts:
+                if b'Content-Disposition' in part and b'filename=' in part:
+                    filename_match = re.search(b'filename="([^"]+)"', part)
+                    if filename_match:
+                        filename = filename_match.group(1).decode('utf-8', errors='ignore')
+                        if '.' in filename:
+                            file_ext = filename.split('.')[-1].lower()
+                    
+                    header_end = part.find(b'\r\n\r\n')
+                    if header_end != -1:
+                        file_data = part[header_end + 4:]
+                        if file_data.endswith(b'\r\n'):
+                            file_data = file_data[:-2]
+                        break
+            
+            if not file_data:
+                raise ValueError('No file data in multipart')
+        
+        # Generate unique filename
+        unique_id = str(uuid.uuid4())
+        s3_key = f'article-images/{unique_id}.{file_ext}'
+        
+        # Upload to S3
+        s3_client.put_object(
+            Bucket='my-video-downloads-bucket',
+            Key=s3_key,
+            Body=file_data,
+            ContentType=f'image/{file_ext}'
+        )
+        
+        # Return CloudFront URL
+        cloudfront_url = f'https://d271vky579caz9.cloudfront.net/{s3_key}'
+        
+        return {
+            'statusCode': 200,
+            'headers': cors_headers(),
+            'body': json.dumps({'url': cloudfront_url})
+        }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
         }
 
 def get_upload_url(event):

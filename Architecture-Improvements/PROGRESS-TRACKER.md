@@ -59,11 +59,27 @@
 - [x] Test video download via queue ✅ Working - video processed successfully
 - [x] Monitor confirmed: Queue: 0, In-Flight: 0, DLQ: 0 (clean processing)
 
-### Phase 3: Digest Generator ⏸️ PENDING
+### Phase 3: Digest Generator ⏸️ SKIPPED (For Now)
 - [ ] Connect digest-generator Lambda to email-queue
+- **Note:** Email digest system exists (digest-generator + newsletter_api) but is part of larger marketing automation. Skipping SQS integration until full email marketing system is implemented. See NEWSLETTER_SYSTEM_GUIDE.md for current implementation.
+- **Current Implementation:** 
+  - digest-generator Lambda auto-generates weekly newsletters
+  - newsletter_api Lambda sends emails via AWS SES
+  - Admin interface (admin-newsletters.html) for manual newsletter creation
+  - DynamoDB tables: newsletters, email_subscribers, newsletter_templates, newsletter_analytics
+  - Complete system operational, just not using SQS queue yet
+- **When to Revisit:** After Shopping system implementation or when email marketing becomes priority
 
-### Phase 4: Analytics ⏸️ PENDING
+### Phase 4: Analytics ⏸️ SKIPPED (For Now)
 - [ ] Connect article-analysis Lambda to analytics-queue
+- **Note:** Analytics tracking exists but not critical for core platform. Skipping SQS integration for now. Can revisit after Circuit Breakers and Rate Limiting.
+- **Current Implementation:**
+  - Article view tracking operational
+  - Analytics dashboard with top articles and category stats
+  - DynamoDB Analytics table storing engagement metrics
+  - Frontend tracking via JavaScript on article pages
+  - Complete system working, just not using SQS queue yet
+- **When to Revisit:** After Circuit Breakers/Rate Limiting implementation or when high-volume analytics processing needed
 
 ---
 
