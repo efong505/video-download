@@ -976,7 +976,7 @@ Empty line creates new paragraph
                 if (articleData.featured_image && !articleData.featured_image.startsWith('data:')) {
                     imageUrl = articleData.featured_image;
                 }
-                const previewHtml = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta property="og:type" content="article"><meta property="og:site_name" content="Christian Conservatives Today"><meta property="og:title" content="' + escapeHtml(articleData.title) + '"><meta property="og:description" content="' + escapeHtml(excerpt) + '"><meta property="og:url" content="https://christianconservativestoday.com/previews/article-' + articleData.article_id + '.html"><meta property="og:image" content="' + imageUrl + '"><meta property="og:image:secure_url" content="' + imageUrl + '"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="' + escapeHtml(articleData.title) + '"><meta name="twitter:description" content="' + escapeHtml(excerpt) + '"><meta name="twitter:image" content="' + imageUrl + '"><meta http-equiv="refresh" content="0;url=/article.html?id=' + articleData.article_id + '"><title>' + escapeHtml(articleData.title) + ' - Christian Conservatives Today</title></head><body><scr' + 'ipt>window.location.href="/article.html?id=' + articleData.article_id + '";</scr' + 'ipt><p>Redirecting to article...</p></body></html>';
+                const previewHtml = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta property="og:type" content="article"><meta property="og:site_name" content="Christian Conservatives Today"><meta property="og:title" content="' + escapeHtml(articleData.title) + '"><meta property="og:description" content="' + escapeHtml(excerpt) + '"><meta property="og:url" content="https://christianconservativestoday.com/previews/article-' + articleData.article_id + '.html"><meta property="og:image" content="' + imageUrl + '"><meta property="og:image:secure_url" content="' + imageUrl + '"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ArizonaAloha"><meta name="twitter:creator" content="@ArizonaAloha"><meta name="twitter:title" content="' + escapeHtml(articleData.title) + '"><meta name="twitter:description" content="' + escapeHtml(excerpt) + '"><meta name="twitter:image" content="' + imageUrl + '"><meta name="twitter:image:alt" content="' + escapeHtml(articleData.title) + '"><title>' + escapeHtml(articleData.title) + ' - Christian Conservatives Today</title><script>window.location.href="/article.html?id=' + articleData.article_id + '";</script></head><body><p>Redirecting to article...</p></body></html>';
                 await uploadPreviewToS3(articleData.article_id, previewHtml);
             } catch (error) {
                 console.error('Error generating preview:', error);
@@ -1009,10 +1009,12 @@ Empty line creates new paragraph
                     await fetch(data.upload_url, {
                         method: 'PUT',
                         headers: {
-                            'Content-Type': 'text/html'
+                            'Content-Type': 'text/html',
+                            'Cache-Control': 'no-cache, no-store, must-revalidate'
                         },
                         body: htmlContent
                     });
+                    console.log('Preview uploaded successfully for article:', articleId);
                 }
             } catch (error) {
                 console.error('Error uploading preview:', error);

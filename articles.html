@@ -358,13 +358,18 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
+        .share-btn i {
+            color: white;
+            vertical-align: middle;
+        }
         .share-btn:hover {
             transform: translateY(-2px) scale(1.1);
             color: white;
             box-shadow: 0 4px 12px rgba(0,0,0,0.2);
         }
         .share-btn-facebook { background: #1877f2; }
-        .share-btn-twitter { background: #1da1f2; }
+        .share-btn-twitter { background: #000000; }
+        .share-btn-twitter i { color: white !important; line-height: 1; display: inline-block; }
         .share-btn-copy { background: #6c757d; }
         .share-btn-copy.copied { background: #28a745; }
 
@@ -935,7 +940,7 @@
                     <div class="share-buttons">
                         <small class="text-muted d-block mb-2">📢 Share:</small>
                         <a href="https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent('https://christianconservativestoday.com/previews/article-' + safeArticleId + '.html')}" target="_blank" class="share-btn share-btn-facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent('https://christianconservativestoday.com/previews/article-' + safeArticleId + '.html')}&text=${encodeURIComponent(safeTitle)}" target="_blank" class="share-btn share-btn-twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="https://twitter.com/intent/tweet?url=${encodeURIComponent('https://christianconservativestoday.com/previews/article-' + safeArticleId + '.html')}&text=${encodeURIComponent(safeTitle)}" target="_blank" class="share-btn share-btn-twitter"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="white" viewBox="0 0 16 16"><path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/></svg></a>
                         <a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://christianconservativestoday.com/previews/article-' + safeArticleId + '.html')}" target="_blank" class="share-btn" style="background: #0077b5;"><i class="fab fa-linkedin-in"></i></a>
                         <button onclick="copyLinkForInstagram('${safeArticleId}')" class="share-btn" style="background: #E4405F;"><i class="fab fa-instagram"></i></button>
                         <a href="https://truthsocial.com/share?url=${encodeURIComponent('https://christianconservativestoday.com/previews/article-' + safeArticleId + '.html')}&title=${encodeURIComponent(safeTitle)}" target="_blank" class="share-btn" style="background: #FF0000;"><i class="fas fa-flag-usa"></i></a>

@@ -1100,7 +1100,7 @@ Empty line creates new paragraph
                     if (featuredImage && !featuredImage.startsWith('data:')) {
                         imageUrl = featuredImage;
                     }
-                    var previewHtml = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta property="og:type" content="article"><meta property="og:site_name" content="Christian Conservatives Today"><meta property="og:title" content="' + escapeHtml(title) + '"><meta property="og:description" content="' + escapeHtml(excerpt) + '"><meta property="og:url" content="https://christianconservativestoday.com/previews/article-' + articleId + '.html"><meta property="og:image" content="' + imageUrl + '"><meta property="og:image:secure_url" content="' + imageUrl + '"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="' + escapeHtml(title) + '"><meta name="twitter:description" content="' + escapeHtml(excerpt) + '"><meta name="twitter:image" content="' + imageUrl + '"><meta http-equiv="refresh" content="0;url=/article.html?id=' + articleId + '"><title>' + escapeHtml(title) + ' - Christian Conservatives Today</title></head><body><scr' + 'ipt>window.location.href="/article.html?id=' + articleId + '";</scr' + 'ipt><p>Redirecting to article...</p></body></html>';
+                    var previewHtml = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta property="og:type" content="article"><meta property="og:site_name" content="Christian Conservatives Today"><meta property="og:title" content="' + escapeHtml(title) + '"><meta property="og:description" content="' + escapeHtml(excerpt) + '"><meta property="og:url" content="https://christianconservativestoday.com/previews/article-' + articleId + '.html"><meta property="og:image" content="' + imageUrl + '"><meta property="og:image:secure_url" content="' + imageUrl + '"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site" content="@ArizonaAloha"><meta name="twitter:creator" content="@ArizonaAloha"><meta name="twitter:title" content="' + escapeHtml(title) + '"><meta name="twitter:description" content="' + escapeHtml(excerpt) + '"><meta name="twitter:image" content="' + imageUrl + '"><meta name="twitter:image:alt" content="' + escapeHtml(title) + '"><title>' + escapeHtml(title) + ' - Christian Conservatives Today</title><script>window.location.href="/article.html?id=' + articleId + '";</script></head><body><p>Redirecting to article...</p></body></html>';
                     uploadPreviewToS3(articleId, previewHtml).then(resolve).catch(reject);
                 } catch (error) {
                     reject(error);
@@ -1132,9 +1132,12 @@ Empty line creates new paragraph
                     return fetch(data.upload_url, {
                         method: 'PUT',
                         headers: {
-                            'Content-Type': 'text/html'
+                            'Content-Type': 'text/html',
+                            'Cache-Control': 'no-cache, no-store, must-revalidate'
                         },
                         body: htmlContent
+                    }).then(function() {
+                        console.log('Preview uploaded successfully for article:', articleId);
                     });
                 }
             });
