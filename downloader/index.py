@@ -2,7 +2,9 @@ import json
 import boto3
 import subprocess
 import os
+import time
 from datetime import datetime
+from enum import Enum
 
 s3_client = boto3.client('s3')
 dynamodb = boto3.resource('dynamodb')
@@ -10,6 +12,62 @@ sns_client = boto3.client('sns')
 jobs_table = dynamodb.Table('download-jobs')
 
 SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:371751795928:video-download-notifications'
+
+# Circuit Breaker Implementation
+class CircuitState(Enum):
+    CLOSED = "closed"
+    OPEN = "open"
+    HALF_OPEN = "half_open"
+
+class CircuitBreaker:
+    def __init__(self, failure_threshold=5, timeout=30, expected_exception=Exception):
+        self.failure_threshold = failure_threshold
+        self.timeout = timeout
+        self.expected_exception = expected_exception
+        self.failure_count = 0
+        self.last_failure_time = None
+        self.state = CircuitState.CLOSED
+    
+    def call(self, func, *args, **kwargs):
+        if self.state == CircuitState.OPEN:
+            if self._should_attempt_reset():
+                self.state = CircuitState.HALF_OPEN
+            else:
+                raise CircuitBreakerOpenError(f"Service unavailable. Retry in {self._time_until_retry()}s")
+        
+        try:
+            result = func(*args, **kwargs)
+            self._on_success()
+            return result
+        except self.expected_exception as e:
+            self._on_failure()
+            raise e
+    
+    def _on_success(self):
+        self.failure_count = 0
+        self.state = CircuitState.CLOSED
+    
+    def _on_failure(self):
+        self.failure_count += 1
+        self.last_failure_time = time.time()
+        if self.failure_count >= self.failure_threshold:
+            self.state = CircuitState.OPEN
+    
+    def _should_attempt_reset(self):
+        return time.time() - self.last_failure_time >= self.timeout
+    
+    def _time_until_retry(self):
+        if not self.last_failure_time:
+            return 0
+        elapsed = time.time() - self.last_failure_time
+        return max(0, int(self.timeout - elapsed))
+
+class CircuitBreakerOpenError(Exception):
+    pass
+
+# Initialize circuit breakers
+s3_breaker = CircuitBreaker(failure_threshold=3, timeout=60, expected_exception=Exception)
+dynamodb_breaker = CircuitBreaker(failure_threshold=5, timeout=30, expected_exception=Exception)
 
 def send_notification(subject, message):
     """Send SNS notification"""
@@ -48,13 +106,16 @@ def update_job_status(job_id, status, progress=None, error=None):
             update_expr += ', completed_at = :completed'
             expr_values[':completed'] = datetime.now().isoformat()
         
-        jobs_table.update_item(
+        dynamodb_breaker.call(
+            jobs_table.update_item,
             Key={'job_id': job_id},
             UpdateExpression=update_expr,
             ExpressionAttributeValues=expr_values,
             ExpressionAttributeNames=expr_names
         )
         print(f"Updated job {job_id} status to {status}")
+    except CircuitBreakerOpenError as e:
+        print(f"Circuit breaker open for DynamoDB: {e}")
     except Exception as e:
         print(f"Failed to update job status: {e}")
 
@@ -77,9 +138,12 @@ def generate_thumbnails(video_path, output_name, bucket):
             cmd = ['ffmpeg', '-ss', str(timestamp), '-i', video_path, '-vframes', '1', '-q:v', '2', thumb_path]
             subprocess.run(cmd, capture_output=True, timeout=30)
             
-            # Upload thumbnail to thumbnails/ directory
+            # Upload thumbnail to thumbnails/ directory with circuit breaker
             thumb_key = f"thumbnails/{thumb_name}"
-            s3_client.upload_file(thumb_path, bucket, thumb_key, ExtraArgs={'ContentType': 'image/jpeg'})
+            s3_breaker.call(
+                s3_client.upload_file,
+                thumb_path, bucket, thumb_key, ExtraArgs={'ContentType': 'image/jpeg'}
+            )
             os.remove(thumb_path)
             print(f"Uploaded thumbnail: {thumb_key}")
             
@@ -216,9 +280,10 @@ def lambda_handler(event, context):
             content_type = 'video/mp4'  # default
     
         
-        # Upload video to videos/ directory
+        # Upload video to videos/ directory with circuit breaker
         video_key = f"videos/{output_name}"
-        s3_client.upload_file(
+        s3_breaker.call(
+            s3_client.upload_file,
             output_path,
             bucket,
             video_key,
@@ -252,13 +317,13 @@ def lambda_handler(event, context):
             f"Completed at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S UTC')}"
         )
         
-        # Save metadata to DynamoDB
+        # Save metadata to DynamoDB with circuit breaker
         try:
             table = dynamodb.Table('video-metadata')
-            # Use custom title if provided, otherwise use filename without extension
             display_title = title if title else output_name.rsplit('.', 1)[0]
             
-            table.put_item(
+            dynamodb_breaker.call(
+                table.put_item,
                 Item={
                     'video_id': output_name,
                     'filename': output_name,
@@ -272,6 +337,8 @@ def lambda_handler(event, context):
                 }
             )
             print(f"Saved metadata for {output_name} with title: '{display_title}', tags: {tags}, owner: {event.get('owner', 'system')}, visibility: {event.get('visibility', 'public')}")
+        except CircuitBreakerOpenError as e:
+            print(f"Circuit breaker open for DynamoDB: {e}")
         except Exception as e:
             print(f"Failed to save metadata: {e}")
         

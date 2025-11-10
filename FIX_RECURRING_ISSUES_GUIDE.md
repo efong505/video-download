@@ -1190,3 +1190,300 @@ aws dynamodb delete-item --table-name video-metadata --key "{\"video_id\": {\"S\
 - `tag_api/index.py`: Modified list_all_videos() to return all videos when no pagination params
 
 **Performance**: Page loads ALL video metadata but only downloads thumbnail images as they scroll into view (lazy loading).
+
+
+---
+
+## Issue 19: Featured Image Upload and Social Media Sharing
+
+**Symptom**: 
+1. Image uploads corrupted/failed when using multipart FormData
+2. Facebook/X sharing shows no featured image or wrong image
+3. X/Twitter icon displays as black and misaligned
+
+**Root Causes**:
+1. API Gateway configured multipart as binary media type, causing base64 encoding issues
+2. Preview HTML files missing proper Twitter/X meta tags
+3. Font Awesome X icon not rendering properly in Font Awesome 6.0.0
+
+**Complete Solution**:
+
+### Part 1: Fix Image Upload (admin_api/index.py)
+
+Changed from multipart FormData to JSON with base64 encoding:
+
+```python
+def upload_image(event):
+    """Handle image upload to S3 from base64 JSON data"""
+    import uuid
+    import re
+    
+    try:
+        body_str = event.get('body', '{}')
+        is_base64 = event.get('isBase64Encoded', False)
+        
+        # Try JSON format first (new format)
+        try:
+            body = json.loads(body_str)
+            file_data_base64 = body.get('file_data')
+            file_ext = body.get('file_ext', 'jpg')
+            
+            if file_data_base64:
+                file_data = base64.b64decode(file_data_base64)
+            else:
+                raise ValueError("No file_data in JSON")
+        except (json.JSONDecodeError, ValueError):
+            # Fallback to multipart format for backward compatibility
+            # ... multipart parsing code ...
+        
+        # Generate unique filename
+        unique_id = str(uuid.uuid4())
+        s3_key = f'article-images/{unique_id}.{file_ext}'
+        
+        # Upload to S3
+        s3_client.put_object(
+            Bucket='my-video-downloads-bucket',
+            Key=s3_key,
+            Body=file_data,
+            ContentType=f'image/{file_ext}'
+        )
+        
+        # Return CloudFront URL (not S3 URL)
+        cloudfront_url = f'https://d271vky579caz9.cloudfront.net/{s3_key}'
+        
+        return {
+            'statusCode': 200,
+            'headers': cors_headers(),
+            'body': json.dumps({'url': cloudfront_url})
+        }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
+        }
+```
+
+### Part 2: Update Frontend Upload (edit-article.html, create-article.html)
+
+```javascript
+function uploadImageToS3(file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const base64Data = e.target.result.split(',')[1];
+        const fileExt = file.name.split('.').pop().toLowerCase();
+        
+        fetch(ADMIN_API + '?action=upload_image', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + authToken
+            },
+            body: JSON.stringify({
+                file_data: base64Data,
+                file_ext: fileExt
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.url) {
+                document.getElementById('featured-image-url').value = data.url;
+                alert('Image uploaded successfully!');
+            }
+        });
+    };
+    reader.readAsDataURL(file);
+}
+```
+
+### Part 3: Fix Twitter/X Meta Tags in Preview Generation
+
+Updated both create-article.html and edit-article.html:
+
+```javascript
+function generateAndUploadPreview(articleData) {
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = articleData.content;
+    const plainText = tempDiv.textContent || tempDiv.innerText || '';
+    const excerpt = plainText.substring(0, 160);
+    
+    let imageUrl = 'https://d271vky579caz9.cloudfront.net/techcrosslogo.jpg';
+    if (articleData.featured_image && !articleData.featured_image.startsWith('data:')) {
+        imageUrl = articleData.featured_image;
+    }
+    
+    const previewHtml = `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Christian Conservatives Today">
+<meta property="og:title" content="${escapeHtml(articleData.title)}">
+<meta property="og:description" content="${escapeHtml(excerpt)}">
+<meta property="og:url" content="https://christianconservativestoday.com/previews/article-${articleData.article_id}.html">
+<meta property="og:image" content="${imageUrl}">
+<meta property="og:image:secure_url" content="${imageUrl}">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@ArizonaAloha">
+<meta name="twitter:creator" content="@ArizonaAloha">
+<meta name="twitter:title" content="${escapeHtml(articleData.title)}">
+<meta name="twitter:description" content="${escapeHtml(excerpt)}">
+<meta name="twitter:image" content="${imageUrl}">
+<meta name="twitter:image:alt" content="${escapeHtml(articleData.title)}">
+<title>${escapeHtml(articleData.title)} - Christian Conservatives Today</title>
+<script>window.location.href="/article.html?id=${articleData.article_id}";</script>
+</head>
+<body>
+<p>Redirecting to article...</p>
+</body>
+</html>`;
+    
+    await uploadPreviewToS3(articleData.article_id, previewHtml);
+}
+
+function uploadPreviewToS3(articleId, htmlContent) {
+    return fetch(ADMIN_API + '?action=upload_url', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + authToken
+        },
+        body: JSON.stringify({
+            filename: `previews/article-${articleId}.html`,
+            content_type: 'text/html'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.upload_url) {
+            return fetch(data.upload_url, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'text/html',
+                    'Cache-Control': 'no-cache, no-store, must-revalidate'
+                },
+                body: htmlContent
+            }).then(() => {
+                console.log('Preview uploaded successfully for article:', articleId);
+            });
+        }
+    });
+}
+```
+
+### Part 4: Fix X Icon Display
+
+Replace Font Awesome icon with inline SVG in article.html, articles.html, news-article.html:
+
+```html
+<!-- OLD (doesn't work in FA 6.0.0) -->
+<i class="fab fa-x-twitter"></i>
+
+<!-- NEW (inline SVG) -->
+<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="white" viewBox="0 0 16 16">
+    <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/>
+</svg>
+```
+
+Update CSS for X button:
+
+```css
+.share-btn-twitter { 
+    background: #000000; 
+}
+.share-btn-twitter i, .share-btn-twitter svg { 
+    color: white !important; 
+    fill: white !important;
+    line-height: 1; 
+    display: inline-block; 
+}
+```
+
+**Deployment**:
+```powershell
+# Deploy Lambda
+cd admin_api
+powershell -Command "Compress-Archive -Path index.py -DestinationPath function.zip -Force"
+aws lambda update-function-code --function-name admin-api --zip-file fileb://function.zip
+
+# Deploy HTML files
+aws s3 cp create-article.html s3://my-video-downloads-bucket/ --content-type "text/html"
+aws s3 cp edit-article.html s3://my-video-downloads-bucket/ --content-type "text/html"
+aws s3 cp article.html s3://my-video-downloads-bucket/ --content-type "text/html"
+aws s3 cp articles.html s3://my-video-downloads-bucket/ --content-type "text/html"
+aws s3 cp news-article.html s3://my-video-downloads-bucket/ --content-type "text/html"
+
+# Invalidate CloudFront cache
+aws cloudfront create-invalidation --distribution-id E3N00R2D2NE9C5 --paths "/*"
+```
+
+**Verification**:
+1. Upload featured image in create/edit article - should return CloudFront URL
+2. Create/edit article - preview HTML should auto-generate
+3. Share article on Facebook - should show featured image and title
+4. Share article on X/Twitter - should show featured image and title
+5. X icon should display white on black background, aligned with other icons
+
+**Key Points**:
+- Use JSON with base64 encoding instead of multipart FormData
+- Always return CloudFront URLs, not S3 URLs
+- Include Twitter-specific meta tags (twitter:site, twitter:creator, twitter:image:alt)
+- Preview generation happens automatically on create/edit
+- Use inline SVG for X icon (Font Awesome 6.0.0 has rendering issues)
+- Set Cache-Control headers on preview uploads
+- Featured images must be HTTPS URLs, not base64 data URLs
+
+**Why This Solution Works**:
+- JSON avoids API Gateway binary media type complications
+- CloudFront URLs are publicly accessible for social media crawlers
+- Twitter meta tags ensure proper X/Twitter card display
+- Inline SVG bypasses Font Awesome rendering issues
+- Automatic preview generation ensures previews always exist and are current
+- Cache-Control headers prevent stale previews
+
+---
+
+
+## Issue 20: Service Worker Chrome Extension Cache Error
+
+**Symptom**: Console errors when using create-article.html or edit-article.html:
+```
+Uncaught (in promise) TypeError: Failed to execute 'put' on 'Cache': Request scheme 'chrome-extension' is unsupported
+```
+
+**Root Cause**: Service worker attempts to cache all fetch requests including chrome-extension:// URLs which cannot be cached.
+
+**Fix**: Add URL scheme check in service-worker.js
+
+```javascript
+self.addEventListener('fetch', function(event) {
+  // Skip non-http URLs (chrome-extension, etc.)
+  if (!event.request.url.startsWith('http')) {
+    return;
+  }
+  event.respondWith(
+    caches.match(event.request)
+      .then(function(response) {
+        // ... rest of code
+      })
+  );
+});
+```
+
+**Deployment**:
+```powershell
+aws s3 cp service-worker.js s3://my-video-downloads-bucket/
+aws cloudfront create-invalidation --distribution-id E3N00R2D2NE9C5 --paths "/service-worker.js"
+```
+
+**Verification**:
+1. Open create-article.html or edit-article.html
+2. Check console - no cache errors
+3. Service worker still caches http/https requests normally
+
+**Key Point**: Service workers can only cache http/https URLs, not chrome-extension, file, or other schemes.
+
+---

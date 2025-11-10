@@ -38,7 +38,23 @@ foreach ($file in $Files) {
         }
         
         Write-Host "Uploading $file to $destination"
-        aws s3 cp $file $destination
+        
+        # Try to find AWS CLI
+        $awsCli = $null
+        if (Get-Command aws -ErrorAction SilentlyContinue) {
+            $awsCli = "aws"
+        } elseif (Test-Path "C:\Program Files\Amazon\AWSCLIV2\aws.exe") {
+            $awsCli = "C:\Program Files\Amazon\AWSCLIV2\aws.exe"
+        } elseif (Test-Path "$env:LOCALAPPDATA\Programs\Python\Python*\Scripts\aws.exe") {
+            $awsCli = (Get-ChildItem "$env:LOCALAPPDATA\Programs\Python\Python*\Scripts\aws.exe" | Select-Object -First 1).FullName
+        }
+        
+        if ($awsCli) {
+            & $awsCli s3 cp $file $destination
+        } else {
+            Write-Host "AWS CLI not found. Install from https://aws.amazon.com/cli/" -ForegroundColor Red
+            exit 1
+        }
     } else {
         Write-Host "File not found: $file" -ForegroundColor Red
     }

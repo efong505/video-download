@@ -4196,6 +4196,91 @@ NEXT STEPS:
 
 **Status**: PWA implementation complete and operational. Users can now install Christian Conservatives Today as a native-like app on mobile and desktop devices with offline support, push notifications, and fast loading via service worker caching.
 
+## Video Upload Thumbnail Generation Fix ✅ COMPLETE (January 2025)
+
+### Issue Summary
+**Problem**: Videos uploaded via user-upload.html and admin.html were not generating thumbnails automatically.
+
+### Root Cause
+**S3 Event Trigger**: Only fires for videos uploaded to `videos/` folder
+**Upload Forms**: Both user-upload.html and admin.html were uploading to bucket root
+**Thumbnail Generator**: Lambda function expects videos in `videos/` folder
+
+### Resolution
+**Solution**: Updated upload forms to use `videos/` prefix for S3 uploads
+
+**Files Modified**:
+- `user-upload.html` - Changed filename to `videos/${filename}` in upload_url request
+- `admin.html` - Changed filename to `videos/${filename}` in upload_url request
+- Both files now add file.size to metadata for proper storage tracking
+- Removed manual thumbnail generation calls (now automatic via S3 trigger)
+
+**Technical Implementation**:
+```javascript
+// Before (uploaded to bucket root, no thumbnail)
+body: JSON.stringify({ filename: filename })
+
+// After (uploads to videos/ folder, automatic thumbnail)
+body: JSON.stringify({ filename: `videos/${filename}` })
+```
+
+**S3 Event Configuration**:
+- Trigger: s3:ObjectCreated:*
+- Prefix: videos/
+- Suffix: .mp4
+- Lambda: thumbnail-generator
+
+**Thumbnail Generator Behavior**:
+- Detects video upload to videos/ folder
+- Downloads video to /tmp/
+- Generates thumbnail at 50% duration (1-10 seconds)
+- Uploads to thumbnails/ folder as {filename}_thumb_2.jpg
+- Automatic process, no manual intervention needed
+
+### Testing & Verification
+**Test Case**: funny-christian-conserviative.mp4
+- Uploaded to bucket root initially (no thumbnail)
+- Moved to videos/ folder (thumbnail generated automatically)
+- Result: thumbnails/funny-christian-conserviative_thumb_2.jpg (216KB)
+- Verified: Thumbnail displays correctly on videos.html
+
+**Deployment**:
+- Updated HTML files deployed to S3
+- No Lambda changes required (existing trigger works)
+- Tested with new upload - thumbnail generated within 10 seconds
+
+### Benefits
+**Automatic Thumbnails**:
+- All future uploads via user-upload.html generate thumbnails automatically
+- All future uploads via admin.html generate thumbnails automatically
+- No manual Lambda invocation needed
+- Consistent with download system behavior
+
+**For Embedded Videos**:
+- External videos (YouTube/Rumble/Facebook) already call generate_thumbnail API
+- Thumbnail fetching works for YouTube (maxresdefault.jpg)
+- No changes needed for embed functionality
+
+### Documentation
+**Created**: VIDEO_UPLOAD_THUMBNAIL_FIX.md
+- Complete problem analysis
+- 3 solution options documented
+- Implementation details
+- Testing procedures
+- Troubleshooting guide
+
+### Verification Checklist
+- ✅ user-upload.html uploads to videos/ folder
+- ✅ admin.html uploads to videos/ folder
+- ✅ S3 event trigger fires for videos/ uploads
+- ✅ Thumbnail generator creates thumbnails automatically
+- ✅ Thumbnails display correctly on videos.html
+- ✅ File size metadata saved for storage tracking
+- ✅ External video thumbnails still work
+- ✅ Documentation complete
+
+**Status**: Video upload thumbnail generation fully operational. All uploads via user-upload.html and admin.html now automatically generate thumbnails within 10-15 seconds via S3 event trigger to thumbnail-generator Lambda function.
+
 ## Phase 5 - E-Commerce Shopping System 🛒 PLANNED
 
 ### Overview
@@ -4733,3 +4818,183 @@ Transform the Christian Conservative Platform into native mobile applications fo
 - ⏳ Implementation pending (4-6 weeks)
 
 **Next Steps**: Complete technical architecture design, then begin Phase 1 backend implementation.
+
+
+## Featured Image Upload & Social Media Sharing System ✅ COMPLETE (January 2025)
+
+### Feature Overview
+**Enhancement**: Complete featured image upload system with S3 storage, CloudFront delivery, and comprehensive social media sharing integration with proper Open Graph and Twitter meta tags.
+
+### Implementation Details
+
+**Featured Image Upload System**:
+- **Image Upload to S3**: Direct upload to `article-images/{uuid}.{ext}` in S3 bucket
+- **CloudFront URLs**: Returns `https://d271vky579caz9.cloudfront.net/{s3_key}` for public access
+- **Base64 Encoding**: Changed from multipart FormData to JSON with base64-encoded data
+- **File Format Support**: JPG, PNG, GIF, WebP with automatic extension detection
+- **Image Compression**: Client-side compression before upload for optimal performance
+
+**API Gateway Binary Handling Fix**:
+- **Problem**: API Gateway configured multipart/form-data as binary media type, causing base64 encoding of request body
+- **Root Cause**: Binary media type handling in API Gateway was corrupting image uploads
+- **Solution**: Switched from multipart FormData to JSON with base64-encoded image data
+- **Result**: Clean image uploads without corruption, proper S3 storage
+
+**Social Media Preview Generation**:
+- **Automatic Preview HTML**: Generated on article create/edit with proper meta tags
+- **Open Graph Tags**: og:title, og:description, og:image, og:url, og:type
+- **Twitter Card Tags**: twitter:card, twitter:site, twitter:creator, twitter:title, twitter:description, twitter:image, twitter:image:alt
+- **Preview URL Format**: `https://christianconservativestoday.com/previews/article-{article_id}.html`
+- **Cache-Control Headers**: Set on preview uploads to prevent stale cached versions
+
+**Facebook Sharing Fix**:
+- **Problem**: Facebook scraper couldn't access preview pages due to immediate meta refresh redirects
+- **Solution**: Removed immediate redirects, added proper Open Graph meta tags in preview HTML
+- **Meta Tags Added**: og:title, og:description, og:image (CloudFront URL), og:url, og:type
+- **Result**: Facebook now properly scrapes and displays article previews with featured images
+
+**Twitter/X Sharing Enhancement**:
+- **Twitter-Specific Tags**: Added twitter:site, twitter:creator, twitter:image:alt
+- **Card Type**: Set to "summary_large_image" for prominent image display
+- **Image Alt Text**: Automatically generated from article title
+- **Result**: Proper X/Twitter card display with featured images
+
+**X Icon Display Fix**:
+- **Problem**: X/Twitter icon showing as black square and misaligned in share buttons
+- **Root Cause**: Font Awesome 6.0.0 has rendering issues with `fa-brands fa-x-twitter` icon
+- **Solution**: Replaced Font Awesome icon with inline SVG
+- **SVG Code**: 
+```html
+<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 16 16">
+  <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/>
+</svg>
+```
+- **CSS Styling**: `.share-twitter { background: #000000; }` with white icon fill
+- **Result**: Proper X logo display on all share buttons
+
+### Files Modified
+
+**Backend (admin_api/index.py)**:
+- `upload_image()` function handles both JSON (base64) and multipart formats
+- Parses multipart data using regex for boundary extraction
+- Uploads to S3 with proper content type detection
+- Returns CloudFront URL for public access
+- Fixed UTF-8 to bytes conversion for API Gateway base64 encoding
+
+**Frontend (create-article.html, edit-article.html)**:
+- `uploadImageToS3()` reads files as base64 using FileReader
+- Sends image data as JSON: `{file_data: "base64string", file_ext: "jpg"}`
+- `generateAndUploadPreview()` creates preview HTML with all meta tags
+- `uploadPreviewToS3()` uploads preview with Cache-Control headers
+- Changed from FormData to JSON for image uploads
+
+**Article Display (article.html, articles.html, news-article.html)**:
+- Share buttons updated with inline SVG X icon
+- CSS updated for X button styling (black background, white icon)
+- Featured images displayed in article cards and full article view
+- Open Graph and Twitter meta tags in article.html for direct sharing
+
+### Technical Implementation
+
+**Image Upload Flow**:
+1. User selects image file in article editor
+2. FileReader converts file to base64 string
+3. JSON payload sent to admin API: `{file_data: "base64...", file_ext: "jpg"}`
+4. Lambda function decodes base64 and uploads to S3
+5. CloudFront URL returned to frontend
+6. URL stored in article `featured_image` field
+
+**Preview Generation Flow**:
+1. Article created/edited with featured image
+2. `generateAndUploadPreview()` called automatically
+3. Preview HTML generated with proper meta tags
+4. Preview uploaded to S3 with Cache-Control headers
+5. Social media crawlers access preview URL
+6. Meta tags provide rich preview data
+
+**CloudFront Configuration**:
+- Distribution ID: E3N00R2D2NE9C5
+- Domain: d271vky579caz9.cloudfront.net
+- Origin: my-video-downloads-bucket S3 bucket
+- Cache behavior: Public read access for article-images/ and previews/
+
+### Key Insights
+
+**API Gateway Binary Media Types**:
+- When multipart/form-data is configured as binary media type, API Gateway base64 encodes the entire request body
+- This causes image corruption because the multipart boundary and headers are also encoded
+- Solution: Use JSON with base64-encoded data instead of multipart FormData
+
+**Social Media Crawlers**:
+- Facebook scraper requires proper Open Graph meta tags and no immediate redirects
+- Twitter/X requires specific twitter:* meta tags for card display
+- Featured images must be HTTPS URLs (CloudFront), not base64 data URLs
+- Preview HTML files must be publicly accessible without authentication
+
+**Font Awesome Icon Issues**:
+- Font Awesome 6.0.0 has known rendering issues with fa-x-twitter icon
+- Inline SVG is more reliable and provides better control over styling
+- SVG icons work consistently across all browsers and devices
+
+### Verification Checklist
+- ✅ Featured image upload works without corruption
+- ✅ CloudFront URLs returned for uploaded images
+- ✅ Preview HTML generated with proper meta tags
+- ✅ Facebook sharing displays article preview with image
+- ✅ Twitter/X sharing displays proper card with image
+- ✅ X icon displays correctly (not black square)
+- ✅ Share buttons styled consistently across pages
+- ✅ Cache-Control headers prevent stale previews
+- ✅ All changes documented in FIX_RECURRING_ISSUES_GUIDE.md (Issue 19)
+
+**Status**: Featured image upload and social media sharing system fully operational with proper Open Graph and Twitter meta tags, CloudFront delivery, and inline SVG X icon for consistent display across all platforms.
+
+### Documentation
+**FIX_RECURRING_ISSUES_GUIDE.md - Issue 19**:
+- Complete documentation of featured image upload corruption fix
+- Social media preview generation with meta tags
+- X icon display fix with inline SVG
+- Code examples for image upload, preview generation, and icon replacement
+- Deployment commands and verification steps
+
+**Files Referenced**:
+- admin_api/index.py - Image upload handler
+- create-article.html - Article creation with image upload
+- edit-article.html - Article editing with image upload
+- article.html - Article display with share buttons
+- articles.html - Article listing with share buttons
+- news-article.html - News article display with share buttons
+- FIX_RECURRING_ISSUES_GUIDE.md - Issue 19 documentation
+
+
+## Service Worker Chrome Extension Fix ✅ COMPLETE (January 2025)
+
+### Issue Summary
+**Problem**: Service worker throwing cache errors when pages load chrome extensions, breaking create-article.html and edit-article.html functionality.
+
+**Error**: `Uncaught (in promise) TypeError: Failed to execute 'put' on 'Cache': Request scheme 'chrome-extension' is unsupported`
+
+### Resolution
+**Fix**: Added URL scheme check to skip non-http requests in service worker fetch handler.
+
+**Files Modified**:
+- `service-worker.js` - Added `if (!event.request.url.startsWith('http')) return;` check
+
+**Code Change**:
+```javascript
+self.addEventListener('fetch', function(event) {
+  if (!event.request.url.startsWith('http')) {
+    return;  // Skip chrome-extension and other non-http URLs
+  }
+  // ... rest of fetch handling
+});
+```
+
+**Verification**:
+- ✅ No more cache errors in console
+- ✅ Service worker still caches http/https requests
+- ✅ Create and edit article pages work without errors
+
+**Status**: Service worker now properly handles chrome extensions and other non-http URL schemes without throwing cache errors.
+
+---

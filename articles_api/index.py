@@ -1,17 +1,74 @@
 import json
 import boto3
+import time
 from datetime import datetime
 import uuid
 import re
 from decimal import Decimal
 import base64
+from enum import Enum
 
 dynamodb = boto3.resource('dynamodb')
 articles_table = dynamodb.Table('articles')
 users_table = dynamodb.Table('users')
 
-# Bible API configuration (using free Bible API)
+# Bible API configuration
 BIBLE_API_BASE = 'https://bible-api.com'
+
+# Circuit Breaker Implementation
+class CircuitState(Enum):
+    CLOSED = "closed"
+    OPEN = "open"
+    HALF_OPEN = "half_open"
+
+class CircuitBreaker:
+    def __init__(self, failure_threshold=5, timeout=30, expected_exception=Exception):
+        self.failure_threshold = failure_threshold
+        self.timeout = timeout
+        self.expected_exception = expected_exception
+        self.failure_count = 0
+        self.last_failure_time = None
+        self.state = CircuitState.CLOSED
+    
+    def call(self, func, *args, **kwargs):
+        if self.state == CircuitState.OPEN:
+            if self._should_attempt_reset():
+                self.state = CircuitState.HALF_OPEN
+            else:
+                raise CircuitBreakerOpenError(f"Service unavailable. Retry in {self._time_until_retry()}s")
+        
+        try:
+            result = func(*args, **kwargs)
+            self._on_success()
+            return result
+        except self.expected_exception as e:
+            self._on_failure()
+            raise e
+    
+    def _on_success(self):
+        self.failure_count = 0
+        self.state = CircuitState.CLOSED
+    
+    def _on_failure(self):
+        self.failure_count += 1
+        self.last_failure_time = time.time()
+        if self.failure_count >= self.failure_threshold:
+            self.state = CircuitState.OPEN
+    
+    def _should_attempt_reset(self):
+        return time.time() - self.last_failure_time >= self.timeout
+    
+    def _time_until_retry(self):
+        if not self.last_failure_time:
+            return 0
+        elapsed = time.time() - self.last_failure_time
+        return max(0, int(self.timeout - elapsed))
+
+class CircuitBreakerOpenError(Exception):
+    pass
+
+# Initialize circuit breaker
+dynamodb_breaker = CircuitBreaker(failure_threshold=5, timeout=30, expected_exception=Exception)
 
 def lambda_handler(event, context):
     # Always add CORS headers
@@ -132,7 +189,7 @@ def create_article(event):
             'updated_at': datetime.utcnow().isoformat()
         }
         
-        articles_table.put_item(Item=article)
+        dynamodb_breaker.call(articles_table.put_item, Item=article)
         
         return {
             'statusCode': 200,
@@ -142,6 +199,12 @@ def create_article(event):
                 'article_id': article_id,
                 'scripture_references': scripture_references
             })
+        }
+    except CircuitBreakerOpenError as e:
+        return {
+            'statusCode': 503,
+            'headers': headers,
+            'body': json.dumps({'error': str(e)})
         }
     except json.JSONDecodeError:
         return {
@@ -382,7 +445,7 @@ def search_articles(event):
             scan_kwargs['FilterExpression'] = 'visibility = :vis'
             scan_kwargs['ExpressionAttributeValues'] = {':vis': 'public'}
         
-        response = articles_table.scan(**scan_kwargs)
+        response = dynamodb_breaker.call(articles_table.scan, **scan_kwargs)
         articles = response.get('Items', [])
         
         # Fix author names for existing articles that have email addresses
@@ -461,7 +524,12 @@ def search_articles(event):
                 }
             })
         }
-        
+    except CircuitBreakerOpenError as e:
+        return {
+            'statusCode': 503,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
+        }
     except Exception as e:
         return {
             'statusCode': 500,
@@ -484,7 +552,7 @@ def list_articles(event):
             scan_kwargs['FilterExpression'] = 'visibility = :vis'
             scan_kwargs['ExpressionAttributeValues'] = {':vis': 'public'}
         
-        response = articles_table.scan(**scan_kwargs)
+        response = dynamodb_breaker.call(articles_table.scan, **scan_kwargs)
         articles = response.get('Items', [])
         
         # Fix author names for existing articles that have email addresses
@@ -506,7 +574,12 @@ def list_articles(event):
                 'count': len(articles)
             })
         }
-        
+    except CircuitBreakerOpenError as e:
+        return {
+            'statusCode': 503,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
+        }
     except Exception as e:
         return {
             'statusCode': 500,
@@ -527,7 +600,7 @@ def get_article(event):
         }
     
     try:
-        response = articles_table.get_item(Key={'article_id': article_id})
+        response = dynamodb_breaker.call(articles_table.get_item, Key={'article_id': article_id})
         article = response.get('Item')
         
         if not article:
@@ -577,7 +650,8 @@ def get_article(event):
             article['author'] = proper_name
         
         # Increment view count
-        articles_table.update_item(
+        dynamodb_breaker.call(
+            articles_table.update_item,
             Key={'article_id': article_id},
             UpdateExpression='SET view_count = if_not_exists(view_count, :zero) + :inc',
             ExpressionAttributeValues={':inc': 1, ':zero': 0}
@@ -589,7 +663,12 @@ def get_article(event):
             'headers': cors_headers(),
             'body': json.dumps({'article': convert_decimals(article)})
         }
-        
+    except CircuitBreakerOpenError as e:
+        return {
+            'statusCode': 503,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
+        }
     except Exception as e:
         return {
             'statusCode': 500,
@@ -649,7 +728,8 @@ def update_article(event):
             expression_values[':author'] = new_author_name
             expression_values[':author_email'] = body['author_email']
         
-        articles_table.update_item(
+        dynamodb_breaker.call(
+            articles_table.update_item,
             Key={'article_id': article_id},
             UpdateExpression=update_expression,
             ExpressionAttributeValues=expression_values
@@ -660,7 +740,12 @@ def update_article(event):
             'headers': cors_headers(),
             'body': json.dumps({'message': 'Article updated successfully'})
         }
-        
+    except CircuitBreakerOpenError as e:
+        return {
+            'statusCode': 503,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
+        }
     except Exception as e:
         return {
             'statusCode': 500,
@@ -692,7 +777,7 @@ def delete_article(event):
             }
         
         # Get the article to check ownership
-        response = articles_table.get_item(Key={'article_id': article_id})
+        response = dynamodb_breaker.call(articles_table.get_item, Key={'article_id': article_id})
         article = response.get('Item')
         
         if not article:
@@ -721,14 +806,19 @@ def delete_article(event):
             }
         
         # Delete the article
-        articles_table.delete_item(Key={'article_id': article_id})
+        dynamodb_breaker.call(articles_table.delete_item, Key={'article_id': article_id})
         
         return {
             'statusCode': 200,
             'headers': headers,
             'body': json.dumps({'message': 'Article deleted successfully'})
         }
-        
+    except CircuitBreakerOpenError as e:
+        return {
+            'statusCode': 503,
+            'headers': headers,
+            'body': json.dumps({'error': str(e)})
+        }
     except Exception as e:
         return {
             'statusCode': 500,
@@ -788,8 +878,9 @@ def extract_user_from_token(event):
 def get_user_name(email):
     """Get user's display name from users table"""
     try:
-        # Scan users table filtering by email since email-index may not exist
-        response = users_table.scan(
+        # Scan users table
+        response = dynamodb_breaker.call(
+            users_table.scan,
             FilterExpression='email = :email',
             ExpressionAttributeValues={':email': email}
         )
@@ -821,7 +912,7 @@ def get_analytics(event):
     try:
         if article_id:
             # Get analytics for specific article
-            response = articles_table.get_item(Key={'article_id': article_id})
+            response = dynamodb_breaker.call(articles_table.get_item, Key={'article_id': article_id})
             article = response.get('Item')
             
             if not article:
@@ -849,7 +940,7 @@ def get_analytics(event):
             }
         else:
             # Get overall analytics
-            response = articles_table.scan()
+            response = dynamodb_breaker.call(articles_table.scan)
             articles = response.get('Items', [])
             
             total_views = sum(article.get('view_count', 0) for article in articles)
@@ -886,6 +977,12 @@ def get_analytics(event):
                 'headers': cors_headers(),
                 'body': json.dumps({'analytics': convert_decimals(analytics)})
             }
+    except CircuitBreakerOpenError as e:
+        return {
+            'statusCode': 503,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
+        }
     except Exception as e:
         return {
             'statusCode': 500,

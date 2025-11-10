@@ -2,13 +2,71 @@ import json
 import boto3
 import os
 import uuid
+import time
 from datetime import datetime
 from decimal import Decimal
+from enum import Enum
 
 sns_client = boto3.client('sns')
 dynamodb = boto3.resource('dynamodb')
 jobs_table = dynamodb.Table('download-jobs')
 SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:371751795928:video-download-notifications'
+
+# Circuit Breaker Implementation
+class CircuitState(Enum):
+    CLOSED = "closed"
+    OPEN = "open"
+    HALF_OPEN = "half_open"
+
+class CircuitBreaker:
+    def __init__(self, failure_threshold=5, timeout=30, expected_exception=Exception):
+        self.failure_threshold = failure_threshold
+        self.timeout = timeout
+        self.expected_exception = expected_exception
+        self.failure_count = 0
+        self.last_failure_time = None
+        self.state = CircuitState.CLOSED
+    
+    def call(self, func, *args, **kwargs):
+        if self.state == CircuitState.OPEN:
+            if self._should_attempt_reset():
+                self.state = CircuitState.HALF_OPEN
+            else:
+                raise CircuitBreakerOpenError(f"Service unavailable. Retry in {self._time_until_retry()}s")
+        
+        try:
+            result = func(*args, **kwargs)
+            self._on_success()
+            return result
+        except self.expected_exception as e:
+            self._on_failure()
+            raise e
+    
+    def _on_success(self):
+        self.failure_count = 0
+        self.state = CircuitState.CLOSED
+    
+    def _on_failure(self):
+        self.failure_count += 1
+        self.last_failure_time = time.time()
+        if self.failure_count >= self.failure_threshold:
+            self.state = CircuitState.OPEN
+    
+    def _should_attempt_reset(self):
+        return time.time() - self.last_failure_time >= self.timeout
+    
+    def _time_until_retry(self):
+        if not self.last_failure_time:
+            return 0
+        elapsed = time.time() - self.last_failure_time
+        return max(0, int(self.timeout - elapsed))
+
+class CircuitBreakerOpenError(Exception):
+    pass
+
+# Initialize circuit breakers
+dynamodb_breaker = CircuitBreaker(failure_threshold=5, timeout=30, expected_exception=Exception)
+lambda_breaker = CircuitBreaker(failure_threshold=3, timeout=60, expected_exception=Exception)
 
 def lambda_handler(event, context):
     try:
@@ -66,7 +124,8 @@ def lambda_handler(event, context):
         output_name = body.get('output_name', 'video.mp4')
         
         try:
-            jobs_table.put_item(
+            dynamodb_breaker.call(
+                jobs_table.put_item,
                 Item={
                     'job_id': job_id,
                     'url': url,
@@ -78,6 +137,12 @@ def lambda_handler(event, context):
                     'progress': 0
                 }
             )
+        except CircuitBreakerOpenError as e:
+            return {
+                'statusCode': 503,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': str(e)})
+            }
         except Exception as e:
             print(f"Failed to create job entry: {e}")
         
@@ -103,22 +168,30 @@ def lambda_handler(event, context):
                 return int(obj) if obj % 1 == 0 else float(obj)
             raise TypeError
         
-        # Just invoke the downloader Lambda directly
+        # Invoke the downloader Lambda with circuit breaker
         lambda_client = boto3.client('lambda')
-        lambda_client.invoke(
-            FunctionName='video-downloader',
-            InvocationType='Event',
-            Payload=json.dumps({
-                'job_id': job_id,
-                'url': url,
-                'format': 'best',
-                'output_name': output_name,
-                'title': body.get('title', ''),
-                'tags': body.get('tags', []),
-                'owner': body.get('owner', 'system'),
-                'visibility': body.get('visibility', 'public')
-            }, default=decimal_default)
-        )
+        try:
+            lambda_breaker.call(
+                lambda_client.invoke,
+                FunctionName='video-downloader',
+                InvocationType='Event',
+                Payload=json.dumps({
+                    'job_id': job_id,
+                    'url': url,
+                    'format': 'best',
+                    'output_name': output_name,
+                    'title': body.get('title', ''),
+                    'tags': body.get('tags', []),
+                    'owner': body.get('owner', 'system'),
+                    'visibility': body.get('visibility', 'public')
+                }, default=decimal_default)
+            )
+        except CircuitBreakerOpenError as e:
+            return {
+                'statusCode': 503,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': str(e)})
+            }
         
         return {
             'statusCode': 200,
@@ -141,8 +214,9 @@ def check_storage_quota(owner_email):
     try:
         users_table = dynamodb.Table('users')
         
-        # Get user by email
-        response = users_table.query(
+        # Get user by email with circuit breaker
+        response = dynamodb_breaker.call(
+            users_table.query,
             IndexName='email-index',
             KeyConditionExpression='email = :email',
             ExpressionAttributeValues={':email': owner_email}
@@ -201,8 +275,8 @@ def check_storage_quota(owner_email):
 
 def get_job_status():
     try:
-        # Get all jobs (scan without filter)
-        response = jobs_table.scan()
+        # Get all jobs with circuit breaker
+        response = dynamodb_breaker.call(jobs_table.scan)
         jobs = response.get('Items', [])
         
         # Filter jobs from last 24 hours in Python
@@ -244,6 +318,12 @@ def get_job_status():
                 'active': convert_decimals(active_jobs[:10]),
                 'recent': convert_decimals(recent_jobs[:20])
             })
+        }
+    except CircuitBreakerOpenError as e:
+        return {
+            'statusCode': 503,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'error': str(e), 'active': [], 'recent': []})
         }
     except Exception as e:
         print(f"Error getting job status: {e}")

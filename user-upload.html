@@ -409,7 +409,7 @@
                         'Authorization': `Bearer ${authToken}`,
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ filename: filename })
+                    body: JSON.stringify({ filename: `videos/${filename}` })
                 });
 
                 const urlData = await urlResponse.json();
@@ -440,27 +440,13 @@
                         title: title || filename,
                         tags: tags,
                         owner: currentUser.email,
-                        visibility: visibility
+                        visibility: visibility,
+                        size: file.size
                     })
                 });
 
-                document.getElementById('upload-progress-bar').style.width = '90%';
-                document.getElementById('upload-status').textContent = 'Generating thumbnail...';
-
-                // Trigger thumbnail generation (allow to fail silently)
-                fetch(`${ADMIN_API}?action=generate_thumbnail`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ filename: filename })
-                }).catch(error => {
-                    console.log('Thumbnail generation failed (non-critical):', error);
-                });
-
                 document.getElementById('upload-progress-bar').style.width = '100%';
-                document.getElementById('upload-status').textContent = 'Upload complete!';
+                document.getElementById('upload-status').textContent = 'Upload complete! Thumbnail will be generated automatically...';
 
                 setTimeout(() => {
                     showMessage('Video uploaded successfully! Redirecting to videos...', 'success');
