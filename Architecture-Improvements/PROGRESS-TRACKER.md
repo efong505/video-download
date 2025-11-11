@@ -4,10 +4,10 @@
 
 ---
 
-## Overall Progress: 16/34 hours (47%) - Low Traffic Optimization
+## Overall Progress: 20/34 hours (59%) - Low Traffic Optimization
 
 ```
-[████████████████████████░░░░░░░░░░░░░░░░░░░░░░░░] 47%
+[██████████████████████████████░░░░░░░░░░░░░░░░] 59%
 ```
 
 **Note:** Timeline adjusted for low-traffic site. Caching deferred until traffic justifies cost.
@@ -139,13 +139,21 @@
 - video-downloader: S3 uploads, DynamoDB updates
 - articles-api: All DynamoDB operations
 
-### Rate Limiting:
-- [ ] Read 04-RATE-LIMITING.md
-- [ ] Create rate_limiter.py module
-- [ ] Create rate-limits DynamoDB table
-- [ ] Implement tiered rate limits
-- [ ] Configure API Gateway usage plans
+### Rate Limiting: ✅ COMPLETE (Nov 7, 2025)
+- [x] Create rate_limiter.py module
+- [x] Create rate-limits DynamoDB table script
+- [x] Add to router Lambda
+- [x] Add to articles-api Lambda
+- [x] Create deploy-rate-limiting.ps1
+- [x] Create RATE_LIMITING_GUIDE.md
+- [ ] Deploy to production
 - [ ] Test rate limiting
+
+**Configuration:**
+- Anonymous: 20/hour
+- Free: 100/hour
+- Paid: 1000/hour
+- Admin: 10000/hour
 
 ---
 
@@ -228,31 +236,26 @@
 | Week 1: SQS Phase 2 | ✅ Done | 2h | Nov 6, 2025 |
 | Week 1: SQS Phases 3-4 | ⏸️ Skipped | 4h | Deferred |
 | Week 3: Circuit Breakers | ✅ Done | 6h | Nov 6, 2025 |
-| Week 3: Rate Limiting | ⏭️ Next | 4h | Target: Nov 16 |
+| Week 3: Rate Limiting | ✅ Done | 4h | Nov 7, 2025 |
 | Cache Monitoring | ✅ Done | 2h | Nov 6, 2025 |
 | ElastiCache | ⏸️ Deferred | 16h | When traffic justifies |
 | API Gateway Cache | ⏸️ Deferred | 6h | When traffic justifies |
-| **Total** | **47% done** | **34h** | **Target: Nov 30** |
+| **Total** | **59% done** | **34h** | **Target: Nov 16** |
 
 ---
 
 ## Next Action
 
-**Deploy Circuit Breakers to Production**
+**Deploy Rate Limiting to Production**
 
 ```powershell
-cd C:\Users\Ed\Documents\Programming\AWS\Architecture-Improvements\circuit-breaker
+cd C:\Users\Ed\Documents\Programming\AWS\Downloader\Architecture-Improvements\scripts
 
-# Deploy circuit breaker updates
-.\deploy-circuit-breakers.ps1
+# Deploy rate limiting
+.\deploy-rate-limiting.ps1
 
-# Monitor for circuit breaker events
-.\monitor-circuit-breakers.ps1
-
-# Test with intentional failures (optional)
-# Make 6+ failed requests to trigger circuit breaker
-
-# Continue with Rate Limiting next
+# Test rate limiting
+# Make 21+ requests as anonymous user to trigger 429 error
 ```
 
 ---
