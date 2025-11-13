@@ -895,7 +895,7 @@
                         if (videoType === 'local') {
                             const filename = video.filename.endsWith('.mp4') ? video.filename : video.filename + '.mp4';
                             const baseName = filename.replace('.mp4', '');
-                            const videoUrl = `${BUCKET_URL}/videos/${filename}`;
+                            const videoUrl = `${BUCKET_URL}/${filename}`;
                             const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb_2.jpg`;
                             const fallbackThumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
                             
@@ -952,7 +952,7 @@
                         if (videoType === 'local') {
                             const filename = video.filename.endsWith('.mp4') ? video.filename : video.filename + '.mp4';
                             const baseName = filename.replace('.mp4', '');
-                            const videoUrl = `${BUCKET_URL}/videos/${filename}`;
+                            const videoUrl = `${BUCKET_URL}/${filename}`;
                             const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb_2.jpg`;
                             const fallbackThumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
                             

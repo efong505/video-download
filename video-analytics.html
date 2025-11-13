@@ -25,41 +25,83 @@
         .video-row:hover {
             background: #f8f9fa;
         }
+        .video-row:last-child {
+            border-bottom: none;
+        }
+        .progress {
+            height: 25px;
+        }
     </style>
 </head>
 <body>
     <div id="navbar-container" data-page="video-analytics"></div>
 
     <div class="container my-5" style="margin-top: 5rem !important;">
-        <h1 class="mb-4">📊 Video Analytics Dashboard</h1>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>📊 Video Analytics Dashboard</h1>
+            <select id="dateRange" class="form-select" style="width: 200px;">
+                <option value="7">Last 7 Days</option>
+                <option value="30">Last 30 Days</option>
+                <option value="all" selected>All Time</option>
+            </select>
+        </div>
 
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="stat-card">
                     <div class="stat-label">Total Views</div>
                     <div class="stat-number" id="totalViews">0</div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="stat-card">
                     <div class="stat-label">Total Videos</div>
                     <div class="stat-number" id="totalVideos">0</div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="stat-card">
                     <div class="stat-label">Avg Views/Video</div>
                     <div class="stat-number" id="avgViews">0</div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="stat-card">
+                    <div class="stat-label">Videos with Views</div>
+                    <div class="stat-number" id="videosWithViews">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>🔥 Top 10 Videos</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="topVideos"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>📈 Trending (Last 7 Days)</h3>
+                    </div>
+                    <div class="card-body">
+                        <div id="trendingVideos"></div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="card mt-4">
             <div class="card-header">
-                <h3>🔥 Top 10 Videos</h3>
+                <h3>📂 Views by Category</h3>
             </div>
             <div class="card-body">
-                <div id="topVideos"></div>
+                <div id="categoryBreakdown"></div>
             </div>
         </div>
     </div>
@@ -79,24 +121,24 @@
 
         async function loadAnalytics() {
             try {
-                // Get top videos
                 const response = await fetch(TAG_API + '?action=analytics');
                 const data = await response.json();
                 
-                // Get all videos for total count
                 const allResponse = await fetch(TAG_API + '?action=list');
                 const allData = await allResponse.json();
                 
                 const totalVideos = allData.total_count || 0;
                 const totalViews = data.top_videos.reduce((sum, v) => sum + v.view_count, 0);
-                const avgViews = totalVideos > 0 ? Math.round(totalViews / totalVideos) : 0;
+                const videosWithViews = data.top_videos.filter(v => v.view_count > 0).length;
+                const avgViews = videosWithViews > 0 ? Math.round(totalViews / videosWithViews) : 0;
                 
                 document.getElementById('totalViews').textContent = totalViews.toLocaleString();
                 document.getElementById('totalVideos').textContent = totalVideos.toLocaleString();
                 document.getElementById('avgViews').textContent = avgViews.toLocaleString();
+                document.getElementById('videosWithViews').textContent = videosWithViews.toLocaleString();
                 
-                // Display top videos
-                const topVideosHtml = data.top_videos.map((video, index) => `
+                // Top videos
+                const topVideosHtml = data.top_videos.slice(0, 10).map((video, index) => `
                     <div class="video-row">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
@@ -108,8 +150,52 @@
                         </div>
                     </div>
                 `).join('');
+                document.getElementById('topVideos').innerHTML = topVideosHtml || '<p class="text-muted">No views yet</p>';
                 
-                document.getElementById('topVideos').innerHTML = topVideosHtml || '<p class="text-muted">No video data available</p>';
+                // Trending (simulate - would need date-based queries in production)
+                const trending = data.top_videos.slice(0, 5);
+                const trendingHtml = trending.map((video, index) => `
+                    <div class="video-row">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>#${index + 1}</strong> ${video.title}
+                            </div>
+                            <div>
+                                <span class="badge bg-success">${video.view_count} views</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                document.getElementById('trendingVideos').innerHTML = trendingHtml || '<p class="text-muted">No trending data</p>';
+                
+                // Category breakdown
+                const categoryViews = {};
+                allData.videos.forEach(video => {
+                    const category = video.tags && video.tags[0] ? video.tags[0] : 'Uncategorized';
+                    const views = video.view_count || 0;
+                    categoryViews[category] = (categoryViews[category] || 0) + views;
+                });
+                
+                const sortedCategories = Object.entries(categoryViews)
+                    .sort((a, b) => b[1] - a[1])
+                    .slice(0, 10);
+                
+                const categoryHtml = sortedCategories.map(([cat, views]) => {
+                    const percentage = totalViews > 0 ? Math.round((views / totalViews) * 100) : 0;
+                    return `
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span><strong>${cat}</strong></span>
+                                <span>${views} views (${percentage}%)</span>
+                            </div>
+                            <div class="progress">
+                                <div class="progress-bar" style="width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                document.getElementById('categoryBreakdown').innerHTML = categoryHtml || '<p class="text-muted">No category data</p>';
+                
             } catch (error) {
                 console.error('Error loading analytics:', error);
                 document.getElementById('topVideos').innerHTML = '<p class="text-danger">Error loading analytics</p>';
@@ -117,6 +203,8 @@
         }
 
         loadAnalytics();
+        
+        document.getElementById('dateRange').addEventListener('change', loadAnalytics);
     </script>
 </body>
 </html>
