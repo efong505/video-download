@@ -2552,6 +2552,15 @@
                 const videoType = getVideoType(url);
                 const videoId = generateVideoId(url, title);
 
+                // Extract thumbnail URL for YouTube videos
+                let thumbnailUrl = '';
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                    const ytVideoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
+                    if (ytVideoId) {
+                        thumbnailUrl = `https://img.youtube.com/vi/${ytVideoId}/maxresdefault.jpg`;
+                    }
+                }
+
                 const response = await fetch(`${TAG_API}?action=add_video`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
@@ -2563,7 +2572,8 @@
                         owner: currentUser.email,
                         visibility: visibility,
                         external_url: url,
-                        video_type: videoType
+                        video_type: videoType,
+                        thumbnail_url: thumbnailUrl
                     })
                 });
 

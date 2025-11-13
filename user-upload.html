@@ -504,6 +504,15 @@
                 // Generate a unique filename for the external video
                 const videoId = videoType + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
                 
+                // Extract thumbnail URL for YouTube videos
+                let thumbnailUrl = '';
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                    const ytVideoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
+                    if (ytVideoId) {
+                        thumbnailUrl = `https://img.youtube.com/vi/${ytVideoId}/maxresdefault.jpg`;
+                    }
+                }
+                
                 // Add external video metadata
                 const response = await fetch(`${TAG_API}?action=add_video`, {
                     method: 'POST',
@@ -516,7 +525,8 @@
                         owner: currentUser.email,
                         visibility: visibility,
                         video_type: videoType,
-                        external_url: url
+                        external_url: url,
+                        thumbnail_url: thumbnailUrl
                     })
                 });
 

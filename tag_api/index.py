@@ -6,6 +6,7 @@ import uuid
 dynamodb = boto3.resource('dynamodb')
 s3_client = boto3.client('s3')
 table = dynamodb.Table('video-metadata')
+analytics_table = dynamodb.Table('video-analytics')
 
 def lambda_handler(event, context):
     """
@@ -43,6 +44,10 @@ def lambda_handler(event, context):
             return update_video_tags(event)
         elif method == 'GET' and action == 'list':
             return list_all_videos(event)
+        elif method == 'POST' and action == 'track_view':
+            return track_video_view(event)
+        elif method == 'GET' and action == 'analytics':
+            return get_video_analytics(event)
         elif method == 'POST' and action == 'create_article':
             return create_article_via_tags(event)
         else:
@@ -97,6 +102,10 @@ def add_video_metadata(event):
     
     if external_url:
         item['external_url'] = external_url
+    
+    thumbnail_url = body.get('thumbnail_url')
+    if thumbnail_url:
+        item['thumbnail_url'] = thumbnail_url
     
     table.put_item(Item=item)
     
@@ -356,7 +365,8 @@ def list_all_videos(event):
                 'visibility': visibility,
                 'video_type': item.get('video_type', 'local'),
                 'external_url': item.get('external_url', ''),
-                'upload_date': item.get('upload_date', item.get('created_at', ''))
+                'upload_date': item.get('upload_date', item.get('created_at', '')),
+                'thumbnail_url': item.get('thumbnail_url', '')
             }
             
             # Add size for local videos from S3
@@ -432,6 +442,101 @@ def list_all_videos(event):
                 'count': total_count,
                 'total_count': total_count
             })
+        }
+
+def track_video_view(event):
+    """Track video view"""
+    try:
+        body = json.loads(event['body'])
+        video_id = body.get('video_id')
+        
+        if not video_id:
+            return {
+                'statusCode': 400,
+                'headers': cors_headers(),
+                'body': json.dumps({'error': 'video_id required'})
+            }
+        
+        # Record view
+        analytics_table.put_item(Item={
+            'video_id': video_id,
+            'timestamp': int(datetime.utcnow().timestamp()),
+            'date': datetime.utcnow().strftime('%Y-%m-%d')
+        })
+        
+        # Update view count in video metadata
+        try:
+            table.update_item(
+                Key={'video_id': video_id},
+                UpdateExpression='SET view_count = if_not_exists(view_count, :zero) + :inc',
+                ExpressionAttributeValues={':zero': 0, ':inc': 1}
+            )
+        except:
+            pass
+        
+        return {
+            'statusCode': 200,
+            'headers': cors_headers(),
+            'body': json.dumps({'message': 'View tracked'})
+        }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
+        }
+
+def get_video_analytics(event):
+    """Get video analytics"""
+    try:
+        query_params = event.get('queryStringParameters') or {}
+        video_id = query_params.get('video_id')
+        
+        if video_id:
+            # Get analytics for specific video
+            response = analytics_table.query(
+                KeyConditionExpression='video_id = :vid',
+                ExpressionAttributeValues={':vid': video_id}
+            )
+            return {
+                'statusCode': 200,
+                'headers': cors_headers(),
+                'body': json.dumps({
+                    'video_id': video_id,
+                    'total_views': len(response['Items'])
+                })
+            }
+        else:
+            # Get top videos
+            videos_response = table.scan()
+            videos = videos_response['Items']
+            
+            # Filter and sort by view_count
+            videos_with_views = [v for v in videos if v.get('view_count', 0) > 0]
+            videos_with_views.sort(key=lambda x: int(x.get('view_count', 0)), reverse=True)
+            top_videos = videos_with_views[:10]
+            
+            # If less than 10, add some without views
+            if len(top_videos) < 10:
+                videos_without = [v for v in videos if v.get('view_count', 0) == 0][:10-len(top_videos)]
+                top_videos.extend(videos_without)
+            
+            return {
+                'statusCode': 200,
+                'headers': cors_headers(),
+                'body': json.dumps({
+                    'top_videos': [{
+                        'video_id': v.get('video_id'),
+                        'title': v.get('title'),
+                        'view_count': int(v.get('view_count', 0))
+                    } for v in top_videos]
+                })
+            }
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': cors_headers(),
+            'body': json.dumps({'error': str(e)})
         }
 
 def create_article_via_tags(event):

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Analytics - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/css/common-styles.css" rel="stylesheet">
+    <style>
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .stat-number {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+        .video-row {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        .video-row:hover {
+            background: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="video-analytics"></div>
+
+    <div class="container my-5" style="margin-top: 5rem !important;">
+        <h1 class="mb-4">📊 Video Analytics Dashboard</h1>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-label">Total Views</div>
+                    <div class="stat-number" id="totalViews">0</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-label">Total Videos</div>
+                    <div class="stat-number" id="totalVideos">0</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <div class="stat-label">Avg Views/Video</div>
+                    <div class="stat-number" id="avgViews">0</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mt-4">
+            <div class="card-header">
+                <h3>🔥 Top 10 Videos</h3>
+            </div>
+            <div class="card-body">
+                <div id="topVideos"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
+
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            });
+
+        async function loadAnalytics() {
+            try {
+                // Get top videos
+                const response = await fetch(TAG_API + '?action=analytics');
+                const data = await response.json();
+                
+                // Get all videos for total count
+                const allResponse = await fetch(TAG_API + '?action=list');
+                const allData = await allResponse.json();
+                
+                const totalVideos = allData.total_count || 0;
+                const totalViews = data.top_videos.reduce((sum, v) => sum + v.view_count, 0);
+                const avgViews = totalVideos > 0 ? Math.round(totalViews / totalVideos) : 0;
+                
+                document.getElementById('totalViews').textContent = totalViews.toLocaleString();
+                document.getElementById('totalVideos').textContent = totalVideos.toLocaleString();
+                document.getElementById('avgViews').textContent = avgViews.toLocaleString();
+                
+                // Display top videos
+                const topVideosHtml = data.top_videos.map((video, index) => `
+                    <div class="video-row">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>#${index + 1}</strong> ${video.title}
+                            </div>
+                            <div>
+                                <span class="badge bg-primary">${video.view_count} views</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                document.getElementById('topVideos').innerHTML = topVideosHtml || '<p class="text-muted">No video data available</p>';
+            } catch (error) {
+                console.error('Error loading analytics:', error);
+                document.getElementById('topVideos').innerHTML = '<p class="text-danger">Error loading analytics</p>';
+            }
+        }
+
+        loadAnalytics();
+    </script>
+</body>
+</html>

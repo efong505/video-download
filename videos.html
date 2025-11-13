@@ -521,7 +521,6 @@
                         <video class="video-player" controls style="display: none; width: 100%; height: 200px; background: #000;">
                             Your browser does not support the video tag.
                         </video>
-                        </div>
                         <div class="video-title">
                             ${title}
                             <div style="margin-top: 8px;">
@@ -541,7 +540,7 @@
                     const videoId = externalUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
                     if (videoId) {
                         embedSrc = `https://www.youtube.com/embed/${videoId}`;
-                        thumbnailSrc = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+                        thumbnailSrc = thumbnailUrl || `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
                         platformName = 'YouTube';
                     }
                 } else if (externalUrl.includes('rumble.com')) {
@@ -599,46 +598,58 @@
             container.appendChild(col);
         }
         
+        function trackVideoView(videoId) {
+            fetch(TAG_API + '?action=track_view', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({video_id: videoId})
+            }).catch(err => console.log('View tracking error:', err));
+        }
+        
         function playVideo(button, videoUrl) {
             console.log('Playing video:', videoUrl);
             const card = button.closest('.video-card');
             const thumbnailContainer = card.querySelector('.thumbnail-container');
-            const video = card.querySelector('.video-player');
+            const videoPlayer = card.querySelector('.video-player');
+            
+            // Extract video ID from URL
+            const videoId = videoUrl.split('/').pop();
+            trackVideoView(videoId);
             
             // Hide thumbnail container and show video
             thumbnailContainer.style.display = 'none';
-            video.style.display = 'block';
+            videoPlayer.style.display = 'block';
             
             // Set video source and play
-            video.src = videoUrl;
-            video.load();
+            videoPlayer.src = videoUrl;
+            videoPlayer.load();
             
-            video.addEventListener('error', function(e) {
-                console.error('Video error:', e, video.error);
+            videoPlayer.addEventListener('error', function(e) {
+                console.error('Video error:', e, videoPlayer.error);
                 thumbnailContainer.style.display = 'block';
-                video.style.display = 'none';
+                videoPlayer.style.display = 'none';
             });
             
-            video.play().catch(error => {
+            videoPlayer.play().catch(error => {
                 console.error('Play error:', error);
                 thumbnailContainer.style.display = 'block';
-                video.style.display = 'none';
+                videoPlayer.style.display = 'none';
             });
             
             // Add close button to video
-            if (!video.querySelector('.close-video')) {
+            if (!videoPlayer.parentElement.querySelector('.close-video')) {
                 const closeBtn = document.createElement('button');
                 closeBtn.className = 'close-video';
                 closeBtn.innerHTML = '✕';
                 closeBtn.style.cssText = 'position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; z-index: 1000;';
                 closeBtn.onclick = function() {
-                    video.pause();
-                    video.currentTime = 0;
+                    videoPlayer.pause();
+                    videoPlayer.currentTime = 0;
                     thumbnailContainer.style.display = 'block';
-                    video.style.display = 'none';
+                    videoPlayer.style.display = 'none';
                 };
-                video.parentElement.style.position = 'relative';
-                video.parentElement.appendChild(closeBtn);
+                videoPlayer.parentElement.style.position = 'relative';
+                videoPlayer.parentElement.appendChild(closeBtn);
             }
         }
         
@@ -882,14 +893,15 @@
                         const externalUrl = video.external_url || '';
                         
                         if (videoType === 'local') {
-                            const baseName = video.filename.replace('.mp4', '');
-                            const videoUrl = `${BUCKET_URL}/${video.filename}`;
+                            const filename = video.filename.endsWith('.mp4') ? video.filename : video.filename + '.mp4';
+                            const baseName = filename.replace('.mp4', '');
+                            const videoUrl = `${BUCKET_URL}/videos/${filename}`;
                             const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb_2.jpg`;
                             const fallbackThumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
                             
-                            createVideoCard(row, video.title, videoUrl, thumbnailUrl, fallbackThumbnailUrl, video.filename, videoType, externalUrl);
+                            createVideoCard(row, video.title, videoUrl, thumbnailUrl, fallbackThumbnailUrl, filename, videoType, externalUrl);
                         } else {
-                            createVideoCard(row, video.title, '', '', '', video.filename, videoType, externalUrl);
+                            createVideoCard(row, video.title, '', video.thumbnail_url || '', '', video.filename, videoType, externalUrl);
                         }
                     });
                     
@@ -938,14 +950,15 @@
                         const externalUrl = video.external_url || '';
                         
                         if (videoType === 'local') {
-                            const baseName = video.filename.replace('.mp4', '');
-                            const videoUrl = `${BUCKET_URL}/${video.filename}`;
+                            const filename = video.filename.endsWith('.mp4') ? video.filename : video.filename + '.mp4';
+                            const baseName = filename.replace('.mp4', '');
+                            const videoUrl = `${BUCKET_URL}/videos/${filename}`;
                             const thumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb_2.jpg`;
                             const fallbackThumbnailUrl = `${BUCKET_URL}/thumbnails/${baseName}_thumb.jpg`;
                             
-                            createVideoCard(row, video.title, videoUrl, thumbnailUrl, fallbackThumbnailUrl, video.filename, videoType, externalUrl);
+                            createVideoCard(row, video.title, videoUrl, thumbnailUrl, fallbackThumbnailUrl, filename, videoType, externalUrl);
                         } else {
-                            createVideoCard(row, video.title, '', '', '', video.filename, videoType, externalUrl);
+                            createVideoCard(row, video.title, '', video.thumbnail_url || '', '', video.filename, videoType, externalUrl);
                         }
                     });
                     

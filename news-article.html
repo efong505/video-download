@@ -279,6 +279,19 @@
         }
 
         function displayArticle(news) {
+            // Update meta tags for social sharing
+            if (news.featured_image) {
+                document.querySelector('meta[property="og:image"]').setAttribute('content', news.featured_image);
+                document.querySelector('meta[property="og:image:secure_url"]').setAttribute('content', news.featured_image);
+                document.querySelector('meta[name="twitter:image"]').setAttribute('content', news.featured_image);
+            }
+            document.querySelector('meta[property="og:title"]').setAttribute('content', news.title);
+            document.querySelector('meta[name="twitter:title"]').setAttribute('content', news.title);
+            if (news.summary) {
+                document.querySelector('meta[property="og:description"]').setAttribute('content', news.summary);
+                document.querySelector('meta[name="twitter:description"]').setAttribute('content', news.summary);
+            }
+            
             var html = '';
             
             // Breaking badge
