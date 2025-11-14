@@ -14,7 +14,7 @@ def lambda_handler(event, context):
     headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Headers': 'Content-Type,Authorization',
-        'Access-Control-Allow-Methods': 'GET,OPTIONS'
+        'Access-Control-Allow-Methods': 'GET,POST,OPTIONS'
     }
     
     try:
@@ -29,6 +29,12 @@ def lambda_handler(event, context):
             return get_product(event, headers)
         elif action == 'search':
             return search_products(event, headers)
+        elif action == 'create':
+            return create_product(event, headers)
+        elif action == 'update':
+            return update_product(event, headers)
+        elif action == 'delete':
+            return delete_product(event, headers)
         else:
             return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'Invalid action'})}
     
@@ -83,3 +89,55 @@ def search_products(event, headers):
     items = [i for i in response.get('Items', []) if query in i.get('name', '').lower()]
     
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'products': items, 'count': len(items)}, default=decimal_default)}
+
+def create_product(event, headers):
+    import uuid
+    from datetime import datetime
+    
+    body = json.loads(event.get('body', '{}'))
+    product_id = str(uuid.uuid4())
+    
+    product = {
+        'product_id': product_id,
+        'name': body['name'],
+        'description': body['description'],
+        'price': Decimal(str(body['price'])),
+        'stock': body['stock'],
+        'category': body['category'],
+        'image_url': body['image_url'],
+        'featured': body.get('featured', '0'),
+        'average_rating': Decimal('0'),
+        'review_count': 0,
+        'created_at': datetime.utcnow().isoformat()
+    }
+    
+    products_table.put_item(Item=product)
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'product_id': product_id})}
+
+def update_product(event, headers):
+    body = json.loads(event.get('body', '{}'))
+    product_id = body['product_id']
+    
+    products_table.update_item(
+        Key={'product_id': product_id},
+        UpdateExpression='SET #name = :name, description = :desc, price = :price, stock = :stock, category = :cat, image_url = :img, featured = :feat',
+        ExpressionAttributeNames={'#name': 'name'},
+        ExpressionAttributeValues={
+            ':name': body['name'],
+            ':desc': body['description'],
+            ':price': Decimal(str(body['price'])),
+            ':stock': body['stock'],
+            ':cat': body['category'],
+            ':img': body['image_url'],
+            ':feat': body.get('featured', '0')
+        }
+    )
+    
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'status': 'updated'})}
+
+def delete_product(event, headers):
+    body = json.loads(event.get('body', '{}'))
+    product_id = body['product_id']
+    
+    products_table.delete_item(Key={'product_id': product_id})
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'status': 'deleted'})}
