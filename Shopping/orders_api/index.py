@@ -29,53 +29,85 @@ def lambda_handler(event, context):
         elif action == 'list':
             return list_orders(params)
         else:
-            return {'statusCode': 400, 'body': json.dumps({'error': 'Invalid action'})}
+            return {
+                'statusCode': 400,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': 'Invalid action'})
+            }
             
     except Exception as e:
-        return {'statusCode': 500, 'body': json.dumps({'error': str(e)})}
+        return {
+            'statusCode': 500,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'error': str(e)})
+        }
 
 def create_order(event):
-    body = json.loads(event.get('body', '{}'))
-    
-    order_id = str(uuid.uuid4())
-    timestamp = datetime.utcnow().isoformat()
-    
-    # Validate stock
-    for item in body['items']:
-        product = products_table.get_item(Key={'product_id': item['product_id']})['Item']
-        if product['stock'] < item['quantity']:
-            return {'statusCode': 400, 'body': json.dumps({'error': f'Insufficient stock for {product["name"]}'})}
-    
-    # Create order
-    order = {
-        'order_id': order_id,
-        'user_id': body.get('user_id', 'guest'),
-        'items': body['items'],
-        'subtotal': Decimal(str(body['subtotal'])),
-        'tax': Decimal(str(body['tax'])),
-        'total': Decimal(str(body['total'])),
-        'status': 'pending',
-        'shipping_address': body.get('shipping_address', {}),
-        'payment_method': body.get('payment_method', 'pending'),
-        'created_at': timestamp,
-        'updated_at': timestamp
-    }
-    
-    orders_table.put_item(Item=order)
-    
-    # Update stock
-    for item in body['items']:
-        products_table.update_item(
-            Key={'product_id': item['product_id']},
-            UpdateExpression='SET stock = stock - :qty',
-            ExpressionAttributeValues={':qty': item['quantity']}
-        )
-    
-    return {
-        'statusCode': 200,
-        'headers': {'Access-Control-Allow-Origin': '*'},
-        'body': json.dumps({'order_id': order_id, 'status': 'created'})
-    }
+    try:
+        print('Event:', json.dumps(event))
+        body = json.loads(event.get('body', '{}'))
+        print('Body:', body)
+        
+        order_id = str(uuid.uuid4())
+        timestamp = datetime.utcnow().isoformat()
+        
+        # Validate stock
+        for item in body['items']:
+            product = products_table.get_item(Key={'product_id': item['product_id']})['Item']
+            if product['stock'] < item['quantity']:
+                return {
+                    'statusCode': 400,
+                    'headers': {'Access-Control-Allow-Origin': '*'},
+                    'body': json.dumps({'error': f'Insufficient stock for {product["name"]}'})
+                }
+        
+        # Convert items to Decimal
+        items = [{
+            'product_id': item['product_id'],
+            'name': item['name'],
+            'price': Decimal(str(item['price'])),
+            'quantity': item['quantity']
+        } for item in body['items']]
+        
+        # Create order
+        order = {
+            'order_id': order_id,
+            'user_id': body.get('user_id', 'guest'),
+            'items': items,
+            'subtotal': Decimal(str(body['subtotal'])),
+            'tax': Decimal(str(body['tax'])),
+            'total': Decimal(str(body['total'])),
+            'status': 'pending',
+            'shipping_address': body.get('shipping_address', {}),
+            'payment_method': body.get('payment_method', 'pending'),
+            'created_at': timestamp,
+            'updated_at': timestamp
+        }
+        
+        orders_table.put_item(Item=order)
+        
+        # Update stock
+        for item in body['items']:
+            products_table.update_item(
+                Key={'product_id': item['product_id']},
+                UpdateExpression='SET stock = stock - :qty',
+                ExpressionAttributeValues={':qty': item['quantity']}
+            )
+        
+        return {
+            'statusCode': 200,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'order_id': order_id, 'status': 'created'})
+        }
+    except Exception as e:
+        print('Error in create_order:', str(e))
+        import traceback
+        traceback.print_exc()
+        return {
+            'statusCode': 500,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'error': str(e)})
+        }
 
 def get_order(params):
     order_id = params.get('order_id')
