@@ -5008,3 +5008,218 @@ self.addEventListener('fetch', function(event) {
 **Status**: Service worker now properly handles chrome extensions and other non-http URL schemes without throwing cache errors.
 
 ---
+
+
+## Email Marketing System - Mailchimp-Style Implementation 🔄 PLANNED (January 2025)
+
+### System Overview
+**Feature**: Complete email marketing and automation platform for Christian Conservatives Today, providing newsletter campaigns, subscriber management, automation workflows, and analytics.
+
+### Decision: Mailchimp vs Tailwind
+**Chosen Approach**: Mailchimp-style email marketing platform
+
+**Why Mailchimp Over Tailwind**:
+1. ✅ Platform already has content (articles, news, videos, election updates)
+2. ✅ Natural fit: Send newsletters about new content
+3. ✅ Simpler scope: Email-only vs multi-platform social media
+4. ✅ Higher ROI: Email converts 40x better than social for ministry content
+5. ✅ Existing user base: Convert website visitors to subscribers
+6. ✅ AWS SES integration is straightforward and cost-effective ($0.10 per 1,000 emails)
+
+**Tailwind (Not Chosen)**:
+- Focus: Social media scheduling (Pinterest/Instagram) + email
+- Complexity: Multi-platform management
+- Less relevant for text-heavy ministry content
+
+### Planned Features
+
+#### 1. Subscriber Management
+- Email list storage in DynamoDB
+- Segmentation by interests (articles, videos, election, prayer)
+- CSV import/export
+- Double opt-in confirmation
+- One-click unsubscribe
+- Custom fields (first name, last name, state, interests)
+
+#### 2. Campaign Builder
+- Visual email editor (reuse Quill.js or drag-and-drop)
+- Pre-built templates (newsletter, announcement, update)
+- Personalization with merge tags ({{first_name}}, {{article_title}})
+- Desktop/mobile preview
+- Test email functionality
+
+#### 3. Automation Workflows
+- Welcome series on signup
+- Drip campaigns (multi-email sequences)
+- Trigger-based sends (new article published, video uploaded)
+- Re-engagement for inactive subscribers
+
+#### 4. Email Analytics
+- Open tracking (1x1 pixel)
+- Click tracking (redirect URLs)
+- Conversion tracking
+- Engagement metrics (open rate, click rate, unsubscribe rate)
+- A/B testing for subject lines and content
+
+#### 5. Scheduling & Sending
+- Immediate send
+- Scheduled send (specific date/time)
+- Time zone optimization
+- Batch sending to avoid spam filters
+- Resend to non-openers
+
+### Technical Architecture
+
+**AWS Services**:
+- **Amazon SES**: Email sending (verified domain required)
+- **DynamoDB**: Subscriber data, campaign data, analytics
+- **Lambda**: Campaign processing, automation triggers
+- **EventBridge**: Scheduled sends, automation workflows
+- **S3**: Email templates, images, attachments
+- **SNS**: Bounce/complaint notifications
+
+**Database Schema**:
+- **Subscribers**: email (PK), first_name, last_name, state, interests, status, subscribed_at, source, tags
+- **Campaigns**: campaign_id (PK), title, subject, content_html, content_text, template_id, segment, status, scheduled_send_time, sent_at, recipient_count, open_count, click_count
+- **Analytics**: event_id (PK), campaign_id, email, event_type, timestamp, metadata
+
+**Lambda Functions**:
+- email_campaigns_api - Campaign CRUD operations
+- email_subscribers_api - Subscriber management
+- email_tracking_api - Open/click tracking
+- email_automation_api - Automation workflows
+- email_sender - Batch campaign sends
+
+### Integration with Existing Platform
+
+**Content Notifications**:
+- New article published → Automatic email to subscribers
+- New video uploaded → Weekly digest
+- Election updates → Breaking news alerts
+- Prayer requests → Daily prayer digest
+
+**Subscription Forms**:
+- Footer signup on all pages
+- Exit-intent popup on articles
+- Video page subscription
+- Election map state-specific updates
+
+**User Accounts**:
+- Sync with Users table
+- Preference center for email settings
+- Unified profile showing subscription status
+
+### Implementation Plan
+
+**Phase 1: Foundation** (Week 1-2)
+- [ ] Set up Amazon SES (verify domain, request production access)
+- [ ] Create DynamoDB tables
+- [ ] Build email_subscribers_api Lambda
+- [ ] Create basic subscription form
+- [ ] Implement double opt-in workflow
+
+**Phase 2: Campaign Builder** (Week 3-4)
+- [ ] Build email_campaigns_api Lambda
+- [ ] Create campaign builder UI (admin-campaigns.html)
+- [ ] Implement email templates
+- [ ] Add merge tag support
+- [ ] Build preview functionality
+
+**Phase 3: Sending & Tracking** (Week 5-6)
+- [ ] Build email_sender Lambda
+- [ ] Implement open/click tracking
+- [ ] Create email_tracking_api Lambda
+- [ ] Build analytics dashboard
+- [ ] Add unsubscribe handling
+
+**Phase 4: Automation** (Week 7-8)
+- [ ] Build email_automation_api Lambda
+- [ ] Create automation builder UI
+- [ ] Implement welcome series
+- [ ] Add trigger system (EventBridge)
+- [ ] Build drip campaign workflows
+
+**Phase 5: Advanced Features** (Week 9-10)
+- [ ] A/B testing functionality
+- [ ] Segmentation builder
+- [ ] CSV import/export
+- [ ] Bounce/complaint handling
+- [ ] Re-engagement campaigns
+
+### Cost Analysis
+
+**AWS SES Pricing**:
+- Sending: $0.10 per 1,000 emails
+- Receiving: $0.10 per 1,000 emails (for bounce handling)
+
+**Example Costs**:
+- 1,000 subscribers, 4 emails/month: $0.40/month
+- 10,000 subscribers, 4 emails/month: $4.00/month
+- 100,000 subscribers, 4 emails/month: $40.00/month
+
+**Comparison to Mailchimp**:
+- Mailchimp: $13-20/month for 500 subscribers
+- AWS SES: $0.40/month for 1,000 subscribers
+- **Savings**: 95%+ cheaper at scale
+
+### Use Cases for Christian Conservatives Today
+
+**Weekly Newsletter**:
+- Content: Top 3 articles, latest video, election update
+- Audience: All subscribers
+- Frequency: Every Sunday evening
+- Goal: Drive traffic back to website
+
+**Election Alerts**:
+- Content: Breaking election news, candidate updates
+- Audience: Election subscribers
+- Frequency: As needed (breaking news)
+- Goal: Keep users informed on critical races
+
+**New Article Notifications**:
+- Content: Article title, excerpt, read more link
+- Audience: Article subscribers
+- Frequency: Immediately after publish
+- Goal: Increase article readership
+
+**Prayer Request Digest**:
+- Content: Top 5 prayer requests from prayer wall
+- Audience: Prayer subscribers
+- Frequency: Daily at 6am
+- Goal: Encourage prayer engagement
+
+**Donation Campaigns**:
+- Content: Ministry impact, donation appeal
+- Audience: Engaged subscribers (high open rate)
+- Frequency: Quarterly
+- Goal: Raise funds for platform operations
+
+### Success Metrics
+
+**Email Performance**:
+- Open Rate: Target 20-30% (industry average 15-25%)
+- Click Rate: Target 2-5% (industry average 1-3%)
+- Unsubscribe Rate: Keep below 0.5%
+- Bounce Rate: Keep below 2%
+
+**Business Impact**:
+- Website Traffic: Increase from email by 30%
+- Article Readership: Increase by 40%
+- User Engagement: Increase return visits by 50%
+- Donations: Generate $X per campaign
+
+### Next Steps
+
+1. **Review Documentation** - Confirm approach and features
+2. **Set up AWS SES** - Verify domain, request production access
+3. **Create Database Tables** - Set up DynamoDB schema
+4. **Build Subscriber API** - Start with basic subscription functionality
+5. **Create Signup Forms** - Add to website footer and key pages
+6. **Test End-to-End** - Verify subscription and email sending works
+7. **Build Campaign Builder** - Create admin interface for campaigns
+8. **Launch First Campaign** - Send welcome email to existing users
+
+### Documentation Created
+- **Email Marketing/README.md** - Complete system documentation with Mailchimp vs Tailwind comparison, technical architecture, implementation plan, cost analysis, and use cases
+
+**Status**: Email marketing system planning complete. Ready to begin Phase 1 implementation with AWS SES setup and subscriber management.

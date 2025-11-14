@@ -42,54 +42,72 @@ def lambda_handler(event, context):
         }
 
 def create_review(event):
-    body = json.loads(event.get('body', '{}'))
-    
-    review_id = str(uuid.uuid4())
-    timestamp = datetime.utcnow().isoformat()
-    
-    review = {
-        'review_id': review_id,
-        'product_id': body['product_id'],
-        'user_id': body.get('user_id', 'guest'),
-        'rating': body['rating'],
-        'title': body['title'],
-        'review_text': body['review_text'],
-        'helpful_votes': 0,
-        'unhelpful_votes': 0,
-        'verified_purchase': body.get('verified_purchase', False),
-        'status': 'pending',
-        'created_at': timestamp
-    }
-    
-    reviews_table.put_item(Item=review)
-    
-    # Update product rating
-    update_product_rating(body['product_id'])
-    
-    return {
-        'statusCode': 200,
-        'headers': {'Access-Control-Allow-Origin': '*'},
-        'body': json.dumps({'review_id': review_id, 'status': 'created'})
-    }
+    try:
+        body = json.loads(event.get('body', '{}'))
+        
+        review_id = str(uuid.uuid4())
+        timestamp = datetime.utcnow().isoformat()
+        
+        review = {
+            'review_id': review_id,
+            'product_id': body['product_id'],
+            'user_id': body.get('user_id', 'guest'),
+            'rating': body['rating'],
+            'title': body['title'],
+            'review_text': body['review_text'],
+            'helpful_votes': 0,
+            'unhelpful_votes': 0,
+            'verified_purchase': body.get('verified_purchase', False),
+            'status': 'approved',
+            'created_at': timestamp
+        }
+        
+        reviews_table.put_item(Item=review)
+        
+        # Update product rating
+        update_product_rating(body['product_id'])
+        
+        return {
+            'statusCode': 200,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'review_id': review_id, 'status': 'created'})
+        }
+    except Exception as e:
+        print('Error in create_review:', str(e))
+        import traceback
+        traceback.print_exc()
+        return {
+            'statusCode': 500,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'error': str(e)})
+        }
 
 def list_reviews(params):
-    product_id = params.get('product_id')
-    
-    response = reviews_table.query(
-        IndexName='product_id-index',
-        KeyConditionExpression='product_id = :pid',
-        ExpressionAttributeValues={':pid': product_id},
-        FilterExpression='#status = :approved',
-        ExpressionAttributeNames={'#status': 'status'}
-    )
-    
-    reviews = decimal_to_float(response.get('Items', []))
-    
-    return {
-        'statusCode': 200,
-        'headers': {'Access-Control-Allow-Origin': '*'},
-        'body': json.dumps({'reviews': reviews, 'count': len(reviews)})
-    }
+    try:
+        product_id = params.get('product_id')
+        
+        response = reviews_table.query(
+            IndexName='product_id-created_at-index',
+            KeyConditionExpression='product_id = :pid',
+            ExpressionAttributeValues={':pid': product_id},
+            FilterExpression='#status = :approved',
+            ExpressionAttributeNames={'#status': 'status'}
+        )
+        
+        reviews = decimal_to_float(response.get('Items', []))
+        
+        return {
+            'statusCode': 200,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'reviews': reviews, 'count': len(reviews)})
+        }
+    except Exception as e:
+        print('Error in list_reviews:', str(e))
+        return {
+            'statusCode': 500,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'error': str(e), 'reviews': [], 'count': 0})
+        }
 
 def vote_review(event):
     body = json.loads(event.get('body', '{}'))
@@ -117,7 +135,7 @@ def vote_review(event):
 
 def update_product_rating(product_id):
     response = reviews_table.query(
-        IndexName='product_id-index',
+        IndexName='product_id-created_at-index',
         KeyConditionExpression='product_id = :pid',
         ExpressionAttributeValues={':pid': product_id},
         FilterExpression='#status = :approved',

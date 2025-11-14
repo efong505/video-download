@@ -70,7 +70,7 @@ def get_product(event, headers):
     if 'Item' not in response:
         return {'statusCode': 404, 'headers': headers, 'body': json.dumps({'error': 'Product not found'})}
     
-    return {'statusCode': 200, 'headers': headers, 'body': json.dumps(response['Item'], default=decimal_default)}
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'product': response['Item']}, default=decimal_default)}
 
 def search_products(event, headers):
     params = event.get('queryStringParameters') or {}
