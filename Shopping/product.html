@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .star { color: #ffc107; }
+        .star-empty { color: #ddd; }
+        .review-card { border: 1px solid #ddd; padding: 15px; margin: 10px 0; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">Christian Conservatives Today</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="shop.html">Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" href="cart.html">Cart</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="row">
+            <div class="col-md-6">
+                <img id="product-image" class="img-fluid" alt="Product">
+            </div>
+            <div class="col-md-6">
+                <h1 id="product-name"></h1>
+                <div id="rating-display"></div>
+                <h2 class="text-primary" id="product-price"></h2>
+                <p id="product-description"></p>
+                <button class="btn btn-primary btn-lg" onclick="addToCart()">Add to Cart</button>
+            </div>
+        </div>
+
+        <hr class="my-5">
+
+        <h3>Customer Reviews</h3>
+        <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#reviewModal">Write a Review</button>
+        <div id="reviews"></div>
+    </div>
+
+    <!-- Review Modal -->
+    <div class="modal fade" id="reviewModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Write a Review</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label>Rating</label>
+                        <select id="rating" class="form-select">
+                            <option value="5">5 Stars</option>
+                            <option value="4">4 Stars</option>
+                            <option value="3">3 Stars</option>
+                            <option value="2">2 Stars</option>
+                            <option value="1">1 Star</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label>Title</label>
+                        <input type="text" id="review-title" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>Review</label>
+                        <textarea id="review-text" class="form-control" rows="4"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" onclick="submitReview()">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_PRODUCTS = 'https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/products';
+        const API_REVIEWS = 'https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/reviews';
+        let currentProduct = null;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
+        async function loadProduct() {
+            const response = await fetch(`${API_PRODUCTS}?action=get&product_id=${productId}`);
+            const data = await response.json();
+            currentProduct = data.product;
+
+            document.getElementById('product-name').textContent = currentProduct.name;
+            document.getElementById('product-price').textContent = `$${currentProduct.price}`;
+            document.getElementById('product-description').textContent = currentProduct.description;
+            document.getElementById('product-image').src = currentProduct.image_url;
+
+            displayRating(currentProduct.average_rating || 0, currentProduct.review_count || 0);
+            loadReviews();
+        }
+
+        function displayRating(rating, count) {
+            const stars = '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating));
+            document.getElementById('rating-display').innerHTML = 
+                `<span class="star">${stars}</span> ${rating.toFixed(1)} (${count} reviews)`;
+        }
+
+        async function loadReviews() {
+            const response = await fetch(`${API_REVIEWS}?action=list&product_id=${productId}`);
+            const data = await response.json();
+
+            const container = document.getElementById('reviews');
+            if (data.reviews.length === 0) {
+                container.innerHTML = '<p>No reviews yet. Be the first to review!</p>';
+                return;
+            }
+
+            container.innerHTML = data.reviews.map(r => `
+                <div class="review-card">
+                    <div class="d-flex justify-content-between">
+                        <strong>${r.title}</strong>
+                        <span class="star">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
+                    </div>
+                    <p class="mb-2">${r.review_text}</p>
+                    <small class="text-muted">By ${r.user_id} on ${new Date(r.created_at).toLocaleDateString()}</small>
+                    <div class="mt-2">
+                        <button class="btn btn-sm btn-outline-success" onclick="voteReview('${r.review_id}', 'helpful')">
+                            👍 Helpful (${r.helpful_votes})
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger" onclick="voteReview('${r.review_id}', 'unhelpful')">
+                            👎 (${r.unhelpful_votes})
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function submitReview() {
+            const review = {
+                product_id: productId,
+                rating: parseInt(document.getElementById('rating').value),
+                title: document.getElementById('review-title').value,
+                review_text: document.getElementById('review-text').value,
+                user_id: 'guest'
+            };
+
+            await fetch(`${API_REVIEWS}?action=create`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(review)
+            });
+
+            bootstrap.Modal.getInstance(document.getElementById('reviewModal')).hide();
+            alert('Review submitted! It will appear after moderation.');
+            loadProduct();
+        }
+
+        async function voteReview(reviewId, voteType) {
+            await fetch(`${API_REVIEWS}?action=vote`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({review_id: reviewId, vote_type: voteType})
+            });
+            loadReviews();
+        }
+
+        function addToCart() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const existing = cart.find(item => item.product_id === productId);
+            
+            if (existing) {
+                existing.quantity++;
+            } else {
+                cart.push({
+                    product_id: productId,
+                    name: currentProduct.name,
+                    price: currentProduct.price,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            alert('Added to cart!');
+        }
+
+        loadProduct();
+    </script>
+</body>
+</html>
