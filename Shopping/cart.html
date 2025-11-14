@@ -137,8 +137,47 @@
             document.getElementById('total').textContent = `$${total.toFixed(2)}`;
         }
 
-        function checkout() {
-            alert('Checkout functionality coming soon! This will integrate with PayPal/Stripe.');
+        async function checkout() {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            if (cart.length === 0) return;
+            
+            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const tax = subtotal * 0.08;
+            const total = subtotal + tax;
+            
+            const orderData = {
+                items: cart.map(item => ({
+                    product_id: item.product_id,
+                    name: item.name,
+                    price: item.price,
+                    quantity: item.quantity
+                })),
+                subtotal: subtotal,
+                tax: tax,
+                total: total,
+                user_id: 'guest',
+                payment_method: 'pending'
+            };
+            
+            try {
+                const response = await fetch('https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/orders?action=create', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(orderData)
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    localStorage.removeItem('cart');
+                    alert(`Order placed successfully! Order ID: ${result.order_id}`);
+                    window.location.href = 'shop.html';
+                } else {
+                    alert('Error: ' + result.error);
+                }
+            } catch (error) {
+                alert('Checkout failed: ' + error.message);
+            }
         }
 
         loadCart();
