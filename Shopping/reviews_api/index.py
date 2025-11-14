@@ -89,7 +89,7 @@ def list_reviews(params):
         response = reviews_table.query(
             IndexName='product_id-created_at-index',
             KeyConditionExpression='product_id = :pid',
-            ExpressionAttributeValues={':pid': product_id},
+            ExpressionAttributeValues={':pid': product_id, ':approved': 'approved'},
             FilterExpression='#status = :approved',
             ExpressionAttributeNames={'#status': 'status'}
         )
@@ -137,7 +137,7 @@ def update_product_rating(product_id):
     response = reviews_table.query(
         IndexName='product_id-created_at-index',
         KeyConditionExpression='product_id = :pid',
-        ExpressionAttributeValues={':pid': product_id},
+        ExpressionAttributeValues={':pid': product_id, ':approved': 'approved'},
         FilterExpression='#status = :approved',
         ExpressionAttributeNames={'#status': 'status'}
     )
