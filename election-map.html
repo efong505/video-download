@@ -277,8 +277,11 @@
             .then(r => r.text())
             .then(html => {
                 document.getElementById('navbar-container').innerHTML = html;
-                initNavbar();
-            });
+                if (typeof initNavbar === 'function') {
+                    initNavbar();
+                }
+            })
+            .catch(err => console.error('Failed to load navbar:', err));
     </script>
     <div class="dashboard-header">
         <div class="container">

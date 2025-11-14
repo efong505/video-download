@@ -68,6 +68,7 @@
     <script>
         function loadCart() {
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            console.log('Cart data:', cart);
             const container = document.getElementById('cart-items');
             
             if (cart.length === 0) {
@@ -75,6 +76,7 @@
                     <div class="alert alert-info">
                         Your cart is empty. <a href="shop.html">Continue shopping</a>
                     </div>`;
+                updateTotals();
                 return;
             }
 

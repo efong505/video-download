@@ -115,16 +115,31 @@
 
         function addToCart(productId) {
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            const product = allProducts.find(p => p.product_id === productId);
+            
+            console.log('Adding product:', product);
+            console.log('Current cart:', cart);
+            
+            if (!product) {
+                console.error('Product not found:', productId);
+                return;
+            }
+            
             const existing = cart.find(item => item.product_id === productId);
             
             if (existing) {
                 existing.quantity++;
             } else {
-                const product = allProducts.find(p => p.product_id === productId);
-                cart.push({ product_id: productId, name: product.name, price: product.price, quantity: 1 });
+                cart.push({ 
+                    product_id: productId, 
+                    name: product.name, 
+                    price: parseFloat(product.price), 
+                    quantity: 1 
+                });
             }
             
             localStorage.setItem('cart', JSON.stringify(cart));
+            console.log('Cart saved:', cart);
             updateCartCount();
             showNotification('Added to cart!');
         }

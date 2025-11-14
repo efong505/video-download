@@ -36,6 +36,7 @@ function initNavbar() {
     
     // Update brand if page-specific
     if (pageIcon) {
+        const allLinks = [...contentLinks, ...ministryLinks, ...adminLinks];
         document.getElementById('navbar-logo').style.display = 'none';
         document.getElementById('navbar-title').textContent = pageIcon + ' ' + (allLinks.find(l => l.page === currentPage)?.label || '');
     }
