@@ -5,10 +5,10 @@
 
 ---
 
-## Overall Progress: 1/9 weeks (11%)
+## Overall Progress: 5/9 weeks (56%)
 
 ```
-[█████░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░] 11%
+[████████████████████████████░░░░░░░░░░░░░░░░░░░░░░] 56%
 ```
 
 ---
@@ -39,11 +39,11 @@
 
 ---
 
-## Week 2: Product Catalog API ⏭️ READY TO START
+## Week 2: Product Catalog API ✅ COMPLETE
 
-**Status:** ⏭️ Ready to begin  
-**Estimated Time:** 6 hours  
-**Target Dates:** TBD
+**Status:** ✅ Complete  
+**Actual Time:** 3 hours  
+**Completed:** November 2025
 
 ### ElastiCache Setup (when needed):
 - [ ] Create VPC (if not exists)
@@ -54,108 +54,85 @@
 - [ ] Update Lambda VPC configuration
 
 ### API Implementation:
-- [ ] Create shop_api Lambda
-- [ ] Create cart_api Lambda
-- [ ] Create order_api Lambda
-- [ ] Create payment_api Lambda
-- [ ] Add Redis caching to all APIs
-- [ ] Test cache hit rates (target: >80%)
+- [x] Create products_api Lambda (list, get, search)
+- [x] Deploy API Gateway endpoint
+- [x] Add 5 sample products
+- [x] Create shop.html (product catalog)
+- [x] Create cart.html (shopping cart with localStorage)
+- [x] Test product listing and cart functionality
+- [ ] Redis caching (deferred until traffic justifies)
 
 ---
 
-## Week 3: Payment + Fault Tolerance ⏸️ PENDING
+## Week 3: Checkout & Orders ✅ COMPLETE
 
-**Status:** ⏸️ Waiting for Week 2  
-**Estimated Time:** 10 hours
+**Status:** ✅ Complete  
+**Actual Time:** 4 hours  
+**Completed:** November 2025
 
-### Circuit Breakers:
-- [ ] Create circuit_breaker.py module
-- [ ] Wrap PayPal API calls
-- [ ] Wrap Stripe API calls
-- [ ] Test with intentional failures
-- [ ] Deploy as Lambda layer
-
-### Rate Limiting:
-- [ ] Create rate_limiter.py module
-- [ ] Configure API Gateway usage plans
-- [ ] Set rate limits (10/min payment, 100/min cart)
-- [ ] Test rate limiting
-- [ ] Verify 429 responses
-
-### Payment Integration:
-- [ ] Set up PayPal Business account
-- [ ] Set up Stripe account
-- [ ] Implement PayPal SDK integration
-- [ ] Implement Stripe SDK integration
-- [ ] Test payment flows
-- [ ] Configure webhooks
+### Orders Implementation:
+- [x] Create orders_api Lambda (create, get, list)
+- [x] Deploy API Gateway /orders endpoint
+- [x] Implement checkout flow in cart.html
+- [x] Stock validation and updates
+- [x] Order creation with Decimal conversion
+- [x] CORS configuration
+- [x] Test end-to-end checkout
+- [ ] Payment integration (deferred to Week 6)
 
 ---
 
-## Week 4: Frontend + API Gateway Caching ⏸️ PENDING
+## Week 4: Reviews & Ratings ✅ COMPLETE
 
-**Status:** ⏸️ Waiting for Week 3  
-**Estimated Time:** 12 hours
+**Status:** ✅ Complete  
+**Actual Time:** 3 hours  
+**Completed:** November 2025
 
-### API Gateway Caching:
-- [ ] Enable cache on API Gateway (0.5 GB)
-- [ ] Configure per-route caching
-- [ ] Set TTLs (5min products, 1hr categories)
-- [ ] Implement cache invalidation
-- [ ] Test cache hit rates
-
-### Frontend Pages:
-- [ ] Create shop.html (product catalog)
-- [ ] Create product.html (product detail)
-- [ ] Create cart.html (shopping cart)
-- [ ] Test add to cart functionality
-- [ ] Test cart updates
+### Reviews Implementation:
+- [x] Create reviews_api Lambda (create, list, vote)
+- [x] Deploy API Gateway /reviews endpoint
+- [x] Create product.html (product detail page)
+- [x] Implement star ratings display
+- [x] Add review submission modal
+- [x] Implement helpful/unhelpful voting
+- [x] Auto-update product average ratings
+- [x] Fix GSI name and ExpressionAttributeValues
+- [ ] API Gateway caching (deferred until traffic justifies)
 
 ---
 
-## Week 5: Checkout + Orders ⏸️ PENDING
+## Week 5: Admin Product Management ✅ COMPLETE
 
-**Status:** ⏸️ Waiting for Week 4  
-**Estimated Time:** 12 hours
+**Status:** ✅ Complete  
+**Actual Time:** 2 hours  
+**Completed:** November 2025
 
-### Checkout Flow:
-- [ ] Create checkout.html
-- [ ] Implement multi-step checkout
-- [ ] Integrate PayPal button
-- [ ] Integrate Stripe card element
-- [ ] Test guest checkout
-- [ ] Test logged-in checkout
+### Admin Implementation:
+- [x] Create admin-products.html
+- [x] Add create product functionality
+- [x] Add edit product functionality
+- [x] Add delete product functionality
+- [x] Update products_api with CRUD operations
+- [x] Add POST method to API Gateway
+- [x] Test all admin operations
+- [ ] Add authentication (deferred to Week 6)
+
+---
+
+## Week 6: Order Management & History ⏭️ READY TO START
+
+**Status:** ⏭️ Ready to begin  
+**Estimated Time:** 6 hours  
+**Target:** Next implementation
 
 ### Order Management:
-- [ ] Create orders.html (order history)
-- [ ] Implement order tracking
-- [ ] Create order_processor Lambda (SQS consumer)
-- [ ] Create payment_processor Lambda (SQS consumer)
-- [ ] Create email_sender Lambda (SQS consumer)
-- [ ] Create inventory_updater Lambda (SQS consumer)
-- [ ] Test end-to-end order flow
-
----
-
-## Week 6: Admin Interface ⏸️ PENDING
-
-**Status:** ⏸️ Waiting for Week 5  
-**Estimated Time:** 10 hours
-
-### Admin Pages:
-- [ ] Create admin-shop.html
-- [ ] Implement product CRUD
-- [ ] Add image upload (S3)
-- [ ] Create category management
-- [ ] Add inventory tracking
-- [ ] Implement order management
-- [ ] Add sales analytics
-- [ ] Test admin workflows
-
-### Admin Rate Limiting:
-- [ ] Configure admin API limits (50/min)
-- [ ] Test rate limiting
-- [ ] Add admin monitoring dashboard
+- [ ] Create orders.html (user order history)
+- [ ] Create admin-orders.html (admin order dashboard)
+- [ ] Add order status updates (pending → processing → shipped → delivered)
+- [ ] Implement order search and filtering
+- [ ] Add order details view
+- [ ] Update orders_api with status management
+- [ ] Test order workflows
 
 ---
 
@@ -278,37 +255,56 @@
 | Week | Focus | Status | Completion Date |
 |------|-------|--------|-----------------|
 | 1 | Database + SQS | ✅ Complete | January 2025 |
-| 2 | APIs + ElastiCache | ⏸️ Deferred | When traffic justifies |
-| 3 | Payment + Fault Tolerance | ⏸️ Pending | TBD |
-| 4 | Frontend + API Cache | ⏸️ Pending | TBD |
-| 5 | Checkout + Orders | ⏸️ Pending | TBD |
-| 6 | Admin Interface | ⏸️ Pending | TBD |
-| 7 | Behavioral Tracking | ⏸️ Pending | TBD |
-| 8 | Marketing Automation | ⏸️ Pending | TBD |
+| 2 | Product Catalog API | ✅ Complete | November 2025 |
+| 3 | Checkout & Orders | ✅ Complete | November 2025 |
+| 4 | Reviews & Ratings | ✅ Complete | November 2025 |
+| 5 | Admin Products | ✅ Complete | November 2025 |
+| 6 | Order Management | ⏭️ Next | TBD |
+| 7 | Payment Integration | ⏸️ Pending | TBD |
+| 8 | User Authentication | ⏸️ Pending | TBD |
 | 9 | Testing + Launch | ⏸️ Pending | TBD |
 
 ---
 
 ## Current Status
 
-**Phase:** Week 2 - Product Catalog API  
-**Next Action:** Create products_api Lambda function
+**Phase:** Week 6 - Order Management & History  
+**Next Action:** Create orders.html and admin-orders.html
 
-**Week 2 Complete!** 🎉
+**Weeks 1-5 Complete!** 🎉
 
-**Infrastructure Summary:**
+**Infrastructure:**
 - 8 SQS queues deployed (4 main + 4 DLQ)
 - 4 DynamoDB tables active (Products, Orders, Cart, Reviews)
 - Auto-cache-monitor updated with Shopping tables
 - Combined traffic monitoring (2M reads/day threshold)
-- All tests passed successfully
 
-**API & Frontend:**
-- products_api Lambda deployed
-- API Gateway endpoint: https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/products
-- shop.html with product catalog
-- cart.html with shopping cart
-- 5 sample products loaded
+**APIs Deployed:**
+- products-api: CRUD operations, list, get, search
+- orders-api: Create, get, list orders
+- reviews-api: Create, list, vote on reviews
+- API Gateway: https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/
+
+**Frontend Pages:**
+- shop.html: Product catalog with ratings
+- cart.html: Shopping cart with checkout
+- product.html: Product details with reviews
+- admin-products.html: Product management
+
+**Features Working:**
+- ✅ Browse products with star ratings
+- ✅ Add to cart (localStorage)
+- ✅ Checkout creates orders
+- ✅ Stock updates automatically
+- ✅ Write and vote on reviews
+- ✅ Admin product CRUD
+
+**Still Needed:**
+- ⏭️ Order history and management
+- ⏸️ Payment processing (Stripe/PayPal)
+- ⏸️ User authentication
+- ⏸️ Email notifications
+- ⏸️ Shipping integration
 
 ---
 

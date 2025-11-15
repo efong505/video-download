@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Marketing Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding-top: 80px; }
+        .quota-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .stat-card { border-left: 4px solid #667eea; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+
+    <div class="container">
+        <h1>📧 Email Marketing Dashboard</h1>
+        
+        <!-- Quota Cards -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card quota-card">
+                    <div class="card-body">
+                        <h5>Subscribers</h5>
+                        <h2 id="subscriber-count">0</h2>
+                        <div class="progress" style="height: 10px;">
+                            <div id="subscriber-progress" class="progress-bar bg-light" style="width: 0%"></div>
+                        </div>
+                        <small id="subscriber-limit">of 0 limit</small>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card quota-card">
+                    <div class="card-body">
+                        <h5>Emails This Month</h5>
+                        <h2 id="emails-sent">0</h2>
+                        <div class="progress" style="height: 10px;">
+                            <div id="emails-progress" class="progress-bar bg-light" style="width: 0%"></div>
+                        </div>
+                        <small id="emails-limit">of 0 limit</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="mb-4">
+            <a href="user-email-campaign-create.html" class="btn btn-primary">📝 Create Campaign</a>
+            <a href="user-email-subscribers.html" class="btn btn-secondary">👥 Manage Subscribers</a>
+        </div>
+
+        <!-- Campaigns List -->
+        <div class="card">
+            <div class="card-header">
+                <h5>Recent Campaigns</h5>
+            </div>
+            <div class="card-body">
+                <div id="campaigns-list">Loading...</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        const API_URL = 'https://YOUR-API-GATEWAY-URL/prod/user-email';
+        const token = localStorage.getItem('auth_token');
+
+        async function loadDashboard() {
+            // Load quota
+            const userData = JSON.parse(localStorage.getItem('user_data') || '{}');
+            const subLimit = userData.email_subscriber_limit || 0;
+            const subCount = userData.email_subscribers_count || 0;
+            const emailLimit = userData.email_monthly_limit || 0;
+            const emailSent = userData.email_sent_this_month || 0;
+
+            document.getElementById('subscriber-count').textContent = subCount;
+            document.getElementById('subscriber-limit').textContent = `of ${subLimit} limit`;
+            document.getElementById('subscriber-progress').style.width = `${(subCount/subLimit)*100}%`;
+
+            document.getElementById('emails-sent').textContent = emailSent;
+            document.getElementById('emails-limit').textContent = `of ${emailLimit} limit`;
+            document.getElementById('emails-progress').style.width = `${(emailSent/emailLimit)*100}%`;
+
+            // Load campaigns
+            const response = await fetch(`${API_URL}?action=list_campaigns`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const data = await response.json();
+
+            if (data.campaigns && data.campaigns.length > 0) {
+                document.getElementById('campaigns-list').innerHTML = data.campaigns.map(c => `
+                    <div class="card mb-2 stat-card">
+                        <div class="card-body">
+                            <h6>${c.title}</h6>
+                            <small>Status: ${c.status} | Recipients: ${c.recipient_count} | Opens: ${c.open_count}</small>
+                        </div>
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById('campaigns-list').innerHTML = '<p>No campaigns yet. Create your first campaign!</p>';
+            }
+        }
+
+        loadDashboard();
+    </script>
+</body>
+</html>

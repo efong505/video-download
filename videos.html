@@ -901,7 +901,7 @@
                             
                             createVideoCard(row, video.title, videoUrl, thumbnailUrl, fallbackThumbnailUrl, filename, videoType, externalUrl);
                         } else {
-                            createVideoCard(row, video.title, '', video.thumbnail_url || '', '', video.filename, videoType, externalUrl);
+                            createVideoCard(row, video.title, '', video.thumbnail_url || '', '', video.filename, 'external', externalUrl);
                         }
                     });
                     
@@ -958,7 +958,7 @@
                             
                             createVideoCard(row, video.title, videoUrl, thumbnailUrl, fallbackThumbnailUrl, filename, videoType, externalUrl);
                         } else {
-                            createVideoCard(row, video.title, '', video.thumbnail_url || '', '', video.filename, videoType, externalUrl);
+                            createVideoCard(row, video.title, '', video.thumbnail_url || '', '', video.filename, 'external', externalUrl);
                         }
                     });
                     
