@@ -27,6 +27,11 @@ variable "environment_variables" {
   default = {}
 }
 
+variable "layers" {
+  type    = list(string)
+  default = []
+}
+
 resource "aws_lambda_function" "this" {
   function_name = var.function_name
   role          = var.role_arn
@@ -35,6 +40,7 @@ resource "aws_lambda_function" "this" {
   memory_size   = var.memory_size
   timeout       = var.timeout
   filename      = "${path.module}/placeholder.zip"
+  layers        = var.layers
 
   environment {
     variables = var.environment_variables
