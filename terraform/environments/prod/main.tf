@@ -832,6 +832,318 @@ module "dynamodb_election_events" {
   ]
 }
 
+# Email subscribers table
+module "dynamodb_email_subscribers" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "email-subscribers"
+  hash_key     = "email"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "email", type = "S" }
+  ]
+}
+
+# Email events table
+module "dynamodb_email_events" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "email-events"
+  hash_key     = "event_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "event_id", type = "S" }
+  ]
+}
+
+# Newsletters table
+module "dynamodb_newsletters" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "newsletters"
+  hash_key     = "newsletter_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "newsletter_id", type = "S" }
+  ]
+}
+
+# Newsletter campaigns table
+module "dynamodb_newsletter_campaigns" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "newsletter_campaigns"
+  hash_key     = "campaign_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "campaign_id", type = "S" }
+  ]
+}
+
+# Newsletter templates table
+module "dynamodb_newsletter_templates" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "newsletter_templates"
+  hash_key     = "template_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "template_id", type = "S" }
+  ]
+}
+
+# Newsletter analytics table
+module "dynamodb_newsletter_analytics" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "newsletter_analytics"
+  hash_key     = "analytics_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "analytics_id", type = "S" }
+  ]
+}
+
+# User email subscribers table
+module "dynamodb_user_email_subscribers" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "user-email-subscribers"
+  hash_key     = "subscriber_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "subscriber_id", type = "S" }
+  ]
+}
+
+# User email campaigns table
+module "dynamodb_user_email_campaigns" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "user-email-campaigns"
+  hash_key     = "campaign_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "campaign_id", type = "S" }
+  ]
+}
+
+# User email events table
+module "dynamodb_user_email_events" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "user-email-events"
+  hash_key     = "event_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "event_id", type = "S" }
+  ]
+}
+
+# Pending changes table
+module "dynamodb_pending_changes" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "pending-changes"
+  hash_key     = "change_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "change_id", type = "S" }
+  ]
+}
+
+# User flags table
+module "dynamodb_user_flags" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "user-flags"
+  hash_key     = "flag_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "flag_id", type = "S" }
+  ]
+}
+
+# Admin users table
+module "dynamodb_admin_users" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "admin-users"
+  hash_key     = "user_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "user_id", type = "S" }
+  ]
+}
+
+# Templates table
+module "dynamodb_templates" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "Templates"
+  hash_key     = "template_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "template_id", type = "S" }
+  ]
+}
+
+# Cards table
+module "dynamodb_cards" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "Cards"
+  hash_key     = "card_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "card_id", type = "S" }
+  ]
+}
+
+# Cart table
+module "dynamodb_cart" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "Cart"
+  hash_key     = "cart_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "cart_id", type = "S" }
+  ]
+}
+
+# Orders table
+module "dynamodb_orders" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "Orders"
+  hash_key     = "order_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "order_id", type = "S" }
+  ]
+}
+
+# Products table
+module "dynamodb_products" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "Products"
+  hash_key     = "product_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "product_id", type = "S" }
+  ]
+}
+
+# Reviews table
+module "dynamodb_reviews" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "Reviews"
+  hash_key     = "review_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "review_id", type = "S" }
+  ]
+}
+
+# Storage files table
+module "dynamodb_storage_files" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "StorageFiles"
+  hash_key     = "file_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "file_id", type = "S" }
+  ]
+}
+
+# Storage users table
+module "dynamodb_storage_users" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "StorageUsers"
+  hash_key     = "user_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "user_id", type = "S" }
+  ]
+}
+
+# Users legacy table
+module "dynamodb_users_legacy" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "Users"
+  hash_key     = "user_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "user_id", type = "S" }
+  ]
+}
+
+# Website configs table
+module "dynamodb_website_configs" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "WebsiteConfigs"
+  hash_key     = "config_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "config_id", type = "S" }
+  ]
+}
+
+# News articles legacy table
+module "dynamodb_news_articles" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "NewsArticles"
+  hash_key     = "article_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "article_id", type = "S" }
+  ]
+}
+
+# Demo table
+module "dynamodb_demo_table" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "DemoTable"
+  hash_key     = "id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "id", type = "S" }
+  ]
+}
+
 # ============================================
 # Outputs
 # ============================================
