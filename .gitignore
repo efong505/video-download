@@ -109,4 +109,20 @@ package-lock.json
 yarn.lock
 
 # url_analysis_api
-url_analysis_api/python/* 
+url_analysis_api/python/*
+
+# Terraform
+**/.terraform/*
+**/.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+.terraformrc
+terraform.rc
