@@ -1,0 +1,22 @@
+{
+  "TotalDeleted": 3,
+  "FailedAPIs": [],
+  "Timestamp": "2026-02-09 13:33:31",
+  "DeletedAPIs": [
+    {
+      "Name": "notifications-api OLD",
+      "Reason": "Empty shell, replaced by lc7w6ebg4m",
+      "Id": "ulcbf9glui"
+    },
+    {
+      "Name": "recipe-scraper-api OLD",
+      "Reason": "Empty shell, replaced by 1lgppg87fe",
+      "Id": "ts4xz3fs70"
+    },
+    {
+      "Name": "MyFirstAPI",
+      "Reason": "Test API, no integrations",
+      "Id": "97gtxp82b2"
+    }
+  ]
+}

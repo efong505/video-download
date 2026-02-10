@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unsubscribe - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body p-5 text-center">
+                        <div id="unsubscribe-form">
+                            <h2 class="mb-4">😢 Sorry to See You Go</h2>
+                            <p class="text-muted mb-4">We're sad to see you unsubscribe from our election updates.</p>
+                            <p id="email-display" class="mb-4"></p>
+                            <button class="btn btn-danger btn-lg" onclick="confirmUnsubscribe()">Unsubscribe</button>
+                            <br><br>
+                            <a href="/" class="text-muted">Never mind, take me back</a>
+                        </div>
+                        <div id="success-message" style="display: none;">
+                            <h2 class="text-success mb-4">✓ Unsubscribed</h2>
+                            <p>You've been successfully unsubscribed from our mailing list.</p>
+                            <p class="text-muted">You won't receive any more emails from us.</p>
+                            <a href="/" class="btn btn-primary mt-3">Return to Homepage</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_ENDPOINT = 'https://niexv1rw75.execute-api.us-east-1.amazonaws.com';
+        
+        // Get email from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const email = urlParams.get('email');
+        
+        // Wait for DOM to be ready
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailDisplay = document.getElementById('email-display');
+            if (emailDisplay) {
+                if (email) {
+                    emailDisplay.innerHTML = '<strong>' + email + '</strong>';
+                } else {
+                    emailDisplay.innerHTML = '<span class="text-danger">No email provided</span>';
+                }
+            }
+        });
+        
+        async function confirmUnsubscribe() {
+            if (!email) {
+                alert('No email address provided');
+                return;
+            }
+            
+            try {
+                const response = await fetch(API_ENDPOINT + '/unsubscribe?email=' + encodeURIComponent(email));
+                
+                if (response.ok) {
+                    const form = document.getElementById('unsubscribe-form');
+                    const success = document.getElementById('success-message');
+                    if (form) form.style.display = 'none';
+                    if (success) success.style.display = 'block';
+                } else {
+                    alert('Failed to unsubscribe. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Please try again.');
+            }
+        }
+    </script>
+</body>
+</html>

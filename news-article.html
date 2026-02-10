@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News Article - Christian Conservatives Today</title>
+    <meta name="description" content="Read breaking Christian conservative news with biblical perspective.">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="Christian Conservatives Today">
+    <meta property="og:title" content="Breaking Christian Conservative News - Biblical Perspective">
+    <meta property="og:description" content="Stay informed with faith-based news coverage. Breaking stories analyzed through a Christian conservative lens with biblical commentary.">
+    <meta property="og:url" content="https://christianconservativestoday.com/news-article.html">
+    <meta property="og:image" content="https://christianconservativestoday.com/techcrosslogo.jpg">
+    <meta property="og:image:secure_url" content="https://christianconservativestoday.com/techcrosslogo.jpg">
+    <meta property="og:image:type" content="image/jpeg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Christian Conservative News">
+    <meta name="twitter:description" content="Read breaking Christian conservative news with biblical perspective.">
+    <meta name="twitter:image" content="https://christianconservativestoday.com/techcrosslogo.jpg">
+    <meta name="twitter:image:alt" content="Christian Conservatives Today Logo">
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CCT">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding-top: 80px;
+        }
+        .article-container {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .article-title {
+            color: #2c3e50;
+            font-weight: 700;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        .article-meta {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #ecf0f1;
+        }
+        .breaking-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: inline-block;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+        .category-badge {
+            background: #27ae60;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-right: 15px;
+        }
+        .article-content {
+            color: #2c3e50;
+            font-size: 1.1em;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+        .article-content h1, .article-content h2, .article-content h3 {
+            color: #2c3e50;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        .article-content p {
+            margin-bottom: 20px;
+        }
+        .article-tags {
+            margin-bottom: 30px;
+        }
+        .tag-badge {
+            background: #3498db;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            display: inline-block;
+        }
+        .external-source {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .share-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .share-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50%;
+            margin-right: 8px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            transition: all 0.3s ease;
+            font-size: 18px;
+        }
+        .share-btn i {
+            color: white;
+            vertical-align: middle;
+        }
+        .share-btn:hover {
+            transform: translateY(-2px) scale(1.1);
+            color: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .share-btn.facebook { background: #3b5998; }
+        .share-btn.twitter { background: #000000; }
+        .share-btn.twitter i { color: white !important; line-height: 1; display: inline-block; }
+        .share-btn.linkedin { background: #0077b5; }
+        .admin-controls {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .btn-warning {
+            background: linear-gradient(135deg, #f39c12 0%, #e67e22 100%);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: 600;
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+        }
+        @media (max-width: 768px) {
+            .article-container {
+                padding: 20px;
+            }
+            .article-title {
+                font-size: 2em;
+            }
+        }
+    </style>
+</head>
+<body style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh;">
+    <!-- Navigation -->
+    <div id="navbar-container" data-page="news-article" data-icon-style="fontawesome"></div>
+    
+    <div class="container mt-4">
+
+        <!-- Admin Controls -->
+        <div id="adminControls" class="admin-controls" style="display: none;">
+            <h6><i class="fas fa-cog"></i> Admin Controls</h6>
+            <button class="btn btn-warning btn-sm me-2" onclick="editNews()">
+                <i class="fas fa-edit"></i> Edit
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="deleteNews()">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+        </div>
+
+        <!-- Article Content -->
+        <div class="article-container">
+            <div id="articleContent">
+                <div class="text-center">
+                    <i class="fas fa-spinner fa-spin fa-2x" style="color: #3498db;"></i>
+                    <p class="mt-2">Loading article...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Share Section -->
+        <div class="share-section">
+            <h5><i class="fas fa-share-alt"></i> Share This Article</h5>
+            <div id="shareButtons"></div>
+        </div>
+
+        <!-- Back to News -->
+        <div class="text-center mb-4">
+            <a href="news.html" class="btn btn-primary">
+                <i class="fas fa-arrow-left"></i> Back to News
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        var NEWS_API = 'https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news';
+        var currentNewsId = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('navbar.html')
+                .then(r => r.text())
+                .then(html => {
+                    document.getElementById('navbar-container').innerHTML = html;
+                    initNavbar();
+                    checkAdminControls();
+                });
+            loadNewsArticle();
+        });
+
+        function checkAdminControls() {
+            var userData = localStorage.getItem('user_data');
+            var userRole = userData ? JSON.parse(userData).role : null;
+            if (['admin', 'super_user'].includes(userRole)) {
+                document.getElementById('adminControls').style.display = 'block';
+            }
+        }
+
+        function loadNewsArticle() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var newsId = urlParams.get('id');
+            
+            if (!newsId) {
+                document.getElementById('articleContent').innerHTML = 
+                    '<div class="text-center"><p class="text-danger">No article ID provided</p></div>';
+                return;
+            }
+            
+            currentNewsId = newsId;
+            
+            fetch(NEWS_API + '?action=get&news_id=' + newsId)
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.error) {
+                    document.getElementById('articleContent').innerHTML = 
+                        '<div class="text-center"><p class="text-danger">Article not found</p></div>';
+                } else {
+                    displayArticle(data);
+                    setupSharing(data);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error loading article:', error);
+                document.getElementById('articleContent').innerHTML = 
+                    '<div class="text-center"><p class="text-danger">Failed to load article</p></div>';
+            });
+        }
+
+        function displayArticle(news) {
+            // Update meta tags for social sharing
+            if (news.featured_image) {
+                document.querySelector('meta[property="og:image"]').setAttribute('content', news.featured_image);
+                document.querySelector('meta[property="og:image:secure_url"]').setAttribute('content', news.featured_image);
+                document.querySelector('meta[name="twitter:image"]').setAttribute('content', news.featured_image);
+            }
+            document.querySelector('meta[property="og:title"]').setAttribute('content', news.title);
+            document.querySelector('meta[name="twitter:title"]').setAttribute('content', news.title);
+            if (news.summary) {
+                document.querySelector('meta[property="og:description"]').setAttribute('content', news.summary);
+                document.querySelector('meta[name="twitter:description"]').setAttribute('content', news.summary);
+            }
+            
+            var html = '';
+            
+            // Breaking badge
+            if (news.is_breaking) {
+                html += '<div class="breaking-badge"><i class="fas fa-exclamation-triangle"></i> BREAKING NEWS</div>';
+            }
+            
+            // Category badge
+            html += '<span class="category-badge">' + (news.category || 'General').toUpperCase() + '</span>';
+            
+            // Title
+            html += '<h1 class="article-title">' + news.title + '</h1>';
+            
+            // Meta info
+            html += '<div class="article-meta">';
+            html += '<i class="fas fa-user"></i> By ' + (news.author_name || news.author) + ' | ';
+            html += '<i class="fas fa-calendar"></i> ' + formatDate(news.created_at) + ' | ';
+            html += '<i class="fas fa-eye"></i> ' + (news.view_count || 0) + ' views';
+            html += '</div>';
+            
+            // External source
+            if (news.external_url) {
+                html += '<div class="external-source">';
+                html += '<h6><i class="fas fa-external-link-alt"></i> Original Source</h6>';
+                html += '<a href="' + news.external_url + '" target="_blank" class="btn btn-primary">';
+                html += 'Read Original Article <i class="fas fa-external-link-alt"></i></a>';
+                html += '</div>';
+            }
+            
+            // Featured Image
+            if (news.featured_image) {
+                html += '<div class="text-center mb-4">';
+                html += '<img src="' + news.featured_image + '" alt="' + news.title + '" style="max-width: 100%; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">';
+                html += '</div>';
+            }
+            
+            // Summary
+            if (news.summary) {
+                html += '<div class="alert alert-info">';
+                html += '<h6><i class="fas fa-info-circle"></i> Summary</h6>';
+                html += '<p>' + news.summary + '</p>';
+                html += '</div>';
+            }
+            
+            // Content
+            html += '<div class="article-content">' + (news.content || '') + '</div>';
+            
+            // Tags
+            if (news.tags && news.tags.length > 0) {
+                html += '<div class="article-tags">';
+                html += '<h6><i class="fas fa-tags"></i> Tags</h6>';
+                news.tags.forEach(function(tag) {
+                    html += '<span class="tag-badge">' + tag + '</span>';
+                });
+                html += '</div>';
+            }
+            
+            document.getElementById('articleContent').innerHTML = html;
+            
+            // Update page title
+            document.title = news.title + ' - Christian Conservatives Today';
+        }
+
+        function setupSharing(news) {
+            var previewUrl = 'https://christianconservativestoday.com/previews/news-' + currentNewsId + '.html';
+            var title = encodeURIComponent(news.title);
+            var summary = encodeURIComponent(news.summary || news.title);
+            
+            var shareHtml = '';
+            shareHtml += '<a href="https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(previewUrl) + '" target="_blank" class="share-btn facebook">';
+            shareHtml += '<i class="fab fa-facebook-f"></i></a>';
+            
+            shareHtml += '<a href="https://twitter.com/intent/tweet?url=' + encodeURIComponent(previewUrl) + '&text=' + title + '" target="_blank" class="share-btn twitter">';
+            shareHtml += '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="white" viewBox="0 0 16 16"><path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/></svg></a>';
+            
+            shareHtml += '<a href="https://www.linkedin.com/sharing/share-offsite/?url=' + encodeURIComponent(previewUrl) + '" target="_blank" class="share-btn linkedin">';
+            shareHtml += '<i class="fab fa-linkedin-in"></i></a>';
+            
+            shareHtml += '<button class="share-btn" style="background: #E4405F;" onclick="copyLinkForInstagram()">';
+            shareHtml += '<i class="fab fa-instagram"></i></button>';
+            
+            shareHtml += '<a href="https://truthsocial.com/share?url=' + encodeURIComponent(previewUrl) + '&title=' + title + '" target="_blank" class="share-btn" style="background: #FF0000;">';
+            shareHtml += '<i class="fas fa-flag-usa"></i></a>';
+            
+            shareHtml += '<button class="share-btn" onclick="copyLink()">';
+            shareHtml += '<i class="fas fa-link"></i></button>';
+            
+            document.getElementById('shareButtons').innerHTML = shareHtml;
+        }
+
+        function copyLink() {
+            var previewUrl = 'https://christianconservativestoday.com/previews/news-' + currentNewsId + '.html';
+            navigator.clipboard.writeText(previewUrl).then(function() {
+                alert('Link copied to clipboard!');
+            }).catch(function() {
+                var textArea = document.createElement('textarea');
+                textArea.value = previewUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('Link copied to clipboard!');
+            });
+        }
+        
+        function copyLinkForInstagram() {
+            var previewUrl = 'https://christianconservativestoday.com/previews/news-' + currentNewsId + '.html';
+            navigator.clipboard.writeText(previewUrl).then(function() {
+                alert('📷 Link copied! Paste it in your Instagram bio or story. Instagram doesn\'t support direct web links in posts.');
+            }).catch(function() {
+                var textArea = document.createElement('textarea');
+                textArea.value = previewUrl;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                alert('📷 Link copied! Paste it in your Instagram bio or story.');
+            });
+        }
+
+        function editNews() {
+            window.location.href = 'edit-news.html?id=' + currentNewsId;
+        }
+
+        function deleteNews() {
+            if (!confirm('Are you sure you want to delete this news article?')) {
+                return;
+            }
+            
+            var token = localStorage.getItem('auth_token');
+            
+            fetch(NEWS_API + '?action=delete&news_id=' + currentNewsId, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    alert('News article deleted successfully');
+                    window.location.href = 'news.html';
+                }
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+                alert('Failed to delete news article');
+            });
+        }
+
+        function formatDate(dateString) {
+            var date = new Date(dateString);
+            return date.toLocaleDateString() + ' at ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+
+
+    </script>
+    <script src="pwa-install.js"></script>
+</body>
+</html>

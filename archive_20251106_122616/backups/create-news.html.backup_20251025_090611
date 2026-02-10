@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create News - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <style>
+        .dashboard-nav {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            padding: 15px 0;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+        }
+        .nav-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        .form-container {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 8px;
+        }
+        .form-control, .form-select {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 12px 15px;
+            transition: all 0.3s ease;
+        }
+        .form-control:focus, .form-select:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(149, 165, 166, 0.4);
+        }
+        .breaking-news-toggle {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        .breaking-news-toggle.active {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+        }
+        #editor {
+            height: 300px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+        }
+        .tag-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            padding: 8px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            min-height: 45px;
+        }
+        .tag-item {
+            background: #3498db;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+        @media (max-width: 768px) {
+            .dashboard-nav {
+                gap: 8px;
+            }
+            .nav-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+        }
+        @media (max-width: 576px) {
+            .dashboard-nav {
+                gap: 5px;
+            }
+            .nav-btn {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh;">
+    <div class="container mt-4">
+        <!-- Navigation -->
+        <div class="dashboard-nav">
+            <a href="index.html" class="nav-btn"><i class="fas fa-home"></i> Home</a>
+            <a href="videos.html" class="nav-btn"><i class="fas fa-video"></i> Videos</a>
+            <a href="articles.html" class="nav-btn"><i class="fas fa-newspaper"></i> Articles</a>
+            <a href="news.html" class="nav-btn"><i class="fas fa-broadcast-tower"></i> News</a>
+            <a href="admin.html" class="nav-btn"><i class="fas fa-cog"></i> Admin</a>
+            <a href="profile.html" class="nav-btn"><i class="fas fa-user"></i> Profile</a>
+            <button onclick="logout()" class="nav-btn" style="background: rgba(231, 76, 60, 0.8);"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+
+        <!-- Create News Form -->
+        <div class="form-container">
+            <h2 class="text-center mb-4" style="color: #2c3e50;">
+                <i class="fas fa-plus-circle"></i> Create News Article
+            </h2>
+
+            <form id="newsForm">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="mb-3">
+                            <label for="title" class="form-label">Title *</label>
+                            <input type="text" class="form-control" id="title" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="category" class="form-label">Category</label>
+                            <select class="form-select" id="category">
+                                <option value="general">General News</option>
+                                <option value="politics">Politics</option>
+                                <option value="christian">Christian News</option>
+                                <option value="election">Election Coverage</option>
+                                <option value="state-election">State Elections</option>
+                                <option value="breaking">Breaking News</option>
+                                <option value="commentary">Commentary</option>
+                                <option value="world">World News</option>
+                                <option value="local">Local News</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="state" class="form-label">State (Optional)</label>
+                            <select class="form-select" id="state">
+                                <option value="">None</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="scheduled_publish" class="form-label">Schedule Publish (Optional)</label>
+                            <input type="datetime-local" class="form-control" id="scheduled_publish">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="visibility" class="form-label">Visibility</label>
+                            <select class="form-select" id="visibility">
+                                <option value="public">Public</option>
+                                <option value="private">Private</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select class="form-select" id="status">
+                                <option value="published">Published</option>
+                                <option value="draft">Draft</option>
+                                <option value="scheduled">Scheduled</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Breaking News</label>
+                    <div>
+                        <button type="button" id="breakingToggle" class="breaking-news-toggle" onclick="toggleBreaking()">
+                            <i class="fas fa-exclamation-triangle"></i> Mark as Breaking News
+                        </button>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="summary" class="form-label">Summary</label>
+                    <textarea class="form-control" id="summary" rows="3" placeholder="Brief summary of the news article..."></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="external_url" class="form-label">External URL (Optional)</label>
+                    <input type="url" class="form-control" id="external_url" placeholder="https://example.com/news-article">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Featured Image (Optional)</label>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="url" class="form-control" id="featured_image" placeholder="https://example.com/image.jpg or upload below">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="file" class="form-control" id="imageUpload" accept="image/*" onchange="uploadImage()">
+                        </div>
+                    </div>
+                    <div id="imagePreview" style="margin-top: 10px;"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Tags</label>
+                    <div class="tag-input" id="tagContainer">
+                        <input type="text" id="tagInput" placeholder="Type tag and press Enter..." style="border: none; outline: none; flex: 1; min-width: 150px;">
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Content *</label>
+                    <div id="editor"></div>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary me-3">
+                        <i class="fas fa-save"></i> Create News Article
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="window.location.href='news.html'">
+                        <i class="fas fa-times"></i> Cancel
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script>
+        var NEWS_API = 'https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news';
+        var quill;
+        var tags = [];
+        var isBreaking = false;
+
+        // Initialize Quill editor
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check authentication
+            var token = localStorage.getItem('auth_token');
+            var userData = localStorage.getItem('user_data');
+            var userRole = userData ? JSON.parse(userData).role : null;
+            
+            if (!token || !['admin', 'super_user'].includes(userRole)) {
+                alert('Admin access required');
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Populate state dropdown
+            populateStateDropdown();
+
+            // Initialize Quill
+            quill = new Quill('#editor', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['blockquote', 'code-block'],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                }
+            });
+
+            // Tag input handling
+            var tagInput = document.getElementById('tagInput');
+            tagInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addTag(this.value.trim());
+                    this.value = '';
+                }
+            });
+        });
+        
+        function populateStateDropdown() {
+            var states = [
+                'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
+                'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
+                'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan',
+                'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+                'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio',
+                'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
+                'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
+                'Wisconsin', 'Wyoming'
+            ];
+            
+            var select = document.getElementById('state');
+            states.forEach(function(state) {
+                var option = document.createElement('option');
+                option.value = state.toLowerCase().replace(/ /g, '-');
+                option.textContent = state;
+                select.appendChild(option);
+            });
+        }
+
+        function addTag(tagText) {
+            if (tagText && !tags.includes(tagText)) {
+                tags.push(tagText);
+                renderTags();
+            }
+        }
+
+        function removeTag(tagText) {
+            tags = tags.filter(function(tag) { return tag !== tagText; });
+            renderTags();
+        }
+
+        function renderTags() {
+            var container = document.getElementById('tagContainer');
+            var tagInput = document.getElementById('tagInput');
+            
+            // Clear existing tags
+            var existingTags = container.querySelectorAll('.tag-item');
+            existingTags.forEach(function(tag) { tag.remove(); });
+            
+            // Add tags
+            tags.forEach(function(tag) {
+                var tagElement = document.createElement('span');
+                tagElement.className = 'tag-item';
+                tagElement.innerHTML = tag + ' <span class="tag-remove" onclick="removeTag(\'' + tag + '\')">&times;</span>';
+                container.insertBefore(tagElement, tagInput);
+            });
+        }
+
+        function toggleBreaking() {
+            isBreaking = !isBreaking;
+            var button = document.getElementById('breakingToggle');
+            
+            if (isBreaking) {
+                button.classList.add('active');
+                button.innerHTML = '<i class="fas fa-check"></i> Breaking News Enabled';
+            } else {
+                button.classList.remove('active');
+                button.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Mark as Breaking News';
+            }
+        }
+
+        document.getElementById('newsForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            createNews();
+        });
+
+        function createNews() {
+            var token = localStorage.getItem('auth_token');
+            
+            var scheduledPublish = document.getElementById('scheduled_publish').value;
+            var state = document.getElementById('state').value;
+            
+            var newsData = {
+                title: document.getElementById('title').value,
+                content: quill.root.innerHTML,
+                summary: document.getElementById('summary').value,
+                category: document.getElementById('category').value,
+                state: state,
+                visibility: document.getElementById('visibility').value,
+                status: document.getElementById('status').value,
+                is_breaking: isBreaking,
+                external_url: document.getElementById('external_url').value,
+                featured_image: document.getElementById('featured_image').value,
+                scheduled_publish: scheduledPublish ? new Date(scheduledPublish).toISOString() : '',
+                tags: tags
+            };
+
+            fetch(NEWS_API + '?action=create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(newsData)
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    alert('News article created successfully!');
+                    window.location.href = 'news.html';
+                }
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+                alert('Failed to create news article');
+            });
+        }
+
+        function uploadImage() {
+            var fileInput = document.getElementById('imageUpload');
+            var file = fileInput.files[0];
+            
+            if (!file) return;
+            
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var imageData = e.target.result;
+                var token = localStorage.getItem('auth_token');
+                
+                // Show preview
+                document.getElementById('imagePreview').innerHTML = 
+                    '<img src="' + imageData + '" style="max-width: 200px; border-radius: 10px;">';
+                
+                // Upload to S3
+                fetch(NEWS_API + '?action=upload', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: JSON.stringify({
+                        image: imageData,
+                        filename: 'news-' + Date.now() + '.jpg'
+                    })
+                })
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    if (data.url) {
+                        document.getElementById('featured_image').value = data.url;
+                        alert('Image uploaded successfully!');
+                    } else {
+                        alert('Upload failed: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Upload error:', error);
+                    alert('Failed to upload image');
+                });
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
+    </script>
+</body>
+</html>

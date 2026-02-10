@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Article - Christian Conservative Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        /* MOVED TO common-styles.css
+.dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+*/
+        /* MOVED TO common-styles.css
+.dashboard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+*/
+        /* MOVED TO common-styles.css
+.nav-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0;
+        }
+*/
+        /* MOVED TO common-styles.css
+.nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+*/
+        /* MOVED TO common-styles.css
+.nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+*/
+        /* MOVED TO common-styles.css
+.nav-link:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+*/
+        /* MOVED TO common-styles.css
+.nav-link.logout {
+            background: rgba(220,53,69,0.8);
+            border-color: rgba(220,53,69,0.9);
+        }
+*/
+        /* MOVED TO common-styles.css
+.nav-link.logout:hover {
+            background: rgba(220,53,69,1);
+        }
+*/
+        @media (max-width: 768px) {
+            /* MOVED TO common-styles.css
+.nav-brand {
+                font-size: 1.4rem;
+            }
+*/
+            /* MOVED TO common-styles.css
+.nav-links {
+                gap: 8px;
+                justify-content: center;
+                width: 100%;
+                margin-top: 10px;
+            }
+*/
+            /* MOVED TO common-styles.css
+.nav-link {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+*/
+            /* MOVED TO common-styles.css
+.dashboard-nav {
+                justify-content: center;
+                text-align: center;
+            }
+*/
+        }
+        @media (max-width: 576px) {
+            /* MOVED TO common-styles.css
+.nav-links {
+                gap: 5px;
+            }
+*/
+            /* MOVED TO common-styles.css
+.nav-link {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+            }
+*/
+            /* MOVED TO common-styles.css
+.nav-brand {
+                font-size: 1.2rem;
+            }
+*/
+        }
+        .article-form {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        /* Enhanced media handling in Quill editor */
+        .ql-editor img {
+            max-width: 100%;
+            height: auto;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        .ql-editor img:hover {
+            border-color: #667eea;
+        }
+        .ql-editor iframe {
+            max-width: 100%;
+            height: auto;
+            min-height: 315px;
+        }
+        .ql-video {
+            width: 100%;
+            height: 315px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="dashboard-nav">
+                <h1 class="nav-brand">✏️ Edit Article</h1>
+                <div class="nav-links" id="nav-links">
+                    <a href="/" class="nav-link">🏠 Home</a>
+                    <a href="category.html" class="nav-link">📂 Categories</a>
+                    <a href="videos.html" class="nav-link">🎬 Videos</a>
+                    <a href="articles.html" class="nav-link">📝 Articles</a>
+                    <a href="create-article.html" class="nav-link">✍️ Write Article</a>
+                    <a href="authors.html" class="nav-link">👥 Authors</a>
+                    <a href="resources.html" class="nav-link">📚 Resources</a>
+                    <a href="user-upload.html" class="nav-link">⬆️ Upload Video</a>
+                    <a href="profile.html" class="nav-link">👤 Profile</a>
+                    <a href="#" onclick="viewMyPage()" class="nav-link">📄 My Page</a>
+                    <a href="#" onclick="logout()" class="nav-link logout">🚪 Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 mx-auto">
+                <div id="loading" class="text-center py-5">
+                    <div class="spinner-border" role="status"></div>
+                    <p class="mt-3">Loading article...</p>
+                </div>
+
+                <div id="edit-form" class="article-form" style="display: none;">
+                    <form id="article-form">
+                        <div class="mb-3">
+                            <label class="form-label">Article Title</label>
+                            <input type="text" id="article-title" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <select id="article-category" class="form-select">
+                                <option value="sermon">Sermon</option>
+                                <option value="politics">Political Commentary</option>
+                                <option value="devotional">Devotional</option>
+                                <option value="apologetics">Apologetics</option>
+                                <option value="ministry">Ministry Update</option>
+                                <option value="service_notes">Service Notes</option>
+                                <option value="study_notes">Study Notes (Personal)</option>
+                                <option value="general">General</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Tags (comma separated)</label>
+                            <input type="text" id="article-tags" class="form-control">
+                        </div>
+
+                        <div class="mb-3" id="author-field" style="display: none;">
+                            <label class="form-label">Author (Admin Only)</label>
+                            <select id="article-author" class="form-select">
+                                <option value="">Loading users...</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Visibility</label>
+                            <select id="article-visibility" class="form-select">
+                                <option value="public">Public</option>
+                                <option value="private">Private</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Featured Image</label>
+                            <input type="file" id="featured-image" class="form-control" accept="image/*">
+                            <div class="form-text">Optional: Upload a new featured image for social media sharing and article preview</div>
+                            <div id="featured-image-preview" class="mt-2"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Article Content</label>
+                            <div class="mb-2 d-flex gap-2 align-items-center">
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="showBibleLookup()">📖 Insert Bible Verse</button>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="markdownMode" onchange="toggleMarkdownMode()">
+                                    <label class="form-check-label" for="markdownMode">📝 Markdown Mode</label>
+                                </div>
+                                <button type="button" class="btn btn-outline-info btn-sm" onclick="showMarkdownHelp()" id="markdown-help-btn" style="display: none;">❓ Markdown Help</button>
+                            </div>
+                            <div id="article-content" style="height: 400px;"></div>
+                            <textarea id="markdown-content" class="form-control" style="height: 400px; display: none; font-family: 'Courier New', monospace;" placeholder="Write your article in Markdown...
+
+# Heading 1
+## Heading 2
+**Bold text**
+*Italic text*
+[Link](https://example.com)
+![Image](image-url)
+
+- List item 1
+- List item 2
+
+> Blockquote
+
+```
+Code block
+```"></textarea>
+                        </div>
+
+                        <!-- Bible Verse Lookup Modal -->
+                        <div class="modal fade" id="bibleModal" tabindex="-1">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">📖 Bible Verse Lookup</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="mb-3">
+                                            <label class="form-label">Scripture Reference</label>
+                                            <input type="text" id="bible-reference" class="form-control" placeholder="e.g., John 3:16, Romans 8:28">
+                                            <div class="form-text">Enter book, chapter, and verse (e.g., "John 3:16")</div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="form-label">Translation</label>
+                                            <select id="bible-translation" class="form-select">
+                                                <option value="kjv">King James Version (KJV)</option>
+                                                <option value="asv">American Standard Version (ASV 1901)</option>
+                                                <option value="ylt">Young's Literal Translation (YLT - NT only)</option>
+                                                <option value="esv">English Standard Version (ESV) - Falls back to KJV</option>
+                                                <option value="niv">New International Version (NIV) - Falls back to KJV</option>
+                                                <option value="nasb">New American Standard Bible (NASB) - Falls back to KJV</option>
+                                                <option value="nlt">New Living Translation (NLT) - Falls back to KJV</option>
+                                            </select>
+                                            <div class="form-text">Supported: KJV, ASV (1901), YLT (NT only). Other translations fall back to KJV.</div>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" onclick="lookupVerse()">🔍 Look Up Verse</button>
+                                        <div id="verse-result" class="mt-3" style="display: none;">
+                                            <div class="alert alert-success">
+                                                <h6 id="verse-reference"></h6>
+                                                <p id="verse-text"></p>
+                                                <button type="button" class="btn btn-success btn-sm" onclick="insertVerse()">✅ Insert This Verse</button>
+                                            </div>
+                                        </div>
+                                        <div id="verse-error" class="mt-3" style="display: none;">
+                                            <div class="alert alert-danger" id="error-message"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">💾 Update Article</button>
+                            <a href="articles.html" class="btn btn-secondary">❌ Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';
+        const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
+        let currentUser = null;
+        let authToken = null;
+        let quill = null;
+        let articleId = null;
+        let allUsers = [];
+        let isMarkdownMode = false;
+        let lastQuillContent = '';
+        let lastMarkdownContent = '';
+
+        window.addEventListener('load', async function() {
+            authToken = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+            
+            if (!authToken || !userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(userData);
+            
+            // Get article ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            articleId = urlParams.get('id');
+            
+            if (!articleId) {
+                alert('Article ID not provided');
+                window.location.href = 'articles.html';
+                return;
+            }
+            
+            // Load users for admin/super users
+            if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
+                document.getElementById('author-field').style.display = 'block';
+                await loadUsers();
+            }
+            
+            await loadArticle();
+        });
+
+        function setupFeaturedImageHandler() {
+            const featuredImageInput = document.getElementById('featured-image');
+            featuredImageInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        compressImage(e.target.result, function(compressedDataUrl) {
+                            showFeaturedImagePreview(compressedDataUrl);
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        function showFeaturedImagePreview(dataUrl) {
+            const previewDiv = document.getElementById('featured-image-preview');
+            previewDiv.innerHTML = 
+                '<div class="card" style="max-width: 300px;">' +
+                    '<img src="' + dataUrl + '" class="card-img-top" style="height: 150px; object-fit: cover;">' +
+                    '<div class="card-body p-2">' +
+                        '<small class="text-muted">New Featured Image Preview</small>' +
+                        '<button type="button" class="btn btn-sm btn-outline-danger ms-2" onclick="removeFeaturedImage()">Remove</button>' +
+                    '</div>' +
+                '</div>';
+        }
+        
+        function removeFeaturedImage() {
+            document.getElementById('featured-image').value = '';
+            document.getElementById('featured-image-preview').innerHTML = '';
+        }
+
+        async function loadArticle() {
+            try {
+                const response = await fetch(ARTICLES_API + '?action=get&article_id=' + articleId, {
+                    headers: {
+                        'Authorization': 'Bearer ' + authToken
+                    }
+                });
+                const data = await response.json();
+                
+                if (data.article) {
+                    initializeEditor();
+                    addImageResizeFeature();
+                    setupFeaturedImageHandler();
+                    populateForm(data.article);
+                    document.getElementById('loading').style.display = 'none';
+                    document.getElementById('edit-form').style.display = 'block';
+                } else {
+                    alert('Article not found');
+                    window.location.href = 'articles.html';
+                }
+            } catch (error) {
+                alert('Error loading article: ' + error.message);
+                window.location.href = 'articles.html';
+            }
+        }
+
+        function initializeEditor() {
+            quill = new Quill('#article-content', {
+                theme: 'snow',
+                modules: {
+                    toolbar: {
+                        container: [
+                            [{ 'header': [1, 2, 3, false] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'color': [] }, { 'background': [] }],
+                            [{ 'align': [] }],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['blockquote', 'code-block'],
+                            ['link', 'image', 'video'],
+                            ['clean']
+                        ],
+                        handlers: {
+                            'image': imageHandler,
+                            'video': videoHandler
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Custom image handler with compression
+        function imageHandler() {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.click();
+            
+            input.onchange = () => {
+                const file = input.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        compressImage(e.target.result, (compressedDataUrl) => {
+                            const range = quill.getSelection() || { index: quill.getLength() };
+                            quill.insertEmbed(range.index, 'image', compressedDataUrl);
+                            quill.setSelection(range.index + 1);
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+        }
+        
+        function compressImage(dataUrl, callback) {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const img = new Image();
+            
+            img.onload = function() {
+                const maxWidth = 600;
+                const maxHeight = 400;
+                let width = img.width;
+                let height = img.height;
+                
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height = height * (maxWidth / width);
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width = width * (maxHeight / height);
+                        height = maxHeight;
+                    }
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                let quality = 0.5;
+                let compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                
+                while (compressedDataUrl.length > 500 * 1024 * 1.37 && quality > 0.1) {
+                    quality -= 0.1;
+                    compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                }
+                
+                callback(compressedDataUrl);
+            };
+            
+            img.src = dataUrl;
+        }
+        
+        // Custom video handler for embedding videos
+        function videoHandler() {
+            const url = prompt('Enter video URL (YouTube, Vimeo, or direct video file):');
+            if (url) {
+                const range = quill.getSelection() || { index: quill.getLength() };
+                
+                // Check if it's a YouTube URL
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                    const videoId = extractYouTubeId(url);
+                    if (videoId) {
+                        const embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                        quill.insertEmbed(range.index, 'video', embedUrl);
+                    } else {
+                        alert('Invalid YouTube URL');
+                    }
+                } else if (url.includes('vimeo.com')) {
+                    const videoId = extractVimeoId(url);
+                    if (videoId) {
+                        const embedUrl = `https://player.vimeo.com/video/${videoId}`;
+                        quill.insertEmbed(range.index, 'video', embedUrl);
+                    } else {
+                        alert('Invalid Vimeo URL');
+                    }
+                } else {
+                    // Direct video file or other embed URL
+                    quill.insertEmbed(range.index, 'video', url);
+                }
+                
+                quill.setSelection(range.index + 1);
+            }
+        }
+        
+        // Extract YouTube video ID from URL
+        function extractYouTubeId(url) {
+            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+        
+        // Extract Vimeo video ID from URL
+        function extractVimeoId(url) {
+            const regex = /vimeo\.com\/(?:.*#|\/)?([0-9]+)/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+        
+        // Add image resize functionality
+        function addImageResizeFeature() {
+            if (!quill) return;
+            
+            quill.root.addEventListener('click', function(e) {
+                if (e.target.tagName === 'IMG') {
+                    showImageResizeDialog(e.target);
+                }
+            });
+        }
+        
+        function showImageResizeDialog(img) {
+            const currentWidth = img.style.width || img.naturalWidth + 'px';
+            const newWidth = prompt('Enter image width (e.g., 300px, 50%, or auto):', currentWidth);
+            
+            if (newWidth !== null && newWidth.trim() !== '') {
+                img.style.width = newWidth.trim();
+                img.style.height = 'auto';
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                const response = await fetch(ADMIN_API + '?action=users', {
+                    headers: {
+                        'Authorization': 'Bearer ' + authToken
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to fetch users: ' + response.status);
+                }
+                
+                const data = await response.json();
+                
+                if (data.users && Array.isArray(data.users)) {
+                    allUsers = data.users;
+                    populateAuthorDropdown(data.users);
+                } else {
+                    throw new Error('No users found in response');
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+                const authorSelect = document.getElementById('article-author');
+                authorSelect.innerHTML = '<option value="">Error loading users</option>';
+            }
+        }
+        
+        function populateAuthorDropdown(users) {
+            const authorSelect = document.getElementById('article-author');
+            authorSelect.innerHTML = '<option value="">Select Author...</option>';
+            
+            users.forEach(user => {
+                const option = document.createElement('option');
+                option.value = user.email;
+                const displayName = user.first_name && user.last_name ? 
+                    user.first_name + ' ' + user.last_name : user.email;
+                option.textContent = displayName + ' (' + user.email + ')';
+                authorSelect.appendChild(option);
+            });
+        }
+
+        function populateForm(article) {
+            document.getElementById('article-title').value = article.title;
+            document.getElementById('article-category').value = article.category;
+            document.getElementById('article-tags').value = article.tags ? article.tags.join(', ') : '';
+            document.getElementById('article-visibility').value = article.visibility;
+            
+            // Set author if admin/super user
+            if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
+                const authorSelect = document.getElementById('article-author');
+                if (authorSelect) {
+                    // Use author_email if available, otherwise use author field
+                    const authorEmail = article.author_email || article.author || '';
+                    authorSelect.value = authorEmail;
+                }
+            }
+            
+            if (quill) {
+                // Use Quill's clipboard to properly parse HTML content
+                const delta = quill.clipboard.convert(article.content);
+                quill.setContents(delta);
+            }
+            
+            // Show existing featured image if present
+            if (article.featured_image) {
+                showExistingFeaturedImage(article.featured_image);
+            }
+        }
+        
+        function showExistingFeaturedImage(imageData) {
+            const previewDiv = document.getElementById('featured-image-preview');
+            previewDiv.innerHTML = 
+                '<div class="card" style="max-width: 300px;">' +
+                    '<img src="' + imageData + '" class="card-img-top" style="height: 150px; object-fit: cover;">' +
+                    '<div class="card-body p-2">' +
+                        '<small class="text-muted">Current Featured Image</small>' +
+                        '<button type="button" class="btn btn-sm btn-outline-danger ms-2" onclick="removeExistingFeaturedImage()">Remove</button>' +
+                    '</div>' +
+                '</div>';
+        }
+        
+        function removeExistingFeaturedImage() {
+            document.getElementById('featured-image-preview').innerHTML = '';
+            // Mark for removal in form submission
+            document.getElementById('featured-image-preview').setAttribute('data-remove-existing', 'true');
+        }
+
+        document.getElementById('article-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const title = document.getElementById('article-title').value.trim();
+            const category = document.getElementById('article-category').value;
+            const tags = document.getElementById('article-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
+            const visibility = document.getElementById('article-visibility').value;
+            const content = getCurrentContent();
+            const featuredImageInput = document.getElementById('featured-image');
+            
+            let updateData = {
+                article_id: articleId,
+                title: title,
+                content: content,
+                category: category,
+                tags: tags,
+                visibility: visibility
+            };
+            
+            // Handle featured image update
+            const previewDiv = document.getElementById('featured-image-preview');
+            if (previewDiv.getAttribute('data-remove-existing') === 'true') {
+                // User wants to remove existing image
+                updateData.featured_image = '';
+            } else if (featuredImageInput.files[0]) {
+                // User uploaded a new image - compress and include it
+                const file = featuredImageInput.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    compressImage(e.target.result, function(compressedDataUrl) {
+                        updateData.featured_image = compressedDataUrl;
+                        submitArticleUpdate(updateData);
+                    });
+                };
+                reader.readAsDataURL(file);
+                return; // Exit here, submitArticleUpdate will be called from the callback
+            }
+            // If no changes to featured image, don't include it in update
+            
+            // Include author change if admin/super user
+            if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
+                const newAuthorEmail = document.getElementById('article-author').value;
+                if (newAuthorEmail) {
+                    updateData.author_email = newAuthorEmail;
+                }
+            }
+            
+            if (!title || !content) {
+                alert('Please fill in the title and content');
+                return;
+            }
+            
+            submitArticleUpdate(updateData);
+        });
+        
+        async function submitArticleUpdate(updateData) {
+            try {
+                const response = await fetch(ARTICLES_API + '?action=update', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + authToken
+                    },
+                    body: JSON.stringify(updateData)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Article updated successfully!');
+                    window.location.href = 'articles.html';
+                } else {
+                    alert('Error updating article: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error updating article:', error);
+                alert('Error updating article. Please try again.');
+            }
+        }
+
+        let currentVerse = null;
+
+        function showBibleLookup() {
+            const modal = new bootstrap.Modal(document.getElementById('bibleModal'));
+            modal.show();
+        }
+
+        async function lookupVerse() {
+            const reference = document.getElementById('bible-reference').value.trim();
+            const translation = document.getElementById('bible-translation').value;
+            
+            if (!reference) {
+                alert('Please enter a scripture reference');
+                return;
+            }
+            
+            document.getElementById('verse-result').style.display = 'none';
+            document.getElementById('verse-error').style.display = 'none';
+            
+            try {
+                const response = await fetch(ARTICLES_API + '?action=bible_verse&reference=' + encodeURIComponent(reference) + '&translation=' + translation);
+                const data = await response.json();
+                
+                if (response.ok && data.text) {
+                    currentVerse = data;
+                    document.getElementById('verse-reference').textContent = data.reference + ' (' + data.translation + ')';
+                    document.getElementById('verse-text').textContent = data.text;
+                    document.getElementById('verse-result').style.display = 'block';
+                } else {
+                    document.getElementById('error-message').textContent = data.error || 'Verse not found';
+                    document.getElementById('verse-error').style.display = 'block';
+                }
+            } catch (error) {
+                document.getElementById('error-message').textContent = 'Error looking up verse: ' + error.message;
+                document.getElementById('verse-error').style.display = 'block';
+            }
+        }
+
+        function insertVerse() {
+            if (currentVerse && quill) {
+                const verseHtml = '<blockquote class="bible-verse"><strong>' + currentVerse.reference + ' (' + currentVerse.translation + '):</strong> "' + currentVerse.text + '"</blockquote><p><br></p>';
+                
+                const range = quill.getSelection();
+                if (range) {
+                    quill.clipboard.dangerouslyPasteHTML(range.index, verseHtml);
+                } else {
+                    quill.clipboard.dangerouslyPasteHTML(quill.getLength(), verseHtml);
+                }
+                
+                const modal = bootstrap.Modal.getInstance(document.getElementById('bibleModal'));
+                modal.hide();
+                
+                document.getElementById('bible-reference').value = '';
+                document.getElementById('verse-result').style.display = 'none';
+            }
+        }
+
+        function viewMyPage() {
+            const userData = localStorage.getItem('user_data');
+            if (userData) {
+                const user = JSON.parse(userData);
+                window.location.href = `user-page.html?user=${encodeURIComponent(user.email)}`;
+            }
+        }
+        
+        function toggleMarkdownMode() {
+            const markdownCheckbox = document.getElementById('markdownMode');
+            const quillEditor = document.getElementById('article-content');
+            const markdownTextarea = document.getElementById('markdown-content');
+            const helpBtn = document.getElementById('markdown-help-btn');
+            
+            isMarkdownMode = markdownCheckbox.checked;
+            
+            if (isMarkdownMode) {
+                // Switch to markdown mode
+                lastQuillContent = quill.root.innerHTML;
+                const markdownText = convertHtmlToMarkdown(lastQuillContent);
+                markdownTextarea.value = markdownText;
+                
+                quillEditor.style.display = 'none';
+                markdownTextarea.style.display = 'block';
+                helpBtn.style.display = 'inline-block';
+            } else {
+                // Switch back to WYSIWYG mode
+                lastMarkdownContent = markdownTextarea.value;
+                const htmlContent = marked.parse(lastMarkdownContent);
+                quill.root.innerHTML = htmlContent;
+                
+                quillEditor.style.display = 'block';
+                markdownTextarea.style.display = 'none';
+                helpBtn.style.display = 'none';
+            }
+        }
+        
+        function convertHtmlToMarkdown(html) {
+            // Create a temporary div to decode HTML entities
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            const decodedHtml = tempDiv.innerHTML;
+            
+            // Basic HTML to Markdown conversion
+            return decodedHtml
+                .replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1\n\n')
+                .replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n\n')
+                .replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n\n')
+                .replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**')
+                .replace(/<b[^>]*>(.*?)<\/b>/gi, '**$1**')
+                .replace(/<em[^>]*>(.*?)<\/em>/gi, '*$1*')
+                .replace(/<i[^>]*>(.*?)<\/i>/gi, '*$1*')
+                .replace(/<a[^>]*href=["'](.*?)["'][^>]*>(.*?)<\/a>/gi, '[$2]($1)')
+                .replace(/<img[^>]*src=["'](.*?)["'][^>]*alt=["'](.*?)["'][^>]*>/gi, '![$2]($1)')
+                .replace(/<img[^>]*src=["'](.*?)["'][^>]*>/gi, '![]($1)')
+                .replace(/<blockquote[^>]*>(.*?)<\/blockquote>/gi, '> $1\n\n')
+                // Handle lists - try multiple patterns
+                .replace(/<li[^>]*data-list="bullet"[^>]*>([\s\S]*?)<\/li>/gi, '- $1\n')
+                .replace(/<li[^>]*data-list="ordered"[^>]*>([\s\S]*?)<\/li>/gi, function(match, content, offset, string) {
+                    const beforeMatch = string.substring(0, offset);
+                    const orderCount = (beforeMatch.match(/data-list="ordered"/g) || []).length + 1;
+                    return orderCount + '. ' + content + '\n';
+                })
+                .replace(/<ul[^>]*>([\s\S]*?)<\/ul>/gi, function(match, content) {
+                    return content.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, '- $1\n') + '\n';
+                })
+                .replace(/<ol[^>]*>([\s\S]*?)<\/ol>/gi, function(match, content) {
+                    let counter = 1;
+                    return content.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, function(match, item) {
+                        return (counter++) + '. ' + item + '\n';
+                    }) + '\n';
+                })
+                .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n')
+                .replace(/<br[^>]*>/gi, '\n')
+                .replace(/<[^>]+>/g, '') // Remove remaining HTML tags
+                .replace(/\n{3,}/g, '\n\n') // Clean up extra newlines
+                .trim();
+        }
+        
+        function showMarkdownHelp() {
+            const helpContent = `
+# Markdown Quick Reference
+
+## Headers
+# H1 Header
+## H2 Header
+### H3 Header
+
+## Text Formatting
+**Bold text**
+*Italic text*
+~~Strikethrough~~
+
+## Links and Images
+[Link text](https://example.com)
+![Alt text](image-url)
+
+## Lists
+- Unordered list item
+- Another item
+
+1. Ordered list item
+2. Another item
+
+## Quotes and Code
+> Blockquote text
+
+\`Inline code\`
+
+\`\`\`
+Code block
+\`\`\`
+
+## Line Breaks
+Two spaces at end of line  
+Creates a line break
+
+Empty line creates new paragraph
+            `;
+            
+            alert(helpContent);
+        }
+        
+        function getCurrentContent() {
+            if (isMarkdownMode) {
+                const markdownText = document.getElementById('markdown-content').value;
+                return marked.parse(markdownText);
+            } else {
+                return quill.root.innerHTML;
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
+        
+        // Add admin link if user is admin or super_user
+        document.addEventListener('DOMContentLoaded', function() {
+            const userData = localStorage.getItem('user_data');
+            if (userData) {
+                const user = JSON.parse(userData);
+                if (user.role === 'admin' || user.role === 'super_user') {
+                    const navLinks = document.getElementById('nav-links');
+                    if (navLinks) {
+                        const adminLink = document.createElement('a');
+                        adminLink.href = 'admin.html';
+                        adminLink.className = 'nav-link';
+                        adminLink.innerHTML = '⚙️ Admin';
+                        navLinks.insertBefore(adminLink, navLinks.lastElementChild);
+                    }
+                }
+            }
+        });
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

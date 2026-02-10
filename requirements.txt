@@ -1,0 +1,36 @@
+# Python Dependencies for AWS Lambda Functions
+# These packages are installed during deployment and should not be committed to the repository
+
+# HTTP Requests Library (used by articles_api and paypal_billing_api)
+requests==2.32.5
+
+# JWT Token Handling (used by auth_api and admin_api)
+PyJWT==2.8.0
+
+# AWS SDK for Python (used by router and other Lambda functions)
+boto3==1.40.46
+botocore==1.40.46
+s3transfer==0.14.0
+
+# Date/Time Utilities (dependency of boto3)
+python-dateutil==2.9.0.post0
+
+# JSON Path Expressions (dependency of boto3)
+jmespath==1.0.1
+
+# Utility Libraries
+six==1.17.0
+
+# HTTP Library Dependencies (dependencies of requests)
+urllib3==2.5.0
+certifi==2025.10.5
+charset-normalizer==3.4.3
+idna==3.11
+
+# Video Downloading Library (used by downloader Lambda)
+yt-dlp==2025.9.26
+
+# Development Dependencies (optional)
+# pytest==7.4.0
+# black==23.7.0
+# flake8==6.0.0

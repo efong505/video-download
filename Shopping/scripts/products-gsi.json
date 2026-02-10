@@ -1,0 +1,26 @@
+[
+  {
+    "IndexName": "category-created_at-index",
+    "KeySchema": [
+      {"AttributeName": "category", "KeyType": "HASH"},
+      {"AttributeName": "created_at", "KeyType": "RANGE"}
+    ],
+    "Projection": {"ProjectionType": "ALL"}
+  },
+  {
+    "IndexName": "status-sales_count-index",
+    "KeySchema": [
+      {"AttributeName": "status", "KeyType": "HASH"},
+      {"AttributeName": "sales_count", "KeyType": "RANGE"}
+    ],
+    "Projection": {"ProjectionType": "ALL"}
+  },
+  {
+    "IndexName": "featured-created_at-index",
+    "KeySchema": [
+      {"AttributeName": "featured", "KeyType": "HASH"},
+      {"AttributeName": "created_at", "KeyType": "RANGE"}
+    ],
+    "Projection": {"ProjectionType": "ALL"}
+  }
+]

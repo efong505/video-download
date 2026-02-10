@@ -1,0 +1,140 @@
+/* 
+ * Common Styles - Shared across multiple pages
+ * Created: 2025-01-XX
+ * Usage: 13+ pages (articles, videos, resources, admin pages, etc.)
+ * Consolidates: Navigation, dashboard header, responsive styles
+ */
+
+/* Base body styles - used in 21 pages */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f5f5f5;
+}
+
+/* Dashboard header - used in 13 pages */
+.dashboard-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 20px 0;
+    padding-top: 80px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+/* Dashboard navigation container - used in 11 pages */
+.dashboard-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+/* Navigation brand/title - used in 9 pages */
+.nav-brand {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Navigation links container - used in 11 pages */
+.nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+/* Navigation link styles - used in 13 pages */
+.nav-link {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    background: rgba(255,255,255,0.1);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.nav-link:hover {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* Logout button styles - used in 9 pages */
+.nav-link.logout {
+    background: rgba(220,53,69,0.8);
+    border-color: rgba(220,53,69,0.9);
+}
+
+.nav-link.logout:hover {
+    background: rgba(220,53,69,1);
+}
+
+@media (min-width: 1200px) {
+     .container {
+    max-width: 1311px !important;
+  }
+}
+
+/* Tablet responsive - used in 11 pages */
+@media (max-width: 768px) {
+    .nav-brand {
+        font-size: 1.4rem;
+    }
+    .nav-links {
+        gap: 8px;
+        justify-content: center;
+        width: 100%;
+        margin-top: 10px;
+    }
+    .nav-link {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+    }
+    .dashboard-nav {
+        justify-content: center;
+        text-align: center;
+    }
+}
+
+/* Mobile responsive - used in 8 pages */
+@media (max-width: 576px) {
+    .nav-links {
+        gap: 5px;
+    }
+    .nav-link {
+        padding: 5px 8px;
+        font-size: 0.75rem;
+    }
+    .nav-brand {
+        font-size: 1.2rem;
+    }
+}
+
+/* Android mobile fix - used in multiple pages */
+@media (max-width: 422px) {
+    .dashboard-header {
+        padding-top: 45px;
+        margin-top: 80px !important;
+    }
+    
+}
+
+
+@media (max-width: 312px) {
+    div.header {
+        margin-top: 280px;
+    }
+}
+@media (max-width: 591px) {
+    div.header {
+        padding: 74px 0 20px 0;
+        margin-top: 36px;
+    }
+}

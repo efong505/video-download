@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Downloader - Login</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"], input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        button:hover {
+            background: #5a6fd8;
+        }
+        .toggle-link {
+            text-align: center;
+            color: #667eea;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .admin-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .admin-link a {
+            color: #667eea;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="form-title">Login</h1>
+        <div id="message"></div>
+        
+        <form id="auth-form">
+            <div class="form-group" id="first-name-group" style="display: none;">
+                <label for="first_name">First Name:</label>
+                <input type="text" id="first_name">
+            </div>
+            
+            <div class="form-group" id="last-name-group" style="display: none;">
+                <label for="last_name">Last Name:</label>
+                <input type="text" id="last_name">
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" required>
+            </div>
+            
+            <button type="submit" id="submit-btn">Login</button>
+        </form>
+        
+        <div class="toggle-link" id="toggle-mode">
+            Don't have an account? Register here
+        </div>
+        
+        <div class="admin-link">
+            <a href="admin.html">Admin Dashboard</a> | 
+            <a href="videos.html">Video Gallery</a>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
+        let isLoginMode = true;
+
+        document.getElementById('toggle-mode').addEventListener('click', function() {
+            isLoginMode = !isLoginMode;
+            const title = document.getElementById('form-title');
+            const submitBtn = document.getElementById('submit-btn');
+            const toggleLink = document.getElementById('toggle-mode');
+            const firstNameGroup = document.getElementById('first-name-group');
+            const lastNameGroup = document.getElementById('last-name-group');
+            const firstNameInput = document.getElementById('first_name');
+            const lastNameInput = document.getElementById('last_name');
+            
+            if (isLoginMode) {
+                title.textContent = 'Login';
+                submitBtn.textContent = 'Login';
+                toggleLink.textContent = "Don't have an account? Register here";
+                firstNameGroup.style.display = 'none';
+                lastNameGroup.style.display = 'none';
+                firstNameInput.required = false;
+                lastNameInput.required = false;
+            } else {
+                title.textContent = 'Register';
+                submitBtn.textContent = 'Register';
+                toggleLink.textContent = 'Already have an account? Login here';
+                firstNameGroup.style.display = 'block';
+                lastNameGroup.style.display = 'block';
+                firstNameInput.required = true;
+                lastNameInput.required = true;
+            }
+            
+            document.getElementById('message').innerHTML = '';
+        });
+
+        document.getElementById('auth-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const messageDiv = document.getElementById('message');
+            
+            const action = isLoginMode ? 'login' : 'register';
+            const url = `${API_BASE}?action=${action}`;
+            
+            const requestBody = {
+                email: email,
+                password: password,
+                role: 'user'
+            };
+            
+            if (!isLoginMode) {
+                requestBody.first_name = document.getElementById('first_name').value;
+                requestBody.last_name = document.getElementById('last_name').value;
+            }
+            
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody)
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    messageDiv.innerHTML = `<div class="message success">${data.message}</div>`;
+                    
+                    if (isLoginMode && data.token) {
+                        localStorage.setItem('auth_token', data.token);
+                        localStorage.setItem('user_data', JSON.stringify(data.user));
+                        
+                        setTimeout(() => {
+                            if (data.user.role === 'admin' || data.user.role === 'super_user') {
+                                window.location.href = 'admin.html';
+                            } else {
+                                window.location.href = 'videos.html';
+                            }
+                        }, 1000);
+                    }
+                } else {
+                    messageDiv.innerHTML = `<div class="message error">${data.error}</div>`;
+                }
+            } catch (error) {
+                messageDiv.innerHTML = `<div class="message error">Connection error. Please try again.</div>`;
+                console.error('Auth error:', error);
+            }
+        });
+
+        // Check if already logged in
+        window.addEventListener('load', function() {
+            const token = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+            const user = userData ? JSON.parse(userData) : null;
+            
+            if (token && user) {
+                document.getElementById('message').innerHTML = 
+                    `<div class="message success">Already logged in as ${user.email}</div>`;
+            }
+        });
+    </script>
+</body>
+</html>

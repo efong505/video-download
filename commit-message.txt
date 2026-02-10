@@ -1,0 +1,10 @@
+Fix Facebook share image not displaying for articles
+
+- Convert base64 featured images to S3 HTTPS URLs
+- Fix CloudFront domain (d271vky579caz9.cloudfront.net)
+- Update edit-article.html to fetch current article data after save
+- Regenerate all article previews with correct image URLs
+- Add scripts: convert_base64_to_s3.py, fix_cloudfront_urls.py
+- Update FIX_RECURRING_ISSUES_GUIDE.md with Issue 11 documentation
+
+Facebook can now display article featured images when sharing.

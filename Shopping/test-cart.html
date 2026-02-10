@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cart Debug Test</title>
+</head>
+<body>
+    <h1>Cart Debug Test</h1>
+    <button onclick="testCart()">Test Cart Storage</button>
+    <button onclick="readCart()">Read Cart</button>
+    <button onclick="clearCart()">Clear Cart</button>
+    <pre id="output"></pre>
+
+    <script>
+        function testCart() {
+            const testData = [
+                { product_id: 'test-1', name: 'Test Product', price: 19.99, quantity: 1 }
+            ];
+            localStorage.setItem('cart', JSON.stringify(testData));
+            document.getElementById('output').textContent = 'Cart saved: ' + JSON.stringify(testData, null, 2);
+        }
+
+        function readCart() {
+            const cart = localStorage.getItem('cart');
+            document.getElementById('output').textContent = 
+                'Raw cart data: ' + cart + '\n\n' +
+                'Parsed: ' + JSON.stringify(JSON.parse(cart || '[]'), null, 2);
+        }
+
+        function clearCart() {
+            localStorage.removeItem('cart');
+            document.getElementById('output').textContent = 'Cart cleared';
+        }
+
+        // Auto-read on load
+        window.onload = readCart;
+    </script>
+</body>
+</html>

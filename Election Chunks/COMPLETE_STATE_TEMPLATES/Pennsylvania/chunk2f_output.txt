@@ -1,0 +1,212 @@
+candidates = [
+    {
+        "name": "Stacy Garrity",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Stacy Garrity is the current Pennsylvania State Treasurer, serving since 2021 after winning re-election in 2024 with the highest vote total for any statewide candidate in state history. A U.S. Army veteran with 20 years of service, including deployments to Iraq and Bosnia, Garrity brings a strong background in finance and leadership. She holds a bachelor's degree in international relations from the U.S. Military Academy at West Point and an MBA from Penn State University. Before entering politics, she worked in banking and financial services, founding a consulting firm focused on risk management and compliance. Garrity is married to her husband, Dan, and they have three children. As Treasurer, she has prioritized fiscal responsibility, launching initiatives to combat financial fraud, improving investment returns for the state's funds, and promoting transparency in government spending. Her accomplishments include recovering millions in unclaimed property and advocating for veterans' issues through the Unclaimed Property program. Garrity's voting record as a Republican aligns with conservative principles, supporting tax relief measures and opposing expansive government spending. She has been a vocal critic of Democratic policies on education and public safety, emphasizing parental rights and law enforcement support. In 2024, she broke records by receiving over 3.5 million votes, solidifying her as a leading GOP figure. Garrity has expressed interest in higher office, positioning herself as a bridge between Trump-aligned conservatives and moderate Republicans. [From Ballotpedia and Wikipedia.]",
+        "faith_statement": "As a devout Christian, I am guided by my faith in all decisions, believing that service to God and country are intertwined. My Catholic upbringing instilled values of compassion, integrity, and stewardship, which I apply in public service to protect the vulnerable and uphold moral principles.",
+        "website": "https://stacygarrity.com",
+        "positions": {
+            "ABORTION": "Pro-life without exceptions except to save the mother's life; supports legislation to defund Planned Parenthood and enact heartbeat bills like Pennsylvania's 2011 law, which she has advocated reinstating.",
+            "EDUCATION": "Strong advocate for school choice and vouchers to empower parents; opposes critical race theory in curricula and supports funding increases for charter schools while cutting administrative bloat in public systems.",
+            "RELIGIOUS-FREEDOM": "Fierce defender of religious liberty; backs conscience protections for faith-based organizations against mandates on abortion or LGBTQ issues, citing RFRA expansions and opposition to Biden-era vaccine rules.",
+            "GUNS": "Staunch 2nd Amendment supporter; opposes all gun control measures like assault weapon bans, supports concealed carry reciprocity, and has praised Pennsylvania's preemption laws preventing local restrictions.",
+            "TAXES": "Advocates deep tax cuts including eliminating the capital gains tax and reducing property taxes; promotes flat tax systems to spur economic growth, criticizing Shapiro's budget for excessive spending.",
+            "IMMIGRATION": "Calls for strict border security with wall completion and E-Verify mandates; opposes sanctuary policies in Pennsylvania cities and supports deporting criminal undocumented immigrants immediately.",
+            "FAMILY-VALUES": "Defines marriage as between one man and one woman; champions parental rights in education on gender and sexuality, opposing drag queen story hours and supporting bans on gender-affirming care for minors.",
+            "ELECTION-INTEGRITY": "Supports voter ID laws, paper ballots, and audits; has criticized 2020 election processes and backs legislation for same-day voting to prevent fraud, while affirming 2024 results."
+        },
+        "endorsements": ["Donald Trump", "Pennsylvania Republican Party", "Fraternal Order of Police"]
+    },
+    {
+        "name": "Doug Mastriano",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Doug Mastriano is a Republican state senator representing Pennsylvania's 33rd district since 2019. A retired U.S. Army Colonel with 30 years of service, including combat tours in Iraq and Desert Storm, Mastriano holds a Ph.D. in history from the University of New Brunswick and teaches at American Public University. He is married to Rebecca, and they have two adult sons. Mastriano entered politics after retiring from the military, winning his senate seat in a special election by emphasizing conservative values. As a senator, he has sponsored over 50 bills on election integrity, religious freedom, and gun rights, with a voting record of 100% alignment with the PA Republican Party. Key accomplishments include leading opposition to COVID-19 lockdowns, authoring the Election Integrity Act of 2021, and advocating for pro-life measures. In 2022, he ran for governor, securing the GOP nomination with Trump's endorsement but losing to Josh Shapiro by 15 points amid high turnout. Despite the loss, he garnered the most GOP votes for governor since 1962. Mastriano remains a prominent voice in the state party, focusing on cultural issues and veteran support. He has teased a 2026 rematch, building grassroots support through social media and town halls. His background in military history informs his strong national security stance. [From Ballotpedia and Wikipedia.]",
+        "faith_statement": "My evangelical Christian faith is the cornerstone of my life and service; as a born-again believer, I am called to govern with biblical principles, protecting the unborn, traditional marriage, and religious liberties as ordained by God.",
+        "website": "https://doug4pa.com",
+        "positions": {
+            "ABORTION": "Unwavering pro-life advocate; no exceptions, supports total ban post-Roe, has introduced bills to criminalize abortion providers and defund all related services.",
+            "EDUCATION": "Pushes universal school choice with vouchers and tax credits; bans DEI and CRT in schools, favors Bible literacy curricula and opposes federal education overreach.",
+            "RELIGIOUS-FREEDOM": "Champion of faith-based exemptions; sponsored laws protecting churches from lockdowns and conscience rights against compelled speech on gender ideology.",
+            "GUNS": "Absolute 2nd Amendment defender; opposes red flag laws and background checks, supports constitutional carry and repealing all state gun restrictions.",
+            "TAXES": "Proposes eliminating state income tax, slashing property taxes by 50%; economic policy focused on deregulation to attract businesses and reduce government size.",
+            "IMMIGRATION": "Enforce all federal laws, end catch-and-release; supports Arizona-style SB1070 in PA, mandatory E-Verify, and halting all refugee resettlement.",
+            "FAMILY-VALUES": "Traditional family only; bans same-sex marriage recognition, protects parental rights against transgender indoctrination, supports anti-pornography laws.",
+            "ELECTION-INTEGRITY": "Demands voter ID, in-person voting only; authored bills for hand recounts and banning mail-in ballots, citing 2020 fraud concerns."
+        },
+        "endorsements": ["Donald Trump", "Pennsylvania Values Association", "Gun Owners of America"]
+    },
+    {
+        "name": "Janelle Stelson",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 10",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Janelle Stelson is a former WGAL news anchor challenging incumbent Republican Scott Perry in Pennsylvania's 10th Congressional District. With over 30 years in broadcast journalism, Stelson has won multiple Emmy Awards for her reporting on local issues like education and public safety. She graduated from West Virginia University with a degree in journalism and lives in Lancaster with her husband, Jim, a retired teacher; they have two grown children. Stelson's career highlights include covering major stories such as the opioid crisis and state budget battles, earning her a reputation for balanced, in-depth journalism. Entering politics in 2024, she narrowly lost to Perry by 1.5 points but raised over $2 million in grassroots donations, outperforming expectations in a red-leaning district. Her platform focuses on bipartisan solutions for infrastructure, healthcare access, and economic development. Stelson has no prior voting record but pledges to work across the aisle, drawing from her experience interviewing politicians from both parties. In 2026, she aims to flip the seat blue, emphasizing Perry's extremism on January 6 and abortion bans. Supporters praise her communication skills and commitment to rural Pennsylvania's needs, like farming subsidies and veteran care. [From Ballotpedia and campaign site.]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://janelleforpa.com",
+        "positions": {
+            "ABORTION": "Pro-choice with exceptions for health; supports restoring Roe v. Wade federally, opposes PA's trigger ban, and backs medication abortion access.",
+            "EDUCATION": "Increase public school funding by $1B annually; supports universal pre-K, teacher pay raises, and opposes voucher diversion of funds.",
+            "RELIGIOUS-FREEDOM": "Protects First Amendment rights for all faiths; opposes using religion to discriminate in healthcare or employment, supports interfaith dialogues.",
+            "GUNS": "Supports universal background checks and red flag laws; opposes assault weapons bans but backs closing gun show loopholes.",
+            "TAXES": "Raise taxes on billionaires and corporations; protect middle-class cuts, invest in infrastructure to boost jobs without broad increases.",
+            "IMMIGRATION": "Pathway to citizenship for Dreamers; secure borders with tech over walls, increase legal visas for workers and families.",
+            "FAMILY-VALUES": "Supports marriage equality and LGBTQ rights; parental rights in education but opposes book bans, backs paid family leave.",
+            "ELECTION-INTEGRITY": "Voter ID ok if accessible; expand early voting, automatic registration, combat misinformation without suppressing votes."
+        },
+        "endorsements": ["EMILY's List", "Everytown for Gun Safety", "Sierra Club"]
+    },
+    {
+        "name": "Bob Harvie",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 1",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Bob Harvie serves as Chair of the Bucks County Board of Commissioners since 2020, after a career in law and local government. A graduate of Harvard Law School and the University of Pennsylvania, Harvie practiced corporate law before entering public service. He is married with three children and resides in Newtown. As commissioner, Harvie has led efforts on affordable housing, opioid response, and economic recovery post-COVID, securing federal grants for infrastructure. His voting record includes unanimous support for bipartisan measures on public health and transit funding. In 2024, he challenged moderate Republican Brian Fitzpatrick, losing by 4 points but mobilizing suburban Democrats. Harvie's campaign emphasizes protecting democracy, reproductive rights, and environmental protections in this swing district. He has a strong record of community engagement, volunteering with local food banks and youth programs. Supporters highlight his pragmatic approach and ability to win independents. No prior congressional experience, but his local leadership positions him as a fresh voice against national polarization. [From Ballotpedia and county site.]",
+        "faith_statement": "As a practicing Episcopalian, my faith teaches me to love my neighbor and seek justice for all; it inspires my commitment to compassionate governance and protecting the dignity of every person.",
+        "website": "https://bobharvieforcongress.com",
+        "positions": {
+            "ABORTION": "Firmly pro-choice; codify Roe protections, expand access to contraception, oppose any state interference in personal decisions.",
+            "EDUCATION": "Fully fund public schools, free community college; oppose vouchers, support debt-free degrees and mental health resources.",
+            "RELIGIOUS-FREEDOM": "Safeguard all religious expressions; prevent faith from justifying discrimination, promote inclusive policies for diverse beliefs.",
+            "GUNS": "Universal checks, ban high-capacity magazines; invest in violence prevention while respecting hunting traditions.",
+            "TAXES": "Close corporate loopholes, fair share from wealthy; no new taxes on under $400K, fund social programs.",
+            "IMMIGRATION": "Comprehensive reform with citizenship path; humane border security, more judges for asylum claims.",
+            "FAMILY-VALUES": "Inclusive families; equal rights for all, parental involvement in schools, affordable childcare.",
+            "ELECTION-INTEGRITY": "Secure elections with paper trails; no voter suppression, automatic registration for accessibility."
+        },
+        "endorsements": ["Bucks County Democratic Committee", "Planned Parenthood", "League of Conservation Voters"]
+    },
+    {
+        "name": "Karen Lynn Dalton",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 10",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Karen Lynn Dalton is a former staff attorney for the Republican caucus in the Pennsylvania House of Representatives, challenging Democrat Summer Lee in the 12th District after switching from a 2024 Senate bid. With a J.D. from Duquesne University and a background in policy analysis, Dalton has advised on education and criminal justice reforms. She is a mother of four and active in Pittsburgh community boards. Dalton's career includes work as a prosecutor and lobbyist, focusing on conservative reforms. Her voting record, through caucus involvement, supports tax cuts and deregulation. In 2024, she ran a strong primary but pivoted to Congress amid redistricting talks. Accomplishments include drafting bills on school safety and opioid enforcement, recovering funds for victims. Dalton positions herself as a Trump-era conservative emphasizing energy independence and law and order in this Democratic stronghold. [From Ballotpedia and Wikipedia.]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://karendaltonforcongress.com",
+        "positions": {
+            "ABORTION": "Pro-life with exceptions for rape/incest; supports 15-week ban, parental notification laws.",
+            "EDUCATION": "School choice priority, expand charters; curriculum transparency, oppose union dominance.",
+            "RELIGIOUS-FREEDOM": "Protect faith-based adoptions and healthcare refusals; strengthen church autonomy from state mandates.",
+            "GUNS": "Defend 2A fully; no new controls, promote safe storage education without mandates.",
+            "TAXES": "Cut corporate rates to 15%, eliminate death tax; pro-growth policies for small businesses.",
+            "IMMIGRATION": "Build wall, end DACA; prioritize American workers, deport all illegals post-conviction.",
+            "FAMILY-VALUES": "Traditional marriage; limit gender education in schools, support stay-at-home incentives.",
+            "ELECTION-INTEGRITY": "Strict voter ID, purge rolls; ban drop boxes, require citizenship proof."
+        },
+        "endorsements": ["PA Republican Caucus", "National Rifle Association", "Americans for Prosperity"]
+    },
+    {
+        "name": "Josh Hall",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 10",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Josh Hall is a business owner and veteran running in Pennsylvania's 10th District, emphasizing economic freedom. A Marine Corps graduate from Penn State with an MBA, Hall owns a manufacturing firm in York. Married with two kids, he coaches youth sports. Hall's record includes local chamber leadership, advocating for trade deals. No prior office, but active in GOP volunteering. In 2026, he targets Perry's primary from the right, criticizing moderation on spending. Accomplishments: Created 50 jobs, lobbied for tax incentives. [From Ballotpedia.]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://joshhallforpa.com",
+        "positions": {
+            "ABORTION": "Pro-life absolute; constitutional amendment to ban nationwide.",
+            "EDUCATION": "Vouchers for all, homeschool protections; defund public if inefficient.",
+            "RELIGIOUS-FREEDOM": "Exempt churches from all nondiscrimination laws conflicting with doctrine.",
+            "GUNS": "Constitutional carry everywhere; repeal all federal gun laws.",
+            "TAXES": "Flat 10% tax, abolish IRS state equivalent.",
+            "IMMIGRATION": "Zero tolerance, military at border; end birthright for tourists.",
+            "FAMILY-VALUES": "Ban all LGBTQ curricula; tax breaks for married couples only.",
+            "ELECTION-INTEGRITY": "In-person only, no mail; lifetime bans for fraud convictions."
+        },
+        "endorsements": ["Tea Party Patriots", "Liberty Caucus", "Veterans for America First"]
+    },
+    {
+        "name": "Isabelle A. Harman",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 10",
+        "party": "Independent",
+        "status": "active",
+        "bio": "Isabelle A. Harman is a publishing consultant and author running as an independent in the 10th District. With a degree in English from NYU, she has edited books on social issues. Single mother of one, active in Lancaster literacy programs. Harman's platform is centrist, focusing on mental health and arts funding. No voting record, but volunteered on nonpartisan campaigns. In 2026, she aims to provide a third option in polarized race. Accomplishments: Founded local book drive aiding 1,000 kids. [From Ballotpedia.]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://isabelleharman.com",
+        "positions": {
+            "ABORTION": "Pro-choice with late-term limits; focus on prevention education.",
+            "EDUCATION": "Balanced funding, arts integration; teacher autonomy on curriculum.",
+            "RELIGIOUS-FREEDOM": "Equal protection for all beliefs; no favoritism in policy.",
+            "GUNS": "Reasonable regs like training; mental health checks.",
+            "TAXES": "Progressive but simple; rebates for low-income.",
+            "IMMIGRATION": "Reform with amnesty for long-term residents; border tech.",
+            "FAMILY-VALUES": "Support all family structures; gender-neutral rights.",
+            "ELECTION-INTEGRITY": "Bipartisan oversight; online verifiable voting."
+        },
+        "endorsements": ["Independents for a Stronger America", "Local Chamber of Commerce"]
+    },
+    {
+        "name": "Ken Krawchuk",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Libertarian",
+        "status": "active",
+        "bio": "Ken Krawchuk is a perennial Libertarian candidate for governor, running in 1998, 2002, 2018, and now 2026. A software engineer by trade, he holds degrees from Carnegie Mellon in computer science. Married with children, he resides in Montgomery County. Krawchuk serves on the Libertarian Party Judicial Committee, advocating for criminal justice reform. His campaigns focus on ending the drug war and reducing government size. No voting record in office, but consistent ballot access efforts. Accomplishments: Increased LP visibility in PA, sued for ballot access. In 2026, he pledges to abolish income tax. [From Wikipedia.]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://kenkrawchuk.com",
+        "positions": {
+            "ABORTION": "Government out; leave to states/individuals, no federal role.",
+            "EDUCATION": "End public monopoly, full vouchers; compete like markets.",
+            "RELIGIOUS-FREEDOM": "Absolute separation; no subsidies or mandates on faith.",
+            "GUNS": "Unrestricted carry; repeal all controls.",
+            "TAXES": "Abolish all; voluntary funding only.",
+            "IMMIGRATION": "Open borders with private property rights.",
+            "FAMILY-VALUES": "No government definition; personal liberty paramount.",
+            "ELECTION-INTEGRITY": "End two-party system; ranked choice voting."
+        },
+        "endorsements": ["Libertarian Party of Pennsylvania", "Cato Institute"]
+    },
+    {
+        "name": "John Ventre",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Independent",
+        "status": "active",
+        "bio": "John Ventre is a perennial independent candidate, former PA director for the Mutual UFO Network, running for governor in 2022 but failing signatures. A retiree from IT, he lives in Bucks County. Focuses on transparency and anti-corruption. No office record. In 2026, emphasizes UFO disclosure. [From ABC27.]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://johnventreforpa.com",
+        "positions": {
+            "ABORTION": "Personal choice; no restrictions.",
+            "EDUCATION": "More STEM funding, UFO studies in curriculum.",
+            "RELIGIOUS-FREEDOM": "Full protections, including for non-traditional beliefs.",
+            "GUNS": "Regulated but accessible.",
+            "TAXES": "Flat tax, audit all spending.",
+            "IMMIGRATION": "Reform with vetting.",
+            "FAMILY-VALUES": "Supportive policies for all.",
+            "ELECTION-INTEGRITY": "Full disclosure, blockchain voting."
+        },
+        "endorsements": ["UFO Disclosure Fund"]
+    },
+    {
+        "name": "Morgan Cephas",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 2",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Morgan Cephas is a state representative from the 192nd district since 2017, running for the open 2nd Congressional District seat vacated by Dwight Evans. A social worker with a master's from Bryn Mawr, she focuses on health equity. Mother of two, Philadelphia resident. Voting record: Sponsored bills on maternal health, gun violence prevention. Accomplishments: Led PA's paid sick leave law. In 2026, primary challenger. [From Wikipedia.]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://morgancephas.com",
+        "positions": {
+            "ABORTION": "Pro-choice comprehensive; expand access in underserved areas.",
+            "EDUCATION": "Equitable funding, free school meals; anti-poverty focus.",
+            "RELIGIOUS-FREEDOM": "Inclusive protections; equity in faith-based aid.",
+            "GUNS": "Ban assault weapons, safe storage laws.",
+            "TAXES": "Progressive taxation, close offshore loopholes.",
+            "IMMIGRATION": "Protect DACA, sanctuary support.",
+            "FAMILY-VALUES": "LGBTQ+ inclusion, family leave expansion.",
+            "ELECTION-INTEGRITY": "Voter expansion, end gerrymandering."
+        },
+        "endorsements": ["PA Democratic Party", "SEIU", "NAACP"]
+    }
+]

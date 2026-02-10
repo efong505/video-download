@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Article - Christian Conservative Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .nav-link.logout {
+            background: rgba(220,53,69,0.8);
+            border-color: rgba(220,53,69,0.9);
+        }
+        .nav-link.logout:hover {
+            background: rgba(220,53,69,1);
+        }
+        .dashboard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .nav-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        @media (max-width: 768px) {
+            .nav-brand {
+                font-size: 1.4rem;
+            }
+            .nav-links {
+                gap: 8px;
+                justify-content: center;
+                width: 100%;
+                margin-top: 10px;
+            }
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+            .dashboard-nav {
+                justify-content: center;
+                text-align: center;
+            }
+        }
+        @media (max-width: 576px) {
+            .nav-links {
+                gap: 5px;
+            }
+            .nav-link {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+            }
+            .nav-brand {
+                font-size: 1.2rem;
+            }
+        }
+        .article-form {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .template-card {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        .template-card:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        .template-card.selected {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        .bible-search {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .verse-result {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+        .ql-editor img {
+            max-width: 100%;
+            height: auto;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        .ql-editor img:hover {
+            border-color: #667eea;
+        }
+        .ql-editor iframe {
+            max-width: 100%;
+            height: auto;
+            min-height: 315px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.3s ease;
+        }
+        .ql-editor iframe:hover {
+            border-color: #667eea;
+        }
+        .ql-editor iframe:hover::after {
+            content: 'Right-click to resize';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 2px 6px;
+            font-size: 10px;
+            border-radius: 3px;
+            pointer-events: none;
+        }
+        .ql-video {
+            width: 100%;
+            height: 315px;
+            border: none;
+        }
+    </style>
+    <style>
+        body { padding-top: 70px; }
+    </style>
+</head>
+<body>
+    <!-- Unified Navbar -->
+    <div id="navbar-container" data-page="create-article"></div>
+    <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            })
+            .catch(err => console.error('Failed to load navbar:', err));
+    </script>
+    
+    <div class="dashboard-header">
+        <div class="container">
+            <h1 class="mb-0">✍️ Create Article</h1>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="article-form">
+                    <form id="article-form">
+                        <div class="mb-3">
+                            <label class="form-label">Article Title</label>
+                            <input type="text" id="article-title" class="form-control" placeholder="Enter your article title..." required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <select id="article-category" class="form-select">
+                                <option value="sermon">Sermon</option>
+                                <option value="politics">Political Commentary</option>
+                                <option value="devotional">Devotional</option>
+                                <option value="apologetics">Apologetics</option>
+                                <option value="ministry">Ministry Update</option>
+                                <option value="service_notes">Service Notes</option>
+                                <option value="study_notes">Study Notes (Personal)</option>
+                                <option value="bible_study">Bible Study & Devotional</option>
+                                <option value="general">General</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Tags (comma separated)</label>
+                            <input type="text" id="article-tags" class="form-control" placeholder="faith, politics, scripture...">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Visibility</label>
+                            <select id="article-visibility" class="form-select">
+                                <option value="public">Public</option>
+                                <option value="private">Private</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Resource URL (Optional)</label>
+                            <div class="input-group">
+                                <input type="url" id="resource-url" class="form-control" placeholder="https://example.com/article">
+                                <button type="button" class="btn btn-outline-primary" onclick="analyzeUrl()" id="analyze-btn">
+                                    <span id="analyze-text">🔍 Analyze</span>
+                                    <span id="analyze-spinner" class="spinner-border spinner-border-sm" style="display:none;"></span>
+                                </button>
+                            </div>
+                            <div class="form-text">Paste a URL to auto-generate title and description</div>
+                            <div id="url-analysis-result" class="mt-2"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Featured Image</label>
+                            <input type="file" id="featured-image" class="form-control" accept="image/*">
+                            <div class="form-text">Optional: Upload a featured image for social media sharing and article preview</div>
+                            <div id="featured-image-preview" class="mt-2"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Article Content</label>
+                            <div class="mb-2 d-flex gap-2 align-items-center">
+                                <button type="button" class="btn btn-outline-secondary btn-sm" onclick="resizeLastVideo()" id="resize-video-btn">📐 Resize Last Video</button>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="markdownMode" onchange="toggleMarkdownMode()">
+                                    <label class="form-check-label" for="markdownMode">📝 Markdown Mode</label>
+                                </div>
+                                <button type="button" class="btn btn-outline-info btn-sm" onclick="showMarkdownHelp()" id="markdown-help-btn" style="display: none;">❓ Markdown Help</button>
+                            </div>
+                            <div id="article-content" style="height: 400px;"></div>
+                            <textarea id="markdown-content" class="form-control" style="height: 400px; display: none; font-family: 'Courier New', monospace;" placeholder="Write your article in Markdown...
+
+# Heading 1
+## Heading 2
+**Bold text**
+*Italic text*
+[Link](https://example.com)
+![Image](image-url)
+
+- List item 1
+- List item 2
+
+> Blockquote
+
+```
+Code block
+```"></textarea>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">📝 Publish Article</button>
+                            <button type="button" class="btn btn-secondary" onclick="saveDraft()">💾 Save Draft</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="previewArticle()">👁️ Preview</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">📋 Article Templates</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="templates-container">
+                            <div class="text-center">
+                                <div class="spinner-border spinner-border-sm" role="status"></div>
+                                <p class="mt-2">Loading templates...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">📖 Bible Verse Lookup</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="bible-search">
+                            <div class="mb-3">
+                                <input type="text" id="verse-search" class="form-control" placeholder="e.g., John 3:16">
+                            </div>
+                            <div class="mb-3">
+                                <select id="translation-select" class="form-select">
+                                    <option value="kjv">King James Version</option>
+                                    <option value="esv">English Standard Version</option>
+                                    <option value="niv">New International Version</option>
+                                    <option value="nasb">New American Standard</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="searchVerse()">🔍 Search Verse</button>
+                            <div id="verse-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
+        var ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';
+        var URL_ANALYSIS_API = 'https://q65k3dbpd7.execute-api.us-east-1.amazonaws.com/prod/analyze';
+        
+        var currentUser = null;
+        var authToken = null;
+        var selectedTemplate = null;
+        var quill = null;
+        var isMarkdownMode = false;
+        var lastQuillContent = '';
+        var lastMarkdownContent = '';
+
+        function initializeEditor() {
+            quill = new Quill('#article-content', {
+                theme: 'snow',
+                modules: {
+                    toolbar: {
+                        container: [
+                            [{ 'header': [1, 2, 3, false] }],
+                            ['bold', 'italic', 'underline', 'strike'],
+                            [{ 'color': [] }, { 'background': [] }],
+                            [{ 'align': [] }],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['blockquote', 'code-block'],
+                            ['link', 'image', 'video'],
+                            ['clean']
+                        ],
+                        handlers: {
+                            'image': imageHandler,
+                            'video': videoHandler
+                        }
+                    }
+                },
+                placeholder: 'Write your article content here...'
+            });
+        }
+        
+        function imageHandler() {
+            var input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+            input.click();
+            
+            input.onchange = function() {
+                var file = input.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        compressImage(e.target.result, function(compressedDataUrl) {
+                            var range = quill.getSelection() || { index: quill.getLength() };
+                            quill.insertEmbed(range.index, 'image', compressedDataUrl);
+                            quill.setSelection(range.index + 1);
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+        }
+        
+        function compressImage(dataUrl, callback) {
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            var img = new Image();
+            
+            img.onload = function() {
+                var maxWidth = 600;
+                var maxHeight = 400;
+                var width = img.width;
+                var height = img.height;
+                
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height = height * (maxWidth / width);
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width = width * (maxHeight / height);
+                        height = maxHeight;
+                    }
+                }
+                
+                canvas.width = width;
+                canvas.height = height;
+                
+                ctx.drawImage(img, 0, 0, width, height);
+                
+                var quality = 0.5;
+                var compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                
+                while (compressedDataUrl.length > 500 * 1024 * 1.37 && quality > 0.1) {
+                    quality -= 0.1;
+                    compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                }
+                
+                callback(compressedDataUrl);
+            };
+            
+            img.src = dataUrl;
+        }
+        
+        function videoHandler() {
+            var url = prompt('Enter video URL (YouTube, Vimeo, or direct video file):');
+            if (url) {
+                var range = quill.getSelection() || { index: quill.getLength() };
+                
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                    var videoId = extractYouTubeId(url);
+                    if (videoId) {
+                        var embedUrl = 'https://www.youtube.com/embed/' + videoId;
+                        insertResizableVideo(range.index, embedUrl);
+                    } else {
+                        alert('Invalid YouTube URL');
+                    }
+                } else if (url.includes('vimeo.com')) {
+                    var videoId = extractVimeoId(url);
+                    if (videoId) {
+                        var embedUrl = 'https://player.vimeo.com/video/' + videoId;
+                        insertResizableVideo(range.index, embedUrl);
+                    } else {
+                        alert('Invalid Vimeo URL');
+                    }
+                } else {
+                    insertResizableVideo(range.index, url);
+                }
+                
+                quill.setSelection(range.index + 1);
+            }
+        }
+        
+        function insertResizableVideo(index, url) {
+            quill.insertEmbed(index, 'video', url);
+        }
+        
+        function extractYouTubeId(url) {
+            var regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+            var match = url.match(regex);
+            return match ? match[1] : null;
+        }
+        
+        function extractVimeoId(url) {
+            var regex = /vimeo\.com\/(?:.*#|\/)?([0-9]+)/;
+            var match = url.match(regex);
+            return match ? match[1] : null;
+        }
+        
+        function addImageResizeFeature() {
+            if (!quill) return;
+            
+            quill.root.addEventListener('click', function(e) {
+                if (e.target.tagName === 'IMG') {
+                    showImageResizeDialog(e.target);
+                }
+            });
+        }
+        
+        function resizeLastVideo() {
+            var iframes = quill.root.querySelectorAll('iframe');
+            if (iframes.length > 0) {
+                var lastVideo = iframes[iframes.length - 1];
+                showVideoResizeDialog(lastVideo);
+            } else {
+                alert('No videos found. Please insert a video first.');
+            }
+        }
+        
+        function showImageResizeDialog(img) {
+            var currentWidth = img.style.width || img.naturalWidth + 'px';
+            var newWidth = prompt('Enter image width (e.g., 300px, 50%, or auto):', currentWidth);
+            
+            if (newWidth !== null && newWidth.trim() !== '') {
+                img.style.width = newWidth.trim();
+                img.style.height = 'auto';
+            }
+        }
+        
+        function showVideoResizeDialog(iframe) {
+            var currentWidth = iframe.style.width || '560px';
+            var currentHeight = iframe.style.height || '315px';
+            
+            var newWidth = prompt('Enter video width (e.g., 560px, 100%, or auto):', currentWidth);
+            if (newWidth === null) return;
+            
+            var newHeight = prompt('Enter video height (e.g., 315px, 400px, or auto):', currentHeight);
+            if (newHeight === null) return;
+            
+            if (newWidth.trim() !== '') {
+                iframe.style.width = newWidth.trim();
+            }
+            if (newHeight.trim() !== '') {
+                iframe.style.height = newHeight.trim();
+            }
+        }
+
+        window.addEventListener('load', function() {
+            authToken = localStorage.getItem('auth_token');
+            var userData = localStorage.getItem('user_data');
+            
+            if (!authToken || !userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(userData);
+            initializeEditor();
+            addImageResizeFeature();
+            setupFeaturedImageHandler();
+            
+            setTimeout(function() {
+                loadTemplates();
+            }, 100);
+        });
+        
+        function setupFeaturedImageHandler() {
+            var featuredImageInput = document.getElementById('featured-image');
+            featuredImageInput.addEventListener('change', function(e) {
+                var file = e.target.files[0];
+                if (file) {
+                    var reader = new FileReader();
+                    reader.onload = function(e) {
+                        compressImage(e.target.result, function(compressedDataUrl) {
+                            showFeaturedImagePreview(compressedDataUrl);
+                        });
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+        }
+        
+        function showFeaturedImagePreview(dataUrl) {
+            var previewDiv = document.getElementById('featured-image-preview');
+            previewDiv.innerHTML = 
+                '<div class="card" style="max-width: 300px;">' +
+                    '<img src="' + dataUrl + '" class="card-img-top" style="height: 150px; object-fit: cover;">' +
+                    '<div class="card-body p-2">' +
+                        '<small class="text-muted">Featured Image Preview</small>' +
+                        '<button type="button" class="btn btn-sm btn-outline-danger ms-2" onclick="removeFeaturedImage()">Remove</button>' +
+                    '</div>' +
+                '</div>';
+        }
+        
+        function removeFeaturedImage() {
+            document.getElementById('featured-image').value = '';
+            document.getElementById('featured-image-preview').innerHTML = '';
+        }
+
+        function loadTemplates() {
+            fetch(ARTICLES_API + '?action=templates')
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    if (data.templates) {
+                        displayTemplates(data.templates);
+                    } else {
+                        displayFallbackTemplates();
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error loading templates:', error);
+                    displayFallbackTemplates();
+                });
+        }
+        
+        function displayFallbackTemplates() {
+            var fallbackTemplates = {
+                'blog': {
+                    name: '📝 Blog Post',
+                    description: 'Personal blog post with introduction and conclusion',
+                    content: '<h2>Blog Title</h2><p><br></p><p><strong>Introduction:</strong></p><p>Welcome to my latest thoughts on [topic]. Today I want to share...</p><p><br></p><p><strong>Main Content:</strong></p><p>The main point I want to discuss is...</p><p><br></p><p>Here are some key insights:</p><ul><li>Point one</li><li>Point two</li><li>Point three</li></ul><p><br></p><p><strong>Conclusion:</strong></p><p>In closing, I believe that...</p><p><br></p><p><em>What are your thoughts? Feel free to share in the comments below.</em></p>'
+                },
+                'devotional': {
+                    name: '🙏 Daily Devotional',
+                    description: 'Short devotional with scripture and reflection',
+                    content: '<h2>Daily Devotional - [Date]</h2><p><br></p><blockquote><strong>Today\'s Scripture:</strong> [Insert verse]</blockquote><p><br></p><p><strong>Reflection:</strong></p><p>Today\'s passage reminds us that...</p><p><br></p><p><strong>Prayer:</strong></p><p><em>Heavenly Father, help us to...</em></p><p><br></p><p><strong>Action Step:</strong></p><p>Today I will...</p>'
+                }
+            };
+            displayTemplates(fallbackTemplates);
+        }
+
+        function displayTemplates(templates) {
+            var emojiMap = {
+                'sermon': '⛪',
+                'devotional': '🙏',
+                'bible_study': '📚',
+                'political': '🇺🇸',
+                'political_commentary': '🇺🇸',
+                'politics': '🇺🇸',
+                'christian_politics_commentary': '🇺🇸',
+                'service_notes': '⛪',
+                'study_notes': '📝'
+            };
+            
+            Object.keys(templates).forEach(function(key) {
+                if (emojiMap[key] && !templates[key].name.includes(emojiMap[key])) {
+                    templates[key].name = emojiMap[key] + ' ' + templates[key].name;
+                }
+            });
+            
+            var additionalTemplates = {
+                'blog_post': {
+                    name: '📝 Blog Post',
+                    description: 'Personal blog with introduction and conclusion',
+                    content: '<h2>📝 Blog Post Title</h2><p><br></p><h3>💬 Introduction</h3><p>Welcome to my latest thoughts on [topic]. Today I want to share some insights about...</p><p><br></p><h3>📝 Main Content</h3><p>The main point I want to discuss is...</p><p><br></p><p>Here are some key insights:</p><ul><li>💡 Key point one</li><li>💡 Key point two</li><li>💡 Key point three</li></ul><p><br></p><h3>🎆 Conclusion</h3><p>In closing, I believe that...</p><p><br></p><p><em>💬 What are your thoughts? Feel free to share in the comments below.</em></p>'
+                },
+                'daily_devotional': {
+                    name: '🌅 Daily Devotional',
+                    description: 'Morning devotional with scripture and prayer',
+                    content: '<h2>🌅 Daily Devotional - [Date]</h2><p><br></p><h3>📜 Today\'s Scripture</h3><blockquote><strong>[Insert Bible verse here]</strong></blockquote><p><br></p><h3>💭 Reflection</h3><p>Today\'s passage reminds us that...</p><p><br></p><p>God is teaching us through this verse that...</p><p><br></p><h3>🙏 Prayer</h3><p><em>Heavenly Father, thank You for Your Word today. Help me to...</em></p><p><br></p><h3>🎯 Action Step</h3><p>Today I will apply this by...</p><p><br></p><p><strong>💫 Thought for the Day:</strong> [Inspirational quote or summary]</p>'
+                }
+            };
+            
+            var allTemplates = Object.assign({}, templates, additionalTemplates);
+            
+            var container = document.getElementById('templates-container');
+            if (!container) {
+                console.error('Templates container not found!');
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            Object.keys(allTemplates).forEach(function(key) {
+                var template = allTemplates[key];
+                
+                var templateCard = document.createElement('div');
+                templateCard.className = 'template-card';
+                
+                var h6 = document.createElement('h6');
+                h6.textContent = template.name;
+                
+                var p = document.createElement('p');
+                p.className = 'text-muted small mb-0';
+                p.textContent = template.description;
+                
+                templateCard.appendChild(h6);
+                templateCard.appendChild(p);
+                templateCard.onclick = function() { selectTemplate(key, template); };
+                container.appendChild(templateCard);
+            });
+        }
+
+        function selectTemplate(key, template) {
+            document.querySelectorAll('.template-card').forEach(function(card) {
+                card.classList.remove('selected');
+            });
+            
+            event.target.closest('.template-card').classList.add('selected');
+            selectedTemplate = key;
+            
+            if (quill) {
+                quill.root.innerHTML = template.content;
+            }
+        }
+
+        function searchVerse() {
+            var reference = document.getElementById('verse-search').value.trim();
+            var translation = document.getElementById('translation-select').value;
+            
+            if (!reference) {
+                alert('Please enter a Bible reference (e.g., John 3:16)');
+                return;
+            }
+            
+            var url = ARTICLES_API + '?action=bible_verse&reference=' + encodeURIComponent(reference) + '&translation=' + translation;
+            
+            fetch(url)
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    if (data.reference && data.text) {
+                        displayVerse(data);
+                    } else {
+                        document.getElementById('verse-result').innerHTML = 
+                            '<div class="alert alert-warning">Verse not found. Please check the reference.</div>';
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error searching verse:', error);
+                    document.getElementById('verse-result').innerHTML = 
+                        '<div class="alert alert-danger">Error searching for verse.</div>';
+                });
+        }
+
+        function displayVerse(verseData) {
+            var resultDiv = document.getElementById('verse-result');
+            
+            var verseDiv = document.createElement('div');
+            verseDiv.className = 'verse-result';
+            
+            var referenceH6 = document.createElement('h6');
+            referenceH6.textContent = verseData.reference;
+            
+            var textP = document.createElement('p');
+            textP.textContent = '"' + verseData.text + '"';
+            
+            var translationSmall = document.createElement('small');
+            translationSmall.className = 'text-muted';
+            translationSmall.textContent = verseData.translation;
+            
+            var buttonDiv = document.createElement('div');
+            buttonDiv.className = 'mt-2';
+            
+            var insertBtn = document.createElement('button');
+            insertBtn.className = 'btn btn-sm btn-outline-primary';
+            insertBtn.innerHTML = '➕ Insert into Article';
+            insertBtn.onclick = function() {
+                insertVerse(verseData.reference, verseData.text);
+            };
+            
+            buttonDiv.appendChild(insertBtn);
+            verseDiv.appendChild(referenceH6);
+            verseDiv.appendChild(textP);
+            verseDiv.appendChild(translationSmall);
+            verseDiv.appendChild(buttonDiv);
+            
+            resultDiv.innerHTML = '';
+            resultDiv.appendChild(verseDiv);
+        }
+
+        function insertVerse(reference, text) {
+            var verseHtml = '<blockquote class="blockquote"><p>"' + text + '"</p><footer class="blockquote-footer">' + reference + '</footer></blockquote>';
+            
+            if (quill) {
+                var range = quill.getSelection();
+                var index = range ? range.index : quill.getLength();
+                quill.clipboard.dangerouslyPasteHTML(index, verseHtml);
+            }
+        }
+
+        function saveDraft() {
+            var title = document.getElementById('article-title').value.trim();
+            if (!title) {
+                alert('Please enter a title to save draft');
+                return;
+            }
+            window.open('draft-manager.html', 'draftWindow', 'width=600,height=400,scrollbars=yes');
+        }
+
+        function previewArticle() {
+            var title = document.getElementById('article-title').value.trim();
+            var content = getCurrentContent();
+            if (!title || !content) {
+                alert('Please enter title and content to preview');
+                return;
+            }
+            window.open('article-preview.html', 'previewWindow', 'width=800,height=600,scrollbars=yes');
+        }
+
+        document.getElementById('article-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            var title = document.getElementById('article-title').value.trim();
+            var category = document.getElementById('article-category').value;
+            var tags = document.getElementById('article-tags').value.split(',').map(function(tag) { return tag.trim(); }).filter(function(tag) { return tag; });
+            var visibility = document.getElementById('article-visibility').value;
+            var content = getCurrentContent();
+            var featuredImageInput = document.getElementById('featured-image');
+            
+            if (!title || !content) {
+                alert('Please fill in the title and content');
+                return;
+            }
+            
+            // Get featured image if uploaded
+            if (featuredImageInput.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    compressImage(e.target.result, function(compressedDataUrl) {
+                        submitArticle(title, category, tags, visibility, content, compressedDataUrl);
+                    });
+                };
+                reader.readAsDataURL(featuredImageInput.files[0]);
+                return; // Exit here, submitArticle will be called from the reader callback
+            }
+            
+            // No featured image, submit directly
+            submitArticle(title, category, tags, visibility, content, '');
+        });
+        
+        function submitArticle(title, category, tags, visibility, content, featuredImage) {
+            fetch(ARTICLES_API + '?action=create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + authToken
+                },
+                body: JSON.stringify({
+                    title: title,
+                    content: content,
+                    author: currentUser.email,
+                    category: category,
+                    template_used: selectedTemplate || 'custom',
+                    tags: tags,
+                    visibility: visibility,
+                    featured_image: featuredImage
+                })
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.article_id) {
+                    alert('Article published successfully!');
+                    window.location.href = 'articles.html';
+                } else {
+                    alert('Error publishing article: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(function(error) {
+                console.error('Error publishing article:', error);
+                alert('Error publishing article. Please try again.');
+            });
+        }
+        function viewMyPage() {
+            var userData = localStorage.getItem('user_data');
+            if (userData) {
+                var user = JSON.parse(userData);
+                window.location.href = 'user-page.html?user=' + encodeURIComponent(user.email);
+            }
+        }
+        
+        function toggleMarkdownMode() {
+            var markdownCheckbox = document.getElementById('markdownMode');
+            var quillEditor = document.getElementById('article-content');
+            var markdownTextarea = document.getElementById('markdown-content');
+            var helpBtn = document.getElementById('markdown-help-btn');
+            
+            isMarkdownMode = markdownCheckbox.checked;
+            
+            if (isMarkdownMode) {
+                // Switch to markdown mode
+                lastQuillContent = quill.root.innerHTML;
+                var markdownText = convertHtmlToMarkdown(lastQuillContent);
+                markdownTextarea.value = markdownText;
+                
+                quillEditor.style.display = 'none';
+                markdownTextarea.style.display = 'block';
+                helpBtn.style.display = 'inline-block';
+            } else {
+                // Switch back to WYSIWYG mode
+                lastMarkdownContent = markdownTextarea.value;
+                var htmlContent = marked.parse(lastMarkdownContent);
+                quill.root.innerHTML = htmlContent;
+                
+                quillEditor.style.display = 'block';
+                markdownTextarea.style.display = 'none';
+                helpBtn.style.display = 'none';
+            }
+        }
+        
+        function convertHtmlToMarkdown(html) {
+            // Create a temporary div to decode HTML entities
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = html;
+            const decodedHtml = tempDiv.innerHTML;
+            
+            // Basic HTML to Markdown conversion
+            return decodedHtml
+                .replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1\n\n')
+                .replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n\n')
+                .replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n\n')
+                .replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**')
+                .replace(/<b[^>]*>(.*?)<\/b>/gi, '**$1**')
+                .replace(/<em[^>]*>(.*?)<\/em>/gi, '*$1*')
+                .replace(/<i[^>]*>(.*?)<\/i>/gi, '*$1*')
+                .replace(/<a[^>]*href=["'](.*?)["'][^>]*>(.*?)<\/a>/gi, '[$2]($1)')
+                .replace(/<img[^>]*src=["'](.*?)["'][^>]*alt=["'](.*?)["'][^>]*>/gi, '![$2]($1)')
+                .replace(/<img[^>]*src=["'](.*?)["'][^>]*>/gi, '![]($1)')
+                .replace(/<blockquote[^>]*>(.*?)<\/blockquote>/gi, '> $1\n\n')
+                // Handle lists - try multiple patterns
+                .replace(/<li[^>]*data-list="bullet"[^>]*>([\s\S]*?)<\/li>/gi, '- $1\n')
+                .replace(/<li[^>]*data-list="ordered"[^>]*>([\s\S]*?)<\/li>/gi, function(match, content, offset, string) {
+                    var beforeMatch = string.substring(0, offset);
+                    var orderCount = (beforeMatch.match(/data-list="ordered"/g) || []).length + 1;
+                    return orderCount + '. ' + content + '\n';
+                })
+                .replace(/<ul[^>]*>([\s\S]*?)<\/ul>/gi, function(match, content) {
+                    return content.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, '- $1\n') + '\n';
+                })
+                .replace(/<ol[^>]*>([\s\S]*?)<\/ol>/gi, function(match, content) {
+                    var counter = 1;
+                    return content.replace(/<li[^>]*>([\s\S]*?)<\/li>/gi, function(match, item) {
+                        return (counter++) + '. ' + item + '\n';
+                    }) + '\n';
+                })
+                .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n')
+                .replace(/<br[^>]*>/gi, '\n')
+                .replace(/<[^>]+>/g, '') // Remove remaining HTML tags
+                .replace(/\n{3,}/g, '\n\n') // Clean up extra newlines
+                .trim();
+        }
+        
+        function showMarkdownHelp() {
+            var helpContent = `
+# Markdown Quick Reference
+
+## Headers
+# H1 Header
+## H2 Header
+### H3 Header
+
+## Text Formatting
+**Bold text**
+*Italic text*
+~~Strikethrough~~
+
+## Links and Images
+[Link text](https://example.com)
+![Alt text](image-url)
+
+## Lists
+- Unordered list item
+- Another item
+
+1. Ordered list item
+2. Another item
+
+## Quotes and Code
+> Blockquote text
+
+\`Inline code\`
+
+\`\`\`
+Code block
+\`\`\`
+
+## Line Breaks
+Two spaces at end of line  
+Creates a line break
+
+Empty line creates new paragraph
+            `;
+            
+            alert(helpContent);
+        }
+        
+        function getCurrentContent() {
+            if (isMarkdownMode) {
+                var markdownText = document.getElementById('markdown-content').value;
+                return marked.parse(markdownText);
+            } else {
+                return quill.root.innerHTML;
+            }
+        }
+        
+        function analyzeUrl() {
+            var url = document.getElementById('resource-url').value.trim();
+            if (!url) {
+                alert('Please enter a URL to analyze');
+                return;
+            }
+            
+            var analyzeBtn = document.getElementById('analyze-btn');
+            var analyzeText = document.getElementById('analyze-text');
+            var analyzeSpinner = document.getElementById('analyze-spinner');
+            
+            analyzeBtn.disabled = true;
+            analyzeText.style.display = 'none';
+            analyzeSpinner.style.display = 'inline-block';
+            
+            fetch(URL_ANALYSIS_API, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({url: url})
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.error) {
+                    alert('Error analyzing URL: ' + data.error);
+                } else {
+                    displayUrlAnalysis(data);
+                }
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+                alert('Failed to analyze URL');
+            })
+            .finally(function() {
+                analyzeBtn.disabled = false;
+                analyzeText.style.display = 'inline';
+                analyzeSpinner.style.display = 'none';
+            });
+        }
+        
+        function displayUrlAnalysis(data) {
+            var resultDiv = document.getElementById('url-analysis-result');
+            var html = '<div class="card"><div class="card-body">';
+            html += '<h6 class="card-title">✅ Analysis Complete</h6>';
+            html += '<p class="mb-2"><strong>Title:</strong> ' + data.title + '</p>';
+            if (data.description) {
+                html += '<p class="mb-2"><strong>Description:</strong> ' + data.description + '</p>';
+            }
+            if (data.ai_summary) {
+                html += '<p class="mb-2"><strong>AI Summary:</strong> ' + data.ai_summary + '</p>';
+            }
+            if (data.image) {
+                html += '<p class="mb-2"><strong>Image:</strong> <img src="' + data.image + '" style="max-width:100px;max-height:60px;"></p>';
+            }
+            html += '<button type="button" class="btn btn-sm btn-primary" onclick="applyUrlData(' + JSON.stringify(data).replace(/"/g, '&quot;') + ')">📋 Apply to Article</button>';
+            html += '</div></div>';
+            resultDiv.innerHTML = html;
+        }
+        
+        function applyUrlData(data) {
+            if (data.title && !document.getElementById('article-title').value) {
+                document.getElementById('article-title').value = data.title;
+            }
+            if (data.ai_summary || data.description) {
+                var summary = data.ai_summary || data.description;
+                var currentContent = quill.root.innerHTML;
+                if (!currentContent || currentContent === '<p><br></p>') {
+                    quill.root.innerHTML = '<p>' + summary + '</p><p><br></p><p>Source: <a href="' + data.url + '" target="_blank">' + data.url + '</a></p>';
+                }
+            }
+            alert('✅ URL data applied! You can now edit and customize the content.');
+        }
+        
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
+    </script>
+    
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

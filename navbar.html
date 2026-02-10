@@ -1,0 +1,66 @@
+<nav class="navbar navbar-expand-lg navbar-custom fixed-top">
+    <div class="container">
+        <a class="navbar-brand" href="index.html" id="navbar-brand-link">
+            <img src="techcrosslogo.jpg" alt="Christian Conservatives Today" class="navbar-logo" id="navbar-logo">
+            <span id="navbar-title">Christian Conservatives Today</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto" id="nav-links"></ul>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .navbar-custom {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+    }
+    .navbar-brand {
+        font-weight: 700;
+        color: #2c5aa0 !important;
+        display: flex;
+        align-items: center;
+    }
+    .navbar-logo {
+        height: 32px;
+        width: auto;
+        margin-right: 10px;
+        transition: transform 0.3s ease;
+    }
+    .navbar-logo:hover {
+        transform: scale(1.1);
+    }
+    .nav-link {
+        color: #2c3e50 !important;
+        font-weight: 500;
+        transition: color 0.3s ease;
+        padding: 0.4rem 0.75rem !important;
+    }
+    .nav-link:hover {
+        color: #2c5aa0 !important;
+    }
+    @media (min-width: 992px) and (max-width: 1399px) {
+        .nav-link {
+            padding: 0.4rem 0.4rem !important;
+            font-size: 0.85rem;
+        }
+        .navbar-brand {
+            font-size: 0.95rem;
+        }
+        .navbar-logo {
+            height: 28px;
+        }
+    }
+    @media (max-width: 991px) {
+        .navbar-nav {
+            padding-top: 1rem;
+        }
+        .nav-link {
+            padding: 0.5rem 0 !important;
+        }
+    }
+</style>

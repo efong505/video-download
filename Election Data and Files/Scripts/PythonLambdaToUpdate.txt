@@ -1,0 +1,11 @@
+arn:aws:lambda:us-east-1:371751795928:function:comments-api
+arn:aws:lambda:us-east-1:371751795928:function:url-analysis-api
+arn:aws:lambda:us-east-1:371751795928:function:s3-thumbnail-trigger
+arn:aws:lambda:us-east-1:371751795928:function:resources-api
+arn:aws:lambda:us-east-1:371751795928:function:articles-api
+arn:aws:lambda:us-east-1:371751795928:function:paypal-billing-api
+arn:aws:lambda:us-east-1:371751795928:function:bible-lesson-to-audio
+arn:aws:lambda:us-east-1:371751795928:function:video-tag-api
+arn:aws:lambda:us-east-1:371751795928:function:admin-api
+arn:aws:lambda:us-east-1:371751795928:function:auth-api
+arn:aws:lambda:us-east-1:371751795928:function:news-api

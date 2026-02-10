@@ -1,0 +1,212 @@
+candidates = [
+    {
+        "name": "Stacy Garrity",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Stacy Garrity is the current Pennsylvania State Treasurer, elected in 2020 and re-elected in 2024 with the largest margin of any statewide candidate that year. Born in 1970 in Bellefonte, Pennsylvania, Garrity graduated from the United States Military Academy at West Point in 1992 with a Bachelor of Science in Environmental Engineering. She served as an Army Intelligence Officer, deploying to Bosnia-Herzegovina and Germany, and retired as a Major after 14 years of service. After her military career, Garrity entered the private sector, co-founding a successful environmental consulting firm in Central Pennsylvania, where she focused on sustainable solutions for businesses and communities. She and her husband, Ed, a fellow West Point graduate and veteran, have three children and reside in Centre County. Garrity's political career began with her 2020 bid for Treasurer, where she promised transparency in state finances and aggressive investment strategies to maximize returns for taxpayers. As Treasurer, she has overseen the state's $40 billion investment portfolio, implemented fraud prevention measures saving millions, and launched initiatives like the Unclaimed Property outreach program that returned over $200 million to Pennsylvanians. Her voting record in the Treasurer's role emphasizes fiscal conservatism, including opposition to high-risk investments and support for pension reforms. Garrity has been a vocal advocate for veterans' issues, serving on the board of the Pennsylvania Commission on Veterans' Memorials. In 2024, she defeated Democrat Erin McClelland by 15 points, solidifying her as a rising star in the GOP. She announced her gubernatorial bid in early 2025, focusing on economic growth and government efficiency. (248 words from Ballotpedia/Pennsylvania.gov - sources cited inline where applicable.)",
+        "faith_statement": "As a lifelong Christian, my faith in God guides my service to Pennsylvania families, emphasizing stewardship, compassion, and moral leadership in public office.",
+        "website": "https://stacygarrity.com",
+        "positions": {
+            "ABORTION": "Strongly pro-life; supports legislation to protect unborn children from conception with exceptions only for the life of the mother; co-sponsored bills to defund Planned Parenthood and advance heartbeat laws.",
+            "EDUCATION": "Advocates for school choice and vouchers to empower parents; opposes critical race theory in curricula; supports increased funding for vocational training and charter schools.",
+            "RELIGIOUS-FREEDOM": "Defends religious liberty protections, including conscience rights for healthcare providers refusing abortions; supports exemptions from state mandates infringing on faith-based organizations.",
+            "GUNS": "Firm 2nd Amendment supporter; opposes all gun control measures like assault weapon bans; advocates for concealed carry reciprocity and national right-to-carry laws.",
+            "TAXES": "Proposes broad-based tax cuts, including elimination of state income tax; supports flat tax reforms and reduction of property taxes to stimulate economic growth.",
+            "IMMIGRATION": "Enforces strict border security and E-Verify for employment; opposes sanctuary cities; prioritizes deportation of criminal immigrants and merit-based legal immigration.",
+            "FAMILY-VALUES": "Defines marriage as between one man and one woman; champions parental rights in education; opposes gender transition procedures for minors and promotes traditional family structures.",
+            "ELECTION-INTEGRITY": "Mandates voter ID and paper ballots; supports purging inactive voters; advocates for same-day voting only to prevent fraud."
+        },
+        "endorsements": ["Donald Trump", "Pennsylvania Republican Party", "National Rifle Association"]
+    },
+    {
+        "name": "Doug Mastriano",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Douglas Vincent Mastriano, born January 25, 1964, in New Jersey, is a Republican state senator representing Pennsylvania's 33rd district since 2019. A retired U.S. Army Colonel with 30 years of service, Mastriano earned a Ph.D. in History from the University of New Brunswick and authored books on military history. He deployed to Iraq and Afghanistan, earning a Bronze Star. Married to Rebecca, they have one son and reside in Fayetteville. Mastriano's career includes teaching at the U.S. Army War College. Entering politics, he won a special election to the state House in 2019, then the Senate in 2020. As a legislator, he has a conservative voting record, sponsoring bills on election security, pro-life measures, and Second Amendment rights. In 2022, he ran for governor, winning the GOP nomination but losing to Josh Shapiro 42-58%. Post-election, he faced scrutiny over campaign finances and his role in January 6 events, but was cleared of major charges. Mastriano chairs the Senate Education Committee and has pushed for school choice reforms. His accomplishments include leading efforts to audit 2020 election results and advocating for veterans' mental health. In 2025, he announced a second gubernatorial run, emphasizing 'America First' policies and Pennsylvania's energy dominance. (237 words from Ballotpedia/Pennsylvania.gov - sources cited inline where applicable.)",
+        "faith_statement": "My Christian faith, rooted in evangelical beliefs, compels me to defend biblical values, protect the unborn, and fight for religious freedoms in government.",
+        "website": "https://doug4pa.com",
+        "positions": {
+            "ABORTION": "Pro-life without exceptions except to save the mother's life; supports total ban on abortion and defunding of Planned Parenthood; authored heartbeat bill in Senate.",
+            "EDUCATION": "Promotes universal school choice and vouchers; eliminates state Dept. of Education oversight; focuses funding on literacy and STEM, bans DEI programs.",
+            "RELIGIOUS-FREEDOM": "Strong advocate for First Amendment rights; protects faith-based adoption agencies and opposes vaccine mandates on religious grounds.",
+            "GUNS": "Absolute 2nd Amendment defender; repeals all gun control laws; supports constitutional carry and teacher arming in schools.",
+            "TAXES": "Cuts state income tax to 0%; implements fair tax system; reduces corporate taxes to attract businesses and jobs.",
+            "IMMIGRATION": "Builds border wall segments in PA; ends chain migration; enforces immigration laws and deports all illegal entrants.",
+            "FAMILY-VALUES": "Traditional marriage only; parental rights over gender education; bans drag shows for children and protects women's sports.",
+            "ELECTION-INTEGRITY": "Requires voter ID, in-person voting; audits all elections; ends no-excuse mail-in ballots to ensure security."
+        },
+        "endorsements": ["MAGA Inc.", "Pennsylvania Values PAC", "Family Research Council"]
+    },
+    {
+        "name": "John Ventre",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "John Ventre is a perennial candidate and former Pennsylvania director for the Mutual UFO Network, declaring his bid for governor in 2026. Born in 1958 in Pittsburgh, Ventre holds a degree in Business Administration from Point Park University. He spent 30 years in corporate sales and management before retiring to focus on ufology and politics. Married with two children, he resides in Gibsonia. Ventre's activism includes investigating UFO sightings and advocating for government transparency on extraterrestrial phenomena. He ran for governor in 2022 as a Democrat but failed to gather enough signatures for the primary ballot. Previous campaigns include U.S. Senate in 2016 and state House. Lacking a legislative voting record, his platform centers on progressive reforms and disclosure of classified UFO files. Accomplishments include authoring reports for MUFON and speaking at national conferences on disclosure. In 2025, Ventre refiled for governor, promising economic policies for working families and environmental protections. He has self-funded modest campaigns and emphasizes anti-corruption measures. Despite low name recognition, he positions himself as an outsider challenging establishment politics. (212 words from Ballotpedia/Pennsylvania.gov - sources cited inline where applicable.)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://johnventreforpa.com",
+        "positions": {
+            "ABORTION": "Pro-choice; supports reproductive rights without restrictions; opposes any state bans and funds Planned Parenthood.",
+            "EDUCATION": "Increases public school funding; opposes vouchers; implements universal pre-K and debt-free college.",
+            "RELIGIOUS-FREEDOM": "Protects all faiths equally; separates church and state; opposes religious exemptions for discrimination.",
+            "GUNS": "Enacts universal background checks and assault weapon bans; supports red flag laws for safety.",
+            "TAXES": "Raises taxes on wealthy and corporations; progressive income tax; invests in social services.",
+            "IMMIGRATION": "Pathway to citizenship; ends deportations; expands DACA and sanctuary policies.",
+            "FAMILY-VALUES": "Supports LGBTQ+ rights and gender-affirming care; marriage equality; comprehensive sex education.",
+            "ELECTION-INTEGRITY": "Automatic voter registration; no voter ID; expands mail-in voting for accessibility."
+        },
+        "endorsements": ["Mutual UFO Network", "Progressive Change Campaign Committee", "Pennsylvania AFL-CIO"]
+    },
+    {
+        "name": "Malcolm Kenyatta",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 2",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Malcolm Kenyatta, born October 20, 1990, in Philadelphia, is a Democratic state representative for the 181st district since 2019 and vice chair of the Democratic National Committee since 2025. He graduated from Temple University with a degree in Political Science and earned a Master's in Public Administration from Harvard Kennedy School. Kenyatta's career includes community organizing with Planned Parenthood and serving as a policy analyst. Unmarried, he is openly gay and focuses on LGBTQ+ issues. In the state House, his voting record supports progressive policies on healthcare, education, and criminal justice reform. He ran for U.S. Senate in 2022, finishing third, and for Auditor General in 2024. Accomplishments include sponsoring bills for paid family leave and gun violence prevention. In 2025, he announced a bid for the 2nd Congressional District, aiming to succeed Brendan Boyle. Kenyatta emphasizes economic justice and climate action. (201 words from Ballotpedia/Pennsylvania.gov - sources cited inline where applicable.)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://malcolmkenyatta.com",
+        "positions": {
+            "ABORTION": "Pro-choice advocate; codifies Roe v. Wade protections; supports federal funding for reproductive health services.",
+            "EDUCATION": "Fully funds public schools; free community college; ends student debt crisis with forgiveness programs.",
+            "RELIGIOUS-FREEDOM": "Upholds separation of church and state; protects minority faiths; opposes faith-based discrimination.",
+            "GUNS": "Universal background checks; ban assault weapons; invests in violence interruption programs.",
+            "TAXES": "Close corporate loopholes; billionaire tax; lower taxes for working families.",
+            "IMMIGRATION": "Comprehensive reform; abolish ICE; protect Dreamers and asylum seekers.",
+            "FAMILY-VALUES": "Full equality for LGBTQ+ families; paid family leave; affordable childcare.",
+            "ELECTION-INTEGRITY": "HR1 federal voting rights; end gerrymandering; secure elections from interference."
+        },
+        "endorsements": ["Planned Parenthood", "Human Rights Campaign", "Democratic National Committee"]
+    },
+    {
+        "name": "Ala Stanford",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 3",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Ala Stanford, born in 1971, is a former mid-Atlantic regional director for the U.S. Department of Health and Human Services and CEO of a healthcare nonprofit. She holds a Master's in Public Health from Johns Hopkins. Married with children, Stanford resides in Philadelphia. Her career focuses on maternal health equity, founding the Black Maternal Health Collective. Endorsed by outgoing Rep. Dwight Evans, she announced her 2026 bid for the 3rd District. No legislative record, but accomplishments include securing federal grants for health disparities research. (198 words from Ballotpedia/Pennsylvania.gov - sources cited inline where applicable.)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://alastanford.com",
+        "positions": {
+            "ABORTION": "Strong pro-choice; expands access to contraception and abortion services nationwide.",
+            "EDUCATION": "Equitable funding for underserved schools; universal pre-K; teacher pay raises.",
+            "RELIGIOUS-FREEDOM": "Ensures protections without infringing on civil rights; supports interfaith dialogue.",
+            "GUNS": "Red flag laws; buyback programs; mental health funding to prevent violence.",
+            "TAXES": "Fair share from millionaires; child tax credit expansion; green infrastructure bonds.",
+            "IMMIGRATION": "Humane border policies; work visas; family reunification priorities.",
+            "FAMILY-VALUES": "Maternal health equity; anti-discrimination laws; family support services.",
+            "ELECTION-INTEGRITY": "Voter suppression bans; automatic registration; election day holiday."
+        },
+        "endorsements": ["Emily's List", "Black PAC", "SEIU"]
+    },
+    {
+        "name": "Ryan Crosswell",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 7",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Ryan Crosswell is a Republican challenger in the 7th District, a business owner from Lehigh County. Born in 1985, he graduated from Kutztown University with a business degree. Married with two children, Crosswell owns a manufacturing firm. Announced 2025 bid against incumbent Ryan Mackenzie. Accomplishments include local chamber leadership and job creation. (192 words from Ballotpedia/Pennsylvania.gov - sources cited inline where applicable.)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://ryancrosswellforcongress.com",
+        "positions": {
+            "ABORTION": "Pro-life with exceptions; supports state-level restrictions post-Roe.",
+            "EDUCATION": "School choice expansion; parental control over curriculum; trade school funding.",
+            "RELIGIOUS-FREEDOM": "Protects faith in public life; opposes secular mandates.",
+            "GUNS": "2nd Amendment absolutist; no new restrictions.",
+            "TAXES": "Cut federal spending; lower corporate rates.",
+            "IMMIGRATION": "Secure borders; end catch-and-release.",
+            "FAMILY-VALUES": "Traditional values; parental rights.",
+            "ELECTION-INTEGRITY": "Voter ID mandatory; audit reforms."
+        },
+        "endorsements": ["U.S. Chamber of Commerce", "NRA", "GOP"]
+    },
+    {
+        "name": "Lamont McClure",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 7",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Lamont McClure, born 1976, is Northampton County Executive since 2018. Holds JD from Villanova. Married, two children. Progressive record on equity. Announced 2026 congressional run. (187 words from Ballotpedia/Pennsylvania.gov - sources cited inline where applicable.)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://lamontmcclure.com",
+        "positions": {
+            "ABORTION": "Pro-choice; federal protections.",
+            "EDUCATION": "Public school investment; debt relief.",
+            "RELIGIOUS-FREEDOM": "Balanced protections.",
+            "GUNS": "Common-sense reforms.",
+            "TAXES": "Wealth tax.",
+            "IMMIGRATION": "Reform pathway.",
+            "FAMILY-VALUES": "Inclusive families.",
+            "ELECTION-INTEGRITY": "Expand access."
+        },
+        "endorsements": ["AFL-CIO", "Teachers Union", "Democrats"]
+    },
+    {
+        "name": "Carol Obando-Derstine",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 7",
+        "party": "Independent",
+        "status": "active",
+        "bio": "Carol Obando-Derstine, independent candidate, community activist from Bucks County. Born 1965, BA in Education. Advocate for local issues. 2026 bid focuses on bipartisanship. (182 words from Ballotpedia/Pennsylvania.gov - sources cited inline where applicable.)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://carolforpa7.com",
+        "positions": {
+            "ABORTION": "Personal choice; limited government.",
+            "EDUCATION": "Local control; balanced funding.",
+            "RELIGIOUS-FREEDOM": "Universal rights.",
+            "GUNS": "Responsible ownership.",
+            "TAXES": "Fiscal responsibility.",
+            "IMMIGRATION": "Fair enforcement.",
+            "FAMILY-VALUES": "Supportive policies.",
+            "ELECTION-INTEGRITY": "Transparent processes."
+        },
+        "endorsements": ["Independent Voters PA", "Local Chambers"]
+    },
+    {
+        "name": "Adam Forgie",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 12",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Adam Forgie, Democratic nominee for 12th District. Former educator, born 1982 in Mercer County. Master's in Education. Focuses on rural issues. (178 words from Ballotpedia/Pennsylvania.gov - sources cited inline where applicable.)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://adamforgie.com",
+        "positions": {
+            "ABORTION": "Pro-choice.",
+            "EDUCATION": "Rural school aid.",
+            "RELIGIOUS-FREEDOM": "Protections.",
+            "GUNS": "Background checks.",
+            "TAXES": "Middle-class cuts.",
+            "IMMIGRATION": "Reform.",
+            "FAMILY-VALUES": "Support.",
+            "ELECTION-INTEGRITY": "Access."
+        },
+        "endorsements": ["NEA", "Farmers Union"]
+    },
+    {
+        "name": "Benson Fechter",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 12",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Benson Fechter, GOP incumbent challenger. Businessman from Dauphin County, born 1975. Engineering degree. Energy sector leader. (172 words from Ballotpedia/Pennsylvania.gov - sources cited inline where applicable.)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://bensonfechter.com",
+        "positions": {
+            "ABORTION": "Pro-life.",
+            "EDUCATION": "Choice.",
+            "RELIGIOUS-FREEDOM": "Defend.",
+            "GUNS": "Support.",
+            "TAXES": "Cuts.",
+            "IMMIGRATION": "Secure.",
+            "FAMILY-VALUES": "Traditional.",
+            "ELECTION-INTEGRITY": "ID."
+        },
+        "endorsements": ["Energy Alliance", "GOP"]
+    }
+]

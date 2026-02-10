@@ -1,0 +1,211 @@
+
+    {
+        "name": "Joseph Danielsen",
+        "state": "New Jersey",
+        "office": "General Assembly District 16 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Joseph Danielsen is a Democratic member of the New Jersey General Assembly, representing District 17 since his appointment in October 2014 to fill a vacancy. He was elected to a full term in 2015 and has been re-elected multiple times, including in 2023. Born in Edison, New Jersey, Danielsen graduated from North Brunswick Township High School and earned a B.S. in political science and history from Rutgers University. He also completed the Senior Executives in State and Local Government Program at Harvard Kennedy School. Danielsen has served on the Franklin Township Council since 2010, including as council president in 2012 and 2014. Professionally, he works as a legislative aide and has been involved in community organizations such as the Franklin Township Community Foundation and the Knights of Columbus. He is a former member of the Somerset County Democratic Committee and has volunteered with the New Jersey and Middlesex County Leagues of Municipalities. Danielsen has sponsored numerous bills on education, public safety, and infrastructure, and serves on the Assembly committees on Commerce, Economic Development and Agriculture; Telecommunications and Utilities; and Transportation and Independent Authorities. He resides in Franklin Township with his wife and three children.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=371",
+        "positions": {
+            "ABORTION": "Supports reproductive rights and has voted in favor of legislation codifying Roe v. Wade protections into state law, including the Freedom of Reproductive Choice Act in 2022.",
+            "EDUCATION": "Advocates for increased funding for public schools, including full funding of the school funding formula. Sponsored bills to expand access to preschool, support mental health services in schools, and provide student loan relief for educators. Supports vocational training programs and has worked to secure grants for STEM education in District 17 schools.",
+            "RELIGIOUS-FREEDOM": "Supports protections against discrimination based on religion but emphasizes separation of church and state. Has co-sponsored legislation to combat hate crimes and protect religious institutions from vandalism.",
+            "GUNS": "Strong advocate for gun safety laws. Sponsored bills to require smart gun technology, expand background checks, and ban .50 caliber weapons. Voted for magazine capacity limits and red flag laws.",
+            "TAXES": "Supports progressive taxation and incentives for middle-class families. Co-sponsored property tax relief programs, including the ANCHOR rebate program, and opposed cuts to municipal aid that could lead to higher local taxes.",
+            "IMMIGRATION": "Supports pathways to citizenship and driver's licenses for undocumented immigrants. Co-sponsored legislation to limit cooperation with ICE in non-criminal matters and protect immigrant communities.",
+            "FAMILY-VALUES": "Champions paid family leave expansion, affordable childcare, and child tax credits. Sponsored the Work and Family Mobility Act and bills to support working parents, including diaper tax exemptions and menstrual equity in schools. Advocates for LGBTQ+ family protections and inclusive policies.",
+            "ELECTION-INTEGRITY": "Supports early voting, automatic voter registration, and secure mail-in ballots. Voted to expand voting access during the COVID-19 pandemic and opposes strict voter ID laws that could disenfranchise voters."
+        },
+        "endorsements": ["New Jersey Education Association", "Planned Parenthood Action Fund of New Jersey", "Sierra Club New Jersey Chapter"]
+    },
+    {
+        "name": "Kevin Egan",
+        "state": "New Jersey",
+        "office": "General Assembly District 16 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "Kevin Egan is a Democratic candidate for the New Jersey General Assembly in District 16. A lifelong resident of Middlesex County, Egan has dedicated his career to public service and community advocacy. He currently serves as a member of the South River Borough Council, where he has focused on fiscal responsibility, infrastructure improvements, and public safety. Egan holds a degree in political science from Rutgers University and works as a government affairs specialist. Prior to elected office, he was actively involved in local Democratic organizations and volunteered with youth mentoring programs. Egan has been endorsed by labor unions and progressive groups for his commitment to working families. He emphasizes practical solutions to local issues such as traffic congestion, flood mitigation, and affordable housing. Egan lives in South River with his family and is known for his door-to-door campaigning style and accessibility to constituents.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Strong supporter of reproductive freedom and a woman's right to choose. Pledges to defend New Jersey's reproductive rights laws against any federal restrictions.",
+            "EDUCATION": "Prioritizes fully funding public schools and reducing class sizes. Supports free community college for qualified students and increased funding for special education. Advocates for teacher retention bonuses and expanded after-school programs.",
+            "RELIGIOUS-FREEDOM": "Believes in protecting religious liberty while ensuring no religion is imposed through government policy. Supports anti-discrimination laws that include religious protections.",
+            "GUNS": "Advocates for universal background checks, assault weapon bans, and safe storage laws. Supports funding for community violence intervention programs as an alternative to punitive measures.",
+            "TAXES": "Supports property tax relief through increased state aid to municipalities and school districts. Favors taxing the ultra-wealthy to fund middle-class tax cuts.",
+            "IMMIGRATION": "Supports comprehensive immigration reform, including DREAMers protection and worker visas. Opposes family separation and local enforcement of federal immigration law.",
+            "FAMILY-VALUES": "Champions paid family leave, affordable childcare, and equal pay for equal work. Supports marriage equality and protections for LGBTQ+ families. Advocates for policies supporting seniors and multigenerational households.",
+            "ELECTION-INTEGRITY": "Supports automatic voter registration, no-excuse mail-in voting, and early voting expansion. Believes in making democracy accessible to all eligible voters."
+        },
+        "endorsements": ["AFL-CIO New Jersey", "Moms Demand Action", "New Jersey Working Families"]
+    },
+    {
+        "name": "Sterley Stanley",
+        "state": "New Jersey",
+        "office": "General Assembly District 17 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Sterley Stanley is a Democratic member of the New Jersey General Assembly representing District 17 since 2024. Born in Trinidad and Tobago, Stanley immigrated to the United States and settled in New Brunswick. He earned a bachelor's degree in labor studies from Rutgers University and has been a union organizer for over two decades. Stanley serves as president of the Communication Workers of America Local 1032 and has advocated for workers' rights across public and private sectors. Before entering the Assembly, he was a member of the New Brunswick Board of Education, where he focused on equity in education. Stanley is known for his progressive stance on labor issues, healthcare, and criminal justice reform. He has sponsored legislation to protect public employee pensions and expand union rights. Stanley resides in New Brunswick and is active in community organizations supporting immigrant communities and youth development.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=429",
+        "positions": {
+            "ABORTION": "Firm supporter of abortion rights and access to reproductive healthcare without restrictions. Co-sponsored bills to protect clinic access and expand contraception coverage.",
+            "EDUCATION": "Advocates for universal pre-K, debt-free college, and equitable school funding. Sponsored legislation to forgive student loans for public service workers and increase funding for historically underfunded districts.",
+            "RELIGIOUS-FREEDOM": "Supports constitutional religious freedom but opposes using religion to justify discrimination. Has voted for LGBTQ+ rights protections over religious exemption claims.",
+            "GUNS": "Supports strict gun control measures including assault weapon bans, high-capacity magazine limits, and gun violence research funding. Advocates for community-based prevention programs.",
+            "TAXES": "Supports millionaire's tax and corporate tax fairness to fund social programs. Opposes regressive taxes that burden working families.",
+            "IMMIGRATION": "Strong advocate for immigrant rights, including in-state tuition for undocumented students and protection from deportation for non-violent offenders.",
+            "FAMILY-VALUES": "Supports expanded paid family leave, universal childcare, and protections for LGBTQ+ families. Advocates for policies addressing child poverty and family economic security.",
+            "ELECTION-INTEGRITY": "Champions voting rights expansion, including restoration of voting rights for formerly incarcerated individuals and resistance to voter suppression tactics."
+        },
+        "endorsements": ["Communication Workers of America", "New Jersey Education Association", "Make the Road New Jersey"]
+    },
+    {
+        "name": "Robert Karabinchak",
+        "state": "New Jersey",
+        "office": "General Assembly District 17 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "Robert Karabinchak is a Democratic member of the New Jersey General Assembly representing District 18 since 2016. A lifelong resident of Edison, Karabinchak graduated from Middlesex County College and works as a licensed electrician and business owner. He served on the Edison Township Council from 2009 to 2016, including as council president. Karabinchak has focused on infrastructure, public safety, and economic development throughout his career. He chairs the Assembly Committee on Consumer Affairs and serves on the Environment and Solid Waste and Transportation committees. Karabinchak has sponsored legislation on utility reliability, flood prevention, and small business support. He is known for his bipartisan approach to local issues and constituent services. Karabinchak lives in Edison with his wife and children.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=382",
+        "positions": {
+            "ABORTION": "Supports a woman's right to choose and has voted to protect reproductive healthcare access in New Jersey, including funding for Planned Parenthood.",
+            "EDUCATION": "Advocates for increased school funding, vocational education expansion, and property tax relief through state aid. Supports STEM programs and school safety improvements.",
+            "RELIGIOUS-FREEDOM": "Believes in protecting religious practices while maintaining government neutrality. Has supported measures to protect houses of worship from threats.",
+            "GUNS": "Supports background checks, safe storage laws, and funding for gun buyback programs. Voted for extreme risk protection orders.",
+            "TAXES": "Focuses on property tax relief and incentives for small businesses. Supports the Stay NJ program for senior property tax credits.",
+            "IMMIGRATION": "Supports practical reforms including border security with humane treatment and pathways to legal status for long-term residents.",
+            "FAMILY-VALUES": "Supports paid family leave and childcare subsidies. Advocates for policies helping working families balance career and home responsibilities.",
+            "ELECTION-INTEGRITY": "Supports secure elections with paper ballots and audits. Believes in expanding access while maintaining election security."
+        },
+        "endorsements": ["New Jersey Business and Industry Association", "Edison Democratic Organization", "Middlesex County Building Trades"]
+    },
+    {
+        "name": "Craig Coughlin",
+        "state": "New Jersey",
+        "office": "General Assembly District 18 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Craig Coughlin is the Speaker of the New Jersey General Assembly, representing District 19 since 2010. A native of Perth Amboy, Coughlin earned a B.A. from St. John's University and a J.D. from St. John's University School of Law. He practiced labor law before entering politics and served on the South Amboy Board of Education. As Speaker since 2018, Coughlin has led Democratic legislative efforts on economic issues, healthcare, and education. He has championed property tax relief, minimum wage increases, and infrastructure investment. Coughlin serves as chair of the Legislative Services Commission and is known for his pragmatic leadership style. He has successfully navigated budget negotiations and major policy initiatives. Coughlin resides in Woodbridge Township with his family.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=318",
+        "positions": {
+            "ABORTION": "Strong defender of reproductive rights. Led passage of the Freedom of Reproductive Choice Act to codify abortion rights in state law.",
+            "EDUCATION": "Secured historic increases in school funding, achieving full funding of the state aid formula. Supports free community college and expanded pre-K programs.",
+            "RELIGIOUS-FREEDOM": "Supports First Amendment protections but prioritizes anti-discrimination laws. Has resisted broad religious exemptions that harm LGBTQ+ rights.",
+            "GUNS": "Architect of New Jersey's comprehensive gun safety laws, including magazine limits, smart guns, and background check expansions.",
+            "TAXES": "Championed the ANCHOR property tax relief program and corporate business tax reforms to fund middle-class initiatives.",
+            "IMMIGRATION": "Supports driver's licenses for undocumented residents and limits on local ICE cooperation. Advocates for immigrant inclusion in economic programs.",
+            "FAMILY-VALUES": "Expanded paid family leave to 12 weeks, increased minimum wage, and supported childcare subsidies. Strong advocate for working families.",
+            "ELECTION-INTEGRITY": "Expanded early voting, mail-in ballots, and automatic registration while implementing security measures like voter roll audits."
+        },
+        "endorsements": ["New Jersey Education Association", "Health Professionals and Allied Employees", "New Jersey AFL-CIO"]
+    },
+    {
+        "name": "Yvonne Lopez",
+        "state": "New Jersey",
+        "office": "General Assembly District 18 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "Yvonne Lopez is a Democratic member of the New Jersey General Assembly representing District 19 since 2018. Born in Perth Amboy, Lopez is the first Latina to represent the district. She earned a degree in labor relations from Rutgers University and has worked in human resources and labor advocacy. Lopez serves as Deputy Majority Leader and chairs the Assembly Budget Committee. She previously worked for the Communication Workers of America and served on the Perth Amboy Zoning Board. Lopez has focused on consumer protection, women's rights, and economic justice. She has sponsored legislation on equal pay, menstrual equity, and utility reforms. Lopez is known for her advocacy for working women and underserved communities. She lives in Perth Amboy and is active in Latino community organizations.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=405",
+        "positions": {
+            "ABORTION": "Champion of reproductive justice. Sponsored bills to eliminate copays for abortion services and protect clinic access.",
+            "EDUCATION": "Advocates for equitable funding, free menstrual products in schools, and culturally responsive curriculum. Supports increased funding for English language learners.",
+            "RELIGIOUS-FREEDOM": "Supports religious liberty but opposes using faith to discriminate. Has voted against broad religious refusal laws.",
+            "GUNS": "Supports comprehensive gun reform including domestic violence protections, safe storage, and funding for violence intervention.",
+            "TAXES": "Supports progressive taxation to fund education and healthcare. Sponsored the menstrual products tax exemption.",
+            "IMMIGRATION": "Strong advocate for immigrant communities, supporting in-state tuition, professional licensing access, and protection from exploitation.",
+            "FAMILY-VALUES": "Authored equal pay legislation, paid sick leave expansion, and domestic worker protections. Supports LGBTQ+ inclusion and women's health initiatives.",
+            "ELECTION-INTEGRITY": "Supports expanded voting access including language assistance and community-based polling locations."
+        },
+        "endorsements": ["Latino Action Network", "Planned Parenthood Action Fund", "New Jersey Working Families Alliance"]
+    },
+    {
+        "name": "Annette Quijano",
+        "state": "New Jersey",
+        "office": "General Assembly District 19 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Annette Quijano is a Democratic member of the New Jersey General Assembly representing District 20 since 2008. Born in Elizabeth, Quijano graduated from Rutgers University and earned a J.D. from Rutgers Law School. She worked as a municipal prosecutor and public defender before entering the Assembly. Quijano serves as Deputy Speaker and chairs the Assembly Judiciary Committee. She is the first openly LGBTQ+ woman in the New Jersey Legislature. Quijano has focused on criminal justice reform, LGBTQ+ rights, and consumer protection. She sponsored the landmark bail reform legislation and has advocated for expungement reforms. Quijano previously served on the Elizabeth City Council and is active in community service organizations.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=295",
+        "positions": {
+            "ABORTION": "Leading voice for reproductive rights. Sponsored legislation to protect abortion access and expand contraception coverage.",
+            "EDUCATION": "Supports increased funding for urban schools, LGBTQ+-inclusive curriculum, and college affordability programs.",
+            "RELIGIOUS-FREEDOM": "Strong separation of church and state advocate. Opposes religious exemptions that enable discrimination against LGBTQ+ individuals.",
+            "GUNS": "Supports gun violence prevention measures including universal background checks and funding for trauma-informed care.",
+            "TAXES": "Advocates for fair taxation and closing corporate loopholes to fund social services and education.",
+            "IMMIGRATION": "Supports comprehensive reform, DREAM Act, and protections for immigrant workers from wage theft.",
+            "FAMILY-VALUES": "Champions LGBTQ+ family rights, marriage equality, and anti-discrimination protections. Supports paid leave and childcare access.",
+            "ELECTION-INTEGRITY": "Supports voting rights restoration, early voting, and measures to increase participation among underrepresented communities."
+        },
+        "endorsements": ["Garden State Equality", "Human Rights Campaign", "New Jersey ACLU"]
+    },
+    {
+        "name": "Reginald W. Atkins",
+        "state": "New Jersey",
+        "office": "General Assembly District 19 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "Reginald W. Atkins is a Democratic member of the New Jersey General Assembly representing District 20 since 2022. A native of Roselle, Atkins earned degrees from Kean University and has worked in education and community development. He previously served as a Roselle Borough Councilman and as chief of staff to a state senator. Atkins is a pastor and community leader known for his work in youth mentoring and anti-violence initiatives. In the Assembly, he serves on the Education, Health, and Law and Public Safety committees. Atkins has sponsored legislation on education equity, mental health, and public safety reform. He is recognized for his collaborative approach and focus on urban communities.",
+        "faith_statement": "As a pastor, Atkins frequently references Christian values in his public service, emphasizing compassion, justice, and community service. He has stated that his faith guides his commitment to helping the underserved.",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=424",
+        "positions": {
+            "ABORTION": "Supports reproductive healthcare access but emphasizes prevention and support for pregnant women. Has voted for clinic funding while advocating for alternatives.",
+            "EDUCATION": "Prioritizes urban school funding, vocational training, and mental health resources. Sponsors bills for community schools and after-school programs.",
+            "RELIGIOUS-FREEDOM": "Strong advocate for religious liberty protections for institutions and individuals. Supports conscience protections for faith-based organizations.",
+            "GUNS": "Focuses on community intervention and youth programs to prevent violence. Supports targeted enforcement and mental health approaches over broad restrictions.",
+            "TAXES": "Supports property tax relief for seniors and working families. Advocates for efficient government spending.",
+            "IMMIGRATION": "Supports legal immigration pathways and integration programs. Emphasizes community safety and economic contributions of immigrants.",
+            "FAMILY-VALUES": "Emphasizes traditional family support, youth mentoring, and community-based family services. Supports marriage and family counseling programs.",
+            "ELECTION-INTEGRITY": "Believes in secure elections with voter ID and regular audits to ensure public confidence."
+        },
+        "endorsements": ["New Jersey Family Policy Center", "African American Clergy Association", "Roselle Democratic Committee"]
+    },
+    {
+        "name": "Nancy Munoz",
+        "state": "New Jersey",
+        "office": "General Assembly District 20 Seat 1",
+        "party": "R",
+        "status": "active",
+        "bio": "Nancy Munoz is a Republican member of the New Jersey General Assembly representing District 21 since 2009. A registered nurse with a degree from Skidmore College, Munoz worked in healthcare administration before entering politics. She succeeded her late husband in the Assembly and has been re-elected multiple times. Munoz serves as Deputy Republican Leader and is the ranking member of the Health Committee. She has focused on healthcare policy, fiscal responsibility, and public safety. Munoz has sponsored legislation on Alzheimer's care, nursing home standards, and opioid prevention. She previously served on the Summit Board of Education and is active in community health initiatives. Munoz resides in Summit with her family.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=303",
+        "positions": {
+            "ABORTION": "Pro-life with exceptions for rape, incest, and life of the mother. Has voted against late-term abortion expansions and for informed consent requirements.",
+            "EDUCATION": "Supports school choice, charter schools, and parental rights in education. Advocates for fiscal accountability in school budgets and teacher merit pay.",
+            "RELIGIOUS-FREEDOM": "Strong defender of religious liberty. Has sponsored bills to protect faith-based adoption agencies and conscience rights for healthcare workers.",
+            "GUNS": "Supports Second Amendment rights and concealed carry permits. Advocates for armed security in schools and mental health focus for violence prevention.",
+            "TAXES": "Leading voice for tax reduction and spending restraint. Opposes new taxes and supports phasing out the estate tax.",
+            "IMMIGRATION": "Supports legal immigration with secure borders. Advocates for E-Verify and ending sanctuary policies that protect criminal aliens.",
+            "FAMILY-VALUES": "Supports traditional marriage and family structures. Advocates for parental notification laws and protections for unborn life.",
+            "ELECTION-INTEGRITY": "Champions voter ID laws, signature verification for mail ballots, and regular voter roll maintenance to prevent fraud."
+        },
+        "endorsements": ["New Jersey Right to Life", "NRA Political Victory Fund", "New Jersey Family First"]
+    },
+    {
+        "name": "Michele Matsikoudis",
+        "state": "New Jersey",
+        "office": "General Assembly District 20 Seat 2",
+        "party": "R",
+        "status": "active",
+        "bio": "Michele Matsikoudis is a Republican member of the New Jersey General Assembly representing District 21 since 2022. A lawyer with degrees from Georgetown University and Seton Hall Law School, Matsikoudis previously served as New Providence Borough Attorney and Councilwoman. She has focused on government transparency, property tax relief, and public safety. Matsikoudis serves on the Judiciary and Regulated Professions committees. She has sponsored legislation to combat government corruption and improve election integrity. Known for her independent voice within the GOP, Matsikoudis emphasizes fiscal conservatism and local control. She resides in New Providence with her husband and children.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=421",
+        "positions": {
+            "ABORTION": "Pro-life advocate supporting restrictions after viability and parental notification. Opposes taxpayer funding for abortions.",
+            "EDUCATION": "Champions school choice, including vouchers and education savings accounts. Supports curriculum transparency and parental bill of rights.",
+            "RELIGIOUS-FREEDOM": "Defends First Amendment rights for religious institutions. Opposes mandates that violate conscience, such as vaccine requirements for faith-based schools.",
+            "GUNS": "Strong Second Amendment supporter. Advocates for constitutional carry and opposes magazine limits and assault weapon bans.",
+            "TAXES": "Advocates for 2.5% property tax cap enforcement and elimination of wasteful spending. Supports full deduction of property taxes on state returns.",
+            "IMMIGRATION": "Calls for strict enforcement of immigration laws, ending sanctuary cities, and merit-based legal immigration system.",
+            "FAMILY-VALUES": "Supports traditional family values, school choice for religious education, and protections against gender ideology in schools.",
+            "ELECTION-INTEGRITY": "Pushes for voter ID, paper ballots, and same-day voting only. Demands investigation of alleged election irregularities."
+        },
+        "endorsements": ["Americans for Prosperity New Jersey", "New Jersey Second Amendment Society", "Moms for Liberty Union County"]
+    }

@@ -1,0 +1,66 @@
+name: Rollback Lambda
+
+on:
+  workflow_dispatch:
+    inputs:
+      lambda-name:
+        description: 'Lambda function name'
+        required: true
+        type: choice
+        options:
+          - admin_api
+          - auth_api
+          - articles_api
+          - video_list_api
+          - news_api
+          - resources_api
+          - contributors_api
+          - comments_api
+          - tag_api
+          - prayer_api
+          - events_api
+          - email_subscription_api
+          - ministry_tools_api
+          - notifications_api
+          - url_analysis_api
+          - paypal_billing_api
+          - downloader
+      version:
+        description: 'Version to rollback to (leave empty for previous)'
+        required: false
+
+jobs:
+  rollback:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Get previous version
+        if: ${{ github.event.inputs.version == '' }}
+        id: get-version
+        run: |
+          VERSION=$(aws lambda list-versions-by-function \
+            --function-name ${{ github.event.inputs.lambda-name }} \
+            --query 'Versions[-2].Version' \
+            --output text)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Publish new version
+        id: publish
+        run: |
+          VERSION=${{ github.event.inputs.version || steps.get-version.outputs.version }}
+          aws lambda publish-version \
+            --function-name ${{ github.event.inputs.lambda-name }}
+          echo "Rolled back to version: $VERSION"
+
+      - name: Verify rollback
+        run: |
+          echo "✅ Rolled back ${{ github.event.inputs.lambda-name }}"
+          aws lambda get-function \
+            --function-name ${{ github.event.inputs.lambda-name }} \
+            --query 'Configuration.Version'

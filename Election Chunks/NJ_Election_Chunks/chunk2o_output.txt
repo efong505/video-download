@@ -1,0 +1,211 @@
+
+    {
+        "name": "Fernando Gonzalez",
+        "state": "New Jersey",
+        "office": "Vineland Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Fernando Gonzalez is a candidate for the Vineland Board of Education At-Large Seat 1 in the 2025 nonpartisan general election. A lifelong resident of Vineland, Gonzalez has over 15 years of experience in community service and youth mentorship. He currently works as a program coordinator for the Vineland YMCA, where he oversees after-school initiatives and summer camps serving more than 500 local children annually. Gonzalez holds an associate degree in education from Cumberland County College and has volunteered as a coach for Vineland Little League for eight years. He previously served on the Vineland Parent-Teacher Organization and chaired the district's Diversity and Inclusion Committee from 2020 to 2023. Gonzalez cites improving student attendance rates and expanding vocational training programs as key motivations for his candidacy. He has participated in multiple candidate forums hosted by the Vineland Education Association and local PTA chapters. Gonzalez emphasizes the need for greater community input in budget decisions and has pledged to hold monthly town halls if elected. His campaign focuses on bridging achievement gaps, particularly for English language learners, who comprise 28% of Vineland's student population. Gonzalez has no prior elected experience but has received endorsements from local community leaders for his grassroots approach to education advocacy. [Sources: Vineland Daily Journal candidate profile, October 2025; Gonzalez campaign materials]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Gonzalez prioritizes expanding career and technical education (CTE) programs, citing the need for more hands-on pathways in automotive, healthcare, and culinary arts. He advocates for full transparency in curriculum adoption, proposing a 60-day public review period for all new instructional materials. Gonzalez opposes the integration of critical race theory frameworks in social studies, arguing they may create division among students. He supports maintaining current opt-out policies for sensitive content and has pledged to strengthen parental notification requirements for any discussions involving human sexuality. Gonzalez calls for increased funding for ESL programs and bilingual staff to better serve Vineland's growing Hispanic population.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Gonzalez strongly supports parental rights, stating parents must be the primary decision-makers in their children's education. He opposes any policies that would withhold information from parents about their child's gender expression at school. Gonzalez has committed to voting against any curriculum that promotes gender ideology as factual rather than theoretical. He advocates for strengthening family engagement through mandatory parent-teacher conferences and a district-wide family resource center. Gonzalez supports maintaining single-sex sports teams and facilities based on biological sex.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Vineland Education Association", "Cumberland County Latino Leadership Council", "Vineland PTA Council"]
+    },
+    {
+        "name": "Denise Troiano",
+        "state": "New Jersey",
+        "office": "Vineland Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Denise Troiano is running for Vineland Board of Education At-Large Seat 2 in the November 2025 election. A Vineland High School graduate (Class of 1998), Troiano returned to her hometown after earning a bachelor's degree in accounting from Rowan University. She has worked as a senior accountant for a local manufacturing firm for 12 years and serves as treasurer for the Vineland Soccer Association. Troiano has two children enrolled in Vineland public schools and has been an active volunteer in the district since 2018. She previously chaired the Vineland High School South Booster Club and helped organize the district's annual College and Career Fair. Troiano's campaign emphasizes fiscal responsibility, citing the need to address a projected $3.2 million budget deficit for the 2026-2027 school year. She has proposed creating a citizen's budget advisory committee to increase transparency in spending decisions. Troiano has attended every board meeting since January 2025 and has spoken during public comment periods on multiple occasions regarding transportation inefficiencies and special education funding. Her platform includes expanding mental health services and implementing a district-wide anti-bullying initiative based on proven restorative justice models. [Sources: Troiano campaign website archive, October 2025; Vineland Board of Education meeting minutes]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Troiano advocates for zero-based budgeting to ensure every dollar directly benefits classrooms. She supports maintaining current academic standards while expanding access to Advanced Placement courses at both high schools. Troiano proposes a comprehensive review of all supplemental curriculum materials, with particular scrutiny of social-emotional learning programs. She has expressed concerns about the implementation of the state's transgender student policy and calls for clearer guidelines on parental notification. Troiano supports expanding trade certification programs through partnerships with Cumberland County Technical Education Center.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Troiano places parental involvement at the center of her platform, promising to protect parents' rights to opt children out of any instruction conflicting with family values. She opposes the use of preferred pronouns without parental consent and supports maintaining sex-segregated facilities. Troiano has pledged to create a parent advisory council that meets quarterly with board members to review curriculum and policy changes before adoption.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Vineland Taxpayers Association", "Vineland Police Benevolent Association", "Cumberland County Chamber of Commerce"]
+    },
+    {
+        "name": "Yusuf Abdul-Karim",
+        "state": "New Jersey",
+        "office": "Vineland Board of Education At-Large Seat 3",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Yusuf Abdul-Karim is a candidate for Vineland Board of Education At-Large Seat 3. A 20-year resident of Vineland, Abdul-Karim owns and operates a local halal grocery store that employs 15 community members. He holds a master's degree in public administration from Rutgers University and previously worked as a community liaison for the New Jersey Department of Children and Families. Abdul-Karim has served on the Vineland Human Relations Commission since 2019 and founded the Vineland Youth Leadership Academy, a mentoring program for at-risk middle school students. He has three children who attended Vineland public schools, with his youngest currently in 11th grade. Abdul-Karim's campaign focuses on equity in discipline practices and reducing suspension rates for minority students. He has proposed implementing restorative justice circles district-wide and expanding access to mental health counseling during school hours. Abdul-Karim has been vocal about the need for culturally responsive teaching training for all staff members. He regularly attends Masjid Al-Huda in Vineland and has organized interfaith dialogues with local Christian and Jewish leaders to promote community understanding. [Sources: The Grapevine candidate interview, September 2025; Vineland Human Relations Commission annual report]",
+        "faith_statement": "As a practicing Muslim, Abdul-Karim has stated that his faith informs his commitment to justice and community service but does not dictate specific policy positions.",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Abdul-Karim supports implementing restorative justice practices to address discipline disparities, citing data showing Black students receive suspensions at three times the rate of white students. He advocates for increased funding for alternative education programs and expanded access to credit recovery options. Abdul-Karim proposes creating a curriculum review committee with equal representation from parents, teachers, and students to ensure materials reflect community values while meeting state standards.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Abdul-Karim respects diverse family structures while emphasizing the importance of parental involvement in education. He supports accommodations for religious observances and cultural practices but has not taken specific positions on gender identity policies. Abdul-Karim advocates for strengthening family engagement through multilingual communication and community resource fairs.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Vineland NAACP", "New Jersey Education Association Local Chapter", "Cumberland County Democratic Committee"]
+    },
+    {
+        "name": "Leslie Ramos",
+        "state": "New Jersey",
+        "office": "New Brunswick Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Leslie Ramos is seeking election to the New Brunswick Board of Education At-Large Seat 1. A first-generation college graduate, Ramos earned her bachelor's degree in social work from Kean University and works as a family support specialist for the Puerto Rican Action Board. She has lived in New Brunswick for 18 years and has two children in the district's elementary schools. Ramos previously served as president of the Lincoln Elementary School PTA and coordinated the district's annual Latino Family Literacy Night. Her campaign emphasizes early childhood education and expanding pre-K access for all 3- and 4-year-olds. Ramos has proposed creating a parent university to offer workshops on navigating the school system, understanding special education rights, and supporting bilingual learners at home. She has been a vocal advocate for maintaining the district's dual-language programs, which serve approximately 40% of elementary students. Ramos regularly volunteers with the New Brunswick Tomorrow community outreach initiative and has helped organize vaccination clinics during the COVID-19 pandemic. [Sources: New Brunswick Today candidate questionnaire, October 2025; PRAB annual report]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Ramos supports universal pre-K and full-day kindergarten for all students. She advocates for maintaining and expanding the district's successful dual-language immersion programs. Ramos proposes increased professional development for teachers on culturally responsive pedagogy and trauma-informed instruction. She supports comprehensive sex education that is age-appropriate and medically accurate while respecting parental opt-out rights.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Ramos emphasizes family engagement and cultural responsiveness in education. She supports translation services for all parent communications and regular family resource fairs. Ramos advocates for policies that support working parents, including extended after-school programs and summer learning opportunities. She has not taken specific positions on gender identity policies but stresses the importance of safe and inclusive schools for all students.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["New Brunswick Education Association", "Latino Action Network", "Middlesex County Democratic Organization"]
+    },
+    {
+        "name": "Hector Colon",
+        "state": "New Jersey",
+        "office": "New Brunswick Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Hector Colon is a candidate for New Brunswick Board of Education At-Large Seat 2. A U.S. Army veteran, Colon served eight years in military intelligence before returning to New Brunswick, where he was raised. He currently works as an IT specialist for Johnson & Johnson and volunteers as a mentor for the New Brunswick Big Brothers Big Sisters program. Colon has one child enrolled in New Brunswick High School and previously served on the district's Technology Advisory Committee. His campaign focuses on improving school safety and modernizing infrastructure, citing the age of several district buildings that predate World War II. Colon has proposed creating a facilities master plan with specific timelines for upgrades and repairs. He advocates for expanding cybersecurity education and providing every student with a district-issued device for home use. Colon has attended multiple board meetings to speak in favor of increasing security personnel and implementing anonymous reporting systems for bullying and threats. [Sources: Home News Tribune candidate profile, September 2025; NBPS Technology Committee minutes]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Colon prioritizes infrastructure modernization and technology integration. He supports expanding the district's 1:1 device program to include professional development for teachers on digital pedagogy. Colon advocates for increased security measures, including additional school resource officers and upgraded camera systems. He proposes creating a vocational track in cybersecurity and information technology through partnerships with local businesses.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Colon supports strengthening school safety protocols to protect all students. He advocates for clear communication with parents regarding safety incidents and emergency procedures. Colon supports maintaining current policies on student privacy while ensuring parents have access to information about their own children. He emphasizes the need for anti-bullying programs that address all forms of harassment.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["New Brunswick Police Directors Association", "Middlesex County Building Trades Council", "New Brunswick Republican Club"]
+    },
+    {
+        "name": "Yolanda Jauregui",
+        "state": "New Jersey",
+        "office": "New Brunswick Board of Education At-Large Seat 3",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Yolanda Jauregui is running for New Brunswick Board of Education At-Large Seat 3. Born in Mexico and raised in New Brunswick from age 8, Jauregui is a bilingual social worker employed by the New Brunswick Board of Education as a family liaison. She holds a master's degree in social work from Rutgers University and has worked in the district for 12 years. Jauregui has three children who graduated from New Brunswick public schools. She previously served as chairperson of the district's Bilingual Parent Advisory Committee and helped develop the current dual-language program framework. Jauregui's campaign centers on supporting English language learners and immigrant families, who comprise over 60% of the student population. She has proposed creating a newcomer center to provide intensive support for recently arrived students and their families. Jauregui advocates for increased translation services and cultural competency training for all staff. She has been recognized by the New Jersey Department of Education for her work in parent engagement and received the 2024 Hispanic Leadership Award from the Statewide Hispanic Chamber of Commerce. [Sources: TapInto New Brunswick candidate series, October 2025; NBPS staff directory]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Jauregui supports expanding support services for English language learners, including after-school tutoring and summer bridge programs. She advocates for maintaining the district's dual-language model while ensuring equitable access across all schools. Jauregui proposes increased funding for family liaisons and translation services to improve communication with non-English speaking parents. She supports comprehensive professional development on cultural competency and trauma-informed practices.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Jauregui emphasizes the importance of family-school partnerships, particularly for immigrant families. She supports multilingual communication and cultural events that celebrate the district's diversity. Jauregui advocates for policies that support undocumented students' access to education while maintaining appropriate privacy protections. She stresses the need for inclusive environments that respect all family structures.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["New Brunswick Teachers Union", "Middlesex County Education Association", "Latino Leadership Alliance of New Jersey"]
+    },
+    {
+        "name": "Armando Virguez",
+        "state": "New Jersey",
+        "office": "Perth Amboy Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Armando Virguez is a candidate for Perth Amboy Board of Education At-Large Seat 1. A native of Peru, Virguez has lived in Perth Amboy for 22 years and owns a local insurance agency specializing in serving the Hispanic community. He holds a degree in business administration from Kean University and previously worked as a financial advisor for 15 years. Virguez has four children who attended Perth Amboy public schools, with his youngest currently in middle school. He has served on the Perth Amboy PTA Council and chaired the district's Budget and Finance Committee as a community volunteer. Virguez's campaign focuses on fiscal accountability and improving graduation rates, which currently stand at 78%. He has proposed implementing a balanced scorecard system to track district performance across multiple metrics. Virguez advocates for expanding dual enrollment programs with Middlesex College to provide college credits for high school students. He has been active in the Perth Amboy Chamber of Commerce and helped organize the annual Hispanic Heritage Festival. [Sources: Amboy Guardian candidate profile, October 2025; Perth Amboy BOE committee assignments]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Virguez supports performance-based budgeting tied to specific student outcomes. He advocates for expanding college credit programs and career technical education in high-demand fields. Virguez proposes a comprehensive audit of special education services to ensure compliance and effectiveness. He supports maintaining academic rigor while providing multiple pathways to graduation, including alternative education programs for at-risk students.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Virguez emphasizes fiscal responsibility to ensure resources directly benefit students and families. He supports transparent budget processes with regular community input sessions. Virguez advocates for policies that strengthen family engagement through parent academies and regular communication in multiple languages. He supports maintaining current opt-out policies for sensitive curriculum content.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Perth Amboy Chamber of Commerce", "Middlesex County Republican Committee", "Perth Amboy Taxpayers Alliance"]
+    },
+    {
+        "name": "Janine Walker",
+        "state": "New Jersey",
+        "office": "Perth Amboy Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Janine Walker is seeking election to the Perth Amboy Board of Education At-Large Seat 2. A lifelong resident of Perth Amboy, Walker graduated from Perth Amboy High School in 2001 and earned her teaching certification from New Jersey City University. She has taught elementary school in the district for 16 years and currently serves as grade level chairperson at the Edward J. Patten Elementary School. Walker has two children enrolled in Perth Amboy public schools. She previously served as building representative for the Perth Amboy Education Association and helped negotiate the current teachers' contract. Walker's campaign prioritizes teacher retention and professional development, citing the district's 18% annual turnover rate. She has proposed creating a mentorship program for new teachers and expanding access to National Board Certification support. Walker advocates for smaller class sizes in early grades and increased funding for classroom supplies. She has been recognized as Teacher of the Year at her school twice and received the Governor's Educator of the Year award in 2023. [Sources: Perth Amboy BOE staff recognition archives; PAEA contract documents]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Walker supports reducing class sizes to 20 students or fewer in grades K-3. She advocates for increased planning time for teachers and collaborative professional learning communities. Walker proposes expanding access to intervention specialists and reading recovery programs. She supports maintaining local control over curriculum while ensuring alignment with state standards and regular review of instructional materials.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Walker emphasizes the teacher-parent partnership in student success. She supports regular communication through multiple platforms and parent-teacher conferences twice annually. Walker advocates for family literacy programs and after-school enrichment activities. She supports maintaining current policies on student privacy while ensuring parents receive timely information about academic progress and behavioral concerns.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Perth Amboy Education Association", "New Jersey Education Association", "Perth Amboy Democratic Committee"]
+    },
+    {
+        "name": "Kenneth Armwood",
+        "state": "New Jersey",
+        "office": "Plainfield Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Kenneth Armwood is a candidate for Plainfield Board of Education At-Large Seat 1. A Plainfield resident for 25 years, Armwood serves as a Middlesex County Commissioner and previously worked as a legislative aide in the New Jersey General Assembly. He holds a bachelor's degree in political science from Kean University and has completed coursework toward a master's in public administration. Armwood has three children in Plainfield public schools and has volunteered as a coach for the Plainfield Recreation Department's youth basketball program. He currently chairs the county's Education Committee and has helped secure over $2 million in grants for local school districts. Armwood's campaign focuses on improving college readiness and expanding STEM programs. He has proposed creating a district-wide college application support system and partnerships with local businesses for internship opportunities. Armwood has attended multiple board meetings to advocate for increased security measures following several incidents at Plainfield High School. [Sources: TAPinto Plainfield candidate forum, October 2025; Middlesex County Commissioner bio]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Armwood supports expanding AP and honors courses while providing support systems to ensure equitable access. He advocates for STEM enrichment programs starting in elementary school, including coding and robotics clubs. Armwood proposes creating a college and career readiness center at the high school with dedicated counselors for scholarship applications and financial aid guidance. He supports increased security measures and mental health support services.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Armwood emphasizes community involvement in schools through volunteer programs and mentorship initiatives. He supports parent engagement through regular town halls and advisory committees. Armwood advocates for policies that ensure student safety while maintaining appropriate privacy protections. He supports anti-bullying programs that address all forms of harassment and discrimination.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Plainfield Democratic Committee", "Union County Education Association", "Plainfield Police Benevolent Association"]
+    },
+    {
+        "name": "Emily Morgan",
+        "state": "New Jersey",
+        "office": "Plainfield Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Emily Morgan is running for Plainfield Board of Education At-Large Seat 2. A registered nurse with 18 years of experience, Morgan works in the pediatric unit at Muhlenberg Regional Medical Center and serves as a school nurse substitute in Plainfield. She holds a bachelor's degree in nursing from Seton Hall University and is pursuing her master's in public health. Morgan has lived in Plainfield for 12 years and has one child in the district's elementary magnet program. She previously served on the Plainfield Health Advisory Board and helped develop the district's COVID-19 response protocols. Morgan's campaign prioritizes student health and wellness, citing high rates of childhood obesity and asthma in the community. She has proposed creating a comprehensive school health program with regular screenings, nutrition education, and physical activity requirements. Morgan advocates for increased mental health services and trauma-informed care training for all staff. She has been recognized by the New Jersey State Nurses Association for her community health initiatives. [Sources: Plainfield Courier News candidate questionnaire, September 2025; NJSNA member spotlight]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Morgan supports comprehensive health education that includes nutrition, physical fitness, and mental wellness. She advocates for daily physical education requirements and healthy school lunch options. Morgan proposes creating a district wellness committee with parents, students, and health professionals to develop evidence-based programs. She supports increased funding for school nurses and counselors to achieve recommended student-to-staff ratios.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Morgan emphasizes student health and safety as foundational to academic success. She supports parent education programs on childhood development, nutrition, and mental health. Morgan advocates for policies that ensure access to healthcare services while maintaining appropriate confidentiality for minors seeking medical care. She supports comprehensive anti-bullying initiatives that address physical and emotional safety.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["New Jersey State Nurses Association", "Plainfield PTA Council", "Union County Medical Society"]
+    }

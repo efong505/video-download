@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AWS vs Local Video Comparison</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .video-container { display: flex; gap: 20px; margin: 20px 0; }
+        .video-box { flex: 1; }
+        video { width: 100%; max-width: 400px; }
+        .status { margin: 10px 0; padding: 10px; border-radius: 4px; }
+        .success { background: #e8f5e8; border-left: 4px solid #4caf50; }
+        .error { background: #ffebee; border-left: 4px solid #f44336; }
+    </style>
+</head>
+<body>
+    <h1>Video Format Comparison Test</h1>
+    
+    <div class="video-container">
+        <div class="video-box">
+            <h3>AWS Downloaded Video</h3>
+            <video id="awsVideo" controls>
+                <source src="chicago_guard_aws.mp4" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div id="awsStatus" class="status">Loading AWS video...</div>
+        </div>
+        
+        <div class="video-box">
+            <h3>Local Script Downloaded Video</h3>
+            <video id="localVideo" controls>
+                <source src="temp_chicago_guard_local" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+            <div id="localStatus" class="status">Loading local video...</div>
+        </div>
+    </div>
+    
+    <h2>File Information</h2>
+    <div id="fileInfo">
+        <p><strong>AWS File:</strong> chicago_guard_aws.mp4 (77,038,640 bytes)</p>
+        <p><strong>Local File:</strong> temp_chicago_guard_local (73,472,032 bytes)</p>
+        <p><strong>Size Difference:</strong> AWS file is 3.5MB larger</p>
+    </div>
+    
+    <script>
+        const awsVideo = document.getElementById('awsVideo');
+        const localVideo = document.getElementById('localVideo');
+        const awsStatus = document.getElementById('awsStatus');
+        const localStatus = document.getElementById('localStatus');
+        
+        // AWS Video Events
+        awsVideo.addEventListener('loadedmetadata', () => {
+            awsStatus.innerHTML = '✅ AWS Video: Metadata loaded successfully';
+            awsStatus.className = 'status success';
+        });
+        
+        awsVideo.addEventListener('canplay', () => {
+            awsStatus.innerHTML = '✅ AWS Video: Ready to play';
+            awsStatus.className = 'status success';
+        });
+        
+        awsVideo.addEventListener('error', (e) => {
+            awsStatus.innerHTML = '❌ AWS Video: ' + (e.message || 'Playback error');
+            awsStatus.className = 'status error';
+        });
+        
+        // Local Video Events
+        localVideo.addEventListener('loadedmetadata', () => {
+            localStatus.innerHTML = '✅ Local Video: Metadata loaded successfully';
+            localStatus.className = 'status success';
+        });
+        
+        localVideo.addEventListener('canplay', () => {
+            localStatus.innerHTML = '✅ Local Video: Ready to play';
+            localStatus.className = 'status success';
+        });
+        
+        localVideo.addEventListener('error', (e) => {
+            localStatus.innerHTML = '❌ Local Video: ' + (e.message || 'Playback error');
+            localStatus.className = 'status error';
+        });
+    </script>
+</body>
+</html>

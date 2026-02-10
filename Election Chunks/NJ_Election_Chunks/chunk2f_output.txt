@@ -1,0 +1,211 @@
+
+    {
+        "name": "Nilsa I. Cruz-Perez",
+        "state": "New Jersey",
+        "office": "General Assembly District 5 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "Nilsa I. Cruz-Perez is a Democratic member of the New Jersey General Assembly, representing District 5. She previously served in the New Jersey Senate from 2014 to 2022, becoming the first Latina legislator in the state senate. Born in Bayamón, Puerto Rico, Cruz-Perez moved to Camden, New Jersey, in 1972. She served in the U.S. Army during the Persian Gulf War as a sergeant. Cruz-Perez earned a B.A. in secondary education from Big Bend Community College and pursued further studies at the University of Puerto Rico. Before entering politics, she worked as a database administrator for the New Jersey Department of Human Services. She was first elected to the Assembly in 1995, serving until 2010, and returned in 2022. Cruz-Perez has focused on veterans' issues, education, and economic development in South Jersey. She serves on committees including Military and Veterans' Affairs, Education, and Transportation. Cruz-Perez is known for her advocacy for working families, affordable housing, and healthcare access. She has sponsored legislation to improve public safety, support small businesses, and expand mental health services. Her military background informs her commitment to supporting veterans and active-duty personnel. Cruz-Perez has received awards for her public service, including recognition from the League of Women Voters and various veterans' organizations. She resides in Barrington and continues to engage with constituents through community events and town halls.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=416",
+        "positions": {
+            "ABORTION": "Supports reproductive rights and access to abortion services; co-sponsored legislation to codify Roe v. Wade protections in New Jersey law following the Dobbs decision.",
+            "EDUCATION": "Advocates for increased funding for public schools, particularly in underserved districts; supports universal pre-K, teacher retention programs, and reducing student debt; sponsored bills to expand vocational training and STEM education in high schools.",
+            "RELIGIOUS-FREEDOM": "Supports protections against discrimination based on religion; voted for measures ensuring equal access to public services regardless of faith while maintaining separation of church and state in public education.",
+            "GUNS": "Favors stricter gun control measures, including universal background checks, red flag laws, and banning assault weapons; co-sponsored the New Jersey gun safety package in 2018.",
+            "TAXES": "Supports progressive taxation and tax incentives for working families; backed the millionaire's tax to fund education and infrastructure; opposes broad-based tax increases on middle-class residents.",
+            "IMMIGRATION": "Advocates for comprehensive immigration reform, including pathways to citizenship; supports in-state tuition for undocumented students and driver's licenses for all residents regardless of immigration status.",
+            "FAMILY-VALUES": "Promotes policies supporting working parents, including paid family leave, affordable childcare, and equal pay; sponsored legislation to protect LGBTQ+ families and expand adoption rights; emphasizes family economic stability through job training and wage protections.",
+            "ELECTION-INTEGRITY": "Supports automatic voter registration, early voting expansion, and secure mail-in ballots; opposes strict voter ID laws that may disenfranchise eligible voters; voted to restore voting rights to individuals on parole."
+        },
+        "endorsements": ["New Jersey Education Association", "Planned Parenthood Action Fund of New Jersey", "Sierra Club New Jersey Chapter"]
+    },
+    {
+        "name": "John M. Brangan",
+        "state": "New Jersey",
+        "office": "General Assembly District 5",
+        "party": "R",
+        "status": "active",
+        "bio": "John M. Brangan is a Republican candidate for the New Jersey General Assembly in District 5. A lifelong resident of Gloucester Township, Brangan has dedicated his career to public service and community involvement. He serves as a councilman in Gloucester Township, where he has focused on fiscal responsibility, public safety, and local infrastructure improvements. Brangan is a graduate of Camden County College and works as a business owner in the construction industry. His platform emphasizes reducing property taxes, supporting law enforcement, and promoting economic growth in South Jersey. Brangan has been active in veterans' organizations, drawing from family military service traditions. He advocates for vocational education and trade skills training to prepare students for local job markets. Brangan has participated in community cleanups, food drives, and youth sports programs. He opposes overregulation of small businesses and seeks to streamline permitting processes. Brangan supports term limits for state legislators and greater transparency in government spending. He has criticized the state's sanctuary policies and high taxation rates. Brangan aims to bring practical, commonsense solutions to Trenton, focusing on issues affecting working-class families in Camden and Gloucester counties.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Opposes late-term abortions and taxpayer funding for abortion providers; supports parental notification laws and alternatives like adoption services.",
+            "EDUCATION": "Advocates for school choice, including expansion of charter schools and voucher programs; supports increased local control over curriculum and opposes state mandates that burden property taxpayers.",
+            "RELIGIOUS-FREEDOM": "Strong supporter of religious liberty; opposes government mandates that force religious organizations to violate their beliefs, particularly regarding marriage and healthcare.",
+            "GUNS": "Defends Second Amendment rights; opposes expanded background checks and assault weapon bans; supports concealed carry reciprocity and armed school resource officers.",
+            "TAXES": "Calls for significant property tax relief through spending cuts and pension reform; opposes new taxes and supports eliminating the estate tax.",
+            "IMMIGRATION": "Advocates for strict enforcement of immigration laws; opposes sanctuary state policies and in-state tuition for undocumented immigrants; supports E-Verify mandates for employers.",
+            "FAMILY-VALUES": "Promotes traditional family structures; supports school policies requiring parental consent for sensitive topics; opposes gender ideology curriculum in early education; defends biological definitions in sports and facilities.",
+            "ELECTION-INTEGRITY": "Supports voter ID requirements, regular voter roll purges, and in-person voting as default; opposes universal mail-in ballots and drop boxes without strict chain-of-custody rules."
+        },
+        "endorsements": ["New Jersey Second Amendment Society", "Gloucester Township Republican Club", "Camden County Right to Life"]
+    },
+    {
+        "name": "Pamela R. Lampitt",
+        "state": "New Jersey",
+        "office": "General Assembly District 6 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Pamela R. Lampitt is a Democratic member of the New Jersey General Assembly, representing District 6 since 2006. She serves as Deputy Speaker and chairs the Education Committee. Born in Syracuse, New York, Lampitt moved to New Jersey in 1985. She earned a B.A. from Johnson & Wales University and worked in the hospitality industry before entering politics. Lampitt began her public service as a Cherry Hill Township councilwoman from 2002 to 2006. She has championed education reform, women's rights, and healthcare access. Lampitt sponsored the landmark Diane B. Allen Equal Pay Act to close the gender wage gap. She has focused on mental health awareness, co-founding the New Jersey Assembly Bipartisan Mental Health Awareness Caucus. Lampitt supports LGBTQ+ rights and sponsored legislation for transgender equality. She advocates for affordable higher education and expanded vocational training. Lampitt has been recognized by the New Jersey Education Association and Planned Parenthood. She serves on the Appropriations and Higher Education committees. Lampitt resides in Cherry Hill with her family and remains active in community organizations, including the Cherry Hill Education Foundation.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=235",
+        "positions": {
+            "ABORTION": "Strong supporter of abortion rights; lead sponsor of the Reproductive Freedom Act to protect and expand access to reproductive healthcare in New Jersey.",
+            "EDUCATION": "Champions increased school funding via the School Funding Reform Act; supports full-day pre-K, reduced class sizes, and free community college; chairs Education Committee to advance teacher diversity and curriculum inclusivity.",
+            "RELIGIOUS-FREEDOM": "Supports anti-discrimination laws protecting religious minorities; advocates for inclusive public schools while allowing religious expression that does not infringe on others' rights.",
+            "GUNS": "Leads on gun violence prevention; sponsored bills for smart gun technology, ammunition bans, and domestic violence firearm restrictions; supports funding for violence intervention programs.",
+            "TAXES": "Supports targeted tax relief for seniors and middle-class families; backed property tax rebate programs and corporate accountability measures to fund public services.",
+            "IMMIGRATION": "Co-sponsored legislation for driver's licenses for undocumented residents; supports protecting DREAMers and refugee resettlement programs in New Jersey.",
+            "FAMILY-VALUES": "Advocates for paid family leave expansion, childcare subsidies, and LGBTQ+ family protections; lead sponsor of equal pay and anti-harassment laws to support working families.",
+            "ELECTION-INTEGRITY": "Supports vote-by-mail expansion, automatic registration, and same-day registration; opposes voter suppression tactics and supports independent redistricting."
+        },
+        "endorsements": ["New Jersey Education Association", "EMILY's List", "Human Rights Campaign New Jersey"]
+    },
+    {
+        "name": "Carol Murphy",
+        "state": "New Jersey",
+        "office": "General Assembly District 6 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "Carol Murphy is a Democratic member of the New Jersey General Assembly, representing District 6 since 2018. She serves as Majority Whip and sits on the Health, Environment, and Transportation committees. A resident of Mount Laurel, Murphy previously served on the Delran Township Council. She earned a degree in communications from Rowan University and worked in public relations before politics. Murphy has focused on environmental protection, healthcare affordability, and infrastructure investment. She sponsored legislation to ban single-use plastics and expand electric vehicle infrastructure. Murphy advocates for women's reproductive rights and LGBTQ+ equality. She has worked to increase funding for opioid treatment and mental health services. Murphy supports small business recovery post-COVID and tax incentives for green energy. She is a member of the New Jersey Legislative Latino Caucus and advocates for immigrant communities. Murphy has been honored by the New Jersey Environmental Lobby and the League of Conservation Voters. She engages constituents through regular town halls and mobile office hours across Burlington and Camden counties.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=405",
+        "positions": {
+            "ABORTION": "Firm supporter of reproductive choice; co-sponsored bills to remove barriers to abortion care and protect providers from out-of-state prosecution.",
+            "EDUCATION": "Supports equitable school funding, expanded pre-K, and student mental health resources; advocates for career and technical education programs and apprenticeship opportunities.",
+            "RELIGIOUS-FREEDOM": "Believes in protecting religious freedom while ensuring no religion is imposed in public schools; supports accommodations for religious observances in workplaces and schools.",
+            "GUNS": "Advocates for comprehensive gun safety laws, including magazine limits, safe storage requirements, and funding for community violence intervention.",
+            "TAXES": "Favors tax credits for childcare and senior property tax relief; supports closing corporate tax loopholes to fund transportation and environmental initiatives.",
+            "IMMIGRATION": "Supports inclusive policies like in-state tuition for undocumented students and professional licensing regardless of immigration status.",
+            "FAMILY-VALUES": "Champions paid sick leave, family medical leave expansion, and domestic violence protections; supports marriage equality and anti-discrimination laws for all families.",
+            "ELECTION-INTEGRITY": "Endorses no-excuse mail-in voting, early voting periods, and secure ballot drop boxes; opposes purging voters without due process."
+        },
+        "endorsements": ["Sierra Club New Jersey", "Moms Demand Action for Gun Sense", "AFL-CIO New Jersey"]
+    },
+    {
+        "name": "Dione Johnson",
+        "state": "New Jersey",
+        "office": "General Assembly District 6",
+        "party": "R",
+        "status": "active",
+        "bio": "Dione Johnson is a Republican candidate for the New Jersey General Assembly in District 6. A resident of Voorhees Township, Johnson is a small business owner and community activist. She holds a degree in business administration and has experience in financial services. Johnson entered politics to address rising costs, public safety, and education quality in Burlington and Camden counties. She criticizes high property taxes and overregulation stifling economic growth. Johnson supports law enforcement and opposes defund the police movements. She advocates for parental rights in education and transparency in school curricula. Johnson has volunteered with local food banks and youth mentorship programs. She promotes trade education as an alternative to four-year college debt. Johnson seeks to reduce government spending and eliminate wasteful programs. She has spoken out against sanctuary policies and supports legal immigration processes. Johnson aims to represent working families struggling with inflation and affordability in South Jersey.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Pro-life; supports restrictions after fetal heartbeat detection and conscience protections for medical professionals; favors adoption promotion over abortion.",
+            "EDUCATION": "Strong advocate for school choice, including vouchers and education savings accounts; supports parental notification for curriculum changes and opt-out rights for sensitive materials.",
+            "RELIGIOUS-FREEDOM": "Defends the right of religious institutions to operate according to their faith; opposes vaccine mandates on religious grounds and government interference in worship services.",
+            "GUNS": "Upholds Second Amendment; opposes magazine bans and red flag laws without due process; supports constitutional carry and school safety enhancements.",
+            "TAXES": "Pushes for property tax caps, elimination of sanctuary state costs, and broad tax cuts to stimulate economy; opposes gas tax increases.",
+            "IMMIGRATION": "Calls for border security, ending sanctuary policies, and merit-based legal immigration; opposes benefits for illegal immigrants funded by taxpayers.",
+            "FAMILY-VALUES": "Supports traditional marriage and biological sex distinctions in sports; opposes transgender medical interventions for minors; promotes family tax credits.",
+            "ELECTION-INTEGRITY": "Demands photo ID for voting, citizenship verification, and banning ballot harvesting; supports paper ballots and election audits."
+        },
+        "endorsements": ["New Jersey Family First", "Voorhees Republican Club", "Burlington County GOP"]
+    },
+    {
+        "name": "Herb Conaway",
+        "state": "New Jersey",
+        "office": "General Assembly District 7 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Herb Conaway is a Democratic member of the New Jersey General Assembly, representing District 7. A physician and attorney, Conaway holds an M.D. from Jefferson Medical College and a J.D. from Rutgers Law School. He served in the U.S. Air Force as a medical officer, achieving the rank of lieutenant colonel. Conaway has practiced medicine in Burlington County for over two decades. First elected to the Assembly in 1998, he chairs the Health Committee and serves on Appropriations. Conaway has authored numerous healthcare laws, including expansions of Medicaid and prescription drug affordability measures. He supports environmental justice and clean energy transitions. Conaway sponsored legislation for paid sick leave and minimum wage increases. He is a proponent of veterans' healthcare and mental health parity. Conaway has been recognized by the Medical Society of New Jersey and the New Jersey Hospital Association. He resides in Delran with his family and teaches at Rowan University School of Osteopathic Medicine.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=71",
+        "positions": {
+            "ABORTION": "Supports full access to abortion and contraceptive services; sponsored bills to protect abortion rights post-Dobbs and ensure insurance coverage.",
+            "EDUCATION": "Advocates for universal pre-K, school infrastructure bonds, and free school meals; supports higher teacher salaries and loan forgiveness for educators in high-need areas.",
+            "RELIGIOUS-FREEDOM": "Protects freedom of worship while supporting nondiscrimination laws; opposes use of religious beliefs to deny healthcare or public accommodations.",
+            "GUNS": "Champions gun buybacks, extreme risk protection orders, and banning ghost guns; supports research into gun violence as a public health issue.",
+            "TAXES": "Supports progressive tax structures to fund health and education; backed millionaire's tax and corporate responsibility initiatives.",
+            "IMMIGRATION": "Favors humane reform, including DACA protections and family unification; supports community trust-building with immigrant populations.",
+            "FAMILY-VALUES": "Promotes inclusive family policies, including IVF access, surrogacy rights, and protections for same-sex parents; supports comprehensive sex education.",
+            "ELECTION-INTEGRITY": "Endorses expanded voting access, including online registration and vote centers; supports campaign finance transparency."
+        },
+        "endorsements": ["New Jersey Medical Society", "Planned Parenthood New Jersey", "American Federation of Teachers NJ"]
+    },
+    {
+        "name": "Andrea Katz",
+        "state": "New Jersey",
+        "office": "General Assembly District 7 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "Andrea Katz is a Democratic member of the New Jersey General Assembly, representing District 7 since 2024. A former Burlington County commissioner, Katz has a background in education and nonprofit management. She holds degrees from the University of Pennsylvania and Bank Street College of Education. Katz taught in public schools before leading educational programs for underserved youth. She entered politics to address affordability, environmental protection, and public health. Katz focuses on reproductive rights, gun safety, and climate resilience. She supports small business grants and workforce development in green industries. Katz has advocated for expanded mental health services in schools and communities. She is a member of the Environment, Education, and Women’s Caucus. Katz resides in Chesterfield Township and is active in local PTA and environmental groups. Her priorities include property tax relief for seniors and infrastructure upgrades in rural areas.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=439",
+        "positions": {
+            "ABORTION": "Dedicated to protecting abortion access; co-sponsored reproductive freedom legislation and clinic protection zones.",
+            "EDUCATION": "Pushes for equitable funding formulas, early childhood education, and teacher mentorship programs; supports arts and civics education restoration.",
+            "RELIGIOUS-FREEDOM": "Advocates for religious pluralism and protection from hate crimes; supports interfaith dialogue initiatives in public policy.",
+            "GUNS": "Supports universal background checks, safe storage laws, and funding for trauma centers in gun violence hotspots.",
+            "TAXES": "Favors tax incentives for clean energy and historic preservation; supports senior freeze programs and middle-class rebates.",
+            "IMMIGRATION": "Champions welcoming communities and language access in government services; supports legal aid for immigrants facing deportation.",
+            "FAMILY-VALUES": "Promotes family-supporting policies like childcare tax credits, elder care support, and paid leave for all workers.",
+            "ELECTION-INTEGRITY": "Supports restoring voting rights post-incarceration and youth pre-registration at 16; opposes gerrymandering."
+        },
+        "endorsements": ["League of Conservation Voters NJ", "New Jersey Working Families", "Burlington County Democratic Committee"]
+    },
+    {
+        "name": "Michael Torrissi Jr.",
+        "state": "New Jersey",
+        "office": "General Assembly District 7",
+        "party": "R",
+        "status": "active",
+        "bio": "Michael Torrissi Jr. is a Republican candidate for the New Jersey General Assembly in District 7. A Hammonton resident, Torrissi owns a family construction business and serves on the Hammonton Town Council. He has a background in public works and infrastructure management. Torrissi entered the race to combat high taxes, improve public safety, and support agriculture in South Jersey. He advocates for the farming community, opposing regulations that burden family farms. Torrissi supports law enforcement and first responder funding. He promotes vocational training and apprenticeship programs tied to local industries. Torrissi has organized community events and supported youth sports. He criticizes state overreach in education and local zoning. Torrissi aims to protect rural character while fostering responsible development.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Opposes elective abortions after viability; supports informed consent, ultrasound requirements, and defunding Planned Parenthood.",
+            "EDUCATION": "Favors local control, property tax deductions for school funding, and expansion of career-technical schools; opposes common core mandates.",
+            "RELIGIOUS-FREEDOM": "Strong defender of religious exemptions in healthcare and education; supports school prayer and faith-based social services.",
+            "GUNS": "Pro-Second Amendment; opposes all new gun control laws; supports national concealed carry reciprocity.",
+            "TAXES": "Demands 2.5% property tax cap enforcement and elimination of redundant state agencies; opposes rain tax and EV mandates.",
+            "IMMIGRATION": "Supports completing border wall, ending catch-and-release, and deporting criminal aliens; opposes tuition aid for illegals.",
+            "FAMILY-VALUES": "Protects parental rights, opposes critical race theory and gender curriculum in schools; supports school choice scholarships.",
+            "ELECTION-INTEGRITY": "Requires proof of citizenship to vote, bans mail-in ballots except for absentee, and mandates hand-counted paper ballots."
+        },
+        "endorsements": ["New Jersey Farm Bureau", "Hammonton GOP", "South Jersey Right to Life"]
+    },
+    {
+        "name": "Brian E. Rumpf",
+        "state": "New Jersey",
+        "office": "General Assembly District 8 Seat 1",
+        "party": "R",
+        "status": "active",
+        "bio": "Brian E. Rumpf is a Republican member of the New Jersey General Assembly, representing District 8 since 2003. He serves as Republican Budget Officer and sits on the Budget and Transportation committees. A lifelong resident of Little Egg Harbor, Rumpf earned a B.A. from The Catholic University of America and a J.D. from Widener University School of Law. He practiced law before politics and served as mayor of Little Egg Harbor. Rumpf focuses on property tax relief, coastal protection, and public safety. He has sponsored legislation for volunteer firefighter incentives and municipal aid stabilization. Rumpf opposes offshore wind projects citing environmental and economic concerns. He supports the Barnegat Bay restoration and Pinelands preservation. Rumpf has been endorsed by the New Jersey Fraternal Order of Police. He resides with his family in Ocean County and remains active in local civic organizations.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=240",
+        "positions": {
+            "ABORTION": "Generally pro-life; supports parental notification and bans on partial-birth abortion; opposes state funding for abortion providers.",
+            "EDUCATION": "Advocates for property tax relief tied to school funding reform; supports charter schools and home schooling freedoms; opposes unfunded mandates on districts.",
+            "RELIGIOUS-FREEDOM": "Protects religious institutions from government overreach; supported conscience protections for adoption agencies and healthcare workers.",
+            "GUNS": "Strong Second Amendment advocate; opposes magazine limits and registration requirements; supports sportsmen’s rights and hunting traditions.",
+            "TAXES": "Leads efforts for pension reform and 2% cap on property taxes; opposes toll increases and new fees on motorists.",
+            "IMMIGRATION": "Supports legal immigration; opposes benefits for illegal immigrants; calls for stricter enforcement and employer sanctions.",
+            "FAMILY-VALUES": "Promotes policies strengthening families, including tax credits for stay-at-home parents and marriage penalty elimination.",
+            "ELECTION-INTEGRITY": "Supports voter ID, signature verification for mail ballots, and banning private funding of elections."
+        },
+        "endorsements": ["NJ Fraternal Order of Police", "New Jersey Outdoor Alliance", "Ocean County GOP"]
+    },
+    {
+        "name": "Lisa Bennett",
+        "state": "New Jersey",
+        "office": "General Assembly District 8 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Lisa Bennett is a Democratic candidate for the New Jersey General Assembly in District 8 Seat 1. A resident of Barnegat, Bennett is an educator and community organizer with a master’s degree in public administration. She has worked in Ocean County schools supporting special education programs. Bennett entered politics to address climate change, healthcare access, and worker protections. She supports offshore wind development and clean energy jobs. Bennett advocates for fully funded public schools and affordable college. She has volunteered with coastal cleanup initiatives and food insecurity programs. Bennett criticizes underinvestment in shore infrastructure and seeks flood mitigation funding. She supports reproductive rights and gun safety reforms. Bennett aims to flip the district by appealing to independent voters concerned with environmental and economic issues.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Supports unrestricted access to abortion and contraception; opposes TRAP laws and waiting periods.",
+            "EDUCATION": "Calls for universal pre-K, debt-free community college, and increased special education funding; supports inclusive curricula reflecting diversity.",
+            "RELIGIOUS-FREEDOM": "Believes religion is personal; opposes school-sponsored prayer but supports cultural religious education.",
+            "GUNS": "Advocates for assault weapon bans, universal checks, and liability insurance for gun owners.",
+            "TAXES": "Supports taxing the ultra-wealthy to fund climate resilience and public transit; favors earned income tax credits.",
+            "IMMIGRATION": "Welcomes refugees and supports asylum rights; opposes family separation and ICE detention quotas.",
+            "FAMILY-VALUES": "Broadly defines family; supports LGBTQ+ adoption, paid leave, and universal childcare.",
+            "ELECTION-INTEGRITY": "Pushes for same-day registration, public election funding, and ranked-choice voting pilots."
+        },
+        "endorsements": ["Ocean County Democratic Committee", "Clean Water Action NJ", "New Jersey Teachers Union Local"]
+    }

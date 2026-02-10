@@ -1,0 +1,1850 @@
+{
+    "Functions": [
+        {
+            "FunctionName": "testimony-auth",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:testimony-auth",
+            "Runtime": "nodejs22.x",
+            "Role": "arn:aws:iam::371751795928:role/testimony-lambda-role",
+            "Handler": "auth.handler",
+            "CodeSize": 1897,
+            "Description": "",
+            "Timeout": 3,
+            "MemorySize": 128,
+            "LastModified": "2026-01-03T08:05:48.000+0000",
+            "CodeSha256": "BqaFeSgPtyAhUYL/v0tOeMbX8sAts7hgVUUXR01Op/E=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "fc56cd0d-43e0-42f1-aafd-e613f7593295",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/testimony-auth"
+            }
+        },
+        {
+            "FunctionName": "ffmpegLambda",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:ffmpegLambda",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/LambdaS3Role",
+            "Handler": "lambda_function.lambda_handler",
+            "CodeSize": 993,
+            "Description": "",
+            "Timeout": 3,
+            "MemorySize": 128,
+            "LastModified": "2025-09-25T16:13:12.000+0000",
+            "CodeSha256": "MQRK/loskMfUl7eU9dBO60ae75YurR5HoBn42fedTAk=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "10550b4b-c3cc-491d-a3e6-47ebcb6ba5db",
+            "Layers": [
+                {
+                    "Arn": "arn:aws:lambda:us-east-1:371751795928:layer:ffmpeg:2",
+                    "CodeSize": 29509456
+                }
+            ],
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/ffmpegLambda"
+            }
+        },
+        {
+            "FunctionName": "video-downloader",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:video-downloader",
+            "Runtime": "python3.11",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 35628814,
+            "Description": "",
+            "Timeout": 900,
+            "MemorySize": 2048,
+            "LastModified": "2025-11-17T15:14:45.000+0000",
+            "CodeSha256": "74v8KZPwKbKI/fJ2X35hF+wNTOOnGHgcBGrl+rF59ZY=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {
+                    "S3_BUCKET": "my-video-downloads-bucket"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "e66b37e2-10bd-4a93-a3fb-860694de3b5f",
+            "Layers": [
+                {
+                    "Arn": "arn:aws:lambda:us-east-1:371751795928:layer:yt-dlp-layer-v2:1",
+                    "CodeSize": 2939831
+                },
+                {
+                    "Arn": "arn:aws:lambda:us-east-1:371751795928:layer:ffmpeg-layer:1",
+                    "CodeSize": 58884058
+                }
+            ],
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 10240
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/video-downloader"
+            }
+        },
+        {
+            "FunctionName": "recipe-scrapter",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:recipe-scrapter",
+            "Runtime": "nodejs22.x",
+            "Role": "arn:aws:iam::371751795928:role/recipe-scraper-role",
+            "Handler": "index.handler",
+            "CodeSize": 295,
+            "Description": "",
+            "Timeout": 3,
+            "MemorySize": 128,
+            "LastModified": "2025-10-17T12:19:48.459+0000",
+            "CodeSha256": "q8E7Nexf5xxhKT9/d4bGpAYOXJYFAUjJ0UDj8OivK8E=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "1bcd1ee5-5d08-4139-b40c-f38393976c9b",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/recipe-scrapter"
+            }
+        },
+        {
+            "FunctionName": "contact-form-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:contact-form-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 760,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 128,
+            "LastModified": "2026-01-20T21:34:31.000+0000",
+            "CodeSha256": "lBY8whTghb4DHYN9YLfSqBYOzAWvRlxtFQpp2ws9vYA=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "b4d42254-d3b0-445e-b24e-9fa26bc2f2ad",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/contact-form-api"
+            }
+        },
+        {
+            "FunctionName": "products-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:products-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/testimony-lambda-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 1429,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 512,
+            "LastModified": "2025-11-14T06:23:01.000+0000",
+            "CodeSha256": "VQD+OlIffWFgRcuso9cHsgtDxOqAt3BLN6jK/tcNijY=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "dbebf1b3-3743-4bcc-8123-8db0998ddda2",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/products-api"
+            }
+        },
+        {
+            "FunctionName": "email-sender",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:email-sender",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 1461,
+            "Description": "",
+            "Timeout": 300,
+            "MemorySize": 512,
+            "LastModified": "2025-11-18T14:50:12.978+0000",
+            "CodeSha256": "CKSHKoxoAzv8ecOb+YS2KWcoWJPY1jDrIb1H2VCWmx0=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "38528dfc-d3de-4857-aaa5-346fd5b2e886",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/email-sender"
+            }
+        },
+        {
+            "FunctionName": "TrackPollyUsage",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:TrackPollyUsage",
+            "Runtime": "python3.13",
+            "Role": "arn:aws:iam::371751795928:role/service-role/TrackPollyUsage-role-viqrec3p",
+            "Handler": "lambda_function.lambda_handler",
+            "CodeSize": 671,
+            "Description": "",
+            "Timeout": 3,
+            "MemorySize": 128,
+            "LastModified": "2025-10-03T14:46:53.000+0000",
+            "CodeSha256": "GGYTMWDjlA+BZWR73OLOkpgWxzDQNV5EZBT4Gb0Ptj0=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "4c904d78-917c-4ec6-b9d0-5b1563f0eb4d",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/TrackPollyUsage"
+            }
+        },
+        {
+            "FunctionName": "digest_generator",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:digest_generator",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 2137,
+            "Description": "",
+            "Timeout": 60,
+            "MemorySize": 256,
+            "LastModified": "2025-11-04T19:57:22.000+0000",
+            "CodeSha256": "AgWUuGDNKcpDOp7sqQ5kmxHN+AtakWkoUi8XAkzSuLg=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "9a067482-425b-4d82-8c6a-fabf1c58a3b8",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/digest_generator"
+            }
+        },
+        {
+            "FunctionName": "reviews-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:reviews-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 1370,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 128,
+            "LastModified": "2025-11-14T06:19:09.000+0000",
+            "CodeSha256": "dRyqsYrJKcYJLNngUuVBstv2eJ6igGbWZ+1dIRSF47o=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "1dd005ea-c71b-4c60-a947-7bf3b486690c",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/reviews-api"
+            }
+        },
+        {
+            "FunctionName": "comments-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:comments-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 2861,
+            "Description": "",
+            "Timeout": 3,
+            "MemorySize": 128,
+            "LastModified": "2025-11-05T21:13:56.000+0000",
+            "CodeSha256": "CVWc32Z7YmrMu5j3yoBdu3uzYOkgdesQgoLsZxWtAWU=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "2590ccb0-fd58-4b62-8711-762ff8d34456",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/comments-api"
+            }
+        },
+        {
+            "FunctionName": "video-url-generator",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:video-url-generator",
+            "Runtime": "python3.11",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 633,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 128,
+            "LastModified": "2025-10-07T16:37:22.921+0000",
+            "CodeSha256": "5MpQIvza7JGaGms/2VybEOVaSJbncss8VO9sTKmASrg=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {
+                    "S3_BUCKET": "my-video-downloads-bucket"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "27fa7bf6-d177-473e-b05e-f507bd71c6b7",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/video-url-generator"
+            }
+        },
+        {
+            "FunctionName": "musicFunction",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:musicFunction",
+            "Runtime": "nodejs22.x",
+            "Role": "arn:aws:iam::371751795928:role/service-role/musicFunction-role-3t4uuscs",
+            "Handler": "index.handler",
+            "CodeSize": 854,
+            "Description": "",
+            "Timeout": 3,
+            "MemorySize": 128,
+            "LastModified": "2026-01-03T08:05:52.000+0000",
+            "CodeSha256": "nIgLpy/kRzCdXF3klfTto2BSAEt2EElBeQ+WSIapi8w=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {
+                    "PRIVATE_KEY": "-----BEGIN RSA PRIVATE KEY-----\\nMIIEowIBAAKCAQEA9sIo9f8Y1GEtmXFsXMwSEf552PDRAOl3a00EZ0DQJmhi7U9N\\nOIRy7TNHlNhiTcZK8Rd08vNAG5sbwZSOf9jeSBYOpkX3/li+MMdBjmknjuLj1Big\\nBTQJA5MvpTQv37F14xwdhKT+UuVX1rCyxjUtYgbRcF2CTN4UZk57jnsSDI7Eb+sq\\nTDGm3z4Cho75Gnopme7oLSsN3pHK7+fvVXAbPFeGQ020NOgVsWzy8ObDhnGp4jAx\\nG4+40B5V5XhrHWfqH4FYX+5KkwML0Wl/qvmx5Sjr95CgsixctswLDJp5DvdkdFjJ\\nPkk1o3woJxfGkWydv2dUdt8lefK3w1w0rLIltQIDAQABAoIBABaW1KgcZ7n9gW6k\\nFv7xwY+7I41sEj4KoV+Fx+rp4IQ7lx7RXSjY2yqCwMFMA8fJ6M9kTdT11r8QNnzE\\nrDzg7gxcVI/9JMQ4fIS7oPE4CCKI+8FNVczUJCUbIsf1XJKWTMvzJXKgphWRoDZr\\nq5oAgTyRkje+n7CIvgZVlfMHqjHS6/xa6Xeowiw3cBLeawapdkF9GJN+9ELxIUM/\\n/veLt2odYnyM7I43NcSwmG433knQRm02yxpXkfjue501DdLd3r8fH4TH3xUh/syQ\\nguE5hXe47HkuCH896GTNXMBwdHiWdvkFevPfjWl649ZtHXv8VSYF+ViiDcklCs4i\\nZGYB68sCgYEA/nnj8X7srNqR8uSILHYMch50Y4P52Pw8PT4PNyrDxCAJA/Zn+sLP\\nGURB2A6nDE7k0bEBme7VSrOIEhzJWmqSPB1NcjgVUX8kYeluETV2o0zS1ImB0lWS\\nh8zq1isg/rCAKTvSV41Wyepw29oO59g4cxQGcNKw3OX7dLc03nfca2sCgYEA+Dxw\\nPanHjf/o4AVtXJuz+gzMYNXYZhvQzDYy1GQp2z8BkfwFD6eootLAKxXIIdIezyAK\\nXw6+ufU5wPhhycNBI8zT7X/AvfqrcOVuFrgPdIYZcuOdMGf6ASzMCjKaZuNi4AOH\\n3+ola74m1AAEVFbxKzAI85L3tjXtk/FTtl42G18CgYAD5AUyKgigU+8rUYcrdtqV\\n3BVXeCsXwDODlDFTXJoFo5+/qcLJOLVF459GGGNBcutYsWYe3mHwdHI+JKaHdV2r\\nAZ+vgWACEPmTbag7JyAbOw92JGwRtTE6Vk243IvymOw8tSdwIz8Scz0qf1j+/nVO\\nfR3kF7SQjAueKzbpt9ds5QKBgQDrs9ePdWo59sgUDpMs39sgjo5xVBvJuJelj8Dr\\n0r+7ojPHfdkAaF3DXQGC54fENVNzsCSo5cNLpwFTrYSMo41yhMamOCu3OBEZfX/u\\nqo5iQgJgCKf0koXcH8EN3cal8zqrIi8d+aHWkBMmMW3q9zK/ozicruvuY35Wf0rR\\nWttdWQKBgBWKF954VoAKK+R/x3Mc+rEXgYmEiUXcpoknD6eIalU5VAZwBqmq6E/8\\n9hjk9AxdSaJ6cr+ykgSMSszWorGEFrOL6QaGuXRWo9dg+pMRPUYxS6rVpod+tW4n\\nfF6FDYoZN83wGR4V2rMEPuAvaBT285SgyTkjNEDbw1pYhv3v0Nm7\\n-----END RSA PRIVATE KEY-----\\n",
+                    "DISTRIBUTION_DOMAIN": "d3rycxy8tpo7kb.cloudfront.net",
+                    "KEY_PAIR_ID": "K2CMXNW05UVNLH"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "ab08917b-caec-42ef-bebc-9fb7a6b60d59",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/musicFunction"
+            }
+        },
+        {
+            "FunctionName": "recipe-scraper",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:recipe-scraper",
+            "Runtime": "nodejs18.x",
+            "Role": "arn:aws:iam::371751795928:role/recipe-scraper-role",
+            "Handler": "scraper.handler",
+            "CodeSize": 67900332,
+            "Description": "",
+            "Timeout": 60,
+            "MemorySize": 1024,
+            "LastModified": "2025-10-17T22:27:33.000+0000",
+            "CodeSha256": "2mQ4G+sv6u4WbFOCGeY3XHC+Y1Ixh9VyeuezXxrqdzo=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {
+                    "CONFIG_TABLE_NAME": "WebsiteConfigs"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "39176696-885d-401e-8935-b2a0c0b64435",
+            "Layers": [
+                {
+                    "Arn": "arn:aws:lambda:us-east-1:764866452798:layer:chrome-aws-lambda:25",
+                    "CodeSize": 51779390
+                }
+            ],
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/recipe-scraper"
+            }
+        },
+        {
+            "FunctionName": "video-list-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:video-list-api",
+            "Runtime": "python3.11",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 768,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 128,
+            "LastModified": "2025-10-09T21:57:03.956+0000",
+            "CodeSha256": "sfff89m9mDLPWrdbvtbHAMZG+kSpJm5vlFDg3W4mM+w=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "84b92eb3-0961-4d09-9959-99f20d3c1d48",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/video-list-api"
+            }
+        },
+        {
+            "FunctionName": "admin_api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:admin_api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/StorageSubscriptionLambdaRole",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 16244244,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 512,
+            "LastModified": "2025-11-18T02:40:45.000+0000",
+            "CodeSha256": "iFU/hUoowRMH6KTszDjZkJXFxRzecUAuMOpb45gX3WI=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {
+                    "S3_BUCKET": "storage-subscription-bucket-75470",
+                    "JWT_SECRET": "your-secret-key-change-this",
+                    "ADMIN_EMAILS": "admin@yourdomain.com"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "b8b8889a-4679-4b33-a429-d3369e9942ec",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/admin_api"
+            }
+        },
+        {
+            "FunctionName": "newsletter_api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:newsletter_api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 7078,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 256,
+            "LastModified": "2026-01-20T21:55:30.000+0000",
+            "CodeSha256": "oyLRM8if+pV1Bt/3jYr9IviCVL5vhSYyHFzASB8vjHY=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "d13d2bf2-821a-4eec-abcb-04533fa300fd",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/newsletter_api"
+            }
+        },
+        {
+            "FunctionName": "storage_api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:storage_api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/StorageSubscriptionLambdaRole",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 16250461,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 512,
+            "LastModified": "2025-11-18T15:28:33.000+0000",
+            "CodeSha256": "rJW3Y192DULEXzvAoBz2J3i1wCnHMVBU1LeGkaxqGQA=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {
+                    "S3_BUCKET": "storage-subscription-bucket-75470",
+                    "JWT_SECRET": "your-secret-key-change-this",
+                    "ADMIN_EMAILS": "admin@yourdomain.com"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "fa1fc218-8e74-4e86-8a92-5396581ffabf",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/storage_api"
+            }
+        },
+        {
+            "FunctionName": "subscription_api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:subscription_api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/StorageSubscriptionLambdaRole",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 18123039,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 512,
+            "LastModified": "2025-11-18T14:32:11.000+0000",
+            "CodeSha256": "NFE027qveAhxcbQt0aJS6jvcIojSUXnsrvJu5WafuOo=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {
+                    "S3_BUCKET": "storage-subscription-bucket-75470",
+                    "JWT_SECRET": "your-secret-key-change-this",
+                    "ADMIN_EMAILS": "admin@yourdomain.com"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "46c7fed9-01c4-4e4f-b1a7-e7d735a7b85b",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/subscription_api"
+            }
+        },
+        {
+            "FunctionName": "contributors-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:contributors-api",
+            "Runtime": "python3.11",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 4749,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 256,
+            "LastModified": "2025-10-30T19:49:42.000+0000",
+            "CodeSha256": "Vy5MWUWn79sGVgvhJtLZwhZmGagzgDDhcZ6pL2REy68=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "b47917ae-fb40-4937-9647-135291f3dc39",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/contributors-api"
+            }
+        },
+        {
+            "FunctionName": "url-analysis-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:url-analysis-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 2124,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 256,
+            "LastModified": "2025-10-22T09:26:39.000+0000",
+            "CodeSha256": "qE7dSgPVBWVVMI9N6T8HFu4e5dp/JSPhJkm1CPHWwVM=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {
+                    "USE_AI_SUMMARY": "true"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "19d8bf2f-0b6d-4e28-9240-26d344545596",
+            "Layers": [
+                {
+                    "Arn": "arn:aws:lambda:us-east-1:371751795928:layer:requests-layer:1",
+                    "CodeSize": 1080358
+                }
+            ],
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/url-analysis-api"
+            }
+        },
+        {
+            "FunctionName": "orders-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:orders-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 1342,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 128,
+            "LastModified": "2025-11-14T05:49:07.000+0000",
+            "CodeSha256": "/tv4LGdlbq4O5w7EFWVD9HZG+XWRl3Mk7SHlPPRy4Xc=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "180a1548-ad1b-4bbe-9a0b-cb2c6fcc9eca",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/orders-api"
+            }
+        },
+        {
+            "FunctionName": "book-delivery-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:book-delivery-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 16936242,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 256,
+            "LastModified": "2026-02-03T03:59:18.000+0000",
+            "CodeSha256": "DSf8wavBt89t/o4S1m8PD/BtIbd9z9d+SODE0U9FRfA=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "9e8fb669-2b1f-49a5-93be-2dd50e935d1b",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/book-delivery-api"
+            }
+        },
+        {
+            "FunctionName": "s3-thumbnail-trigger",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:s3-thumbnail-trigger",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 1101,
+            "Description": "",
+            "Timeout": 300,
+            "MemorySize": 1024,
+            "LastModified": "2025-10-22T09:31:13.000+0000",
+            "CodeSha256": "hLMxtrvInOFraciGQSFWr+yTlbsjYSN//XrPRd6I36Y=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "ac1ee1b6-20ef-42a0-86fc-2eef8341ff95",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/s3-thumbnail-trigger"
+            }
+        },
+        {
+            "FunctionName": "auth_api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:auth_api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/StorageSubscriptionLambdaRole",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 16243857,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 512,
+            "LastModified": "2025-11-18T02:25:42.000+0000",
+            "CodeSha256": "/Cuj5USGmRLtXAaSfL3ESx4eweZTiUNLXQXn9eQHras=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {
+                    "S3_BUCKET": "storage-subscription-bucket-75470",
+                    "JWT_SECRET": "your-secret-key-change-this",
+                    "ADMIN_EMAILS": "admin@yourdomain.com"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "9d970978-0370-48b1-9b79-5baf22e2b5d2",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/auth_api"
+            }
+        },
+        {
+            "FunctionName": "pollyFunctionTest",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:pollyFunctionTest",
+            "Runtime": "python3.13",
+            "Role": "arn:aws:iam::371751795928:role/service-role/pollyFunctionTest-role-ho3nji6s",
+            "Handler": "lambda_function.lambda_handler",
+            "CodeSize": 2873,
+            "Description": "",
+            "Timeout": 3,
+            "MemorySize": 128,
+            "LastModified": "2025-09-27T17:00:31.000+0000",
+            "CodeSha256": "0GzEt5eh33++3ugAGaXApIwlszt0IbwG/m0CGt3ZPjw=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "be0997ad-4e60-4dda-b428-3cedc7505416",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/pollyFunctionTest"
+            }
+        },
+        {
+            "FunctionName": "resources-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:resources-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 1419,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 128,
+            "LastModified": "2025-10-28T16:43:10.000+0000",
+            "CodeSha256": "ylaLT8KwsomilbeDUNMCpyMoiKPaa38JbWVW5IGnc7Q=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "7a680aeb-e222-45d9-a2c5-00b997e60766",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/resources-api"
+            }
+        },
+        {
+            "FunctionName": "thumbnail-generator",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:thumbnail-generator",
+            "Runtime": "python3.11",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 2318,
+            "Description": "",
+            "Timeout": 300,
+            "MemorySize": 1024,
+            "LastModified": "2025-10-22T19:43:54.000+0000",
+            "CodeSha256": "yO1K6pTEXgWcGfvTSExWb07bYxUR+YmxGRIgEjy41S0=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "7dfbd519-2330-4120-b9f7-21699f00d6e8",
+            "Layers": [
+                {
+                    "Arn": "arn:aws:lambda:us-east-1:371751795928:layer:ffmpeg-layer:1",
+                    "CodeSize": 58884058
+                }
+            ],
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/thumbnail-generator"
+            }
+        },
+        {
+            "FunctionName": "createTempate",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:createTempate",
+            "Runtime": "nodejs22.x",
+            "Role": "arn:aws:iam::371751795928:role/service-role/createTempate-role-duqzax2n",
+            "Handler": "index.handler",
+            "CodeSize": 564,
+            "Description": "",
+            "Timeout": 3,
+            "MemorySize": 128,
+            "LastModified": "2025-09-20T22:25:16.000+0000",
+            "CodeSha256": "RCO4QNDWPr+LS6Eg/UldS8zC2h41+sdMmOJa5c1lM8Q=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "7b9659ea-0457-4f24-b245-969f763be115",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/createTempate"
+            }
+        },
+        {
+            "FunctionName": "articles-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:articles-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 1048014,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 128,
+            "LastModified": "2025-11-27T19:02:42.000+0000",
+            "CodeSha256": "TVH4w4XVsqpACEKW6zStmZ6Rf94kU8rrd+MpyRYxKNo=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "71088499-272a-4391-9f34-477305178796",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/articles-api"
+            }
+        },
+        {
+            "FunctionName": "user-email-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:user-email-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 68975,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 512,
+            "LastModified": "2025-11-18T15:21:50.000+0000",
+            "CodeSha256": "HrafqgE4IhfxifP0exw6eXJxHq9wjzp81WTTyhIAg7o=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "6565f240-8c97-4cb5-a5e6-d46e72a423e2",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/user-email-api"
+            }
+        },
+        {
+            "FunctionName": "recipe-scraper-lambda",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:recipe-scraper-lambda",
+            "Runtime": "nodejs16.x",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "scraper.handler",
+            "CodeSize": 80316253,
+            "Description": "",
+            "Timeout": 60,
+            "MemorySize": 1024,
+            "LastModified": "2025-10-27T12:11:54.000+0000",
+            "CodeSha256": "2qLm/xp5raatPQRsfP9nXTZpgVoQTOB/ZOMRfctb4wI=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {
+                    "CONFIG_TABLE_NAME": "WebsiteConfigs"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "6005e7cc-a927-460d-a8fe-e447c8986b3a",
+            "Layers": [
+                {
+                    "Arn": "arn:aws:lambda:us-east-1:764866452798:layer:chrome-aws-lambda:31",
+                    "CodeSize": 52920758
+                }
+            ],
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/recipe-scraper-lambda"
+            }
+        },
+        {
+            "FunctionName": "paypal-billing-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:paypal-billing-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 1029986,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 128,
+            "LastModified": "2025-10-28T05:53:59.000+0000",
+            "CodeSha256": "q2i9BLXFLFL2nbZLReybuLaOMJrF9Mnzo1MJ4i44xG0=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {
+                    "PAYPAL_CLIENT_ID": "AfRsTknme8cj0IuEjhYWK7F939A4BwXJ2rmDtNC4uMu9g1zzH5ZUCv_4n9dK4I5Wdx-G42FkNBWewYrg",
+                    "PAYPAL_BASE_URL": "https://api-m.paypal.com",
+                    "PAYPAL_CLIENT_SECRET": "EJ-LsGmf6wMgZE0dnIk-YAUIub_xkxMZ0veXDTXFs5IH2WCZ7drqMdaADG318m0ozEw3eR98jxBGmWSi"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "299b6e7b-94f1-40bd-b29a-1c8d1a46019e",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/paypal-billing-api"
+            }
+        },
+        {
+            "FunctionName": "helloWorld",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:helloWorld",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/service-role/helloWorld-role-l6rjrsvi",
+            "Handler": "lambda_function.lambda_handler",
+            "CodeSize": 440,
+            "Description": "A starter AWS Lambda function.",
+            "Timeout": 3,
+            "MemorySize": 128,
+            "LastModified": "2025-09-21T23:51:03.822+0000",
+            "CodeSha256": "ZpkdK8nqlariL8pK1ZC3BVBjBPEiV2Wwmp3HJr/wSEk=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {}
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "d1097bb2-0d67-4d58-934e-bf324f3ceb26",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/helloWorld"
+            }
+        },
+        {
+            "FunctionName": "bible-lesson-to-audio",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:bible-lesson-to-audio",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/BibleLessonPollyRole",
+            "Handler": "lambda_function.lambda_handler",
+            "CodeSize": 3454,
+            "Description": "Convert Bible lesson text to audio using Amazon Polly",
+            "Timeout": 900,
+            "MemorySize": 256,
+            "LastModified": "2025-10-22T09:27:05.000+0000",
+            "CodeSha256": "nDzmC4V/mac2CBJGs0GTzWgu4k30vIiysn8QisvcTbo=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "2a03ff54-075e-4fdd-ae56-7789ae6e0327",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/bible-lesson-to-audio"
+            }
+        },
+        {
+            "FunctionName": "NewsScraperLambda",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:NewsScraperLambda",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/NewsScraperLambdaRole",
+            "Handler": "lambda_function.lambda_handler",
+            "CodeSize": 21679805,
+            "Description": "",
+            "Timeout": 300,
+            "MemorySize": 512,
+            "LastModified": "2025-11-20T18:46:15.132+0000",
+            "CodeSha256": "sKVvwAWGbXnxCH7Y7Mb1L942+NT9EUX9k1raZlkwaKM=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {
+                    "SQS_QUEUE_URL": "https://sqs.us-east-1.amazonaws.com/371751795928/NewsScraperQueue",
+                    "S3_BUCKET_NAME": "news-scraper-ekewaka"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "3a04ddd5-40ac-4e69-92f5-ff2792ad7a85",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/NewsScraperLambda"
+            }
+        },
+        {
+            "FunctionName": "video-tag-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:video-tag-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 4330,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 128,
+            "LastModified": "2025-11-13T18:51:33.000+0000",
+            "CodeSha256": "awKUuAx1Ebu8qywb1foUXUOULv8MMauqx2kqIBgOBW0=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "a0c0444a-9ae9-4a30-b793-2024ec855978",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/video-tag-api"
+            }
+        },
+        {
+            "FunctionName": "video-download-router",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:video-download-router",
+            "Runtime": "python3.11",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 48601897,
+            "Description": "",
+            "Timeout": 60,
+            "MemorySize": 512,
+            "LastModified": "2026-01-20T02:48:30.000+0000",
+            "CodeSha256": "GYjJx9IiOCVLAdNk9gMGD5o1TtYZo86U1k8ZSHfqM74=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {
+                    "S3_BUCKET": "my-video-downloads-bucket",
+                    "SUBNET_IDS": "subnet-06a2ecf732dbe5b92",
+                    "ECS_CLUSTER_NAME": "video-downloader-cluster",
+                    "ECS_TASK_DEFINITION": "video-downloader-task",
+                    "DOWNLOADER_LAMBDA_ARN": "arn:aws:lambda:us-east-1:371751795928:function:video-downloader"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "ab91b639-83f4-4254-af3b-13ef88ca78ee",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/video-download-router"
+            }
+        },
+        {
+            "FunctionName": "admin-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:admin-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 5652,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 128,
+            "LastModified": "2026-01-20T22:20:33.000+0000",
+            "CodeSha256": "ElfI6bxo+wOapovpazR4tmloBuQvbG4kLkvGdLX92kk=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "47306f7d-3813-491c-860e-1e800a3b45be",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/admin-api"
+            }
+        },
+        {
+            "FunctionName": "auto-cache-monitor",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:auto-cache-monitor",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 1389,
+            "Description": "",
+            "Timeout": 60,
+            "MemorySize": 256,
+            "LastModified": "2025-11-11T16:58:37.000+0000",
+            "CodeSha256": "lLF5XNw4OZWOWaB0Rnf4JUj1bDhCwakKTTeh/qGsTz8=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "d05b45f0-6597-4360-8bc0-bec7aafd479c",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/auto-cache-monitor"
+            }
+        },
+        {
+            "FunctionName": "events_api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:events_api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 1996,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 128,
+            "LastModified": "2025-11-05T21:57:27.000+0000",
+            "CodeSha256": "Tf60WXrCUDWlMYKiqaJLHrk0E8ivsgRTrf2dqpzggRg=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "a8557dc3-ec95-4d39-b51d-112052b82300",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/events_api"
+            }
+        },
+        {
+            "FunctionName": "testimony-email-sharing",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:testimony-email-sharing",
+            "Runtime": "nodejs22.x",
+            "Role": "arn:aws:iam::371751795928:role/testimony-lambda-role",
+            "Handler": "email-sharing.handler",
+            "CodeSize": 6800,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 128,
+            "LastModified": "2026-01-03T08:05:56.000+0000",
+            "CodeSha256": "Q77sjyhRvS0MlSAIfXIpUXsT1EARgbwPRFmNJQZoSmg=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "80de2258-cc9f-4866-aa61-303b16d80f7e",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/testimony-email-sharing"
+            }
+        },
+        {
+            "FunctionName": "email-subscription-handler",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:email-subscription-handler",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/service-role/email-subscription-handler-role-s3uqsrwg",
+            "Handler": "lambda_function.lambda_handler",
+            "CodeSize": 5534,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 128,
+            "LastModified": "2026-01-20T22:00:38.000+0000",
+            "CodeSha256": "T9wxqh7cxpsDkwb2FOpQLQ5iD/KbgH44J6EJ4KHjgN4=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "ba39defa-bc35-4621-b311-72e950951da1",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/email-subscription-handler"
+            }
+        },
+        {
+            "FunctionName": "auth-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:auth-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 74474,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 128,
+            "LastModified": "2025-10-22T09:27:12.000+0000",
+            "CodeSha256": "lXMMtPN0+CG3NmtxqkghC1bgsbx3C9kgQ9OwT5IKNK8=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "5058879e-7ef6-4b07-a83f-53eba363d0de",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/auth-api"
+            }
+        },
+        {
+            "FunctionName": "testimony-admin",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:testimony-admin",
+            "Runtime": "nodejs22.x",
+            "Role": "arn:aws:iam::371751795928:role/testimony-lambda-role",
+            "Handler": "admin.handler",
+            "CodeSize": 3284626,
+            "Description": "",
+            "Timeout": 3,
+            "MemorySize": 128,
+            "LastModified": "2026-01-03T08:05:59.000+0000",
+            "CodeSha256": "oQgqbSN0AkhgABkpLyNh7+Ld1TXRib1HMGeo21mmyfk=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "903054e9-44fc-404d-bf9f-adc899e4489f",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/testimony-admin"
+            }
+        },
+        {
+            "FunctionName": "playlists-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:playlists-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 1266,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 128,
+            "LastModified": "2025-11-13T18:37:45.188+0000",
+            "CodeSha256": "gb7jbgqayAPsHhllIj0OcbKM92/698KO1DuZtFe7u+w=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "90c13aad-fcfe-489d-91d0-de6a285eb24e",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/playlists-api"
+            }
+        },
+        {
+            "FunctionName": "article-meta-tags-edge",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:article-meta-tags-edge",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 1542,
+            "Description": "",
+            "Timeout": 5,
+            "MemorySize": 128,
+            "LastModified": "2025-11-03T05:41:48.000+0000",
+            "CodeSha256": "ZNSAz5aOFXS4ZVF9+OSoK1a6tC1BPmpMvnhL4AiwFAU=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "0ff7b2f0-0f1e-40d1-9ee3-73c45d840f41",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/article-meta-tags-edge"
+            }
+        },
+        {
+            "FunctionName": "prayer_api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:prayer_api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 2072,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 512,
+            "LastModified": "2025-11-05T21:15:28.000+0000",
+            "CodeSha256": "SVzpotaefkYZ+cFJzToU5VdFYXz5UMLcaNAC8xentiw=",
+            "Version": "$LATEST",
+            "Environment": {
+                "Variables": {
+                    "REQUIRE_MODERATION": "true"
+                }
+            },
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "e6f4eb51-bba8-474e-9dcb-26297eaaac08",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/prayer_api"
+            }
+        },
+        {
+            "FunctionName": "notifications_api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:notifications_api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 2116,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 256,
+            "LastModified": "2025-11-05T06:41:48.048+0000",
+            "CodeSha256": "Ps/JkupLeEhxiSPZlX1R5LptShTMj7UYiDYktMBYC1E=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "4ec5ddbb-f215-4029-9c29-da8ae26d408f",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/notifications_api"
+            }
+        },
+        {
+            "FunctionName": "testimony-email-ses",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:testimony-email-ses",
+            "Runtime": "nodejs22.x",
+            "Role": "arn:aws:iam::371751795928:role/testimony-lambda-role",
+            "Handler": "email-ses.handler",
+            "CodeSize": 3282901,
+            "Description": "",
+            "Timeout": 3,
+            "MemorySize": 128,
+            "LastModified": "2026-01-03T08:06:02.000+0000",
+            "CodeSha256": "8U55BY7L6ewkokxxmGanopWdInCwcaPsaALA0FV43gM=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "aa774184-7abf-44c8-b9bd-3648cfc07d33",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/testimony-email-ses"
+            }
+        },
+        {
+            "FunctionName": "testimony-crud",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:testimony-crud",
+            "Runtime": "nodejs22.x",
+            "Role": "arn:aws:iam::371751795928:role/testimony-lambda-role",
+            "Handler": "testimony.handler",
+            "CodeSize": 4703,
+            "Description": "",
+            "Timeout": 3,
+            "MemorySize": 128,
+            "LastModified": "2026-01-03T08:06:13.000+0000",
+            "CodeSha256": "xbtHpjaDllBuIaTEXIx2KCKimxTApU6CISc1b0lxkqk=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "2e069f68-bfd2-4052-88da-e92d27e1b1cc",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/testimony-crud"
+            }
+        },
+        {
+            "FunctionName": "news-api",
+            "FunctionArn": "arn:aws:lambda:us-east-1:371751795928:function:news-api",
+            "Runtime": "python3.12",
+            "Role": "arn:aws:iam::371751795928:role/lambda-execution-role",
+            "Handler": "index.lambda_handler",
+            "CodeSize": 3784,
+            "Description": "",
+            "Timeout": 30,
+            "MemorySize": 256,
+            "LastModified": "2025-11-05T21:35:29.000+0000",
+            "CodeSha256": "uU60RMkejZd13CDkDrd0bORrSzK3ed0M3/hr7zlwzi0=",
+            "Version": "$LATEST",
+            "TracingConfig": {
+                "Mode": "PassThrough"
+            },
+            "RevisionId": "d25da64c-49cc-45b8-b2e0-92793a466de3",
+            "PackageType": "Zip",
+            "Architectures": [
+                "x86_64"
+            ],
+            "EphemeralStorage": {
+                "Size": 512
+            },
+            "SnapStart": {
+                "ApplyOn": "None",
+                "OptimizationStatus": "Off"
+            },
+            "LoggingConfig": {
+                "LogFormat": "Text",
+                "LogGroup": "/aws/lambda/news-api"
+            }
+        }
+    ]
+}

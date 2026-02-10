@@ -1,0 +1,210 @@
+    {
+        "name": "Greg Myhre",
+        "state": "New Jersey",
+        "office": "General Assembly District 8 Seat 2",
+        "party": "R",
+        "status": "active",
+        "bio": "Greg Myhre is a Republican candidate for the New Jersey General Assembly in District 8, Seat 2. A resident of Burlington County, Myhre has a background in law enforcement and public service. He served as a police officer in Evesham Township for over 25 years, retiring as a sergeant. Myhre has been active in community organizations, including coaching youth sports and serving on local boards. He emphasizes public safety, fiscal responsibility, and reducing property taxes as key issues. Myhre ran unsuccessfully for the Assembly in previous cycles but secured the Republican nomination in 2025 alongside running mate Michael Torrissi Jr. He advocates for stronger support for first responders, school safety measures, and opposition to overreaching state mandates. Myhre holds an associate degree in criminal justice and has received training through the FBI National Academy. His campaign focuses on practical, community-based solutions to New Jersey's challenges, including affordability and government efficiency. Myhre is endorsed by local law enforcement groups and Republican organizations in Burlington and Atlantic Counties.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.gregmyhre.com",
+        "positions": {
+            "ABORTION": "Myhre opposes late-term abortions and supports parental notification laws. He believes in protecting life while allowing exceptions for rape, incest, and health of the mother. He has criticized New Jersey's Reproductive Freedom Act as extreme.",
+            "EDUCATION": "Myhre supports expanding school choice through charter schools and vouchers. He advocates for increased funding for vocational and technical education, opposes critical race theory in curricula, and prioritizes school safety with resource officers in every school. He calls for greater parental involvement in education decisions and transparency in school boards.",
+            "RELIGIOUS-FREEDOM": "Myhre supports protections for religious institutions and individuals to practice their faith without government interference. He opposes mandates that force religious organizations to violate their beliefs, particularly regarding marriage and hiring practices.",
+            "GUNS": "A strong Second Amendment supporter, Myhre opposes New Jersey's strict gun control laws, including magazine capacity limits and red flag laws without due process. He supports constitutional carry and enhanced penalties for criminals using firearms.",
+            "TAXES": "Myhre calls for significant property tax relief through state aid reform and spending cuts. He opposes new taxes, including the millionaire's tax, and supports eliminating the state inheritance tax and reducing business taxes to attract employers.",
+            "IMMIGRATION": "Myhre supports strict enforcement of immigration laws, opposing sanctuary state policies. He advocates for E-Verify mandates, increased border security, and ending benefits for undocumented immigrants, including in-state tuition.",
+            "FAMILY-VALUES": "Myhre promotes traditional family structures and opposes policies that he believes undermine parental rights. He supports school policies requiring parental notification for gender identity discussions and opposes transgender girls competing in girls' sports. He advocates for tax credits for families and stay-at-home parents.",
+            "ELECTION-INTEGRITY": "Myhre supports voter ID requirements, regular voter roll purges, and in-person voting as the default. He opposes mail-in voting without request and calls for same-day vote counting and enhanced ballot security measures."
+        },
+        "endorsements": ["New Jersey Fraternal Order of Police", "Burlington County GOP", "New Jersey Family First"]
+    },
+    {
+        "name": "Janine G. Bauer",
+        "state": "New Jersey",
+        "office": "General Assembly District 8 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "Janine G. Bauer is a Democratic candidate for New Jersey General Assembly in District 8, Seat 2. A longtime resident of Medford, Bauer has served on the Medford Township Council since 2018 and was mayor in 2021. She is an attorney specializing in environmental and land use law, with a focus on preserving open space and combating overdevelopment. Bauer previously worked as a deputy attorney general in the New Jersey Department of Law and Public Safety. She is a graduate of Rutgers University and Seton Hall Law School. Bauer's campaign emphasizes environmental protection, affordable healthcare, and fully funding public schools. She has been a vocal advocate for reproductive rights and gun safety reform. Bauer serves on the Burlington County Democratic Committee and has received awards for community service. She runs alongside Assemblyman Andrea Katz, seeking to maintain Democratic control of the district. Her priorities include property tax relief through green energy incentives and protecting South Jersey's water resources.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.bauerfornj.com",
+        "positions": {
+            "ABORTION": "Bauer is pro-choice and supports codifying Roe v. Wade protections in state law. She sponsored local resolutions supporting reproductive freedom and opposes any restrictions on abortion access, including late-term procedures when medically necessary.",
+            "EDUCATION": "Bauer supports full funding of public schools per the School Funding Reform Act. She advocates for universal pre-K, increased teacher salaries, and expanded mental health services in schools. She opposes vouchers that divert funds from public education and supports curriculum inclusivity.",
+            "RELIGIOUS-FREEDOM": "Bauer supports the separation of church and state while protecting individuals' rights to practice religion. She opposes using religious beliefs to discriminate in public accommodations or services, particularly against LGBTQ+ individuals.",
+            "GUNS": "Bauer supports comprehensive gun safety laws, including universal background checks, red flag laws, and bans on assault weapons and high-capacity magazines. She sponsored resolutions calling for federal action on gun violence prevention.",
+            "TAXES": "Bauer supports progressive taxation, including the millionaire's tax, to fund education and infrastructure. She advocates for targeted property tax relief for seniors and middle-class families through expanded homestead rebates.",
+            "IMMIGRATION": "Bauer supports a pathway to citizenship for undocumented immigrants and opposes family separations. She supports New Jersey's sanctuary state policies and in-state tuition for DREAMers, emphasizing humane treatment.",
+            "FAMILY-VALUES": "Bauer supports LGBTQ+ rights, including marriage equality and transgender protections. She advocates for paid family leave, affordable childcare, and anti-discrimination laws. She supports inclusive family policies that recognize diverse family structures.",
+            "ELECTION-INTEGRITY": "Bauer supports expanded vote-by-mail access, early voting, and automatic voter registration. She opposes strict voter ID laws as suppressive and trusts New Jersey's election security measures, including paper ballots."
+        },
+        "endorsements": ["Planned Parenthood Action Fund of NJ", "New Jersey Education Association", "Sierra Club New Jersey"]
+    },
+    {
+        "name": "Paul Kanitra",
+        "state": "New Jersey",
+        "office": "General Assembly District 9 Seat 1",
+        "party": "R",
+        "status": "active",
+        "bio": "Paul Kanitra is the Republican candidate for New Jersey General Assembly in District 9, Seat 1. He has served as mayor of Point Pleasant Beach since 2019 and on the borough council since 2016. A small business owner operating a marketing firm, Kanitra is a graduate of Monmouth University with a degree in communication. He previously worked as a congressional staffer for Rep. Chris Smith. Kanitra's mayoral tenure focused on fiscal conservatism, reducing municipal debt, and opposing offshore wind projects that he claims harm tourism and marine life. He is a vocal critic of Murphy administration policies on taxes and COVID-19 mandates. Kanitra runs alongside John Catalano to replace retiring incumbents Brian Rumpf and DiAnne Gove. His campaign emphasizes lower taxes, support for law enforcement, and protecting the Jersey Shore economy. He has been endorsed by Ocean County Republican leadership and local business associations.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.paulkanitra.com",
+        "positions": {
+            "ABORTION": "Kanitra identifies as pro-life with exceptions for rape, incest, and life of the mother. He opposes taxpayer funding for abortions and supports informed consent and ultrasound requirements.",
+            "EDUCATION": "Kanitra supports school choice, including expansion of charter schools and education savings accounts. He opposes mask and vaccine mandates in schools and calls for curriculum transparency portals for parents. He supports vocational training funding.",
+            "RELIGIOUS-FREEDOM:": "Kanitra strongly supports religious liberty, opposing vaccine mandates on religious grounds and supporting conscience protections for healthcare workers and businesses. He defends the right of religious schools to operate per their beliefs.",
+            "GUNS": "Kanitra is a Second Amendment advocate, opposing New Jersey's carry permitting process and magazine limits. He supports shall-issue concealed carry and stand-your-ground laws, emphasizing enforcement against criminal gun use.",
+            "TAXES": "Kanitra pledges to cut property taxes through state mandate relief and pension reform. He opposes the corporate transit fee and rainwater tax, supporting full deduction of property taxes on state returns.",
+            "IMMIGRATION": "Kanitra supports completing the border wall, ending catch-and-release, and mandatory E-Verify. He opposes driver's licenses for undocumented immigrants and sanctuary policies that shield criminal aliens.",
+            "FAMILY-VALUES": "Kanitra supports traditional marriage and opposes gender transition procedures for minors. He backs parental rights in education, including notification for pronoun changes, and opposes biological males in girls' sports.",
+            "ELECTION-INTEGRITY": "Kanitra demands voter ID, signature verification for mail ballots, and banning ballot harvesting. He supports cleaning voter rolls and requiring proof of citizenship for registration."
+        },
+        "endorsements": ["Ocean County GOP", "New Jersey Right to Life", "Point Pleasant Beach PBA"]
+    },
+    {
+        "name": "John Catalano",
+        "state": "New Jersey",
+        "office": "General Assembly District 9 Seat 2",
+        "party": "R",
+        "status": "active",
+        "bio": "John Catalano is a Republican candidate for New Jersey General Assembly in District 9, Seat 2. He serves as Ocean County Commissioner and previously as mayor of Brick Township from 2014 to 2021. A retired firefighter with 28 years of service in Brick Township, Catalano is a lifelong resident of Ocean County. He attended Ocean County College and has been active in veterans' organizations. As mayor, he focused on shared services to control taxes and opposed overdevelopment. Catalano currently oversees public safety and emergency management as commissioner. His campaign with Paul Kanitra seeks to continue District 9's Republican representation. He prioritizes support for first responders, opposing offshore wind farms, and property tax relief. Catalano has received commendations for his response to Superstorm Sandy and leadership in opioid crisis initiatives. He is married with two children and attends community events regularly.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.catalanofornj.com",
+        "positions": {
+            "ABORTION": "Catalano is pro-life, supporting restrictions after the first trimester except for medical emergencies. He opposes using public funds for abortion services and supports adoption promotion over abortion.",
+            "EDUCATION": "Catalano advocates for increased school safety funding, including armed guards. He supports parental bill of rights, opposing sexually explicit materials in schools, and calls for vocational program expansion in high schools.",
+            "RELIGIOUS-FREEDOM": "Catalano defends religious freedom, supporting exemptions from mandates conflicting with faith. He opposes government compelling speech or actions against religious beliefs, particularly for wedding service providers.",
+            "GUNS": "As a NRA member, Catalano opposes all new gun control measures, supporting national concealed carry reciprocity. He wants to repeal New Jersey's smart gun law mandate and reduce permitting fees.",
+            "TAXES": "Catalano supports phasing out the school tax portion of property taxes, replacing with state revenue. He opposes all tax increases and calls for auditing state spending to eliminate waste.",
+            "IMMIGRATION": "Catalano demands strict border control, deportation of criminal aliens, and ending benefits for illegal immigration. He opposes New Jersey's status as a sanctuary state and tuition aid for undocumented students.",
+            "FAMILY-VALUES": "Catalano promotes policies strengthening nuclear families, including tax breaks for married couples. He opposes critical gender theory in schools and supports single-sex sports and facilities.",
+            "ELECTION-INTEGRITY": "Catalano supports photo ID for voting, limiting mail-in ballots to absentee requests, and requiring chain of custody for all ballots. He wants election day as a state holiday to increase turnout."
+        },
+        "endorsements": ["NJ Firefighters Mutual Benevolent Association", "Ocean County Sheriff's Officers", "Brick Township GOP"]
+    },
+    {
+        "name": "Gregory P. McGuckin",
+        "state": "New Jersey",
+        "office": "General Assembly District 9",
+        "party": "R",
+        "status": "active",
+        "bio": "Gregory P. McGuckin is the incumbent Republican Assemblyman for New Jersey's 9th Legislative District, serving since 2012. An attorney in private practice specializing in real estate and municipal law, McGuckin is a partner at Dasti, Murphy, McGuckin, Ulaky, Koutsouris & Connors. He previously served as a councilman in Toms River Township and on the Ocean County College Board of Trustees. A graduate of Providence College and Seton Hall Law School, McGuckin has been recognized for his work on veterans' issues and property tax relief. He serves as Republican Conference Leader in the Assembly and sits on the Appropriations and Transportation committees. McGuckin is running for re-election in 2025 with a focus on affordability, public safety, and environmental protection of Barnegat Bay. He has sponsored legislation on opioid addiction, first responder support, and small business relief. McGuckin is married with three children and resides in Toms River.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.assemblymangregmcguckin.com",
+        "positions": {
+            "ABORTION": "McGuckin supports parental notification for minors and opposes partial-birth abortion. He believes abortion decisions should be between a woman, her doctor, and her faith, with reasonable restrictions after viability.",
+            "EDUCATION": "McGuckin has sponsored bills increasing state aid to suburban schools. He supports full-day kindergarten funding, teacher recruitment bonuses, and opposes unfunded mandates on districts. He backs school security grants.",
+            "RELIGIOUS-FREEDOM": "McGuckin supports the First Amendment rights of religious organizations, including tax-exempt status and freedom from discriminatory zoning. He opposes compelling participation in same-sex ceremonies.",
+            "GUNS": "McGuckin supports the Second Amendment and has voted against magazine bans and carry restrictions. He advocates for mental health funding over gun control and supports hunters' rights legislation.",
+            "TAXES": "McGuckin has introduced multiple property tax relief bills, including senior freezes and veteran deductions. He supports 2% caps on tax increases and opposes new sales or gas taxes.",
+            "IMMIGRATION": "McGuckin supports legal immigration but opposes benefits for those here illegally. He voted against driver's licenses for undocumented immigrants and supports local law enforcement cooperation with ICE.",
+            "FAMILY-VALUES": "McGuckin supports strengthening families through tax policy and opposes explicit materials in school libraries. He backs parental notification policies and traditional definitions in state law.",
+            "ELECTION-INTEGRITY": "McGuckin supports voter ID and has sponsored bills requiring proof of citizenship. He wants to limit drop boxes and ensure bipartisan poll watchers have meaningful access."
+        },
+        "endorsements": ["Ocean County GOP", "New Jersey Realtors", "Toms River PBA"]
+    },
+    {
+        "name": "Margie Donlon",
+        "state": "New Jersey",
+        "office": "General Assembly District 10 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Margie Donlon is a Democratic candidate for New Jersey General Assembly in District 10, Seat 1. A retired critical care nurse and healthcare executive, Donlon spent over 40 years in nursing, including leadership roles at Community Medical Center in Toms River. She holds a doctorate in nursing practice from Rutgers University and has taught at the collegiate level. Donlon served on the Brick Township Board of Education for nine years, including as president. She is a vocal advocate for healthcare access, women's rights, and public education. Donlon's campaign focuses on affordability, protecting reproductive healthcare, and environmental issues in Ocean County. She previously ran for Assembly in 2023, narrowly losing. Donlon is active in the League of Women Voters and Ocean County Democratic Women. She runs alongside Luanne Peterpaul to flip the traditionally Republican district. Donlon lives in Brick with her husband; they have three grown children.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.donlonfornj.com",
+        "positions": {
+            "ABORTION": "Donlon is staunchly pro-choice, supporting unrestricted access to abortion as healthcare. As a nurse, she defends providers' rights to offer full reproductive services without interference or criminalization.",
+            "EDUCATION": "Donlon supports increased state funding for public schools, free school meals, and teacher retention programs. She advocates for smaller class sizes, updated facilities, and comprehensive sex education inclusive of LGBTQ+ students.",
+            "RELIGIOUS-FREEDOM": "Donlon believes religious freedom does not extend to denying services or healthcare based on personal beliefs. She supports strict separation of church and state in public policy and education.",
+            "GUNS": "Donlon supports assault weapon bans, universal background checks, and safe storage laws. She advocates for funding gun violence research and extreme risk protection orders to prevent suicides and mass shootings.",
+            "TAXES": "Donlon supports fair share taxation, including higher rates on ultra-wealthy to fund social programs. She backs property tax relief targeted at working families and seniors through income-based circuits.",
+            "IMMIGRATION": "Donlon supports comprehensive immigration reform with a path to citizenship. She defends New Jersey's policies providing healthcare and education access regardless of status, viewing immigrants as community assets.",
+            "FAMILY-VALUES": "Donlon supports marriage equality, adoption rights for same-sex couples, and anti-discrimination protections. She advocates for paid family leave expansion and inclusive curricula reflecting diverse families.",
+            "ELECTION-INTEGRITY": "Donlon supports no-excuse mail voting, automatic registration, and restoring rights to formerly incarcerated. She opposes voter ID laws and purges, viewing them as discriminatory barriers."
+        },
+        "endorsements": ["New Jersey Education Association", "Planned Parenthood NJ", "Ocean County Democratic Committee"]
+    },
+    {
+        "name": "Luanne M. Peterpaul",
+        "state": "New Jersey",
+        "office": "General Assembly District 10 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "Luanne M. Peterpaul is a Democratic candidate for New Jersey General Assembly in District 10, Seat 2. An attorney and former Monmouth County prosecutor, Peterpaul has practiced law for over 30 years, specializing in criminal defense and municipal court. She served as a Brick Township councilwoman from 2018 to 2024 and was council president in 2021. Peterpaul is a graduate of Seton Hall University and Law School. She has been active in Ocean-Monmouth Legal Services and domestic violence advocacy. Her campaign emphasizes public safety reform, environmental protection, and affordable housing. Peterpaul previously ran for Assembly in 2021 and 2023, building name recognition. She runs with Margie Donlon to challenge Republican incumbents. Peterpaul focuses on opioid crisis response, fully funding schools, and opposing overdevelopment. She is married to former Assemblyman Eric Peterpaul and has two adult children.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.peterpaulforassembly.com",
+        "positions": {
+            "ABORTION": "Peterpaul supports full reproductive freedom, including contraception and IVF access. She opposes any legislative efforts to restrict abortion rights and supports shielding providers from out-of-state prosecutions.",
+            "EDUCATION": "Peterpaul advocates for equitable school funding, curriculum transparency with parental input, and expanded preschool. She supports student debt relief and increased aid for special education services.",
+            "RELIGIOUS-FREEDOM": "Peterpaul supports individual religious practice but opposes using faith to justify discrimination. She believes public policy should be secular and inclusive of all beliefs and non-beliefs.",
+            "GUNS": "Peterpaul supports closing gun show loopholes, banning bump stocks, and funding community violence intervention programs. She backs raising the purchasing age to 21 and liability insurance requirements.",
+            "TAXES": "Peterpaul supports progressive tax structures to fund infrastructure and education. She proposes corporate tax loophole closures and expanded property tax relief programs for veterans and disabled residents.",
+            "IMMIGRATION": "Peterpaul supports DREAMers and temporary protected status holders. She opposes ICE detention quotas and supports community-based alternatives to detention for non-criminal immigrants.",
+            "FAMILY-VALUES": "Peterpaul champions LGBTQ+ equality, including conversion therapy bans and transgender healthcare access. She supports comprehensive family leave and equal pay legislation benefiting working families.",
+            "ELECTION-INTEGRITY": "Peterpaul defends New Jersey's voting systems, supporting drop boxes and early voting expansion. She opposes restrictive ID requirements and supports same-day registration to increase participation."
+        },
+        "endorsements": ["EMILY's List", "Brick Township Democratic Club", "New Jersey Working Families"]
+    },
+    {
+        "name": "Margaret M. Donlon",
+        "state": "New Jersey",
+        "office": "General Assembly District 10",
+        "party": "D",
+        "status": "active",
+        "bio": "Margaret M. Donlon, commonly known as Margie Donlon, is the incumbent Democratic Assemblywoman for New Jersey's 10th Legislative District, serving since 2024 after winning a special election convention appointment. A retired critical care nurse with over 40 years of experience, Donlon held executive positions at Community Medical Center and taught nursing at the collegiate level. She earned her doctorate from Rutgers. Donlon previously served nine years on the Brick Township Board of Education. Her legislative priorities include healthcare affordability, women's reproductive rights, and public school funding. She serves on the Health, Education, and Regulated Professions committees. Donlon has sponsored bills on maternal health, school nursing ratios, and opioid settlement fund transparency. She is running for her first full term alongside Luanne Peterpaul. Donlon is a member of the New Jersey State Nurses Association and Ocean County Vicinage Advisory Committee on Minority Concerns.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.assemblywomandrdonlon.com",
+        "positions": {
+            "ABORTION": "Donlon champions unrestricted reproductive healthcare, sponsoring bills to protect providers and patients from interstate legal threats. She views abortion access as essential women's healthcare.",
+            "EDUCATION": "Donlon secured funding increases for Ocean County schools and supports universal pre-K. She advocates for trauma-informed education, mental health counselors in every school, and fair teacher evaluations.",
+            "RELIGIOUS-FREEDOM": "Donlon supports freedom of worship but opposes religious exemptions that harm others, particularly in healthcare. She believes medical decisions should be based on science, not doctrine.",
+            "GUNS": "Donlon co-sponsored legislation requiring secure firearm storage and prohibiting ghost guns. She supports funding for hospital-based violence intervention and closing the boyfriend loophole in domestic violence protections.",
+            "TAXES": "Donlon supports the Stay NJ property tax relief program for seniors and expanding ANCHOR rebates. She backs corporate responsibility in taxation to prevent offshoring profits.",
+            "IMMIGRATION": "Donlon supports welcoming communities and values-based immigration policies. She opposes family separation and supports legal aid for immigrants facing deportation for non-violent offenses.",
+            "FAMILY-VALUES": "Donlon supports paid family leave expansion, child tax credits, and universal childcare. She defends LGBTQ+ rights and inclusive education that reflects modern family diversity.",
+            "ELECTION-INTEGRITY": "Donlon trusts New Jersey's secure election systems with paper records. She supports restoring voting rights upon release from incarceration and opposes measures that disproportionately affect minority voters."
+        },
+        "endorsements": ["New Jersey AFL-CIO", "Health Professionals and Allied Employees", "Ocean County Federation of Democratic Women"]
+    },
+    {
+        "name": "Andrew C. Wardell",
+        "state": "New Jersey",
+        "office": "General Assembly District 10",
+        "party": "R",
+        "status": "active",
+        "bio": "Andrew C. Wardell is a Republican candidate for New Jersey General Assembly in District 10. A resident of Brick Township, Wardell is a financial advisor and small business owner. He previously served on the Brick Township Council and as a commissioner on the Brick Township Municipal Utilities Authority. Wardell is a graduate of Monmouth University with a degree in business administration. He has been active in Ocean County Republican politics and veterans' organizations, though not a veteran himself. Wardell's campaign focuses on property tax reduction, opposing offshore wind projects, and public safety. He is running to challenge the Democratic incumbent in a district that has shifted competitive. Wardell emphasizes his local government experience in controlling spending and improving services. He is endorsed by local police and fire organizations. Wardell is married with children attending Brick public schools.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Wardell supports limits on abortion after 20 weeks and requiring parental consent for minors. He opposes public funding for elective abortions and supports crisis pregnancy center funding.",
+            "EDUCATION": "Wardell calls for property tax reform to fully fund schools without local levy increases. He supports school choice vouchers and opposes state overreach in local curriculum decisions.",
+            "RELIGIOUS-FREEDOM": "Wardell supports robust protections for religious expression in public, including student-led prayer. He opposes government compelling businesses to violate faith-based principles.",
+            "GUNS": "Wardell opposes new restrictions on law-abiding gun owners, supporting concealed carry reform and repealing the 10-round magazine limit. He prioritizes prosecuting illegal gun possession.",
+            "TAXES": "Wardell pledges no new taxes and significant property tax cuts through mandate relief and shared services. He opposes the school funding formula that penalizes Ocean County districts.",
+            "IMMIGRATION": "Wardell supports border security, ending sanctuary policies, and requiring proof of legal status for public benefits. He opposes in-state tuition for undocumented immigrants.",
+            "FAMILY-VALUES": "Wardell supports parental rights legislation requiring notification for any social transition at school. He opposes transgender participation in girls' sports and bathroom access based on gender identity.",
+            "ELECTION-INTEGRITY": "Wardell supports mandatory voter ID with free state IDs, limiting absentee ballots, and requiring signature matching with multiple points of comparison."
+        },
+        "endorsements": ["Brick Township PBA", "Ocean County Young Republicans", "New Jersey Conservative Party"]
+    },
+    {
+        "name": "Kyler Dineen",
+        "state": "New Jersey",
+        "office": "General Assembly District 10",
+        "party": "R",
+        "status": "active",
+        "bio": "Kyler Dineen is a Republican candidate for New Jersey General Assembly in District 10. A young professional and first-time candidate, Dineen works in logistics management for a Jersey Shore transportation company. He is a graduate of Stockton University with a degree in political science. Dineen has been active in Ocean County GOP youth outreach and served on the Lavallette Planning Board. His campaign emphasizes fresh perspectives on affordability, environmental conservation of Barnegat Bay, and supporting small businesses. Dineen runs alongside Andrew Wardell to reclaim the seat for Republicans. He focuses on opposing tax increases, improving infrastructure, and enhancing public access to beaches. Dineen is a lifelong resident of Ocean County, growing up in Lavallette, and represents a new generation of conservative leadership. He has received mentoring from retiring Republican legislators in the district.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "Dineen supports protecting life from conception with exceptions for rape, incest, and mother's health. He opposes taxpayer-funded abortions and supports alternatives like adoption incentives.",
+            "EDUCATION": "Dineen supports expanding technical high schools and apprenticeship programs. He calls for fiscal accountability in education spending and empowering parents through school board reforms.",
+            "RELIGIOUS-FREEDOM": "Dineen believes religious liberty is foundational, supporting protections for faith-based adoption agencies and opposing anti-discrimination laws that target religious beliefs.",
+            "GUNS": "Dineen is a gun owner who supports constitutional carry and opposes registration requirements. He advocates for armed security in schools and severe penalties for straw purchases.",
+            "TAXES": "Dineen proposes a 10% across-the-board cut in state spending to enable property tax reductions. He opposes electric vehicle mandates and the associated infrastructure taxes.",
+            "IMMIGRATION": "Dineen supports finishing the border wall, merit-based legal immigration, and ending chain migration. He opposes any form of amnesty and benefits for illegal entry.",
+            "FAMILY-VALUES": "Dineen supports defining marriage as one man-one woman in policy and protecting children's innocence in schools. He backs banning gender reassignment surgeries for minors.",
+            "ELECTION-INTEGRITY": "Dineen demands in-person voting with ID, banning private funding of elections, and requiring all ballots be received by election day close."
+        },
+        "endorsements": ["Ocean County GOP", "Lavallette Republican Club", "Students for Life NJ"]
+    }

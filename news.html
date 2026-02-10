@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News - Christian Conservatives Today</title>
+    
+    <!-- PWA Meta Tags -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="CCT">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/card-styles.css">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script src="assets/js/token-validator.js"></script>
+    <style>
+        body {
+            padding-top: 80px;
+        }
+        .breaking-banner {
+            background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+            color: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(231, 76, 60, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(231, 76, 60, 0); }
+        }
+        .news-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 5px solid #3498db;
+        }
+        .horizontal-scroll-container {
+            display: flex;
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 10px 0;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .news-card-wrapper {
+            flex: 0 0 400px;
+            min-width: 400px;
+            max-width: 400px;
+        }
+        .category-section-header {
+            color: #2c3e50;
+            font-weight: 700;
+            font-size: 1.5em;
+            margin: 30px 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #3498db;
+            display: block;
+            width: 100%;
+            clear: both;
+        }
+        .scroll-wrapper {
+            position: relative;
+            display: block;
+            width: 100%;
+            clear: both;
+            margin-bottom: 30px;
+        }
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+        .scroll-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.8);
+            color: #333;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            display: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+        .scroll-btn:hover {
+            background: rgba(255,255,255,1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+        .scroll-btn-left {
+            left: -25px;
+        }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+        .scroll-btn-right {
+            right: -25px;
+        }
+
+        */
+        @media (min-width: 768px) {
+            /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+            .scroll-btn {
+                display: block;
+            }
+
+            */
+        }
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .news-card.breaking {
+            border-left-color: #e74c3c;
+            background: linear-gradient(135deg, #fff 0%, #ffebee 100%);
+        }
+        .news-title {
+            color: #2c3e50;
+            font-weight: 700;
+            margin-bottom: 15px;
+            font-size: 1.4em;
+        }
+        .news-meta {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+        .news-summary {
+            color: #34495e;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .news-tags {
+            margin-bottom: 15px;
+        }
+        .tag-badge {
+            background: #3498db;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-right: 8px;
+            margin-bottom: 5px;
+            display: inline-block;
+        }
+        .breaking-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-right: 10px;
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0.5; }
+        }
+        .category-badge {
+            background: #27ae60;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-right: 10px;
+        }
+        .filter-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-weight: 600;
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+            border: none;
+            border-radius: 25px;
+            padding: 8px 20px;
+            font-weight: 600;
+        }
+        .external-link {
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .external-link:hover {
+            color: #2980b9;
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); min-height: 100vh;">
+    <!-- Navigation -->
+    <div id="navbar-container" data-page="news" data-icon-style="fontawesome"></div>
+    
+    <div class="container mt-4">
+
+        <!-- Breaking News Banner -->
+        <div id="breakingBanner" style="display: none;" class="breaking-banner">
+            <h4><i class="fas fa-exclamation-triangle"></i> BREAKING NEWS</h4>
+            <div id="breakingContent"></div>
+        </div>
+
+        <!-- Page Header -->
+        <div class="text-center mb-4">
+            <h1 style="color: #2c3e50; font-weight: 700;">
+                <i class="fas fa-broadcast-tower"></i> Christian Conservative News
+            </h1>
+            <p style="color: #7f8c8d; font-size: 1.1em;">Stay informed with the latest news from a biblical perspective</p>
+        </div>
+
+        <!-- Filters -->
+        <div class="filter-section">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <select class="form-select" id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="general">General News</option>
+                        <option value="politics">Politics</option>
+                        <option value="christian">Christian News</option>
+                        <option value="election">Election Coverage</option>
+                        <option value="state-election">State Elections</option>
+                        <option value="breaking">Breaking News</option>
+                        <option value="commentary">Commentary</option>
+                        <option value="world">World News</option>
+                        <option value="local">Local News</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="breakingOnly">
+                        <label class="form-check-label" for="breakingOnly">
+                            Breaking Only
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-select" id="stateFilter">
+                        <option value="">All States</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-primary" onclick="loadNews()">
+                        <i class="fas fa-filter"></i> Filter
+                    </button>
+                </div>
+                <div class="col-md-3 text-end" id="adminControls" style="display: none;">
+                    <a href="create-news.html" class="btn btn-success">
+                        <i class="fas fa-plus"></i> Create News
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- News List -->
+        <div id="newsList">
+            <div class="text-center">
+                <i class="fas fa-spinner fa-spin fa-2x" style="color: #3498db;"></i>
+                <p class="mt-2">Loading news...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        var NEWS_API = 'https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('navbar.html')
+                .then(r => r.text())
+                .then(html => {
+                    document.getElementById('navbar-container').innerHTML = html;
+                    initNavbar();
+                    checkAdminControls();
+                });
+            populateStateFilter();
+            loadNews();
+            loadBreakingNews();
+        });
+        
+        function populateStateFilter() {
+            var states = [
+                'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut',
+                'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa',
+                'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan',
+                'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+                'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio',
+                'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota',
+                'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia',
+                'Wisconsin', 'Wyoming'
+            ];
+            
+            var select = document.getElementById('stateFilter');
+            states.forEach(function(state) {
+                var option = document.createElement('option');
+                option.value = state.toLowerCase().replace(/ /g, '-');
+                option.textContent = state;
+                select.appendChild(option);
+            });
+        }
+
+        function checkAdminControls() {
+            var userData = localStorage.getItem('user_data');
+            var userRole = userData ? JSON.parse(userData).role : null;
+            if (['admin', 'super_user'].includes(userRole)) {
+                document.getElementById('adminControls').style.display = 'block';
+            }
+        }
+
+        function loadBreakingNews() {
+            fetch(NEWS_API + '?action=list&breaking=true')
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data && data.length > 0) {
+                    var breakingNews = data[0]; // Get most recent breaking news
+                    var banner = document.getElementById('breakingBanner');
+                    var content = document.getElementById('breakingContent');
+                    
+                    content.innerHTML = 
+                        '<h5>' + breakingNews.title + '</h5>' +
+                        '<p>' + (breakingNews.summary || 'Click to read more...') + '</p>' +
+                        '<a href="news-article.html?id=' + breakingNews.news_id + '" class="btn btn-light btn-sm">Read Full Story</a>';
+                    
+                    banner.style.display = 'block';
+                }
+            })
+            .catch(function(error) {
+                console.error('Error loading breaking news:', error);
+            });
+        }
+
+        function loadNews() {
+            var category = document.getElementById('categoryFilter').value;
+            var breakingOnly = document.getElementById('breakingOnly').checked;
+            var state = document.getElementById('stateFilter').value;
+            
+            var url = NEWS_API + '?action=list';
+            if (category) url += '&category=' + category;
+            if (breakingOnly) url += '&breaking=true';
+            if (state) url += '&state=' + state;
+            
+            fetch(url)
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                displayNews(data);
+            })
+            .catch(function(error) {
+                console.error('Error loading news:', error);
+                document.getElementById('newsList').innerHTML = 
+                    '<div class="text-center"><p class="text-danger">Failed to load news</p></div>';
+            });
+        }
+
+        function displayNews(newsItems) {
+            var container = document.getElementById('newsList');
+            
+            if (!newsItems || newsItems.length === 0) {
+                container.innerHTML = 
+                    '<div class="text-center"><p class="text-muted">No news articles found</p></div>';
+                return;
+            }
+            
+            // Group news by category
+            var groupedNews = {};
+            newsItems.forEach(function(news) {
+                var category = news.category || 'general';
+                if (!groupedNews[category]) {
+                    groupedNews[category] = [];
+                }
+                groupedNews[category].push(news);
+            });
+            
+            var html = '';
+            
+            // Display each category
+            var categoryIndex = 0;
+            Object.keys(groupedNews).sort().forEach(function(category) {
+                html += '<div class="category-section" style="display: block; width: 100%; clear: both; margin-bottom: 40px;">';
+                html += '<h3 class="category-section-header">' + category.toUpperCase() + '</h3>';
+                html += '<div class="scroll-wrapper">';
+                html += '<button class="scroll-btn scroll-btn-left" onclick="scrollCategory(' + categoryIndex + ', -420)">◀</button>';
+                html += '<div class="horizontal-scroll-container" id="news-scroll-' + categoryIndex + '">';
+                
+                groupedNews[category].forEach(function(news) {
+                    var isBreaking = news.is_breaking;
+                    var cardClass = isBreaking ? 'news-card breaking' : 'news-card';
+                    
+                    html += '<div class="news-card-wrapper">';
+                    html += '<div class="' + cardClass + '">';
+                
+                // Breaking badge
+                if (isBreaking) {
+                    html += '<span class="breaking-badge"><i class="fas fa-exclamation-triangle"></i> BREAKING</span>';
+                }
+                
+                // Category badge
+                html += '<span class="category-badge">' + (news.category || 'General').toUpperCase() + '</span>';
+                
+                // Title
+                html += '<h3 class="news-title">' + news.title + '</h3>';
+                
+                // Meta info
+                html += '<div class="news-meta">';
+                var authorDisplay = news.author_name || news.author || 'Unknown';
+                html += '<i class="fas fa-user"></i> ' + authorDisplay + ' | ';
+                html += '<i class="fas fa-calendar"></i> ' + formatDate(news.created_at) + ' | ';
+                html += '<i class="fas fa-eye"></i> ' + (news.view_count || 0) + ' views';
+                if (news.state) {
+                    html += ' | <i class="fas fa-map-marker-alt"></i> ' + news.state.toUpperCase();
+                }
+                if (news.status === 'scheduled') {
+                    html += ' | <i class="fas fa-clock"></i> Scheduled';
+                }
+                html += '</div>';
+                
+                // Summary
+                if (news.summary) {
+                    html += '<div class="news-summary">' + news.summary + '</div>';
+                }
+                
+                // Tags
+                if (news.tags && news.tags.length > 0) {
+                    html += '<div class="news-tags">';
+                    news.tags.forEach(function(tag) {
+                        html += '<span class="tag-badge">' + tag + '</span>';
+                    });
+                    html += '</div>';
+                }
+                
+                // Actions
+                html += '<div class="d-flex justify-content-between align-items-center">';
+                html += '<a href="news-article.html?id=' + news.news_id + '" class="btn btn-primary">Read More</a>';
+                
+                if (news.external_url) {
+                    html += '<a href="' + news.external_url + '" target="_blank" class="external-link">';
+                    html += '<i class="fas fa-external-link-alt"></i> Original Source</a>';
+                }
+                html += '</div>'; // Close actions div
+                html += '</div>'; // Close news-card
+                html += '</div>'; // Close news-card-wrapper
+                });
+                
+                html += '</div>'; // Close horizontal-scroll-container
+                html += '<button class="scroll-btn scroll-btn-right" onclick="scrollCategory(' + categoryIndex + ', 420)">▶</button>';
+                html += '</div>'; // Close scroll-wrapper
+                html += '</div>'; // Close category-section
+                categoryIndex++;
+            });
+            
+            container.innerHTML = html;
+            
+            setTimeout(updateNewsArrows, 100);
+        }
+
+        function formatDate(dateString) {
+            var date = new Date(dateString);
+            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        }
+
+        function scrollCategory(index, amount) {
+            var container = document.getElementById('news-scroll-' + index);
+            if (container) {
+                container.scrollBy({ left: amount, behavior: 'smooth' });
+            }
+        }
+        
+        function updateNewsArrows() {
+            var containers = document.querySelectorAll('[id^="news-scroll-"]');
+            containers.forEach(function(container, index) {
+                var leftBtn = container.previousElementSibling;
+                var rightBtn = container.nextElementSibling;
+                
+                if (leftBtn && leftBtn.classList.contains('scroll-btn-left')) {
+                    leftBtn.style.display = container.scrollLeft > 0 ? 'block' : 'none';
+                }
+                if (rightBtn && rightBtn.classList.contains('scroll-btn-right')) {
+                    rightBtn.style.display = container.scrollLeft < container.scrollWidth - container.clientWidth - 1 ? 'block' : 'none';
+                }
+                
+                container.addEventListener('scroll', function() {
+                    if (leftBtn) leftBtn.style.display = container.scrollLeft > 0 ? 'block' : 'none';
+                    if (rightBtn) rightBtn.style.display = container.scrollLeft < container.scrollWidth - container.clientWidth - 1 ? 'block' : 'none';
+                });
+            });
+        }
+
+
+    </script>
+    <script src="pwa-install.js"></script>
+</body>
+</html>

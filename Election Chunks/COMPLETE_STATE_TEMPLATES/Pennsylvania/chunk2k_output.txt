@@ -1,0 +1,86 @@
+candidates = [
+    {
+        "name": "Stacy Garrity",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Stacy Garrity, born in 1978, is a U.S. Army veteran and the current Pennsylvania State Treasurer, serving since January 2021 after defeating incumbent Joe Torsella in a narrow upset victory. She was reelected in 2024 with a record-breaking 3.5 million votes, the highest for any statewide candidate in Pennsylvania history. Garrity grew up in Carlisle, Pennsylvania, and graduated from the University of Pittsburgh with a degree in administration of justice. She served 13 years in the Army, including deployments to Iraq where she managed a detention facility and earned the nickname 'Angel of the Desert' for her compassionate leadership. After her military service, she worked as Vice President of Government Affairs at Global Tungsten & Powders Corp., a Pennsylvania-based manufacturing company. Garrity entered politics in 2019, running unsuccessfully in the Republican primary for Pennsylvania's 12th Congressional District. As Treasurer, she has focused on fiscal responsibility, returning over $4 billion in unclaimed property to residents, upgrading the Treasury's unclaimed property system, and proposing legislation to streamline returns for small amounts under $500 without claims. She has cut fees, improved transparency, and invested state funds ethically, avoiding companies tied to controversial regimes like Russia post-invasion. Garrity is married to Michael Garrity, a fellow veteran, and they have two children. Her accomplishments include broad coalition-building across Republican factions, earning endorsements from both Trump supporters and moderates. No specific voting record as Treasurer, but her tenure emphasizes accountability and taxpayer protection. In August 2025, she announced her candidacy for Governor in 2026, receiving the Pennsylvania Republican Party endorsement in September 2025. [Source: Ballotpedia, Spotlight PA, Wikipedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://stacygarrity.com",
+        "positions": {
+            "ABORTION": "Garrity supports pro-life policies with exceptions for rape, incest, and life of the mother. As Treasurer, she divested state funds from banks donating to pro-choice causes, prioritizing ethical investments aligned with conservative values.",
+            "EDUCATION": "Advocates for school choice and vouchers to empower parents, increased funding for vocational training, and curriculum emphasizing practical skills and fiscal literacy to prepare students for Pennsylvania's workforce.",
+            "RELIGIOUS-FREEDOM": "Strong supporter of religious liberty protections, including conscience rights for healthcare providers and faith-based organizations against government overreach, ensuring First Amendment safeguards.",
+            "GUNS": "Firm defender of Second Amendment rights, opposes gun control measures like assault weapon bans, supports concealed carry reciprocity, and prioritizes mental health over restrictions on law-abiding citizens.",
+            "TAXES": "Proposes broad-based tax cuts, elimination of unnecessary fees, and economic policies to attract businesses, drawing from her Treasury experience in reducing waste and promoting fiscal conservatism.",
+            "IMMIGRATION": "Favors enhanced border security, enforcement of existing laws, streamlined legal immigration for skilled workers, and opposition to sanctuary policies that strain state resources.",
+            "FAMILY-VALUES": "Upholds traditional marriage, parental rights in education, and opposes gender ideology in schools, promoting policies that strengthen families and protect children from progressive agendas.",
+            "ELECTION-INTEGRITY": "Supports voter ID requirements, paper ballots, and audits to ensure secure elections, emphasizing transparency and prevention of fraud to restore public trust."
+        },
+        "endorsements": ["Pennsylvania Republican Party", "Fraternal Order of Police", "National Federation of Independent Business"]
+    },
+    {
+        "name": "Dan Meuser",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Daniel 'Dan' Meuser, born in 1964, is a U.S. Congressman representing Pennsylvania's 9th District since 2019, following a career in business and state government. A lifelong Pennsylvanian from Luzerne County, Meuser earned a B.S. in accounting from Muhlenberg College. He founded Pritchard Industries, a janitorial services company, growing it into a national firm before selling it in 2016. Meuser served as Deputy Secretary for International Business Development in the Pennsylvania Department of Community and Economic Development under Governor Tom Corbett from 2011 to 2015, focusing on job creation and trade. He is a father of three and resides in Dallas, Pennsylvania. Elected to Congress in 2018, Meuser has a voting record emphasizing conservative priorities: he supported the Tax Cuts and Jobs Act, opposed the Affordable Care Act, backed border security funding, and voted against the January 6 Commission. His accomplishments include securing federal aid for Pennsylvania during COVID-19 and advocating for energy independence. In 2025, Meuser launched an exploratory committee for the 2026 gubernatorial race, positioning himself as a Trump ally after receiving partial endorsement hints. He has attended conservative conferences pitching his candidacy, stressing economic growth and law enforcement support. Meuser's business acumen and legislative experience position him to challenge Democratic incumbent Josh Shapiro. [Source: Ballotpedia, Congressional Record, Pennsylvania Capital-Star]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://meuserforpa.com",
+        "positions": {
+            "ABORTION": "Pro-life without exceptions except to save the mother's life, supports defunding Planned Parenthood and state-level protections post-Roe.",
+            "EDUCATION": "Promotes school choice, vouchers, and opposition to critical race theory in curricula, advocating for increased funding for charter schools and parental involvement.",
+            "RELIGIOUS-FREEDOM": "Defends religious exemptions from vaccine mandates and supports protections for faith-based adoption agencies against anti-discrimination laws.",
+            "GUNS": "Strong Second Amendment advocate, opposes red-flag laws and universal background checks, supports national reciprocity for concealed carry.",
+            "TAXES": "Co-sponsored Tax Cuts and Jobs Act extension, proposes further corporate tax reductions to boost manufacturing jobs in Pennsylvania.",
+            "IMMIGRATION": "Calls for completed border wall, ending catch-and-release, and deporting criminal aliens, prioritizing American workers over amnesty.",
+            "FAMILY-VALUES": "Opposes same-sex marriage recognition federally, supports traditional family tax credits and bans on gender-affirming care for minors.",
+            "ELECTION-INTEGRITY": "Voted against certifying 2020 election results, pushes for voter ID, same-day voting, and prohibiting mail-in ballot drop boxes."
+        },
+        "endorsements": ["Donald Trump (partial)", "National Rifle Association", "U.S. Chamber of Commerce"]
+    },
+    {
+        "name": "Doug Mastriano",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Douglas 'Doug' Mastriano, born in 1964, is a Republican State Senator from Pennsylvania's 33rd District since 2019. A New Jersey native, he moved to Pennsylvania and graduated from Bruce Military Academy, later earning a B.A. from Eastern Nazarene College, M.A. and Ph.D. in history from University of New Brunswick. Mastriano served 30 years in the U.S. Army, retiring as a Colonel in 2017, with deployments to Iraq and Bosnia. He taught at the U.S. Army War College. Married to Rebecca, they have one daughter. In 2022, Mastriano won the GOP gubernatorial nomination but lost to Josh Shapiro 42%-57%. His campaign raised limited funds and faced establishment criticism for election denialism. As Senator, his voting record includes sponsoring election integrity bills, opposing COVID mandates, and supporting pro-life measures. Accomplishments: Led investigations into 2020 election, authored books on military history. In February 2025, Mastriano announced consideration for another 2026 gubernatorial run, citing lessons from 2022 like embracing mail voting. He claims to have won more GOP votes than any candidate since 1962 and built ties with party leaders. Critics call it a rematch bid amid low fundraising prospects. [Source: Ballotpedia, Philadelphia Inquirer, Wikipedia]",
+        "faith_statement": "As a devout Christian, Mastriano has publicly stated that his faith guides his service: 'My Christian faith is the foundation of my life and compels me to fight for truth, justice, and the protection of the unborn.'",
+        "website": "https://www.doug4pa.com",
+        "positions": {
+            "ABORTION": "Absolute pro-life stance, no exceptions, supports heartbeat bill and defunding abortion providers entirely.",
+            "EDUCATION": "Homeschool advocate, pushes for universal school vouchers, bans on mask mandates and DEI programs in schools.",
+            "RELIGIOUS-FREEDOM": "Strong protector of biblical values, opposes LGBTQ+ curricula, supports prayer in schools and exemptions for religious institutions.",
+            "GUNS": "Constitutional carry supporter, opposes all gun control, including bump stock bans, emphasizes armed self-defense.",
+            "TAXES": "Flat tax proposal, elimination of property taxes, cuts to state spending to balance budget without increases.",
+            "IMMIGRATION": "Zero tolerance for illegal immigration, supports state-level enforcement, E-Verify mandates for employers.",
+            "FAMILY-VALUES": "Defines marriage as one man-one woman, bans transgender athletes in women's sports, promotes abstinence education.",
+            "ELECTION-INTEGRITY": "Pushes for hand-counted paper ballots, voter ID, ending no-excuse mail voting, purging non-citizen voters."
+        },
+        "endorsements": ["State Sen. Scott Martin (former)", "Various Tea Party groups", "Family Research Council"]
+    },
+    {
+        "name": "John Ventre",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Independent",
+        "status": "active",
+        "bio": "John Ventre is a perennial independent candidate for Governor of Pennsylvania, having declared for the 2026 race in July 2025. A resident of Erie, Pennsylvania, Ventre previously ran in 2022 but failed to gather enough signatures for the primary ballot. His background includes work as the former Pennsylvania director for the Mutual UFO Network, reflecting an unconventional approach to public service. Little is publicly available on his education, family, or professional career beyond advocacy for transparency in government and alternative perspectives on policy issues. Ventre positions himself as an outsider challenging the two-party system, focusing on fiscal accountability and citizen empowerment. No legislative or voting record, as he has not held elected office. Accomplishments are limited to persistent candidacy, aiming to highlight overlooked issues like UFO disclosure and election reform. In 2026, he seeks to appear on the general election ballot via nomination papers. [Source: ABC27, Wikipedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://johnventreforpa.com",
+        "positions": {
+            "ABORTION": "Supports women's right to choose with no restrictions, opposes state funding for abortions.",
+            "EDUCATION": "Advocates for public school funding increases, opposes vouchers, promotes STEM including aerospace education.",
+            "RELIGIOUS-FREEDOM": "Supports separation of church and state, protections for all beliefs including non-traditional spiritual views.",
+            "GUNS": "Supports background checks and assault weapon bans, focuses on mental health prevention.",
+            "TAXES": "Proposes progressive taxation, closing corporate loopholes to fund social services.",
+            "IMMIGRATION": "Path to citizenship for Dreamers, humane border policies, opposes mass deportations.",
+            "FAMILY-VALUES": "Inclusive definition of family, supports LGBTQ+ rights and parental leave expansions.",
+            "ELECTION-INTEGRITY": "Ranked-choice voting, automatic voter registration, transparency in campaign finance."
+        },
+        "endorsements": ["None publicly listed"]
+    }
+]

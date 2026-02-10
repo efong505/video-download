@@ -1,0 +1,210 @@
+    {
+        "name": "Bill Pascrell",
+        "state": "New Jersey",
+        "office": "U.S. House District 9",
+        "party": "D",
+        "status": "active",
+        "bio": "Bill Pascrell Jr., a Democrat, has represented New Jersey's 9th Congressional District since 2013, after serving the 8th District from 1997 to 2013. Born in Paterson, New Jersey, in 1937, Pascrell graduated from Fordham University and earned a master’s degree in philosophy. He served in the U.S. Army and Army Reserve, taught high school English, and was a college instructor. Pascrell began his political career as a Paterson Board of Education member (1973–1977), later serving in the New Jersey General Assembly (1988–1996) and as Paterson’s mayor (1990–1996). In Congress, he serves on the House Ways and Means Committee, focusing on tax policy, trade, and Social Security. Pascrell has championed healthcare access, co-founding the Congressional Brain Injury Task Force and advocating for 9/11 first responders through the Zadroga Act. He supports labor unions, infrastructure investment, and environmental protections. Pascrell has won re-election consistently, facing Republican Billy Prempeh in 2024. A vocal critic of former President Trump, he pushed for impeachment and tax return disclosure. Pascrell’s district, covering parts of Passaic, Bergen, and Hudson counties, is heavily Democratic. He emphasizes constituent services, securing federal funds for local projects, and maintains a strong presence in Paterson’s Italian-American community. Pascrell’s legislative record includes co-sponsoring bills on prescription drug costs, veterans’ benefits, and public safety.",
+        "faith_statement": "Pascrell, a Roman Catholic, has referenced his faith in advocating for social justice and healthcare access but has no explicit public faith statement on his campaign website or Ballotpedia.",
+        "website": "https://pascrell.house.gov",
+        "positions": {
+            "ABORTION": "Supports abortion rights; co-sponsored the Women’s Health Protection Act to codify Roe v. Wade and opposes restrictions on federal funding for Planned Parenthood.",
+            "EDUCATION": "Advocates increased federal funding for public schools, student loan relief, and universal pre-K; supports teachers’ unions and opposes private school vouchers.",
+            "RELIGIOUS-FREEDOM": "Supports religious liberty but emphasizes separation of church and state; has backed protections for religious institutions while opposing faith-based discrimination.",
+            "GUNS": "Strong gun control advocate; supports universal background checks, assault weapons ban, and red flag laws; earned an 'F' rating from the NRA.",
+            "TAXES": "Opposes Trump tax cuts for the wealthy; supports progressive taxation, closing corporate loopholes, and expanding the Child Tax Credit.",
+            "IMMIGRATION": "Supports comprehensive reform, DACA protections, and a pathway to citizenship; opposes border wall and family separations.",
+            "FAMILY-VALUES": "Endorses policies supporting working families, including paid family leave, affordable childcare, and equal pay; supports LGBTQ+ rights.",
+            "ELECTION-INTEGRITY": "Supports the For the People Act for automatic voter registration and campaign finance reform; has criticized voter suppression efforts."
+        },
+        "endorsements": ["New Jersey Education Association", "Planned Parenthood Action Fund", "League of Conservation Voters"]
+    },
+    {
+        "name": "Billy Prempeh",
+        "state": "New Jersey",
+        "office": "U.S. House District 9",
+        "party": "R",
+        "status": "active",
+        "bio": "Billy Prempeh, a Republican, is challenging incumbent Bill Pascrell in New Jersey’s 9th Congressional District in 2024. Born in 1986 in Ghana, Prempeh immigrated to the U.S. at age six, growing up in Paterson. He served in the U.S. Army as a paratrooper with the 82nd Airborne Division, deploying to Afghanistan. After military service, Prempeh earned a degree in criminal justice and worked in logistics and security. He ran for Congress in 2020 and 2022, losing to Pascrell but gaining traction among conservative voters. Prempeh identifies as a 'common-sense conservative,' focusing on economic opportunity, public safety, and limited government. His campaign emphasizes reducing inflation, supporting law enforcement, and opposing 'socialist' policies. Prempeh has criticized Pascrell’s long tenure, arguing for term limits and fresh leadership. Active on social media, he engages younger voters and highlights his immigrant background to appeal to diverse communities. Prempeh supports school choice, Second Amendment rights, and border security. He has faced scrutiny for controversial social media posts but maintains a loyal base. The 9th District’s Democratic lean makes his campaign an uphill battle, but he aims to capitalize on economic discontent.",
+        "faith_statement": "No publicly disclosed faith statement; Prempeh has referenced Christian values in campaign rhetoric but provides no formal statement.",
+        "website": "https://billypremph.com",
+        "positions": {
+            "ABORTION": "Opposes abortion except in cases of rape, incest, or life-threatening situations; supports defunding Planned Parenthood.",
+            "EDUCATION": "Supports school choice, charter schools, and vouchers; opposes federal overreach in education and critical race theory in curricula.",
+            "RELIGIOUS-FREEDOM": "Strongly supports religious liberty; opposes vaccine mandates and restrictions on church gatherings during COVID-19.",
+            "GUNS": "Supports Second Amendment rights; opposes background checks expansion and assault weapons bans; endorsed by pro-gun groups.",
+            "TAXES": "Advocates tax cuts, deregulation, and eliminating federal income tax; criticizes high taxes in New Jersey.",
+            "IMMIGRATION": "Supports strict border security, ending sanctuary cities, and merit-based immigration; opposes amnesty.",
+            "FAMILY-VALUES": "Promotes traditional family structures; opposes gender ideology in schools and supports parental rights.",
+            "ELECTION-INTEGRITY": "Supports voter ID laws, paper ballots, and election audits; has questioned 2020 election integrity without evidence."
+        },
+        "endorsements": ["New Jersey Right to Life", "Passaic County GOP", "Combat Veterans for Congress"]
+    },
+    {
+        "name": "Donald Payne Jr.",
+        "state": "New Jersey",
+        "office": "U.S. House District 10",
+        "party": "D",
+        "status": "active",
+        "bio": "Donald Payne Jr., a Democrat, has represented New Jersey’s 10th Congressional District since 2012, succeeding his father, Donald M. Payne. Born in Newark in 1958, Payne graduated from Kean University and worked as a union official and toll collector before entering politics. He served on the Newark City Council (2003–2012), including as council president. In Congress, Payne sits on the House Transportation and Infrastructure Committee, advocating for urban infrastructure, public transit, and port security. The 10th District, covering parts of Essex, Hudson, and Union counties, is one of the most Democratic in the nation. Payne focuses on job creation, affordable housing, and healthcare access. He has championed environmental justice, addressing pollution in urban communities, and supports criminal justice reform. Payne’s legislative priorities include expanding broadband access and funding for historically Black colleges. He faced health challenges, suffering a heart attack in 2024 but resumed campaigning. Payne’s re-election campaigns emphasize his family’s legacy and constituent services. He faces Republican Carmen Bucco in 2024. Payne maintains strong ties to Newark’s African-American community and labor unions.",
+        "faith_statement": "No publicly disclosed faith statement; Payne has referenced attending Baptist churches but provides no formal campaign statement.",
+        "website": "https://payne.house.gov",
+        "positions": {
+            "ABORTION": "Strongly supports abortion rights; co-sponsored bills to protect reproductive healthcare access and expand contraception coverage.",
+            "EDUCATION": "Supports increased funding for public schools, HBCUs, and student debt relief; opposes private school vouchers.",
+            "RELIGIOUS-FREEDOM": "Supports religious freedom but prioritizes civil rights; has backed anti-discrimination laws protecting LGBTQ+ individuals.",
+            "GUNS": "Advocates strict gun control; supports background checks, assault weapons bans, and funding for community violence intervention.",
+            "TAXES": "Supports progressive taxation, expanding Earned Income Tax Credit, and corporate tax increases to fund social programs.",
+            "IMMIGRATION": "Supports DACA, pathway to citizenship, and humane border policies; opposes mass deportation.",
+            "FAMILY-VALUES": "Endorses paid family leave, affordable childcare, and LGBTQ+ equality; supports marriage equality.",
+            "ELECTION-INTEGRITY": "Supports automatic voter registration, early voting, and restoring Voting Rights Act provisions."
+        },
+        "endorsements": ["AFL-CIO", "Sierra Club", "Essex County Democratic Committee"]
+    },
+    {
+        "name": "Carmen Bucco",
+        "state": "New Jersey",
+        "office": "U.S. House District 10",
+        "party": "R",
+        "status": "active",
+        "bio": "Carmen Bucco, a Republican, is running for New Jersey’s 10th Congressional District in 2024 against incumbent Donald Payne Jr. A lifelong New Jersey resident, Bucco has a background in business and community advocacy. Details about his early life and education are limited, but he has positioned himself as a conservative outsider challenging the Democratic stronghold. Bucco’s campaign focuses on economic revitalization, public safety, and reducing government spending. He criticizes high taxes and crime in urban areas like Newark, advocating for law enforcement support and school choice. Bucco supports pro-business policies, including tax cuts and deregulation, to attract jobs to the district. His platform emphasizes traditional values, Second Amendment rights, and border security. Running in a heavily Democratic district, Bucco faces significant challenges but aims to appeal to disaffected voters. He has highlighted his Italian-American heritage to connect with local communities. Bucco’s campaign is grassroots, relying on social media and local events. He has not previously held elected office, making this his first major political run.",
+        "faith_statement": "No publicly disclosed faith statement.",
+        "website": "",
+        "positions": {
+            "ABORTION": "Opposes abortion except in extreme cases; supports fetal heartbeat laws and defunding Planned Parenthood.",
+            "EDUCATION": "Supports school choice, charter schools, and parental control over curricula; opposes federal mandates.",
+            "RELIGIOUS-FREEDOM": "Advocates strong protections for religious institutions; opposes government overreach in faith-based organizations.",
+            "GUNS": "Supports Second Amendment; opposes new gun control measures and supports concealed carry rights.",
+            "TAXES": "Advocates broad tax cuts, eliminating estate tax, and reducing property taxes in New Jersey.",
+            "IMMIGRATION": "Supports border wall, ending sanctuary policies, and strict enforcement of immigration laws.",
+            "FAMILY-VALUES": "Promotes traditional marriage and family; opposes transgender policies in schools.",
+            "ELECTION-INTEGRITY": "Supports voter ID, cleaning voter rolls, and in-person voting with limited mail-in ballots."
+        },
+        "endorsements": ["New Jersey Family Policy Council", "Hudson County GOP", "National Rifle Association"]
+    },
+    {
+        "name": "Mikie Sherrill",
+        "state": "New Jersey",
+        "office": "U.S. House District 11",
+        "party": "D",
+        "status": "active",
+        "bio": "Mikie Sherrill, a Democrat, has represented New Jersey’s 11th Congressional District since 2019. A former U.S. Navy helicopter pilot and federal prosecutor, Sherrill graduated from the U.S. Naval Academy and earned a law degree from Georgetown. She served as a Russian policy officer and flew missions in Europe and the Middle East. After leaving the Navy, Sherrill worked as an Assistant U.S. Attorney in New Jersey, prosecuting financial fraud. Elected in 2018, she flipped a Republican-held seat, focusing on healthcare, infrastructure, and national security. Sherrill serves on the House Armed Services and Education and Labor Committees. The 11th District, covering parts of Morris, Essex, and Passaic counties, is competitive but leans Democratic. Sherrill supports the Affordable Care Act, paid family leave, and clean energy. She has criticized partisan gridlock, positioning herself as a moderate. In 2024, she faces Republican Joseph Belnome. Sherrill’s military background and prosecutorial experience resonate with suburban voters. She is also a 2025 gubernatorial candidate, raising her statewide profile.",
+        "faith_statement": "No publicly disclosed faith statement; Sherrill has mentioned attending Catholic schools but provides no campaign faith statement.",
+        "website": "https://mikkieforcongress.com",
+        "positions": {
+            "ABORTION": "Strongly supports abortion rights; co-sponsored the Women’s Health Protection Act and supports codifying Roe v. Wade.",
+            "EDUCATION": "Supports public school funding, student loan forgiveness, and universal pre-K; opposes broad voucher programs.",
+            "RELIGIOUS-FREEDOM": "Supports religious liberty alongside civil rights; backs anti-discrimination protections for LGBTQ+ individuals.",
+            "GUNS": "Advocates background checks, red flag laws, and banning bump stocks; supports responsible gun ownership.",
+            "TAXES": "Supports middle-class tax cuts, closing loopholes for the wealthy, and funding infrastructure through corporate taxes.",
+            "IMMIGRATION": "Supports DACA, comprehensive reform, and humane border policies; opposes family separations.",
+            "FAMILY-VALUES": "Endorses paid leave, childcare support, and marriage equality; prioritizes women’s and LGBTQ+ rights.",
+            "ELECTION-INTEGRITY": "Supports voting rights expansion, automatic registration, and protecting election officials."
+        },
+        "endorsements": ["EMILY’s List", "Giffords PAC", "Morris County Democratic Committee"]
+    },
+    {
+        "name": "Joseph Belnome",
+        "state": "New Jersey",
+        "office": "U.S. House District 11",
+        "party": "R",
+        "status": "active",
+        "bio": "Joseph Belnome, a Republican, is running for New Jersey’s 11th Congressional District in 2024 against incumbent Mikie Sherrill. A businessman and former municipal official, Belnome has lived in Morris County for decades. He has served on local boards, focusing on fiscal responsibility and community development. Belnome’s campaign emphasizes reducing inflation, supporting small businesses, and strengthening national defense. He criticizes Sherrill’s voting record, accusing her of supporting ‘radical’ policies. Belnome advocates tax cuts, deregulation, and school choice. He supports law enforcement and opposes defunding the police. Running in a competitive district, Belnome aims to appeal to moderate and independent voters. His platform includes Second Amendment rights, border security, and pro-life policies. Belnome has leveraged local GOP networks and grassroots efforts. This is his first congressional run, though he has experience in local politics. He faces challenges in a district that has shifted toward Democrats.",
+        "faith_statement": "No publicly disclosed faith statement.",
+        "website": "https://belnomeforcongress.com",
+        "positions": {
+            "ABORTION": "Pro-life; supports restrictions after 20 weeks and defunding Planned Parenthood.",
+            "EDUCATION": "Supports school choice, expanding charter schools, and reducing federal involvement in education.",
+            "RELIGIOUS-FREEDOM": "Strongly supports religious liberty; opposes mandates conflicting with faith-based beliefs.",
+            "GUNS": "Defends Second Amendment; opposes new restrictions and supports national concealed carry reciprocity.",
+            "TAXES": "Advocates cutting federal spending, lowering corporate taxes, and simplifying the tax code.",
+            "IMMIGRATION": "Supports border security, E-Verify mandates, and ending chain migration.",
+            "FAMILY-VALUES": "Promotes traditional family values; opposes gender transition policies for minors.",
+            "ELECTION-INTEGRITY": "Supports voter ID, limiting mail-in voting, and election transparency measures."
+        },
+        "endorsements": ["Morris County GOP", "New Jersey Right to Life", "National Federation of Independent Business"]
+    },
+    {
+        "name": "Bonnie Watson Coleman",
+        "state": "New Jersey",
+        "office": "U.S. House District 12",
+        "party": "D",
+        "status": "active",
+        "bio": "Bonnie Watson Coleman, a Democrat, has represented New Jersey’s 12th Congressional District since 2015, the first African-American woman to serve in Congress from New Jersey. Born in Camden in 1945, she graduated from Rutgers University and began her career in social services. Watson Coleman served in the New Jersey General Assembly (1998–2015), chairing the Democratic State Committee. In Congress, she sits on the Appropriations and Homeland Security Committees, focusing on criminal justice reform, healthcare, and voting rights. The 12th District, covering parts of Mercer, Middlesex, and Somerset counties, is solidly Democratic. Watson Coleman is a progressive leader, co-founding the Congressional Caucus on Black Women and Girls. She advocates for Medicare for All, environmental justice, and gun control. Watson Coleman has pushed for police reform and reparations studies. Facing Republican Darius Mayfield in 2024, she maintains strong name recognition. Her legislative record includes securing funds for local infrastructure and supporting labor unions. Watson Coleman’s activism roots inform her outspoken style.",
+        "faith_statement": "No publicly disclosed faith statement; Watson Coleman has referenced attending Methodist churches but provides no formal statement.",
+        "website": "https://watsoncoleman.house.gov",
+        "positions": {
+            "ABORTION": "Strongly supports abortion rights; co-sponsored bills to protect reproductive freedom and expand access.",
+            "EDUCATION": "Supports free college, student debt cancellation, and increased public school funding; opposes vouchers.",
+            "RELIGIOUS-FREEDOM": "Supports religious freedom but prioritizes equality; backs protections against faith-based discrimination.",
+            "GUNS": "Advocates assault weapons ban, universal background checks, and gun violence research funding.",
+            "TAXES": "Supports wealth tax, higher corporate rates, and expanded social safety nets.",
+            "IMMIGRATION": "Supports citizenship path, DACA expansion, and abolishing ICE in its current form.",
+            "FAMILY-VALUES": "Endorses LGBTQ+ rights, paid leave, and universal childcare; supports marriage equality.",
+            "ELECTION-INTEGRITY": "Champions HR 1 for voting rights, opposing voter ID laws as suppressive."
+        },
+        "endorsements": ["Progressive Caucus", "Brady Campaign", "Mercer County Democrats"]
+    },
+    {
+        "name": "Darius Mayfield",
+        "state": "New Jersey",
+        "office": "U.S. House District 12",
+        "party": "R",
+        "status": "active",
+        "bio": "Darius Mayfield, a Republican, is challenging incumbent Bonnie Watson Coleman in New Jersey’s 12th Congressional District in 2024. A businessman and community activist, Mayfield grew up in Trenton and has focused on economic development and youth mentorship. He previously ran for office in 2022, gaining attention for his conservative platform. Mayfield’s campaign emphasizes job creation, public safety, and fiscal conservatism. He criticizes progressive policies, arguing they fuel inflation and crime. Mayfield supports tax cuts, school choice, and law enforcement funding. His platform includes pro-life policies, Second Amendment rights, and border security. Running in a Democratic stronghold, Mayfield targets disaffected voters and moderates. He leverages social media to amplify his message, focusing on local issues like property taxes. Mayfield has not held elected office but has built a grassroots following. His campaign challenges Watson Coleman’s progressive record.",
+        "faith_statement": "No publicly disclosed faith statement; Mayfield has referenced Christian principles in speeches.",
+        "website": "https://dariusmayfield.com",
+        "positions": {
+            "ABORTION": "Pro-life; supports banning late-term abortions and parental notification laws.",
+            "EDUCATION": "Supports school vouchers, charter expansion, and eliminating Common Core.",
+            "RELIGIOUS-FREEDOM": "Advocates robust protections for religious expression in public spaces.",
+            "GUNS": "Strong Second Amendment supporter; opposes all new gun control legislation.",
+            "TAXES": "Proposes flat tax, cutting federal bureaucracy, and lowering New Jersey property taxes.",
+            "IMMIGRATION": "Supports completing border wall, mandatory E-Verify, and deporting undocumented immigrants.",
+            "FAMILY-VALUES": "Defends traditional marriage; opposes critical gender theory in schools.",
+            "ELECTION-INTEGRITY": "Advocates voter ID, ending no-excuse mail-in voting, and same-day election audits."
+        },
+        "endorsements": ["Middlesex County GOP", "New Jersey Second Amendment Society", "Students for Life"]
+    },
+    {
+        "name": "Jack Ciattarelli",
+        "state": "New Jersey",
+        "office": "Governor",
+        "party": "R",
+        "status": "active",
+        "bio": "Jack Ciattarelli, a Republican, is running for New Jersey governor in 2025. A former state assemblyman (2011–2018) and Somerset County freeholder, Ciattarelli was born in 1961 and grew up in Raritan. He earned degrees from Seton Hall University and worked as a CPA and medical publishing entrepreneur. Ciattarelli narrowly lost the 2021 gubernatorial race to Phil Murphy, earning 48% of the vote. His 2025 campaign focuses on affordability, property tax relief, and public safety. Ciattarelli advocates cutting state spending, auditing government programs, and fully funding schools without raising taxes. He supports school choice and parental rights in education. Ciattarelli has moderated some social stances since 2021, emphasizing economic issues. He opposes vaccine mandates and supports law enforcement. Ciattarelli’s business background and legislative experience appeal to moderates. He faces Mikie Sherrill in the general election. His campaign leverages his near-win in 2021 to argue electability.",
+        "faith_statement": "No publicly disclosed faith statement; Ciattarelli has mentioned Catholic upbringing but provides no formal statement.",
+        "website": "https://jack4nj.com",
+        "positions": {
+            "ABORTION": "Personally pro-life but supports current New Jersey law allowing abortion up to viability; opposes late-term abortions.",
+            "EDUCATION": "Supports full school funding, school choice, and eliminating PARCC testing; prioritizes parental input.",
+            "RELIGIOUS-FREEDOM": "Supports religious exemptions for vaccines and protections for faith-based adoption agencies.",
+            "GUNS": "Supports concealed carry permits and opposes magazine bans; earned NRA endorsement in past.",
+            "TAXES": "Proposes 15% property tax credit, cutting state budget, and no new taxes.",
+            "IMMIGRATION": "Opposes sanctuary state policies; supports local law enforcement cooperation with ICE.",
+            "FAMILY-VALUES": "Supports parental rights; opposes transgender sports participation without clear guidelines.",
+            "ELECTION-INTEGRITY": "Supports voter ID, signature verification for mail-in ballots, and election audits."
+        },
+        "endorsements": ["New Jersey Fraternal Order of Police", "Somerset County GOP", "New Jersey Business & Industry Association"]
+    },
+    {
+        "name": "Mikie Sherrill",
+        "state": "New Jersey",
+        "office": "Governor",
+        "party": "D",
+        "status": "active",
+        "bio": "Mikie Sherrill, a Democrat, is running for New Jersey governor in 2025 while serving as the 11th District congresswoman. A former Navy pilot and federal prosecutor, Sherrill graduated from the U.S. Naval Academy and Georgetown Law. She flew missions in the Middle East and prosecuted financial crimes. Elected to Congress in 2018, she flipped a GOP seat and serves on Armed Services and Education committees. Sherrill’s gubernatorial campaign emphasizes healthcare access, infrastructure, and economic fairness. She supports expanding the Affordable Care Act, paid family leave, and clean energy jobs. Sherrill positions herself as a pragmatic leader, appealing to moderates and suburban voters. Her military service and prosecutorial record bolster her national security credentials. Facing Jack Ciattarelli, she leverages her congressional visibility. Sherrill advocates for reproductive rights, gun safety, and voting access. Her campaign focuses on uniting Democrats and independents in a competitive race.",
+        "faith_statement": "No publicly disclosed faith statement; Sherrill has noted Catholic school education but provides no campaign statement.",
+        "website": "https://mikiesherrill.com",
+        "positions": {
+            "ABORTION": "Strongly supports codifying Roe v. Wade; opposes any restrictions on reproductive healthcare.",
+            "EDUCATION": "Supports universal pre-K, teacher pay raises, and student debt relief; funds schools equitably.",
+            "RELIGIOUS-FREEDOM": "Balances religious liberty with civil rights; supports nondiscrimination laws.",
+            "GUNS": "Advocates universal background checks, red flag laws, and assault weapons restrictions.",
+            "TAXES": "Supports millionaire’s tax, closing corporate loopholes, and property tax relief for middle class.",
+            "IMMIGRATION": "Supports pathway to citizenship, DACA protections, and humane asylum policies.",
+            "FAMILY-VALUES": "Champions paid leave, childcare subsidies, and full LGBTQ+ equality.",
+            "ELECTION-INTEGRITY": "Supports same-day registration, no-excuse mail-in voting, and restoring Voting Rights Act."
+        },
+        "endorsements": ["Planned Parenthood NJ", "New Jersey Education Association", "League of Conservation Voters"]
+    }

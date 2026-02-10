@@ -1,0 +1,212 @@
+candidates = [
+    {
+        "name": "Stacy Garrity",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Stacy Garrity is the current Pennsylvania State Treasurer, first elected in 2020 and re-elected in 2024 with the largest margin of any statewide candidate in Pennsylvania history, receiving more votes than any state candidate ever. A U.S. Army veteran with 16 years of service, including deployments to Iraq and Afghanistan, Garrity holds a bachelor's degree in political science from Pennsylvania State University. Before entering politics, she owned and operated a small business in Potter County, where she lives with her husband and two children. As Treasurer, she has focused on fiscal responsibility, implementing transparency measures like the state's first online checkbook and recovering over $300 million in unclaimed property. Garrity has built a broad coalition within the Republican Party, appealing to both Trump supporters and moderates, evidenced by endorsements from building trades unions typically aligned with Democrats. Her accomplishments include advocating for taxpayer protections and economic policies to support Pennsylvania families. While her voting record as Treasurer is administrative rather than legislative, she has consistently supported conservative fiscal policies. (Source: Ballotpedia, Spotlight PA, Pennsylvania.gov)",
+        "faith_statement": "As a Christian, my faith guides my service to others and my commitment to protecting the values that make Pennsylvania strong, including the right to life and religious liberty.",
+        "website": "https://www.stacygarrity.com",
+        "positions": {
+            "ABORTION": "Stacy Garrity is pro-life and supports legislation to protect unborn children, including Pennsylvania's existing bans on late-term abortions. She advocates for exceptions in cases of rape, incest, or life of the mother and has endorsed bills to defund Planned Parenthood while promoting adoption and support for mothers.",
+            "EDUCATION": "Garrity supports school choice and vouchers to empower parents, including expansion of the Educational Improvement Tax Credit program. She opposes critical race theory in curricula and favors increased funding for vocational training and charter schools to improve outcomes in underperforming districts.",
+            "RELIGIOUS-FREEDOM": "A strong defender of religious liberty, Garrity supports protections for faith-based organizations and conscience rights for healthcare providers refusing to participate in abortions. She has backed federal and state laws like the Religious Freedom Restoration Act to prevent government overreach into religious practices.",
+            "GUNS": "Garrity is a staunch Second Amendment advocate, opposing all gun control measures and supporting concealed carry reciprocity. As a veteran, she emphasizes responsible ownership and has fought against red flag laws, prioritizing mental health over firearm restrictions.",
+            "TAXES": "Committed to tax cuts, Garrity proposes eliminating the state inheritance tax and reducing property taxes through pension reforms. She supports flat tax structures to stimulate economic growth and has criticized excessive government spending as Treasurer.",
+            "IMMIGRATION": "Garrity calls for secure borders, including funding for a border wall and ending sanctuary cities in Pennsylvania. She supports legal immigration pathways but prioritizes enforcement against illegal entry, including E-Verify for employment.",
+            "FAMILY-VALUES": "Garrity upholds traditional marriage and parental rights in education, opposing gender transition procedures for minors without consent. She supports policies promoting family stability, like tax credits for families and protections for religious adoption agencies.",
+            "ELECTION-INTEGRITY": "Garrity demands voter ID requirements and paper ballots for all elections, auditing 2020 results as Treasurer. She supports banning drop boxes and mail-in voting expansions to prevent fraud and ensure one person, one vote."
+        },
+        "endorsements": ["National Federation of Independent Business", "Pennsylvania Manufacturers' Association", "Fraternal Order of Police"]
+    },
+    {
+        "name": "Doug Mastriano",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Doug Mastriano is a Republican state senator representing Pennsylvania's 33rd District since 2019, following a special election win. A retired U.S. Army Colonel with 30 years of service, including combat tours in Desert Storm and the Global War on Terror, Mastriano holds a Ph.D. in history from the University of New Brunswick and teaches at American Public University. He and his wife Rebecca, also a veteran, have one daughter and reside in Fayetteville. Mastriano entered politics after an unsuccessful 2018 congressional bid, quickly rising as a vocal critic of COVID-19 mandates and election integrity issues. He won the 2022 Republican gubernatorial nomination but lost to Josh Shapiro by 15 points, garnering the most GOP votes for governor since 1962. In the Senate, his voting record is conservative, sponsoring bills on election security, school choice, and pro-life measures. Accomplishments include leading investigations into 2020 election irregularities and authoring legislation to ban no-bail policies. (Source: Ballotpedia, Pennsylvania Senate website, Wikipedia)",
+        "faith_statement": "As a committed Christian and ordained elder in the Church of the Nazarene, my faith in Jesus Christ compels me to defend biblical values, protect the unborn, and fight for religious freedoms against secular overreach.",
+        "website": "https://www.doug4pa.com",
+        "positions": {
+            "ABORTION": "Mastriano is firmly pro-life without exceptions, supporting a total ban on abortion and defunding Planned Parenthood. He sponsored the 2022 Heartbeat Bill to prohibit abortions after six weeks and advocates for constitutional amendments recognizing fetal personhood.",
+            "EDUCATION": "Advocates for universal school choice and vouchers, eliminating Common Core, and empowering parents against 'woke' curricula. Supports tax credits for private and homeschool education while increasing funding for trade schools over college debt forgiveness.",
+            "RELIGIOUS-FREEDOM": "Mastriano champions religious exemptions from vaccine mandates and protects faith-based businesses from discrimination lawsuits. He co-sponsored bills to reinforce First Amendment rights and oppose government closures of churches during emergencies.",
+            "GUNS": "Absolute Second Amendment defender, opposing all restrictions including assault weapon bans. Supports constitutional carry nationwide and has a 100% NRA rating, pushing to repeal Pennsylvania's gun-free zones.",
+            "TAXES": "Proposes eliminating state income tax and property taxes, replacing with sales tax on luxuries. As a fiscal hawk, he cut spending in Senate budget votes and supports balanced budget amendments.",
+            "IMMIGRATION": "Demands immediate border wall completion and mass deportation of criminals. Opposes amnesty, supports E-Verify mandates, and wants to end federal funding to sanctuary jurisdictions like Philadelphia.",
+            "FAMILY-VALUES": "Defines marriage as between one man and one woman, bans gender-affirming care for minors, and enforces parental notification for school gender policies. Promotes abstinence education and opposes drag queen story hours.",
+            "ELECTION-INTEGRITY": "Pushes for voter ID, same-day voting only, and full audits with paper trails. Led 2020 election lawsuits and proposes felony penalties for ballot harvesting to restore trust in elections."
+        },
+        "endorsements": ["Family Research Council", "National Right to Life", "Gun Owners of America"]
+    },
+    {
+        "name": "Scott Perry",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 10",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Scott Perry is the incumbent U.S. Representative for Pennsylvania's 10th Congressional District since 2013, re-elected in 2024 with 50.6% amid a tight race. A retired Army National Guard Brigadier General with 39 years of service, including deployments to Iraq, Cuba, and Eastern Europe, Perry owns a fuel distribution business. He holds an associate's degree in business administration from Bloomsburg University. Married to Christy with two daughters, he resides in Dillsburg. Before Congress, Perry served in the Pennsylvania House (2007-2013), focusing on veterans' issues and energy policy. In Congress, he chairs the House Freedom Caucus and serves on Foreign Affairs and Transportation committees. His voting record is conservative: 100% Heritage Action score, opposing all major Biden legislation like the Inflation Reduction Act. Accomplishments include authoring the PROMESA reform bill for Puerto Rico and leading probes into the Afghanistan withdrawal. (Source: Ballotpedia, Congressional Record, Pennsylvania.gov)",
+        "faith_statement": "My Christian faith informs my service, guiding me to uphold moral principles, protect religious liberties, and serve as a steward of conservative values for future generations.",
+        "website": "https://perry.house.gov",
+        "positions": {
+            "ABORTION": "Pro-life absolutist, Perry supports overturning Roe v. Wade and national bans post-Dobbs. Co-sponsored the Life at Conception Act with no exceptions and defunds Planned Parenthood federally.",
+            "EDUCATION": "Supports universal school choice, vouchers, and abolishing the Department of Education. Opposes DEI programs and critical theory, favoring parental rights and STEM-focused curricula with local control.",
+            "RELIGIOUS-FREEDOM": "Strong advocate for RFRA expansions, protecting faith-based adoptions and healthcare conscience clauses. Voted against Equality Act to safeguard religious institutions from LGBTQ mandates.",
+            "GUNS": "NRA A+ rated, Perry opposes red flag laws and universal background checks, sponsoring concealed carry reciprocity and national right-to-carry legislation.",
+            "TAXES": "Advocates permanent Trump tax cuts, eliminating capital gains taxes, and fair tax replacement for income tax. Voted against all tax hikes, pushing for spending cuts to balance budgets.",
+            "IMMIGRATION": "Calls for border wall completion, ending catch-and-release, and mass deportations. Supports Remain in Mexico policy revival and ending birthright citizenship for illegals.",
+            "FAMILY-VALUES": "Defends traditional marriage, opposes same-sex adoption mandates on religious agencies. Bans transgender athletes in women's sports and supports parental opt-outs for sex education.",
+            "ELECTION-INTEGRITY": "Pushes for voter ID nationally, paper ballots, and Election Day-only voting. Investigated 2020 irregularities and co-sponsored SAVE Act for citizenship proof."
+        },
+        "endorsements": ["Heritage Action", "National Rifle Association", "Americans for Prosperity"]
+    },
+    {
+        "name": "Lloyd Smucker",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 11",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Lloyd Smucker has represented Pennsylvania's 11th Congressional District since 2017, re-elected in 2024 with 62.9%. Previously, he served in the Pennsylvania Senate (2009-2018) and House (1991-2006). A business owner in manufacturing and agriculture, Smucker holds a bachelor's in business administration from Millersville University. Married to Patricia with three children and three grandchildren, he farms in West Hempfield. In Congress, he sits on Agriculture and Ways and Means committees, focusing on trade and tax policy. His voting record is solidly conservative: supported 2017 tax cuts, opposed ACA expansions. Accomplishments include securing farm bill provisions for dairy and authoring trade deals benefiting Pennsylvania exports. As Senate Appropriations chair, he balanced budgets without tax increases. (Source: Ballotpedia, House.gov, Pennsylvania Senate archives)",
+        "faith_statement": "As a member of West Hempfield United Methodist Church, my faith drives my commitment to servant leadership, family values, and policies that reflect Judeo-Christian principles of compassion and responsibility.",
+        "website": "https://smucker.house.gov",
+        "positions": {
+            "ABORTION": "Pro-life, supports 20-week federal ban with exceptions for mother's life. Voted to defund Planned Parenthood and protect infants born alive after abortions.",
+            "EDUCATION": "Backs school choice and Opportunity Scholarships, opposes federal overreach in curricula. Supports career-technical education funding and tax credits for private schools.",
+            "RELIGIOUS-FREEDOM": "Co-sponsored First Amendment Defense Act to protect religious beliefs on marriage. Opposes mandates forcing faith groups to violate conscience on social issues.",
+            "GUNS": "Supports concealed carry reciprocity and opposes assault weapons bans. NRA endorsed, focuses on mental health fixes over gun restrictions.",
+            "TAXES": "Champion of TCJA permanence, proposes doubling standard deduction. Voted for estate tax repeal to aid family farms and small businesses.",
+            "IMMIGRATION": "Supports border security funding, E-Verify, and merit-based legal immigration. Opposes amnesty, prioritizes American workers in visa programs.",
+            "FAMILY-VALUES": "Upholds traditional family structures, supports child tax credit expansions. Opposes ERA fearing impacts on parental rights and religious freedoms.",
+            "ELECTION-INTEGRITY": "Endorses voter ID and absentee ballot reforms. Voted for Electoral Count Reform Act to prevent 2020-like disputes."
+        },
+        "endorsements": ["U.S. Chamber of Commerce", "Farm Bureau", "National Association of Manufacturers"]
+    },
+    {
+        "name": "Dan Meuser",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 9",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Dan Meuser has served Pennsylvania's 9th Congressional District since 2019, re-elected in 2024 with 70.5%. Former Pennsylvania Revenue Secretary (2011-2015) under Gov. Corbett, he reformed the department into a taxpayer advocate. Meuser owns a family shoe business and holds a bachelor's in economics from Muhlenberg College. Married to Michelle with three children, he resides in Hellertown. In Congress, he serves on Small Business and Financial Services committees. Conservative voting record: 96% Club for Growth score, opposed infrastructure bill. Accomplishments include PPP loan expansions during COVID and authoring bills to cut regulations on small businesses. Considered 2026 gubernatorial run but focused on re-election. (Source: Ballotpedia, Meuser.house.gov, Pennsylvania.gov)",
+        "faith_statement": "My Catholic faith inspires my public service, emphasizing dignity of life, family, and charity to the least fortunate while upholding moral truths in policy.",
+        "website": "https://meuser.house.gov",
+        "positions": {
+            "ABORTION": "Pro-life, supports Hyde Amendment strengthening and 15-week ban. Backed Born-Alive Act and opposes taxpayer funding for abortions abroad.",
+            "EDUCATION": "Advocates choice via 529 expansions for K-12, opposes loan forgiveness. Supports workforce development and ending federal testing mandates.",
+            "RELIGIOUS-FREEDOM": "Defends conscience protections for pro-life employers, co-sponsored Uphold Religious Freedom Act against ACA mandates.",
+            "GUNS": "Second Amendment protector, opposes ghost gun regulations and ATF overreach. Sponsored reciprocity bill for interstate carry.",
+            "TAXES": "Pushes for corporate rate cut to 15%, SALT deduction cap removal for high-tax states. Voted against all Democratic tax hikes.",
+            "IMMIGRATION": "Demands wall funding, ends chain migration. Supports DACA path but with border security triggers.",
+            "FAMILY-VALUES": "Supports paid family leave tax credits, opposes gender ideology in schools. Backed child care access for working parents.",
+            "ELECTION-INTEGRITY": "Endorses national voter ID, bans private funding of elections. Investigated 2020 via Big Tech hearings."
+        },
+        "endorsements": ["Club for Growth", "Small Business & Entrepreneurship Council", "Job Creators Network"]
+    },
+    {
+        "name": "Ryan Mackenzie",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 7",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Ryan Mackenzie is the incumbent U.S. Representative for Pennsylvania's 7th District since 2025, having flipped the seat in 2024 with 50.5%. Previously, he served in the Pennsylvania House (2011-2025), chairing Veterans Affairs and Emergency Preparedness. A small business owner in IT services, Mackenzie holds a bachelor's in politics from Muhlenberg College. Married with three children, he lives in Bath. In the House, he focuses on economic growth and national security. Conservative record: sponsored property tax elimination bill, opposed green energy mandates. Accomplishments include securing federal aid for Lehigh Valley infrastructure and advocating for opioid crisis funding. (Source: Ballotpedia, Mackenzie.house.gov, Pennsylvania House archives)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://ryanmackenzie.com",
+        "positions": {
+            "ABORTION": "Pro-life, supports parental consent and ultrasound mandates pre-abortion. Backed 20-week ban in state legislature.",
+            "EDUCATION": "Champions vouchers and cyber charter expansion, opposes mask mandates in schools. Pushes literacy improvement via phonics.",
+            "RELIGIOUS-FREEDOM": "Supported bans on religious discrimination in COVID relief, protects faith exemptions in healthcare.",
+            "GUNS": "NRA-backed, opposes permit-to-purchase and magazine limits. Sponsored preemption of local gun laws.",
+            "TAXES": "Proposes income tax cut to 3%, eliminates LLC tax. Voted against all budget increases without offsets.",
+            "IMMIGRATION": "Calls for E-Verify statewide, opposes driver's licenses for illegals. Supports federal cooperation on deportations.",
+            "FAMILY-VALUES": "Opposes drag shows for kids, supports traditional curricula. Backed family leave expansions for small businesses.",
+            "ELECTION-INTEGRITY": "Sponsored voter ID bill, bans unsolicited mail ballots. Pushed for 2020 audit in Lehigh County."
+        },
+        "endorsements": ["Pennsylvania Chamber of Business and Industry", "NFIB", "NRA"]
+    },
+    {
+        "name": "Brian Fitzpatrick",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 1",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Brian Fitzpatrick has represented Pennsylvania's 1st District since 2017, re-elected in 2024 with 56.4%. Former FBI agent and federal prosecutor, he led national security cases post-9/11. Holds a J.D. from Dickinson School of Law and bachelor's from La Salle University. Married to Chic with four children, resides in Levittown. Co-chairs bipartisan Problem Solvers Caucus, serves on Intelligence Committee. Moderate-conservative record: voted for infrastructure, against impeachment. Accomplishments include authoring veterans' suicide prevention bill and securing Bucks County funding. (Source: Ballotpedia, Fitzpatrick.house.gov)",
+        "faith_statement": "As a Catholic, my faith calls me to bridge divides, promote peace, and serve with integrity, drawing from Gospel values of justice and mercy.",
+        "website": "https://fitzpatrick.house.gov",
+        "positions": {
+            "ABORTION": "Pro-life with exceptions for rape/incest/life, supports 20-week ban but voted to codify Roe post-Dobbs.",
+            "EDUCATION": "Bipartisan for funding increases, supports choice but opposes full vouchers. Focuses on mental health in schools.",
+            "RELIGIOUS-FREEDOM": "Co-sponsored bills protecting faith adoptions, opposes anti-religious bias in federal contracting.",
+            "GUNS": "Supports background checks and red flag laws, but defends self-defense rights. NRA B rating.",
+            "TAXES": "Backs middle-class cuts, SALT cap raise. Voted for TCJA extensions.",
+            "IMMIGRATION": "Supports border tech over wall, DREAM Act path. Opposes family separations.",
+            "FAMILY-VALUES": "Supports paid leave, opposes late-term abortions. Bipartisan on child care access.",
+            "ELECTION-INTEGRITY": "Endorses voter ID, secure mail voting. Voted for Electoral Count Reform."
+        },
+        "endorsements": ["U.S. Chamber", "AFL-CIO", "Everytown for Gun Safety"]
+    },
+    {
+        "name": "Guy Reschenthaler",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 14",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Guy Reschenthaler represents Pennsylvania's 14th District since 2019, re-elected in 2024 with 66.6%. Former Washington County judge and Marine Corps officer with Iraq deployment. J.D. from Duquesne University, bachelor's from Penn State. Married to Sarah with two sons, lives in Peters Township. Serves as House GOP Chief Deputy Whip, on Rules Committee. Conservative record: 98% Heritage score, sponsored energy independence bills. Accomplishments include opioid funding and VA reforms. (Source: Ballotpedia, Reschenthaler.house.gov)",
+        "faith_statement": "My evangelical Christian faith anchors my fight for freedom, life, and family, inspired by service to God and country.",
+        "website": "https://reschenthaler.house.gov",
+        "positions": {
+            "ABORTION": "Pro-life, no exceptions except mother's life. Sponsored Pain-Capable Unborn Child Protection Act.",
+            "EDUCATION": "School choice advocate, opposes teachers' union monopolies. Supports tax credits for private education.",
+            "RELIGIOUS-FREEDOM": "Defends church reopenings, conscience rights. Voted against Respect for Marriage Act.",
+            "GUNS": "Strong 2A supporter, opposes all federal gun control. Sponsored reciprocity act.",
+            "TAXES": "Permanent tax cuts, repeal estate tax. Opposed Biden's billionaire tax.",
+            "IMMIGRATION": "Build the wall, end sanctuary cities. Supports merit-based system.",
+            "FAMILY-VALUES": "Traditional marriage, ban transgender military service. Child tax credit expansion.",
+            "ELECTION-INTEGRITY": "Voter ID mandatory, no mail voting without verification. Pushed 2020 probes."
+        },
+        "endorsements": ["Marines Endowment", "Americans for Prosperity", "NRA"]
+    },
+    {
+        "name": "Glenn Thompson",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 15",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Glenn Thompson has served Pennsylvania's 15th District since 2009, re-elected in 2024 with 71.5%. Former physical therapist and county commissioner. Master's in physical therapy from Slippery Rock University. Married to Marilyn with three children, resides in Howard. Chairs Agriculture Committee, focuses on rural issues. Conservative: supported farm bill, opposed Green New Deal. Accomplishments include broadband expansion for farms and trade wins for ag exports. (Source: Ballotpedia, Thompson.house.gov)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://thompson.house.gov",
+        "positions": {
+            "ABORTION": "Pro-life, supports defunding Planned Parenthood. Backed 20-week ban.",
+            "EDUCATION": "Vocational training priority, school choice for rural areas. Opposes loan bailouts.",
+            "RELIGIOUS-FREEDOM": "Protects faith-based rural charities, opposes anti-discrimination overreaches.",
+            "GUNS": "Defends hunting rights, opposes suppressors ban. NRA A rating.",
+            "TAXES": "Estate tax repeal for farmers, death tax elimination. TCJA supporter.",
+            "IMMIGRATION": "Guest worker programs for ag, secure borders. E-Verify for farms.",
+            "FAMILY-VALUES": "Family farm protections, opposes urban-centric policies. Child nutrition focus.",
+            "ELECTION-INTEGRITY": "Rural voter access, ID requirements. Secure election funding."
+        },
+        "endorsements": ["American Farm Bureau", "National Cattlemen's Beef Association", "Dairy Farmers"]
+    },
+    {
+        "name": "Rob Bresnahan Jr.",
+        "state": "Pennsylvania",
+        "office": "U.S. House District 8",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Rob Bresnahan Jr. flipped Pennsylvania's 8th District in 2024 with 50.8%, serving since 2025. Former Luzerne County Commissioner and small business owner in real estate. Bachelor's in political science from King's College. Married with children, resides in Wilkes-Barre. Focuses on economic revitalization in NEPA. Conservative newcomer, endorsed Trump. Accomplishments include county tax cuts and opioid task force leadership. (Source: Ballotpedia, campaign site)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://bresnahanforcongress.com",
+        "positions": {
+            "ABORTION": "Pro-life, supports state bans post-Roe. Opposes funding abortions.",
+            "EDUCATION": "School choice, oppose CRT. Fund trade schools.",
+            "RELIGIOUS-FREEDOM": "Protect local churches, conscience rights.",
+            "GUNS": "2A absolute, no new controls.",
+            "TAXES": "Cut business taxes, eliminate gas tax.",
+            "IMMIGRATION": "Secure borders, deport criminals.",
+            "FAMILY-VALUES": "Parental rights, traditional education.",
+            "ELECTION-INTEGRITY": "Voter ID, end mail fraud."
+        },
+        "endorsements": ["Pennsylvania GOP", "Local unions", "Trump-aligned PACs"]
+    }
+]

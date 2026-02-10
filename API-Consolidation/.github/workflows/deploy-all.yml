@@ -1,0 +1,85 @@
+name: Deploy All APIs
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type "deploy-all" to confirm'
+        required: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate confirmation
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "deploy-all" ]; then
+            echo "❌ Confirmation failed. Type 'deploy-all' to proceed."
+            exit 1
+          fi
+
+  deploy-lambdas:
+    needs: validate
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        lambda:
+          - { name: 'admin_api', dir: 'admin_api' }
+          - { name: 'auth_api', dir: 'auth_api' }
+          - { name: 'articles_api', dir: 'articles_api' }
+          - { name: 'video_list_api', dir: 'video_list_api' }
+          - { name: 'news_api', dir: 'news_api' }
+          - { name: 'resources_api', dir: 'resources_api' }
+          - { name: 'contributors_api', dir: 'contributors_api' }
+          - { name: 'comments_api', dir: 'comments_api' }
+          - { name: 'tag_api', dir: 'tag_api' }
+          - { name: 'prayer_api', dir: 'prayer_api' }
+          - { name: 'events_api', dir: 'events_api' }
+          - { name: 'email_subscription_api', dir: 'email_subscription_api' }
+          - { name: 'ministry_tools_api', dir: 'ministry_tools_api' }
+          - { name: 'notifications_api', dir: 'notifications_api' }
+          - { name: 'url_analysis_api', dir: 'url_analysis_api' }
+          - { name: 'paypal_billing_api', dir: 'paypal_billing_api' }
+          - { name: 'downloader', dir: 'downloader' }
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          cd ${{ matrix.lambda.dir }}
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt -t .
+          fi
+
+      - name: Create deployment package
+        run: |
+          cd ${{ matrix.lambda.dir }}
+          zip -r ../${{ matrix.lambda.name }}-deployment.zip . -x "*.git*" "*.pyc" "__pycache__/*"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Deploy to Lambda
+        run: |
+          aws lambda update-function-code \
+            --function-name ${{ matrix.lambda.name }} \
+            --zip-file fileb://${{ matrix.lambda.name }}-deployment.zip
+
+      - name: Wait for update
+        run: |
+          aws lambda wait function-updated \
+            --function-name ${{ matrix.lambda.name }}
+
+      - name: Verify deployment
+        run: |
+          echo "✅ ${{ matrix.lambda.name }} deployed successfully!"

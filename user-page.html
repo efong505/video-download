@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Videos - Ekewaka</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/card-styles.css">
+    <style>
+        .user-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            margin-bottom: 30px;
+        }
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+        .video-card {
+            position: relative;
+            cursor: pointer;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            background: white;
+            margin-bottom: 20px;
+        }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+        .thumbnail-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            background: #000;
+            overflow: hidden;
+        }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+        .thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+        .play-button {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(102,126,234,0.9);
+            border: none;
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            color: white;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+        .play-button:hover {
+            background: rgba(102,126,234,1);
+            transform: translate(-50%, -50%) scale(1.1);
+        }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+        .video-player {
+            display: none;
+            width: 100%;
+            height: 200px;
+        }
+
+        */
+        .video-title {
+            padding: 15px;
+            background: white;
+            font-weight: 600;
+            text-align: center;
+            color: #333;
+            border-top: 1px solid #eee;
+        }
+        .video-actions {
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-top: 1px solid #eee;
+            text-align: center;
+        }
+        .btn-sm {
+            font-size: 12px;
+            padding: 4px 8px;
+        }
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+        .article-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+
+        */
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+        .article-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        */
+        .article-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        .article-title {
+            color: #333;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+        .article-title:hover {
+            color: #667eea;
+        }
+        .article-excerpt {
+            color: #555;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        .category-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .category-sermon { background: #e3f2fd; color: #1565c0; }
+        .category-politics { background: #fff3e0; color: #ef6c00; }
+        .category-devotional { background: #f3e5f5; color: #7b1fa2; }
+        .category-apologetics { background: #e8f5e8; color: #2e7d32; }
+        .category-ministry { background: #fff8e1; color: #f57f17; }
+        .category-bible_study { background: #e8eaf6; color: #3f51b5; }
+        .category-general { background: #f5f5f5; color: #616161; }
+    </style>
+</head>
+<body>
+    <div class="user-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h1 id="user-name">Loading...</h1>
+                    <p id="user-bio" class="lead">Christian content creator sharing videos and articles</p>
+                    <div id="user-stats" class="mt-3">
+                        <span class="badge bg-light text-dark me-2">📹 <span id="video-count">0</span> Videos</span>
+                        <span class="badge bg-light text-dark">📝 <span id="article-count">0</span> Articles</span>
+                    </div>
+                </div>
+                <div class="col-md-4 text-end">
+                    <a href="videos.html" class="btn btn-light">← Back to All Videos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Content Type Tabs -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <ul class="nav nav-tabs" id="contentTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="videos-tab" data-bs-toggle="tab" data-bs-target="#videos" type="button" role="tab">
+                            🎬 Videos (<span id="video-count-tab">0</span>)
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="articles-tab" data-bs-toggle="tab" data-bs-target="#articles" type="button" role="tab">
+                            📝 Articles (<span id="article-count-tab">0</span>)
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="tab-content" id="contentTabsContent">
+            <!-- Videos Tab -->
+            <div class="tab-pane fade show active" id="videos" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Filter Videos</h5>
+                                <div class="mb-3">
+                                    <label class="form-label">Visibility</label>
+                                    <select class="form-control" id="visibility-filter">
+                                        <option value="all">All Videos</option>
+                                        <option value="public">Public Only</option>
+                                        <option value="private">Private Only</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Tags</label>
+                                    <div id="tag-filters"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div id="videos-container" class="row">
+                            <div class="col-12 text-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Articles Tab -->
+            <div class="tab-pane fade" id="articles" role="tabpanel">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5>Filter Articles</h5>
+                                <div class="mb-3">
+                                    <label class="form-label">Category</label>
+                                    <select class="form-control" id="article-category-filter">
+                                        <option value="all">All Categories</option>
+                                        <option value="sermon">Sermons</option>
+                                        <option value="politics">Politics</option>
+                                        <option value="devotional">Devotionals</option>
+                                        <option value="apologetics">Apologetics</option>
+                                        <option value="ministry">Ministry</option>
+                                        <option value="bible_study">Bible Study</option>
+                                        <option value="general">General</option>
+                                    </select>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Visibility</label>
+                                    <select class="form-control" id="article-visibility-filter">
+                                        <option value="all">All Articles</option>
+                                        <option value="public">Public Only</option>
+                                        <option value="private">Private Only</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div id="articles-container" class="row">
+                            <div class="col-12 text-center">
+                                <div class="spinner-border" role="status">
+                                    <span class="visually-hidden">Loading articles...</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
+        const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';
+        
+        let userEmail = null;
+        let allVideos = [];
+        let allArticles = [];
+        let allTags = [];
+        let currentUser = null;
+        let isOwner = false;
+        let userName = '';
+
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            userEmail = urlParams.get('user');
+            
+            if (!userEmail) {
+                document.getElementById('videos-container').innerHTML = '<div class="col-12"><div class="alert alert-danger">No user specified</div></div>';
+                return;
+            }
+            
+            // Check if current user is the page owner
+            const userData = localStorage.getItem('user_data');
+            if (userData) {
+                currentUser = JSON.parse(userData);
+                isOwner = currentUser.email === userEmail;
+            }
+            
+            loadUserVideos();
+            loadUserArticles(); // This now calls loadUserData() internally
+        });
+
+        async function loadUserData() {
+            // If viewing own page, use localStorage data
+            if (currentUser && currentUser.email === userEmail) {
+                const fullName = [currentUser.first_name, currentUser.last_name].filter(n => n && n.trim()).join(' ');
+                if (fullName) {
+                    userName = fullName;
+                    document.getElementById('user-name').textContent = fullName;
+                    return;
+                }
+            }
+            
+            // Try to get user's actual name from auth API
+            try {
+                const response = await fetch('https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth?action=get_user&email=' + encodeURIComponent(userEmail));
+                const data = await response.json();
+                
+                if (data && data.first_name) {
+                    const fullName = [data.first_name, data.last_name].filter(n => n && n.trim()).join(' ');
+                    if (fullName) {
+                        userName = fullName;
+                        document.getElementById('user-name').textContent = fullName;
+                        return;
+                    }
+                }
+            } catch (error) {
+                console.warn('Could not load user name:', error);
+            }
+            
+            // Fallback to email prefix
+            userName = userEmail.split('@')[0];
+            document.getElementById('user-name').textContent = userEmail.split('@')[0];
+        }
+
+        async function loadUserVideos() {
+            try {
+                const response = await fetch(TAG_API + '?action=list');
+                const data = await response.json();
+                
+                if (data.videos) {
+                    // Show all videos for owner, only public for others
+                    allVideos = data.videos.filter(video => {
+                        if (video.owner === userEmail) {
+                            return isOwner || video.visibility === 'public';
+                        }
+                        return false;
+                    });
+                    
+                    // Extract unique tags
+                    const tagSet = new Set();
+                    allVideos.forEach(video => {
+                        if (video.tags) {
+                            video.tags.forEach(tag => tagSet.add(tag));
+                        }
+                    });
+                    allTags = Array.from(tagSet);
+                    
+                    displayVideos(allVideos);
+                    displayTagFilters();
+                    updateStats();
+                }
+            } catch (error) {
+                console.error('Error loading videos:', error);
+                document.getElementById('videos-container').innerHTML = '<div class="col-12"><div class="alert alert-danger">Error loading videos</div></div>';
+            }
+        }
+
+        async function loadUserArticles() {
+            try {
+                // Wait for user data to load first
+                await loadUserData();
+                
+                // Load both public and private articles
+                const publicResponse = await fetch(ARTICLES_API + '?action=list&visibility=public');
+                const publicData = await publicResponse.json();
+                
+                let userArticles = [];
+                
+                if (publicData.articles) {
+                    userArticles = publicData.articles.filter(article => {
+                        // Check if article author matches user email or user name
+                        return article.author === userEmail || 
+                               article.author === userName ||
+                               (article.author && article.author.toLowerCase() === userEmail.toLowerCase()) ||
+                               (article.author && userName && article.author.toLowerCase() === userName.toLowerCase());
+                    });
+                }
+                
+                // If owner, also load private articles
+                if (isOwner) {
+                    try {
+                        const authToken = localStorage.getItem('auth_token');
+                        if (authToken) {
+                            const privateResponse = await fetch(ARTICLES_API + '?action=list&visibility=private', {
+                                headers: { 'Authorization': `Bearer ${authToken}` }
+                            });
+                            const privateData = await privateResponse.json();
+                            
+                            if (privateData.articles) {
+                                const userPrivateArticles = privateData.articles.filter(article => 
+                                    article.author === userEmail || article.author === userName
+                                );
+                                userArticles = [...userArticles, ...userPrivateArticles];
+                            }
+                        }
+                    } catch (privateError) {
+                        console.warn('Could not load private articles:', privateError);
+                    }
+                }
+                
+                allArticles = userArticles;
+                document.getElementById('article-count').textContent = allArticles.length;
+                document.getElementById('article-count-tab').textContent = allArticles.length;
+                displayArticles(allArticles);
+                
+            } catch (error) {
+                console.error('Error loading articles:', error);
+                document.getElementById('articles-container').innerHTML = '<div class="col-12"><div class="alert alert-danger">Error loading articles</div></div>';
+            }
+        }
+
+        function displayVideos(videos) {
+            const container = document.getElementById('videos-container');
+            
+            if (videos.length === 0) {
+                container.innerHTML = '<div class="col-12"><div class="alert alert-info">No public videos found for this user</div></div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            videos.forEach(video => {
+                const col = document.createElement('div');
+                col.className = 'col-md-4 mb-4';
+                
+                const videoType = video.video_type || 'local';
+                const externalUrl = video.external_url || '';
+                
+                if (videoType === 'local') {
+                    const baseName = video.filename.replace('.mp4', '');
+                    const videoUrl = `https://christianconservativestoday.com/videos/${video.filename}`;
+                    const thumbnailUrl = `https://christianconservativestoday.com/thumbnails/${baseName}_thumb_2.jpg`;
+                    const fallbackThumbnailUrl = `https://christianconservativestoday.com/thumbnails/${baseName}_thumb.jpg`;
+                    
+                    col.innerHTML = `
+                        <div class="video-card">
+                            <div class="thumbnail-container">
+                                <img src="${thumbnailUrl}" alt="${video.title}" class="thumbnail" 
+                                     onerror="this.onerror=null; this.src='${fallbackThumbnailUrl}';">
+                                <button class="play-button" onclick="playVideo(this, '${videoUrl}')">
+                                    ▶
+                                </button>
+                            </div>
+                            <video class="video-player" controls style="display: none;">
+                                Your browser does not support the video tag.
+                            </video>
+                            <div class="video-title">
+                                ${video.title}
+                                <div style="margin-top: 8px;">
+                                    ${video.tags ? video.tags.map(tag => `<span class="badge bg-secondary me-1" style="font-size: 10px;">${tag}</span>`).join('') : ''}
+                                </div>
+                            </div>
+                            ${isOwner ? `<div class="video-actions">
+                                <button class="btn btn-primary btn-sm me-2" onclick="editVideo('${video.filename}')">
+                                    ✏️ Edit
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteVideo('${video.filename}', '${video.title}')">
+                                    🗑️ Delete
+                                </button>
+                            </div>` : ''}
+                        </div>
+                    `;
+                } else {
+                    let thumbnailSrc = '';
+                    let embedUrl = externalUrl;
+                    let canEmbed = false;
+                    
+                    if (externalUrl.includes('youtube.com') || externalUrl.includes('youtu.be')) {
+                        const videoId = externalUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
+                        if (videoId) {
+                            thumbnailSrc = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+                            embedUrl = `https://www.youtube.com/embed/${videoId}`;
+                            canEmbed = true;
+                        }
+                    } else if (externalUrl.includes('rumble.com')) {
+                        // Extract Rumble video ID (format: v70t3vw)
+                        const rumbleMatch = externalUrl.match(/rumble\.com\/(v[a-z0-9]+)/i);
+                        if (rumbleMatch) {
+                            const videoId = rumbleMatch[1];
+                            // Use Rumble's embed URL with proper format
+                            embedUrl = `https://rumble.com/embed/${videoId}/?pub=4`;
+                            canEmbed = true;
+                        } else {
+                            embedUrl = externalUrl;
+                            canEmbed = false;
+                        }
+                    }
+                    
+                    const safeEmbedUrl = embedUrl.replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+                    const safeExternalUrl = externalUrl.replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+                    const safeTitle = video.title.replace(/'/g, "&#39;").replace(/"/g, "&quot;");
+                    
+                    col.innerHTML = `
+                        <div class="video-card" data-embed-url="${safeEmbedUrl}" data-can-embed="${canEmbed}">
+                            <div class="thumbnail-container">
+                                <img src="${thumbnailSrc}" alt="${safeTitle}" class="thumbnail" 
+                                     onerror="this.style.background='linear-gradient(135deg, #667eea, #764ba2)'; this.style.color='white'; this.style.display='flex'; this.style.alignItems='center'; this.style.justifyContent='center'; this.innerHTML='🎬';">
+                                <button class="play-button" onclick="playExternalVideo(this)">${canEmbed ? '▶' : '🔗'}</button>
+                                ${!canEmbed ? '<div style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 4px 8px; border-radius: 4px; font-size: 11px;">Opens in new tab</div>' : ''}
+                            </div>
+                            <iframe class="video-player" style="display: none; width: 100%; height: 200px; border: none;" allowfullscreen></iframe>
+                            <div class="video-title">
+                                ${video.title}
+                                <div style="margin-top: 8px;">
+                                    ${video.tags ? video.tags.map(tag => `<span class="badge bg-secondary me-1" style="font-size: 10px;">${tag}</span>`).join('') : ''}
+                                </div>
+                            </div>
+                            ${isOwner ? `<div class="video-actions">
+                                <button class="btn btn-primary btn-sm me-2" onclick="editVideo('${safeExternalUrl}')">✏️ Edit</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteVideo('${safeExternalUrl}', '${safeTitle}')">
+                                    🗑️ Delete
+                                </button>
+                            </div>` : ''}
+                        </div>
+                    `;
+                }
+                
+                container.appendChild(col);
+            });
+        }
+
+        function displayTagFilters() {
+            const container = document.getElementById('tag-filters');
+            container.innerHTML = allTags.map(tag => `
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="${tag}" id="tag-${tag}" onchange="filterVideos()">
+                    <label class="form-check-label" for="tag-${tag}">${tag}</label>
+                </div>
+            `).join('');
+        }
+
+        function filterVideos() {
+            const visibilityFilter = document.getElementById('visibility-filter').value;
+            const selectedTags = Array.from(document.querySelectorAll('#tag-filters input:checked')).map(cb => cb.value);
+            
+            let filteredVideos = allVideos.filter(video => {
+                if (visibilityFilter !== 'all' && video.visibility !== visibilityFilter) return false;
+                if (selectedTags.length > 0 && !selectedTags.some(tag => video.tags && video.tags.includes(tag))) return false;
+                return true;
+            });
+            
+            displayVideos(filteredVideos);
+        }
+
+        function updateStats() {
+            document.getElementById('video-count').textContent = allVideos.length;
+            document.getElementById('video-count-tab').textContent = allVideos.length;
+        }
+        
+        function displayArticles(articles) {
+            const container = document.getElementById('articles-container');
+            
+            if (articles.length === 0) {
+                container.innerHTML = '<div class="col-12"><div class="alert alert-info">No articles found for this user</div></div>';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            articles.forEach(article => {
+                const col = document.createElement('div');
+                col.className = 'col-lg-6 col-md-12 mb-4';
+                
+                // Safely handle article content
+                let excerpt = 'No content available';
+                try {
+                    if (article.content && typeof article.content === 'string') {
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = article.content;
+                        const plainText = tempDiv.textContent || tempDiv.innerText || '';
+                        if (plainText.trim()) {
+                            excerpt = plainText.split(' ').slice(0, 30).join(' ') + (plainText.split(' ').length > 30 ? '...' : '');
+                        }
+                    }
+                } catch (error) {
+                    excerpt = 'Content unavailable';
+                }
+                
+                // Safely format date
+                let date = 'Unknown date';
+                try {
+                    if (article.created_at) {
+                        date = new Date(article.created_at).toLocaleDateString();
+                    }
+                } catch (error) {
+                    date = 'Unknown date';
+                }
+                
+                const safeTitle = (article.title || 'Untitled Article').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+                const safeCategory = article.category || 'general';
+                const safeReadingTime = article.reading_time || 0;
+                const safeViewCount = article.view_count || 0;
+                const safeArticleId = article.article_id || '';
+                const visibilityBadge = article.visibility === 'private' ? '<span class="badge bg-warning text-dark ms-2">Private</span>' : '';
+                
+                col.innerHTML = `
+                    <div class="article-card">
+                        <div class="article-meta">
+                            <span class="category-badge category-${safeCategory}">${getCategoryName(safeCategory)}</span>
+                            ${visibilityBadge}
+                            <span class="ms-3">${date}</span>
+                            <span class="ms-3">📖 ${safeReadingTime} min read</span>
+                            <span class="ms-3">👁️ ${safeViewCount} views</span>
+                        </div>
+                        
+                        <h3><a href="article.html?id=${safeArticleId}" class="article-title">${safeTitle}</a></h3>
+                        
+                        <div class="article-excerpt">${excerpt}</div>
+                        
+                        ${isOwner ? `<div class="mt-3">
+                            <a href="edit-article.html?id=${safeArticleId}" class="btn btn-sm btn-outline-primary">✏️ Edit</a>
+                            <button onclick="deleteArticle('${safeArticleId}', '${safeTitle}')" class="btn btn-sm btn-outline-danger ms-2">🗑️ Delete</button>
+                        </div>` : ''}
+                    </div>
+                `;
+                
+                container.appendChild(col);
+            });
+        }
+        
+        function getCategoryName(category) {
+            const names = {
+                'sermon': 'Sermon',
+                'politics': 'Politics', 
+                'devotional': 'Devotional',
+                'apologetics': 'Apologetics',
+                'ministry': 'Ministry',
+                'bible_study': 'Bible Study',
+                'general': 'General'
+            };
+            return names[category] || 'General';
+        }
+        
+        function filterArticles() {
+            const categoryFilter = document.getElementById('article-category-filter').value;
+            const visibilityFilter = document.getElementById('article-visibility-filter').value;
+            
+            let filteredArticles = allArticles.filter(article => {
+                if (categoryFilter !== 'all' && article.category !== categoryFilter) return false;
+                if (visibilityFilter !== 'all' && article.visibility !== visibilityFilter) return false;
+                return true;
+            });
+            
+            displayArticles(filteredArticles);
+        }
+        
+        async function deleteArticle(articleId, articleTitle) {
+            if (!confirm(`Are you sure you want to delete "${articleTitle}"? This action cannot be undone.`)) {
+                return;
+            }
+            
+            try {
+                const authToken = localStorage.getItem('auth_token');
+                const response = await fetch(`${ARTICLES_API}?action=delete&article_id=${articleId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + authToken
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Article deleted successfully!');
+                    loadUserArticles();
+                } else {
+                    alert('Error deleting article: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error deleting article:', error);
+                alert('Error deleting article. Please try again.');
+            }
+        }
+
+        function getYouTubeThumbnail(url) {
+            const videoId = extractYouTubeVideoId(url);
+            return videoId ? `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg` : '';
+        }
+
+        function extractYouTubeVideoId(url) {
+            const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+            const match = url.match(regex);
+            return match ? match[1] : null;
+        }
+
+        document.getElementById('visibility-filter').addEventListener('change', filterVideos);
+        
+        // Add event listeners for article filters when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            // Wait for elements to be created
+            setTimeout(() => {
+                const articleCategoryFilter = document.getElementById('article-category-filter');
+                const articleVisibilityFilter = document.getElementById('article-visibility-filter');
+                
+                if (articleCategoryFilter) {
+                    articleCategoryFilter.addEventListener('change', filterArticles);
+                }
+                if (articleVisibilityFilter) {
+                    articleVisibilityFilter.addEventListener('change', filterArticles);
+                }
+            }, 100);
+        });
+        
+        function playVideo(button, videoUrl) {
+            const card = button.closest('.video-card');
+            const thumbnailContainer = card.querySelector('.thumbnail-container');
+            const video = card.querySelector('.video-player');
+            
+            thumbnailContainer.style.display = 'none';
+            video.style.display = 'block';
+            video.src = videoUrl;
+            video.load();
+            
+            video.addEventListener('error', function(e) {
+                console.error('Video error:', e, video.error);
+                thumbnailContainer.style.display = 'block';
+                video.style.display = 'none';
+            });
+            
+            video.play().catch(error => {
+                console.error('Play error:', error);
+                thumbnailContainer.style.display = 'block';
+                video.style.display = 'none';
+            });
+            
+            if (!video.querySelector('.close-video')) {
+                const closeBtn = document.createElement('button');
+                closeBtn.className = 'close-video';
+                closeBtn.innerHTML = '✕';
+                closeBtn.style.cssText = 'position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; z-index: 1000;';
+                closeBtn.onclick = function() {
+                    video.pause();
+                    video.currentTime = 0;
+                    thumbnailContainer.style.display = 'block';
+                    video.style.display = 'none';
+                };
+                video.parentElement.style.position = 'relative';
+                video.parentElement.appendChild(closeBtn);
+            }
+        }
+        
+        function playExternalVideo(button) {
+            const card = button.closest('.video-card');
+            const thumbnailContainer = card.querySelector('.thumbnail-container');
+            const iframe = card.querySelector('.video-player');
+            const embedUrl = card.dataset.embedUrl;
+            const canEmbed = card.dataset.canEmbed === 'true';
+            
+            console.log('Playing external video:', embedUrl, 'Can embed:', canEmbed);
+            
+            if (!canEmbed) {
+                // Open in new tab if can't embed
+                window.open(embedUrl, '_blank');
+                return;
+            }
+            
+            thumbnailContainer.style.display = 'none';
+            iframe.style.display = 'block';
+            iframe.src = embedUrl;
+            
+            if (!card.querySelector('.close-video')) {
+                const closeBtn = document.createElement('button');
+                closeBtn.className = 'close-video';
+                closeBtn.innerHTML = '✕';
+                closeBtn.style.cssText = 'position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; border: none; border-radius: 50%; width: 30px; height: 30px; cursor: pointer; z-index: 1000;';
+                closeBtn.onclick = function() {
+                    iframe.src = '';
+                    thumbnailContainer.style.display = 'block';
+                    iframe.style.display = 'none';
+                    closeBtn.remove();
+                };
+                card.style.position = 'relative';
+                card.appendChild(closeBtn);
+            }
+        }
+        
+        function editVideo(videoIdentifier) {
+            const video = allVideos.find(v => v.filename === videoIdentifier || v.external_url === videoIdentifier);
+            if (!video) {
+                alert('Video not found');
+                return;
+            }
+            
+            const newTitle = prompt('Edit video title:', video.title);
+            if (newTitle === null || newTitle.trim() === '') return;
+            
+            const newTags = prompt('Edit tags (comma-separated):', video.tags ? video.tags.join(', ') : '');
+            if (newTags === null) return;
+            
+            const newVisibility = confirm('Make video public?') ? 'public' : 'private';
+            
+            const updates = {
+                title: newTitle.trim(),
+                tags: newTags.split(',').map(tag => tag.trim()).filter(tag => tag),
+                visibility: newVisibility,
+                filename: video.filename,
+                external_url: video.external_url
+            };
+            
+            fetch(TAG_API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: 'update', ...updates })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Video updated successfully!');
+                    loadUserVideos();
+                } else {
+                    alert('Error updating video: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error updating video');
+            });
+        }
+        
+        function deleteVideo(videoIdentifier, title) {
+            if (!confirm(`Are you sure you want to delete "${title}"? This action cannot be undone.`)) {
+                return;
+            }
+            
+            const video = allVideos.find(v => v.filename === videoIdentifier || v.external_url === videoIdentifier);
+            if (!video) {
+                alert('Video not found');
+                return;
+            }
+            
+            fetch(TAG_API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ 
+                    action: 'delete', 
+                    filename: video.filename,
+                    external_url: video.external_url
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Video deleted successfully!');
+                    loadUserVideos();
+                } else {
+                    alert('Error deleting video: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error deleting video');
+            });
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

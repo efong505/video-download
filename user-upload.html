@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Video - Ekewaka</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .upload-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .quota-bar {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid #dee2e6;
+        }
+        .progress {
+            height: 25px;
+            margin-bottom: 10px;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+        }
+        .form-control {
+            border-radius: 8px;
+            padding: 12px;
+        }
+        .upgrade-notice {
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            color: #2d3436;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="mb-0">📤 Upload Video</h1>
+                <div>
+                    <a href="videos.html" class="btn btn-light me-2">← Back to Videos</a>
+                    <a href="profile.html" class="btn btn-outline-light">👤 Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="upload-container">
+            <!-- Quota Display -->
+            <div class="quota-bar">
+                <h5>📊 Your Storage Usage</h5>
+                <div class="progress">
+                    <div class="progress-bar" id="storage-progress" role="progressbar" style="width: 0%"></div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <span id="storage-text">Loading...</span>
+                    <span id="subscription-tier">Free Plan</span>
+                </div>
+                <div class="mt-2">
+                    <small class="text-muted">Videos: <span id="video-count">0</span> / <span id="video-limit">50</span></small>
+                </div>
+            </div>
+
+            <!-- Upgrade Notice (hidden by default) -->
+            <div id="upgrade-notice" class="upgrade-notice" style="display: none;">
+                <h6>⚠️ Storage Limit Reached</h6>
+                <p class="mb-2">You've reached your storage limit. Upgrade your plan to upload more videos:</p>
+                <div class="row">
+                    <div class="col-md-3">
+                        <strong>Premium</strong><br>
+                        25GB / 500 videos<br>
+                        <small>$9.99/month</small>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Pro</strong><br>
+                        100GB / 2000 videos<br>
+                        <small>$19.99/month</small>
+                    </div>
+                    <div class="col-md-3">
+                        <strong>Enterprise</strong><br>
+                        Unlimited<br>
+                        <small>$49.99/month</small>
+                    </div>
+                    <div class="col-md-3">
+                        <a href="profile.html#subscription" class="btn btn-warning btn-sm">Upgrade Now</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Options -->
+            <div class="mb-4">
+                <div class="btn-group w-100" role="group">
+                    <input type="radio" class="btn-check" name="upload-type" id="local-upload" checked>
+                    <label class="btn btn-outline-primary" for="local-upload">📁 Upload File</label>
+                    
+                    <input type="radio" class="btn-check" name="upload-type" id="external-upload">
+                    <label class="btn btn-outline-primary" for="external-upload">🔗 External Video</label>
+                </div>
+            </div>
+
+            <!-- Local Upload Form -->
+            <div id="local-upload-form">
+                <h4>📁 Select Video File</h4>
+                <div class="mb-3">
+                    <input type="file" class="form-control" id="video-file" accept="video/*">
+                    <div class="form-text">Supported formats: MP4, WebM, MOV, AVI (Max 500MB per file)</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">📝 Video Title</label>
+                    <input type="text" class="form-control" id="video-title" placeholder="Enter video title">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">🏷️ Tags (comma-separated)</label>
+                    <input type="text" class="form-control" id="video-tags" placeholder="news, politics, 2024">
+                    <div id="tag-suggestions" style="display: none; border: 1px solid #ddd; max-height: 150px; overflow-y: auto; background: white; position: absolute; z-index: 1000; width: calc(100% - 60px);"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">👁️ Visibility</label>
+                    <select class="form-control" id="video-visibility">
+                        <option value="public">Public (visible to all users)</option>
+                        <option value="private">Private (only visible to you)</option>
+                    </select>
+                </div>
+
+                <!-- Upload Progress -->
+                <div id="upload-progress" style="display: none;">
+                    <div class="progress mb-3">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated" id="upload-progress-bar" style="width: 0%"></div>
+                    </div>
+                    <div id="upload-status">Preparing upload...</div>
+                </div>
+
+                <button class="btn btn-primary btn-lg" id="upload-btn" onclick="uploadVideo()">
+                    📤 Upload Video
+                </button>
+            </div>
+
+            <!-- External Video Form -->
+            <div id="external-upload-form" style="display: none;">
+                <h4>🔗 Add External Video</h4>
+                
+                <div class="mb-3">
+                    <label class="form-label">Video URL</label>
+                    <input type="url" class="form-control" id="external-video-url" placeholder="https://youtube.com/watch?v=... or https://rumble.com/...">
+                    <div class="form-text">Supported: YouTube, Rumble, Facebook</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">📝 Video Title</label>
+                    <input type="text" class="form-control" id="external-video-title" placeholder="Enter video title">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">🏷️ Tags (comma-separated)</label>
+                    <input type="text" class="form-control" id="external-video-tags" placeholder="news, politics, 2024">
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">👁️ Visibility</label>
+                    <select class="form-control" id="external-video-visibility">
+                        <option value="public">Public (visible to all users)</option>
+                        <option value="private">Private (only visible to you)</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-primary btn-lg" id="external-btn" onclick="addExternalVideo()">
+                    🔗 Add External Video
+                </button>
+            </div>
+
+            <!-- Messages -->
+            <div id="messages" class="mt-3"></div>
+        </div>
+    </div>
+
+    <script>
+        const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
+        const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
+        const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
+        
+        let currentUser = null;
+        let authToken = null;
+        let allTags = [];
+        let userQuota = null;
+
+        // Initialize page
+        window.addEventListener('load', async function() {
+            authToken = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+            
+            if (!authToken || !userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(userData);
+            await loadUserQuota();
+            await loadAllTags();
+            setupTagAutocomplete();
+            
+            // Setup upload type toggle
+            document.querySelectorAll('input[name="upload-type"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.id === 'local-upload') {
+                        document.getElementById('local-upload-form').style.display = 'block';
+                        document.getElementById('external-upload-form').style.display = 'none';
+                    } else {
+                        document.getElementById('local-upload-form').style.display = 'none';
+                        document.getElementById('external-upload-form').style.display = 'block';
+                    }
+                });
+            });
+        });
+
+        async function loadUserQuota() {
+            try {
+                // Get user's current storage usage from their videos
+                const response = await fetch(`${TAG_API}?action=list&user=${encodeURIComponent(currentUser.email)}&role=${encodeURIComponent(currentUser.role)}`);
+                const data = await response.json();
+                
+                let totalSize = 0;
+                let videoCount = 0;
+                
+                if (data.videos) {
+                    data.videos.forEach(video => {
+                        if (video.video_type === 'local' && video.owner === currentUser.email) {
+                            totalSize += parseInt(video.size) || 0;
+                            videoCount++;
+                        }
+                    });
+                }
+
+                // Set quota limits based on subscription tier or role
+                const quotaLimits = {
+                    free: { storage: 2 * 1024 * 1024 * 1024, videos: 50 }, // 2GB
+                    premium: { storage: 25 * 1024 * 1024 * 1024, videos: 500 }, // 25GB
+                    pro: { storage: 100 * 1024 * 1024 * 1024, videos: 2000 }, // 100GB
+                    enterprise: { storage: Infinity, videos: Infinity }
+                };
+
+                // Admin and super_user get unlimited
+                let tier = 'free';
+                if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
+                    tier = 'enterprise';
+                }
+                const limits = quotaLimits[tier];
+
+                userQuota = {
+                    used: totalSize,
+                    limit: limits.storage,
+                    videoCount: videoCount,
+                    videoLimit: limits.videos,
+                    tier: tier
+                };
+
+                updateQuotaDisplay();
+            } catch (error) {
+                console.error('Failed to load quota:', error);
+                showMessage('Failed to load storage quota', 'error');
+            }
+        }
+
+        function updateQuotaDisplay() {
+            if (!userQuota) return;
+
+            const percentage = userQuota.limit === Infinity ? 0 : (userQuota.used / userQuota.limit) * 100;
+            const usedGB = (userQuota.used / (1024 * 1024 * 1024)).toFixed(2);
+            const limitGB = userQuota.limit === Infinity ? '∞' : (userQuota.limit / (1024 * 1024 * 1024)).toFixed(0);
+
+            document.getElementById('storage-progress').style.width = `${Math.min(percentage, 100)}%`;
+            document.getElementById('storage-progress').className = `progress-bar ${percentage > 90 ? 'bg-danger' : percentage > 70 ? 'bg-warning' : 'bg-success'}`;
+            document.getElementById('storage-text').textContent = `${usedGB} GB / ${limitGB} GB used`;
+            document.getElementById('subscription-tier').textContent = `${userQuota.tier.charAt(0).toUpperCase() + userQuota.tier.slice(1)} Plan`;
+            document.getElementById('video-count').textContent = userQuota.videoCount;
+            document.getElementById('video-limit').textContent = userQuota.videoLimit === Infinity ? '∞' : userQuota.videoLimit;
+
+            // Show upgrade notice if near or at limit (not for admin/super_user)
+            if ((percentage >= 95 || userQuota.videoCount >= userQuota.videoLimit) && 
+                currentUser.role !== 'admin' && currentUser.role !== 'super_user') {
+                document.getElementById('upgrade-notice').style.display = 'block';
+                document.getElementById('local-upload-form').style.opacity = '0.5';
+                document.getElementById('upload-btn').disabled = true;
+                document.getElementById('external-btn').disabled = true;
+            }
+        }
+
+        async function loadAllTags() {
+            try {
+                const response = await fetch(`${TAG_API}?action=get_all_tags`);
+                const data = await response.json();
+                allTags = data.tags || [];
+            } catch (error) {
+                console.log('Error loading tags:', error);
+            }
+        }
+
+        function setupTagAutocomplete() {
+            const input = document.getElementById('video-tags');
+            const suggestions = document.getElementById('tag-suggestions');
+            
+            input.addEventListener('input', function() {
+                const value = this.value;
+                const lastComma = value.lastIndexOf(',');
+                const currentTag = value.substring(lastComma + 1).trim().toLowerCase();
+                
+                if (currentTag.length < 2) {
+                    suggestions.style.display = 'none';
+                    return;
+                }
+                
+                const matches = allTags.filter(tag => 
+                    tag.toLowerCase().includes(currentTag) && 
+                    !value.toLowerCase().includes(tag.toLowerCase())
+                );
+                
+                if (matches.length > 0) {
+                    suggestions.innerHTML = matches.map(tag => 
+                        `<div style="padding: 8px; cursor: pointer; border-bottom: 1px solid #eee;" onclick="selectTag('${tag}')">${tag}</div>`
+                    ).join('');
+                    suggestions.style.display = 'block';
+                } else {
+                    suggestions.style.display = 'none';
+                }
+            });
+            
+            input.addEventListener('blur', function() {
+                setTimeout(() => suggestions.style.display = 'none', 200);
+            });
+        }
+
+        function selectTag(tag) {
+            const input = document.getElementById('video-tags');
+            const value = input.value;
+            const lastComma = value.lastIndexOf(',');
+            
+            if (lastComma >= 0) {
+                input.value = value.substring(0, lastComma + 1) + ' ' + tag + ', ';
+            } else {
+                input.value = tag + ', ';
+            }
+            
+            input.focus();
+        }
+
+        async function uploadVideo() {
+            const fileInput = document.getElementById('video-file');
+            const title = document.getElementById('video-title').value;
+            const tags = document.getElementById('video-tags').value.split(',').map(t => t.trim()).filter(t => t);
+            const visibility = document.getElementById('video-visibility').value;
+
+            if (!fileInput.files[0]) {
+                showMessage('Please select a video file', 'error');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const filename = file.name;
+
+            // Check file size (500MB limit for regular users)
+            const maxSize = 500 * 1024 * 1024; // 500MB
+            if (file.size > maxSize) {
+                showMessage('File size exceeds 500MB limit. Please choose a smaller file or upgrade your plan.', 'error');
+                return;
+            }
+
+            // Check if upload would exceed quota
+            if (userQuota && userQuota.used + file.size > userQuota.limit) {
+                showMessage('Upload would exceed your storage limit. Please upgrade your plan.', 'error');
+                return;
+            }
+
+            if (userQuota && userQuota.videoCount >= userQuota.videoLimit) {
+                showMessage('You have reached your video limit. Please upgrade your plan.', 'error');
+                return;
+            }
+
+            document.getElementById('upload-progress').style.display = 'block';
+            document.getElementById('upload-btn').disabled = true;
+            document.getElementById('upload-status').textContent = 'Getting upload URL...';
+
+            try {
+                // Get presigned URL from admin API (allow regular users for upload)
+                const urlResponse = await fetch(`${ADMIN_API}?action=upload_url`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ filename: `videos/${filename}` })
+                });
+
+                const urlData = await urlResponse.json();
+                if (!urlResponse.ok) throw new Error(urlData.error);
+
+                document.getElementById('upload-progress-bar').style.width = '20%';
+                document.getElementById('upload-status').textContent = 'Uploading to S3...';
+
+                // Upload file to S3
+                const uploadResponse = await fetch(urlData.upload_url, {
+                    method: 'PUT',
+                    body: file,
+                    headers: { 'Content-Type': file.type }
+                });
+
+                if (!uploadResponse.ok) throw new Error('S3 upload failed');
+
+                document.getElementById('upload-progress-bar').style.width = '70%';
+                document.getElementById('upload-status').textContent = 'Adding metadata...';
+
+                // Add video metadata
+                await fetch(`${TAG_API}?action=add_video`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        video_id: filename,
+                        filename: filename,
+                        title: title || filename,
+                        tags: tags,
+                        owner: currentUser.email,
+                        visibility: visibility,
+                        size: file.size
+                    })
+                });
+
+                document.getElementById('upload-progress-bar').style.width = '100%';
+                document.getElementById('upload-status').textContent = 'Upload complete! Thumbnail will be generated automatically...';
+
+                setTimeout(() => {
+                    showMessage('Video uploaded successfully! Redirecting to videos...', 'success');
+                    setTimeout(() => {
+                        window.location.href = 'videos.html';
+                    }, 2000);
+                }, 1000);
+
+            } catch (error) {
+                showMessage(`Upload failed: ${error.message}`, 'error');
+            } finally {
+                document.getElementById('upload-btn').disabled = false;
+            }
+        }
+
+        async function addExternalVideo() {
+            const url = document.getElementById('external-video-url').value.trim();
+            const title = document.getElementById('external-video-title').value.trim();
+            const tags = document.getElementById('external-video-tags').value.split(',').map(t => t.trim()).filter(t => t);
+            const visibility = document.getElementById('external-video-visibility').value;
+
+            if (!url) {
+                showMessage('Please enter a video URL', 'error');
+                return;
+            }
+
+            if (!title) {
+                showMessage('Please enter a video title', 'error');
+                return;
+            }
+
+            // Validate URL format
+            const supportedDomains = ['youtube.com', 'youtu.be', 'rumble.com', 'facebook.com', 'fb.watch'];
+            const isValidUrl = supportedDomains.some(domain => url.toLowerCase().includes(domain));
+            
+            if (!isValidUrl) {
+                showMessage('Please enter a valid YouTube, Rumble, or Facebook video URL', 'error');
+                return;
+            }
+
+            document.getElementById('external-btn').disabled = true;
+            document.getElementById('external-btn').textContent = 'Adding Video...';
+
+            try {
+                // Determine video type
+                let videoType = 'external';
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                    videoType = 'youtube';
+                } else if (url.includes('rumble.com')) {
+                    videoType = 'rumble';
+                } else if (url.includes('facebook.com') || url.includes('fb.watch')) {
+                    videoType = 'facebook';
+                }
+                
+                // Generate a unique filename for the external video
+                const videoId = videoType + '_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                
+                // Extract thumbnail URL for YouTube videos
+                let thumbnailUrl = '';
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                    const ytVideoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
+                    if (ytVideoId) {
+                        thumbnailUrl = `https://img.youtube.com/vi/${ytVideoId}/maxresdefault.jpg`;
+                    }
+                }
+                
+                // Add external video metadata
+                const response = await fetch(`${TAG_API}?action=add_video`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        video_id: videoId,
+                        filename: videoId,
+                        title: title,
+                        tags: tags,
+                        owner: currentUser.email,
+                        visibility: visibility,
+                        video_type: videoType,
+                        external_url: url,
+                        thumbnail_url: thumbnailUrl
+                    })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Failed to add external video');
+
+                // Trigger thumbnail generation for external video
+                try {
+                    await fetch(`${ADMIN_API}?action=generate_thumbnail`, {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ 
+                            filename: videoId,
+                            video_type: videoType,
+                            external_url: url
+                        })
+                    });
+                } catch (error) {
+                    console.log('Thumbnail generation failed (non-critical):', error);
+                }
+
+                showMessage('External video added successfully! Redirecting to videos...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'videos.html';
+                }, 2000);
+
+            } catch (error) {
+                showMessage(`Failed to add external video: ${error.message}`, 'error');
+            } finally {
+                document.getElementById('external-btn').disabled = false;
+                document.getElementById('external-btn').textContent = '🔗 Add External Video';
+            }
+        }
+
+        function showMessage(message, type) {
+            const messagesDiv = document.getElementById('messages');
+            const alertClass = type === 'error' ? 'alert-danger' : 'alert-success';
+            messagesDiv.innerHTML = `<div class="alert ${alertClass}">${message}</div>`;
+            
+            setTimeout(() => {
+                messagesDiv.innerHTML = '';
+            }, 5000);
+        }
+
+        function showQuotaModal(data) {
+            const usage = data.current_usage || {};
+            const storageUsedGB = (usage.storage_used / (1024**3)).toFixed(2);
+            const storageLimitGB = (usage.storage_limit / (1024**3)).toFixed(1);
+            const storagePercent = usage.storage_limit > 0 ? ((usage.storage_used / usage.storage_limit) * 100).toFixed(1) : 0;
+            const videoPercent = usage.video_limit > 0 ? ((usage.video_count / usage.video_limit) * 100).toFixed(1) : 0;
+            
+            document.getElementById('quota-modal-message').innerHTML = `
+                <strong>${data.message}</strong><br>
+                <p class="mt-2">You need to either upgrade your plan or delete some videos to make room for new uploads.</p>
+            `;
+            
+            document.getElementById('quota-modal-usage').innerHTML = `
+                <h6>Current Usage:</h6>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span><strong>Storage:</strong></span>
+                        <span>${storageUsedGB} GB / ${storageLimitGB} GB (${storagePercent}%)</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar ${storagePercent >= 90 ? 'bg-danger' : 'bg-warning'}" style="width: ${Math.min(storagePercent, 100)}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="d-flex justify-content-between mb-1">
+                        <span><strong>Videos:</strong></span>
+                        <span>${usage.video_count} / ${usage.video_limit} (${videoPercent}%)</span>
+                    </div>
+                    <div class="progress">
+                        <div class="progress-bar ${videoPercent >= 90 ? 'bg-danger' : 'bg-warning'}" style="width: ${Math.min(videoPercent, 100)}%"></div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('quota-modal').style.display = 'block';
+        }
+
+        function closeQuotaModal() {
+            document.getElementById('quota-modal').style.display = 'none';
+        }
+    </script>
+    
+    <!-- Quota Exceeded Modal -->
+    <div class="modal" id="quota-modal" tabindex="-1" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 9999;">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">⚠️ Storage Limit Reached</h5>
+                    <button type="button" class="btn-close btn-close-white" onclick="closeQuotaModal()"></button>
+                </div>
+                <div class="modal-body">
+                    <p id="quota-modal-message"></p>
+                    <div id="quota-modal-usage" class="mt-3"></div>
+                </div>
+                <div class="modal-footer">
+                    <a href="profile.html#subscription" class="btn btn-primary">💎 Upgrade Plan</a>
+                    <a href="user-page.html?user=${encodeURIComponent(currentUser?.email || '')}" class="btn btn-secondary">🗑️ Manage Videos</a>
+                    <button type="button" class="btn btn-outline-secondary" onclick="closeQuotaModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

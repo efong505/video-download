@@ -1,0 +1,211 @@
+
+    {
+        "name": "Linda S. Carter",
+        "state": "New Jersey",
+        "office": "General Assembly District 21 Seat 1",
+        "party": "D",
+        "status": "active",
+        "bio": "Linda S. Carter is a Democratic member of the New Jersey General Assembly representing District 22 since her appointment in 2018. She previously served on the Plainfield City Council and as a Union County Freeholder. Born in Newark, Carter graduated from Arts High School and attended Union County College and Drake College of Business. She has worked as a legislative aide and in community development roles. Carter has focused on affordable housing, education funding, and economic development. She sponsored legislation to expand access to menstrual products in schools and homeless shelters, and supported measures for clean energy and infrastructure improvements. Carter serves on the Housing, Education, and Telecommunications and Utilities committees. She is a member of the New Jersey Legislative Black Caucus and has been recognized for her advocacy on behalf of underserved communities. Carter ran unopposed in the 2023 Democratic primary and is seeking re-election in District 21 following redistricting. Her legislative priorities include property tax relief, public safety, and workforce development. She has a strong record of constituent services in Plainfield, Fanwood, and surrounding municipalities.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=407",
+        "positions": {
+            "ABORTION": "Supports reproductive rights; voted for A3975/S2677 codifying Roe v. Wade protections into state law and expanding access to reproductive healthcare services, including contraception and abortion care without restrictions.",
+            "EDUCATION": "Champions increased school funding and equity; sponsored bills to provide free menstrual products in public schools (A4794) and expand career and technical education programs; supports full funding of the school funding formula and opposes vouchers that divert funds from public schools.",
+            "RELIGIOUS-FREEDOM": "Supports protections against discrimination based on religion; co-sponsored legislation to strengthen anti-bias education in schools and protect LGBTQ+ individuals, which includes religious exemptions for certain faith-based organizations in adoption services.",
+            "GUNS": "Advocates for stricter gun control; voted for magazine capacity limits, smart gun technology mandates, and enhanced background checks; supports A4769 requiring firearms safety training and safe storage laws.",
+            "TAXES": "Supports progressive taxation and property tax relief; backed the Anchor Property Tax Relief Program and millionaire's tax to fund schools and reduce middle-class burdens; opposes broad-based tax cuts favoring corporations.",
+            "IMMIGRATION": "Supports pathway to citizenship and driver’s licenses for undocumented residents; co-sponsored legislation to limit local law enforcement cooperation with ICE and expand in-state tuition for DREAMers.",
+            "FAMILY-VALUES": "Promotes policies supporting working families, including paid family leave expansion, affordable childcare, and menstrual equity; supports LGBTQ+ family protections and anti-discrimination measures in schools and public accommodations.",
+            "ELECTION-INTEGRITY": "Supports early voting, automatic voter registration, and no-excuse mail-in ballots; voted to restore voting rights to individuals on parole or probation and expand ballot access."
+        },
+        "endorsements": ["New Jersey Education Association", "Planned Parenthood Action Fund of New Jersey", "Sierra Club New Jersey Chapter"]
+    },
+    {
+        "name": "James J. Kennedy",
+        "state": "New Jersey",
+        "office": "General Assembly District 21 Seat 2",
+        "party": "D",
+        "status": "active",
+        "bio": "James J. Kennedy is a Democratic member of the New Jersey General Assembly representing District 22 since 2016. He previously served as Mayor of Rahway for 24 years, leading urban redevelopment and infrastructure projects. A lifelong resident of Rahway, Kennedy attended St. Mary’s High School and studied at Union County College. He has worked in public service and labor advocacy, serving as business manager for Laborers’ International Union Local 394. Kennedy has prioritized economic revitalization, public safety, and transportation improvements. He chairs the Assembly Environment and Solid Waste Committee and serves on the Transportation and Labor committees. Kennedy sponsored legislation to expand solar energy incentives, improve flood mitigation, and support union workers. He played a key role in securing funding for the Rahway River flood control project and NJ Transit upgrades. Kennedy is a member of the Irish American Caucus and has received awards for community leadership. Following redistricting, he is running in District 21, focusing on property tax relief and workforce housing.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=387",
+        "positions": {
+            "ABORTION": "Strong supporter of abortion rights; voted to enshrine reproductive freedom in state law (S3030/A4810) and expand insurance coverage for contraception and abortion services.",
+            "EDUCATION": "Advocates for fully funded public schools; supports increased state aid to reduce property tax reliance and expand pre-K; opposes privatization efforts and charter school expansion without oversight.",
+            "RELIGIOUS-FREEDOM": "Supports religious liberty with anti-discrimination protections; backed curriculum transparency laws while ensuring inclusive education; co-sponsored bills protecting faith-based adoption agencies with conscience exemptions.",
+            "GUNS": "Champions gun safety reforms; voted for .50 caliber bans, ghost gun prohibitions, and mandatory training; supports red flag laws and ammunition background checks.",
+            "TAXES": "Favors targeted tax relief for seniors and middle-class families; supported property tax rebate programs and corporate accountability measures; opposes regressive sales tax increases.",
+            "IMMIGRATION": "Endorses sanctuary policies and immigrant protections; voted for driver’s licenses for undocumented residents and in-state tuition eligibility for DREAMers.",
+            "FAMILY-VALUES": "Promotes paid leave, equal pay, and childcare access; supports marriage equality and transgender rights; advocates for policies strengthening economic security for all family structures.",
+            "ELECTION-INTEGRITY": "Supports expanded voting access, including 15 days of early voting and secure mail-in options; voted against strict voter ID requirements."
+        },
+        "endorsements": ["AFL-CIO New Jersey", "Environment New Jersey", "Moms Demand Action for Gun Sense"]
+    },
+    {
+        "name": "John DiMaio",
+        "state": "New Jersey",
+        "office": "General Assembly District 22 Seat 1",
+        "party": "R",
+        "status": "active",
+        "bio": "John DiMaio is a Republican member of the New Jersey General Assembly representing District 23 since 2009, serving as Minority Leader since 2022. A lifelong resident of Hackettstown, DiMaio owns a masonry contracting business and previously served as mayor and councilman. He graduated from Penn State University with a degree in agricultural business management. DiMaio has focused on fiscal responsibility, property tax relief, and Second Amendment rights. He serves on the Budget, Telecommunications, and Military and Veterans’ Affairs committees. DiMaio has sponsored bills to reduce business regulations, expand school choice, and protect agricultural land. He played a key role in opposing the Murphy administration’s tax increases and advocating for small business recovery post-COVID. DiMaio is a member of the Italian American Caucus and a strong supporter of law enforcement. Following redistricting, he is running in District 22, emphasizing lower taxes and government accountability. He has received awards from the NFIB and New Jersey Farm Bureau.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=303",
+        "positions": {
+            "ABORTION": "Opposes late-term abortions and taxpayer-funded abortion; supports parental notification and informed consent laws; voted against A3975 expanding abortion access without gestational limits.",
+            "EDUCATION": "Advocates for school choice, including vouchers and ESAs; supports increased funding for charter schools and homeschooling; opposes critical race theory and sexually explicit materials in curricula.",
+            "RELIGIOUS-FREEDOM": "Strong defender of religious liberty; sponsored resolutions opposing vaccine mandates on religious grounds and protecting faith-based organizations from discrimination in public contracts.",
+            "GUNS": "Ardent Second Amendment supporter; opposes magazine bans, assault weapon restrictions, and red flag laws; sponsors legislation to expand concealed carry and eliminate permit fees.",
+            "TAXES": "Champions across-the-board tax cuts; opposes millionaire’s tax and corporate surcharges; supports phasing out estate tax and reducing property taxes through mandate relief.",
+            "IMMIGRATION": "Supports strict enforcement of immigration laws; opposes sanctuary cities and in-state tuition for undocumented immigrants; advocates for E-Verify mandates for employers.",
+            "FAMILY-VALUES": "Promotes traditional marriage and family policies; supports parental rights in education and opposes transgender sports participation without biological criteria.",
+            "ELECTION-INTEGRITY": "Advocates for voter ID, signature verification, and banning ballot harvesting; supports regular voter roll purges and in-person voting as default."
+        },
+        "endorsements": ["NRA Political Victory Fund", "New Jersey Right to Life", "NFIB New Jersey"]
+    },
+    {
+        "name": "Erik Peterson",
+        "state": "New Jersey",
+        "office": "General Assembly District 22 Seat 2",
+        "party": "R",
+        "status": "active",
+        "bio": "Erik Peterson is a Republican member of the New Jersey General Assembly representing District 23 since 2009. An attorney by profession, Peterson graduated from Temple University School of Law and North Carolina State University. A resident of Clinton Township, he previously served on the Hunterdon County Board of Chosen Freeholders. Peterson has focused on reducing government spending, protecting property rights, and opposing overregulation. He serves on the Judiciary and Regulated Professions committees. Peterson has sponsored legislation to reform civil asset forfeiture, limit executive emergency powers, and expand telehealth services. He is a vocal critic of the state’s sanctuary policies and high tax burden. Peterson supports vocational training and agricultural preservation. Following redistricting, he is running in District 22, prioritizing affordability and public safety. He is a member of the Sportsmen’s Caucus and has been endorsed by law enforcement organizations for his pro-police stance.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=302",
+        "positions": {
+            "ABORTION": "Pro-life; supports gestational limits, ultrasound requirements, and defunding Planned Parenthood; voted against codification of Roe and expansion of abortion providers.",
+            "EDUCATION": "Supports expansion of charter schools and tax credits for private school tuition; opposes Common Core and mandates on gender identity curricula; advocates for local control.",
+            "RELIGIOUS-FREEDOM": "Champions conscience protections for healthcare workers and businesses; opposes mandates violating religious beliefs, including vaccine and curriculum requirements.",
+            "GUNS": "Defends gun ownership rights; opposes all new restrictions on firearms, ammunition, or accessories; supports constitutional carry and stand-your-ground laws.",
+            "TAXES": "Advocates for elimination of income tax on seniors and reduction of business taxes; supports spending caps and zero-based budgeting to control property taxes.",
+            "IMMIGRATION": "Calls for full enforcement of federal immigration laws; opposes driver’s licenses for undocumented and state benefits; supports border security funding.",
+            "FAMILY-VALUES": "Supports parental bill of rights and biological definitions in school sports; opposes explicit materials in libraries and drag performances for minors.",
+            "ELECTION-INTEGRITY": "Pushes for photo ID, proof of citizenship to register, and banning private funding of elections; supports paper ballots and mandatory audits."
+        },
+        "endorsements": ["Hunterdon County GOP", "New Jersey Family Policy Center", "Police Benevolent Association Local 188"]
+    },
+    {
+        "name": "Parker Space",
+        "state": "New Jersey",
+        "office": "General Assembly District 23 Seat 1",
+        "party": "R",
+        "status": "active",
+        "bio": "Parker Space is a Republican member of the New Jersey General Assembly representing District 24 since 2013. A fourth-generation farmer, Space owns Space Farms Zoo and Museum in Sussex County. He graduated from Newton High School and studied agribusiness at Delaware Valley College. Space previously served on the Wantage Township Committee. He has focused on agriculture, Second Amendment rights, and property tax reform. Space serves on the Agriculture, Commerce, and Telecommunications committees. He has sponsored bills to protect farmland from overdevelopment, expand broadband in rural areas, and reduce regulations on small businesses. Space is a strong advocate for hunters and anglers, supporting expanded access to public lands. He opposes high-density housing mandates and state overreach in local zoning. Space is running for re-election in District 23 after redistricting, emphasizing rural infrastructure and economic growth. He has received awards from the New Jersey Farm Bureau and sportsmen’s groups.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=354",
+        "positions": {
+            "ABORTION": "Opposes abortion after viability except to save the mother’s life; supports banning taxpayer funding and requiring parental consent for minors.",
+            "EDUCATION": "Favors school choice and tax deductions for homeschooling; opposes state mandates on curriculum content related to gender and sexuality; supports vocational agriculture programs.",
+            "RELIGIOUS-FREEDOM": "Defends religious expression in public spaces; opposes compelled speech or policies forcing participation in events contrary to faith, such as same-sex weddings.",
+            "GUNS": "Lifetime NRA member; opposes any restrictions on magazine size, firearm types, or carry permits; sponsors bills to nullify federal gun laws.",
+            "TAXES": "Pushes for repeal of rain tax and reduction of school taxes via consolidation; supports full deduction of property taxes on state returns.",
+            "IMMIGRATION": "Advocates for deportation of criminal aliens and ending benefits for undocumented; opposes sanctuary status and mandates local cooperation with ICE.",
+            "FAMILY-VALUES": "Promotes policies protecting children from explicit content and medical transitions; supports parental notification and opt-out rights.",
+            "ELECTION-INTEGRITY": "Requires voter ID and proof of residency; opposes mail-in ballots without request and automatic registration; supports hand-counted paper ballots."
+        },
+        "endorsements": ["New Jersey Outdoor Alliance", "Sussex County GOP", "Farm Bureau of New Jersey"]
+    },
+    {
+        "name": "Dawn Fantasia",
+        "state": "New Jersey",
+        "office": "General Assembly District 23 Seat 2",
+        "party": "R",
+        "status": "active",
+        "bio": "Dawn Fantasia is a Republican member of the New Jersey General Assembly representing District 24 since 2022. A resident of Andover Township, Fantasia previously served on the Sussex County Board of County Commissioners. She graduated from Centenary University with a degree in business administration. Fantasia has worked in finance and community advocacy, focusing on fiscal conservatism and public safety. She serves on the Health, Human Services, and State and Local Government committees. Fantasia has sponsored legislation to combat opioid addiction, streamline government services, and support veterans. She is a strong proponent of parental rights in education and opposes unfunded mandates on local governments. Following redistricting, she is running in District 23, prioritizing affordability and transparency. Fantasia has been recognized for her leadership in reducing county taxes and improving emergency services coordination. She is a member of the Women’s Legislative Caucus and advocates for small business recovery.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=429",
+        "positions": {
+            "ABORTION": "Supports restrictions after 20 weeks and conscience protections for medical providers; opposes state-funded abortion and late-term procedures without strict exceptions.",
+            "EDUCATION": "Advocates for transparency in school curricula and parental notification; supports expansion of charter schools and funding following students via ESAs.",
+            "RELIGIOUS-FREEDOM": "Protects faith-based organizations from government coercion; supports exemptions for religious schools and charities in anti-discrimination laws.",
+            "GUNS": "Opposes new gun control measures; supports concealed carry reciprocity and eliminating permit-to-purchase requirements; defends law-abiding gun owners.",
+            "TAXES": "Calls for spending restraints and elimination of redundant taxes; supports property tax caps and rebates for seniors; opposes gas tax increases.",
+            "IMMIGRATION": "Favors secure borders and legal immigration only; opposes in-state benefits for undocumented and requires proof of legal status for public services.",
+            "FAMILY-VALUES": "Champions parental rights and age-appropriate education; opposes gender ideology in early grades and irreversible medical interventions for minors.",
+            "ELECTION-INTEGRITY": "Mandates voter ID and regular audits; opposes no-excuse mail voting and drop boxes; supports citizenship verification for registration."
+        },
+        "endorsements": ["Sussex County Republican Committee", "New Jersey Coalition for Parental Rights", "Veterans of Foreign Wars NJ"]
+    },
+    {
+        "name": "Christian E. Barranco",
+        "state": "New Jersey",
+        "office": "General Assembly District 24 Seat 1",
+        "party": "R",
+        "status": "active",
+        "bio": "Christian E. Barranco is a Republican member of the New Jersey General Assembly representing District 26 since 2022. A U.S. Marine Corps veteran, Barranco served in Iraq and Afghanistan. A resident of Pompton Plains, he works as a financial advisor and previously served on the Jefferson Township Council. He graduated from William Paterson University with a degree in finance. Barranco has focused on veterans’ services, public safety, and economic growth. He serves on the Military and Veterans’ Affairs, Financial Institutions, and Labor committees. Barranco has sponsored bills to expand veteran benefits, reduce business regulations, and improve mental health access. He is a strong advocate for law enforcement and first responders. Following redistricting, he is running in District 24, emphasizing lower taxes and government reform. Barranco has received the Combat Action Ribbon and is active in veterans’ organizations. He prioritizes infrastructure and flood mitigation in northwestern New Jersey.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=428",
+        "positions": {
+            "ABORTION": "Pro-life; supports heartbeat bills and defunding abortion providers; opposes expansion of abortion access and mandates on religious hospitals.",
+            "EDUCATION": "Supports school choice and empowerment accounts; opposes mask mandates and CRT; advocates for transparency and parental veto over objectionable materials.",
+            "RELIGIOUS-FREEDOM": "Defends First Amendment rights; opposes vaccine mandates on religious grounds and protects pastors from compelled speech on marriage.",
+            "GUNS": "Strong Second Amendment advocate; opposes all restrictive laws; supports national reciprocity and eliminating background checks for permit holders.",
+            "TAXES": "Advocates for flat tax and elimination of estate tax; supports full property tax deduction and cutting pension taxes for retirees.",
+            "IMMIGRATION": "Enforce existing laws; build the wall; end chain migration; require E-Verify and deny benefits to non-citizens.",
+            "FAMILY-VALUES": "Promotes nuclear family and traditional values; supports ban on transgender athletes in girls’ sports and parental consent for gender treatments.",
+            "ELECTION-INTEGRITY": "Requires photo ID, proof of citizenship, and in-person voting; bans ballot harvesting and Zuckerbucks; mandates full forensic audits."
+        },
+        "endorsements": ["Marine Corps League NJ", "Morris County GOP", "Combat Veterans for Congress"]
+    },
+    {
+        "name": "Aura K. Dunn",
+        "state": "New Jersey",
+        "office": "General Assembly District 24 Seat 2",
+        "party": "R",
+        "status": "active",
+        "bio": "Aura K. Dunn is a Republican member of the New Jersey General Assembly representing District 25 since her appointment in 2020. A resident of Mendham, Dunn previously worked as a legislative aide and in public relations. She graduated from the University of Rhode Island with a degree in communications. Dunn has focused on environmental conservation, women’s issues, and small business support. She serves on the Environment, Science, and Women’s Caucus committees. Dunn has sponsored legislation to protect open space, expand broadband access, and support domestic violence victims. She played a key role in securing funding for clean water infrastructure and mental health services. Dunn is a member of the Bipartisan Women’s Legislative Caucus and advocates for maternal health. Following redistricting, she is running in District 24, prioritizing affordability and quality of life. She has been endorsed by environmental and business groups for her balanced approach.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=419",
+        "positions": {
+            "ABORTION": "Supports restrictions after 20 weeks and parental involvement; opposes late-term abortion and taxpayer funding; seeks alternatives like adoption support.",
+            "EDUCATION": "Favors increased funding with accountability; supports STEM expansion and civics education; opposes politicized curricula and mandates on local districts.",
+            "RELIGIOUS-FREEDOM": "Protects religious institutions from overreach; supports exemptions in public health orders and anti-discrimination laws for faith-based adoption agencies.",
+            "GUNS": "Supports background checks and mental health focus; opposes broad bans but backs red flag laws with due process; prioritizes school safety.",
+            "TAXES": "Advocates for property tax relief and incentive programs; supports small business tax credits and opposes new broad-based taxes.",
+            "IMMIGRATION": "Supports legal immigration and border security; opposes amnesty; favors merit-based system and local law enforcement cooperation with ICE.",
+            "FAMILY-VALUES": "Promotes policies supporting mothers and children; supports paid leave and childcare; advocates for domestic violence prevention and family counseling.",
+            "ELECTION-INTEGRITY": "Supports secure elections with ID verification and audit trails; backs early voting but with safeguards against fraud."
+        },
+        "endorsements": ["New Jersey Business & Industry Association", "League of Conservation Voters NJ", "Moms for America NJ"]
+    },
+    {
+        "name": "Brian Bergen",
+        "state": "New Jersey",
+        "office": "General Assembly District 25 Seat 1",
+        "party": "R",
+        "status": "active",
+        "bio": "Brian Bergen is a Republican member of the New Jersey General Assembly representing District 26 since 2020. A U.S. Army veteran and helicopter pilot, Bergen served in Afghanistan. A resident of Denville, he is a commercial airline pilot and small business owner. He graduated from the U.S. Military Academy at West Point with a degree in engineering. Bergen has focused on veterans’ issues, fiscal responsibility, and public safety. He serves on the Transportation, Military, and Public Safety committees. Bergen has sponsored bills to reduce regulations on businesses, expand veteran hiring preferences, and improve infrastructure. He is a critic of excessive government spending and mandates. Following redistricting, he is running in District 25, emphasizing lower taxes and energy independence. Bergen is active in Rotary and supports STEM education initiatives. He has received awards from aviation and veterans’ groups.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=418",
+        "positions": {
+            "ABORTION": "Opposes abortion except in cases of rape, incest, or life of mother; supports banning after 12 weeks and defunding Planned Parenthood.",
+            "EDUCATION": "Strong school choice advocate; supports ESAs and tax credits; opposes teacher vaccine mandates and explicit content in schools.",
+            "RELIGIOUS-FREEDOM": "Defends religious liberty in public and private spheres; opposes government compelling participation in same-sex ceremonies or transgender policies.",
+            "GUNS": "Second Amendment absolutist; opposes any new laws; supports permitless carry and repealing existing restrictions.",
+            "TAXES": "Cut spending first; eliminate corporate welfare; full property tax deduction; oppose all tax hikes.",
+            "IMMIGRATION": "Secure border; deport criminal aliens; end sanctuary policies; English as official language.",
+            "FAMILY-VALUES": "Traditional marriage; protect children from indoctrination; ban gender reassignment for minors; parental rights supreme.",
+            "ELECTION-INTEGRITY": "Voter ID mandatory; paper ballots only; ban machines; citizenship proof; felony for fraud."
+        },
+        "endorsements": ["West Point Society of NJ", "Morris County Young Republicans", "Aviation Association of NJ"]
+    },
+    {
+        "name": "Jay Webber",
+        "state": "New Jersey",
+        "office": "General Assembly District 25 Seat 2",
+        "party": "R",
+        "status": "active",
+        "bio": "Jay Webber is a Republican member of the New Jersey General Assembly representing District 26 since 2008, serving as Minority Conference Leader. An attorney, Webber graduated from Johns Hopkins University and Seton Hall Law School. A resident of Morris Plains, he previously chaired the Morris County GOP and worked as a legislative staffer. Webber has focused on tax relief, government reform, and constitutional rights. He serves on the Budget and Judiciary committees. Webber has sponsored landmark legislation to cap arbitration awards, reform public worker benefits, and protect property rights. He is a leading voice against tax increases and for school funding reform. Following redistricting, he is running in District 25, prioritizing affordability and energy costs. Webber ran for Congress in 2018 and is a frequent commentator on fiscal policy. He has received awards from taxpayer and business advocacy groups.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.njleg.state.nj.us/members/bio.asp?Leg=293",
+        "positions": {
+            "ABORTION": "Pro-life; supports pain-capable limits, parental consent, and banning taxpayer funding; opposes born-alive protection overrides.",
+            "EDUCATION": "Champions school choice and SALT deduction restoration; opposes state overreach in curricula; supports merit pay and ending tenure.",
+            "RELIGIOUS-FREEDOM": "Protects religious institutions and individuals from state mandates conflicting with doctrine, including marriage and healthcare.",
+            "GUNS": "Defends Second Amendment; opposes magazine limits, carry restrictions, and registration; supports national reciprocity.",
+            "TAXES": "Lower taxes across board; cap spending growth; restore full SALT; eliminate estate tax; audit every program.",
+            "IMMIGRATION": "Legal process only; no amnesty; secure border; E-Verify mandatory; end birthright for non-citizens.",
+            "FAMILY-VALUES": "Traditional family unit; parental rights in education and medicine; protect girls’ sports; ban explicit books in schools.",
+            "ELECTION-INTEGRITY": "Photo ID; clean voter rolls; ban mail voting without request; paper ballots; same-day registration banned."
+        },
+        "endorsements": ["Americans for Prosperity NJ", "New Jersey Taxpayers Association", "Morris County Chamber of Commerce"]
+    }

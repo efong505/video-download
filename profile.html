@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - Video Downloader</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="assets/js/token-validator.js"></script>
+    <style>
+        body {
+            padding-top: 80px;
+        }
+        .profile-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102,126,234,0.3);
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <div id="navbar-container" data-page="profile" data-icon="👤"></div>
+    
+    <!-- Page Header -->
+    <div class="container mt-4 mb-4">
+        <div class="text-center">
+            <h1 style="color: #667eea; font-weight: 700;">
+                <i class="fas fa-user-circle" style="font-size: 3rem; display: block; margin-bottom: 15px;"></i>
+                My Profile
+            </h1>
+            <p class="lead text-muted" id="welcome-message">Manage your account settings and subscription</p>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="profile-card">
+                    <h2 style="margin-bottom: 30px; color: #333;">Account Information</h2>
+                    
+                    <div id="message-container"></div>
+                    
+                    <div class="form-group">
+                        <label>Email:</label>
+                        <input type="email" id="user-email" readonly style="background: #f8f9fa; color: #6c757d;">
+                        <small style="color: #6c757d;">Email cannot be changed</small>
+                    </div>
+                    
+                    <hr style="margin: 30px 0;">
+                    
+                    <h3 style="margin-bottom: 20px; color: #333;">Change Password</h3>
+                    
+                    <div class="form-group">
+                        <label>Current Password:</label>
+                        <input type="password" id="current-password" placeholder="Enter current password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>New Password:</label>
+                        <input type="password" id="new-password" placeholder="Enter new password">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Confirm New Password:</label>
+                        <input type="password" id="confirm-password" placeholder="Confirm new password">
+                    </div>
+                    
+                    <button class="btn-primary" onclick="changePassword()">Change Password</button>
+                </div>
+                
+                <!-- Subscription Dashboard -->
+                <div class="profile-card">
+                    <h2 style="margin-bottom: 30px; color: #333;">📊 Subscription & Usage</h2>
+                    
+                    <div id="subscription-loading" class="text-center" style="padding: 20px;">
+                        <div class="spinner-border" role="status"></div>
+                        <p>Loading subscription data...</p>
+                    </div>
+                    
+                    <div id="subscription-content" style="display: none;">
+                        <!-- Current Plan -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center;">
+                                    <h4 style="color: #667eea; margin-bottom: 10px;">Current Plan</h4>
+                                    <div id="current-tier" style="font-size: 1.5rem; font-weight: bold; text-transform: uppercase;">Free</div>
+                                    <div id="tier-price" style="color: #666; margin-top: 5px;">$0/month</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; text-align: center;">
+                                    <h4 style="color: #667eea; margin-bottom: 10px;">Status</h4>
+                                    <div id="subscription-status" style="font-size: 1.2rem; font-weight: bold;">Active</div>
+                                    <div id="next-billing" style="color: #666; margin-top: 5px;">-</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Usage Stats -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div style="background: #e8f4fd; padding: 20px; border-radius: 8px;">
+                                    <h5 style="color: #0066cc; margin-bottom: 15px;">📁 Storage Usage</h5>
+                                    <div class="progress mb-2" style="height: 20px;">
+                                        <div id="storage-progress" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+                                    </div>
+                                    <div id="storage-text" style="font-size: 14px; color: #666;">0 GB / 2 GB used</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div style="background: #fff3cd; padding: 20px; border-radius: 8px;">
+                                    <h5 style="color: #856404; margin-bottom: 15px;">🎬 Video Count</h5>
+                                    <div class="progress mb-2" style="height: 20px;">
+                                        <div id="video-progress" class="progress-bar bg-warning" role="progressbar" style="width: 0%;"></div>
+                                    </div>
+                                    <div id="video-text" style="font-size: 14px; color: #666;">0 / 50 videos</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Upgrade Options -->
+                        <div id="upgrade-section">
+                            <h4 style="margin-bottom: 20px; color: #333;">⬆️ Upgrade Your Plan</h4>
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <div class="card h-100" style="border: 2px solid #28a745;">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title" style="color: #28a745;">Premium</h5>
+                                            <h3 style="color: #333;">$9.99<small>/month</small></h3>
+                                            <ul class="list-unstyled mt-3">
+                                                <li>✅ 25GB Storage</li>
+                                                <li>✅ 500 Videos</li>
+                                                <li>✅ Priority Processing</li>
+                                                <li>✅ Custom Branding</li>
+                                            </ul>
+                                            <button class="btn btn-success" onclick="upgradeSubscription('premium')">Upgrade to Premium</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100" style="border: 2px solid #007bff;">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title" style="color: #007bff;">Pro</h5>
+                                            <h3 style="color: #333;">$24.99<small>/month</small></h3>
+                                            <ul class="list-unstyled mt-3">
+                                                <li>✅ 100GB Storage</li>
+                                                <li>✅ 2000 Videos</li>
+                                                <li>✅ Analytics & API</li>
+                                                <li>✅ Bulk Operations</li>
+                                            </ul>
+                                            <button class="btn btn-primary" onclick="upgradeSubscription('pro')">Upgrade to Pro</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="card h-100" style="border: 2px solid #6f42c1;">
+                                        <div class="card-body text-center">
+                                            <h5 class="card-title" style="color: #6f42c1;">Enterprise</h5>
+                                            <h3 style="color: #333;">$99.99<small>/month</small></h3>
+                                            <ul class="list-unstyled mt-3">
+                                                <li>✅ Unlimited Storage</li>
+                                                <li>✅ Unlimited Videos</li>
+                                                <li>✅ White-label</li>
+                                                <li>✅ Dedicated Support</li>
+                                            </ul>
+                                            <button class="btn" style="background: #6f42c1; color: white;" onclick="upgradeSubscription('enterprise')">Upgrade to Enterprise</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Cancel Subscription -->
+                        <div id="cancel-section" style="display: none; margin-top: 30px; padding: 20px; background: #f8d7da; border-radius: 8px;">
+                            <h5 style="color: #721c24;">Cancel Subscription</h5>
+                            <p style="color: #721c24; margin-bottom: 15px;">Your subscription will remain active until the end of your billing period.</p>
+                            <button class="btn btn-danger" onclick="cancelSubscription()">Cancel Subscription</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/common-utils.js"></script>
+    <script>
+        let currentUser = null;
+        let subscriptionData = null;
+
+        // Initialize page
+        window.addEventListener('load', function() {
+            if (!requireAuth()) return;
+            
+            currentUser = getUserData();
+            
+            // Update welcome message
+            const fullName = [currentUser.first_name, currentUser.last_name].filter(n => n).join(' ');
+            if (fullName) {
+                document.getElementById('welcome-message').textContent = `Welcome, ${fullName}!`;
+            }
+            
+            // Populate user info
+            document.getElementById('user-email').value = currentUser.email;
+            
+            // Initialize navbar
+            fetch('navbar.html')
+                .then(r => r.text())
+                .then(html => {
+                    document.getElementById('navbar-container').innerHTML = html;
+                    initNavbar();
+                });
+            
+            // Check for PayPal return parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const subscriptionId = urlParams.get('subscription_id');
+            const token = urlParams.get('token');
+            
+            if (subscriptionId && token) {
+                activateSubscription(subscriptionId);
+            } else {
+                // Load subscription data
+                loadSubscriptionData();
+            }
+        });
+
+        async function changePassword() {
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            // Clear previous messages
+            document.getElementById('message-container').innerHTML = '';
+            
+            // Validation
+            if (!currentPassword || !newPassword || !confirmPassword) {
+                showMessage('Please fill in all password fields', 'danger');
+                return;
+            }
+            
+            if (newPassword !== confirmPassword) {
+                showMessage('New passwords do not match', 'danger');
+                return;
+            }
+            
+            if (newPassword.length < 6) {
+                showMessage('New password must be at least 6 characters long', 'danger');
+                return;
+            }
+            
+            try {
+                const response = await apiRequest(`${API_ENDPOINTS.AUTH}?action=change_password`, {
+                    method: 'PUT',
+                    body: JSON.stringify({
+                        current_password: currentPassword,
+                        new_password: newPassword
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    showNotification('Password changed successfully!', 'success');
+                    showMessage('Password changed successfully!', 'success');
+                    // Clear form
+                    document.getElementById('current-password').value = '';
+                    document.getElementById('new-password').value = '';
+                    document.getElementById('confirm-password').value = '';
+                } else {
+                    throw new Error(data.error || 'Failed to change password');
+                }
+            } catch (error) {
+                showMessage(`Failed to change password: ${error.message}`, 'danger');
+            }
+        }
+        
+        function showMessage(message, type) {
+            const container = document.getElementById('message-container');
+            container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+        }
+        
+        async function loadSubscriptionData() {
+            try {
+                // CRITICAL: Admin/Super User Unlimited Access Logic
+                // DO NOT REMOVE: Admins and super users get unlimited storage/videos
+                // This check must happen BEFORE PayPal API calls
+                if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
+                    // Still fetch usage stats for display
+                    try {
+                        const usageResponse = await apiRequest(`${API_ENDPOINTS.PAYPAL}?action=usage&user_id=${currentUser.user_id}`);
+                        const usageData = await usageResponse.json();
+                        
+                        if (usageResponse.ok) {
+                            subscriptionData = {
+                                subscription_tier: 'admin',
+                                subscription_status: 'active',
+                                storage_used: usageData.storage_used || 0,
+                                storage_limit: -1,
+                                video_count: usageData.video_count || 0,
+                                video_limit: -1,
+                                storage_percentage: 0,
+                                video_percentage: 0
+                            };
+                        } else {
+                            subscriptionData = {
+                                subscription_tier: 'admin',
+                                subscription_status: 'active',
+                                storage_used: 0,
+                                storage_limit: -1,
+                                video_count: 0,
+                                video_limit: -1,
+                                storage_percentage: 0,
+                                video_percentage: 0
+                            };
+                        }
+                    } catch (error) {
+                        console.error('Failed to fetch usage:', error);
+                        subscriptionData = {
+                            subscription_tier: 'admin',
+                            subscription_status: 'active',
+                            storage_used: 0,
+                            storage_limit: -1,
+                            video_count: 0,
+                            video_limit: -1,
+                            storage_percentage: 0,
+                            video_percentage: 0
+                        };
+                    }
+                    displaySubscriptionData(subscriptionData);
+                    return;
+                }
+                
+                // Get subscription data from PayPal API
+                const response = await apiRequest(`${API_ENDPOINTS.PAYPAL}?action=subscription_status&user_id=${currentUser.user_id}`);
+                const data = await response.json();
+                
+                if (response.ok) {
+                    console.log('Subscription data:', data);
+                    
+                    // Get usage stats
+                    const usageResponse = await apiRequest(`${API_ENDPOINTS.PAYPAL}?action=usage&user_id=${currentUser.user_id}`);
+                    const usageData = await usageResponse.json();
+                    
+                    if (usageResponse.ok) {
+                        subscriptionData = {
+                            subscription_tier: data.subscription_tier || 'free',
+                            subscription_status: data.subscription_status || 'active',
+                            storage_used: usageData.storage_used || 0,
+                            storage_limit: usageData.storage_limit || 2147483648,
+                            video_count: usageData.video_count || 0,
+                            video_limit: usageData.video_limit || 50,
+                            storage_percentage: usageData.storage_percentage || 0,
+                            video_percentage: usageData.video_percentage || 0,
+                            next_billing_date: data.next_billing_date
+                        };
+                    } else {
+                        // Fallback to basic subscription data
+                        subscriptionData = {
+                            subscription_tier: data.subscription_tier || 'free',
+                            subscription_status: data.subscription_status || 'active',
+                            storage_used: 0,
+                            storage_limit: 2147483648,
+                            video_count: 0,
+                            video_limit: 50,
+                            storage_percentage: 0,
+                            video_percentage: 0,
+                            next_billing_date: data.next_billing_date
+                        };
+                    }
+                    
+                    displaySubscriptionData(subscriptionData);
+                } else {
+                    throw new Error(data.error || 'Failed to load subscription data');
+                }
+            } catch (error) {
+                console.error('Error loading subscription:', error);
+                document.getElementById('subscription-loading').innerHTML = 
+                    '<div class="alert alert-danger">Failed to load subscription data</div>';
+            }
+        }
+        
+        function displaySubscriptionData(data) {
+            document.getElementById('subscription-loading').style.display = 'none';
+            document.getElementById('subscription-content').style.display = 'block';
+            
+            // Current plan
+            const tierNames = {
+                'free': 'Free',
+                'admin': 'Admin (Unlimited)',
+                'premium': 'Premium', 
+                'pro': 'Pro',
+                'enterprise': 'Enterprise'
+            };
+            const tierPrices = {
+                'free': '$0/month',
+                'admin': 'Unlimited Access',
+                'premium': '$9.99/month',
+                'pro': '$24.99/month', 
+                'enterprise': '$99.99/month'
+            };
+            
+            document.getElementById('current-tier').textContent = tierNames[data.subscription_tier] || 'Free';
+            document.getElementById('tier-price').textContent = tierPrices[data.subscription_tier] || '$0/month';
+            document.getElementById('subscription-status').textContent = data.subscription_status || 'Active';
+            
+            if (data.next_billing_date) {
+                const date = new Date(data.next_billing_date).toLocaleDateString();
+                document.getElementById('next-billing').textContent = `Next billing: ${date}`;
+            }
+            
+            // Usage stats
+            const storageUsed = data.storage_used || 0;
+            const storageLimit = data.storage_limit || 2147483648; // 2GB
+            const videoCount = data.video_count || 0;
+            const videoLimit = data.video_limit || 50;
+            
+            const storagePercent = storageLimit > 0 ? (storageUsed / storageLimit) * 100 : 0;
+            const videoPercent = videoLimit > 0 ? (videoCount / videoLimit) * 100 : 0;
+            
+            document.getElementById('storage-progress').style.width = `${Math.min(storagePercent, 100)}%`;
+            
+            if (storageLimit === -1) {
+                document.getElementById('storage-text').textContent = 
+                    `${(storageUsed / (1024**3)).toFixed(2)} GB / Unlimited`;
+            } else {
+                document.getElementById('storage-text').textContent = 
+                    `${(storageUsed / (1024**3)).toFixed(2)} GB / ${(storageLimit / (1024**3)).toFixed(0)} GB used`;
+            }
+                
+            document.getElementById('video-progress').style.width = `${Math.min(videoPercent, 100)}%`;
+            
+            if (videoLimit === -1) {
+                document.getElementById('video-text').textContent = `${videoCount} / Unlimited videos`;
+            } else {
+                document.getElementById('video-text').textContent = `${videoCount} / ${videoLimit} videos`;
+            }
+            
+            // Show/hide upgrade section
+            if (data.subscription_tier === 'free') {
+                document.getElementById('upgrade-section').style.display = 'block';
+                document.getElementById('cancel-section').style.display = 'none';
+            } else if (data.subscription_tier === 'admin') {
+                // Admin/Super users don't need upgrade options
+                document.getElementById('upgrade-section').style.display = 'none';
+                document.getElementById('cancel-section').style.display = 'none';
+            } else {
+                document.getElementById('upgrade-section').style.display = 'none';
+                document.getElementById('cancel-section').style.display = 'block';
+            }
+        }
+        
+        async function upgradeSubscription(tier) {
+            try {
+                // Clean URL for return/cancel URLs
+                const cleanUrl = window.location.origin + window.location.pathname;
+                
+                const response = await apiRequest(`${API_ENDPOINTS.PAYPAL}?action=create_subscription`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        user_id: currentUser.user_id,
+                        tier: tier,
+                        email: currentUser.email,
+                        return_url: cleanUrl,
+                        cancel_url: cleanUrl
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.approval_url) {
+                    // Redirect to PayPal for approval
+                    window.location.href = data.approval_url;
+                } else {
+                    throw new Error(data.error || 'Failed to create subscription');
+                }
+            } catch (error) {
+                alert(`Failed to upgrade subscription: ${error.message}`);
+            }
+        }
+        
+        async function cancelSubscription() {
+            if (!confirm('Are you sure you want to cancel your subscription? You will be downgraded to the free tier at the end of your billing period.')) {
+                return;
+            }
+            
+            try {
+                const response = await apiRequest(`${API_ENDPOINTS.PAYPAL}?action=cancel_subscription`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        user_id: currentUser.user_id
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Subscription cancelled successfully. You will retain access until the end of your billing period.');
+                    loadSubscriptionData(); // Refresh data
+                } else {
+                    throw new Error(data.error || 'Failed to cancel subscription');
+                }
+            } catch (error) {
+                alert(`Failed to cancel subscription: ${error.message}`);
+            }
+        }
+        
+        async function activateSubscription(subscriptionId) {
+            try {
+                const response = await apiRequest(`${API_ENDPOINTS.PAYPAL}?action=activate_subscription&subscription_id=${subscriptionId}&user_id=${currentUser.user_id}`, {
+                    method: 'POST'
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok && data.status === 'activated') {
+                    // Clean URL and show success message
+                    window.history.replaceState({}, document.title, window.location.pathname);
+                    showMessage('Subscription activated successfully!', 'success');
+                    
+                    // Reload subscription data
+                    setTimeout(() => {
+                        loadSubscriptionData();
+                    }, 1000);
+                } else {
+                    showMessage('Subscription is still pending activation. Please wait a few minutes and refresh the page.', 'warning');
+                    loadSubscriptionData();
+                }
+            } catch (error) {
+                console.error('Activation error:', error);
+                showMessage('Error activating subscription. Please contact support if this persists.', 'danger');
+                loadSubscriptionData();
+            }
+        }
+        
+        function viewMyPage() {
+            const userData = localStorage.getItem('user_data');
+            if (userData) {
+                const user = JSON.parse(userData);
+                window.location.href = `user-page.html?user=${encodeURIComponent(user.email)}`;
+            }
+        }
+        
+
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+</body>
+</html>

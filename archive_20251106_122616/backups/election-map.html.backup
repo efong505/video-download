@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary Meta Tags -->
+    <title>Christian Conservatives Today Election Map - Find Pro-Life Candidates 2025-2026</title>
+    <meta name="title" content="Christian Conservatives Today Election Map - Find Pro-Life Candidates">
+    <meta name="description"
+        content="Interactive election map for Christian conservative voters. Find pro-life, pro-family, pro-freedom candidates in all 50 states. Free voter guides for 2025-2026 elections.">
+    <meta name="keywords"
+        content="christian voter guide, pro-life candidates, conservative election map, 2025 elections, 2026 elections, biblical voting, christian conservative, voter guide">
+    <meta name="author" content="Christian Conservative Election Platform">
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://christianconservativestoday.com/election-map.html">
+    <meta property="og:title"
+        content="Christian Conservatives Today Election Map - Find Christian Conservative Candidates In Your State Today">
+    <meta property="og:description"
+        content="Interactive election map for Christian voters. Find pro-life, pro-family candidates in all 50 states. Free voter guides for 2025-2026 elections.">
+    <meta property="og:image" content="https://christianconservativestoday.com/images/election-map-preview.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Christian Conservatives Today Election Map showing all 50 US states">
+    <!-- <meta property="fb:app_id" content="1950677525499050"> -->
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="https://election-map-preview.com/election-map.html">
+    <meta name="twitter:title"
+        content="Christian Conservatives Today Election Map - Find Christian Conservative Candidates In Your State Today">
+    <meta name="twitter:description"
+        content="Interactive election map for Christian voters. Find pro-life, pro-family candidates in all 50 states.">
+    <meta name="twitter:image" content="https://christianconservativestoday.com/images/election-map-preview.jpg">
+    <meta name="twitter:image:alt" content="Christian Conservatives Today Election Map">
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://christianconservativestoday.com/election-map.html">
+    <!-- Existing stylesheets -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://d3js.org/topojson.v3.min.js"></script>
+    <style>
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 0;
+        }
+
+        .navbar-custom .nav-link {
+            color: #333 !important;
+            font-weight: 500;
+        }
+
+        .navbar-custom .nav-link:hover {
+            color: #667eea !important;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+
+        .state-map-container {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .state-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .state-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .state-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .state-card.has-contributor {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+        }
+
+        .state-card .badge {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+
+        .contributor-info {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .candidate-card {
+            background: white;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 10px 0;
+        }
+
+        .event-card {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        #us-map {
+            width: 100%;
+            height: 600px;
+            margin: 0 auto;
+            display: block;
+        }
+
+        @media (max-width: 768px) {
+            #us-map {
+                height: 400px;
+            }
+        }
+
+        .state {
+            fill: #667eea;
+            stroke: white;
+            stroke-width: 1.5;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .state:hover {
+            fill: #764ba2;
+            stroke-width: 2.5;
+        }
+
+        .state.has-contributor {
+            fill: #28a745;
+        }
+
+        .state.has-contributor:hover {
+            fill: #20c997;
+        }
+
+        .state-label {
+            fill: white;
+            font-size: 10px;
+            font-weight: bold;
+            pointer-events: none;
+            text-anchor: middle;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .view-toggle {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .view-toggle button {
+            margin: 0 5px;
+        }
+
+        .view-toggle button.active {
+            background-color: #667eea;
+            border-color: #667eea;
+            color: white;
+        }
+
+        #scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        #scroll-to-top:hover {
+            background: #764ba2;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .disclaimer {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+    </style>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-6K5EF6N17M"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-6K5EF6N17M');
+    </script>
+</head>
+<body>
+    <!-- Loading Spinner -->
+    <div id="loading-overlay"
+        style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); z-index: 9999; display: flex; align-items: center; justify-content: center; flex-direction: column;">
+        <div class="spinner-border text-primary" role="status" style="width: 4rem; height: 4rem;">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <p class="mt-3 text-muted" style="font-size: 18px;">Loading election data...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div id="error-message"
+        style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 10000; max-width: 500px; width: 90%;">
+        <div class="alert alert-danger" style="box-shadow: 0 8px 25px rgba(0,0,0,0.3);">
+            <h5 class="alert-heading">⚠️ Unable to Load Election Data</h5>
+            <p>We're having trouble connecting to our database. This could be due to:</p>
+            <ul>
+                <li>Temporary server maintenance</li>
+                <li>Your internet connection</li>
+                <li>High traffic volume</li>
+            </ul>
+            <hr>
+            <p class="mb-0">
+                <button class="btn btn-primary" onclick="location.reload()">🔄 Try Again</button>
+                <button class="btn btn-outline-secondary ms-2" onclick="hideErrorMessage()">Close</button>
+            </p>
+        </div>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container">
+            <a class="navbar-brand" href="/" style="color: #667eea; font-weight: bold;">🗺️ Election Map</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="videos.html">Videos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="articles.html">Articles</a></li>
+                    <li class="nav-item"><a class="nav-link" href="news.html">News</a></li>
+                    <li class="nav-item"><a class="nav-link" href="resources.html">Resources</a></li>
+                    <li class="nav-item" id="admin-link" style="display:none;"><a class="nav-link"
+                            href="admin-contributors.html">Admin</a></li>
+                    <li class="nav-item" id="auth-link"><a class="nav-link" href="login.html">Login</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="dashboard-header">
+        <div class="container">
+            <h1>🗺️ Christian Conservative Election Map</h1>
+            <p>Find Pro-Life, Pro-Family, Pro-Freedom Candidates in Your State</p>
+        </div>
+    </div>
+
+    <!-- Data Disclaimer -->
+    <div class="container mt-3">
+        <div class="disclaimer">
+            <strong>⚠️ Disclaimer:</strong> Election data is updated regularly but may not reflect the most recent
+            changes. Candidate information is gathered from public sources and campaign materials. We encourage voters
+            to verify information directly with candidates and official election sources. Last database update: <span
+                id="last-update-date">Loading...</span>
+        </div>
+    </div>
+
+    <!-- Email Capture Banner -->
+    <div class="container mt-3">
+        <div class="alert alert-success" id="email-capture-banner"
+            style="border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h5 class="mb-1">📧 Get Election Updates & Voter Guides</h5>
+                    <small>Stay informed about key races, candidate updates, and critical election dates in your
+                        state.</small>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="first-name-input" class="form-control mb-2" placeholder="First Name *" required>
+                    <input type="text" id="last-name-input" class="form-control mb-2" placeholder="Last Name (optional)">
+                    <div class="input-group">
+                        <input type="email" id="email-input" class="form-control" placeholder="your@email.com *" required>
+                        <button class="btn btn-primary" type="button" onclick="subscribeEmail()">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Social Share Section -->
+    <div class="container mt-3">
+        <div class="card" style="border-radius: 12px; border: 2px solid #667eea;">
+            <div class="card-body text-center py-3">
+                <h6 class="mb-3">📢 Share This Tool With Fellow Christians:</h6>
+                <div class="d-flex flex-wrap justify-content-center gap-2">
+                    <button type="button" class="btn btn-primary" onclick="shareOnFacebook()" title="Share on Facebook" style="min-width: 120px;">
+                        📘 Facebook
+                    </button>
+                    <button type="button" class="btn btn-info text-white" onclick="shareOnTwitter()"
+                        title="Share on Twitter/X" style="min-width: 120px;">
+                        🐦 Twitter/X
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="shareViaEmail()" title="Share via Email" style="min-width: 120px;">
+                        ✉️ Email
+                    </button>
+                    <button type="button" class="btn btn-secondary" onclick="copyLink()" title="Copy Link" style="min-width: 120px;">
+                        🔗 Copy Link
+                    </button>
+                </div>
+                <div id="copy-success" class="mt-2" style="display: none;">
+                    <small class="text-success">✓ Link copied to clipboard!</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="map-container">
+        <div class="state-map-container">
+            <div class="view-toggle">
+                <button id="map-view-btn" class="btn btn-primary active" onclick="showMapView()">🗺️ Map View</button>
+                <button id="grid-view-btn" class="btn btn-outline-primary" onclick="showGridView()">📋 Grid
+                    View</button>
+            </div>
+            <div id="map-view">
+                <svg id="us-map"></svg>
+            </div>
+            <div id="grid-view" style="display: none;">
+                <div id="state-grid" class="state-grid"></div>
+            </div>
+        </div>
+
+        <div id="state-details" style="display: none;">
+            <div class="contributor-info">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 id="state-name" class="mb-0"></h4>
+                    <button class="btn btn-outline-primary btn-sm" onclick="scrollToTop()" title="Back to map">
+                        ⬆️ Back to Map
+                    </button>
+                </div>
+                <div id="contributor-section"></div>
+                <div id="candidates-section"></div>
+                <div id="events-section"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scroll to Top Button -->
+    <button id="scroll-to-top" onclick="scrollToTop()" title="Back to top">
+        ⬆️
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script>
+        const CONTRIBUTORS_API = 'https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors';
+
+        // Check authentication status and update nav
+        function updateAuthLink() {
+            const token = localStorage.getItem('auth_token');
+            const userRole = localStorage.getItem('userRole');
+            const authLink = document.getElementById('auth-link');
+            const adminLink = document.getElementById('admin-link');
+            if (token) {
+                authLink.innerHTML = '<a class="nav-link" href="#" onclick="logout()">Logout</a>';
+                if (userRole === 'super_user' || userRole === 'admin' || userRole === 'editor') {
+                    adminLink.style.display = 'block';
+                }
+            }
+        }
+
+
+        function showErrorMessage() {
+            document.getElementById('error-message').style.display = 'block';
+        }
+
+        function hideErrorMessage() {
+            document.getElementById('error-message').style.display = 'none';
+        }
+
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
+        const states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire', 'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'];
+
+        let contributors = [];
+        let candidates = [];
+        let events = [];
+        let races = [];
+        let summaries = [];
+
+        async function loadData() {
+            try {
+                // Show loading spinner
+                document.getElementById('loading-overlay').style.display = 'flex';
+
+                const [contribResp, candResp, eventsResp, racesResp, summariesResp] = await Promise.all([
+                    fetch(CONTRIBUTORS_API + '?resource=contributors'),
+                    fetch(CONTRIBUTORS_API + '?resource=candidates'),
+                    fetch(CONTRIBUTORS_API + '?resource=events'),
+                    fetch(CONTRIBUTORS_API + '?resource=races'),
+                    fetch(CONTRIBUTORS_API + '?resource=summaries')
+                ]);
+
+                contributors = await contribResp.json();
+                candidates = await candResp.json();
+                events = await eventsResp.json();
+                races = await racesResp.json();
+                summaries = await summariesResp.json();
+
+                renderStateGrid();
+                renderUSMap();
+
+                // Hide loading spinner
+                document.getElementById('loading-overlay').style.display = 'none';
+
+            } catch (error) {
+                console.error('Error loading data:', error);
+                // Hide spinner and show error
+                document.getElementById('loading-overlay').style.display = 'none';
+                showErrorMessage();
+            }
+            try {
+                const [contribResp, candResp, eventsResp, racesResp, summariesResp] = await Promise.all([
+                    fetch(CONTRIBUTORS_API + '?resource=contributors'),
+                    fetch(CONTRIBUTORS_API + '?resource=candidates'),
+                    fetch(CONTRIBUTORS_API + '?resource=events'),
+                    fetch(CONTRIBUTORS_API + '?resource=races'),
+                    fetch(CONTRIBUTORS_API + '?resource=summaries')
+                ]);
+
+                contributors = await contribResp.json();
+                candidates = await candResp.json();
+                events = await eventsResp.json();
+                races = await racesResp.json();
+                summaries = await summariesResp.json();
+                console.log('Loaded summaries:', summaries);
+                console.log('Loaded races:', races);
+                console.log('Loaded candidates:', candidates);
+
+                renderStateGrid();
+                renderUSMap();
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        function renderUSMap() {
+            const svg = d3.select('#us-map')
+                .attr('viewBox', '0 0 960 600')
+                .attr('preserveAspectRatio', 'xMidYMid meet');
+
+            const projection = d3.geoAlbersUsa()
+                .scale(1200)
+                .translate([480, 300]);
+
+            const path = d3.geoPath().projection(projection);
+
+            d3.json('https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json').then(us => {
+                const statesFeatures = topojson.feature(us, us.objects.states).features;
+
+                svg.selectAll('.state')
+                    .data(statesFeatures)
+                    .enter().append('path')
+                    .attr('class', d => {
+                        const stateName = getStateName(d.id);
+                        const hasContributor = contributors.some(c => c.state === stateName && c.status === 'active');
+                        return 'state' + (hasContributor ? ' has-contributor' : '');
+                    })
+                    .attr('d', path)
+                    .on('click', function (event, d) {
+                        const stateName = getStateName(d.id);
+                        console.log('Map clicked, state ID:', d.id, 'State name:', stateName);
+                        selectState(stateName);
+                    })
+                    .append('title')
+                    .text(d => {
+                        const stateName = getStateName(d.id);
+                        const count = contributors.filter(c => c.state === stateName).length;
+                        return stateName + (count > 0 ? ' (' + count + ' correspondent' + (count > 1 ? 's' : '') + ')' : '');
+                    });
+            });
+        }
+
+        function getStateName(id) {
+            const stateIds = {1: 'Alabama', '01': 'Alabama', 2: 'Alaska', '02': 'Alaska', 4: 'Arizona', '04': 'Arizona', 5: 'Arkansas', '05': 'Arkansas', 6: 'California', '06': 'California', 8: 'Colorado', '08': 'Colorado', 9: 'Connecticut', '09': 'Connecticut', 10: 'Delaware', 12: 'Florida', 13: 'Georgia', 15: 'Hawaii', 16: 'Idaho', 17: 'Illinois', 18: 'Indiana', 19: 'Iowa', 20: 'Kansas', 21: 'Kentucky', 22: 'Louisiana', 23: 'Maine', 24: 'Maryland', 25: 'Massachusetts', 26: 'Michigan', 27: 'Minnesota', 28: 'Mississippi', 29: 'Missouri', 30: 'Montana', 31: 'Nebraska', 32: 'Nevada', 33: 'New Hampshire', 34: 'New Jersey', 35: 'New Mexico', 36: 'New York', 37: 'North Carolina', 38: 'North Dakota', 39: 'Ohio', 40: 'Oklahoma', 41: 'Oregon', 42: 'Pennsylvania', 44: 'Rhode Island', 45: 'South Carolina', 46: 'South Dakota', 47: 'Tennessee', 48: 'Texas', 49: 'Utah', 50: 'Vermont', 51: 'Virginia', 53: 'Washington', 54: 'West Virginia', 55: 'Wisconsin', 56: 'Wyoming'};
+            return stateIds[id] || '';
+        }
+
+        function showMapView() {
+            document.getElementById('map-view').style.display = 'block';
+            document.getElementById('grid-view').style.display = 'none';
+            document.getElementById('map-view-btn').classList.add('active');
+            document.getElementById('map-view-btn').classList.remove('btn-outline-primary');
+            document.getElementById('map-view-btn').classList.add('btn-primary');
+            document.getElementById('grid-view-btn').classList.remove('active');
+            document.getElementById('grid-view-btn').classList.remove('btn-primary');
+            document.getElementById('grid-view-btn').classList.add('btn-outline-primary');
+        }
+
+        function showGridView() {
+            document.getElementById('map-view').style.display = 'none';
+            document.getElementById('grid-view').style.display = 'block';
+            document.getElementById('grid-view-btn').classList.add('active');
+            document.getElementById('grid-view-btn').classList.remove('btn-outline-primary');
+            document.getElementById('grid-view-btn').classList.add('btn-primary');
+            document.getElementById('map-view-btn').classList.remove('active');
+            document.getElementById('map-view-btn').classList.remove('btn-primary');
+            document.getElementById('map-view-btn').classList.add('btn-outline-primary');
+        }
+
+        function renderStateGrid() {
+            const grid = document.getElementById('state-grid');
+            grid.innerHTML = states.map(state => {
+                const hasContributor = contributors.some(c => c.state === state && c.status === 'active');
+                const contributorCount = contributors.filter(c => c.state === state).length;
+
+                return '<div class="state-card ' + (hasContributor ? 'has-contributor' : '') + '" onclick="selectState(\'' + state + '\')">' +
+                    (hasContributor ? '<span class="badge bg-success">✓</span>' : '') +
+                    '<h5>' + state + '</h5>' +
+                    '<small>' + (hasContributor ? contributorCount + ' Correspondent' + (contributorCount > 1 ? 's' : '') : 'No Coverage') + '</small>' +
+                    '</div>';
+            }).join('');
+        }
+
+        function selectState(state) {
+            console.log('selectState called with:', state, 'Type:', typeof state);
+            if (!state || state === '') {
+                console.error('Empty state passed to selectState');
+                return;
+            }
+            document.getElementById('state-details').style.display = 'block';
+            document.getElementById('state-name').textContent = '📍 ' + state + ' Election Coverage';
+
+            const stateContributors = contributors.filter(c => c.state === state);
+            const stateCandidates = candidates.filter(c => c.state === state);
+            const stateEvents = events.filter(e => e.state === state);
+
+            // Debug logging
+            console.log('State:', state);
+            console.log('State Candidates:', stateCandidates);
+            console.log('State Races:', races.filter(r => r.state === state));
+            console.log('All Summaries:', summaries);
+            console.log('State Summary:', summaries.find(s => s.state === state));
+
+            const stateSummary = summaries.find(s => s.state === state);
+            let summaryHTML = '';
+            if (stateSummary) {
+                const renderedContent = stateSummary.content.startsWith('<') ? stateSummary.content : marked.parse(stateSummary.content);
+                summaryHTML = '<div class="alert alert-primary mb-4">' +
+                    '<div class="d-flex justify-content-between align-items-center mb-2">' +
+                    '<h5 class="mb-0">📖 ' + stateSummary.title + '</h5>' +
+                    '<div>' +
+                    '<button class="btn btn-sm btn-outline-primary me-2" onclick="expandSummary(\'' + state + '\')" title="Expand for full view">🔍 Expand</button>' +
+                    '<div class="btn-group">' +
+                    '<button class="btn btn-sm btn-outline-success dropdown-toggle" data-bs-toggle="dropdown" title="Download voter guide">⬇️ Download</button>' +
+                    '<ul class="dropdown-menu">' +
+                    '<li><a class="dropdown-item" href="#" onclick="downloadSummary(\'' + state + '\', \'txt\'); return false;">📄 Text File (.txt)</a></li>' +
+                    '<li><a class="dropdown-item" href="#" onclick="downloadSummary(\'' + state + '\', \'pdf\'); return false;">📕 PDF Document (.pdf)</a></li>' +
+                    '</ul>' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div style="max-height: 300px; overflow-y: auto; font-size: 14px; line-height: 1.6;">' + renderedContent + '</div>' +
+                    '<small class="text-muted">Last updated: ' + (stateSummary.updated_at ? new Date(stateSummary.updated_at).toLocaleDateString() : 'Recently') + '</small>' +
+                    '<div class="alert alert-warning mt-2 mb-0" style="font-size: 12px; padding: 8px;"><strong>Note:</strong> Candidate information may change. Please verify with official sources before voting.</div>' +
+                    '</div>';
+            }
+
+            document.getElementById('contributor-section').innerHTML = summaryHTML +
+                '<h5>📝 State Correspondents</h5>' +
+                (stateContributors.length > 0 ?
+                    stateContributors.map(c =>
+                        '<div class="alert alert-success">' +
+                        '<strong>' + (c.first_name && c.last_name ? c.first_name + ' ' + c.last_name : c.user_email) + '</strong>' +
+                        (c.verified ? ' <span class="badge bg-primary">✓ Verified</span>' : '') +
+                        '<br><a href="mailto:' + c.user_email + '">' + c.user_email + '</a>' +
+                        (c.phone_number ? ' | <a href="tel:' + c.phone_number + '">📞 ' + c.phone_number + '</a>' : '') +
+                        '<p class="mb-0 mt-2">' + (c.bio || 'No bio provided') + '</p>' +
+                        '</div>'
+                    ).join('') :
+                    '<p class="text-muted">No correspondents assigned yet. <a href="apply-correspondent.html?state=' + encodeURIComponent(state) + '">Apply to cover this state</a></p>'
+                );
+
+            const stateRaces = races.filter(r => r.state === state);
+            const candidateCount = stateCandidates.length;
+            const raceCount = stateRaces.length;
+            const raceSummary = stateRaces.map(r => {
+                const count = stateCandidates.filter(c => c.race_id === r.race_id).length;
+                return r.office + ' (' + count + ')';
+            }).join(', ');
+
+            let candidatesHTML = '<div class="card mb-4" style="border: 2px solid #667eea; border-radius: 12px;">' +
+                '<div class="card-body" style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);">' +
+                '<h5 class="card-title mb-3" style="color: #667eea;">📊 Election Overview</h5>' +
+                '<div class="row text-center">' +
+                '<div class="col-md-6 mb-2">' +
+                '<div class="p-3" style="background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">' +
+                '<h3 class="mb-0" style="color: #667eea; font-weight: bold;">' + raceCount + '</h3>' +
+                '<small class="text-muted">Total Races</small>' +
+                '</div>' +
+                '</div>' +
+                '<div class="col-md-6 mb-2">' +
+                '<div class="p-3" style="background: white; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">' +
+                '<h3 class="mb-0" style="color: #28a745; font-weight: bold;">' + candidateCount + '</h3>' +
+                '<small class="text-muted">Total Candidates</small>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                (raceCount > 0 ? '<div class="mt-3 p-2" style="background: white; border-radius: 8px;"><small class="text-muted"><strong>Races:</strong> ' + raceSummary + '</small></div>' : '') +
+                '</div>' +
+                '</div>' +
+                '<h5 class="mt-4">🎯 Candidates</h5>';
+
+            if (stateRaces.length > 0) {
+                stateRaces.forEach(race => {
+                    const raceCandidates = stateCandidates.filter(c => c.race_id === race.race_id);
+                    console.log('Race:', race.office, 'Race ID:', race.race_id);
+                    console.log('Candidates for this race:', raceCandidates);
+                    console.log('Candidate race_ids:', stateCandidates.map(c => ({name: c.name, race_id: c.race_id})));
+                    candidatesHTML += '<div class="alert alert-info mt-3"><strong>' + race.office + '</strong> - ' + race.race_type + ' (' + new Date(race.election_date).toLocaleDateString() + ')</div>';
+
+                    if (raceCandidates.length > 0) {
+                        candidatesHTML += '<div class="row">';
+                        raceCandidates.forEach(c => {
+                            const positions = c.positions || {};
+                            const getPartyBadge = (party) => {
+                                if (!party) return '<span class="badge bg-secondary">IND</span>';
+                                const p = party.toLowerCase();
+                                if (p === 'republican') return '<span class="badge bg-danger">R</span>';
+                                if (p === 'democrat' || p === 'democratic') return '<span class="badge bg-primary">D</span>';
+                                if (p === 'independent') return '<span class="badge bg-secondary">IND</span>';
+                                if (p === 'libertarian') return '<span class="badge bg-warning">L</span>';
+                                if (p === 'green') return '<span class="badge bg-success">G</span>';
+                                return '<span class="badge bg-secondary">' + party.substring(0, 3).toUpperCase() + '</span>';
+                            };
+                            const partyBadge = getPartyBadge(c.party);
+                            candidatesHTML += '<div class="col-md-6"><div class="candidate-card">' +
+                                '<h6>' + c.name + ' ' + partyBadge + '</h6>' +
+                                (c.faith_statement ? '<p class="text-muted fst-italic">"' + c.faith_statement + '"</p>' : '<p class="text-muted fst-italic">No publicly disclosed faith statement</p>') +
+                                '<p class="mb-1">' + (c.bio || '') + '</p>' +
+                                (Object.keys(positions).length > 0 ? '<hr><p class="mb-1"><strong>Key Positions:</strong></p><ul class="small">' +
+                                    Object.entries(positions).map(([k, v]) => '<li><strong>' + k.replace('_', ' ').toUpperCase() + ':</strong> ' + v + '</li>').join('') + '</ul>' : '') +
+                                (c.endorsements && c.endorsements.length > 0 ? '<p class="mb-1"><small><strong>Endorsed by:</strong> ' + c.endorsements.join(', ') + '</small></p>' : '') +
+                                (c.website && c.website.trim() && !['not available', 'n/a', 'none', 'tbd', 'coming soon', 'unknown'].includes(c.website.trim().toLowerCase()) ? '<a href="' + validateUrl(c.website) + '" target="_blank" class="btn btn-sm btn-primary">Website</a> ' : '') +
+                                (c.voting_record_url && c.voting_record_url.trim() ? '<a href="' + validateUrl(c.voting_record_url) + '" target="_blank" class="btn btn-sm btn-outline-primary">Voting Record</a>' : '') +
+                                '</div></div>';
+                        });
+                        candidatesHTML += '</div>';
+                    } else {
+                        candidatesHTML += '<p class="text-muted">No candidates announced yet.</p>';
+                    }
+                });
+            }
+
+            const unassignedCandidates = stateCandidates.filter(c => !c.race_id || c.race_id === '');
+            console.log('Unassigned candidates:', unassignedCandidates);
+            if (unassignedCandidates.length > 0) {
+                candidatesHTML += '<div class="alert alert-secondary mt-3"><strong>Other Candidates</strong></div>';
+                unassignedCandidates.forEach(c => {
+                    candidatesHTML += '<div class="candidate-card">' +
+                        '<h6>' + c.name + ' - ' + c.office + '</h6>' +
+                        '<p>' + (c.bio || '') + '</p>' +
+                        (c.website && !['not available', 'n/a', 'none', 'tbd', 'coming soon', 'unknown'].includes(c.website.trim().toLowerCase()) ? '<a href="' + validateUrl(c.website) + '" target="_blank">Visit Website</a>' : '') +
+                        '</div>';
+                });
+            }
+
+            if (stateCandidates.length === 0) {
+                candidatesHTML += '<p class="text-muted">No candidates listed yet.</p>';
+            }
+
+            document.getElementById('candidates-section').innerHTML = candidatesHTML;
+
+            document.getElementById('events-section').innerHTML =
+                '<h5 class="mt-4">📅 Upcoming Events</h5>' +
+                (stateEvents.length > 0 ?
+                    stateEvents.map(e =>
+                        '<div class="event-card">' +
+                        '<h6>' + e.title + '</h6>' +
+                        '<p class="mb-1"><strong>Date:</strong> ' + new Date(e.event_date).toLocaleDateString() + '</p>' +
+                        '<p class="mb-0">' + (e.description || '') + '</p>' +
+                        '</div>'
+                    ).join('') :
+                    '<p class="text-muted">No upcoming events.</p>'
+                );
+
+            document.getElementById('state-details').scrollIntoView({behavior: 'smooth'});
+
+            // Show scroll-to-top button when state details are shown
+            setTimeout(() => {
+                document.getElementById('scroll-to-top').style.display = 'block';
+            }, 500);
+        }
+
+        function scrollToTop() {
+            const mapContainer = document.getElementById('map-container');
+            if (mapContainer) {
+                mapContainer.scrollIntoView({behavior: 'smooth', block: 'start'});
+            } else {
+                window.scrollTo({top: 0, behavior: 'smooth'});
+            }
+        }
+
+        function validateUrl(url) {
+            if (!url || !url.trim()) return '/candidate-404.html';
+            url = url.trim();
+            // Check for placeholder values
+            const invalidValues = ['not available', 'n/a', 'none', 'tbd', 'coming soon', 'unknown'];
+            if (invalidValues.includes(url.toLowerCase())) return '/candidate-404.html';
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                url = 'https://' + url;
+            }
+            try {
+                new URL(url);
+                return url;
+            } catch {
+                return '/candidate-404.html';
+            }
+        }
+
+        function applyAsContributor(state) {
+            alert('Contributor application feature coming soon! Contact admin to become a state correspondent for ' + state);
+        }
+
+        function expandSummary(state) {
+            const stateSummary = summaries.find(s => s.state === state);
+            if (!stateSummary) return;
+
+            const renderedContent = stateSummary.content.startsWith('<') ? stateSummary.content : marked.parse(stateSummary.content);
+
+            const modalHTML = '<div class="modal fade" id="summaryModal" tabindex="-1">' +
+                '<div class="modal-dialog modal-xl modal-dialog-scrollable">' +
+                '<div class="modal-content">' +
+                '<div class="modal-header">' +
+                '<h5 class="modal-title">📖 ' + stateSummary.title + '</h5>' +
+                '<button type="button" class="btn-close" data-bs-dismiss="modal"></button>' +
+                '</div>' +
+                '<div class="modal-body" style="font-size: 15px; line-height: 1.8;">' + renderedContent + '</div>' +
+                '<div class="modal-footer">' +
+                '<small class="text-muted me-auto">Last updated: ' + (stateSummary.updated_at ? new Date(stateSummary.updated_at).toLocaleDateString() : 'Recently') + '</small>' +
+                '<div class="btn-group">' +
+                '<button type="button" class="btn btn-success dropdown-toggle" data-bs-toggle="dropdown">⬇️ Download</button>' +
+                '<ul class="dropdown-menu">' +
+                '<li><a class="dropdown-item" href="#" onclick="downloadSummary(\'' + state + '\', \'txt\'); return false;">📄 Text File (.txt)</a></li>' +
+                '<li><a class="dropdown-item" href="#" onclick="downloadSummary(\'' + state + '\', \'pdf\'); return false;">📕 PDF Document (.pdf)</a></li>' +
+                '</ul>' +
+                '</div>' +
+                '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+
+            const existingModal = document.getElementById('summaryModal');
+            if (existingModal) existingModal.remove();
+
+            document.body.insertAdjacentHTML('beforeend', modalHTML);
+            const modal = new bootstrap.Modal(document.getElementById('summaryModal'));
+            modal.show();
+        }
+
+        function downloadSummary(state, format) {
+            const stateSummary = summaries.find(s => s.state === state);
+            if (!stateSummary) return;
+
+            format = format || 'txt';
+
+            if (format === 'pdf') {
+                downloadSummaryPDF(state, stateSummary);
+            } else {
+                downloadSummaryText(state, stateSummary);
+            }
+        }
+
+        function downloadSummaryText(state, stateSummary) {
+            let content = stateSummary.content;
+            let filename = state.replace(/\s+/g, '_') + '_Voter_Guide.txt';
+
+            // If content is HTML, convert to plain text
+            if (content.startsWith('<')) {
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = content;
+                content = tempDiv.textContent || tempDiv.innerText || '';
+            }
+
+            // Add header
+            const header = stateSummary.title + '\n' +
+                '='.repeat(stateSummary.title.length) + '\n' +
+                'Last Updated: ' + (stateSummary.updated_at ? new Date(stateSummary.updated_at).toLocaleDateString() : 'Recently') + '\n' +
+                'Source: Christian Conservative Election Platform\n\n';
+
+            content = header + content;
+
+            // Create download
+            const blob = new Blob([content], {type: 'text/plain'});
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        }
+
+        async function downloadSummaryPDF(state, stateSummary) {
+            const {jsPDF} = window.jspdf;
+
+            let content = stateSummary.content;
+            let renderedHTML = '';
+
+            // Render markdown to HTML if needed
+            if (content.startsWith('<')) {
+                renderedHTML = content;
+            } else {
+                renderedHTML = marked.parse(content);
+            }
+
+            // Create temporary container
+            const container = document.createElement('div');
+            container.style.cssText = 'position: absolute; left: -9999px; width: 800px; padding: 40px; font-family: Arial, sans-serif; font-size: 14px; line-height: 1.6; background: white;';
+            container.innerHTML = '<h1 style="font-size: 24px; margin-bottom: 10px;">' + stateSummary.title + '</h1>' +
+                '<p style="font-size: 12px; color: #666; margin-bottom: 5px;">Last Updated: ' + (stateSummary.updated_at ? new Date(stateSummary.updated_at).toLocaleDateString() : 'Recently') + '</p>' +
+                '<p style="font-size: 12px; color: #666; margin-bottom: 20px;">Source: Christian Conservative Election Platform</p>' +
+                '<hr style="margin-bottom: 20px; border: 1px solid #ccc;" />' +
+                '<div>' + renderedHTML + '</div>';
+
+            document.body.appendChild(container);
+
+            try {
+                // Convert HTML to canvas with emojis
+                const canvas = await html2canvas(container, {
+                    scale: 2,
+                    useCORS: true,
+                    logging: false
+                });
+
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = 210; // A4 width in mm
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+                const doc = new jsPDF('p', 'mm', 'a4');
+                let position = 0;
+                const pageHeight = 297; // A4 height in mm
+
+                // Add image to PDF, creating new pages as needed
+                while (position < imgHeight) {
+                    doc.addImage(imgData, 'PNG', 0, -position, imgWidth, imgHeight);
+                    position += pageHeight;
+                    if (position < imgHeight) {
+                        doc.addPage();
+                    }
+                }
+
+                const filename = state.replace(/\s+/g, '_') + '_Voter_Guide.pdf';
+                doc.save(filename);
+            } finally {
+                document.body.removeChild(container);
+            }
+        }
+
+        // Email subscription function
+        const EMAIL_API_ENDPOINT = 'https://niexv1rw75.execute-api.us-east-1.amazonaws.com';
+
+        async function subscribeEmail() {
+            const emailInput = document.getElementById('email-input');
+            const firstNameInput = document.getElementById('first-name-input');
+            const lastNameInput = document.getElementById('last-name-input');
+            
+            const email = emailInput.value.trim();
+            const firstName = firstNameInput.value.trim();
+            const lastName = lastNameInput.value.trim();
+
+            if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                alert('Please enter a valid email address.');
+                return;
+            }
+            
+            if (!firstName) {
+                alert('Please enter your first name.');
+                return;
+            }
+
+            try {
+                const response = await fetch(EMAIL_API_ENDPOINT + '/subscribe', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({email: email, first_name: firstName, last_name: lastName})
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    const banner = document.getElementById('email-capture-banner');
+                    if (data.message === 'already_subscribed') {
+                        banner.innerHTML = '<div class="text-center py-3">' +
+                            '<h5 class="text-info mb-2">✓ Already Subscribed!</h5>' +
+                            '<p class="mb-0"><strong>' + email + '</strong> is already on our mailing list.</p>' +
+                            '<small class="text-muted">You\'ll continue receiving election updates and voter guides.</small>' +
+                            '</div>';
+                    } else if (data.message === 'confirmation_resent') {
+                        banner.innerHTML = '<div class="text-center py-3">' +
+                            '<h5 class="text-info mb-2">✓ Confirmation Email Resent!</h5>' +
+                            '<p class="mb-0">Check your inbox at <strong>' + email + '</strong></p>' +
+                            '<small class="text-muted">Please click the confirmation link to complete your subscription.</small>' +
+                            '</div>';
+                    } else {
+                        banner.innerHTML = '<div class="text-center py-3">' +
+                            '<h5 class="text-success mb-2">✓ Almost Done!</h5>' +
+                            '<p class="mb-0">Confirmation email sent to <strong>' + email + '</strong></p>' +
+                            '<small class="text-muted">Please check your inbox and click the confirmation link to complete your subscription.</small>' +
+                            '</div>';
+                    }
+                } else {
+                    alert(data.error || 'Subscription failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Subscription error:', error);
+                alert('There was an error subscribing. Please check your internet connection and try again.');
+            }
+        }
+
+        // Social sharing functions
+        function shareOnFacebook() {
+            const url = encodeURIComponent(window.location.href);
+            const shareUrl = 'https://www.facebook.com/sharer/sharer.php?u=' + url;
+            window.open(shareUrl, '_blank', 'width=600,height=400');
+        }
+
+        function shareOnTwitter() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out this interactive election map for Christian conservative voters! Find pro-life, pro-family candidates in your state. 🗳️🙏');
+            const shareUrl = 'https://twitter.com/intent/tweet?text=' + text + '&url=' + url + '&hashtags=ChristianVoter,ProLife,2025Elections';
+            window.open(shareUrl, '_blank', 'width=600,height=400');
+        }
+
+        function shareViaEmail() {
+            const subject = encodeURIComponent('Christian Conservative Election Map - Find Pro-Life Candidates');
+            const body = encodeURIComponent('I found this amazing interactive election map for Christian conservative voters!\n\n' +
+                'It shows every 2025-2026 race with candidate faith statements, pro-life positions, and biblical voting guidance.\n\n' +
+                'Check it out: ' + window.location.href + '\n\n' +
+                'Perfect for churches, small groups, and anyone who wants to vote according to biblical values.\n\n' +
+                'God bless!');
+            window.location.href = 'mailto:?subject=' + subject + '&body=' + body;
+        }
+
+        function copyLink() {
+            const url = window.location.href;
+
+            // Try modern clipboard API first
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(() => {
+                    showCopySuccess();
+                }).catch(() => {
+                    fallbackCopyLink(url);
+                });
+            } else {
+                fallbackCopyLink(url);
+            }
+        }
+
+        function fallbackCopyLink(url) {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = url;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-9999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showCopySuccess();
+            } catch (err) {
+                alert('Failed to copy link. Please copy manually: ' + url);
+            }
+            document.body.removeChild(textArea);
+        }
+
+        function showCopySuccess() {
+            const successMsg = document.getElementById('copy-success');
+            successMsg.style.display = 'block';
+            setTimeout(() => {
+                successMsg.style.display = 'none';
+            }, 3000);
+        }
+
+        // Show/hide scroll-to-top button based on scroll position
+        window.addEventListener('scroll', () => {
+            const scrollBtn = document.getElementById('scroll-to-top');
+            const stateDetails = document.getElementById('state-details');
+
+            if (stateDetails.style.display === 'block' && window.scrollY > 300) {
+                scrollBtn.style.display = 'block';
+            } else if (window.scrollY < 300) {
+                scrollBtn.style.display = 'none';
+            }
+        });
+
+        // Update last update date
+        function updateLastUpdateDate() {
+            const dateSpan = document.getElementById('last-update-date');
+            if (dateSpan) {
+                const today = new Date();
+                dateSpan.textContent = today.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+            }
+        }
+
+        // Allow Enter key to submit email
+        document.addEventListener('DOMContentLoaded', () => {
+            updateAuthLink();
+            loadData();
+            updateLastUpdateDate();
+
+            const emailInput = document.getElementById('email-input');
+            if (emailInput) {
+                emailInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        subscribeEmail();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

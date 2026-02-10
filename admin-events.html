@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Events - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="navbar-container" data-page="admin-events"></div>
+
+    <div class="container my-5" style="margin-top: 5rem !important;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>📅 Manage Events</h1>
+            <div>
+                <button class="btn btn-primary" onclick="showCreateModal()">+ Create Event</button>
+                <button class="btn btn-success" onclick="showImportModal()">📥 Import CSV</button>
+                <button class="btn btn-info" onclick="syncElectionDates()">🗳️ Sync Election Dates</button>
+            </div>
+        </div>
+
+        <div id="eventsTable"></div>
+    </div>
+
+    <!-- Import CSV Modal -->
+    <div class="modal fade" id="importModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Import Events from CSV</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Upload a CSV file with columns: title, description, category, event_date, event_time, location, address, state, contact_email, contact_phone, registration_url</p>
+                    <input type="file" class="form-control" id="csvFile" accept=".csv">
+                    <div id="importPreview" class="mt-3"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="importCSV()">Import</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create/Edit Modal -->
+    <div class="modal fade" id="eventModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Create Event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="eventId">
+                    <div class="mb-3">
+                        <label class="form-label">Title *</label>
+                        <input type="text" class="form-control" id="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description *</label>
+                        <textarea class="form-control" id="description" rows="4" required></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Event Type *</label>
+                            <select class="form-select" id="eventType">
+                                <option value="church">Church Service</option>
+                                <option value="rally">Rally</option>
+                                <option value="town_hall">Town Hall</option>
+                                <option value="prayer_meeting">Prayer Meeting</option>
+                                <option value="election">Election Event</option>
+                                <option value="general">General</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Category</label>
+                            <select class="form-select" id="category">
+                                <option value="service">Church Service</option>
+                                <option value="conference">Conference</option>
+                                <option value="outreach">Outreach</option>
+                                <option value="prayer">Prayer Meeting</option>
+                                <option value="general">General</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Event Date *</label>
+                            <input type="date" class="form-control" id="eventDate" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Event Time</label>
+                            <input type="time" class="form-control" id="eventTime">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Location</label>
+                        <input type="text" class="form-control" id="location" placeholder="Church name or venue">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control" id="address" placeholder="Full address">
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Contact Email</label>
+                            <input type="email" class="form-control" id="contactEmail">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Contact Phone</label>
+                            <input type="tel" class="form-control" id="contactPhone">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Image URL</label>
+                        <input type="url" class="form-control" id="imageUrl">
+                    </div>
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="registrationRequired">
+                        <label class="form-check-label">Registration Required</label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Registration URL</label>
+                        <input type="url" class="form-control" id="registrationUrl">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Max Attendees (0 = unlimited)</label>
+                        <input type="number" class="form-control" id="maxAttendees" value="0">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveEvent()">Save Event</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        const API_URL = 'https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/events';
+
+        const authToken = localStorage.getItem('auth_token');
+        const userData = localStorage.getItem('user_data');
+        if (!authToken || !userData) {
+            window.location.href = 'login.html';
+        }
+
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            });
+
+        $(document).ready(function() {
+            const states = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+            states.forEach(state => {
+                $('#state').append(`<option value="${state}">${state}</option>`);
+            });
+            loadEvents();
+        });
+
+        function loadEvents() {
+            fetch(API_URL + '?action=list')
+                .then(r => r.json())
+                .then(data => {
+                    const table = $('#eventsTable');
+                    table.empty();
+
+                    if (!data.events || data.events.length === 0) {
+                        table.html('<p>No events found.</p>');
+                        return;
+                    }
+
+                    let html = '<table class="table table-striped"><thead><tr><th>Title</th><th>Date</th><th>Location</th><th>Category</th><th>Actions</th></tr></thead><tbody>';
+                    data.events.forEach(event => {
+                        let eventDate;
+                        try {
+                            const parts = event.event_date.split('-');
+                            const d = new Date(parts[0], parts[1] - 1, parts[2]);
+                            eventDate = d.toLocaleDateString();
+                        } catch (e) {
+                            eventDate = event.event_date;
+                        }
+                        html += `<tr>
+                            <td>${event.title}</td>
+                            <td>${eventDate}</td>
+                            <td>${event.location || '-'}</td>
+                            <td>${event.category}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary" onclick="editEvent('${event.event_id}')">Edit</button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteEvent('${event.event_id}')">Delete</button>
+                            </td>
+                        </tr>`;
+                    });
+                    html += '</tbody></table>';
+                    table.html(html);
+                });
+        }
+
+        function showCreateModal() {
+            $('#modalTitle').text('Create Event');
+            $('#eventId').val('');
+            $('#title, #description, #location, #address, #contactEmail, #contactPhone, #imageUrl, #registrationUrl').val('');
+            $('#eventDate, #eventTime').val('');
+            $('#eventType').val('general');
+            $('#category').val('general');
+            $('#state').val('');
+            $('#registrationRequired').prop('checked', false);
+            $('#maxAttendees').val('0');
+            new bootstrap.Modal(document.getElementById('eventModal')).show();
+        }
+
+        function showImportModal() {
+            $('#csvFile').val('');
+            $('#importPreview').html('');
+            new bootstrap.Modal(document.getElementById('importModal')).show();
+        }
+
+        function importCSV() {
+            const file = document.getElementById('csvFile').files[0];
+            if (!file) {
+                alert('Please select a CSV file');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const text = e.target.result;
+                const lines = text.split('\n');
+                const headers = lines[0].split(',').map(h => h.trim());
+                
+                let imported = 0;
+                const user = JSON.parse(userData);
+                
+                for (let i = 1; i < lines.length; i++) {
+                    if (!lines[i].trim()) continue;
+                    
+                    const values = lines[i].split(',').map(v => v.trim());
+                    const event = {};
+                    headers.forEach((header, index) => {
+                        event[header] = values[index] || '';
+                    });
+                    
+                    const eventData = {
+                        action: 'create',
+                        title: event.title,
+                        description: event.description,
+                        event_type: event.event_type || 'general',
+                        category: event.category || 'general',
+                        event_date: event.event_date,
+                        event_time: event.event_time || '',
+                        location: event.location || '',
+                        address: event.address || '',
+                        state: event.state || '',
+                        contact_email: event.contact_email || '',
+                        contact_phone: event.contact_phone || '',
+                        registration_url: event.registration_url || '',
+                        registration_required: !!event.registration_url,
+                        max_attendees: 0,
+                        created_by: user.email
+                    };
+                    
+                    fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(eventData)
+                    }).then(() => imported++);
+                }
+                
+                setTimeout(() => {
+                    alert(`Imported ${imported} events!`);
+                    bootstrap.Modal.getInstance(document.getElementById('importModal')).hide();
+                    loadEvents();
+                }, 1000);
+            };
+            reader.readAsText(file);
+        }
+
+        async function syncElectionDates() {
+            if (!confirm('Sync election dates from the election database? This will create events for all upcoming elections.')) return;
+            
+            try {
+                // Fetch races from election database
+                const response = await fetch('https://cayl9dmtaf.execute-api.us-east-1.amazonaws.com/prod/contributors?action=get_races');
+                const data = await response.json();
+                
+                if (!data.races) {
+                    alert('No races found');
+                    return;
+                }
+                
+                const user = JSON.parse(userData);
+                let synced = 0;
+                
+                for (const race of data.races) {
+                    if (!race.election_date) continue;
+                    
+                    const eventData = {
+                        action: 'create',
+                        title: `${race.state} - ${race.office} Election`,
+                        description: `Election for ${race.office} in ${race.state}`,
+                        event_type: 'election',
+                        category: 'general',
+                        event_date: race.election_date,
+                        event_time: '',
+                        location: race.state,
+                        address: '',
+                        state: race.state,
+                        contact_email: '',
+                        contact_phone: '',
+                        registration_url: '',
+                        registration_required: false,
+                        max_attendees: 0,
+                        created_by: user.email
+                    };
+                    
+                    await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(eventData)
+                    });
+                    synced++;
+                }
+                
+                alert(`Synced ${synced} election dates!`);
+                loadEvents();
+            } catch (err) {
+                alert('Error syncing election dates: ' + err);
+            }
+        }
+
+        function editEvent(eventId) {
+            fetch(API_URL + '?action=get&event_id=' + eventId)
+                .then(r => r.json())
+                .then(data => {
+                    console.log('Edit response:', data);
+                    const event = data.event || data;
+                    if (!event || !event.event_id) {
+                        alert('Error loading event: ' + JSON.stringify(data));
+                        return;
+                    }
+                    $('#modalTitle').text('Edit Event');
+                    $('#eventId').val(event.event_id);
+                    $('#title').val(event.title);
+                    $('#description').val(event.description);
+                    $('#eventType').val(event.event_type || 'general');
+                    $('#category').val(event.category);
+                    $('#state').val(event.state || '');
+                    $('#eventDate').val(event.event_date);
+                    $('#eventTime').val(event.event_time || '');
+                    $('#location').val(event.location || '');
+                    $('#address').val(event.address || '');
+                    $('#contactEmail').val(event.contact_email || '');
+                    $('#contactPhone').val(event.contact_phone || '');
+                    $('#imageUrl').val(event.image_url || '');
+                    $('#registrationRequired').prop('checked', event.registration_required);
+                    $('#registrationUrl').val(event.registration_url || '');
+                    $('#maxAttendees').val(event.max_attendees || 0);
+                    new bootstrap.Modal(document.getElementById('eventModal')).show();
+                })
+                .catch(err => alert('Error loading event: ' + err));
+        }
+
+        function saveEvent() {
+            const eventId = $('#eventId').val();
+            const user = JSON.parse(userData);
+            
+            const eventData = {
+                action: eventId ? 'update' : 'create',
+                title: $('#title').val(),
+                description: $('#description').val(),
+                event_type: $('#eventType').val(),
+                category: $('#category').val(),
+                event_date: $('#eventDate').val(),
+                event_time: $('#eventTime').val(),
+                location: $('#location').val(),
+                address: $('#address').val(),
+                state: $('#state').val(),
+                contact_email: $('#contactEmail').val(),
+                contact_phone: $('#contactPhone').val(),
+                image_url: $('#imageUrl').val(),
+                registration_required: $('#registrationRequired').is(':checked'),
+                registration_url: $('#registrationUrl').val(),
+                max_attendees: parseInt($('#maxAttendees').val()) || 0,
+                created_by: user.email
+            };
+
+            if (eventId) {
+                eventData.event_id = eventId;
+            }
+
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(eventData)
+            })
+            .then(r => r.json())
+            .then(data => {
+                console.log('Save response:', data);
+                if (data.error) {
+                    alert('Error: ' + data.error);
+                } else {
+                    alert(eventId ? 'Event updated!' : 'Event created!');
+                    bootstrap.Modal.getInstance(document.getElementById('eventModal')).hide();
+                    loadEvents();
+                }
+            })
+            .catch(err => {
+                console.error('Save error:', err);
+                alert('Error: ' + err);
+            });
+        }
+
+        function deleteEvent(eventId) {
+            if (!confirm('Delete this event?')) return;
+            
+            fetch(API_URL + '?action=delete&event_id=' + eventId, { method: 'POST' })
+                .then(r => r.json())
+                .then(data => {
+                    console.log('Delete response:', data);
+                    if (data.error) {
+                        alert('Error: ' + data.error);
+                    } else {
+                        alert('Event deleted!');
+                        loadEvents();
+                    }
+                })
+                .catch(err => alert('Delete failed: ' + err));
+        }
+    </script>
+</body>
+</html>

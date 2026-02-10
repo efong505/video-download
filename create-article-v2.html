@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Article - Christian Conservative Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.min.js"></script>
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        .article-form {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        .template-card {
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        .template-card:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        .template-card.selected {
+            border-color: #667eea;
+            background: #f8f9ff;
+        }
+        .bible-search {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .verse-result {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1 class="mb-0">✍️ Create Article</h1>
+                <div class="d-flex gap-3">
+                    <a href="/" class="nav-link">🏠 Home</a>
+                    <a href="videos.html" class="nav-link">🎬 Videos</a>
+                    <a href="articles.html" class="nav-link">📝 Articles</a>
+                    <a href="#" onclick="logout()" class="nav-link">🚪 Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="article-form">
+                    <form id="article-form">
+                        <div class="mb-3">
+                            <label class="form-label">Article Title</label>
+                            <input type="text" id="article-title" class="form-control" placeholder="Enter your article title..." required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <select id="article-category" class="form-select">
+                                <option value="sermon">Sermon</option>
+                                <option value="politics">Political Commentary</option>
+                                <option value="devotional">Devotional</option>
+                                <option value="apologetics">Apologetics</option>
+                                <option value="ministry">Ministry Update</option>
+                                <option value="general">General</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Tags (comma separated)</label>
+                            <input type="text" id="article-tags" class="form-control" placeholder="faith, politics, scripture...">
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Visibility</label>
+                            <select id="article-visibility" class="form-select">
+                                <option value="public">Public</option>
+                                <option value="private">Private</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Article Content</label>
+                            <div id="article-content" style="height: 400px;"></div>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary">📝 Publish Article</button>
+                            <button type="button" class="btn btn-secondary" onclick="saveDraft()">💾 Save Draft</button>
+                            <button type="button" class="btn btn-outline-secondary" onclick="previewArticle()">👁️ Preview</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">📋 Article Templates</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="templates-container">
+                            <div class="text-center">
+                                <div class="spinner-border spinner-border-sm" role="status"></div>
+                                <p class="mt-2">Loading templates...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">📖 Bible Verse Lookup</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="bible-search">
+                            <div class="mb-3">
+                                <input type="text" id="verse-search" class="form-control" placeholder="e.g., John 3:16">
+                            </div>
+                            <div class="mb-3">
+                                <select id="translation-select" class="form-select">
+                                    <option value="kjv">King James Version</option>
+                                    <option value="esv">English Standard Version</option>
+                                    <option value="niv">New International Version</option>
+                                    <option value="nasb">New American Standard</option>
+                                </select>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="searchVerse()">🔍 Search Verse</button>
+                            <div id="verse-result"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
+        var ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';
+        
+        var currentUser = null;
+        var authToken = null;
+        var selectedTemplate = null;
+        var quill = null;
+
+        function initializeEditor() {
+            quill = new Quill('#article-content', {
+                theme: 'snow',
+                modules: {
+                    toolbar: [
+                        [{ 'header': [1, 2, 3, false] }],
+                        ['bold', 'italic', 'underline', 'strike'],
+                        [{ 'color': [] }, { 'background': [] }],
+                        [{ 'align': [] }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                        ['blockquote', 'code-block'],
+                        ['link', 'image'],
+                        ['clean']
+                    ]
+                },
+                placeholder: 'Write your article content here...'
+            });
+        }
+
+        window.addEventListener('load', function() {
+            authToken = localStorage.getItem('auth_token');
+            var userData = localStorage.getItem('user_data');
+            
+            if (!authToken || !userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(userData);
+            initializeEditor();
+            loadTemplates();
+        });
+
+        function loadTemplates() {
+            fetch(ARTICLES_API + '?action=templates')
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    if (data.templates) {
+                        displayTemplates(data.templates);
+                    } else {
+                        document.getElementById('templates-container').innerHTML = 
+                            '<p class="text-muted">Templates not available</p>';
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error loading templates:', error);
+                    document.getElementById('templates-container').innerHTML = 
+                        '<p class="text-muted">Templates not available</p>';
+                });
+        }
+
+        function displayTemplates(templates) {
+            var container = document.getElementById('templates-container');
+            container.innerHTML = '';
+            
+            Object.keys(templates).forEach(function(key) {
+                var template = templates[key];
+                var templateCard = document.createElement('div');
+                templateCard.className = 'template-card';
+                
+                var h6 = document.createElement('h6');
+                h6.textContent = template.name;
+                
+                var p = document.createElement('p');
+                p.className = 'text-muted small mb-0';
+                p.textContent = template.description;
+                
+                templateCard.appendChild(h6);
+                templateCard.appendChild(p);
+                templateCard.onclick = function() { selectTemplate(key, template); };
+                container.appendChild(templateCard);
+            });
+        }
+
+        function selectTemplate(key, template) {
+            document.querySelectorAll('.template-card').forEach(function(card) {
+                card.classList.remove('selected');
+            });
+            
+            event.target.closest('.template-card').classList.add('selected');
+            selectedTemplate = key;
+            
+            if (quill) {
+                quill.root.innerHTML = template.content;
+            }
+        }
+
+        function searchVerse() {
+            var reference = document.getElementById('verse-search').value.trim();
+            var translation = document.getElementById('translation-select').value;
+            
+            if (!reference) {
+                alert('Please enter a Bible reference (e.g., John 3:16)');
+                return;
+            }
+            
+            var url = ARTICLES_API + '?action=bible_verse&reference=' + encodeURIComponent(reference) + '&translation=' + translation;
+            
+            fetch(url)
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    if (data.reference && data.text) {
+                        displayVerse(data);
+                    } else {
+                        document.getElementById('verse-result').innerHTML = 
+                            '<div class="alert alert-warning">Verse not found. Please check the reference.</div>';
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Error searching verse:', error);
+                    document.getElementById('verse-result').innerHTML = 
+                        '<div class="alert alert-danger">Error searching for verse.</div>';
+                });
+        }
+
+        function displayVerse(verseData) {
+            var resultDiv = document.getElementById('verse-result');
+            
+            var verseDiv = document.createElement('div');
+            verseDiv.className = 'verse-result';
+            
+            var referenceH6 = document.createElement('h6');
+            referenceH6.textContent = verseData.reference;
+            
+            var textP = document.createElement('p');
+            textP.textContent = '"' + verseData.text + '"';
+            
+            var translationSmall = document.createElement('small');
+            translationSmall.className = 'text-muted';
+            translationSmall.textContent = verseData.translation;
+            
+            var buttonDiv = document.createElement('div');
+            buttonDiv.className = 'mt-2';
+            
+            var insertBtn = document.createElement('button');
+            insertBtn.className = 'btn btn-sm btn-outline-primary';
+            insertBtn.innerHTML = '➕ Insert into Article';
+            insertBtn.onclick = function() {
+                insertVerse(verseData.reference, verseData.text);
+            };
+            
+            buttonDiv.appendChild(insertBtn);
+            verseDiv.appendChild(referenceH6);
+            verseDiv.appendChild(textP);
+            verseDiv.appendChild(translationSmall);
+            verseDiv.appendChild(buttonDiv);
+            
+            resultDiv.innerHTML = '';
+            resultDiv.appendChild(verseDiv);
+        }
+
+        function insertVerse(reference, text) {
+            var verseHtml = '<blockquote class="blockquote"><p>"' + text + '"</p><footer class="blockquote-footer">' + reference + '</footer></blockquote>';
+            
+            if (quill) {
+                var range = quill.getSelection();
+                var index = range ? range.index : quill.getLength();
+                quill.clipboard.dangerouslyPasteHTML(index, verseHtml);
+            }
+        }
+
+        document.getElementById('article-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            var title = document.getElementById('article-title').value.trim();
+            var category = document.getElementById('article-category').value;
+            var tags = document.getElementById('article-tags').value.split(',').map(function(tag) { return tag.trim(); }).filter(function(tag) { return tag; });
+            var visibility = document.getElementById('article-visibility').value;
+            var content = quill ? quill.root.innerHTML : '';
+            
+            if (!title || !content) {
+                alert('Please fill in the title and content');
+                return;
+            }
+            
+            fetch(ARTICLES_API + '?action=create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + authToken
+                },
+                body: JSON.stringify({
+                    title: title,
+                    content: content,
+                    author: currentUser.email,
+                    category: category,
+                    template_used: selectedTemplate || 'custom',
+                    tags: tags,
+                    visibility: visibility
+                })
+            })
+            .then(function(response) { return response.json(); })
+            .then(function(data) {
+                if (data.article_id) {
+                    alert('Article published successfully!');
+                    window.location.href = 'articles.html';
+                } else {
+                    alert('Error publishing article: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(function(error) {
+                console.error('Error publishing article:', error);
+                alert('Error publishing article. Please try again.');
+            });
+        });
+
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

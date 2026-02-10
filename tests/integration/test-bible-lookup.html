@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Bible Lookup</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        .test-section {
+            background: #f5f5f5;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .error {
+            color: red;
+        }
+        .success {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔍 Bible Lookup API Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Scripture Lookup</h2>
+        <p>This will test if the ARTICLES_API bible_verse endpoint is working.</p>
+        
+        <div>
+            <label>Reference:</label>
+            <input type="text" id="reference" value="John 3:16" style="padding: 8px; width: 200px;">
+        </div>
+        
+        <div style="margin-top: 10px;">
+            <label>Translation:</label>
+            <select id="translation" style="padding: 8px;">
+                <option value="kjv">KJV</option>
+                <option value="asv">ASV</option>
+                <option value="ylt">YLT</option>
+                <option value="esv">ESV (falls back to KJV)</option>
+                <option value="niv">NIV (falls back to KJV)</option>
+            </select>
+        </div>
+        
+        <button onclick="testLookup()">🔍 Test Lookup</button>
+        <button onclick="testDirectAPI()">🌐 Test Direct Bible-API.com</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';
+        
+        async function testLookup() {
+            const reference = document.getElementById('reference').value;
+            const translation = document.getElementById('translation').value;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = '<p>⏳ Testing ARTICLES_API endpoint...</p>';
+            
+            try {
+                const url = `${ARTICLES_API}?action=bible_verse&reference=${encodeURIComponent(reference)}&translation=${translation}`;
+                console.log('Testing URL:', url);
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                console.log('Response:', data);
+                
+                if (response.ok && data.text) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <h3>✅ Success!</h3>
+                            <p><strong>Reference:</strong> ${data.reference}</p>
+                            <p><strong>Translation:</strong> ${data.translation}</p>
+                            <p><strong>Text:</strong> "${data.text}"</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h3>❌ Error</h3>
+                            <p><strong>Status:</strong> ${response.status}</p>
+                            <p><strong>Error:</strong> ${data.error || 'Unknown error'}</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Network Error</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+                console.error('Error:', error);
+            }
+        }
+        
+        async function testDirectAPI() {
+            const reference = document.getElementById('reference').value;
+            const translation = document.getElementById('translation').value;
+            const resultDiv = document.getElementById('result');
+            
+            resultDiv.innerHTML = '<p>⏳ Testing direct Bible-API.com...</p>';
+            
+            try {
+                const formatted = reference.toLowerCase().replace(' ', '');
+                const url = `https://bible-api.com/${formatted}?translation=${translation}`;
+                console.log('Testing direct URL:', url);
+                
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                console.log('Direct API Response:', data);
+                
+                if (response.ok && data.text) {
+                    resultDiv.innerHTML = `
+                        <div class="success">
+                            <h3>✅ Direct API Works!</h3>
+                            <p><strong>Reference:</strong> ${data.reference}</p>
+                            <p><strong>Text:</strong> "${data.text}"</p>
+                            <p>This means the external Bible API is working. The issue might be with the Lambda function.</p>
+                        </div>
+                    `;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <h3>❌ Direct API Error</h3>
+                            <p><strong>Status:</strong> ${response.status}</p>
+                            <pre>${JSON.stringify(data, null, 2)}</pre>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <h3>❌ Network Error</h3>
+                        <p>${error.message}</p>
+                        <p>This could be a CORS issue or the Bible API might be down.</p>
+                    </div>
+                `;
+                console.error('Error:', error);
+            }
+        }
+    </script>
+</body>
+</html>

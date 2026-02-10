@@ -1,0 +1,6 @@
+﻿{
+    "httpMethod":  "GET",
+    "queryStringParameters":  {
+                                  "action":  "test"
+                              }
+}

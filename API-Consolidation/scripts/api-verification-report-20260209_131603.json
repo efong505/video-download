@@ -1,0 +1,110 @@
+[
+  {
+    "HasTraffic": false,
+    "Exists": true,
+    "RequestCount": 0,
+    "Name": "MyMusicAPI",
+    "LastActivity": "Never",
+    "InHTMLFiles": false,
+    "HasLambdaIntegration": true,
+    "Recommendation": "✅ SAFE TO DELETE - No activity detected",
+    "HasLogs": false,
+    "Id": "sljzs4mmue"
+  },
+  {
+    "HasTraffic": false,
+    "Exists": true,
+    "RequestCount": 0,
+    "Name": "MyFirstAPI",
+    "LastActivity": "Never",
+    "InHTMLFiles": false,
+    "HasLambdaIntegration": false,
+    "Recommendation": "✅ SAFE TO DELETE - No activity detected",
+    "HasLogs": false,
+    "Id": "97gtxp82b2"
+  },
+  {
+    "HasTraffic": false,
+    "Exists": true,
+    "RequestCount": 0,
+    "Name": "storage-subscription-api-http",
+    "LastActivity": "Never",
+    "InHTMLFiles": false,
+    "HasLambdaIntegration": true,
+    "Recommendation": "✅ SAFE TO DELETE - No activity detected",
+    "HasLogs": false,
+    "Id": "fm52xqjuz3"
+  },
+  {
+    "HasTraffic": false,
+    "Exists": true,
+    "RequestCount": 0,
+    "Name": "video-downloader-api-dup",
+    "LastActivity": "Never",
+    "InHTMLFiles": false,
+    "HasLambdaIntegration": true,
+    "Recommendation": "✅ SAFE TO DELETE - No activity detected",
+    "HasLogs": false,
+    "Id": "qdk8y6nna6"
+  },
+  {
+    "HasTraffic": false,
+    "Exists": true,
+    "RequestCount": 0,
+    "Name": "NewsScraperAPI",
+    "LastActivity": "Never",
+    "InHTMLFiles": false,
+    "HasLambdaIntegration": false,
+    "Recommendation": "✅ SAFE TO DELETE - No activity detected",
+    "HasLogs": false,
+    "Id": "xi6azy9cp9"
+  },
+  {
+    "HasTraffic": false,
+    "Exists": true,
+    "RequestCount": 0,
+    "Name": "recipe-scraper-api-1",
+    "LastActivity": "Never",
+    "InHTMLFiles": false,
+    "HasLambdaIntegration": true,
+    "Recommendation": "✅ SAFE TO DELETE - No activity detected",
+    "HasLogs": false,
+    "Id": "1lgppg87fe"
+  },
+  {
+    "HasTraffic": false,
+    "Exists": true,
+    "RequestCount": 0,
+    "Name": "recipe-scraper-api-2",
+    "LastActivity": "Never",
+    "InHTMLFiles": false,
+    "HasLambdaIntegration": false,
+    "Recommendation": "✅ SAFE TO DELETE - No activity detected",
+    "HasLogs": false,
+    "Id": "ts4xz3fs70"
+  },
+  {
+    "HasTraffic": false,
+    "Exists": true,
+    "RequestCount": 0,
+    "Name": "MyTestimony API",
+    "LastActivity": "Never",
+    "InHTMLFiles": false,
+    "HasLambdaIntegration": true,
+    "Recommendation": "✅ SAFE TO DELETE - No activity detected",
+    "HasLogs": false,
+    "Id": "wm234jgiv3"
+  },
+  {
+    "HasTraffic": false,
+    "Exists": true,
+    "RequestCount": 0,
+    "Name": "notifications-api-dup",
+    "LastActivity": "Never",
+    "InHTMLFiles": false,
+    "HasLambdaIntegration": false,
+    "Recommendation": "✅ SAFE TO DELETE - No activity detected",
+    "HasLogs": false,
+    "Id": "ulcbf9glui"
+  }
+]

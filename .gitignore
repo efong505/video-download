@@ -1,0 +1,112 @@
+# AWS Deployment Files
+*.zip
+response.json
+test-*.json
+cors-*.json
+
+# Python Dependencies (all Lambda functions)
+*/__pycache__/
+*/bin/
+*/lib/
+*/layer/
+*/package/
+*/certifi/
+*/certifi-*/
+*/charset_normalizer/
+*/charset_normalizer-*/
+*/idna/
+*/idna-*/
+*/requests/
+*/requests-*/
+*/urllib3/
+*/urllib3-*/
+*/boto3/
+*/boto3-*/
+*/botocore/
+*/botocore-*/
+*/dateutil/
+*/python_dateutil-*/
+*/jmespath/
+*/jmespath-*/
+*/s3transfer/
+*/s3transfer-*/
+*/yt_dlp/
+*/yt_dlp-*/
+*/jwt/
+*/PyJWT-*/
+*/six.py
+*/six-*/
+*/share/
+env/
+
+# Python Distribution Info
+*/*.dist-info/
+*/*.egg-info/
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+
+# Virtual Environments
+venv/
+.venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Video Files
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.webm
+*.mkv
+*.part
+*.ytdl
+
+# Environment Files
+.env
+.env.local
+.env.production
+
+# IDE Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temporary Files
+temp/
+tmp/
+
+# PayPal Credentials (NEVER commit these)
+paypal_credentials.json
+*.pem
+*.key
+
+# AWS Credentials
+.aws/
+aws-credentials.json
+
+# Database Backups
+*.db
+*.sqlite
+*.sqlite3
+
+# Node.js Dependencies (if any)
+node_modules/
+package-lock.json
+yarn.lock
+
+# url_analysis_api
+url_analysis_api/python/* 

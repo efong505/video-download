@@ -1,0 +1,42 @@
+{
+  "s3": {
+    "bucket": "my-video-downloads-bucket",
+    "video_prefix": "videos/",
+    "thumbnail_prefix": "thumbnails/",
+    "region": "us-east-1"
+  },
+  "dynamodb": {
+    "region": "us-east-1",
+    "tables": {
+      "users": "users",
+      "videos": "video-metadata",
+      "articles": "articles",
+      "news": "news",
+      "resources": "resources",
+      "contributors": "contributors",
+      "races": "races",
+      "candidates": "candidates",
+      "summaries": "state-summaries",
+      "jobs": "download-jobs",
+      "comments": "comments",
+      "subscribers": "email-subscribers",
+      "events": "email-events",
+      "templates": "templates",
+      "prayers": "prayer-requests",
+      "calendar": "events",
+      "newsletters": "newsletters",
+      "pending": "pending-changes"
+    }
+  },
+  "lambda": {
+    "region": "us-east-1",
+    "runtime": "python3.12",
+    "timeout": 900,
+    "memory": 3008
+  },
+  "cloudfront": {
+    "enabled": true,
+    "distribution_id": "<your-distribution-id>"
+  },
+  "domain": "christianconservativestoday.com"
+}

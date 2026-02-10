@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Admin API</title>
+</head>
+<body>
+    <h1>Admin API Test</h1>
+    <div id="result"></div>
+    
+    <script>
+        // Test the admin API user update functionality
+        async function testAdminAPI() {
+            const authToken = localStorage.getItem('auth_token');
+            if (!authToken) {
+                document.getElementById('result').innerHTML = 'No auth token found. Please login first.';
+                return;
+            }
+            
+            try {
+                // Test getting users first
+                const response = await fetch('https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin?action=users', {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                
+                const data = await response.json();
+                console.log('Users response:', data);
+                
+                if (response.ok && data.users && data.users.length > 0) {
+                    const testUser = data.users[0];
+                    document.getElementById('result').innerHTML = `
+                        <h3>Test User Found:</h3>
+                        <p>User ID: ${testUser.user_id}</p>
+                        <p>Email: ${testUser.email}</p>
+                        <p>First Name: ${testUser.first_name || 'Not set'}</p>
+                        <p>Last Name: ${testUser.last_name || 'Not set'}</p>
+                        <p>Role: ${testUser.role}</p>
+                        <button onclick="testUpdate('${testUser.user_id}')">Test Name Update</button>
+                    `;
+                } else {
+                    document.getElementById('result').innerHTML = 'No users found or API error: ' + JSON.stringify(data);
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = 'Error: ' + error.message;
+            }
+        }
+        
+        async function testUpdate(userId) {
+            const authToken = localStorage.getItem('auth_token');
+            
+            try {
+                const response = await fetch('https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin?action=user_role', {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        role: 'user', // Keep same role
+                        first_name: 'Test',
+                        last_name: 'User'
+                    })
+                });
+                
+                const data = await response.json();
+                console.log('Update response:', data);
+                
+                if (response.ok) {
+                    document.getElementById('result').innerHTML += '<br><strong>Update successful!</strong><br>' + JSON.stringify(data);
+                } else {
+                    document.getElementById('result').innerHTML += '<br><strong>Update failed:</strong><br>' + JSON.stringify(data);
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML += '<br><strong>Update error:</strong><br>' + error.message;
+            }
+        }
+        
+        // Run test on page load
+        testAdminAPI();
+    </script>
+</body>
+</html>

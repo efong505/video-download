@@ -1,0 +1,18 @@
+[
+  {
+    "IndexName": "product_id-created_at-index",
+    "KeySchema": [
+      {"AttributeName": "product_id", "KeyType": "HASH"},
+      {"AttributeName": "created_at", "KeyType": "RANGE"}
+    ],
+    "Projection": {"ProjectionType": "ALL"}
+  },
+  {
+    "IndexName": "user_id-created_at-index",
+    "KeySchema": [
+      {"AttributeName": "user_id", "KeyType": "HASH"},
+      {"AttributeName": "created_at", "KeyType": "RANGE"}
+    ],
+    "Projection": {"ProjectionType": "ALL"}
+  }
+]

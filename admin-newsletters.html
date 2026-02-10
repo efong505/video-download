@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Management - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <style>
+        @media (min-width: 1200px) {.container {max-width: 1160px !important;}}
+        .nav-tabs { margin-bottom: 20px; }
+        .stat-card { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+        .stat-number { font-size: 2rem; font-weight: bold; color: #0d6efd; }
+        #editor { height: 300px; }
+        .content-block { padding: 15px; margin: 10px 0; border: 2px dashed #ccc; border-radius: 5px; cursor: move; background: #f8f9fa; }
+        .content-block:hover { border-color: #0d6efd; background: #e7f1ff; }
+        .drop-zone { min-height: 100px; border: 2px dashed #ccc; border-radius: 5px; padding: 20px; margin: 10px 0; }
+        .drop-zone.drag-over { border-color: #0d6efd; background: #e7f1ff; }
+        #preview-content { border: 1px solid #ddd; padding: 20px; background: white; min-height: 400px; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="admin-newsletters"></div>
+
+    <div class="container my-5" style="margin-top: 5rem !important;">
+        <h1 class="mb-4">📧 Newsletter Management</h1>
+
+        <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#newsletters">Newsletters</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#subscribers">Subscribers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#templates">Templates</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#campaigns">Campaigns</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#analytics">Analytics</a>
+            </li>
+        </ul>
+
+        <div class="tab-content">
+            <!-- Newsletters Tab -->
+            <div id="newsletters" class="tab-pane fade show active">
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-number" id="totalNewsletters">0</div>
+                            <div>Total Newsletters</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-number" id="sentNewsletters">0</div>
+                            <div>Sent</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="stat-card">
+                            <div class="stat-number" id="draftNewsletters">0</div>
+                            <div>Drafts</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#newsletterModal" onclick="openNewsletter()">Create Newsletter</button>
+                <button class="btn btn-secondary mb-3 ms-2" onclick="window.location.href='newsletter-archive.html'">View Archive</button>
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Subject</th>
+                            <th>Status</th>
+                            <th>Recipients</th>
+                            <th>Created</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="newslettersList"></tbody>
+                </table>
+            </div>
+
+            <!-- Subscribers Tab -->
+            <div id="subscribers" class="tab-pane fade">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <div class="stat-card">
+                            <div class="stat-number" id="activeSubscribers">0</div>
+                            <div>Active Subscribers</div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="stat-card">
+                            <div class="stat-number" id="unsubscribed">0</div>
+                            <div>Unsubscribed</div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#addSubscriberModal">➕ Add Subscriber</button>
+                <button class="btn btn-primary mb-3 ms-2" data-bs-toggle="modal" data-bs-target="#bulkImportModal">📤 Bulk Import CSV</button>
+
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Name</th>
+                            <th>Status</th>
+                            <th>Subscribed</th>
+                            <th>Source</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subscribersList"></tbody>
+                </table>
+            </div>
+
+            <!-- Templates Tab -->
+            <div id="templates" class="tab-pane fade">
+                <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#templateModal">Create Template</button>
+                <div id="templatesList" class="row"></div>
+            </div>
+
+            <!-- Campaigns Tab -->
+            <div id="campaigns" class="tab-pane fade">
+                <h4>Subscriber Segments</h4>
+                <p>Manage subscriber campaigns/segments for targeted newsletters.</p>
+                <button class="btn btn-success mb-3" data-bs-toggle="modal" data-bs-target="#campaignModal" onclick="openNewCampaign()">➕ Create Campaign</button>
+                <div class="row mb-4" id="campaignCards"></div>
+                <h5>Manage Subscribers by Campaign</h5>
+                <select class="form-select mb-3" id="campaignFilter" onchange="filterByCampaign()">
+                    <option value="all">All Subscribers</option>
+                </select>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Name</th>
+                            <th>Campaigns</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="campaignSubscribersList"></tbody>
+                </table>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div id="analytics" class="tab-pane fade">
+                <h4>Newsletter Analytics</h4>
+                <div id="analyticsData"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Newsletter Modal -->
+    <div class="modal fade" id="newsletterModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Create Newsletter</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="newsletterId">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Title *</label>
+                        <input type="text" class="form-control" id="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subject" class="form-label">Email Subject *</label>
+                        <input type="text" class="form-control" id="subject" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Content *</label>
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#visualEditor">Visual Editor</a></li>
+                            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#htmlEditor">HTML Editor</a></li>
+                        </ul>
+                        <div class="tab-content border border-top-0">
+                            <div id="visualEditor" class="tab-pane fade show active">
+                                <div class="p-2 border-bottom bg-light">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('bold')"><b>B</b></button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('italic')"><i>I</i></button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('underline')"><u>U</u></button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('insertUnorderedList')">• List</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('insertOrderedList')">1. List</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('justifyLeft')">Left</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('justifyCenter')">Center</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="formatDoc('justifyRight')">Right</button>
+                                    <select class="form-select form-select-sm d-inline-block" style="width: auto;" onchange="formatDoc('fontSize', this.value); this.value=''">
+                                        <option value="">Font Size</option>
+                                        <option value="1">Small</option>
+                                        <option value="3">Normal</option>
+                                        <option value="5">Large</option>
+                                        <option value="7">Huge</option>
+                                    </select>
+                                    <input type="color" class="form-control form-control-sm d-inline-block" style="width: 50px;" onchange="formatDoc('foreColor', this.value)" title="Text Color">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary" onclick="insertLink()">🔗 Link</button>
+                                </div>
+                                <div id="editor" style="min-height: 300px; padding: 15px; overflow-y: auto;"></div>
+                            </div>
+                            <div id="htmlEditor" class="tab-pane fade">
+                                <textarea id="htmlContent" class="form-control" rows="15" style="font-family: monospace;"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="scheduledSend" class="form-label">Schedule Send (Optional)</label>
+                        <input type="datetime-local" class="form-control" id="scheduledSend">
+                    </div>
+                    <div class="mb-3">
+                        <label for="campaign" class="form-label">Campaign/Segment</label>
+                        <select class="form-select" id="campaign">
+                            <option value="general">General (All Subscribers)</option>
+                            <option value="election">Election Updates</option>
+                            <option value="prayer">Prayer Requests</option>
+                            <option value="events">Events & Rallies</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status">
+                            <option value="draft">Draft</option>
+                            <option value="scheduled">Scheduled</option>
+                            <option value="ready">Ready to Send</option>
+                        </select>
+                    </div>
+                    <div class="alert alert-info">
+                        <strong>Mail Merge Tags:</strong> Use {{first_name}}, {{last_name}}, {{email}} in your content
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info" onclick="previewNewsletter()">Preview</button>
+                    <button type="button" class="btn btn-primary" onclick="saveNewsletter()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Preview Modal -->
+    <div class="modal fade" id="previewModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Newsletter Preview</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="preview-content"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="sendFromPreview()">Send Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Subscriber Modal -->
+    <div class="modal fade" id="addSubscriberModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Subscriber</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="newEmail" class="form-label">Email *</label>
+                        <input type="email" class="form-control" id="newEmail" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newFirstName" class="form-label">First Name *</label>
+                        <input type="text" class="form-control" id="newFirstName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="newLastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="newLastName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="newPhone" class="form-label">Phone</label>
+                        <input type="tel" class="form-control" id="newPhone">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Campaigns</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="newCampGeneral" value="general" checked>
+                            <label class="form-check-label" for="newCampGeneral">General</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="newCampElection" value="election">
+                            <label class="form-check-label" for="newCampElection">Election Updates</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="newCampPrayer" value="prayer">
+                            <label class="form-check-label" for="newCampPrayer">Prayer Requests</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="newCampEvents" value="events">
+                            <label class="form-check-label" for="newCampEvents">Events & Rallies</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="addNewSubscriber()">Add Subscriber</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bulk Import Modal -->
+    <div class="modal fade" id="bulkImportModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Bulk Import Subscribers</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <strong>CSV Format:</strong> email, first_name, last_name, phone, campaigns<br>
+                        <strong>Example:</strong> john@example.com, John, Doe, 555-1234, general|election<br>
+                        <small>Campaigns: general, election, prayer, events (separate with | for multiple)</small>
+                    </div>
+                    <div class="mb-3">
+                        <label for="csvFile" class="form-label">Upload CSV File</label>
+                        <input type="file" class="form-control" id="csvFile" accept=".csv,.txt">
+                    </div>
+                    <div class="mb-3">
+                        <label for="csvText" class="form-label">Or Paste CSV Data</label>
+                        <textarea class="form-control" id="csvText" rows="10" placeholder="email,first_name,last_name,phone,campaigns"></textarea>
+                    </div>
+                    <div id="importPreview"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="processBulkImport()">Import Subscribers</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Subscriber Modal -->
+    <div class="modal fade" id="subscriberModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Subscriber</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="subEmail">
+                    <div class="mb-3">
+                        <label for="subFirstName" class="form-label">First Name *</label>
+                        <input type="text" class="form-control" id="subFirstName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="subLastName" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="subLastName">
+                    </div>
+                    <div class="mb-3">
+                        <label for="subPhone" class="form-label">Phone</label>
+                        <input type="tel" class="form-control" id="subPhone">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Campaigns</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="campGeneral" value="general">
+                            <label class="form-check-label" for="campGeneral">General</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="campElection" value="election">
+                            <label class="form-check-label" for="campElection">Election Updates</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="campPrayer" value="prayer">
+                            <label class="form-check-label" for="campPrayer">Prayer Requests</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" id="campEvents" value="events">
+                            <label class="form-check-label" for="campEvents">Events & Rallies</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSubscriber()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Campaign Modal -->
+    <div class="modal fade" id="campaignModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="campaignModalTitle">Create Campaign</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="campaignId">
+                    <div class="mb-3">
+                        <label for="campaignName" class="form-label">Campaign Name *</label>
+                        <input type="text" class="form-control" id="campaignName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="campaignDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="campaignDescription" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="saveCampaign()">Save Campaign</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Template Modal -->
+    <div class="modal fade" id="templateModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Template</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="templateName" class="form-label">Template Name *</label>
+                        <input type="text" class="form-control" id="templateName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="templateDescription" class="form-label">Description</label>
+                        <textarea class="form-control" id="templateDescription" rows="2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="templateHtml" class="form-label">HTML Content *</label>
+                        <textarea class="form-control" id="templateHtml" rows="10" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" onclick="saveTemplate()">Save Template</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        const API_URL = 'https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/newsletter';
+        let quill;
+
+        $(document).ready(function() {
+            const authToken = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+            
+            if (!authToken || !userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const user = JSON.parse(userData);
+            if (user.role !== 'admin' && user.role !== 'super_user') {
+                alert('Access denied. Admin only.');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            fetch('navbar.html')
+                .then(r => r.text())
+                .then(html => {
+                    document.getElementById('navbar-container').innerHTML = html;
+                    initNavbar();
+                });
+
+            $('#editor').attr('contenteditable', 'true').css('background', 'white');
+
+            loadNewsletters();
+            loadSubscribers();
+            loadTemplates();
+            loadCampaigns();
+            
+            // Load analytics when tab is shown
+            $('a[href="#analytics"]').on('shown.bs.tab', function() {
+                loadAnalytics();
+            });
+            
+            // Load campaign subscribers when tab is shown
+            $('a[href="#campaigns"]').on('shown.bs.tab', function() {
+                loadCampaigns();
+                filterByCampaign();
+            });
+            
+            // Sync editors on tab switch
+            $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function(e) {
+                const target = $(e.target).attr('href');
+                if (target === '#htmlEditor') {
+                    $('#htmlContent').val($('#editor').html());
+                } else if (target === '#visualEditor') {
+                    $('#editor').html($('#htmlContent').val());
+                }
+            });
+        });
+
+        function loadNewsletters() {
+            fetch(API_URL + '?action=list_newsletters')
+                .then(r => r.json())
+                .then(data => {
+                    const newsletters = data.newsletters || [];
+                    $('#totalNewsletters').text(newsletters.length);
+                    $('#sentNewsletters').text(newsletters.filter(n => n.status === 'sent').length);
+                    $('#draftNewsletters').text(newsletters.filter(n => n.status === 'draft').length);
+
+                    const tbody = $('#newslettersList');
+                    tbody.empty();
+                    
+                    newsletters.forEach(n => {
+                        tbody.append(`
+                            <tr>
+                                <td>${n.title}</td>
+                                <td>${n.subject}</td>
+                                <td><span class="badge bg-${n.status === 'sent' ? 'success' : n.status === 'scheduled' ? 'warning' : 'secondary'}">${n.status}</span></td>
+                                <td id="recipients-${n.newsletter_id}">${n.recipient_count || 0}</td>
+                                <td>${new Date(n.created_at).toLocaleDateString()}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" onclick="editNewsletter('${n.newsletter_id}')">Edit</button>
+                                    ${n.status !== 'sent' ? `<button class="btn btn-sm btn-success" onclick="sendNewsletter('${n.newsletter_id}')">Send</button>` : ''}
+                                    <button class="btn btn-sm btn-danger" onclick="deleteNewsletter('${n.newsletter_id}')">Delete</button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                });
+        }
+
+        function loadSubscribers() {
+            fetch(API_URL + '?action=list_subscribers')
+                .then(r => r.json())
+                .then(data => {
+                    const subscribers = data.subscribers || [];
+                    $('#activeSubscribers').text(subscribers.filter(s => s.status === 'active').length);
+                    $('#unsubscribed').text(subscribers.filter(s => s.status === 'unsubscribed').length);
+
+                    const tbody = $('#subscribersList');
+                    tbody.empty();
+                    
+                    subscribers.forEach(s => {
+                        const campaigns = (s.campaigns || ['general']).join(', ');
+                        tbody.append(`
+                            <tr>
+                                <td>${s.email}</td>
+                                <td>${s.first_name || ''} ${s.last_name || ''}</td>
+                                <td><span class="badge bg-${s.status === 'active' ? 'success' : 'secondary'}">${s.status}</span></td>
+                                <td>${new Date(s.subscribed_at).toLocaleDateString()}</td>
+                                <td>${s.source || 'website'}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" onclick="editSubscriber('${s.email}')">Edit</button>
+                                    <button class="btn btn-sm btn-warning" onclick="unsubscribeUser('${s.email}')">Unsubscribe</button>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteSubscriber('${s.email}')">Delete</button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                });
+        }
+
+        function loadTemplates() {
+            fetch(API_URL + '?action=list_templates')
+                .then(r => r.json())
+                .then(data => {
+                    const templates = data.templates || [];
+                    const container = $('#templatesList');
+                    container.empty();
+                    
+                    templates.forEach(t => {
+                        container.append(`
+                            <div class="col-md-4 mb-3">
+                                <div class="card h-100">
+                                    <div style="height: 200px; overflow: hidden; border-bottom: 1px solid #ddd;">
+                                        <iframe srcdoc="${t.html.replace(/"/g, '&quot;')}" style="width: 600px; height: 800px; transform: scale(0.33); transform-origin: 0 0; border: none;"></iframe>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">${t.name}</h5>
+                                        <p class="card-text small">${t.description || ''}</p>
+                                        <button class="btn btn-sm btn-primary w-100 mb-2" onclick="copyTemplateToNewsletter('${t.template_id}')">Use Template</button>
+                                        <button class="btn btn-sm btn-outline-secondary w-100 mb-2" onclick="previewTemplate('${t.template_id}')">Preview</button>
+                                        <button class="btn btn-sm btn-danger w-100" onclick="deleteTemplate('${t.template_id}')">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    });
+                });
+        }
+
+
+
+        function openNewsletter() {
+            $('#modalTitle').text('Create Newsletter');
+            $('#newsletterId').val('');
+            $('#title').val('');
+            $('#subject').val('');
+            $('#status').val('draft');
+            $('#campaign').val('general');
+            $('#scheduledSend').val('');
+            $('#templateSelect').val('');
+            $('#htmlContent').val('');
+            $('#editor').html('');
+        }
+
+        function editNewsletter(id) {
+            fetch(API_URL + '?action=get_newsletter&newsletter_id=' + id)
+                .then(r => r.json())
+                .then(data => {
+                    const n = data.newsletter;
+                    $('#modalTitle').text('Edit Newsletter');
+                    $('#newsletterId').val(n.newsletter_id);
+                    $('#title').val(n.title);
+                    $('#subject').val(n.subject);
+                    $('#status').val(n.status);
+                    $('#scheduledSend').val(n.scheduled_send || '');
+                    $('#htmlContent').val(n.content);
+                    $('#editor').html(n.content);
+                    $('#newsletterModal').modal('show');
+                });
+        }
+
+        function saveNewsletter() {
+            const activeTab = $('.tab-pane.active').attr('id');
+            const content = activeTab === 'htmlEditor' ? $('#htmlContent').val() : $('#editor').html();
+            
+            const id = $('#newsletterId').val();
+            const data = {
+                action: id ? 'update_newsletter' : 'create_newsletter',
+                title: $('#title').val(),
+                subject: $('#subject').val(),
+                content: content,
+                status: $('#status').val(),
+                scheduled_send: $('#scheduledSend').val(),
+                created_by: JSON.parse(localStorage.getItem('user_data')).email
+            };
+
+            if (id) data.newsletter_id = id;
+
+            fetch(API_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+            .then(r => r.json())
+            .then(() => {
+                $('#newsletterModal').modal('hide');
+                loadNewsletters();
+                alert('Newsletter saved successfully!');
+            });
+        }
+
+        function sendNewsletter(id) {
+            // Get subscriber count first
+            fetch(API_URL + '?action=list_subscribers&status=active')
+                .then(r => r.json())
+                .then(data => {
+                    const count = (data.subscribers || []).length;
+                    if (count === 0) {
+                        alert('No active subscribers found. Add subscribers first.');
+                        return;
+                    }
+                    if (!confirm(`Send this newsletter to ${count} active subscriber(s)?`)) return;
+                    
+                    sendNewsletterNow(id);
+                });
+        }
+
+        function sendNewsletterNow(id) {
+            const campaign = $('#campaign').val() || 'general';
+            
+            fetch(API_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({action: 'send_newsletter', newsletter_id: id, campaign: campaign})
+            })
+            .then(r => r.json())
+            .then(data => {
+                alert(data.message);
+                loadNewsletters();
+            });
+        }
+
+        function deleteNewsletter(id) {
+            if (!confirm('Delete this newsletter?')) return;
+
+            fetch(API_URL + '?action=delete_newsletter&newsletter_id=' + id)
+                .then(r => r.json())
+                .then(() => {
+                    loadNewsletters();
+                    alert('Newsletter deleted!');
+                });
+        }
+
+        function saveTemplate() {
+            const data = {
+                action: 'create_template',
+                name: $('#templateName').val(),
+                description: $('#templateDescription').val(),
+                html: $('#templateHtml').val()
+            };
+
+            fetch(API_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+            .then(r => r.json())
+            .then(() => {
+                $('#templateModal').modal('hide');
+                loadTemplates();
+                alert('Template saved!');
+            });
+        }
+
+
+
+        function previewNewsletter() {
+            const activeTab = $('.tab-pane.active').attr('id');
+            const content = activeTab === 'htmlEditor' ? $('#htmlContent').val() : $('#editor').html();
+            const subject = $('#subject').val();
+            
+            let previewHtml = `
+                <div style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif;">
+                    <h2 style="color: #333;">${subject}</h2>
+                    ${content}
+                    <hr style="margin: 30px 0;">
+                    <p style="color: #666; font-size: 12px;">This is a preview. Unsubscribe link will be added automatically.</p>
+                </div>
+            `;
+            
+            $('#preview-content').html(previewHtml);
+            $('#previewModal').modal('show');
+        }
+
+        function sendFromPreview() {
+            const id = $('#newsletterId').val();
+            if (!id) {
+                alert('Please save the newsletter first');
+                return;
+            }
+            $('#previewModal').modal('hide');
+            sendNewsletter(id);
+        }
+
+        function copyTemplateToNewsletter(id) {
+            fetch(API_URL + '?action=get_template&template_id=' + id)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.template) {
+                        $('#modalTitle').text('Create Newsletter from Template');
+                        $('#newsletterId').val('');
+                        $('#title').val(data.template.name);
+                        $('#subject').val('Newsletter - ' + data.template.name);
+                        $('#status').val('draft');
+                        $('#scheduledSend').val('');
+                        $('#htmlContent').val(data.template.html);
+                        $('#editor').html(data.template.html);
+                        
+                        $('#newsletterModal').modal('show');
+                    }
+                });
+        }
+
+        function previewTemplate(id) {
+            fetch(API_URL + '?action=get_template&template_id=' + id)
+                .then(r => r.json())
+                .then(data => {
+                    if (data.template) {
+                        $('#preview-content').html(data.template.html);
+                        $('#previewModal').modal('show');
+                    }
+                });
+        }
+
+        function deleteTemplate(id) {
+            if (!confirm('Delete this template?')) return;
+            fetch(API_URL + '?action=delete_template&template_id=' + id)
+                .then(r => r.json())
+                .then(() => {
+                    loadTemplates();
+                    alert('Template deleted!');
+                });
+        }
+
+        function formatDoc(cmd, value = null) {
+            document.execCommand(cmd, false, value);
+            $('#editor').focus();
+        }
+
+        function insertLink() {
+            const url = prompt('Enter URL:');
+            if (url) {
+                document.execCommand('createLink', false, url);
+            }
+        }
+
+        function loadCampaigns() {
+            Promise.all([
+                fetch(API_URL + '?action=list_campaigns').then(r => r.json()),
+                fetch(API_URL + '?action=list_subscribers').then(r => r.json())
+            ]).then(([campaignsData, subscribersData]) => {
+                const campaigns = campaignsData.campaigns || [];
+                const subscribers = subscribersData.subscribers || [];
+                const active = subscribers.filter(s => s.status === 'active');
+                
+                $('#campaignCards').empty();
+                $('#campaignFilter').find('option:not(:first)').remove();
+                $('#campaign').empty();
+                
+                campaigns.forEach(c => {
+                    const count = active.filter(s => (s.campaigns || []).includes(c.campaign_id)).length;
+                    $('#campaignCards').append(`
+                        <div class="col-md-3">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5>${c.name}</h5>
+                                    <p class="text-muted small">${c.description || ''}</p>
+                                    <span class="badge bg-primary">${count}</span>
+                                    <div class="mt-2">
+                                        <button class="btn btn-sm btn-outline-primary" onclick="editCampaign('${c.campaign_id}')">Edit</button>
+                                        <button class="btn btn-sm btn-outline-danger" onclick="deleteCampaign('${c.campaign_id}')">Delete</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `);
+                    $('#campaignFilter').append(`<option value="${c.campaign_id}">${c.name}</option>`);
+                    $('#campaign').append(`<option value="${c.campaign_id}">${c.name}</option>`);
+                });
+            });
+        }
+        
+        function openNewCampaign() {
+            $('#campaignModalTitle').text('Create Campaign');
+            $('#campaignId').val('');
+            $('#campaignName').val('');
+            $('#campaignDescription').val('');
+        }
+        
+        function editCampaign(id) {
+            fetch(API_URL + '?action=list_campaigns')
+                .then(r => r.json())
+                .then(data => {
+                    const campaign = (data.campaigns || []).find(c => c.campaign_id === id);
+                    if (campaign) {
+                        $('#campaignModalTitle').text('Edit Campaign');
+                        $('#campaignId').val(campaign.campaign_id);
+                        $('#campaignName').val(campaign.name);
+                        $('#campaignDescription').val(campaign.description || '');
+                        $('#campaignModal').modal('show');
+                    }
+                });
+        }
+        
+        function saveCampaign() {
+            const id = $('#campaignId').val();
+            const name = $('#campaignName').val().trim();
+            if (!name) {
+                alert('Campaign name is required');
+                return;
+            }
+            
+            const data = {
+                action: id ? 'update_campaign' : 'create_campaign',
+                campaign_id: id || name.toLowerCase().replace(/\s+/g, '_'),
+                name: name,
+                description: $('#campaignDescription').val().trim()
+            };
+            
+            fetch(API_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+            .then(r => r.json())
+            .then(() => {
+                $('#campaignModal').modal('hide');
+                loadCampaigns();
+                alert('Campaign saved!');
+            });
+        }
+        
+        function deleteCampaign(id) {
+            if (!confirm('Delete this campaign? Subscribers will keep their assignments.')) return;
+            
+            fetch(API_URL + '?action=delete_campaign&campaign_id=' + id)
+                .then(r => r.json())
+                .then(() => {
+                    loadCampaigns();
+                    alert('Campaign deleted!');
+                });
+        }
+
+        function loadAnalytics() {
+            Promise.all([
+                fetch(API_URL + '?action=get_analytics').then(r => r.json()),
+                fetch(API_URL + '?action=list_newsletters').then(r => r.json())
+            ]).then(([analyticsData, newslettersData]) => {
+                const analytics = analyticsData.analytics || [];
+                const newsletters = newslettersData.newsletters || [];
+                const container = $('#analyticsData');
+                container.empty();
+                
+                if (analytics.length === 0) {
+                    container.append('<p class="text-muted">No analytics data yet. Send a newsletter to see tracking data.</p>');
+                    return;
+                }
+                
+                // Group by newsletter
+                const byNewsletter = {};
+                analytics.forEach(a => {
+                    if (!byNewsletter[a.newsletter_id]) {
+                        byNewsletter[a.newsletter_id] = [];
+                    }
+                    byNewsletter[a.newsletter_id].push(a);
+                });
+                
+                Object.keys(byNewsletter).forEach(nid => {
+                    const items = byNewsletter[nid];
+                    const newsletter = newsletters.find(n => n.newsletter_id === nid);
+                    const title = newsletter ? newsletter.title : nid.substring(0, 8) + '...';
+                    const opened = items.filter(i => i.opened).length;
+                    const totalOpens = items.reduce((sum, i) => sum + (i.open_count || 0), 0);
+                    const openRate = ((opened / items.length) * 100).toFixed(1);
+                    
+                    container.append(`
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <h5>${title}</h5>
+                                <p><strong>Sent:</strong> ${items.length} | <strong>Opened:</strong> ${opened} (${openRate}%) | <strong>Total Opens:</strong> ${totalOpens}</p>
+                                <button class="btn btn-sm btn-primary" onclick="viewNewsletterDetails('${nid}', '${title.replace(/'/g, "\\'")}')">View Details</button>
+                            </div>
+                        </div>
+                    `);
+                });
+            });
+        }
+
+        function editSubscriber(email) {
+            fetch(API_URL + '?action=get_subscriber&email=' + encodeURIComponent(email))
+                .then(r => r.json())
+                .then(data => {
+                    const sub = data.subscriber;
+                    $('#subEmail').val(sub.email);
+                    $('#subFirstName').val(sub.first_name || '');
+                    $('#subLastName').val(sub.last_name || '');
+                    $('#subPhone').val(sub.phone || '');
+                    
+                    const campaigns = sub.campaigns || ['general'];
+                    $('#campGeneral').prop('checked', campaigns.includes('general'));
+                    $('#campElection').prop('checked', campaigns.includes('election'));
+                    $('#campPrayer').prop('checked', campaigns.includes('prayer'));
+                    $('#campEvents').prop('checked', campaigns.includes('events'));
+                    
+                    $('#subscriberModal').modal('show');
+                });
+        }
+
+        function saveSubscriber() {
+            const campaigns = [];
+            if ($('#campGeneral').is(':checked')) campaigns.push('general');
+            if ($('#campElection').is(':checked')) campaigns.push('election');
+            if ($('#campPrayer').is(':checked')) campaigns.push('prayer');
+            if ($('#campEvents').is(':checked')) campaigns.push('events');
+            
+            const data = {
+                action: 'update_subscriber',
+                email: $('#subEmail').val(),
+                first_name: $('#subFirstName').val(),
+                last_name: $('#subLastName').val(),
+                phone: $('#subPhone').val(),
+                campaigns: campaigns
+            };
+            
+            fetch(API_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+            .then(r => r.json())
+            .then(() => {
+                $('#subscriberModal').modal('hide');
+                loadSubscribers();
+                loadCampaigns();
+                filterByCampaign();
+                alert('Subscriber updated!');
+            });
+        }
+
+        function unsubscribeUser(email) {
+            if (!confirm('Unsubscribe this user?')) return;
+            
+            fetch(API_URL + '?action=unsubscribe&email=' + encodeURIComponent(email))
+                .then(r => r.json())
+                .then(() => {
+                    loadSubscribers();
+                    loadCampaigns();
+                    alert('User unsubscribed!');
+                });
+        }
+
+        function deleteSubscriber(email) {
+            if (!confirm('Permanently delete this subscriber?')) return;
+            
+            fetch(API_URL + '?action=delete_subscriber&email=' + encodeURIComponent(email))
+                .then(r => r.json())
+                .then(() => {
+                    loadSubscribers();
+                    loadCampaigns();
+                    filterByCampaign();
+                    alert('Subscriber deleted!');
+                });
+        }
+
+        function addNewSubscriber() {
+            const campaigns = [];
+            if ($('#newCampGeneral').is(':checked')) campaigns.push('general');
+            if ($('#newCampElection').is(':checked')) campaigns.push('election');
+            if ($('#newCampPrayer').is(':checked')) campaigns.push('prayer');
+            if ($('#newCampEvents').is(':checked')) campaigns.push('events');
+            
+            const data = {
+                action: 'add_subscriber',
+                email: $('#newEmail').val().trim().toLowerCase(),
+                first_name: $('#newFirstName').val().trim(),
+                last_name: $('#newLastName').val().trim(),
+                phone: $('#newPhone').val().trim(),
+                campaigns: campaigns
+            };
+            
+            fetch(API_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(data)
+            })
+            .then(r => r.json())
+            .then(result => {
+                if (result.error) {
+                    alert('Error: ' + result.error);
+                } else {
+                    $('#addSubscriberModal').modal('hide');
+                    $('#newEmail').val('');
+                    $('#newFirstName').val('');
+                    $('#newLastName').val('');
+                    $('#newPhone').val('');
+                    $('#newCampGeneral').prop('checked', true);
+                    $('#newCampElection').prop('checked', false);
+                    $('#newCampPrayer').prop('checked', false);
+                    $('#newCampEvents').prop('checked', false);
+                    loadSubscribers();
+                    loadCampaigns();
+                    alert('Subscriber added successfully!');
+                }
+            });
+        }
+
+        $('#csvFile').on('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    $('#csvText').val(e.target.result);
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        function processBulkImport() {
+            const csvText = $('#csvText').val().trim();
+            if (!csvText) {
+                alert('Please upload a CSV file or paste CSV data');
+                return;
+            }
+            
+            const lines = csvText.split('\n').filter(l => l.trim());
+            const subscribers = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line || line.toLowerCase().startsWith('email')) continue;
+                
+                const parts = line.split(',').map(p => p.trim());
+                if (parts.length < 1 || !parts[0]) continue;
+                
+                const campaigns = parts[4] ? parts[4].split('|').map(c => c.trim()) : ['general'];
+                
+                subscribers.push({
+                    email: parts[0].toLowerCase(),
+                    first_name: parts[1] || '',
+                    last_name: parts[2] || '',
+                    phone: parts[3] || '',
+                    campaigns: campaigns
+                });
+            }
+            
+            if (subscribers.length === 0) {
+                alert('No valid subscribers found in CSV');
+                return;
+            }
+            
+            if (!confirm(`Import ${subscribers.length} subscriber(s)?`)) return;
+            
+            fetch(API_URL, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({action: 'bulk_import', subscribers: subscribers})
+            })
+            .then(r => r.json())
+            .then(result => {
+                $('#bulkImportModal').modal('hide');
+                $('#csvText').val('');
+                $('#csvFile').val('');
+                loadSubscribers();
+                loadCampaigns();
+                alert(result.message + (result.errors.length > 0 ? '\n\nErrors:\n' + result.errors.join('\n') : ''));
+            });
+        }
+
+        function filterByCampaign() {
+            const campaign = $('#campaignFilter').val();
+            
+            fetch(API_URL + '?action=list_subscribers')
+                .then(r => r.json())
+                .then(data => {
+                    let subscribers = data.subscribers || [];
+                    
+                    if (campaign !== 'all') {
+                        subscribers = subscribers.filter(s => (s.campaigns || ['general']).includes(campaign));
+                    }
+                    
+                    const tbody = $('#campaignSubscribersList');
+                    tbody.empty();
+                    
+                    subscribers.forEach(s => {
+                        const campaigns = (s.campaigns || ['general']).join(', ');
+                        tbody.append(`
+                            <tr>
+                                <td>${s.email}</td>
+                                <td>${s.first_name || ''} ${s.last_name || ''}</td>
+                                <td><span class="badge bg-secondary">${campaigns}</span></td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" onclick="editSubscriber('${s.email}')">Edit</button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                });
+        }
+
+        function viewNewsletterDetails(newsletterId, title) {
+            const container = $('#analyticsData');
+            container.html('<div class="text-center"><div class="spinner-border" role="status"></div><p>Loading details...</p></div>');
+            
+            fetch(API_URL + '?action=get_newsletter_analytics&newsletter_id=' + newsletterId)
+                .then(r => r.json())
+                .then(data => {
+                    const analytics = data.analytics || [];
+                    
+                    if (analytics.length === 0) {
+                        container.html(`
+                            <div class="alert alert-info">
+                                <h5>${title}</h5>
+                                <p>No tracking data available for this newsletter.</p>
+                                <button class="btn btn-secondary" onclick="loadAnalytics()">← Back</button>
+                            </div>
+                        `);
+                        return;
+                    }
+                    
+                    // Get subscriber details for each tracking record
+                    const promises = analytics.map(a => 
+                        fetch(API_URL + '?action=get_subscriber&email=' + encodeURIComponent(a.email))
+                            .then(r => r.json())
+                            .then(d => ({...a, subscriber: d.subscriber}))
+                            .catch(() => ({...a, subscriber: null}))
+                    );
+                    
+                    Promise.all(promises).then(results => {
+                        let rows = '';
+                        results.forEach(item => {
+                            const sub = item.subscriber;
+                            const name = sub ? `${sub.first_name || ''} ${sub.last_name || ''}`.trim() || '-' : '-';
+                            const lastOpened = item.last_opened_at ? new Date(item.last_opened_at).toLocaleString() : '-';
+                            const openCount = item.open_count || 0;
+                            const rowClass = item.opened ? '' : 'table-secondary';
+                            
+                            rows += `
+                                <tr class="${rowClass}">
+                                    <td>${item.email}</td>
+                                    <td>${name}</td>
+                                    <td>${openCount}</td>
+                                    <td>${lastOpened}</td>
+                                </tr>
+                            `;
+                        });
+                        
+                        container.html(`
+                            <div class="card mb-3">
+                                <div class="card-header">
+                                    <h5>${title} - Detailed Analytics</h5>
+                                    <button class="btn btn-sm btn-secondary" onclick="loadAnalytics()">← Back</button>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Email</th>
+                                                <th>Name</th>
+                                                <th>Opens</th>
+                                                <th>Last Opened</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>${rows}</tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        `);
+                    });
+                });
+        }
+    </script>
+</body>
+</html>

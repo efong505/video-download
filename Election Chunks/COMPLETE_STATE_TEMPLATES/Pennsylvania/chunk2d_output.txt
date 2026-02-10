@@ -1,0 +1,86 @@
+candidates = [
+    {
+        "name": "Stacy Garrity",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Stacy Garrity is the current Pennsylvania State Treasurer, first elected in 2020 and reelected in 2024 with the largest margin of any statewide candidate in Pennsylvania history, receiving more votes than any state candidate ever. A decorated U.S. Army Reserve veteran, she served over 20 years in the military, including deployments to Iraq and Afghanistan, earning the Bronze Star Medal for her service. Before entering politics, Garrity worked in banking and finance, focusing on investment management and economic development in rural Pennsylvania. She grew up in Bradford County, the daughter of a small business owner, and graduated from Lycoming College with a degree in business administration. As Treasurer, she has prioritized fiscal responsibility, launching initiatives to combat financial exploitation of seniors, investing in Pennsylvania's infrastructure through the state's unclaimed property program, and advocating for lower fees on state services. Garrity has built a broad coalition within the Republican Party, appealing to both Trump supporters and traditional conservatives by emphasizing economic growth, veterans' issues, and family values. In her reelection campaign, she secured endorsements from building trades unions, a rare feat for a Republican, demonstrating her ability to bridge divides. Married with two children, she resides in Potter Township and is active in her local church community. Her accomplishments include recovering over $300 million in unclaimed funds for Pennsylvanians and implementing technology upgrades to modernize the Treasurer's office. (Source: Ballotpedia, Spotlight PA, official campaign biography from Pennsylvania.gov).",
+        "faith_statement": "As a devout Christian, I draw strength from my faith in Jesus Christ, which guides my commitment to serve with integrity and compassion, protecting the vulnerable and upholding moral principles in public service.",
+        "website": "https://www.stacygarrity.com",
+        "positions": {
+            "ABORTION": "Stacy Garrity is pro-life and supports Pennsylvania's existing restrictions on abortion after 20 weeks, with exceptions for the life of the mother. She has endorsed legislation to defund Planned Parenthood and promote alternatives like adoption services, while opposing any expansion of abortion access.",
+            "EDUCATION": "Garrity advocates for school choice and expanded vouchers to empower parents, particularly in rural and underperforming districts. She supports funding for career and technical education programs and opposes mandates on critical race theory in curricula, emphasizing parental rights in education decisions.",
+            "RELIGIOUS-FREEDOM": "A strong defender of religious liberty, Garrity supports protections for faith-based organizations against government overreach, including conscience rights for healthcare providers refusing to participate in procedures conflicting with their beliefs, and opposes policies that infringe on free exercise of religion.",
+            "GUNS": "Garrity is a staunch Second Amendment advocate, opposing all forms of gun control measures like assault weapon bans or red-flag laws. She supports concealed carry reciprocity and has earned endorsements from the NRA for her efforts to protect gun owners' rights.",
+            "TAXES": "Committed to tax relief, Garrity proposes cutting property taxes through state rebates and eliminating the capital gains tax on small businesses. She supports a flat tax system to stimulate economic growth and has criticized excessive government spending as Treasurer.",
+            "IMMIGRATION": "Garrity calls for enhanced border security, including completing the southern border wall and increasing funding for ICE enforcement. She supports legal immigration pathways but opposes sanctuary cities and amnesty for undocumented immigrants.",
+            "FAMILY-VALUES": "Garrity upholds traditional marriage as between one man and one woman and supports parental rights in education, including opt-outs from gender identity discussions. She advocates for policies strengthening families, such as tax credits for child care and protections against gender transition procedures for minors.",
+            "ELECTION-INTEGRITY": "Garrity demands strict voter ID requirements, paper ballots, and audits of election machines. She has questioned 2020 election processes and supports legislation banning ranked-choice voting and requiring same-day voting only."
+        },
+        "endorsements": ["National Rifle Association", "Pennsylvania Farm Bureau", "Fraternal Order of Police"]
+    },
+    {
+        "name": "Doug Mastriano",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Doug Mastriano is a Republican state senator representing Pennsylvania's 33rd District since 2019, following a special election victory. A retired U.S. Army Colonel with 30 years of service, including combat deployments to Iraq, Desert Storm, and Bosnia, Mastriano earned a Ph.D. in History from the University of New Brunswick and teaches at American Public University. Born in New Jersey, he moved to Pennsylvania after retiring from the military. In the Senate, he chairs the Transportation Committee and has been a vocal critic of COVID-19 mandates, authoring bills to limit gubernatorial emergency powers. Mastriano gained national attention as the 2022 Republican nominee for governor, winning the primary with 44% in a crowded field but losing the general election to Josh Shapiro by 15 points, garnering the most votes for a GOP gubernatorial candidate since 1962. His campaign focused on election integrity, school choice, and pro-life policies. Married to Rebecca, with two adult sons, Mastriano is an active member of his evangelical church. He authored 'Tell Truth and Shame the Devil,' a book on his military and political experiences. As a historian, he has published on World War I and military strategy. His legislative record includes over 50 sponsored bills on veterans' affairs, energy independence, and Second Amendment rights. (Source: Ballotpedia, Pennsylvania Senate biography, official campaign site).",
+        "faith_statement": "My Christian faith in Jesus Christ is the foundation of my life and service; it compels me to fight for biblical values, protect the unborn, and ensure religious freedoms are safeguarded against secular overreach.",
+        "website": "https://www.doug4pa.com",
+        "positions": {
+            "ABORTION": "Mastriano is firmly pro-life, supporting a total ban on abortion with no exceptions except to save the mother's life. He sponsored the 2022 Heartbeat Bill to prohibit abortions after six weeks and vows to sign it into law as governor.",
+            "EDUCATION": "Advocates for universal school vouchers and abolishing the Department of Education, redirecting funds to homeschooling and private schools. Opposes DEI programs and mandates teaching of intelligent design alongside evolution.",
+            "RELIGIOUS-FREEDOM": "Champion of Christian nationalism, Mastriano seeks constitutional amendments protecting religious displays in public spaces and exemptions for faith-based adoptions from LGBTQ+ requirements.",
+            "GUNS": "Absolute Second Amendment defender, Mastriano opposes all gun control and supports constitutional carry without permits, while arming teachers in schools for safety.",
+            "TAXES": "Proposes eliminating all state income taxes, replacing with sales tax on luxury goods, and slashing corporate taxes to attract businesses, citing his military background in fiscal discipline.",
+            "IMMIGRATION": "Supports mass deportation of undocumented immigrants, ending birthright citizenship for children of illegals, and deploying National Guard to the southern border.",
+            "FAMILY-VALUES": "Defines marriage as one man-one woman, bans gender-affirming care for minors, and requires parental notification for school counseling on gender issues.",
+            "ELECTION-INTEGRITY": "Demands hand-counted paper ballots, voter ID, and purging rolls of non-citizens; claims 2020 election was stolen and would audit all past elections."
+        },
+        "endorsements": ["Donald Trump", "Family Research Council", "Gun Owners of America"]
+    },
+    {
+        "name": "Dan Meuser",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Daniel Meuser is the U.S. Representative for Pennsylvania's 9th Congressional District since 2019, previously serving as Pennsylvania's Secretary of Revenue from 2011 to 2015 under Gov. Tom Corbett. A fourth-generation small business owner, Meuser leads Aardvark Transportation Services, employing over 200 people. Born in Maryland and raised in Pennsylvania, he holds a B.A. in Political Science from Duke University. In Congress, he serves on the Financial Services and Small Business Committees, co-chairing the Congressional Manufacturing Caucus. Meuser has been a staunch Trump ally, voting against certifying the 2020 election and supporting efforts to repeal the Affordable Care Act. His legislative accomplishments include the SHIELD Act for election security and bills boosting veteran entrepreneurship. Married to Becky with three children, Meuser is involved in his Lutheran church and local Rotary Club. As Revenue Secretary, he reduced the agency staff by 25% while improving taxpayer services, saving millions. He has raised over $5 million for his congressional campaigns, focusing on economic growth in rural Pennsylvania. Endorsed by Trump for his loyalty, Meuser is considering a gubernatorial bid to challenge Shapiro, emphasizing job creation and border security. (Source: Ballotpedia, Congressional biography, Pennsylvania.gov).",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://meuser.house.gov",
+        "positions": {
+            "ABORTION": "Pro-life, Meuser supports overturning Roe v. Wade and state-level bans post-Dobbs, with exceptions for rape, incest, and maternal health; co-sponsored Born-Alive Abortion Survivors Protection Act.",
+            "EDUCATION": "Supports expanding 529 savings plans for K-12 and school choice vouchers; opposes federal overreach in curriculum and favors work-based learning over college-for-all mandates.",
+            "RELIGIOUS-FREEDOM": "Defends conscience protections for religious employers under ACA and supports lawsuits against vaccine mandates infringing on faith; backs First Amendment Defense Act.",
+            "GUNS": "Strong NRA supporter, opposes background check expansions and red-flag laws; advocates national concealed carry reciprocity and funding for school resource officers.",
+            "TAXES": "Pushes for permanent TCJA extensions, eliminating death tax, and state-level property tax caps; as former Revenue Secretary, streamlined tax collection to reduce burdens.",
+            "IMMIGRATION": "Calls for wall construction, ending chain migration, and E-Verify mandates; voted against DACA amnesty and supports deporting criminal aliens.",
+            "FAMILY-VALUES": "Supports traditional marriage, parental rights in education against gender ideology, and tax credits for families; opposes funding for Planned Parenthood.",
+            "ELECTION-INTEGRITY": "Co-sponsored SAVE Act for voter ID and citizenship proof; demands audits and paper trails, citing 2020 irregularities in Pennsylvania."
+        },
+        "endorsements": ["Donald Trump", "National Federation of Independent Business", "U.S. Chamber of Commerce"]
+    },
+    {
+        "name": "Scott Martin",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Scott Martin is a Republican state senator for Pennsylvania's 13th District since 2017, serving as chair of the Senate Appropriations Committee. A Lancaster County native, he owns The Martin Group, a digital marketing firm, and previously worked in economic development for the county. Martin graduated from Franklin & Marshall College with a B.A. in Government and serves on the boards of local nonprofits. In the Senate, he has sponsored over 100 bills, including the Property Tax Independence Act to eliminate school property taxes and initiatives for opioid crisis response. He ran for governor in 2022 but endorsed Stacy Garrity after withdrawing. Married to Dana with three children, Martin is active in his Presbyterian church and coaches youth sports. His accomplishments include securing $1 billion in state investments for Lancaster's infrastructure and advocating for veterans through the Senate Veterans Affairs Committee. As Appropriations chair, he balanced budgets emphasizing fiscal conservatism and education funding without tax increases. (Source: Ballotpedia, Pennsylvania Senate biography).",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.senatorscottmartin.com",
+        "positions": {
+            "ABORTION": "Pro-life, supports 20-week ban with exceptions; endorsed Garrity's pro-life stance and opposes taxpayer funding for abortions.",
+            "EDUCATION": "Champions school choice and vouchers, increased funding for special education; opposes CRT and supports phonics-based reading reforms.",
+            "RELIGIOUS-FREEDOM": "Supports RFRA expansions for faith-based child welfare agencies and protections against discrimination lawsuits for religious expression.",
+            "GUNS": "NRA-endorsed, opposes permit requirements for concealed carry and universal background checks; backs stand-your-ground laws.",
+            "TAXES": "Author of bill to replace property taxes with income tax increases on high earners; supports cutting corporate net income tax to 4.99%.",
+            "IMMIGRATION": "Favors stricter enforcement, opposing sanctuary policies and supporting federal cooperation on deportations.",
+            "FAMILY-VALUES": "Promotes family tax credits and parental consent for minors' medical decisions; opposes same-sex marriage mandates.",
+            "ELECTION-INTEGRITY": "Sponsored voter ID legislation and election security audits; requires proof of citizenship for voting."
+        },
+        "endorsements": ["Pennsylvania Chamber of Business and Industry", "Pennsylvania Manufacturers' Association", "Stacy Garrity"]
+    }
+]

@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My S3 Buckets</title>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.1450.0.min.js"></script>
+</head>
+<body>
+    <h1>S3 Buckets</h1>
+    <ul id="buckets"></ul>
+    <script>
+        AWS.config.region = 'us-east-1';
+        AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: 'YOUR_POOL'});
+        
+        const buckets = [
+            {name: 'my-video-downloads-bucket', account: 'Main Account', url: 'https://s3.console.aws.amazon.com/s3/buckets/my-video-downloads-bucket'}
+        ];
+        
+        buckets.forEach(b => {
+            document.getElementById('buckets').innerHTML += 
+                `<li><a href="${b.url}" target="_blank">${b.name} (${b.account})</a></li>`;
+        });
+    </script>
+</body>
+</html>

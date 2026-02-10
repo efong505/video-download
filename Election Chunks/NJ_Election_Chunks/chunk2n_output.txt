@@ -1,0 +1,210 @@
+    {
+        "name": "Mussab Ali",
+        "state": "New Jersey",
+        "office": "Union City Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Mussab Ali is a lifelong resident of Union City and a product of the Union City public school system. He graduated from Union City High School and later earned a Bachelor’s degree in Political Science from Rutgers University. A community organizer with the Hudson County Democratic Committee, Ali has worked on voter registration drives and youth mentorship programs. He currently serves as a legislative aide to a local assemblyman, focusing on education funding and bilingual programs. Ali ran for the Board of Education in 2022, placing second in a field of six, and is seeking election again to expand access to STEM programs and improve college readiness for English-language learners. He has volunteered as a coach for the Union City Recreation Department and serves on the board of the local Boys & Girls Club. Ali emphasizes transparency in budgeting and believes every dollar should be traceable to student outcomes. He has pledged to hold quarterly town halls in English and Spanish to ensure parent voices shape policy.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Ali supports expanding dual-language immersion programs and increasing AP course offerings in STEM fields. He advocates for full-day pre-K for all 4-year-olds and restoring trade-vocational tracks at the high school. He has called for an independent audit of the district’s $300 million budget to eliminate administrative bloat and redirect funds to classroom technology and teacher training. Ali opposes any curriculum that divides students by race or ethnicity and has pledged to require parental opt-in consent for lessons on human sexuality or gender identity.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Ali believes parents are the primary educators of their children and must have final say on sensitive topics. He supports a transparent curriculum portal where every textbook, reading assignment, and supplemental video is posted online 30 days before use. He opposes social-emotional learning surveys that probe family beliefs without explicit parental consent and has promised to ban cell-phone use during instructional time to reduce cyberbullying and protect childhood mental health.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Hudson County Democratic Committee", "Union City Teachers Association", "Latino Action Network"]
+    },
+    {
+        "name": "Wendy Grullon",
+        "state": "New Jersey",
+        "office": "Union City Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Wendy Grullon is a parent of three children enrolled in Union City schools and a paralegal at a local immigration law firm. Born in the Dominican Republic and raised in Union City, she is fluent in Spanish and English. Grullon has served as PTA president at Robert Waters Elementary for four years and led a successful campaign to install air-conditioning in every classroom. She volunteers with the Union City Food Pantry and coordinates bilingual parent workshops on FAFSA completion and scholarship opportunities. Grullon’s platform centers on equity, mental-health resources, and restoring trust between the board and immigrant families wary of federal data-sharing. She has criticized the district’s chronic absenteeism rate and wants restorative-justice discipline policies paired with mandatory after-school tutoring.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Grullon calls for hiring 20 additional bilingual counselors and creating a district-wide attendance task force. She supports culturally responsive teaching but insists any discussion of systemic racism must be age-appropriate and fact-based. She wants to expand the International Baccalaureate program to the middle schools and guarantee every graduating senior a one-on-one college or trade-school counseling session.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Grullon champions a ‘Parents’ Bill of Rights’ that requires 48-hour notice and opt-out forms for any lesson touching on gender identity or sexual orientation. She opposes locker-room or bathroom policies based on self-identified gender and vows to keep sports teams separated by biological sex to ensure fairness and safety for girls.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Union City PTA Council", "New Jersey Education Association", "Hudson County Young Democrats"]
+    },
+    {
+        "name": "Silvia Rodriguez",
+        "state": "New Jersey",
+        "office": "Union City Board of Education At-Large Seat 3",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Silvia Rodriguez is a 20-year veteran teacher in the Union City district, currently assigned to Emerson Middle School as an ESL instructor. She holds National Board Certification and a Master’s in Educational Leadership from New Jersey City University. Rodriguez has chaired the district’s Bilingual Education Advisory Committee and successfully lobbied for the reinstatement of the Gifted & Talented program after budget cuts. A union shop steward, she negotiated the current contract that restored planning time for middle-school teachers. Rodriguez is running to protect educator voices on the board and to prevent outsourcing of custodial and cafeteria jobs. She also wants to create a teacher residency pipeline with local colleges to address staffing shortages.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Rodriguez supports a return to phonics-based reading instruction in grades K-3 and wants to eliminate standardized testing in non-mandated grades to reduce student stress. She backs full funding of special-education mandates and a cap on class sizes at 22 students. Rodriguez has pledged to post all board contracts online within 24 hours of approval to curb no-bid deals.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Rodriguez insists that library books with explicit sexual content be placed in a restricted section requiring parental permission. She opposes any policy that withholds information about a student’s gender transition from parents and has co-signed a resolution affirming that only women should compete in women’s sports at district facilities.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Union City Education Association", "AFT New Jersey", "Hudson County Latino Caucus"]
+    },
+    {
+        "name": "Maria Valado",
+        "state": "New Jersey",
+        "office": "Bayonne Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Maria Valado is a Bayonne native and registered nurse at Bayonne Medical Center. She holds a BSN from Kean University and serves on the hospital’s community health board. Valado’s two children attend Bayonne public schools; she has been an active member of the Midtown Community School PTA and led the fundraiser that installed a new playground. She previously ran for city council on a platform of fiscal responsibility and school safety. Valado wants to address the district’s aging infrastructure and chronic flooding at several elementary schools. She has criticized the board’s use of one-time federal COVID funds for recurring salary increases.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Valado supports a facilities bond referendum to replace boilers and roofs at four schools built before 1960. She advocates for a return to neighborhood school assignments to reduce busing costs and build community cohesion. She wants to expand the nursing staff to one full-time nurse per building and implement a district-wide epinephrine auto-injector program.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Valado demands transparency on any social-emotional learning curriculum and insists on parental veto power over surveys that ask about home life. She opposes mixed-sex overnight field trips and pledges to maintain single-sex locker rooms. She has called for a policy requiring teachers to notify parents if a student asks to be addressed by a different name or pronoun at school.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Bayonne Parents Alliance", "Hudson County GOP", "New Jersey Family First"]
+    },
+    {
+        "name": "Dennis Jasinski",
+        "state": "New Jersey",
+        "office": "Bayonne Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Dennis Jasinski is a retired Bayonne police lieutenant with 28 years of service and a former School Resource Officer at Bayonne High School. He holds an Associate’s degree in Criminal Justice and has completed FEMA’s Active Shooter Response training. Jasinski coaches CYO basketball at St. Andrew’s parish and has volunteered with the Special Olympics. He is running to improve school safety protocols and restore vocational programs eliminated during past budget cuts. Jasinski has criticized the district’s lax enforcement of truancy laws and wants to partner with local law enforcement for a ‘handle with care’ notification system for students exposed to domestic trauma.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Jasinski supports reinstating auto mechanics, carpentry, and culinary arts at the high school with industry certifications. He wants armed School Resource Officers in every secondary school and ballistic film on ground-floor windows. He advocates for a zero-tolerance policy on fighting paired with mandatory conflict-resolution classes.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Jasinski opposes any curriculum that teaches gender fluidity as fact to elementary students. He supports a policy requiring parental consent for any club or activity promoting LGBTQ identities and vows to keep boys’ and girls’ sports teams biologically separate. He has pledged to post all visitor policies online and limit building access to one secured entrance.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Bayonne PBA Local 7", "NJ FOP", "Bayonne Veterans Council"]
+    },
+    {
+        "name": "Jodi Casais",
+        "state": "New Jersey",
+        "office": "Bayonne Board of Education At-Large Seat 3",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Jodi Casais is a Bayonne real-estate agent and mother of twins in the gifted program at Woodrow Wilson School. She holds a Bachelor’s in Communications from St. Peter’s University and previously worked as a legislative aide in Trenton. Casais has served on the Bayonne Library Board and led the campaign to extend weekend hours. She is running to accelerate the rollout of 1:1 Chromebooks and to create a parent university offering evening classes on navigating special education services. Casais has questioned the district’s $2 million contract with an outside testing vendor and wants competitive bidding for all services over $50,000.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Casais supports a weighted funding formula that directs extra resources to schools with higher poverty rates. She wants to expand the International Baccalaureate diploma program and offer SAT prep free to all juniors. She has called for a forensic audit of the transportation budget after revelations of no-show bus driver overtime.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Casais demands that all books challenged by parents receive a public hearing within 30 days. She opposes teachers using preferred pronouns without parental knowledge and supports a policy that sports participation aligns with birth certificate gender. She wants to restore the Pledge of Allegiance as a daily requirement in every classroom.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Bayonne Taxpayers Association", "Hudson County Realtors PAC", "New Jersey Moms for Liberty"]
+    },
+    {
+        "name": "Christopher Cerf",
+        "state": "New Jersey",
+        "office": "Newark Board of Education (State-Appointed)",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Christopher Cerf is the former New Jersey Commissioner of Education (2011-2015) and ex-Superintendent of Newark Public Schools (2015-2018). A Yale Law graduate, he co-founded the education consulting firm Public Prep and served as deputy chancellor of New York City schools under Joel Klein. Cerf was reappointed to the state-controlled Newark board in 2023 to oversee the final stages of returning the district to local control. He has championed universal pre-K, the teacher tenure reform law, and the expansion of high-performing charter schools. Critics blame him for school closures during the One Newark plan; supporters credit him with rising graduation rates from 61% to 79%. Cerf currently teaches education policy at Columbia University.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Cerf supports maintaining the portfolio model that allows families to choose traditional, charter, or magnet schools. He backs full state funding of the school funding formula (SFRA) and wants to preserve the teacher evaluation system tied to student growth. He has called for a phased return of authority to an elected board by 2026 with safeguards against fiscal mismanagement.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Cerf supports transparent school performance data and annual public report cards. He believes curriculum decisions belong to professional educators but insists parents must receive 30-day notice of controversial materials. He has endorsed keeping restroom and locker-room policies aligned with federal Title IX interpretations that recognize biological sex.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Newark Trust for Education", "NJ Children’s Foundation", "Education Reform Now"]
+    },
+    {
+        "name": "Josephine Garcia",
+        "state": "New Jersey",
+        "office": "East Orange Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Josephine Garcia is a 15-year resident of East Orange and a social worker with the Essex County Division of Family Assistance. She holds an MSW from Rutgers and specializes in child welfare. Garcia’s daughter attends East Orange STEM Academy; she has served as treasurer of the Cicely L. Tyson Community School PTA and organized college bus tours for first-generation students. Garcia ran unsuccessfully for the board in 2021 and is campaigning on restorative justice, mental-health supports, and eliminating out-of-school suspensions for non-violent offenses. She has criticized the district’s $12 million facilities backlog and wants to partner with the county vocational school for shared trades programs.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Garcia supports hiring 25 additional restorative-practice coordinators and creating a district-wide mental-health clinic in partnership with Rutgers Behavioral Health. She wants to expand the AVID college-readiness program to all middle schools and guarantee every senior a completed FAFSA before graduation. She backs a moratorium on new charter authorizations until traditional schools are fully funded.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Garcia supports culturally responsive teaching but insists any discussion of gender identity remain age-appropriate and require parental consent. She opposes policies that allow students to change names or pronouns on school records without guardian notification and wants to maintain sex-segregated sports and facilities to protect student privacy.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["East Orange Education Association", "Essex County Democratic Socialists", "New Jersey Working Families"]
+    },
+    {
+        "name": "Tyrone Tarver",
+        "state": "New Jersey",
+        "office": "East Orange Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Tyrone Tarver is a retired U.S. Army sergeant and current security supervisor at East Orange Campus High School. A 30-year resident, he holds a Bachelor’s in Criminal Justice from Kean University and volunteers as a mentor with the My Brother’s Keeper program. Tarver has two sons who graduated from East Orange schools and now attend HBCUs. He is running to improve school safety, expand JROTC, and create an alumni donation portal to fund scholarships. Tarver has criticized the district’s 22% chronic absenteeism rate and wants a truancy task force that includes faith leaders and community patrols.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Tarver supports metal detectors and ID badges at all secondary schools, plus a partnership with the Essex County Sheriff for K-9 sweeps. He wants to double the size of the JROTC program and add cybersecurity and drone-pilot electives. He backs a ‘no excuses’ attendance policy with Saturday school for chronic absentees.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Tarver opposes any curriculum that teaches inherent racial guilt and insists parents receive copies of all classroom materials. He supports keeping sports and changing areas separated by biological sex and vows to end social transition policies that exclude parents. He wants to bring back shop class and home economics to teach practical life skills.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["East Orange PBA", "Essex County Veterans Alliance", "100 Black Men of New Jersey"]
+    },
+    {
+        "name": "Casimiro Neto",
+        "state": "New Jersey",
+        "office": "East Orange Board of Education At-Large Seat 3",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Casimiro Neto is a Cape Verdean-American entrepreneur who owns a tax-preparation franchise on Central Avenue. A graduate of East Orange High, he earned an MBA from Montclair State and employs 12 local residents. Neto serves on the board of the East Orange YMCA and sponsors an annual back-to-school backpack drive. His platform focuses on fiscal accountability, STEM expansion, and creating a parent liaison in every school. Neto has questioned the district’s $1.8 million legal fees over three years and wants to cap outside counsel at $500,000 annually.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Neto supports a robotics league for grades 4-8 and a partnership with Essex County College for dual-enrollment courses. He wants to publish a monthly budget dashboard online and tie administrator bonuses to student proficiency gains. He backs full-day kindergarten and a summer bridge program to close learning gaps.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Neto demands that any book with sexual content be removed from elementary libraries and placed in a restricted high-school section. He opposes teachers facilitating social transitions without parental involvement and supports a policy that athletic rosters reflect biological sex. He has pledged to host quarterly faith-and-family forums to discuss character education.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["East Orange Chamber of Commerce", "Essex County Taxpayers Alliance", "New Jersey Family Policy Council"]
+    }

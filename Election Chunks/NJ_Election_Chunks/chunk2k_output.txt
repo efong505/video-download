@@ -1,0 +1,211 @@
+
+    {
+        "name": "A'Dorian Murray-Thomas",
+        "state": "New Jersey",
+        "office": "Newark Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "A'Dorian Murray-Thomas is a community leader and founder of SHE Wins, Inc., a nonprofit dedicated to empowering young women in Newark. She is a graduate of Newark Public Schools and holds a bachelor's degree from Rutgers University-Newark. Murray-Thomas has served on the Newark Board of Education since 2020, elected at age 24 as the youngest member in district history. Her platform emphasizes student mental health, equitable resource distribution, and college/career readiness programs. She has spearheaded initiatives to increase AP course access in underserved high schools and expand dual-enrollment opportunities with local colleges. Murray-Thomas advocates for trauma-informed teaching practices and has worked to implement restorative justice programs in schools. She previously served as a youth advisor to the Newark Community Schools Corporation and has received recognition from the Newark Arts Council for her work in youth development. Her campaign focuses on closing achievement gaps and ensuring every student graduates with a post-secondary plan. Murray-Thomas has been endorsed by local parent organizations and education advocacy groups for her data-driven approach to school improvement.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Murray-Thomas prioritizes equitable access to advanced coursework, particularly expanding AP and dual-enrollment programs in under-resourced schools. She supports trauma-informed education and restorative justice practices over punitive discipline. Her platform includes increasing mental health resources, implementing universal pre-K, and creating clear pathways to college and career certification. She advocates for transparent budget allocation to ensure Title I schools receive proportional funding for technology and facilities upgrades.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Murray-Thomas emphasizes parental engagement through regular town halls and digital communication platforms. She supports transparent curriculum review processes where parents can access all instructional materials online. While supportive of inclusive environments, she has stated that discussions of gender identity should be age-appropriate and involve parental notification for sensitive topics. She opposes any curriculum that she believes divides students by race or promotes guilt based on historical events.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Newark Education Workers Caucus", "Newark Parents Union", "Rutgers University Alumni Association"]
+    },
+    {
+        "name": "Kanileah Anderson",
+        "state": "New Jersey",
+        "office": "Newark Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Kanileah Anderson is an educator and parent advocate with over 15 years of experience in Newark Public Schools. She currently serves as a special education coordinator at a local elementary school and has previously taught in both general education and inclusion classrooms. Anderson holds a master's degree in special education from Kean University and is pursuing her Ed.D. in educational leadership. She has been actively involved in the Newark Special Education Parent Advisory Council and has led professional development workshops on inclusive education practices. Anderson's campaign focuses on improving outcomes for students with disabilities, reducing class sizes in high-needs schools, and implementing evidence-based reading intervention programs. She has received recognition from the New Jersey Education Association for her work in literacy instruction and has successfully advocated for increased funding for assistive technology in special education classrooms. Anderson emphasizes the importance of early intervention and transition planning for students with IEPs.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Anderson advocates for full implementation of evidence-based reading curricula and structured literacy programs across all grade levels. She supports reducing class sizes to 20 students maximum in K-3 and increasing specialized instructional support personnel. Her platform includes expanding vocational training programs and creating dedicated transition coordinators for students with disabilities entering post-secondary life.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Anderson supports robust parental involvement in IEP development and requires parental consent for any changes to a student's educational placement. She advocates for an online portal where parents can review all curriculum materials and opt-out of specific lessons with alternative assignments. She has expressed concerns about social-emotional learning programs that may conflict with family values and supports age-appropriate guidelines for discussing identity topics.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["New Jersey Education Association", "Newark Special Education Parent Advisory Council", "Kean University Education Alumni"]
+    },
+    {
+        "name": "Louis Maisonave Jr.",
+        "state": "New Jersey",
+        "office": "Newark Board of Education At-Large Seat 3",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Louis Maisonave Jr. is a Newark native and U.S. Army veteran who has dedicated his post-military career to youth development and education equity. He holds a degree in criminal justice from Essex County College and works as a youth counselor at the Newark YMCA. Maisonave previously served on the Newark Public Schools Parent-Teacher Organization and has coached multiple youth sports teams in the city. His campaign emphasizes school safety, vocational education, and fiscal responsibility. He has been vocal about the need to address chronic absenteeism and has proposed incentive programs for consistent attendance. Maisonave advocates for expanding trade certification programs in high schools and creating partnerships with local businesses for apprenticeship opportunities. He has received recognition from the Newark Police Athletic League for his work in violence prevention and has successfully organized community forums on school safety concerns.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Maisonave supports expanding career and technical education (CTE) programs with certifications in plumbing, electrical, and healthcare fields. He advocates for mandatory financial literacy courses starting in middle school and creating clear pathways from high school to apprenticeship programs. His platform includes implementing attendance incentive programs and partnering with local businesses to provide real-world work experience.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Maisonave emphasizes parental rights in education decisions and supports requiring parental permission for any club or activity involvement. He advocates for transparent curriculum adoption processes with public review periods and has expressed concerns about comprehensive sex education programs starting before high school. He supports teaching traditional family structures in early education while maintaining respect for diverse family compositions.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Newark Police Athletic League", "Essex County Vocational Technical Schools", "Newark Veterans Association"]
+    },
+    {
+        "name": "Afaf Muhammad",
+        "state": "New Jersey",
+        "office": "Jersey City Board of Education Ward A",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Afaf Muhammad is a longtime Jersey City resident and parent of three children in the public school system. She works as a community liaison for the Jersey City Housing Authority and has been actively involved in parent advocacy groups for over a decade. Muhammad holds a degree in social work from New Jersey City University and has specialized in family engagement programs. She currently serves as president of the Ward A Parent-Teacher Association and has led initiatives to increase bilingual education resources in schools with high ELL populations. Muhammad's campaign focuses on language access, cultural competency training for staff, and expanding dual-language programs. She has successfully advocated for translation services at all school events and has organized workshops on navigating the school system for immigrant families. Muhammad emphasizes the importance of culturally responsive teaching and has received recognition from the Jersey City NAACP for her equity work.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Muhammad advocates for expanding dual-language immersion programs in Spanish, Arabic, and other predominant community languages. She supports hiring bilingual staff in all schools and providing translation services for all parent communications. Her platform includes cultural competency professional development for all staff and creating welcome centers for immigrant families new to the district.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Muhammad supports family engagement through multilingual communication and cultural events that celebrate diverse traditions. She advocates for parental input in curriculum development through community advisory boards. While supportive of inclusive policies, she emphasizes that discussions of complex social issues should respect cultural and religious diversity and involve parental awareness.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Jersey City NAACP", "New Jersey City University Social Work Department", "Ward A Parent-Teacher Association"]
+    },
+    {
+        "name": "Natalia Ioffe",
+        "state": "New Jersey",
+        "office": "Jersey City Board of Education Ward B",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Natalia Ioffe is a technology professional and parent advocate with expertise in educational technology integration. She holds a master's degree in instructional technology from Columbia University and works as an ed-tech consultant for school districts nationwide. Ioffe has two children in Jersey City public schools and has served on the district's Technology Advisory Committee for three years. Her campaign focuses on responsible technology integration, digital literacy, and closing the digital divide. She has successfully advocated for device distribution programs during remote learning and has organized coding clubs in elementary schools. Ioffe emphasizes data privacy protection and appropriate screen time guidelines. She has received recognition from the New Jersey Technology Education Association for her work in STEM education and has published articles on balanced technology use in K-12 settings.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Ioffe advocates for 1:1 device programs with robust digital citizenship curriculum starting in kindergarten. She supports coding and computational thinking integration across all grade levels and creating maker spaces in every school. Her platform includes professional development for teachers in technology integration and establishing clear data privacy policies aligned with state and federal regulations.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Ioffe supports digital parental controls and monitoring tools that allow parents to track their child's device usage and content access. She advocates for screen time guidelines that respect family preferences and has expressed concerns about social media influences on young children. She supports teaching digital wellness alongside technology skills.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["New Jersey Technology Education Association", "Jersey City Ed-Tech Parents Group", "Columbia University Teachers College Alumni"]
+    },
+    {
+        "name": "Paula Jones",
+        "state": "New Jersey",
+        "office": "Jersey City Board of Education Ward C",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Paula Jones is a retired Jersey City public school principal with 35 years of experience in education. She holds a doctorate in educational leadership from Seton Hall University and has successfully turned around two underperforming schools during her tenure as principal. Jones currently serves as an adjunct professor at Hudson County Community College and mentors new administrators through the New Jersey Principals and Supervisors Association. Her campaign focuses on academic excellence, teacher retention, and fiscal accountability. She has been recognized by the New Jersey Department of Education for improving graduation rates and has implemented successful intervention programs for struggling students. Jones emphasizes the importance of high expectations for all students and has advocated for merit-based teacher recognition programs.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Jones supports rigorous academic standards with accelerated learning opportunities for advanced students. She advocates for teacher merit pay based on student growth metrics and expanding intervention programs for students below grade level. Her platform includes implementing a district-wide curriculum audit to ensure alignment with state standards and college readiness benchmarks.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Jones emphasizes traditional academic focus and supports parental rights to opt-out of non-academic programs. She advocates for character education programs that reinforce universal values of respect and responsibility. She has expressed concerns about ideological bias in curriculum and supports teaching historical facts without present-day judgment.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["New Jersey Principals and Supervisors Association", "Hudson County Community College", "Seton Hall University Education Department"]
+    },
+    {
+        "name": "Eddie Gonzalez",
+        "state": "New Jersey",
+        "office": "Paterson Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Eddie Gonzalez is a Paterson business owner and youth mentor who has been actively involved in community development for over 20 years. He owns a local auto repair shop that employs and trains at-risk youth through apprenticeship programs. Gonzalez serves on the Paterson Youth Council and has organized multiple job fairs connecting high school students with local employers. His campaign focuses on vocational education, school-to-work pipelines, and community partnerships. He has successfully advocated for the creation of a automotive technology program at Paterson's technical high school and has secured donations of equipment from local businesses. Gonzalez emphasizes the dignity of skilled trades and has received recognition from the Passaic County Workforce Development Board for his youth employment initiatives.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Gonzalez advocates for expanding vocational programs with industry certifications in automotive, construction, and healthcare fields. He supports creating dedicated career academies within existing high schools and establishing partnerships with local businesses for internships and apprenticeships. His platform includes mandatory work-based learning experiences starting in 10th grade.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Gonzalez supports teaching work ethic and personal responsibility as core curriculum components. He advocates for parental involvement in career planning and has expressed support for programs that reinforce traditional family structures. He emphasizes practical life skills education over theoretical social studies.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Passaic County Workforce Development Board", "Paterson Chamber of Commerce", "Paterson Youth Council"]
+    },
+    {
+        "name": "Alex Mendez Jr.",
+        "state": "New Jersey",
+        "office": "Paterson Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Alex Mendez Jr. is a Paterson firefighter and community activist with deep roots in the city's Dominican community. He has served as a volunteer coach for Little League baseball for 15 years and organizes annual backpack giveaways for local students. Mendez holds an associate's degree in fire science from Passaic County Community College and is pursuing his bachelor's in public administration. His campaign focuses on school safety, extracurricular activities, and community engagement. He has successfully advocated for the installation of security cameras at multiple school entrances and has organized anti-bullying workshops in elementary schools. Mendez emphasizes the importance of positive role models and has received recognition from the Paterson Fire Department for his community service work.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Mendez supports expanding after-school programs and athletic opportunities with a focus on character development. He advocates for school resource officers in every middle and high school and implementing anonymous reporting systems for safety concerns. His platform includes creating mentorship programs connecting first responders with at-risk students.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Mendez emphasizes community and family involvement in schools through regular events and volunteer opportunities. He supports teaching respect for authority and personal responsibility. He advocates for dress codes and behavior standards that reflect community values.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Paterson Firefighters Association", "Paterson Little League", "Dominican American Community Association"]
+    },
+    {
+        "name": "Manny Martinez",
+        "state": "New Jersey",
+        "office": "Paterson Board of Education At-Large Seat 3",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Manny Martinez is a bilingual education specialist and parent of four children in Paterson public schools. He holds a master's degree in bilingual education from William Paterson University and has taught ESL classes for 18 years. Martinez serves as chairperson of the district's English Language Learner Parent Advisory Committee and has developed curriculum materials for bilingual classrooms. His campaign focuses on language acquisition, cultural inclusion, and academic support for immigrant students. He has successfully advocated for increased funding for ESL programs and has organized parent education classes in multiple languages. Martinez emphasizes the importance of maintaining native language proficiency while acquiring English and has received recognition from the New Jersey Teachers of English to Speakers of Other Languages for his work.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Martinez advocates for dual-language programs that maintain native language proficiency while developing English skills. He supports hiring more bilingual teachers and paraprofessionals and creating newcomer centers for recently arrived immigrant students. His platform includes extended learning time for ELL students and translation services for all parent communications.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Martinez supports family literacy programs that involve parents in their children's education. He advocates for cultural celebrations that honor diverse traditions while promoting shared community values. He emphasizes respect for family structures across cultures.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["NJTESOL/NJBE", "William Paterson University Education Department", "Paterson ELL Parent Advisory Committee"]
+    },
+    {
+        "name": "Maria Richardson",
+        "state": "New Jersey",
+        "office": "Elizabeth Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Maria Richardson is a special education advocate and parent of a child with autism in the Elizabeth public schools. She holds a degree in psychology from Kean University and works as a behavior therapist for children with developmental disabilities. Richardson founded the Elizabeth Special Needs Parent Support Group and has been a vocal advocate for inclusive education practices. Her campaign focuses on special education services, teacher training, and parent empowerment. She has successfully advocated for the creation of sensory rooms in elementary schools and has organized training sessions for general education teachers on inclusion strategies. Richardson emphasizes early intervention and transition planning and has received recognition from the New Jersey Council for Exceptional Children for her advocacy work.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Richardson advocates for full inclusion with appropriate supports and trained paraprofessionals in every classroom. She supports expanding applied behavior analysis services within schools and creating dedicated transition programs for students aging out of special education services. Her platform includes mandatory inclusion training for all staff and regular progress monitoring for students with IEPs.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Richardson emphasizes parental expertise in understanding their child's needs and supports requiring parental approval for any changes to IEP services. She advocates for parent training programs and support groups that respect diverse family structures while focusing on child development.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Elizabeth Special Needs Parent Support Group", "New Jersey Council for Exceptional Children", "Kean University Psychology Department"]
+    }

@@ -1,0 +1,1 @@
+{"Records":[{"eventName":"ObjectCreated:Put","s3":{"bucket":{"name":"my-video-downloads-bucket"},"object":{"key":"videos/1000003114.mp4"}}}]}

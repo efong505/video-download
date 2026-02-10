@@ -1,0 +1,212 @@
+candidates = [
+    {
+        "name": "Stacy Garrity",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Stacy Garrity is the current Pennsylvania State Treasurer, elected in 2020 and re-elected in 2024 with a record-breaking margin, receiving the most votes of any statewide candidate in history. Born and raised in Pennsylvania, Garrity graduated from the University of Pittsburgh with a degree in industrial engineering. She served 12 years in the U.S. Army Reserve, including a deployment to Iraq where she managed a detention facility and earned the nickname 'Angel of the Desert' for her compassionate leadership. After her military service, she worked in the private sector at Global Tungsten & Powders Corp. as Vice President of Government Affairs and Industry Liaison, focusing on manufacturing and economic development. Garrity entered politics in 2019 with an unsuccessful bid for U.S. Congress in the 12th District. As Treasurer, she has prioritized fiscal transparency, returning over $4 billion in unclaimed property to residents, upgrading the Treasury's systems, and proposing legislation to streamline small claims returns. Her tenure includes initiatives to cut waste, reduce fees, and ensure accountability in state investments. Garrity announced her candidacy for Governor in August 2025, earning the endorsement of the Pennsylvania Republican Party in September 2025. She is married with two children and resides in Potter Township. [Source: Wikipedia, Spotlight PA, WHYY, Ballotpedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://stacygarrity.com",
+        "positions": {
+            "ABORTION": "Garrity supports Pennsylvania's current abortion laws post-Dobbs, which allow access up to 24 weeks with exceptions for maternal health. She opposes further restrictions but emphasizes parental notification for minors and defunding providers like Planned Parenthood that perform abortions.",
+            "EDUCATION": "Advocates for school choice, including expanded vouchers and charter schools, to empower parents in underperforming districts. Supports increased funding for vocational training and STEM programs while maintaining public school investments.",
+            "RELIGIOUS-FREEDOM": "Strong advocate for religious liberty, supporting protections for faith-based organizations against government overreach, including conscience rights for healthcare providers refusing to participate in procedures conflicting with beliefs.",
+            "GUNS": "Defends Second Amendment rights, opposing new gun control measures like assault weapon bans. Supports background checks and red flag laws but prioritizes mental health interventions over firearm restrictions.",
+            "TAXES": "Proposes broad-based tax cuts, including property tax relief for seniors and elimination of the capital stock and franchise tax to boost economic growth. Focuses on fiscal discipline to balance the budget without raising taxes.",
+            "IMMIGRATION": "Supports secure borders and enforcement of federal immigration laws, including E-Verify for employers. Favors legal pathways for skilled immigrants but opposes sanctuary policies and amnesty for undocumented individuals.",
+            "FAMILY-VALUES": "Champions traditional marriage and parental rights in education, opposing gender transition procedures for minors without consent. Supports policies promoting family stability, like paid family leave and child tax credits.",
+            "ELECTION-INTEGRITY": "Endorses voter ID requirements, paper ballots, and audits to ensure secure elections. Opposes no-excuse mail-in voting expansions and supports purging inactive voters from rolls."
+        },
+        "endorsements": ["Pennsylvania Republican Party", "Fraternal Order of Police", "National Federation of Independent Business"]
+    },
+    {
+        "name": "Doug Mastriano",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Doug Mastriano is a Republican state senator representing Pennsylvania's 33rd District since 2019. A retired U.S. Army Colonel with 30 years of service, including deployments to Iraq and Afghanistan, Mastriano holds a Ph.D. in history from the University of New Brunswick and teaches at American Public University. He and his wife, Rebecca, have one daughter. Mastriano entered politics after an unsuccessful 2018 congressional bid, winning his senate seat in a special election. As a legislator, he has focused on election integrity, opposing COVID-19 mandates, and conservative social issues. In 2022, he won the GOP gubernatorial nomination but lost the general election to Josh Shapiro by 15 points, raising limited funds and facing party establishment criticism for his election denialism. Mastriano has expressed interest in running again in 2026, citing lessons learned from 2022, including embracing mail voting and building broader GOP support. He authored books on military history and has been a vocal critic of progressive policies. His legislative record includes sponsoring bills for voter ID and school choice. [Source: Wikipedia, The Inquirer, ABC27]",
+        "faith_statement": "Mastriano is an outspoken evangelical Christian who has integrated his faith into his political platform, stating that his decisions are guided by biblical principles and that Pennsylvania needs leaders who uphold Judeo-Christian values to combat moral decay.",
+        "website": "https://doug4pa.com",
+        "positions": {
+            "ABORTION": "Strongly pro-life, supports a near-total ban on abortion with exceptions only for saving the mother's life. Sponsored legislation to defund Planned Parenthood and recognize fetal personhood.",
+            "EDUCATION": "Pushes for universal school choice, vouchers, and education savings accounts. Opposes critical race theory and mandates DEI training in schools.",
+            "RELIGIOUS-FREEDOM": "Vigorous defender of religious freedoms, authoring bills to protect churches from shutdowns and ensure faith-based adoptions without discrimination.",
+            "GUNS": "Absolute Second Amendment advocate, opposing all gun control and supporting constitutional carry and stand-your-ground laws.",
+            "TAXES": "Calls for drastic tax cuts, including eliminating property taxes and reducing state income tax to spur growth and relieve working families.",
+            "IMMIGRATION": "Demands strict border enforcement, ending sanctuary cities, and deporting criminal undocumented immigrants. Supports merit-based legal immigration.",
+            "FAMILY-VALUES": "Defines marriage as between one man and one woman, supports parental rights to opt out of LGBTQ+ curricula, and bans gender-affirming care for minors.",
+            "ELECTION-INTEGRITY": "Advocates for strict voter ID, in-person voting only, and hand recounts. Has questioned 2020 election results and pushed for paper ballots exclusively."
+        },
+        "endorsements": ["Pennsylvania Values PAC", "Eagle Forum", "Gun Owners of America"]
+    },
+    {
+        "name": "Dan Meuser",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Dan Meuser is the U.S. Representative for Pennsylvania's 9th Congressional District since 2019. A business owner and former state official, Meuser founded ARD Group, an accounting and consulting firm. He served as Deputy Chief of Staff under Governor Tom Corbett and as Secretary of the Commonwealth. Meuser holds a B.S. in accounting from Muhlenberg College and lives in Schuylkill County with his wife and five children. Elected to Congress in 2018, he serves on the Ways and Means and Small Business Committees, focusing on tax relief and economic growth. Meuser has a 100% pro-life voting record and supports Israel strongly. In 2025, he indicated interest in the 2026 gubernatorial race, attending conservative events and seeking Trump's endorsement, stating he wouldn't run without it. His congressional accomplishments include co-sponsoring the PRO Act for small businesses and opposing green energy mandates. Meuser endorsed Stacy Garrity but remains a potential contender. [Source: Wikipedia, WHYY, Pennsylvania Capital-Star]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://meuser.house.gov",
+        "positions": {
+            "ABORTION": "Pro-life, supports overturning Roe and state bans with exceptions for rape, incest, and maternal health. Co-sponsored Born-Alive Act federally.",
+            "EDUCATION": "Supports school choice and vouchers, opposes federal overreach in curriculum, and backs career-technical education funding.",
+            "RELIGIOUS-FREEDOM": "Protects religious institutions from mandates, supports tax exemptions for faith groups, and defends conscience protections.",
+            "GUNS": "Strong NRA supporter, opposes red flag laws and universal background checks, favors national reciprocity for concealed carry.",
+            "TAXES": "Advocates permanent TCJA extension, corporate tax cuts, and elimination of death tax to foster job creation.",
+            "IMMIGRATION": "Pushes border wall completion, ends chain migration, and enforces E-Verify. Opposes DACA amnesty.",
+            "FAMILY-VALUES": "Traditional marriage advocate, supports parental rights bills, and opposes gender ideology in schools.",
+            "ELECTION-INTEGRITY": "Backs voter ID, same-day voting, and election audits. Supported 2020 election challenges."
+        },
+        "endorsements": ["National Right to Life", "U.S. Chamber of Commerce", "National Association of Wholesaler-Distributors"]
+    },
+    {
+        "name": "Josh Shapiro",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Josh Shapiro is the incumbent Governor of Pennsylvania, elected in 2022 with 56.5% of the vote. A former state Attorney General (2017-2023), Shapiro graduated from the University of Rochester and Georgetown University Law Center. He served in the Pennsylvania House (2005-2012) and as Montgomery County Commissioner. Married to Lori Shapiro with four children, he resides in Abington. As AG, Shapiro secured $1 billion in consumer relief, sued opioid manufacturers, and defended voting rights. As Governor, he has focused on economic development, signing a $14.3 billion infrastructure bill, expanding job training, and vetoing school voucher expansions. His approval rating hovers around 55%. Eligible for re-election, Shapiro has not formally announced but is expected to run in 2026. Accomplishments include record job growth and property tax rebates. [Source: Ballotpedia, Wikipedia, WHYY]",
+        "faith_statement": "As an observant Jew, Shapiro has publicly discussed how his faith informs his commitment to public service, justice, and tikkun olam (repairing the world), emphasizing ethical leadership and community welfare.",
+        "website": "https://www.governor.pa.gov",
+        "positions": {
+            "ABORTION": "Pro-choice, supports codifying Roe protections and opposes any restrictions. Defended clinics as AG and vetoed parental consent bills.",
+            "EDUCATION": "Opposes vouchers, invests in public schools with $1.1 billion increase. Supports universal pre-K and teacher pay raises.",
+            "RELIGIOUS-FREEDOM": "Balances religious liberty with anti-discrimination laws, supporting faith exemptions where constitutional but prioritizing LGBTQ+ rights.",
+            "GUNS": "Supports universal background checks, red flag laws, and assault weapon bans while respecting hunting rights.",
+            "TAXES": "No new taxes pledge, focuses on closing corporate loopholes and property tax relief via sales tax expansion.",
+            "IMMIGRATION": "Supports pathway to citizenship, opposes family separations, and aids Dreamers. Backs federal reform for border security.",
+            "FAMILY-VALUES": "Supports marriage equality, parental leave, and inclusive curricula. Opposes bans on gender-affirming care.",
+            "ELECTION-INTEGRITY": "Defends mail-in voting, automatic registration. Opposes voter ID as suppressive; ensures secure, accessible elections."
+        },
+        "endorsements": ["Planned Parenthood", "AFT Pennsylvania", "Everytown for Gun Safety"]
+    },
+    {
+        "name": "Austin Davis",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Democrat",
+        "status": "potential",
+        "bio": "Austin Davis is the Lieutenant Governor of Pennsylvania since 2023, the first Black person and millennial in the role. Elected to the state House in 2018 representing the 35th District, Davis graduated from California University of Pennsylvania. He previously worked as a policy analyst and community organizer in Pittsburgh. Married with one child, he focuses on economic equity and criminal justice reform. As Lt. Gov., Davis chairs the Board of Pardons, oversees the state lottery, and promotes workforce development. Potential 2026 gubernatorial candidate if Shapiro runs for higher office. Legislative record includes sponsoring bills for fair redistricting and police accountability. [Source: Wikipedia, Ballotpedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.pasenatedems.com/davis",
+        "positions": {
+            "ABORTION": "Pro-choice, supports reproductive freedom without restrictions and access to contraception.",
+            "EDUCATION": "Invests in public education equity, supports community schools and debt-free college pathways.",
+            "RELIGIOUS-FREEDOM": "Upholds First Amendment rights while combating hate crimes against religious communities.",
+            "GUNS": "Advocates common-sense reforms like background checks and closing gun show loopholes.",
+            "TAXES": "Progressive taxation to fund social services, relief for low-income families.",
+            "IMMIGRATION": "Humane policies, supports DACA and immigrant integration programs.",
+            "FAMILY-VALUES": "Inclusive family policies, supports LGBTQ+ rights and affordable childcare.",
+            "ELECTION-INTEGRITY": "Expands voting access, fights disenfranchisement, ensures transparency."
+        },
+        "endorsements": ["Pennsylvania Democratic Party", "SEIU", "NAACP"]
+    },
+    {
+        "name": "Bob Casey Jr.",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Democrat",
+        "status": "potential",
+        "bio": "Bob Casey Jr. served as U.S. Senator for Pennsylvania from 2007 to 2025, losing re-election in 2024 to Dave McCormick. Son of former Governor Bob Casey Sr., he previously served as Auditor General (1997-2005) and Treasurer (2005-2007). Casey holds a law degree from Catholic University and lives in Scranton with his wife and five children. His senate tenure focused on labor rights, healthcare, and poverty reduction, co-sponsoring the PRO Act and Affordable Care Act expansions. As a moderate Democrat, he earned bipartisan praise for veterans' affairs work. Post-senate, Casey is considered for 2026 gubernatorial run, leveraging family legacy and statewide experience. [Source: Wikipedia, Ballotpedia]",
+        "faith_statement": "As a devout Catholic, Casey has stated his faith guides his pro-life stance and commitment to social justice, drawing from Catholic social teaching on the dignity of life and care for the poor.",
+        "website": "https://www.bobcasey.com",
+        "positions": {
+            "ABORTION": "Personally pro-life but supports access with exceptions; opposes late-term abortions.",
+            "EDUCATION": "Fully funds public schools, expands Pell Grants, and supports teacher recruitment.",
+            "RELIGIOUS-FREEDOM": "Protects religious institutions and conscience rights in healthcare.",
+            "GUNS": "Supports background checks and assault ban, but protects hunting rights.",
+            "TAXES": "Closes loopholes on wealthy, expands child tax credit.",
+            "IMMIGRATION": "Comprehensive reform with border security and citizenship path.",
+            "FAMILY-VALUES": "Strong families through paid leave and marriage equality support.",
+            "ELECTION-INTEGRITY": "Voter access with safeguards like ID alternatives."
+        },
+        "endorsements": ["AFL-CIO", "Planned Parenthood (partial)", "Veterans of Foreign Wars"]
+    },
+    {
+        "name": "Kim Ward",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "potential",
+        "bio": "Kim Ward is President Pro Tempore of the Pennsylvania Senate, representing the 39th District since 2009. A former Westmoreland County Commissioner, Ward graduated from Duquesne University. Married with three children, she has focused on economic development and public safety. As Senate leader since 2022, Ward has advanced GOP priorities like tax cuts and energy independence. Potential gubernatorial candidate, praised for unifying the party. Endorsed Garrity but eyed for run. [Source: Wikipedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.senatorkimward.com",
+        "positions": {
+            "ABORTION": "Pro-life with exceptions, supports heartbeat bill.",
+            "EDUCATION": "School choice and career tech funding.",
+            "RELIGIOUS-FREEDOM": "Strong protections for faith-based groups.",
+            "GUNS": "Second Amendment defender.",
+            "TAXES": "Cut taxes, streamline regulations.",
+            "IMMIGRATION": "Enforce laws, secure borders.",
+            "FAMILY-VALUES": "Traditional values, parental rights.",
+            "ELECTION-INTEGRITY": "Voter ID, audit reforms."
+        },
+        "endorsements": ["PA GOP Senate Caucus", "NFIB"]
+    },
+    {
+        "name": "Martina White",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Republican",
+        "status": "potential",
+        "bio": "Martina White is a state representative for the 170th District since 2015. Former Cheltenham Township Commissioner, she holds a degree from Villanova University. Focuses on suburban issues like taxes and education. Potential candidate with strong fundraising. Married, resides in Montgomery County. [Source: Wikipedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.repmartinawhite.com",
+        "positions": {
+            "ABORTION": "Pro-life advocate.",
+            "EDUCATION": "Vouchers and choice.",
+            "RELIGIOUS-FREEDOM": "Defends faith liberties.",
+            "GUNS": "Supports gun rights.",
+            "TAXES": "Reduce burdens.",
+            "IMMIGRATION": "Legal enforcement.",
+            "FAMILY-VALUES": "Parental rights.",
+            "ELECTION-INTEGRITY": "Secure voting."
+        },
+        "endorsements": ["PA Pro-Life Federation"]
+    },
+    {
+        "name": "Ken Krawchuk",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Libertarian",
+        "status": "active",
+        "bio": "Ken Krawchuk is a perennial Libertarian candidate, nominated for governor in 1998, 2002, and 2018. IT professional and party judicial committee member. Resides in Bucks County. Advocates limited government. [Source: Wikipedia]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.lppa.org",
+        "positions": {
+            "ABORTION": "Pro-choice, government out of personal decisions.",
+            "EDUCATION": "End public monopoly, full vouchers.",
+            "RELIGIOUS-FREEDOM": "Absolute separation of church and state.",
+            "GUNS": "Unrestricted Second Amendment.",
+            "TAXES": "Flat tax or abolish income tax.",
+            "IMMIGRATION": "Open borders with free market.",
+            "FAMILY-VALUES": "Individual liberty over mandates.",
+            "ELECTION-INTEGRITY": "End voting machines, ranked choice."
+        },
+        "endorsements": ["Libertarian Party of PA"]
+    },
+    {
+        "name": "John Ventre",
+        "state": "Pennsylvania",
+        "office": "Governor",
+        "party": "Independent",
+        "status": "active",
+        "bio": "John Ventre is a perennial independent candidate, former Mutual UFO Network director. Ran for governor in 2022 but failed signatures. Focuses on transparency. [Source: ABC27]",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "No known website",
+        "positions": {
+            "ABORTION": "Personal choice.",
+            "EDUCATION": "Local control.",
+            "RELIGIOUS-FREEDOM": "Protected.",
+            "GUNS": "Rights with responsibility.",
+            "TAXES": "Fair and low.",
+            "IMMIGRATION": "Secure and humane.",
+            "FAMILY-VALUES": "Support families.",
+            "ELECTION-INTEGRITY": "Transparent processes."
+        },
+        "endorsements": []
+    }
+]

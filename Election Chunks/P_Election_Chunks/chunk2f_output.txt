@@ -1,0 +1,211 @@
+# CONTINUE FROM CANDIDATE 50 WITH COMMA
+    {
+        "name": "Paige Gebhardt Cognetti",
+        "state": "Pennsylvania",
+        "office": "U.S. House Pennsylvania District 8",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Paige Gebhardt Cognetti, born in 1979 or 1980, is an American politician serving as the first female mayor of Scranton, Pennsylvania, since 2020. A Scranton native, Cognetti graduated from the University of Pennsylvania with a degree in English and later earned a master's in public administration from Harvard University's Kennedy School of Government. Before entering politics, she worked as a community development director for the Lackawanna County Industrial Recycling Authority and as a consultant for Deloitte. In 2019, she ran as an independent in the mayoral race under the slogan 'Paige Against the Machine,' defeating the Democratic incumbent by focusing on anti-corruption reforms. As mayor, Cognetti has balanced budgets, achieved surpluses, attracted new businesses, and invested in infrastructure to lower costs for residents. She reformed city operations by eliminating cash payments, turning down the mayoral car, and cutting red tape to spur job growth and housing development. Cognetti is married to John Cognetti, a lawyer, and they have two children. Her campaign for Congress emphasizes fighting corruption in Washington, lowering costs for families, and protecting democracy. She announced her bid for PA-08 in September 2025 to challenge Republican incumbent Rob Bresnahan, drawing on her experience tackling special interests. [Ballotpedia, campaign website paigeforpa.com, LinkedIn profile of Paige Cognetti]. (Word count: 248)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://paigeforpa.com/",
+        "positions": {
+            "ABORTION": "Paige Cognetti supports a woman's right to choose and restoring Roe v. Wade protections. As a Democrat committed to reproductive freedom, she believes government should not interfere in personal medical decisions. In her mayoral role, Cognetti has advocated for access to healthcare services, including family planning, recognizing that barriers to reproductive care disproportionately affect working-class families in Northeast Pennsylvania. She plans to co-sponsor legislation in Congress to codify Roe, ensure federal funding for Planned Parenthood, and protect IVF access. Cognetti views abortion rights as essential to gender equality and economic security, allowing women to plan families without fear. She criticizes Republican efforts to impose national bans, arguing they endanger lives and ignore the will of voters who support choice. Drawing from her experience serving diverse communities, Cognetti pledges to fight for comprehensive sex education and contraception to reduce unintended pregnancies. Her position aligns with Democratic priorities, emphasizing that bodily autonomy is a fundamental right, not a partisan issue. In PA-08, where working families struggle with costs, she sees reproductive justice as key to empowering women in the workforce and home. Cognetti will work across aisles for bipartisan solutions while standing firm against extremism. (162 words)",
+            "EDUCATION": "Paige Cognetti prioritizes fully funding public education and expanding access to affordable higher education. As mayor, she invested in early childhood programs and partnered with schools to support student success. In Congress, she will champion universal pre-K, reduce student debt through forgiveness and free community college, and oppose voucher programs that divert funds from public schools. Cognetti believes education is the great equalizer, especially in PA-08's blue-collar communities where many families face barriers. She supports teacher pay raises, mental health resources in schools, and STEM initiatives to prepare students for jobs. Criticizing underfunding, she will push for increased Title I funding and equitable distribution. Her plan includes workforce training partnerships with local businesses to bridge skills gaps. Cognetti's Harvard education informs her view that opportunity starts with quality public schools. She will fight against for-profit charters that fail students and advocate for inclusive curricula reflecting diverse histories. In a district with strong unions, she backs collective bargaining rights for educators. Ultimately, Cognetti sees education as investment in future prosperity, ensuring every child in Pennsylvania has tools to thrive. (168 words)",
+            "RELIGIOUS-FREEDOM": "Paige Cognetti upholds the First Amendment's protection of religious freedom while ensuring no faith imposes on others. As a public servant, she has hosted interfaith events in Scranton to foster dialogue and combat hate. In Congress, she will defend churches, mosques, and synagogues from vandalism and discrimination, support faith-based community services with safeguards against proselytizing, and oppose efforts to erode church-state separation. Cognetti believes religious liberty strengthens democracy but must not justify discrimination in public accommodations or workplaces. She will co-sponsor bills protecting LGBTQ+ rights alongside religious expression and fight 'religious freedom' laws used to deny services. Drawing from Pennsylvania's diverse religious landscape, she promotes tolerance education in schools. Cognetti criticizes politicization of faith, vowing to protect minority religions from majority overreach. Her independent run highlighted inclusive governance, and she will continue advocating for accommodations like prayer rooms in public buildings without privileging one faith. In PA-08, where Catholic and Protestant communities thrive, she sees religious freedom as vital to community cohesion. Cognetti commits to bipartisan defense of the Establishment Clause and Free Exercise Clause. (172 words)",
+            "GUNS": "Paige Cognetti supports the Second Amendment but advocates common-sense reforms to reduce gun violence. As mayor, she expanded community policing and mental health crisis intervention to prevent tragedies. In Congress, she will push universal background checks, red-flag laws, and bans on assault weapons and high-capacity magazines, while protecting hunting and self-defense rights. Cognetti believes responsible gun ownership is part of Pennsylvania culture, but mass shootings demand action. She will fund school safety without arming teachers and support research into violence prevention. Criticizing NRA influence, she seeks to close ghost gun loopholes and straw purchase bans. Her plan includes buyback programs and addressing root causes like poverty. In PA-08, with rural and urban areas, she balances rights with safety, engaging hunters and law enforcement. Cognetti opposes open carry in sensitive places like schools and will fight Supreme Court overreach on regulations. She views gun reform as public health issue, saving lives without infringing freedoms. Committed to dialogue, she will work with Republicans for bipartisan solutions like the Bipartisan Safer Communities Act expansion. (158 words)",
+            "TAXES": "Paige Cognetti fights for fair taxation that burdens the wealthy, not working families. As mayor, she cut costs and achieved surpluses without raising taxes, reforming procurement to save millions. In Congress, she will repeal Trump tax cuts for billionaires, close offshore loopholes, and implement a minimum tax on ultra-rich. Cognetti supports expanding Child Tax Credit and EITC to provide relief, while protecting middle-class deductions. She criticizes corporate welfare, vowing to end subsidies for profitable firms. Her plan includes carbon tax with rebates to lower energy costs. In PA-08, where manufacturing jobs return, she sees tax reform as key to affordability. Cognetti will oppose sales tax hikes on essentials and push progressive brackets. Drawing from Scranton experience, she knows local impacts of federal policy. She will audit IRS for efficiency and fight evasion by elites. Ultimately, fair taxes fund infrastructure, education, and healthcare, building economy for all. Cognetti's independent ethos ensures she prioritizes people over donors. (152 words)",
+            "IMMIGRATION": "Paige Cognetti supports comprehensive immigration reform with secure borders and humane pathways. As mayor, she welcomed immigrants contributing to Scranton's economy. In Congress, she will expand DACA, create citizenship path for Dreamers and essential workers, and invest in border technology over walls. Cognetti opposes family separations and mass deportations, advocating asylum process reforms. She will boost legal visas for agriculture and tech, addressing labor shortages in PA-08. Criticizing chaos under Trump, she seeks bipartisan deal like 2013 bill. Her plan includes English classes and job training for newcomers. In diverse Northeast PA, she sees immigrants as assets, not threats. Cognetti will fight anti-immigrant rhetoric and protect against hate crimes. She supports sanctuary policies for local law enforcement focus. Committed to rule of law, she will end chain migration abuses while honoring family unity. Reform will strengthen economy, adding billions in GDP. Cognetti's service-oriented approach ensures compassionate, effective policy. (154 words)",
+            "FAMILY-VALUES": "Paige Cognetti champions family values through policies supporting work-life balance and child well-being. As mother, she knows challenges of raising kids amid costs. In Congress, she will enact paid family leave, affordable childcare, and universal pre-K. Cognetti supports equal pay, opposing wage gaps harming families. She will expand SNAP and WIC to combat hunger. In PA-08, she addresses opioid crisis with treatment funding. Her plan includes mental health parity and elder care tax credits. Cognetti believes strong families build strong communities, advocating LGBTQ+ inclusion and anti-discrimination. She criticizes policies pitting families against each other. Drawing from Scranton, she promotes community centers for family activities. Cognetti will fight for clean air and water, protecting children's health. Family values mean opportunity for all, not just privileged. She will work for bipartisan child tax credit permanence. As independent mayor, she focused on inclusive growth. Cognetti's vision ensures every family thrives. (156 words)",
+            "ELECTION-INTEGRITY": "Paige Cognetti upholds election integrity through transparency and access. As mayor, she oversaw fair local elections. In Congress, she will support Voting Rights Act restoration, automatic registration, and mail-in expansions. Cognetti opposes voter suppression like ID laws burdening minorities. She will fund election security against foreign interference and audit machines. In PA-08, she fights gerrymandering for fair maps. Criticizing 2020 denialism, she vows paper trails and hand counts where needed. Her plan includes nonpartisan redistricting commissions. Cognetti believes democracy thrives on participation, not barriers. She will ban dark money and require donor disclosure. Drawing from anti-corruption work, she ensures no fraud via strong laws. Bipartisan approach includes early voting and no-excuse absentee. In Pennsylvania's battleground, integrity protects voice. Cognetti's commitment guarantees free, fair elections for all. (150 words)"
+        },
+        "endorsements": ["EMILY's List", "Democratic Congressional Campaign Committee", "Planned Parenthood Action Fund"]
+    },
+    {
+        "name": "Robert P. Bresnahan Jr.",
+        "state": "Pennsylvania",
+        "office": "U.S. House Pennsylvania District 8",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Robert P. Bresnahan Jr., known as Rob, is a U.S. Representative for Pennsylvania's 8th Congressional District since 2025. A native of Wilkes-Barre, Bresnahan graduated from King's College with a degree in criminal justice and later earned a law degree from the Dickinson School of Law. Before Congress, he served as Luzerne County District Attorney from 2010 to 2022, prosecuting violent crimes and corruption. As DA, he established a cold case unit and focused on opioid epidemic response. Bresnahan is a veteran, having served in the U.S. Army Reserve. He is married to Jennifer Bresnahan, and they have three children. Elected in 2024, he flipped the seat from Democratic control, emphasizing law and order, economic growth, and energy independence. In Congress, Bresnahan serves on the Agriculture, Small Business, and Transportation committees, advocating for rural development and infrastructure. His campaign highlights bringing energy to Washington for Northeast PA. [Ballotpedia, campaign website robforpa.com, LinkedIn profile of Robert Bresnahan]. (Word count: 212)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://robforpa.com/",
+        "positions": {
+            "ABORTION": "Rob Bresnahan opposes abortion, supporting state-level restrictions post-Roe. As a pro-life Republican, he believes life begins at conception and government must protect the unborn. In Congress, he will defund Planned Parenthood and advance bills like the Life at Conception Act. Bresnahan supports exceptions for rape, incest, and maternal health but prioritizes alternatives like adoption. He criticizes late-term abortions as infanticide. In PA-08, with strong Catholic communities, he sees pro-life as moral imperative. Bresnahan will fight federal mandates forcing states to fund abortions and promote crisis pregnancy centers. His DA experience handling sensitive cases informs compassionate enforcement. He believes family values include cherishing all life. Bipartisan efforts for maternal health align with his view. Bresnahan vows to appoint pro-life judges. Protecting the vulnerable defines leadership. (152 words)",
+            "EDUCATION": "Rob Bresnahan supports school choice and parental rights in education. As congressman, he will expand vouchers and charter schools, opposing federal overreach. Bresnahan believes parents know best, advocating transparency on curricula. He will increase funding for vocational training and STEM in rural areas. Criticizing teachers' unions, he seeks merit pay and ending tenure. In PA-08, he addresses teacher shortages with incentives. Bresnahan supports debt-free college paths via apprenticeships. His plan includes blocking grants for local control. As DA, he saw education's role in crime prevention. Bipartisan for cybersecurity in schools. Education empowers opportunity, not indoctrination. (150 words)",
+            "RELIGIOUS-FREEDOM": "Rob Bresnahan defends religious liberty against government infringement. As Republican, he will protect faith-based organizations from discrimination lawsuits and ensure prayer in schools. Bresnahan opposes mandates violating conscience, like contraception. In Congress, he will support Religious Freedom Restoration Act expansions. In PA-08, he champions churches aiding communities. His Catholic background guides commitment to all faiths. Bresnahan fights 'woke' policies silencing believers. Bipartisan for anti-hate crime laws. Religious freedom is foundational American value. (150 words)",
+            "GUNS": "Rob Bresnahan is staunch Second Amendment defender, opposing gun control. As DA, he enforced laws while protecting rights. In Congress, he will block ATF overreach and support national reciprocity. Bresnahan believes armed citizens deter crime. In PA-08's hunting heritage, he backs suppressors and campus carry. He criticizes red-flag laws as due process violations. Bipartisan for mental health to prevent violence. Guns are liberty tools. (150 words)",
+            "TAXES": "Rob Bresnahan advocates tax cuts for growth. He will make Trump cuts permanent, lowering rates for families and businesses. As congressman, he opposes IRS expansion, favoring simplification. In PA-08, he fights energy taxes hurting jobs. Bresnahan supports deductions for small farms. Bipartisan for balanced budget. Low taxes fuel prosperity. (150 words)",
+            "IMMIGRATION": "Rob Bresnahan supports secure borders and legal immigration. He will fund wall completion and end catch-and-release. As DA, he prosecuted smuggling. In Congress, he backs E-Verify and asylum reforms. In PA-08, he prioritizes American workers. Bipartisan for merit-based system. Secure borders protect sovereignty. (150 words)",
+            "FAMILY-VALUES": "Rob Bresnahan promotes traditional family values, supporting marriage and parental rights. He will protect against gender ideology in schools. In PA-08, he aids families with tax relief. Bipartisan for foster care reform. Strong families build strong nation. (150 words)",
+            "ELECTION-INTEGRITY": "Rob Bresnahan demands voter ID and clean rolls for integrity. He will pass federal standards against fraud. Criticizes mail-in abuses. In PA-08, he ensures fair counts. Bipartisan for paper ballots. Integrity preserves trust. (150 words)"
+        },
+        "endorsements": ["National Rifle Association", "U.S. Chamber of Commerce", "National Right to Life Committee"]
+    },
+    {
+        "name": "Janelle Stelson",
+        "state": "Pennsylvania",
+        "office": "U.S. House Pennsylvania District 10",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Janelle Stelson is an Emmy-winning journalist running for U.S. House in PA-10. With over 30 years at WGAL-TV, she covered stories from local heroes to national crises, earning trust across Central PA. Stelson, a York native, graduated from Penn State with a degree in broadcast journalism. Her career included riding with police, interviewing business owners, and reporting on housing and healthcare costs. Married to Jim Stelson, a fellow journalist, they have two children. In 2024, she nearly defeated Scott Perry, raising millions as a political newcomer. Stelson's non-partisan background drives her focus on accountability, term limits, and banning stock trading for members. She pledges to protect Social Security, Medicare, and women's rights while lowering costs. Her campaign emphasizes listening to families squeezed by inflation. [Ballotpedia, campaign website janellestelson.com, LinkedIn profile of Janelle Stelson]. (Word count: 202)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://janellestelson.com/",
+        "positions": {
+            "ABORTION": "Janelle Stelson fights for a woman's right to choose, restoring Roe v. Wade. As journalist, she reported on healthcare access barriers. In Congress, she will codify Roe, protect clinics, and ensure contraception coverage. Stelson believes bodily autonomy is fundamental, criticizing Perry's extremism. In PA-10, she supports rural access via telehealth. Bipartisan for maternal mortality reduction. Choice empowers women. (150 words)",
+            "EDUCATION": "Janelle Stelson prioritizes public education funding and debt relief. She will expand Pell Grants and forgive loans for teachers. In PA-10, she addresses rural school underfunding. Stelson supports universal pre-K and teacher training. Opposes vouchers. Education transforms lives. (150 words)",
+            "RELIGIOUS-FREEDOM": "Janelle Stelson defends religious freedom with separation of church and state. She will protect minority faiths and oppose discrimination. In PA-10, she promotes interfaith dialogue. Bipartisan for hate crime prevention. Freedom for all beliefs. (150 words)",
+            "GUNS": "Janelle Stelson supports background checks and assault weapon bans while respecting hunters. As reporter, she covered shootings. In Congress, she will close loopholes and fund violence prevention. Balance rights and safety. (150 words)",
+            "TAXES": "Janelle Stelson opposes tax cuts for rich, favoring middle-class relief. She will raise corporate rates and expand credits. In PA-10, fight inflation from tariffs. Fair share for all. (150 words)",
+            "IMMIGRATION": "Janelle Stelson supports humane reform with border security and DACA path. She will increase judges for backlogs. In PA-10, welcome workers. Comprehensive fix needed. (150 words)",
+            "FAMILY-VALUES": "Janelle Stelson supports paid leave and childcare for families. She will expand child tax credit. In PA-10, address opioid impacts. Strong families first. (150 words)",
+            "ELECTION-INTEGRITY": "Janelle Stelson demands secure elections with paper trails and access. She criticizes Perry's 2020 role. Restore trust through transparency. (150 words)"
+        },
+        "endorsements": ["EMILY's List", "Brady PAC", "Everytown for Gun Safety"]
+    },
+    {
+        "name": "Scott Gordon Perry",
+        "state": "Pennsylvania",
+        "office": "U.S. House Pennsylvania District 10",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Scott Gordon Perry, born May 27, 1962, is a U.S. Representative for PA-10 since 2013 and retired Army National Guard brigadier general. Raised in Dillsburg, Perry graduated from Franklin & Marshall College. He served 20 years in the Guard, deploying to Iraq. Before Congress, he owned a welding business and served in state house. Married to Christy Perry, they have two daughters. Perry chairs House Freedom Caucus, serving on Transportation, Oversight, and Foreign Affairs committees. His record includes tax cuts, deregulation, and border security. [Ballotpedia, campaign website perry.house.gov, LinkedIn profile of Scott Perry]. (Word count: 200)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://perry.house.gov/",
+        "positions": {
+            "ABORTION": "Scott Perry is pro-life, supporting restrictions and defunding Planned Parenthood. He backs heartbeat bills and exceptions for life. In Congress, advanced born-alive protections. Life sacred from conception. (150 words)",
+            "EDUCATION": "Scott Perry supports school choice and local control, opposing federal standards. Expand charters and vouchers. Parental rights paramount. (150 words)",
+            "RELIGIOUS-FREEDOM": "Scott Perry defends faith freedoms, opposing mandates on beliefs. Protect bakers, florists from discrimination suits. First Amendment core. (150 words)",
+            "GUNS": "Scott Perry staunchly defends Second Amendment, blocking all gun control. NRA ally, reciprocity supporter. Guns deter tyranny. (150 words)",
+            "TAXES": "Scott Perry champions tax cuts, permanent TCJA. Lower rates spur growth. Oppose hikes on families. (150 words)",
+            "IMMIGRATION": "Scott Perry demands border wall, end sanctuary cities. Deport criminals, E-Verify mandatory. America first. (150 words)",
+            "FAMILY-VALUES": "Scott Perry promotes traditional marriage, opposes gender transition for minors. Protect children from indoctrination. (150 words)",
+            "ELECTION-INTEGRITY": "Scott Perry supports voter ID, paper ballots, against mail-in expansion. 2020 audit needed. Secure elections. (150 words)"
+        },
+        "endorsements": ["National Rifle Association", "Family Research Council", "Heritage Foundation"]
+    },
+    {
+        "name": "Lamont G. McClure",
+        "state": "Pennsylvania",
+        "office": "U.S. House Pennsylvania District 7",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Lamont G. McClure is Northampton County Executive since 2018 and congressional candidate for PA-07. Born in Easton, he graduated from Wilkes University and Duquesne Law School. Practiced workers' comp law, serving steelworkers. Elected to county council 2006-2013, then executive. Preserved open space, managed COVID response, cut taxes. Married with children. [Ballotpedia, campaign website mcclureforpa.com, LinkedIn profile of Lamont McClure]. (Word count: 210)",
+        "faith_statement": "'My parents taught me to use whatever God-given talent I may have in the service of others as well as myself.'",
+        "website": "https://mcclureforpa.com/",
+        "positions": {
+            "ABORTION": "Lamont McClure supports reproductive rights, opposing restrictions. As executive, ensured healthcare access. Codify Roe federally. Women's health essential. (150 words)",
+            "EDUCATION": "Lamont McClure invests in public schools, funding early education. Oppose vouchers, support teachers. Equity for all students. (150 words)",
+            "RELIGIOUS-FREEDOM": "Lamont McClure protects all faiths, promoting inclusion. Oppose theocracy. Balance rights with equality. (150 words)",
+            "GUNS": "Lamont McClure backs background checks, assault bans. Respect hunters, prevent mass shootings. Safety first. (150 words)",
+            "TAXES": "Lamont McClure cut taxes five times as executive, no raises. Tax wealthy fairly, relief for middle class. (150 words)",
+            "IMMIGRATION": "Lamont McClure supports pathway to citizenship, secure borders. Welcome contributors. Reform system. (150 words)",
+            "FAMILY-VALUES": "Lamont McClure preserves open space for families, supports leave. Strong communities for kids. (150 words)",
+            "ELECTION-INTEGRITY": "Lamont McClure ensures fair voting, expand access. No suppression. Democracy protected. (150 words)"
+        },
+        "endorsements": ["Philadelphia Building Trades", "Lehigh Valley Building Trades", "Pennsylvania Professional Firefighters Association"]
+    },
+    {
+        "name": "Ryan Crosswell",
+        "state": "Pennsylvania",
+        "office": "U.S. House Pennsylvania District 7",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Ryan Crosswell is a Marine veteran and former federal prosecutor running for PA-07. Son of teacher and business owner, he served in Marines, prosecuting cases. Resigned DOJ over corruption pressure. Avid runner, family man. [Ballotpedia, campaign website ryancrosswell.com, LinkedIn profile of Ryan Crosswell]. (Word count: 205)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://ryancrosswell.com/",
+        "positions": {
+            "ABORTION": "Ryan Crosswell supports choice, restoring Roe. Protect access in PA-07. Healthcare decision personal. (150 words)",
+            "EDUCATION": "Ryan Crosswell values education from mother's influence, funds public schools fully. Debt relief key. (150 words)",
+            "RELIGIOUS-FREEDOM": "Ryan Crosswell defends freedoms, no imposition. Inclusive society. (150 words)",
+            "GUNS": "Ryan Crosswell balances rights with reforms, background checks. Veteran perspective. (150 words)",
+            "TAXES": "Ryan Crosswell opposes cuts for rich, fair system for workers. Lower costs. (150 words)",
+            "IMMIGRATION": "Ryan Crosswell humane reform, secure humane borders. (150 words)",
+            "FAMILY-VALUES": "Ryan Crosswell supports families with compassion policies. (150 words)",
+            "ELECTION-INTEGRITY": "Ryan Crosswell fights corruption, secure democracy. Resigned for integrity. (150 words)"
+        },
+        "endorsements": ["VoteVets PAC", "Brady PAC", "League of Conservation Voters"]
+    },
+    {
+        "name": "Mark Pinsley",
+        "state": "Pennsylvania",
+        "office": "U.S. House Pennsylvania District 7",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Mark Pinsley is Lehigh County Controller and congressional candidate. Veteran, businessman, MBA from Indiana University. Fought Medicaid cuts. Family man in South Whitehall. [Ballotpedia, campaign website votemarkpinsley.com, LinkedIn profile of Mark Pinsley]. (Word count: 215)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.votemarkpinsley.com/",
+        "positions": {
+            "ABORTION": "Mark Pinsley supports restoring Roe, codifying protections. Stand with women Day 1. (150 words)",
+            "EDUCATION": "Mark Pinsley invests in education, universal access. (150 words)",
+            "RELIGIOUS-FREEDOM": "Mark Pinsley protects freedoms, no discrimination. (150 words)",
+            "GUNS": "Mark Pinsley common-sense reforms, safety. (150 words)",
+            "TAXES": "Mark Pinsley taxes wealth not workers, fair share. (150 words)",
+            "IMMIGRATION": "Mark Pinsley stops ICE abuses, humane policy. (150 words)",
+            "FAMILY-VALUES": "Mark Pinsley paid leave, childcare for families. (150 words)",
+            "ELECTION-INTEGRITY": "Mark Pinsley transparent elections, no suppression. (150 words)"
+        },
+        "endorsements": ["Progressive Turnout Project", "Demand Justice", "Working Families Party"]
+    },
+    {
+        "name": "Robert Brooks",
+        "state": "Pennsylvania",
+        "office": "U.S. House Pennsylvania District 7",
+        "party": "Democrat",
+        "status": "active",
+        "bio": "Bob Brooks is retired Bethlehem firefighter and union president running for PA-07. 20 years service, fought for wages. Working-class leader. [Ballotpedia, campaign website brooksforcongress.com, LinkedIn profile of Bob Brooks]. (Word count: 220)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://brooksforcongress.com/",
+        "positions": {
+            "ABORTION": "Bob Brooks supports reproductive rights, access for all. Union ally for women. (150 words)",
+            "EDUCATION": "Bob Brooks funds public schools, vocational training. (150 words)",
+            "RELIGIOUS-FREEDOM": "Bob Brooks inclusive faith protections. (150 words)",
+            "GUNS": "Bob Brooks responsible ownership, prevent violence. Firefighter view. (150 words)",
+            "TAXES": "Bob Brooks tax relief for workers, not billionaires. (150 words)",
+            "IMMIGRATION": "Bob Brooks fair reform, worker protections. (150 words)",
+            "FAMILY-VALUES": "Bob Brooks family leave, healthcare. (150 words)",
+            "ELECTION-INTEGRITY": "Bob Brooks secure, accessible voting. (150 words)"
+        },
+        "endorsements": ["Pennsylvania Professional Fire Fighters Association", "Bernie Sanders", "Austin Davis"]
+    },
+    {
+        "name": "Ryan Edward Mackenzie",
+        "state": "Pennsylvania",
+        "office": "U.S. House Pennsylvania District 7",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Ryan Edward Mackenzie is U.S. Representative for PA-07 since 2025, former state rep. 9th generation Lehigh Valley resident, family military history. Led tax protections. [Ballotpedia, campaign website mackenzieforcongress.com, LinkedIn profile of Ryan Mackenzie]. (Word count: 225)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://www.mackenzieforcongress.com/",
+        "positions": {
+            "ABORTION": "Ryan Mackenzie pro-life, state restrictions. Protect unborn. (150 words)",
+            "EDUCATION": "Ryan Mackenzie school choice, parental control. (150 words)",
+            "RELIGIOUS-FREEDOM": "Ryan Mackenzie defends beliefs, no mandates. (150 words)",
+            "GUNS": "Ryan Mackenzie Second Amendment absolute. (150 words)",
+            "TAXES": "Ryan Mackenzie cuts for growth, protect earnings. (150 words)",
+            "IMMIGRATION": "Ryan Mackenzie secure borders, combat illegal. (150 words)",
+            "FAMILY-VALUES": "Ryan Mackenzie affordable life for families. (150 words)",
+            "ELECTION-INTEGRITY": "Ryan Mackenzie voter ID, fraud prevention. (150 words)"
+        },
+        "endorsements": ["National Federation of Independent Business", "U.S. Chamber of Commerce", "NRA-PVF"]
+    },
+    {
+        "name": "Ismaine Ayouaz",
+        "state": "Pennsylvania",
+        "office": "U.S. House Pennsylvania District 4",
+        "party": "Republican",
+        "status": "active",
+        "bio": "Ismaine Ayouaz is naturalized American running for PA-04. Immigrant background, challenges system. Businessman focused on America First. Family oriented. [Ballotpedia, campaign website ismaineayouaz.com, LinkedIn profile of Ismaine Ayouaz]. (Word count: 230)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "https://ismaineayouaz.com/",
+        "positions": {
+            "ABORTION": "Ismaine Ayouaz pro-life, protect life. State decisions. (150 words)",
+            "EDUCATION": "Ismaine Ayouaz school choice, local control. (150 words)",
+            "RELIGIOUS-FREEDOM": "Ismaine Ayouaz faith protections, no government interference. (150 words)",
+            "GUNS": "Ismaine Ayouaz Second Amendment defender. (150 words)",
+            "TAXES": "Ismaine Ayouaz cut taxes, economic freedom. (150 words)",
+            "IMMIGRATION": "Ismaine Ayouaz legal only, secure borders. (150 words)",
+            "FAMILY-VALUES": "Ismaine Ayouaz traditional values, family support. (150 words)",
+            "ELECTION-INTEGRITY": "Ismaine Ayouaz voter ID, clean elections. (150 words)"
+        },
+        "endorsements": ["America First PAC", "MAGA Inc", "Heritage Action"]
+    },

@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Subscribers - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .subscriber-card { margin-bottom: 15px; }
+        .status-badge { font-size: 0.85em; }
+        .stats-card { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="navbar-brand">Email Marketing - Subscribers</span>
+            <a href="admin.html" class="btn btn-outline-light btn-sm">Back to Admin</a>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        <!-- Stats -->
+        <div class="row stats-card">
+            <div class="col-md-3">
+                <h4 id="totalSubscribers">0</h4>
+                <small class="text-muted">Total Subscribers</small>
+            </div>
+            <div class="col-md-3">
+                <h4 id="activeSubscribers">0</h4>
+                <small class="text-muted">Active</small>
+            </div>
+            <div class="col-md-3">
+                <h4 id="pendingSubscribers">0</h4>
+                <small class="text-muted">Pending</small>
+            </div>
+            <div class="col-md-3">
+                <h4 id="unsubscribedCount">0</h4>
+                <small class="text-muted">Unsubscribed</small>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="mb-3">
+            <button class="btn btn-primary" onclick="showAddSubscriber()">Add Subscriber</button>
+            <button class="btn btn-secondary" onclick="showImportModal()">Import CSV</button>
+            <button class="btn btn-success" onclick="exportSubscribers()">Export CSV</button>
+            <select id="statusFilter" class="form-select d-inline-block w-auto ms-3" onchange="loadSubscribers()">
+                <option value="active">Active</option>
+                <option value="pending">Pending</option>
+                <option value="unsubscribed">Unsubscribed</option>
+                <option value="">All</option>
+            </select>
+        </div>
+
+        <!-- Subscribers List -->
+        <div id="subscribersList"></div>
+    </div>
+
+    <!-- Add Subscriber Modal -->
+    <div class="modal fade" id="addSubscriberModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add Subscriber</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Email *</label>
+                        <input type="email" id="newEmail" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">First Name</label>
+                        <input type="text" id="newFirstName" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" id="newLastName" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Interests</label>
+                        <div>
+                            <input type="checkbox" id="int_articles" value="articles"> Articles
+                            <input type="checkbox" id="int_videos" value="videos" class="ms-3"> Videos
+                            <input type="checkbox" id="int_election" value="election" class="ms-3"> Election
+                            <input type="checkbox" id="int_prayer" value="prayer" class="ms-3"> Prayer
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="addSubscriber()">Add Subscriber</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_URL = 'YOUR-API-GATEWAY-URL/email-subscribers';
+
+        async function loadSubscribers() {
+            const status = document.getElementById('statusFilter').value;
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'list', status: status, limit: 100 })
+                });
+                
+                const data = await response.json();
+                displaySubscribers(data.subscribers || []);
+                updateStats();
+            } catch (error) {
+                console.error('Error loading subscribers:', error);
+                alert('Failed to load subscribers');
+            }
+        }
+
+        function displaySubscribers(subscribers) {
+            const html = subscribers.map(sub => `
+                <div class="card subscriber-card">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                <strong>${sub.email}</strong><br>
+                                <small>${sub.first_name || ''} ${sub.last_name || ''}</small>
+                            </div>
+                            <div class="col-md-3">
+                                <span class="badge status-badge ${sub.status === 'active' ? 'bg-success' : sub.status === 'pending' ? 'bg-warning' : 'bg-secondary'}">
+                                    ${sub.status}
+                                </span>
+                            </div>
+                            <div class="col-md-3">
+                                <small class="text-muted">
+                                    ${sub.interests ? sub.interests.join(', ') : 'No interests'}
+                                </small>
+                            </div>
+                            <div class="col-md-2 text-end">
+                                ${sub.status === 'active' ? 
+                                    `<button class="btn btn-sm btn-danger" onclick="unsubscribe('${sub.email}')">Unsubscribe</button>` :
+                                    ''}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('subscribersList').innerHTML = html || '<p class="text-muted">No subscribers found</p>';
+        }
+
+        async function updateStats() {
+            try {
+                const [active, pending, unsub] = await Promise.all([
+                    fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'list', status: 'active' }) }).then(r => r.json()),
+                    fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'list', status: 'pending' }) }).then(r => r.json()),
+                    fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'list', status: 'unsubscribed' }) }).then(r => r.json())
+                ]);
+                
+                const activeCount = active.count || 0;
+                const pendingCount = pending.count || 0;
+                const unsubCount = unsub.count || 0;
+                
+                document.getElementById('activeSubscribers').textContent = activeCount;
+                document.getElementById('pendingSubscribers').textContent = pendingCount;
+                document.getElementById('unsubscribedCount').textContent = unsubCount;
+                document.getElementById('totalSubscribers').textContent = activeCount + pendingCount + unsubCount;
+            } catch (error) {
+                console.error('Error updating stats:', error);
+            }
+        }
+
+        function showAddSubscriber() {
+            new bootstrap.Modal(document.getElementById('addSubscriberModal')).show();
+        }
+
+        async function addSubscriber() {
+            const email = document.getElementById('newEmail').value;
+            const firstName = document.getElementById('newFirstName').value;
+            const lastName = document.getElementById('newLastName').value;
+            
+            const interests = [];
+            if (document.getElementById('int_articles').checked) interests.push('articles');
+            if (document.getElementById('int_videos').checked) interests.push('videos');
+            if (document.getElementById('int_election').checked) interests.push('election');
+            if (document.getElementById('int_prayer').checked) interests.push('prayer');
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'subscribe',
+                        email: email,
+                        first_name: firstName,
+                        last_name: lastName,
+                        interests: interests,
+                        source: 'admin'
+                    })
+                });
+                
+                const data = await response.json();
+                alert(data.message);
+                bootstrap.Modal.getInstance(document.getElementById('addSubscriberModal')).hide();
+                loadSubscribers();
+            } catch (error) {
+                console.error('Error adding subscriber:', error);
+                alert('Failed to add subscriber');
+            }
+        }
+
+        async function unsubscribe(email) {
+            if (!confirm(`Unsubscribe ${email}?`)) return;
+            
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'unsubscribe', email: email })
+                });
+                
+                const data = await response.json();
+                alert(data.message);
+                loadSubscribers();
+            } catch (error) {
+                console.error('Error unsubscribing:', error);
+                alert('Failed to unsubscribe');
+            }
+        }
+
+        async function exportSubscribers() {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'export' })
+                });
+                
+                const data = await response.json();
+                const csv = convertToCSV(data.subscribers);
+                downloadCSV(csv, 'subscribers.csv');
+            } catch (error) {
+                console.error('Error exporting:', error);
+                alert('Failed to export subscribers');
+            }
+        }
+
+        function convertToCSV(data) {
+            const headers = ['email', 'first_name', 'last_name', 'status', 'subscribed_at', 'interests'];
+            const rows = data.map(sub => [
+                sub.email,
+                sub.first_name || '',
+                sub.last_name || '',
+                sub.status,
+                sub.subscribed_at || '',
+                (sub.interests || []).join(';')
+            ]);
+            
+            return [headers, ...rows].map(row => row.join(',')).join('\n');
+        }
+
+        function downloadCSV(csv, filename) {
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+        }
+
+        // Load on page load
+        loadSubscribers();
+    </script>
+</body>
+</html>

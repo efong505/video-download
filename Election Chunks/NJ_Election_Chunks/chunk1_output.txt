@@ -1,0 +1,1059 @@
+races = [
+    {
+        "state": "New Jersey",
+        "office": "U.S. Senate",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Incumbent Democratic Senator Cory Booker seeks re-election to a third full term in the Class II seat. Booker, first elected in a 2013 special election, faces Republican opposition in the November 3 general election (source: Ballotpedia, Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "U.S. House District 1",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Incumbent Democrat Donald Norcross represents South Jersey suburbs including Camden and Cherry Hill. Norcross seeks re-election following his 2024 victory with 57.8% of the vote (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "U.S. House District 2",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Incumbent Democrat Herb Conaway, elected in 2024 with 53.2%, represents South Jersey from the Delaware Valley to the Pine Barrens, including Atlantic City and Vineland (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "U.S. House District 3",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Incumbent Democrat Angie Craig seeks re-election in the district covering central New Jersey, including parts of Burlington, Mercer, and Monmouth counties (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "U.S. House District 4",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Incumbent Republican Jeff Van Drew represents the upper Jersey Shore, expanding into Monmouth and Ocean counties, including Lakewood Township and Toms River (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "U.S. House District 5",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Incumbent Democrat Josh Gottheimer seeks re-election in the northwest district encompassing parts of Bergen, Essex, Morris, Passaic, and Sussex counties (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "U.S. House District 6",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Incumbent Democrat Frank Pallone, re-elected in 2024 with 56.1%, represents central New Jersey including Middlesex, Monmouth, and Union counties (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "U.S. House District 7",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Incumbent Democrat Tom Malinowski seeks re-election in the affluent district covering the New Jersey Highlands of Hunterdon and Warren counties (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "U.S. House District 8",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Incumbent Democrat Rob Menendez, re-elected in 2024 with 59.2%, represents the majority-Hispanic district including Elizabeth, Hoboken, Union City, and parts of Newark and Jersey City (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "U.S. House District 9",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Incumbent Democrat Bill Pascrell seeks re-election in the urban district covering parts of Essex, Hudson, Passaic, and Union counties (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "U.S. House District 10",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Incumbent Democrat LaMonica McIver faces Republican Shana Melius in the district including Newark, East Orange, and Irvington (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "U.S. House District 11",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Incumbent Democrat Mikie Sherrill represents northern New Jersey including parts of Essex, Morris, and Sussex counties (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "U.S. House District 12",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Incumbent Democrat Bonnie Watson Coleman seeks re-election in central New Jersey covering Mercer, Middlesex, and Somerset counties (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Governor",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Open seat following term limits for incumbent Phil Murphy. Democrat Mikie Sherrill faces Republican Jack Ciattarelli in the race to become the 57th governor (source: Wikipedia, NJ.com)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Lieutenant Governor",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Elected jointly with the governor. Running mate of the gubernatorial winner will serve as the 54th lieutenant governor (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 1 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 1 covers Cumberland (part), Gloucester (part), and Salem counties. Incumbent Matthew Samual Dalton (R) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 1 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 1 covers Cumberland (part), Gloucester (part), and Salem counties. Incumbent Erik K. Simonsen (R) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 2 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 2 covers Atlantic (part) and Cape May (all) counties. Incumbent Don Guardian (R) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 2 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 2 covers Atlantic (part) and Cape May (all) counties. Incumbent Claire M. Richer (R) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 3 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 3 covers Cumberland (part) and Gloucester (part) counties. Incumbent Andrea Katz (D) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 3 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 3 covers Cumberland (part) and Gloucester (part) counties. Incumbent Gary Schaer (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 4 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 4 covers Camden (part) and Gloucester (part) counties. Incumbent Anthony Verrelli (D) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 4 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 4 covers Camden (part) and Gloucester (part) counties. Incumbent Barbara Cooper (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 5 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 5 covers Camden (part) and Gloucester (part) counties. Incumbent Herbert Conaway Jr. (D) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 5 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 5 covers Camden (part) and Gloucester (part) counties. Incumbent Bill Moen (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 6 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 6 covers Burlington (part) and Camden (part) counties. Incumbent Louis Greenwald (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 6 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 6 covers Burlington (part) and Camden (part) counties. Incumbent Melinda Kane (D) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 7 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 7 covers Burlington (all) county. Incumbent Carol Murphy (D) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 7 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 7 covers Burlington (all) county. Incumbent Troy Singleton (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 8 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 8 covers Atlantic (part) and Burlington (part) counties. Incumbent Michael Torrissi (R) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 8 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 8 covers Atlantic (part) and Burlington (part) counties. Incumbent Andrea Katz (R) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 9 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 9 covers Ocean (part) and Atlantic (part) counties. Incumbent Brian Rumpf (R) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 9 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 9 covers Ocean (part) and Atlantic (part) counties. Incumbent Michael Torrissi (R) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 10 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 10 covers Monmouth (part) and Ocean (part) counties. Incumbent John Catalano (R) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 10 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 10 covers Monmouth (part) and Ocean (part) counties. Incumbent Greg Myhre (R) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 11 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 11 covers Monmouth (part) county. Incumbent Kimberly Brixie (D) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 11 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 11 covers Monmouth (part) county. Incumbent Marggie McCarroll (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 12 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 12 covers Burlington (part) and Mercer (part) counties. Incumbent Dan Benson (D) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 12 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 12 covers Burlington (part) and Mercer (part) counties. Incumbent Anjali Vyas (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 13 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 13 covers Monmouth (part) county. Incumbent Victoria Desai (D) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 13 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 13 covers Monmouth (part) county. Incumbent Alex Sauick (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 14 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 14 covers Mercer (part) and Middlesex (part) counties. Incumbent Wayne DeAngelo (D) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 14 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 14 covers Mercer (part) and Middlesex (part) counties. Incumbent Tennille McCoy (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 15 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 15 covers Hunterdon (all) and Mercer (part) counties. Incumbent Verlina Reynolds-Jackson (D) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 15 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 15 covers Hunterdon (all) and Mercer (part) counties. Incumbent Anthony Verrelli (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 16 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 16 covers Hunterdon (part), Mercer (part), Middlesex (part), Somerset (part) counties. Incumbent Ann Hauk (D) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 16 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 16 covers Hunterdon (part), Mercer (part), Middlesex (part), Somerset (part) counties. Incumbent Kevin Mullapudi (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 17 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 17 covers Somerset (part) and Middlesex (part) counties. Incumbent Sadaf Jaffer (D) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 17 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 17 covers Somerset (part) and Middlesex (part) counties. Incumbent Joseph Danielsen (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 18 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 18 covers Middlesex (part) and Somerset (part) counties. Incumbent Robert Karabinchak (D) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 18 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 18 covers Middlesex (part) and Somerset (part) counties. Incumbent Nitesh Amin (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 19 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 19 covers Middlesex (all) county. Incumbent Craig Coughlin (D) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 19 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 19 covers Middlesex (all) county. Incumbent Yvonne Lopez (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 20 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 20 covers Union (part) county. Incumbent Jabulani Blyden (D) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 20 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 20 covers Union (part) county. Incumbent Herbert Conaway Jr. (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 21 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 21 covers Middlesex (part), Morris (part), Somerset (part), Union (part) counties. Incumbent Michele Matsikoudis (R) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 21 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 21 covers Middlesex (part), Morris (part), Somerset (part), Union (part) counties. Incumbent Nancy Munoz (R) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 22 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 22 covers Somerset (part) and Union (part) counties. Incumbent Linda Carter (D) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 22 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 22 covers Somerset (part) and Union (part) counties. Incumbent James Kennedy (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 23 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 23 covers Hunterdon (part), Somerset (part), and Warren (part) counties. Incumbent John DiMaio (R) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 23 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 23 covers Hunterdon (part), Somerset (part), and Warren (part) counties. Incumbent Joe Danielsen (R) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 24 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 24 covers Morris (part), Sussex (part), and Warren (part) counties. Incumbent Michael Inganamort (R) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 24 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 24 covers Morris (part), Sussex (part), and Warren (part) counties. Incumbent Dawn Fantasia (R) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 25 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 25 covers Morris (part) and Passaic (part) counties. Incumbent Brian Bergen (R) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 25 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 25 covers Morris (part) and Passaic (part) counties. Incumbent Jay Webber (R) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 26 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 26 covers Essex (part), Morris (part), and Passaic (part) counties. Incumbent Christian Granado (D) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 26 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 26 covers Essex (part), Morris (part), and Passaic (part) counties. Incumbent Sadaf F. Jaffer (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 27 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 27 covers Essex (part) and Passaic (part) counties. Incumbent Michael V. Byrne (R) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 27 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 27 covers Essex (part) and Passaic (part) counties. Incumbent Donald H. Wong (R) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 28 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 28 covers Essex (part) county. Incumbent Thomas P. Giblin (D) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 28 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 28 covers Essex (part) county. Incumbent Cleopatra Tucker (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 29 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 29 covers Essex (part) and Union (part) counties. Incumbent Eliana Pintor Marin (D) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 29 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 29 covers Essex (part) and Union (part) counties. Incumbent Shavonda Sumter (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 30 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 30 covers Essex (part) and Union (part) counties. Incumbent Jomo K. Johnson (D) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 30 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 30 covers Essex (part) and Union (part) counties. Incumbent William Sampson (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 31 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 31 covers Hudson (part) county. Incumbent Barbara McCann Stamato (D) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 31 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 31 covers Hudson (part) county. Incumbent Jacqueline Weimmer (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 32 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 32 covers Hudson (part) county. Incumbent Annette Quijano (D) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 32 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 32 covers Hudson (part) county. Incumbent Sergio Granados (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 33 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 33 covers Hudson (part) county. Incumbent Marget Espinal (D) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 33 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 33 covers Hudson (part) county. Incumbent Gabe Rodriguez (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 34 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 34 covers Essex (part) and Passaic (part) counties. Incumbent Kevin J. O'Toole (R) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 34 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 34 covers Essex (part) and Passaic (part) counties. Incumbent Bettyles Murphy (R) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 35 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 35 covers Essex (part) and Passaic (part) counties. Incumbent Benjie Wimberly (D) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 35 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 35 covers Essex (part) and Passaic (part) counties. Incumbent Shavonda E. Sumter (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 36 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 36 covers Bergen (part) and Passaic (part) counties. Incumbent P. Christie (D) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 36 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 36 covers Bergen (part) and Passaic (part) counties. Incumbent Gary Schaer (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 37 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 37 covers Bergen (part) county. Incumbent Ellen Park (D) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 37 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 37 covers Bergen (part) county. Incumbent Benjie Wimberly (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 38 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 38 covers Bergen (part) and Hudson (part) counties. Incumbent Chris Tully (D) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 38 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 38 covers Bergen (part) and Hudson (part) counties. Incumbent Hae Chan (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 39 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 39 covers Bergen (part) and Passaic (part) counties. Incumbent Margot Gilboa (D) seeks re-election (source: NJ Globe)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 39 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 39 covers Bergen (part) and Passaic (part) counties. Incumbent Ellen J. Park (D) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 40 Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 40 covers Bergen (part) and Essex (part) counties. Incumbent Paul Kanitra (R) seeks re-election (source: Wikipedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "General Assembly District 40 Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "District 40 covers Bergen (part) and Essex (part) counties. Incumbent Kevin J. O'Toole (R) seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Newark School Board Seat 1",
+        "election_date": "2025-04-15",
+        "race_type": "general",
+        "description": "At-large seat in Newark Public Schools, Essex County. Incumbent Kanileah Anderson seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Newark School Board Seat 2",
+        "election_date": "2025-04-15",
+        "race_type": "general",
+        "description": "At-large seat in Newark Public Schools, Essex County. Incumbent Louis Maisonave Jr. seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Newark School Board Seat 3",
+        "election_date": "2025-04-15",
+        "race_type": "general",
+        "description": "At-large seat in Newark Public Schools, Essex County. Incumbent David Daughety seeks re-election (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Jersey City School Board Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Jersey City Public Schools, Hudson County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Jersey City School Board Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Jersey City Public Schools, Hudson County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Jersey City School Board Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Jersey City Public Schools, Hudson County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Paterson School Board Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Paterson Public Schools, Passaic County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Paterson School Board Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Paterson Public Schools, Passaic County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Paterson School Board Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Paterson Public Schools, Passaic County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Elizabeth School Board Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Elizabeth Public Schools, Union County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Elizabeth School Board Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Elizabeth Public Schools, Union County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Elizabeth School Board Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Elizabeth Public Schools, Union County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Edison School Board Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Edison Township School District, Middlesex County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Edison School Board Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Edison Township School District, Middlesex County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Edison School Board Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Edison Township School District, Middlesex County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Woodbridge School Board Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Woodbridge Township School District, Middlesex County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Woodbridge School Board Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Woodbridge Township School District, Middlesex County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Woodbridge School Board Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Woodbridge Township School District, Middlesex County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Camden School Board Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Camden City School District, Camden County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Camden School Board Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Camden City School District, Camden County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Camden School Board Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Camden City School District, Camden County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Trenton School Board Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Trenton Public Schools, Mercer County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Trenton School Board Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Trenton Public Schools, Mercer County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Trenton School Board Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Trenton Public Schools, Mercer County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Clifton School Board Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Clifton Public Schools, Passaic County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Clifton School Board Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Clifton Public Schools, Passaic County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Clifton School Board Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Clifton Public Schools, Passaic County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Passaic School Board Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Passaic City School District, Passaic County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Passaic School Board Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Passaic City School District, Passaic County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Passaic School Board Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Passaic City School District, Passaic County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Union City School Board Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Union City School District, Hudson County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Union City School Board Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Union City School District, Hudson County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Union City School Board Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Union City School District, Hudson County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Bayonne School Board Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Bayonne City School District, Hudson County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Bayonne School Board Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Bayonne City School District, Hudson County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Bayonne School Board Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Bayonne City School District, Hudson County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "East Orange School Board Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in East Orange Community Charter School, Essex County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "East Orange School Board Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in East Orange Community Charter School, Essex County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "East Orange School Board Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in East Orange Community Charter School, Essex County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Vineland School Board Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Vineland Public Schools, Cumberland County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Vineland School Board Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Vineland Public Schools, Cumberland County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Vineland School Board Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in Vineland Public Schools, Cumberland County (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "New Brunswick School Board Seat 1",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in New Brunswick Public Schools, Middlesex County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "New Brunswick School Board Seat 2",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in New Brunswick Public Schools, Middlesex County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "New Brunswick School Board Seat 3",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat in New Brunswick Public Schools, Middlesex County (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Bergen County Commissioner",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat on the Bergen County Board of County Commissioners (source: NorthJersey.com)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Essex County Sheriff",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Countywide election for Essex County Sheriff (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Middlesex County Clerk",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Countywide election for Middlesex County Clerk (source: MercerCounty.org)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Ocean County Commissioner",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat on the Ocean County Board of County Commissioners (source: NorthJersey.com)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Camden County Prosecutor",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Countywide election for Camden County Prosecutor (source: Inquirer.com)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Monmouth County Sheriff",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Countywide election for Monmouth County Sheriff (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Hudson County Clerk",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Countywide election for Hudson County Clerk (source: Ballotpedia)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Union County Commissioner",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "At-large seat on the Union County Board of County Commissioners (source: NorthJersey.com)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Passaic County Sheriff",
+        "election_date": "2025-11-04",
+        "race_type": "general",
+        "description": "Countywide election for Passaic County Sheriff (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Attorney General",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Appointed position by the governor, listed for informational purposes in conjunction with U.S. Senate election (source: NJ.gov)."
+    },
+    {
+        "state": "New Jersey",
+        "office": "Secretary of State",
+        "election_date": "2026-11-03",
+        "race_type": "general",
+        "description": "Appointed position by the governor, listed for informational purposes in conjunction with U.S. Senate election (source: NJ.gov)."
+    }
+]

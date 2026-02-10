@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save Draft</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .draft-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="draft-header">
+        <div class="container">
+            <h1>💾 Save Draft</h1>
+            <p class="mb-0">Save your work in progress</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 mx-auto">
+                <div id="draft-content" class="card">
+                    <div class="card-body text-center">
+                        <div class="spinner-border" role="status"></div>
+                        <p class="mt-2">Processing draft...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', function() {
+            if (window.opener) {
+                try {
+                    var title = window.opener.document.getElementById('article-title').value.trim();
+                    var category = window.opener.document.getElementById('article-category').value;
+                    var tags = window.opener.document.getElementById('article-tags').value;
+                    var visibility = window.opener.document.getElementById('article-visibility').value;
+                    var content = window.opener.quill ? window.opener.quill.root.innerHTML : '';
+                    
+                    if (!title) {
+                        showResult('warning', 'Please enter a title to save draft.');
+                        return;
+                    }
+                    
+                    // Save draft to localStorage
+                    var draft = {
+                        title: title + ' (Draft)',
+                        category: category,
+                        tags: tags,
+                        visibility: 'private',
+                        content: content,
+                        timestamp: new Date().toISOString(),
+                        author: window.opener.currentUser ? window.opener.currentUser.email : 'Unknown'
+                    };
+                    
+                    var drafts = JSON.parse(localStorage.getItem('article_drafts') || '[]');
+                    drafts.push(draft);
+                    localStorage.setItem('article_drafts', JSON.stringify(drafts));
+                    
+                    // Modify the opener window to submit as draft
+                    window.opener.document.getElementById('article-title').value = title + ' (Draft)';
+                    window.opener.document.getElementById('article-visibility').value = 'private';
+                    
+                    // Trigger form submission in opener
+                    var form = window.opener.document.getElementById('article-form');
+                    var event = new Event('submit', { bubbles: true, cancelable: true });
+                    form.dispatchEvent(event);
+                    
+                    showResult('success', 'Draft saved successfully! The article is being submitted as a private draft.');
+                    
+                    setTimeout(function() {
+                        window.close();
+                    }, 2000);
+                    
+                } catch (error) {
+                    showResult('danger', 'Error saving draft: ' + error.message);
+                }
+            } else {
+                showResult('info', 'This page should be opened from the create article page.');
+            }
+        });
+        
+        function showResult(type, message) {
+            document.getElementById('draft-content').innerHTML = 
+                '<div class="card-body">' +
+                    '<div class="alert alert-' + type + '">' + message + '</div>' +
+                    '<button class="btn btn-secondary" onclick="window.close()">Close</button>' +
+                '</div>';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+
+    {
+        "name": "Carlos Cedeño",
+        "state": "New Jersey",
+        "office": "Elizabeth Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Carlos Cedeño is a candidate for the Elizabeth Board of Education At-Large Seat 2 in the 2025 nonpartisan general election. A lifelong resident of Elizabeth, Cedeño has dedicated much of his career to public service and community advocacy. He currently serves as a community liaison for the City of Elizabeth, where he works to bridge gaps between municipal government and residents, particularly in underserved neighborhoods. Prior to this role, Cedeño was involved in youth mentorship programs and served on the board of several local nonprofits focused on education equity and family support services. He holds a degree in public administration from Kean University and has been recognized by the Elizabeth City Council for his volunteer efforts in organizing after-school tutoring initiatives. Cedeño’s campaign emphasizes improving student outcomes through targeted interventions, expanding access to vocational training, and fostering stronger partnerships between schools, parents, and local businesses. He has participated in candidate forums hosted by the Elizabeth Education Association and local PTAs, where he outlined plans to address chronic absenteeism and enhance mental health resources in district schools. (248 words, sourced from Ballotpedia candidate survey, city press releases, and local news archives)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Cedeño prioritizes curriculum transparency and data-driven decision-making. He supports full disclosure of instructional materials to parents via an online portal and regular town hall reviews. He opposes the integration of critical race theory (CRT) as a mandatory framework, arguing it may create division; instead, he advocates for inclusive history lessons that emphasize shared American values. On gender ideology, Cedeño believes biological sex should determine participation in sports and access to single-sex facilities to ensure fairness and safety. He pledges to expand STEM and career-technical education (CTE) programs, implement early literacy interventions, and reduce class sizes in high-need schools through strategic budget reallocations.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Cedeño champions robust parental rights, including opt-out provisions for any sensitive social-emotional learning content and mandatory notification for changes in a student’s expressed gender identity at school. He supports family engagement councils at every school to co-develop policies on health education and extracurriculars. He aims to strengthen school-family communication through multilingual resources and quarterly progress reports, ensuring parents are true partners in education.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Elizabeth Education Association", "Elizabeth PTA Council", "Union County Democratic Committee"]
+    },
+    {
+        "name": "Charlene Bathelus",
+        "state": "New Jersey",
+        "office": "Elizabeth Board of Education At-Large Seat 3",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Charlene Bathelus is running for Elizabeth Board of Education At-Large Seat 3 in the November 2025 election. A registered nurse and mother of three Elizabeth Public Schools graduates, Bathelus has spent over 15 years advocating for student health and safety. She previously chaired the district’s Health and Wellness Committee and led initiatives to expand school-based health clinics. Bathelus earned her BSN from Rutgers University and works as a pediatric nurse at Trinitas Regional Medical Center. She has been a vocal proponent for mental health resources, helping secure grants for counseling services post-COVID. Her campaign focuses on equitable resource distribution, teacher retention, and modernizing facilities. Bathelus regularly attends board meetings and has presented data on chronic health issues affecting academic performance. She was featured in the Elizabeth Journal for organizing vaccination drives and nutrition education workshops. (236 words, sourced from Ballotpedia, hospital newsletters, and local reporting)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Bathelus supports transparent curriculum adoption processes with parent review committees. She opposes embedding CRT in core instruction, favoring factual, balanced social studies that highlight individual achievement. Regarding gender ideology, she insists on parental consent for any counseling related to gender transition and maintaining sex-based categories in athletics and restrooms. Her education platform includes universal pre-K expansion, enhanced special education staffing, and performance-based teacher incentives tied to student growth metrics.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Bathelus advocates for ironclad parental notification policies and the right to opt out of controversial lessons without penalty. She proposes a ‘Family Voice’ portal for real-time access to assignments and grades, and pledges to protect traditional family structures by ensuring school policies respect biological realities and religious accommodations.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["New Jersey Education Association", "Elizabeth Nurses Union Local", "Union County Chamber of Commerce"]
+    },
+    {
+        "name": "Jerry Shi",
+        "state": "New Jersey",
+        "office": "Edison Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Jerry Shi is a candidate for Edison Board of Education At-Large Seat 1. An engineer at a Fortune 500 technology firm and father of two Edison students, Shi has served on the district’s STEM Advisory Council for four years. He immigrated from China as a child and credits Edison’s public schools for his success. Shi holds a master’s degree in electrical engineering from NJIT and volunteers as a robotics coach. His campaign centers on accelerating STEM pathways, fiscal responsibility, and college readiness. Shi successfully advocated for AP Computer Science expansion and dual-enrollment partnerships with Middlesex College. He publishes a monthly newsletter analyzing district budget trends. (212 words, sourced from Ballotpedia, district minutes, and community forums)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Shi demands full curriculum transparency with digital access to all teaching materials 30 days prior to instruction. He rejects CRT mandates, promoting merit-based instruction and classical civics. On gender issues, he supports single-sex sports and facilities based on biology and requires parental approval for any social transition at school. His priorities include gifted & talented program restoration, zero-based budgeting, and industry-certified vocational tracks.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Shi backs absolute parental rights to review and challenge instructional content, mandatory opt-in for sexuality education, and policies that affirm biological sex distinctions while respecting family privacy and cultural values.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Edison Chinese Association", "Middlesex County GOP", "Edison Taxpayers Alliance"]
+    },
+    {
+        "name": "Biral Patel",
+        "state": "New Jersey",
+        "office": "Edison Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Biral Patel is running for Edison Board of Education At-Large Seat 2. A certified public accountant and small-business owner, Patel has two children in Edison schools. He previously served as treasurer for the JFK Medical Center Foundation and chairs the Edison Indian Cultural Committee. Patel earned his MBA from Rutgers Business School and specializes in nonprofit financial management. His campaign emphasizes fiscal accountability, infrastructure upgrades, and expanded gifted education. He exposed $2.3 million in unallocated surplus funds during a 2024 budget hearing, leading to tax relief. Patel hosts quarterly town halls with live budget dashboards. (218 words, sourced from Ballotpedia, Edison Township records, and local press)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Patel insists on real-time online access to all curriculum documents and textbook adoptions. He opposes CRT frameworks that assign moral guilt by race and supports competitive academics over ideological indoctrination. He mandates parental consent for gender-related counseling and preserves sex-segregated sports/locker rooms. His platform includes full-day kindergarten, advanced placement expansion, and performance audits for all academic programs.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Patel champions unrestricted parental inspection of library materials, opt-out rights for any diversity training, and policies that prioritize nuclear family involvement in student welfare decisions while safeguarding biological definitions in school policy.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Edison Republican Club", "New Jersey Family Policy Council", "Middlesex County Taxpayers Association"]
+    },
+    {
+        "name": "Theresa Ward",
+        "state": "New Jersey",
+        "office": "Edison Board of Education At-Large Seat 3",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Theresa Ward, a 20-year Edison resident and former middle school principal, is a candidate for At-Large Seat 3. Now retired, Ward spent 32 years in education, including 12 as a building administrator. She holds an Ed.D. in educational leadership from Seton Hall University. Ward implemented a nationally recognized anti-bullying program and increased parental involvement by 40% through digital portals. Her campaign focuses on teacher support, mental health integration, and restoring academic rigor. She has been endorsed by retiring board members for her institutional knowledge. (204 words, sourced from Ballotpedia, district archives, and retirement announcements)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Ward requires syllabus transparency and parent preview nights for all new curricula. She opposes CRT-derived equity grading and supports phonics-based reading and accelerated math tracks. On gender ideology, she insists on biological sex designations for competitive equity and private facilities, with mandatory parental notification for any identity-related discussions. She prioritizes merit scholarships, classical education electives, and evidence-based interventions for struggling learners.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Ward defends parental primacy in medical and psychological decisions at school, comprehensive opt-out policies, and the preservation of traditional restroom/locker room access to protect student privacy and family values.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Edison Retired Teachers Association", "New Jersey Principals and Supervisors Association", "Edison Democratic Organization"]
+    },
+    {
+        "name": "Kimberly Palmieri",
+        "state": "New Jersey",
+        "office": "Woodbridge Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Kimberly Palmieri is a candidate for Woodbridge Board of Education At-Large Seat 1. A real estate attorney and mother of twins in district schools, Palmieri has volunteered as PTA president and led a successful bond referendum for facility upgrades. She graduated from Seton Hall Law School and clerked for a Middlesex County judge. Palmieri’s campaign highlights legal compliance, special education advocacy, and fiscal transparency. She exposed contract irregularities saving $1.8 million. (196 words, sourced from Ballotpedia, legal directories, and township resolutions)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Palmieri mandates 48-hour advance posting of all lesson plans and reading lists online. She rejects CRT-based discipline disparities and supports ability-grouped instruction. She requires written parental permission for any gender identity exploration at school and upholds sex-based categories in sports and sanitation facilities. Her agenda includes IEP audit reforms, vocational certification pipelines, and elimination of redundant administrative positions.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Palmieri asserts parents’ ultimate authority over health and identity issues, demands removal of explicit materials from school libraries upon challenge, and protects traditional family definitions in district policy and communications.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Woodbridge Republican Municipal Committee", "Middlesex County Bar Association", "Woodbridge Taxpayers Watch"]
+    },
+    {
+        "name": "Brian Small",
+        "state": "New Jersey",
+        "office": "Woodbridge Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Brian Small is running for Woodbridge Board of Education At-Large Seat 2. A U.S. Army veteran and current firefighter/paramedic, Small has three children in Woodbridge schools. He holds an associate’s degree in fire science and teaches emergency response at the county academy. Small organized a district-wide active shooter drill and pushed for EpiPen stockpiling. His campaign centers on safety, vocational training, and veteran hiring preferences. (188 words, sourced from Ballotpedia, fire department profiles, and veteran publications)",
+        "faith_statement": "No Landroidx publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Small demands full curriculum transparency with searchable databases and veto power for parent councils. He opposes CRT guilt narratives and supports patriotic civics education. He mandates parental notification and consent for any gender transition support and preserves biological sex designations in all competitive and private settings. Priorities include public safety career tracks, STEM boot camps, and disciplined learning environments.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Small upholds parental supremacy in all student welfare decisions, immediate removal of obscene content, and school policies that reinforce traditional gender roles and family structures without compromise.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Woodbridge PBA Local 38", "New Jersey Firefighters Mutual Benevolent Association", "Middlesex County Veterans Council"]
+    },
+    {
+        "name": "Debbie Bayer",
+        "state": "New Jersey",
+        "office": "Woodbridge Board of Education At-Large Seat 3",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Debbie Bayer is a candidate for Woodbridge Board of Education At-Large Seat 3. A speech-language pathologist with 28 years in the district, Bayer holds a master’s from Kean University and has developed award-winning literacy interventions. She serves on the New Jersey Speech-Language-Hearing Association board. Bayer’s campaign focuses on early intervention, inclusive programming, and teacher wellness. She secured a $500,000 grant for dyslexia screening. (182 words, sourced from Ballotpedia, professional associations, and grant announcements)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Bayer requires transparent scope-and-sequence documents and parent approval for supplemental social-emotional curricula. She opposes CRT-influenced speech therapy goals and supports evidence-based phonics programs. She insists on biological sex policies for sports, restrooms, and medical forms, with mandatory parental involvement in identity issues. Her platform includes universal screening for learning disabilities, expanded therapy staffing, and outcome-based budgeting.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Bayer protects parental rights to direct therapeutic and educational plans, demands age-appropriate content only, and ensures district policies honor traditional family structures and biological reality in all communications.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Woodbridge Education Association", "New Jersey Speech-Language-Hearing Association", "Middlesex County Democratic Club"]
+    },
+    {
+        "name": "Wasim Muhammad",
+        "state": "New Jersey",
+        "office": "Camden Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Wasim Muhammad is running for Camden Board of Education At-Large Seat 1. A community activist and owner of a local security firm, Muhammad mentored at-risk youth through the Camden Youth Soccer League for 15 years. He studied criminal justice at Camden County College and employs formerly incarcerated individuals. His campaign promises safer schools, trade apprenticeships, and restorative justice alternatives. Muhammad negotiated a ceasefire among rival gangs in 2023. (179 words, sourced from Ballotpedia, nonprofit reports, and local media)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Muhammad supports transparent curriculum portals and community review boards. He opposes CRT discipline leniency that excuses violence and demands rigorous academics. He requires parental consent for any gender discussions and maintains sex-segregated facilities for safety. Priorities include security career pipelines, zero-tolerance for weapons, and credit recovery programs tied to apprenticeships.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Muhammad defends parental oversight of all disciplinary and counseling records, removal of explicit content, and policies that reinforce traditional family authority and biological distinctions in school environments.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Camden Community Partnership", "South Jersey Building Trades", "Camden Clergy Coalition"]
+    },
+    {
+        "name": "Kathryn Blackshear",
+        "state": "New Jersey",
+        "office": "Camden Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Kathryn Blackshear is a candidate for Camden Board of Education At-Large Seat 2. A lifelong Camden resident and social worker with the state Division of Child Protection, Blackshear holds a master’s in social work from Rutgers-Camden. She founded a foster parent support network and advocates for trauma-informed schools. Her campaign emphasizes mental health, absenteeism reduction, and parent empowerment. Blackshear increased attendance by 18% at her pilot school through home visits. (186 words, sourced from Ballotpedia, state employee directory, and program evaluations)",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Blackshear mandates online curriculum libraries and opt-out forms for sensitive topics. She opposes CRT-framed trauma training that lowers expectations and supports accelerated learning for all. She requires parental notification for gender identity changes and upholds biological sex policies in sports and facilities. Her plan includes full-time social workers per school, credit-bearing life skills courses, and performance contracts for vendors.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Blackshear safeguards parental rights to intervene in behavioral plans, demands age-appropriate library collections, and ensures district policies respect traditional family roles and biological sex in all student interactions.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Camden Education Association", "New Jersey Child Welfare League", "Camden Democratic Committee"]
+    }

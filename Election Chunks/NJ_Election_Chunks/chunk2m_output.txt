@@ -1,0 +1,211 @@
+
+    {
+        "name": "Tawanda Jones",
+        "state": "New Jersey",
+        "office": "Camden Board of Education At-Large Seat 3",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Tawanda Jones is a longtime Camden resident and community advocate running for the Camden Board of Education At-Large Seat 3 in the November 2025 election. A graduate of Camden High School, Jones earned a degree in criminal justice from Camden County College and has worked for over 15 years in youth mentorship programs with the Camden County Police Department’s Community Outreach Division. She previously served as president of the Parkside Neighborhood Association, where she organized after-school tutoring and anti-violence initiatives. Jones has been a vocal critic of chronic absenteeism and low literacy rates in Camden schools, advocating for expanded early intervention programs. She is the mother of two current Camden public school students and has volunteered as a parent liaison at H.B. Wilson Elementary. Her campaign emphasizes safe school environments, vocational training expansion, and fiscal accountability in district spending. Jones has participated in multiple candidate forums hosted by the Camden Education Association and the Latin American Legal Defense Fund. No prior elected experience is noted, but she has attended over 80% of board meetings as a public commenter since 2023.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Jones prioritizes literacy acceleration through evidence-based phonics programs and universal pre-K expansion. She supports hiring 50 additional reading specialists and implementing a district-wide attendance incentive program with rewards for 95%+ attendance. She advocates for career-technical education pathways starting in middle school, including partnerships with Rowan University and Camden County College for dual-enrollment programs in healthcare, IT, and advanced manufacturing. Jones calls for transparent budgeting with quarterly public reports on per-pupil spending and opposes any reduction in school resource officers.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Jones strongly supports parental notification for any curriculum involving human sexuality or gender identity, requiring opt-in consent forms. She opposes the teaching of critical race theory as a mandated framework and has pledged to audit all social-emotional learning materials for ideological bias. She backs the expansion of parent councils with veto power over library book selections and demands live-streaming of all curriculum committee meetings.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Camden Education Association", "Parkside Neighborhood Association", "Camden Parents United"]
+    },
+    {
+        "name": "Robin Hill",
+        "state": "New Jersey",
+        "office": "Trenton Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Robin Hill is a 20-year Trenton Public Schools educator and union leader seeking the At-Large Seat 1 on the Trenton Board of Education. A former social studies teacher at Trenton Central High School, Hill holds a master’s degree in educational leadership from The College of New Jersey. She served as vice president of the Trenton Education Association from 2018 to 2024, negotiating contracts that expanded mental health services and professional development. Hill has led professional learning communities focused on culturally responsive pedagogy and restorative justice practices. She is a founding member of the Trenton Black Educators Network and has coordinated summer enrichment programs serving over 300 students annually. Her campaign focuses on teacher retention, facility modernization, and equitable resource distribution across Trenton’s 20 schools. Hill has two children who graduated from Trenton public schools and remains an active volunteer with the district’s STEM mentorship program.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Hill advocates for full funding of the School Funding Reform Act to address Trenton’s $40 million structural deficit. She supports a 3-year phase-in of full-day pre-K for all 3- and 4-year-olds and the creation of a teacher residency program with The College of New Jersey. Hill proposes a facilities master plan to replace four schools built before 1940 and install HVAC in all buildings by 2028. She backs expanded dual-language programs in Spanish and Haitian Creole to serve Trenton’s ELL population.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Hill supports comprehensive sexual health education aligned with New Jersey standards but requires 30-day advance notice to parents with opt-out provisions. She endorses restorative justice over zero-tolerance discipline and opposes any curriculum that labels students as oppressors based on race. Hill backs parent representation on all textbook adoption committees and quarterly family engagement surveys to guide policy.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Trenton Education Association", "Trenton PTA Council", "New Jersey Working Families Alliance"]
+    },
+    {
+        "name": "Tonya McRae",
+        "state": "New Jersey",
+        "office": "Trenton Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Tonya McRae is a Trenton native and small business owner running for Trenton Board of Education At-Large Seat 2. She operates a childcare center licensed for 60 children and holds an associate’s degree in early childhood education from Mercer County Community College. McRae has served on the Trenton School Wellness Committee since 2021, advocating for healthier cafeteria menus and recess expansion. She previously chaired the Hedgepeth-Williams Middle School PTA, where she organized a community garden and literacy nights. McRae’s campaign emphasizes early childhood education, mental health resources, and fiscal transparency. She has attended every board meeting since January 2024 and live-tweets proceedings to increase public engagement. McRae is the mother of three Trenton public school students and a volunteer coach for the district’s girls’ basketball program.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "McRae calls for universal pre-K by 2027 and the conversion of three elementary schools into early learning hubs. She supports a mental health clinician in every school and a partnership with Capital Health for on-site counseling. McRae proposes a transparent budget dashboard showing line-item expenditures and opposes any tax increase without voter approval. She backs vocational certification programs in culinary arts and cosmetology starting in 9th grade.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "McRae demands parental consent for any discussion of gender identity in elementary grades and opposes social transition policies without guardian involvement. She supports classic literature over graphic novels in middle school curricula and calls for a parent review board for all new library acquisitions. McRae backs school choice within the district and inter-district transfer options for safety concerns.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Trenton Small Business Alliance", "Mercer County Childcare Providers Network", "Concerned Parents of Trenton"]
+    },
+    {
+        "name": "Patrick Murray",
+        "state": "New Jersey",
+        "office": "Trenton Board of Education At-Large Seat 3",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Patrick Murray is a retired Trenton police sergeant and youth advocate running for Trenton Board of Education At-Large Seat 3. A 28-year veteran of the Trenton Police Department, Murray founded the Police Athletic League chapter serving 400 city youth annually. He holds a bachelor’s degree in criminal justice from Trenton State College and completed the FBI National Academy. Murray has coached football at Trenton Central High School for 15 years and serves on the board of the Boys & Girls Club of Mercer County. His campaign focuses on school safety, truancy reduction, and vocational training. Murray has two adult children who attended Trenton public schools and remains active in the district’s DARE program. He has received the Governor’s Award for Community Policing and the Trenton NAACP Community Service Award.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Murray supports a zero-tolerance policy for weapons and the installation of metal detectors in all high schools. He advocates for a truancy task force with home visits and court referrals after 10 unexcused absences. Murray proposes a police partnership for career days and the expansion of JROTC programs. He backs a $5 million investment in security cameras and keycard access systems across the district.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Murray opposes any curriculum promoting gender ideology in K-8 and requires parental notification for club participation involving sexuality. He supports single-sex sports and facilities and calls for a return to traditional grading without social promotion. Murray backs merit-based teacher bonuses and opposes critical race theory frameworks in professional development.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Trenton Police Benevolent Association", "Fraternal Order of Police Lodge 206", "Trenton Athletic Coaches Association"]
+    },
+    {
+        "name": "Mary Sadrakula",
+        "state": "New Jersey",
+        "office": "Clifton Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Mary Sadrakula is a 30-year Clifton resident and retired special education teacher running for Clifton Board of Education At-Large Seat 1. She taught at Clifton High School for 28 years, specializing in students with autism and emotional disabilities. Sadrakula holds a master’s degree in special education from Montclair State University and National Board Certification. She served as president of the Clifton Education Association from 2015 to 2019, negotiating contracts that preserved inclusion programs. Sadrakula has volunteered with the Clifton Special Olympics for two decades and coordinates the district’s transition fair for students with IEPs. Her campaign emphasizes special education funding, class size reduction, and facility upgrades. She has three grown children who graduated from Clifton public schools.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Sadrakula advocates for a 15:1 student-teacher ratio in special education classrooms and the hiring of 20 additional paraprofessionals. She supports a $10 million bond for ADA compliance and sensory rooms in every elementary school. Sadrakula proposes a vocational transition program with Passaic County Community College for students aging out of special services. She backs extended school year programs for students with disabilities.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Sadrakula supports inclusion for students with disabilities but requires parental consent for any social transition plans. She opposes explicit materials in school libraries and backs a parent review committee for challenged books. Sadrakula endorses evidence-based reading curricula and opposes whole-language approaches in special education settings.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Clifton Education Association", "New Jersey Education Association", "Clifton Special Parents Group"]
+    },
+    {
+        "name": "Tina Nega",
+        "state": "New Jersey",
+        "office": "Clifton Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Tina Nega is a Clifton parent and pharmaceutical researcher running for Clifton Board of Education At-Large Seat 2. She holds a PhD in biochemistry from Rutgers University and works as a senior scientist at Johnson & Johnson. Nega has served on the Christopher Columbus Middle School PTO for six years, chairing the science fair and STEM night. She immigrated from Greece at age 10 and is fluent in Greek and English. Nega’s campaign focuses on STEM education, fiscal responsibility, and transparency. She has two children in Clifton public schools and volunteers as a robotics coach. Nega has attended 90% of board meetings since 2022 and maintains detailed notes on budget votes.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Nega proposes a district-wide STEM certification with partnerships at NJIT and Stevens Institute. She supports coding and robotics in every elementary school by 2027 and a $2 million innovation lab at Clifton High School. Nega calls for a zero-based budgeting process and public posting of all vendor contracts over $10,000. She backs accelerated math pathways starting in 6th grade.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Nega demands opt-in consent for any lessons on gender identity or sexual orientation and opposes social transition without parental knowledge. She supports classical education models with emphasis on phonics and memorization. Nega backs a parent portal for real-time grade and attendance updates and opposes cell phones in classrooms.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Clifton Republican Club", "Passaic County STEM Coalition", "Parents for Academic Excellence"]
+    },
+    {
+        "name": "Vincent Sasso",
+        "state": "New Jersey",
+        "office": "Clifton Board of Education At-Large Seat 3",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Vincent Sasso is a Clifton businessman and youth sports coach seeking Clifton Board of Education At-Large Seat 3. He owns a local construction company specializing in school renovations and has completed over $20 million in district projects. Sasso graduated from Clifton High School and earned an associate’s degree in business from Passaic County Community College. He has coached CYO basketball and Little League for 18 years, serving over 500 Clifton children. Sasso serves on the Clifton Economic Development Corporation and previously chaired the Mustang Pride Booster Club. His campaign emphasizes facility maintenance, taxpayer value, and extracurricular expansion. He has four children, three currently in Clifton public schools.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Sasso proposes a 10-year facilities plan with energy-efficient upgrades to reduce utility costs by 20%. He supports a pay-to-play elimination fund through corporate sponsorships and the expansion of after-school programs to 10 p.m. Sasso backs a maintenance reserve fund to avoid borrowing and calls for competitive bidding on all contracts over $50,000.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Sasso opposes any curriculum that teaches gender as a spectrum in elementary schools and requires parental approval for pronoun changes. He supports traditional family structures in health education and backs abstinence-based sex ed. Sasso calls for a return to merit-based honors placement and opposes equity-based grading policies.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Clifton Chamber of Commerce", "Mustang Athletic Boosters", "Taxpayers Association of Clifton"]
+    },
+    {
+        "name": "Kenneth Simmons",
+        "state": "New Jersey",
+        "office": "Passaic Board of Education At-Large Seat 1",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Kenneth Simmons is a Passaic pastor and community organizer running for Passaic Board of Education At-Large Seat 1. Senior pastor of First Baptist Church of Passaic for 22 years, Simmons holds a master’s in divinity from New Brunswick Theological Seminary. He founded the Passaic Clergy Council, which provides backpack giveaways and Thanksgiving dinners to 1,000 families annually. Simmons has served on the Passaic Juvenile Conference Committee and mentors at-risk youth through the Passaic Police Department. His campaign focuses on moral education, safety, and parent involvement. He has five children, all graduates of Passaic public schools, and remains active in the district’s character education program.",
+        "faith_statement": "As senior pastor of First Baptist Church, Simmons integrates biblical principles into community leadership, emphasizing Proverbs 22:6—'Train up a child in the way he should go.' He advocates for voluntary prayer opportunities and moral instruction rooted in Judeo-Christian values.",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Simmons supports a character education curriculum based on universal values of respect, responsibility, and integrity. He proposes a partnership with local churches for after-school tutoring and Saturday academies. Simmons backs uniform policies and a code of conduct with clear consequences. He calls for a $3 million investment in security personnel and conflict resolution training.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Simmons strongly opposes comprehensive sex education that normalizes abortion or gender fluidity, advocating for abstinence-only programs. He supports single-sex bathrooms and sports teams and requires parental consent for any counseling on identity issues. Simmons backs a return to phonics-based reading and opposes critical race theory in any form.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Passaic Clergy Council", "New Jersey Family Policy Center", "Passaic Parents Alliance"]
+    },
+    {
+        "name": "Javier Fresse",
+        "state": "New Jersey",
+        "office": "Passaic Board of Education At-Large Seat 2",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Javier Fresse is a Passaic firefighter and bilingual parent advocate running for Passaic Board of Education At-Large Seat 2. A 15-year veteran of the Passaic Fire Department, Fresse holds an associate’s degree in fire science and serves as president of the Hispanic Firefighters Association. Born in the Dominican Republic, he immigrated at age 8 and graduated from Passaic High School. Fresse has coached soccer through the Passaic Recreation Department for 12 years and serves on the Passaic Elks Lodge scholarship committee. His campaign emphasizes bilingual education, safety, and community partnerships. He has three children in Passaic public schools and volunteers as a translator at parent-teacher conferences.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "Fresse supports dual-language immersion programs in Spanish and Arabic starting in kindergarten. He proposes a fire safety curriculum in every grade and partnerships with the Passaic Fire Department for career days. Fresse backs a $5 million investment in ESL teachers and translation services for all school communications. He calls for extended-day programs until 6 p.m. for working families.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "Fresse supports cultural competency training but requires parental opt-in for any lessons on family structures or sexuality. He backs traditional mother-father role models in early childhood materials and opposes gender ideology in elementary curricula. Fresse endorses parent representation on all bilingual program advisory boards.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Passaic Firefighters FMBA Local 17", "Dominican American Association of Passaic", "Passaic Bilingual Parents Group"]
+    },
+    {
+        "name": "Alicia D'Alessio",
+        "state": "New Jersey",
+        "office": "Passaic Board of Education At-Large Seat 3",
+        "party": "Nonpartisan",
+        "status": "active",
+        "bio": "Alicia D'Alessio is a Passaic attorney and former prosecutor running for Passaic Board of Education At-Large Seat 3. She served as an assistant Passaic County prosecutor for 10 years, specializing in juvenile justice and truancy cases. D'Alessio holds a J.D. from Seton Hall Law School and a bachelor’s in political science from Rutgers. She founded the Passaic Youth Court, diverting 200 first-time offenders annually into restorative programs. D'Alessio has volunteered with the Passaic Bar Association’s mock trial program and mentors students at Passaic High School. Her campaign focuses on discipline reform, legal protections, and college readiness. She has one child entering Passaic public schools in 2026.",
+        "faith_statement": "No publicly disclosed faith statement",
+        "website": "",
+        "positions": {
+            "ABORTION": "N/A for school board role",
+            "EDUCATION": "D'Alessio proposes a truancy court partnership with early intervention after five absences. She supports a college and career center at Passaic High School with dedicated counselors for FAFSA and scholarship applications. D'Alessio backs a $2 million investment in AP course expansion and SAT prep for all juniors. She calls for a discipline code with clear progressive consequences and restorative options.",
+            "RELIGIOUS-FREEDOM": "N/A for school board role",
+            "GUNS": "N/A for school board role",
+            "TAXES": "N/A for school board role",
+            "IMMIGRATION": "N/A for school board role",
+            "FAMILY-VALUES": "D'Alessio supports age-appropriate education but requires 45-day notice and opt-out for any sexuality curriculum. She opposes affirmative gender policies without due process and backs legal review of all identity-related complaints. D'Alessio endorses merit-based admissions to gifted programs and opposes lottery systems for equity.",
+            "ELECTION-INTEGRITY": "N/A for school board role"
+        },
+        "endorsements": ["Passaic County Bar Association", "New Jersey Association of Women Lawyers", "Passaic Alumni Network"]
+    }

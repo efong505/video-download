@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Contributors - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="assets/js/token-validator.js"></script>
+    <style>
+        .navbar-custom {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin-bottom: 30px;
+        }
+        .navbar-custom .nav-link {
+            color: white !important;
+        }
+        .navbar-custom .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" href="admin.html">🗺️ Contributors Admin</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item" id="admin-dashboard-link"><a class="nav-link" href="admin.html">← Admin Dashboard</a></li>
+                    <li class="nav-item" id="pending-changes-link"><a class="nav-link" href="admin-pending-changes.html">📋 Pending Changes <span id="pending-count-badge" class="badge bg-danger" style="display:none;">0</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="election-map.html">View Public Map</a></li>
+                    <li class="nav-item"><a class="nav-link" href="videos.html">Videos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="articles.html">Articles</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <h2>🗺️ State Election Contributors Management</h2>
+        
+        <ul class="nav nav-tabs mt-4" role="tablist">
+            <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#contributors">Contributors</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#races">Races</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#candidates">Candidates</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#events">Events</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#summaries">State Summaries</a></li>
+            <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#import">Bulk Import</a></li>
+        </ul>
+
+        <div class="tab-content mt-3">
+            <div id="contributors" class="tab-pane fade show active">
+                <button class="btn btn-primary mb-3" id="add-contributor-btn" onclick="showAddContributor()">+ Add Contributor</button>
+                <div class="mb-3">
+                    <input type="text" class="form-control" id="filter-contributors" placeholder="Filter by state or email..." onkeyup="filterContributors()">
+                </div>
+                <div id="contributors-list"></div>
+            </div>
+            
+            <div id="races" class="tab-pane fade">
+                <button class="btn btn-primary mb-3" onclick="showAddRace()">+ Add Race</button>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <select class="form-control" id="filter-race-state" onchange="filterRaces()">
+                            <option value="">All States</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="filter-race-office" placeholder="Filter by office..." onkeyup="filterRaces()">
+                    </div>
+                </div>
+                <div id="races-list"></div>
+            </div>
+            
+            <div id="candidates" class="tab-pane fade">
+                <button class="btn btn-primary mb-3" onclick="showAddCandidate()">+ Add Candidate</button>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <select class="form-control" id="filter-candidate-state" onchange="filterCandidates()">
+                            <option value="">All States</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" id="filter-candidate-office" placeholder="Filter by office or name..." onkeyup="filterCandidates()">
+                    </div>
+                </div>
+                <div id="candidates-list"></div>
+            </div>
+            
+            <div id="summaries" class="tab-pane fade">
+                <button class="btn btn-primary mb-3" onclick="showAddSummary()">+ Add State Summary</button>
+                <div class="mb-3">
+                    <select class="form-control" id="filter-summary-state" onchange="filterSummaries()">
+                        <option value="">All States</option>
+                    </select>
+                </div>
+                <div id="summaries-list"></div>
+            </div>
+            
+            <div id="events" class="tab-pane fade">
+                <button class="btn btn-primary mb-3" onclick="showAddEvent()">+ Add Event</button>
+                <div class="mb-3">
+                    <select class="form-control" id="filter-event-state" onchange="filterEvents()">
+                        <option value="">All States</option>
+                    </select>
+                </div>
+                <div id="events-list"></div>
+            </div>
+            
+            <div id="import" class="tab-pane fade">
+                <div class="alert alert-info">
+                    <h5>CSV Bulk Import</h5>
+                    <p>Upload CSV files to quickly import multiple races and candidates.</p>
+                </div>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h6 class="mb-0">Import Races</h6>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>CSV Format:</strong> state, office, election_date, race_type, description</p>
+                                <p><small>Example: Texas, Governor, 2024-11-05, general, Texas Gubernatorial Race</small></p>
+                                <input type="file" class="form-control mb-2" id="races-csv" accept=".csv">
+                                <button class="btn btn-primary" onclick="importRaces()">Import Races</button>
+                                <a href="#" onclick="downloadRacesTemplate()" class="btn btn-outline-secondary">Download Template</a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-success text-white">
+                                <h6 class="mb-0">Import Candidates</h6>
+                            </div>
+                            <div class="card-body">
+                                <p><strong>CSV Format:</strong> name, state, office, party, bio, website, faith_statement, positions, endorsements</p>
+                                <p><small>Example: John Smith, Texas, Governor, Republican, Bio text, https://..., Faith statement, abortion:pro-life;guns:strong-support, NRA;Right to Life</small></p>
+                                <input type="file" class="form-control mb-2" id="candidates-csv" accept=".csv">
+                                <button class="btn btn-success" onclick="importCandidates()">Import Candidates</button>
+                                <a href="#" onclick="downloadCandidatesTemplate()" class="btn btn-outline-secondary">Download Template</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="import-status" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="contributorModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="contributorModalTitle">Add Contributor</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="contributorForm">
+                        <div class="mb-3">
+                            <label>Select User</label>
+                            <select class="form-control" id="contrib-user" required onchange="selectUser()">
+                                <option value="">Select a registered user...</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label>Email (auto-filled)</label>
+                            <input type="email" class="form-control" id="contrib-email" readonly>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label>First Name</label>
+                                <input type="text" class="form-control" id="contrib-first-name">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label>Last Name</label>
+                                <input type="text" class="form-control" id="contrib-last-name">
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label>Phone Number</label>
+                            <input type="tel" class="form-control" id="contrib-phone" placeholder="(555) 123-4567">
+                        </div>
+                        <div class="mb-3">
+                            <label>State</label>
+                            <select class="form-control" id="contrib-state" required></select>
+                        </div>
+                        <div class="mb-3">
+                            <label>Bio</label>
+                            <textarea class="form-control" id="contrib-bio" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label><input type="checkbox" id="contrib-verified"> Verified</label>
+                        </div>
+                        <div class="mb-3" id="bypass-approval-section" style="display:none;">
+                            <label><input type="checkbox" id="contrib-bypass-approval"> Bypass Approval (Auto-approve all submissions)</label>
+                            <small class="text-muted d-block">When enabled, this editor's submissions will be published immediately without admin review.</small>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveContributor()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="candidateModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="candidateModalTitle">Add Candidate</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="candidateForm">
+                        <div class="mb-3">
+                            <label>Name</label>
+                            <input type="text" class="form-control" id="cand-name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>State</label>
+                            <select class="form-control" id="cand-state" required></select>
+                        </div>
+                        <div class="mb-3">
+                            <label>Race</label>
+                            <select class="form-control" id="cand-race"></select>
+                        </div>
+                        <div class="mb-3">
+                            <label>Office</label>
+                            <input type="text" class="form-control" id="cand-office" placeholder="e.g., Governor, Senate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Party</label>
+                            <select class="form-control" id="cand-party">
+                                <option value="Republican">Republican</option>
+                                <option value="Democrat">Democrat</option>
+                                <option value="Independent">Independent</option>
+                                <option value="Libertarian">Libertarian</option>
+                                <option value="Green">Green</option>
+                                <option value="Constitution">Constitution</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label>Bio</label>
+                            <textarea class="form-control" id="cand-bio" rows="3"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label>Faith Statement</label>
+                            <textarea class="form-control" id="cand-faith" rows="2" placeholder="Candidate's statement of faith"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label>Website</label>
+                            <input type="url" class="form-control" id="cand-website">
+                        </div>
+                        <div class="mb-3">
+                            <label>Voting Record URL</label>
+                            <input type="url" class="form-control" id="cand-voting-record">
+                        </div>
+                        <div class="mb-3">
+                            <label>Endorsements (comma-separated)</label>
+                            <input type="text" class="form-control" id="cand-endorsements" placeholder="e.g., NRA, Right to Life">
+                        </div>
+                        <hr>
+                        <h6>Policy Positions</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <label>Abortion</label>
+                                <select class="form-control" id="pos-abortion">
+                                    <option value="">Not specified</option>
+                                    <option value="pro-life">Pro-Life</option>
+                                    <option value="pro-choice">Pro-Choice</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label>2nd Amendment</label>
+                                <select class="form-control" id="pos-guns">
+                                    <option value="">Not specified</option>
+                                    <option value="strong-support">Strong Support</option>
+                                    <option value="support">Support</option>
+                                    <option value="restrictions">Support Restrictions</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label>Immigration</label>
+                                <select class="form-control" id="pos-immigration">
+                                    <option value="">Not specified</option>
+                                    <option value="secure-border">Secure Border</option>
+                                    <option value="pathway">Pathway to Citizenship</option>
+                                    <option value="enforcement">Strict Enforcement</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label>Religious Freedom</label>
+                                <select class="form-control" id="pos-religious-freedom">
+                                    <option value="">Not specified</option>
+                                    <option value="strong-support">Strong Support</option>
+                                    <option value="support">Support</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label>Taxes</label>
+                                <select class="form-control" id="pos-taxes">
+                                    <option value="">Not specified</option>
+                                    <option value="lower">Lower Taxes</option>
+                                    <option value="flat-tax">Flat Tax</option>
+                                    <option value="current">Maintain Current</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-2">
+                                <label>Education</label>
+                                <select class="form-control" id="pos-education">
+                                    <option value="">Not specified</option>
+                                    <option value="school-choice">School Choice</option>
+                                    <option value="parental-rights">Parental Rights</option>
+                                    <option value="public-schools">Support Public Schools</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveCandidate()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="raceModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="raceModalTitle">Add Race</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="raceForm">
+                        <div class="mb-3">
+                            <label>State</label>
+                            <select class="form-control" id="race-state" required></select>
+                        </div>
+                        <div class="mb-3">
+                            <label>Office</label>
+                            <input type="text" class="form-control" id="race-office" placeholder="e.g., Governor, U.S. Senate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Election Date</label>
+                            <input type="date" class="form-control" id="race-date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Race Type</label>
+                            <select class="form-control" id="race-type">
+                                <option value="primary">Primary</option>
+                                <option value="general">General Election</option>
+                                <option value="special">Special Election</option>
+                                <option value="runoff">Runoff</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label>Description</label>
+                            <textarea class="form-control" id="race-desc" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveRace()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="summaryModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="summaryModalTitle">Add State Summary</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="summaryForm">
+                        <div class="mb-3">
+                            <label>State</label>
+                            <select class="form-control" id="summary-state" required></select>
+                        </div>
+                        <div class="mb-3">
+                            <label>Title</label>
+                            <input type="text" class="form-control" id="summary-title" placeholder="e.g., Hawaii 2025-2026 Elections Guide" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Election Year</label>
+                            <input type="text" class="form-control" id="summary-year" value="2026">
+                        </div>
+                        <div class="mb-3">
+                            <label>Content (Voter Guide Summary)</label>
+                            <div class="btn-group mb-2 d-block" role="group">
+                                <button type="button" class="btn btn-sm btn-outline-primary" id="richtext-mode-btn" onclick="switchToRichText()">📝 Rich Text Editor</button>
+                                <button type="button" class="btn btn-sm btn-primary" id="markdown-mode-btn" onclick="switchToMarkdown()">📄 Markdown Mode</button>
+                            </div>
+                            <div id="summary-editor" style="height: 400px; display: none;"></div>
+                            <textarea class="form-control" id="summary-content" rows="20" style="font-family: monospace;"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-info" onclick="previewSummary()">Preview</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSummary()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="previewModal" tabindex="-1">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Preview: <span id="preview-state-name"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-primary" id="preview-content"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="eventModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="eventModalTitle">Add Election Event</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="eventForm">
+                        <div class="mb-3">
+                            <label>Title</label>
+                            <input type="text" class="form-control" id="event-title" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>State</label>
+                            <select class="form-control" id="event-state" required></select>
+                        </div>
+                        <div class="mb-3">
+                            <label>Date</label>
+                            <input type="date" class="form-control" id="event-date" required>
+                        </div>
+                        <div class="mb-3">
+                            <label>Type</label>
+                            <select class="form-control" id="event-type">
+                                <option value="primary">Primary</option>
+                                <option value="general">General Election</option>
+                                <option value="debate">Debate</option>
+                                <option value="rally">Rally</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label>Description</label>
+                            <textarea class="form-control" id="event-desc" rows="3"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveEvent()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+        marked.setOptions({
+            breaks: true,
+            gfm: true
+        });
+    </script>
+    <script>
+        const API = 'https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors';
+        const states = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+
+        let allRaces = [];
+        let allContributors = [];
+        let allCandidates = [];
+        let allEvents = [];
+        let allSummaries = [];
+        let allUsers = [];
+        
+        function populateStateDropdowns() {
+            ['contrib-state', 'cand-state', 'event-state', 'race-state'].forEach(id => {
+                const select = document.getElementById(id);
+                select.innerHTML = '<option value="">Select State</option>' + states.map(s => '<option value="' + s + '">' + s + '</option>').join('');
+            });
+            ['filter-race-state', 'filter-candidate-state', 'filter-event-state', 'filter-summary-state'].forEach(id => {
+                const select = document.getElementById(id);
+                select.innerHTML = '<option value="">All States</option>' + states.map(s => '<option value="' + s + '">' + s + '</option>').join('');
+            });
+            const summaryState = document.getElementById('summary-state');
+            if (summaryState) {
+                summaryState.innerHTML = '<option value="">Select State</option>' + states.map(s => '<option value="' + s + '">' + s + '</option>').join('');
+            }
+        }
+        
+        function populateRaceDropdown() {
+            const select = document.getElementById('cand-race');
+            select.innerHTML = '<option value="">No Race (Optional)</option>' + allRaces.map(r => 
+                '<option value="' + r.race_id + '">' + r.state + ' - ' + r.office + ' (' + r.race_type + ')</option>'
+            ).join('');
+        }
+
+        async function loadUsers() {
+            try {
+                // Use admin API instead of contributors API for user list
+                const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
+                const response = await fetch(ADMIN_API + '?action=users', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
+                const data = await response.json();
+                if (data.error || !data.users) {
+                    console.error('Failed to load users:', data.error || 'Invalid response');
+                    allUsers = [];
+                } else {
+                    allUsers = data.users;
+                    console.log('Loaded users:', allUsers);
+                }
+                populateUserDropdown();
+            } catch (e) {
+                console.error('Failed to load users:', e);
+                allUsers = [];
+                populateUserDropdown();
+            }
+        }
+        
+        function populateUserDropdown() {
+            const select = document.getElementById('contrib-user');
+            select.innerHTML = '<option value="">Select a registered user...</option>' + 
+                allUsers.map(u => {
+                    const fullName = (u.first_name || '') + ' ' + (u.last_name || '');
+                    const displayName = fullName.trim() || 'No name';
+                    return '<option value="' + u.email + '">' + u.email + ' (' + displayName + ')</option>';
+                }).join('');
+        }
+        
+        function selectUser() {
+            const select = document.getElementById('contrib-user');
+            const email = select.value;
+            document.getElementById('contrib-email').value = email;
+            const user = allUsers.find(u => u.email === email);
+            if (user) {
+                document.getElementById('contrib-first-name').value = user.first_name || '';
+                document.getElementById('contrib-last-name').value = user.last_name || '';
+            }
+        }
+        
+        async function loadContributors() {
+            const response = await fetch(API + '?resource=contributors', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
+            allContributors = await response.json();
+            filterContributors();
+        }
+        
+        function filterContributors() {
+            const userData = localStorage.getItem('user_data');
+            const userRole = userData ? JSON.parse(userData).role : null;
+            const filter = document.getElementById('filter-contributors').value.toLowerCase();
+            const filtered = allContributors.filter(c => 
+                c.state.toLowerCase().includes(filter) || c.user_email.toLowerCase().includes(filter)
+            );
+            document.getElementById('contributors-list').innerHTML = filtered.map(c => 
+                '<div class="card mb-2"><div class="card-body">' +
+                '<h6>' + (c.first_name && c.last_name ? c.first_name + ' ' + c.last_name + ' - ' : '') + c.user_email + ' - ' + c.state + '</h6>' +
+                (c.phone_number ? '<p><strong>Phone:</strong> ' + c.phone_number + '</p>' : '') +
+                '<p>' + (c.bio || '') + '</p>' +
+                '<span class="badge bg-' + (c.verified ? 'success' : 'secondary') + '">' + (c.verified ? 'Verified' : 'Unverified') + '</span> ' +
+                '<span class="badge bg-' + (c.bypass_approval ? 'warning' : 'info') + '">' + (c.bypass_approval ? 'Auto-Approve' : 'Needs Approval') + '</span>' +
+                (userRole !== 'editor' ? '<button class="btn btn-sm btn-danger float-end" onclick="deleteContributor(\'' + c.contributor_id + '\')">Delete</button>' : '') +
+                (userRole !== 'editor' ? '<button class="btn btn-sm btn-primary float-end me-2" onclick="editContributor(\'' + c.contributor_id + '\')">Edit</button>' : '') +
+                '</div></div>'
+            ).join('');
+        }
+
+        async function loadRaces() {
+            const response = await fetch(API + '?resource=races', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
+            allRaces = await response.json();
+            filterRaces();
+            populateRaceDropdown();
+        }
+        
+        function filterRaces() {
+            const stateFilter = document.getElementById('filter-race-state').value;
+            const officeFilter = document.getElementById('filter-race-office').value.toLowerCase();
+            const filtered = allRaces.filter(r => 
+                (!stateFilter || r.state === stateFilter) && 
+                (!officeFilter || r.office.toLowerCase().includes(officeFilter))
+            );
+            document.getElementById('races-list').innerHTML = filtered.map(r => 
+                '<div class="card mb-2"><div class="card-body">' +
+                '<h6>' + r.state + ' - ' + r.office + '</h6>' +
+                '<p><strong>' + r.race_type + '</strong> - ' + new Date(r.election_date).toLocaleDateString() + '</p>' +
+                '<p>' + (r.description || '') + '</p>' +
+                '<button class="btn btn-sm btn-danger float-end" onclick="deleteRace(\'' + r.race_id + '\')">Delete</button>' +
+                '<button class="btn btn-sm btn-primary float-end me-2" onclick="editRace(\'' + r.race_id + '\')">Edit</button>' +
+                '</div></div>'
+            ).join('');
+        }
+        
+        async function loadCandidates() {
+            const response = await fetch(API + '?resource=candidates', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
+            allCandidates = await response.json();
+            filterCandidates();
+        }
+        
+        function filterCandidates() {
+            const stateFilter = document.getElementById('filter-candidate-state').value;
+            const officeFilter = document.getElementById('filter-candidate-office').value.toLowerCase();
+            const filtered = allCandidates.filter(c => 
+                (!stateFilter || c.state === stateFilter) && 
+                (!officeFilter || c.office.toLowerCase().includes(officeFilter) || c.name.toLowerCase().includes(officeFilter))
+            );
+            document.getElementById('candidates-list').innerHTML = filtered.map(c => {
+                const race = allRaces.find(r => r.race_id === c.race_id);
+                const positions = c.positions || {};
+                return '<div class="card mb-2"><div class="card-body">' +
+                '<h6>' + c.name + ' - ' + c.state + '</h6>' +
+                '<p><strong>' + c.office + '</strong>' + (race ? ' (' + race.race_type + ')' : '') + '</p>' +
+                '<p>' + (c.bio || '') + '</p>' +
+                (c.faith_statement ? '<p class="text-muted"><em>"' + c.faith_statement + '"</em></p>' : '') +
+                (Object.keys(positions).length > 0 ? '<p><small><strong>Positions:</strong> ' + Object.entries(positions).map(([k,v]) => k + ': ' + v).join(', ') + '</small></p>' : '') +
+                '<button class="btn btn-sm btn-danger float-end" onclick="deleteCandidate(\'' + c.candidate_id + '\')">Delete</button>' +
+                '<button class="btn btn-sm btn-primary float-end me-2" onclick="editCandidate(\'' + c.candidate_id + '\')">Edit</button>' +
+                '</div></div>';
+            }).join('');
+        }
+
+        async function loadEvents() {
+            const response = await fetch(API + '?resource=events', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
+            allEvents = await response.json();
+            filterEvents();
+        }
+        
+        async function loadSummaries() {
+            const response = await fetch(API + '?resource=summaries', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
+            allSummaries = await response.json();
+            filterSummaries();
+        }
+        
+        function filterSummaries() {
+            const stateFilter = document.getElementById('filter-summary-state').value;
+            const filtered = allSummaries.filter(s => !stateFilter || s.state === stateFilter);
+            document.getElementById('summaries-list').innerHTML = filtered.map(s => {
+                const content = s.content || '';
+                const renderedPreview = content.startsWith('<') ? content : marked.parse(content);
+                const textPreview = renderedPreview.replace(/<[^>]*>/g, '').substring(0, 200);
+                return '<div class="card mb-2"><div class="card-body">' +
+                '<h6>' + s.state + ' - ' + s.title + '</h6>' +
+                '<p><small>Election Year: ' + s.election_year + '</small></p>' +
+                '<p style="max-height: 100px; overflow-y: auto; font-size: 12px; color: #666;">' + textPreview + '...</p>' +
+                '<small class="text-muted">Last updated: ' + new Date(s.last_updated).toLocaleDateString() + '</small><br>' +
+                '<button class="btn btn-sm btn-danger float-end" onclick="deleteSummary(\'' + s.state + '\')">Delete</button>' +
+                '<button class="btn btn-sm btn-primary float-end me-2" onclick="editSummary(\'' + s.state + '\')">Edit</button>' +
+                '</div></div>';
+            }).join('');
+        }
+        
+        function filterEvents() {
+            const stateFilter = document.getElementById('filter-event-state').value;
+            const filtered = allEvents.filter(e => !stateFilter || e.state === stateFilter);
+            document.getElementById('events-list').innerHTML = filtered.map(e => 
+                '<div class="card mb-2"><div class="card-body">' +
+                '<h6>' + e.title + ' - ' + e.state + '</h6>' +
+                '<p>' + new Date(e.event_date).toLocaleDateString() + ' - ' + e.event_type + '</p>' +
+                '<button class="btn btn-sm btn-danger float-end" onclick="deleteEvent(\'' + e.event_id + '\')">Delete</button>' +
+                '<button class="btn btn-sm btn-primary float-end me-2" onclick="editEvent(\'' + e.event_id + '\')">Edit</button>' +
+                '</div></div>'
+            ).join('');
+        }
+
+        let editingContributorId = null;
+        
+        async function showAddContributor() {
+            const userData = localStorage.getItem('user_data');
+            const userRole = userData ? JSON.parse(userData).role : null;
+            editingContributorId = null;
+            document.getElementById('contributorModalTitle').textContent = 'Add Contributor';
+            document.getElementById('contributorForm').reset();
+            document.getElementById('bypass-approval-section').style.display = userRole === 'editor' ? 'none' : 'block';
+            
+            // Ensure users are loaded before showing modal
+            if (allUsers.length === 0) {
+                await loadUsers();
+            }
+            
+            new bootstrap.Modal(document.getElementById('contributorModal')).show();
+        }
+        
+        async function editContributor(contributorId) {
+            const userData = localStorage.getItem('user_data');
+            const userRole = userData ? JSON.parse(userData).role : null;
+            editingContributorId = contributorId;
+            document.getElementById('contributorModalTitle').textContent = 'Edit Contributor';
+            const contributor = allContributors.find(c => c.contributor_id === contributorId);
+            if (!contributor) return;
+            document.getElementById('contrib-email').value = contributor.user_email || '';
+            document.getElementById('contrib-first-name').value = contributor.first_name || '';
+            document.getElementById('contrib-last-name').value = contributor.last_name || '';
+            document.getElementById('contrib-phone').value = contributor.phone_number || '';
+            document.getElementById('contrib-state').value = contributor.state || '';
+            document.getElementById('contrib-bio').value = contributor.bio || '';
+            document.getElementById('contrib-verified').checked = contributor.verified || false;
+            document.getElementById('contrib-bypass-approval').checked = contributor.bypass_approval || false;
+            document.getElementById('bypass-approval-section').style.display = userRole === 'editor' ? 'none' : 'block';
+            new bootstrap.Modal(document.getElementById('contributorModal')).show();
+        }
+
+        let editingRaceId = null;
+        
+        function showAddRace() {
+            editingRaceId = null;
+            document.getElementById('raceModalTitle').textContent = 'Add Race';
+            document.getElementById('raceForm').reset();
+            new bootstrap.Modal(document.getElementById('raceModal')).show();
+        }
+        
+        async function editRace(raceId) {
+            editingRaceId = raceId;
+            document.getElementById('raceModalTitle').textContent = 'Edit Race';
+            const race = allRaces.find(r => r.race_id === raceId);
+            if (!race) return;
+            document.getElementById('race-state').value = race.state || '';
+            document.getElementById('race-office').value = race.office || '';
+            document.getElementById('race-date').value = race.election_date || '';
+            document.getElementById('race-type').value = race.race_type || 'general';
+            document.getElementById('race-desc').value = race.description || '';
+            new bootstrap.Modal(document.getElementById('raceModal')).show();
+        }
+        
+        let editingCandidateId = null;
+        
+        function showAddCandidate() {
+            editingCandidateId = null;
+            document.getElementById('candidateModalTitle').textContent = 'Add Candidate';
+            document.getElementById('candidateForm').reset();
+            new bootstrap.Modal(document.getElementById('candidateModal')).show();
+        }
+        
+        async function editCandidate(candidateId) {
+            editingCandidateId = candidateId;
+            document.getElementById('candidateModalTitle').textContent = 'Edit Candidate';
+            
+            const response = await fetch(API + '?resource=candidates', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
+            const candidates = await response.json();
+            const candidate = candidates.find(c => c.candidate_id === candidateId);
+            
+            if (!candidate) return;
+            
+            document.getElementById('cand-name').value = candidate.name || '';
+            document.getElementById('cand-state').value = candidate.state || '';
+            document.getElementById('cand-race').value = candidate.race_id || '';
+            document.getElementById('cand-office').value = candidate.office || '';
+            document.getElementById('cand-party').value = candidate.party || 'Republican';
+            document.getElementById('cand-bio').value = candidate.bio || '';
+            document.getElementById('cand-faith').value = candidate.faith_statement || '';
+            document.getElementById('cand-website').value = candidate.website || '';
+            document.getElementById('cand-voting-record').value = candidate.voting_record_url || '';
+            document.getElementById('cand-endorsements').value = (candidate.endorsements || []).join(', ');
+            
+            const positions = candidate.positions || {};
+            document.getElementById('pos-abortion').value = positions.abortion || '';
+            document.getElementById('pos-guns').value = positions.guns || '';
+            document.getElementById('pos-immigration').value = positions.immigration || '';
+            document.getElementById('pos-religious-freedom').value = positions.religious_freedom || '';
+            document.getElementById('pos-taxes').value = positions.taxes || '';
+            document.getElementById('pos-education').value = positions.education || '';
+            
+            new bootstrap.Modal(document.getElementById('candidateModal')).show();
+        }
+
+        let editingEventId = null;
+        let editingSummaryState = null;
+        let summaryEditor = null;
+        let markdownContent = '';
+        let htmlContent = '';
+        
+        function showAddEvent() {
+            editingEventId = null;
+            document.getElementById('eventModalTitle').textContent = 'Add Election Event';
+            document.getElementById('eventForm').reset();
+            new bootstrap.Modal(document.getElementById('eventModal')).show();
+        }
+        
+        let isMarkdownMode = true;
+        
+        function switchToMarkdown() {
+            if (!isMarkdownMode && summaryEditor) {
+                htmlContent = summaryEditor.root.innerHTML;
+            }
+            isMarkdownMode = true;
+            document.getElementById('summary-editor').style.display = 'none';
+            document.getElementById('summary-content').style.display = 'block';
+            document.getElementById('markdown-mode-btn').classList.remove('btn-outline-primary');
+            document.getElementById('markdown-mode-btn').classList.add('btn-primary');
+            document.getElementById('richtext-mode-btn').classList.remove('btn-primary');
+            document.getElementById('richtext-mode-btn').classList.add('btn-outline-primary');
+            document.getElementById('summary-content').value = markdownContent;
+        }
+        
+        function switchToRichText() {
+            if (isMarkdownMode) {
+                markdownContent = document.getElementById('summary-content').value;
+            }
+            isMarkdownMode = false;
+            document.getElementById('summary-editor').style.display = 'block';
+            document.getElementById('summary-content').style.display = 'none';
+            document.getElementById('richtext-mode-btn').classList.remove('btn-outline-primary');
+            document.getElementById('richtext-mode-btn').classList.add('btn-primary');
+            document.getElementById('markdown-mode-btn').classList.remove('btn-primary');
+            document.getElementById('markdown-mode-btn').classList.add('btn-outline-primary');
+            if (!summaryEditor) {
+                summaryEditor = new Quill('#summary-editor', {
+                    theme: 'snow',
+                    modules: {
+                        toolbar: [
+                            [{ 'header': [1, 2, 3, false] }],
+                            ['bold', 'italic', 'underline'],
+                            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                            ['link'],
+                            ['clean']
+                        ]
+                    }
+                });
+            }
+            if (htmlContent) {
+                summaryEditor.root.innerHTML = htmlContent;
+            } else if (markdownContent) {
+                summaryEditor.root.innerHTML = marked.parse(markdownContent);
+            }
+        }
+        
+        function showAddSummary() {
+            editingSummaryState = null;
+            markdownContent = '';
+            htmlContent = '';
+            document.getElementById('summaryModalTitle').textContent = 'Add State Summary';
+            document.getElementById('summaryForm').reset();
+            document.getElementById('summary-content').value = '';
+            isMarkdownMode = true;
+            document.getElementById('summary-editor').style.display = 'none';
+            document.getElementById('summary-content').style.display = 'block';
+            document.getElementById('markdown-mode-btn').classList.remove('btn-outline-primary');
+            document.getElementById('markdown-mode-btn').classList.add('btn-primary');
+            document.getElementById('richtext-mode-btn').classList.remove('btn-primary');
+            document.getElementById('richtext-mode-btn').classList.add('btn-outline-primary');
+            if (summaryEditor) {
+                summaryEditor.setText('');
+            }
+            new bootstrap.Modal(document.getElementById('summaryModal')).show();
+        }
+        
+        async function editSummary(state) {
+            editingSummaryState = state;
+            document.getElementById('summaryModalTitle').textContent = 'Edit State Summary';
+            const summary = allSummaries.find(s => s.state === state);
+            if (!summary) return;
+            const content = summary.content || '';
+            if (content.startsWith('<')) {
+                htmlContent = content;
+                markdownContent = '';
+            } else {
+                markdownContent = content;
+                htmlContent = '';
+            }
+            document.getElementById('summary-state').value = summary.state || '';
+            document.getElementById('summary-state').disabled = true;
+            document.getElementById('summary-title').value = summary.title || '';
+            document.getElementById('summary-year').value = summary.election_year || '2026';
+            document.getElementById('summary-content').value = markdownContent;
+            isMarkdownMode = true;
+            document.getElementById('summary-editor').style.display = 'none';
+            document.getElementById('summary-content').style.display = 'block';
+            document.getElementById('markdown-mode-btn').classList.remove('btn-outline-primary');
+            document.getElementById('markdown-mode-btn').classList.add('btn-primary');
+            document.getElementById('richtext-mode-btn').classList.remove('btn-primary');
+            document.getElementById('richtext-mode-btn').classList.add('btn-outline-primary');
+            if (summaryEditor) {
+                summaryEditor.setText('');
+            }
+            new bootstrap.Modal(document.getElementById('summaryModal')).show();
+        }
+        
+        async function editEvent(eventId) {
+            editingEventId = eventId;
+            document.getElementById('eventModalTitle').textContent = 'Edit Event';
+            const event = allEvents.find(e => e.event_id === eventId);
+            if (!event) return;
+            document.getElementById('event-title').value = event.title || '';
+            document.getElementById('event-state').value = event.state || '';
+            document.getElementById('event-date').value = event.event_date || '';
+            document.getElementById('event-type').value = event.event_type || 'primary';
+            document.getElementById('event-desc').value = event.description || '';
+            new bootstrap.Modal(document.getElementById('eventModal')).show();
+        }
+
+        async function saveContributor() {
+            const userData = localStorage.getItem('user_data');
+            const userRole = userData ? JSON.parse(userData).role : null;
+            const email = document.getElementById('contrib-email').value;
+            const data = {
+                user_email: email,
+                first_name: document.getElementById('contrib-first-name').value,
+                last_name: document.getElementById('contrib-last-name').value,
+                phone_number: document.getElementById('contrib-phone').value,
+                state: document.getElementById('contrib-state').value,
+                bio: document.getElementById('contrib-bio').value,
+                verified: document.getElementById('contrib-verified').checked,
+                bypass_approval: userRole === 'editor' ? false : document.getElementById('contrib-bypass-approval').checked
+            };
+            
+            if (editingContributorId) {
+                data.contributor_id = editingContributorId;
+                await fetch(API + '?resource=contributors&action=update', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+            } else {
+                const response = await fetch(API + '?resource=contributors', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                alert(result.message || 'Contributor added!');
+            }
+            
+            bootstrap.Modal.getInstance(document.getElementById('contributorModal')).hide();
+            loadContributors();
+        }
+
+        async function saveRace() {
+            const data = {
+                state: document.getElementById('race-state').value,
+                office: document.getElementById('race-office').value,
+                election_date: document.getElementById('race-date').value,
+                race_type: document.getElementById('race-type').value,
+                description: document.getElementById('race-desc').value
+            };
+            
+            const userData = localStorage.getItem('user_data');
+            const userRole = userData ? JSON.parse(userData).role : null;
+            if (editingRaceId) {
+                data.race_id = editingRaceId;
+                const response = await fetch(API + '?resource=races&action=update', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (userRole === 'editor' && result.message && result.message.includes('review')) {
+                    alert('✓ Your changes have been submitted for review. An admin will review and approve your submission.');
+                }
+            } else {
+                const response = await fetch(API + '?resource=races', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (userRole === 'editor' && result.message && result.message.includes('review')) {
+                    alert('✓ Your race has been submitted for review. An admin will review and approve your submission.');
+                }
+            }
+            
+            bootstrap.Modal.getInstance(document.getElementById('raceModal')).hide();
+            loadRaces();
+        }
+        
+        async function saveCandidate() {
+            const positions = {
+                abortion: document.getElementById('pos-abortion').value,
+                guns: document.getElementById('pos-guns').value,
+                immigration: document.getElementById('pos-immigration').value,
+                religious_freedom: document.getElementById('pos-religious-freedom').value,
+                taxes: document.getElementById('pos-taxes').value,
+                education: document.getElementById('pos-education').value
+            };
+            Object.keys(positions).forEach(k => !positions[k] && delete positions[k]);
+            
+            const endorsements = document.getElementById('cand-endorsements').value
+                .split(',').map(e => e.trim()).filter(e => e);
+            
+            const data = {
+                name: document.getElementById('cand-name').value,
+                state: document.getElementById('cand-state').value,
+                office: document.getElementById('cand-office').value,
+                party: document.getElementById('cand-party').value,
+                bio: document.getElementById('cand-bio').value,
+                website: document.getElementById('cand-website').value,
+                race_id: document.getElementById('cand-race').value || null,
+                faith_statement: document.getElementById('cand-faith').value,
+                voting_record_url: document.getElementById('cand-voting-record').value,
+                positions: positions,
+                endorsements: endorsements
+            };
+            
+            const userData = localStorage.getItem('user_data');
+            const userRole = userData ? JSON.parse(userData).role : null;
+            if (editingCandidateId) {
+                data.candidate_id = editingCandidateId;
+                const response = await fetch(API + '?resource=candidates&action=update', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (!response.ok) {
+                    console.error('Update failed:', result);
+                    alert('Update failed: ' + (result.error || 'Unknown error'));
+                    return;
+                }
+                if (userRole === 'editor' && result.message && result.message.includes('review')) {
+                    alert('✓ Your changes have been submitted for review. An admin will review and approve your submission.');
+                }
+            } else {
+                const response = await fetch(API + '?resource=candidates', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                if (userRole === 'editor' && result.message && result.message.includes('review')) {
+                    alert('✓ Your candidate has been submitted for review. An admin will review and approve your submission.');
+                }
+            }
+            
+            bootstrap.Modal.getInstance(document.getElementById('candidateModal')).hide();
+            loadCandidates();
+        }
+
+        function previewSummary() {
+            const state = document.getElementById('summary-state').value;
+            const title = document.getElementById('summary-title').value;
+            let content;
+            if (isMarkdownMode) {
+                markdownContent = document.getElementById('summary-content').value;
+                content = markdownContent;
+            } else {
+                htmlContent = summaryEditor.root.innerHTML;
+                content = htmlContent;
+            }
+            
+            if (!state || !title) {
+                alert('Please select a state and enter a title');
+                return;
+            }
+            
+            const renderedContent = content.startsWith('<') ? content : marked.parse(content);
+            
+            document.getElementById('preview-state-name').textContent = state;
+            document.getElementById('preview-content').innerHTML = 
+                '<h5>📖 ' + title + '</h5>' +
+                '<div style="max-height: 400px; overflow-y: auto; font-size: 14px; line-height: 1.6;">' + renderedContent + '</div>' +
+                '<small class="text-muted">Last updated: ' + new Date().toLocaleDateString() + '</small>';
+            
+            new bootstrap.Modal(document.getElementById('previewModal')).show();
+        }
+        
+        async function saveSummary() {
+            let content;
+            if (isMarkdownMode) {
+                markdownContent = document.getElementById('summary-content').value;
+                content = markdownContent;
+            } else {
+                htmlContent = summaryEditor.root.innerHTML;
+                content = htmlContent;
+            }
+            
+            const data = {
+                state: document.getElementById('summary-state').value,
+                title: document.getElementById('summary-title').value,
+                election_year: document.getElementById('summary-year').value,
+                content: content
+            };
+            
+            if (editingSummaryState) {
+                await fetch(API + '?resource=summaries&action=update', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+            } else {
+                await fetch(API + '?resource=summaries', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+            }
+            
+            document.getElementById('summary-state').disabled = false;
+            bootstrap.Modal.getInstance(document.getElementById('summaryModal')).hide();
+            loadSummaries();
+        }
+        
+        async function deleteSummary(state) {
+            if (!confirm('Delete this state summary?')) return;
+            await fetch(API + '?resource=summaries&action=delete&state=' + state, {
+                method: 'DELETE',
+                headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}
+            });
+            loadSummaries();
+        }
+        
+        async function saveEvent() {
+            const data = {
+                title: document.getElementById('event-title').value,
+                state: document.getElementById('event-state').value,
+                event_date: document.getElementById('event-date').value,
+                event_type: document.getElementById('event-type').value,
+                description: document.getElementById('event-desc').value
+            };
+            
+            if (editingEventId) {
+                data.event_id = editingEventId;
+                await fetch(API + '?resource=events&action=update', {
+                    method: 'PUT',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+            } else {
+                await fetch(API + '?resource=events', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                    body: JSON.stringify(data)
+                });
+            }
+            
+            bootstrap.Modal.getInstance(document.getElementById('eventModal')).hide();
+            loadEvents();
+        }
+
+        async function deleteContributor(id) {
+            if (!confirm('Delete this contributor?')) return;
+            await fetch(API + '?resource=contributors&action=delete&contributor_id=' + id, {
+                method: 'DELETE',
+                headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}
+            });
+            loadContributors();
+        }
+
+        async function deleteCandidate(id) {
+            if (!confirm('Delete this candidate?')) return;
+            await fetch(API + '?resource=candidates&action=delete&candidate_id=' + id, {
+                method: 'DELETE',
+                headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}
+            });
+            loadCandidates();
+        }
+
+        async function deleteRace(id) {
+            if (!confirm('Delete this race?')) return;
+            await fetch(API + '?resource=races&action=delete&race_id=' + id, {
+                method: 'DELETE',
+                headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}
+            });
+            loadRaces();
+        }
+        
+        async function deleteEvent(id) {
+            if (!confirm('Delete this event?')) return;
+            await fetch(API + '?resource=events&action=delete&event_id=' + id, {
+                method: 'DELETE',
+                headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}
+            });
+            loadEvents();
+        }
+
+        function downloadRacesTemplate() {
+            const csv = 'state,office,election_date,race_type,description\nTexas,Governor,2024-11-05,general,Texas Gubernatorial Race\nCalifornia,Senate,2024-11-05,general,U.S. Senate Race';
+            downloadCSV(csv, 'races_template.csv');
+        }
+        
+        function downloadCandidatesTemplate() {
+            const csv = 'name,state,office,party,bio,website,faith_statement,positions,endorsements\nJohn Smith,Texas,Governor,Republican,Conservative leader,https://example.com,Christian values,abortion:pro-life;guns:strong-support,NRA;Right to Life';
+            downloadCSV(csv, 'candidates_template.csv');
+        }
+        
+        function downloadCSV(content, filename) {
+            const blob = new Blob([content], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+        
+        async function importRaces() {
+            const file = document.getElementById('races-csv').files[0];
+            if (!file) {
+                alert('Please select a CSV file');
+                return;
+            }
+            
+            const text = await file.text();
+            const lines = text.split('\n').slice(1); // Skip header
+            let imported = 0;
+            let errors = [];
+            
+            for (const line of lines) {
+                if (!line.trim()) continue;
+                const [state, office, election_date, race_type, description] = line.split(',').map(s => s.trim());
+                
+                try {
+                    await fetch(API + '?resource=races', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                        body: JSON.stringify({ state, office, election_date, race_type, description })
+                    });
+                    imported++;
+                } catch (error) {
+                    errors.push(`Failed to import: ${state} - ${office}`);
+                }
+            }
+            
+            document.getElementById('import-status').innerHTML = 
+                '<div class="alert alert-success">Imported ' + imported + ' races. ' + (errors.length > 0 ? errors.length + ' errors.' : '') + '</div>';
+            loadRaces();
+        }
+        
+        async function importCandidates() {
+            const file = document.getElementById('candidates-csv').files[0];
+            if (!file) {
+                alert('Please select a CSV file');
+                return;
+            }
+            
+            const text = await file.text();
+            const lines = text.split('\n').slice(1); // Skip header
+            let imported = 0;
+            let errors = [];
+            
+            for (const line of lines) {
+                if (!line.trim()) continue;
+                const parts = line.split(',').map(s => s.trim());
+                const [name, state, office, party, bio, website, faith_statement, positionsStr, endorsementsStr] = parts;
+                
+                const positions = {};
+                if (positionsStr) {
+                    positionsStr.split(';').forEach(p => {
+                        const [key, value] = p.split(':');
+                        if (key && value) positions[key.trim()] = value.trim();
+                    });
+                }
+                
+                const endorsements = endorsementsStr ? endorsementsStr.split(';').map(e => e.trim()) : [];
+                
+                // Auto-match race by state and office
+                const matchingRace = allRaces.find(r => r.state === state && r.office === office);
+                const race_id = matchingRace ? matchingRace.race_id : null;
+                
+                try {
+                    await fetch(API + '?resource=candidates', {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json', 'Authorization': 'Bearer ' + localStorage.getItem('auth_token')},
+                        body: JSON.stringify({ name, state, office, party, bio, website, faith_statement, positions, endorsements, race_id })
+                    });
+                    imported++;
+                } catch (error) {
+                    errors.push(`Failed to import: ${name}`);
+                }
+            }
+            
+            document.getElementById('import-status').innerHTML = 
+                '<div class="alert alert-success">Imported ' + imported + ' candidates. ' + (errors.length > 0 ? errors.length + ' errors.' : '') + '</div>';
+            loadCandidates();
+        }
+        
+        async function updatePendingCount() {
+            try {
+                const response = await fetch(API + '?resource=pending-changes', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('auth_token')}});
+                if (!response.ok) {
+                    console.log('Pending changes not accessible (may require admin role)');
+                    return;
+                }
+                const changes = await response.json();
+                if (Array.isArray(changes)) {
+                    const count = changes.length;
+                    const badge = document.getElementById('pending-count-badge');
+                    if (count > 0) {
+                        badge.textContent = count;
+                        badge.style.display = 'inline';
+                    } else {
+                        badge.style.display = 'none';
+                    }
+                }
+            } catch (e) {
+                console.log('Failed to load pending count:', e);
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', async function() {
+            const userData = localStorage.getItem('user_data');
+            const userRole = userData ? JSON.parse(userData).role : null;
+            if (userRole !== 'admin' && userRole !== 'super_user' && userRole !== 'editor') {
+                alert('Access denied. Editor, Admin or Super User role required.');
+                window.location.href = 'index.html';
+                return;
+            }
+            
+            // Hide admin-only features for editors
+            if (userRole === 'editor') {
+                document.querySelector('a[href="#import"]').parentElement.style.display = 'none';
+                document.getElementById('add-contributor-btn').style.display = 'none';
+                document.getElementById('admin-dashboard-link').style.display = 'none';
+                document.getElementById('pending-changes-link').style.display = 'none';
+            }
+            
+            populateStateDropdowns();
+            await loadUsers();
+            loadContributors();
+            await loadRaces();
+            loadCandidates();
+            loadEvents();
+            loadSummaries();
+            updatePendingCount();
+            setInterval(updatePendingCount, 30000); // Update every 30 seconds
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Articles - Christian Conservative Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .dashboard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .nav-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .nav-link.logout {
+            background: rgba(220,53,69,0.8);
+            border-color: rgba(220,53,69,0.9);
+        }
+        .nav-link.logout:hover {
+            background: rgba(220,53,69,1);
+        }
+        .article-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        .horizontal-scroll-container {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 10px 0;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb {
+            background: #888;
+            border-radius: 10px;
+        }
+        .horizontal-scroll-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        .article-card-wrapper {
+            flex: 0 0 450px;
+            min-width: 450px;
+        }
+        .scroll-wrapper {
+            position: relative;
+        }
+        .scroll-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255,255,255,0.8);
+            color: #333;
+            border: 1px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 16px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            display: none;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        .scroll-btn:hover {
+            background: rgba(255,255,255,1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            transform: translateY(-50%) scale(1.05);
+        }
+        .scroll-btn-left {
+            left: -25px;
+        }
+        .scroll-btn-right {
+            right: -25px;
+        }
+        @media (min-width: 768px) {
+            .scroll-btn {
+                display: block;
+            }
+        }
+        @media (max-width: 768px) {
+            .article-card {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+            .nav-brand {
+                font-size: 1.4rem;
+            }
+
+            .nav-links {
+                gap: 8px;
+                justify-content: center;
+                width: 100%;
+                margin-top: 10px;
+            }
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+            .filter-bar {
+                padding: 15px;
+            }
+            .dashboard-nav {
+                justify-content: center;
+                text-align: center;
+            }
+        }
+        @media (max-width: 576px) {
+            .nav-links {
+                gap: 5px;
+            }
+            .nav-link {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+            }
+            .nav-brand {
+                font-size: 1.2rem;
+            }
+
+        }
+        .article-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .article-meta {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+        .article-title {
+            color: #333;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+        .article-title:hover {
+            color: #667eea;
+        }
+        .article-excerpt {
+            color: #555;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        .article-tags {
+            margin-top: 15px;
+        }
+        .tag-badge {
+            background: #f8f9fa;
+            color: #495057;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            margin-right: 8px;
+            margin-bottom: 5px;
+            display: inline-block;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .tag-badge:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-1px);
+        }
+        .tag-cloud-item {
+            background: #f8f9fa;
+            color: #495057;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid #dee2e6;
+        }
+        .tag-cloud-item:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+        .tag-cloud-item.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        .category-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        .category-sermon { background: #e3f2fd; color: #1565c0; }
+        .category-politics { background: #fff3e0; color: #ef6c00; }
+        .category-devotional { background: #f3e5f5; color: #7b1fa2; }
+        .category-apologetics { background: #e8f5e8; color: #2e7d32; }
+        .category-ministry { background: #fff8e1; color: #f57f17; }
+        .category-service_notes { background: #e1f5fe; color: #0277bd; }
+        .category-study_notes { background: #fce4ec; color: #c2185b; }
+        .category-bible_study { background: #e8eaf6; color: #3f51b5; }
+        .category-general { background: #f5f5f5; color: #616161; }
+        .filter-bar {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .share-buttons {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        .share-btn {
+            display: inline-block;
+            padding: 5px 10px;
+            margin-right: 8px;
+            border-radius: 15px;
+            text-decoration: none;
+            color: white;
+            font-size: 0.8rem;
+            transition: all 0.3s ease;
+        }
+        .share-btn:hover {
+            transform: translateY(-1px);
+            color: white;
+        }
+        .share-btn-facebook { background: #1877f2; }
+        .share-btn-twitter { background: #1da1f2; }
+        .share-btn-copy { background: #6c757d; }
+        .share-btn-copy.copied { background: #28a745; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="dashboard-nav">
+                <h1 class="nav-brand">📝 Articles & Blog</h1>
+                <div class="nav-links" id="nav-links">
+                    <a href="/" class="nav-link">🏠 Home</a>
+                    <a href="videos.html" class="nav-link">🎬 Videos</a>
+                    <a href="create-article.html" class="nav-link">✍️ Write Article</a>
+                    <a href="authors.html" class="nav-link">👥 Authors</a>
+                    <a href="election-map.html" class="nav-link">🗺️ Election Map</a>
+                    <a href="resources.html" class="nav-link">📚 Resources</a>
+                    <a href="profile.html" class="nav-link">👤 Profile</a>
+                    <a href="#" onclick="viewMyPage()" class="nav-link">📄 My Page</a>
+                    <a href="#" onclick="logout()" class="nav-link logout">🚪 Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Popular Tags Cloud -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title mb-3">🏷️ Popular Tags</h5>
+                <div id="tags-cloud" class="d-flex flex-wrap gap-2">
+                    <div class="spinner-border spinner-border-sm" role="status"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <div class="row g-3 align-items-center">
+                <div class="col-lg-4 col-md-6">
+                    <div class="input-group">
+                        <span class="input-group-text" style="border-radius: 25px 0 0 25px; background: #f8f9fa; border-color: #dee2e6;">🔍</span>
+                        <input type="text" id="search-input" class="form-control" placeholder="Search titles, content, authors, tags..." style="border-radius: 0 25px 25px 0;">
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-6 col-sm-6">
+                    <select id="category-filter" class="form-select" style="border-radius: 25px;">
+                        <option value="">All Categories</option>
+                        <option value="sermon">Sermons</option>
+                        <option value="politics">Political Commentary</option>
+                        <option value="devotional">Devotionals</option>
+                        <option value="apologetics">Apologetics</option>
+                        <option value="ministry">Ministry Updates</option>
+                        <option value="service_notes">Service Notes</option>
+                        <option value="study_notes">Study Notes</option>
+                        <option value="bible_study">Bible Study & Devotional</option>
+                        <option value="general">General</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-6 col-sm-6">
+                    <select id="tag-filter" class="form-select" style="border-radius: 25px;">
+                        <option value="">All Tags</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-4 col-sm-6">
+                    <select id="draft-filter" class="form-select" style="border-radius: 25px;">
+                        <option value="">All Articles</option>
+                        <option value="drafts">📝 My Drafts</option>
+                        <option value="published">✅ Published</option>
+                    </select>
+                </div>
+                <div class="col-lg-2 col-md-4">
+                    <select id="author-filter" class="form-select" style="border-radius: 25px;">
+                        <option value="">All Authors</option>
+                    </select>
+                </div>
+                <div class="col-lg-1 col-md-4 col-sm-12">
+                    <button class="btn btn-outline-secondary w-100" onclick="clearFilters()" style="border-radius: 25px;">Clear</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Articles Container -->
+        <div id="loading" class="text-center py-5">
+            <div class="spinner-border" role="status"></div>
+            <p class="mt-3">Loading articles...</p>
+        </div>
+
+        <div id="articles-container" class="row g-4" style="display: none;">
+            <!-- Articles will be loaded here -->
+        </div>
+
+        <div id="no-articles" class="text-center py-5" style="display: none;">
+            <h4>No articles found</h4>
+            <p class="text-muted">Be the first to write an article!</p>
+            <a href="create-article.html" class="btn btn-primary">✍️ Write Article</a>
+        </div>
+    </div>
+
+    <script>
+        const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
+        const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';
+        
+        let currentUser = null;
+        let authToken = null;
+        let allArticles = [];
+        
+        // Emergency function to load only public articles
+        async function loadPublicArticlesOnly() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('no-articles').style.display = 'none';
+                
+                console.log('Loading public articles only (emergency mode)...');
+                const response = await fetch(`${ARTICLES_API}?action=list&visibility=public`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                document.getElementById('loading').style.display = 'none';
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    allArticles = data.articles || [];
+                    
+                    if (allArticles.length === 0) {
+                        document.getElementById('no-articles').style.display = 'block';
+                    } else {
+                        displayArticles(allArticles);
+                        populateAuthorFilter(allArticles);
+                        document.getElementById('articles-container').style.display = 'block';
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Emergency load failed:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('no-articles').style.display = 'block';
+                document.getElementById('no-articles').innerHTML = `
+                    <h4>Critical Error</h4>
+                    <p class="text-muted">Unable to load any articles. Please contact support.</p>
+                `;
+            }
+        }
+        
+        // Admin-specific loading function that skips private articles entirely
+        async function loadAdminMode() {
+            try {
+                document.getElementById('loading').style.display = 'block';
+                document.getElementById('no-articles').style.display = 'none';
+                
+                console.log('Loading in Admin Mode (public articles only)...');
+                const response = await fetch(`${ARTICLES_API}?action=list&visibility=public`, {
+                    method: 'GET',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                
+                document.getElementById('loading').style.display = 'none';
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    allArticles = data.articles || [];
+                    
+                    if (allArticles.length === 0) {
+                        document.getElementById('no-articles').style.display = 'block';
+                    } else {
+                        displayArticles(allArticles);
+                        populateAuthorFilter(allArticles);
+                        document.getElementById('articles-container').style.display = 'block';
+                        
+                        // Add admin notice at top
+                        const adminNotice = document.createElement('div');
+                        adminNotice.className = 'alert alert-info mb-3';
+                        adminNotice.innerHTML = '<strong>Admin Mode:</strong> Showing public articles only to avoid timeout issues.';
+                        document.getElementById('articles-container').insertBefore(adminNotice, document.getElementById('articles-container').firstChild);
+                    }
+                } else {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Admin mode load failed:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('no-articles').style.display = 'block';
+            }
+        }
+
+        // Check authentication on page load
+        window.addEventListener('load', async function() {
+            authToken = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+            
+            if (!authToken || !userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            currentUser = JSON.parse(userData);
+            
+            // Add admin link if user is admin or super_user
+            if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
+                const navLinks = document.getElementById('nav-links');
+                if (navLinks) {
+                    const adminLink = document.createElement('a');
+                    adminLink.href = 'admin.html';
+                    adminLink.className = 'nav-link';
+                    adminLink.innerHTML = '⚙️ Admin';
+                    navLinks.insertBefore(adminLink, navLinks.lastElementChild);
+                }
+            }
+            
+            await loadArticles();
+            setupFilters();
+        });
+
+        async function loadArticles() {
+            try {
+                console.log('Loading articles from:', ARTICLES_API);
+                
+                // Load public articles first (always works)
+                let loadedArticles = [];
+                
+                try {
+                    console.log('Loading public articles...');
+                    const publicResponse = await fetch(`${ARTICLES_API}?action=list&visibility=public`, {
+                        method: 'GET',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                    
+                    if (publicResponse.ok) {
+                        const publicData = await publicResponse.json();
+                        loadedArticles = publicData.articles || [];
+                        console.log(`Loaded ${loadedArticles.length} public articles`);
+                    }
+                } catch (publicError) {
+                    console.error('Failed to load public articles:', publicError);
+                }
+                
+                // Handle private articles based on user role
+                if (authToken && currentUser) {
+                    try {
+                        if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
+                            // For admin/super_user: Try to load all private articles with timeout protection
+                            console.log('Loading all private articles for admin...');
+                            
+                            const controller = new AbortController();
+                            const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 second timeout
+                            
+                            try {
+                                const privateResponse = await fetch(`${ARTICLES_API}?action=list&visibility=private`, {
+                                    method: 'GET',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'Authorization': `Bearer ${authToken}`
+                                    },
+                                    signal: controller.signal
+                                });
+                                
+                                clearTimeout(timeoutId);
+                                
+                                if (privateResponse.ok) {
+                                    const privateData = await privateResponse.json();
+                                    const allPrivateArticles = (privateData.articles || []).filter(article => article);
+                                    console.log(`Loaded ${allPrivateArticles.length} private articles (admin access)`);
+                                    loadedArticles = [...loadedArticles, ...allPrivateArticles];
+                                }
+                            } catch (fetchError) {
+                                clearTimeout(timeoutId);
+                                if (fetchError.name === 'AbortError') {
+                                    console.warn('Admin private articles request timed out, loading own articles only');
+                                    // Fallback to own articles only
+                                    const fallbackResponse = await fetch(`${ARTICLES_API}?action=list&visibility=private&author=${encodeURIComponent(currentUser.email)}`, {
+                                        method: 'GET',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'Authorization': `Bearer ${authToken}`
+                                        }
+                                    });
+                                    
+                                    if (fallbackResponse.ok) {
+                                        const fallbackData = await fallbackResponse.json();
+                                        const ownArticles = (fallbackData.articles || []).filter(article => 
+                                            article && (article.author === currentUser.email || article.author === currentUser.name)
+                                        );
+                                        console.log(`Fallback: Loaded ${ownArticles.length} own articles`);
+                                        loadedArticles = [...loadedArticles, ...ownArticles];
+                                    }
+                                } else {
+                                    throw fetchError;
+                                }
+                            }
+                        } else {
+                            // For regular users: Load their private articles normally
+                            console.log('Loading user private articles:', currentUser.email);
+                            const privateResponse = await fetch(`${ARTICLES_API}?action=list&visibility=private`, {
+                                method: 'GET',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${authToken}`
+                                }
+                            });
+                            
+                            if (privateResponse.ok) {
+                                const privateData = await privateResponse.json();
+                                const userPrivateArticles = (privateData.articles || []).filter(article => 
+                                    article && (article.author === currentUser.email || article.author === currentUser.name)
+                                );
+                                console.log(`Loaded ${userPrivateArticles.length} user private articles`);
+                                loadedArticles = [...loadedArticles, ...userPrivateArticles];
+                            }
+                        }
+                        
+                        // Remove duplicates based on article_id
+                        const uniqueArticles = [];
+                        const seenIds = new Set();
+                        loadedArticles.forEach(article => {
+                            if (article && article.article_id && !seenIds.has(article.article_id)) {
+                                seenIds.add(article.article_id);
+                                uniqueArticles.push(article);
+                            }
+                        });
+                        loadedArticles = uniqueArticles;
+                        
+                    } catch (privateError) {
+                        console.warn('Failed to load private articles (continuing with public only):', privateError);
+                        // Continue with just public articles
+                    }
+                }
+                
+                // Always hide loading spinner
+                document.getElementById('loading').style.display = 'none';
+                
+                allArticles = loadedArticles;
+                console.log(`Final article count: ${allArticles.length}`);
+                
+                if (allArticles.length === 0) {
+                    document.getElementById('no-articles').style.display = 'block';
+                } else {
+                    displayArticles(allArticles);
+                    populateAuthorFilter(allArticles);
+                    populateTagsCloud(allArticles);
+                    document.getElementById('articles-container').style.display = 'block';
+                }
+                
+            } catch (error) {
+                console.error('Error loading articles:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('no-articles').style.display = 'block';
+                document.getElementById('no-articles').innerHTML = `
+                    <h4>Connection Error</h4>
+                    <p class="text-muted">Unable to connect to articles service: ${error.message}</p>
+                    <p class="text-muted"><small>This may be due to corrupted article data for your account.</small></p>
+                    <button class="btn btn-primary" onclick="loadPublicArticlesOnly()">🔄 Load Public Articles Only</button>
+                    ${currentUser && (currentUser.role === 'admin' || currentUser.role === 'super_user') ? 
+                        '<button class="btn btn-warning" onclick="loadAdminMode()">⚙️ Admin Mode (No Private Articles)</button>' : ''}
+                    <button class="btn btn-outline-secondary" onclick="loadArticles()">🔄 Try Again</button>
+                    <a href="create-article.html" class="btn btn-outline-primary ms-2">✍️ Write Article</a>
+                `;
+            }
+        }
+
+        function displayArticles(articles) {
+            const container = document.getElementById('articles-container');
+            container.innerHTML = '';
+            
+            if (!articles || !Array.isArray(articles)) {
+                console.error('Invalid articles data:', articles);
+                container.innerHTML = '<div class="alert alert-warning">No articles data available</div>';
+                return;
+            }
+            
+            // Group articles by category
+            const groupedArticles = {};
+            articles.forEach(article => {
+                const category = article.category || 'general';
+                if (!groupedArticles[category]) {
+                    groupedArticles[category] = [];
+                }
+                groupedArticles[category].push(article);
+            });
+            
+            let successCount = 0;
+            let errorCount = 0;
+            
+            // Display each category
+            Object.keys(groupedArticles).sort().forEach(category => {
+                // Create category header
+                const categoryHeader = document.createElement('div');
+                categoryHeader.className = 'col-12';
+                categoryHeader.innerHTML = `<h3 class="mt-4 mb-3" style="color: #667eea; font-weight: 600;">${getCategoryName(category)}</h3>`;
+                container.appendChild(categoryHeader);
+                
+                // Create scroll wrapper with arrows
+                const scrollContainer = document.createElement('div');
+                scrollContainer.className = 'col-12';
+                const outerWrapper = document.createElement('div');
+                outerWrapper.className = 'scroll-wrapper';
+                
+                const leftBtn = document.createElement('button');
+                leftBtn.className = 'scroll-btn scroll-btn-left';
+                leftBtn.innerHTML = '◀';
+                
+                const rightBtn = document.createElement('button');
+                rightBtn.className = 'scroll-btn scroll-btn-right';
+                rightBtn.innerHTML = '▶';
+                
+                const scrollWrapper = document.createElement('div');
+                scrollWrapper.className = 'horizontal-scroll-container';
+                
+                leftBtn.onclick = () => scrollWrapper.scrollBy({ left: -470, behavior: 'smooth' });
+                rightBtn.onclick = () => scrollWrapper.scrollBy({ left: 470, behavior: 'smooth' });
+                
+                scrollWrapper.addEventListener('scroll', () => {
+                    leftBtn.style.display = scrollWrapper.scrollLeft > 0 ? 'block' : 'none';
+                    rightBtn.style.display = scrollWrapper.scrollLeft < scrollWrapper.scrollWidth - scrollWrapper.clientWidth - 1 ? 'block' : 'none';
+                });
+                
+                setTimeout(() => {
+                    leftBtn.style.display = 'none';
+                    rightBtn.style.display = scrollWrapper.scrollWidth > scrollWrapper.clientWidth ? 'block' : 'none';
+                }, 100);
+                
+                groupedArticles[category].forEach((article, index) => {
+                    try {
+                        if (!article || typeof article !== 'object') {
+                            console.warn(`Skipping invalid article at index ${index}:`, article);
+                            errorCount++;
+                            return;
+                        }
+                        
+                        const articleCard = createArticleCard(article);
+                        scrollWrapper.appendChild(articleCard);
+                        successCount++;
+                    } catch (error) {
+                        console.error(`Error displaying article at index ${index}:`, error, article);
+                        errorCount++;
+                    }
+                });
+                
+                outerWrapper.appendChild(leftBtn);
+                outerWrapper.appendChild(scrollWrapper);
+                outerWrapper.appendChild(rightBtn);
+                scrollContainer.appendChild(outerWrapper);
+                container.appendChild(scrollContainer);
+            });
+            
+            console.log(`Articles displayed: ${successCount} successful, ${errorCount} errors`);
+            
+            if (successCount === 0 && errorCount > 0) {
+                container.innerHTML = `
+                    <div class="alert alert-danger">
+                        <h5>Article Display Error</h5>
+                        <p>All articles have corrupted data and cannot be displayed. (${errorCount} articles affected)</p>
+                        <button class="btn btn-primary" onclick="loadArticles()">🔄 Reload Articles</button>
+                    </div>
+                `;
+            } else if (errorCount > 0) {
+                const errorAlert = document.createElement('div');
+                errorAlert.className = 'alert alert-warning mb-3';
+                errorAlert.innerHTML = `<small><strong>Note:</strong> ${errorCount} articles could not be displayed due to data corruption.</small>`;
+                container.insertBefore(errorAlert, container.firstChild);
+            }
+        }
+
+        function createArticleCard(article) {
+            const col = document.createElement('div');
+            col.className = 'article-card-wrapper';
+            
+            const card = document.createElement('div');
+            card.className = 'article-card';
+            
+            // Safely handle article content with error checking
+            let excerpt = 'No content available';
+            try {
+                if (article.content && typeof article.content === 'string') {
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = article.content;
+                    const plainText = tempDiv.textContent || tempDiv.innerText || '';
+                    if (plainText.trim()) {
+                        excerpt = plainText.split(' ').slice(0, 30).join(' ') + (plainText.split(' ').length > 30 ? '...' : '');
+                    }
+                }
+            } catch (error) {
+                console.warn('Error processing article content:', error);
+                excerpt = 'Content unavailable';
+            }
+            
+            // Safely format date
+            let date = 'Unknown date';
+            try {
+                if (article.created_at) {
+                    date = new Date(article.created_at).toLocaleDateString();
+                }
+            } catch (error) {
+                console.warn('Error formatting date:', error);
+            }
+            
+            // Safely build card HTML with error checking
+            try {
+                const safeTitle = (article.title || 'Untitled Article').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+                const safeAuthor = (article.author || 'Unknown Author').replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+                const safeCategory = article.category || 'general';
+                const safeReadingTime = article.reading_time || 0;
+                const safeViewCount = article.view_count || 0;
+                const safeArticleId = article.article_id || '';
+                
+                const featuredImageHtml = article.featured_image ? 
+                    `<div class="mb-3">
+                        <img src="${article.featured_image}" class="img-fluid rounded" style="max-height: 200px; width: 100%; object-fit: cover; cursor: pointer;" onclick="window.open('article.html?id=${safeArticleId}', '_self')" alt="${safeTitle}">
+                    </div>` : '';
+                
+                card.innerHTML = `
+                    ${featuredImageHtml}
+                    <div class="article-meta">
+                        <span class="category-badge category-${safeCategory}">${getCategoryName(safeCategory)}</span>
+                        <span class="ms-3">By ${safeAuthor}</span>
+                        <span class="ms-3">${date}</span>
+                        <span class="ms-3">📖 ${safeReadingTime} min read</span>
+                        <span class="ms-3">👁️ ${safeViewCount} views</span>
+                    </div>
+                    
+                    <h3><a href="article.html?id=${safeArticleId}" class="article-title">${safeTitle}</a></h3>
+                    
+                    <div class="article-excerpt">${excerpt}</div>
+                    
+                    ${article.scripture_references && Array.isArray(article.scripture_references) && article.scripture_references.length > 0 ? 
+                        `<div class="mb-2">
+                            <small class="text-muted">📖 Scripture References: ${article.scripture_references.slice(0, 5).join(', ')}${article.scripture_references.length > 5 ? '...' : ''}</small>
+                        </div>` : ''
+                    }
+                    
+                    ${article.tags && Array.isArray(article.tags) && article.tags.length > 0 ? 
+                        `<div class="article-tags">
+                            ${article.tags.slice(0, 8).map(tag => `<span class="tag-badge" onclick="filterByTag('${(tag || '').replace(/'/g, "\\'")}')">🏷️ ${(tag || '').replace(/'/g, '&#39;').replace(/"/g, '&quot;')}</span>`).join('')}
+                        </div>` : ''
+                    }
+                    
+                    <div class="share-buttons">
+                        <small class="text-muted d-block mb-2">📢 Share:</small>
+                        <a href="#" onclick="shareArticle('facebook', '${safeArticleId}', '${safeTitle}')" class="share-btn share-btn-facebook">📘 Facebook</a>
+                        <a href="#" onclick="shareArticle('twitter', '${safeArticleId}', '${safeTitle}')" class="share-btn share-btn-twitter">🐦 Twitter</a>
+                        <button onclick="copyArticleLink('${safeArticleId}', this)" class="share-btn share-btn-copy">🔗 Copy</button>
+                    </div>
+                    
+                    ${(currentUser && safeArticleId && (currentUser.role === 'admin' || currentUser.role === 'super_user' || article.author === currentUser.email || article.author === currentUser.name)) ? 
+                        `<div class="mt-3">
+                            <a href="edit-article.html?id=${safeArticleId}" class="btn btn-sm btn-outline-primary">✏️ Edit</a>
+                            <button onclick="deleteArticle('${safeArticleId}', '${safeTitle}')" class="btn btn-sm btn-outline-danger ms-2">🗑️ Delete</button>
+                        </div>` : ''
+                    }
+                `;
+            } catch (error) {
+                console.error('Error creating article card:', error);
+                card.innerHTML = `
+                    <div class="alert alert-warning">
+                        <h5>Article Display Error</h5>
+                        <p>This article has corrupted data and cannot be displayed properly.</p>
+                        <small>Article ID: ${article.article_id || 'Unknown'}</small>
+                    </div>
+                `;
+            }
+            
+            col.appendChild(card);
+            return col;
+        }
+
+        function getCategoryName(category) {
+            const names = {
+                'sermon': 'Sermon',
+                'politics': 'Politics',
+                'devotional': 'Devotional',
+                'apologetics': 'Apologetics',
+                'ministry': 'Ministry',
+                'service_notes': 'Service Notes',
+                'study_notes': 'Study Notes',
+                'bible_study': 'Bible Study',
+                'general': 'General'
+            };
+            return names[category] || 'General';
+        }
+
+        function populateAuthorFilter(articles) {
+            const authors = [...new Set(articles.map(article => article.author))];
+            const authorFilter = document.getElementById('author-filter');
+            
+            authors.forEach(author => {
+                const option = document.createElement('option');
+                option.value = author;
+                option.textContent = author;
+                authorFilter.appendChild(option);
+            });
+        }
+        
+        function populateTagsCloud(articles) {
+            const tagCounts = {};
+            articles.forEach(article => {
+                if (article.tags && Array.isArray(article.tags)) {
+                    article.tags.forEach(tag => {
+                        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                    });
+                }
+            });
+            
+            const sortedTags = Object.entries(tagCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 20);
+            
+            const tagsCloud = document.getElementById('tags-cloud');
+            tagsCloud.innerHTML = '';
+            
+            if (sortedTags.length === 0) {
+                tagsCloud.innerHTML = '<small class="text-muted">No tags yet</small>';
+                return;
+            }
+            
+            sortedTags.forEach(([tag, count]) => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'tag-cloud-item';
+                tagElement.textContent = `${tag} (${count})`;
+                tagElement.onclick = () => filterByTag(tag);
+                tagsCloud.appendChild(tagElement);
+            });
+            
+            // Also populate tag filter dropdown
+            const tagFilter = document.getElementById('tag-filter');
+            tagFilter.innerHTML = '<option value="">All Tags</option>';
+            sortedTags.forEach(([tag]) => {
+                const option = document.createElement('option');
+                option.value = tag;
+                option.textContent = tag;
+                tagFilter.appendChild(option);
+            });
+        }
+        
+        function filterByTag(tag) {
+            document.getElementById('tag-filter').value = tag;
+            document.getElementById('search-input').value = '';
+            document.getElementById('category-filter').value = '';
+            document.getElementById('author-filter').value = '';
+            applyFilters();
+            
+            // Highlight active tag
+            document.querySelectorAll('.tag-cloud-item').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Scroll to articles
+            document.getElementById('articles-container').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function setupFilters() {
+            const searchInput = document.getElementById('search-input');
+            const categoryFilter = document.getElementById('category-filter');
+            const authorFilter = document.getElementById('author-filter');
+            const draftFilter = document.getElementById('draft-filter');
+            
+            // Debounce search input for better performance
+            let searchTimeout;
+            searchInput.addEventListener('input', () => {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(applyFilters, 300);
+            });
+            
+            categoryFilter.addEventListener('change', applyFilters);
+            authorFilter.addEventListener('change', applyFilters);
+            draftFilter.addEventListener('change', applyFilters);
+            
+            const tagFilter = document.getElementById('tag-filter');
+            tagFilter.addEventListener('change', applyFilters);
+        }
+
+        async function applyFilters() {
+            const searchTerm = document.getElementById('search-input').value.trim();
+            const selectedCategory = document.getElementById('category-filter').value;
+            const selectedAuthor = document.getElementById('author-filter').value;
+            const selectedTag = document.getElementById('tag-filter').value;
+            const selectedDraftFilter = document.getElementById('draft-filter').value;
+            
+            // If no filters applied, just display all articles
+            if (!searchTerm && !selectedCategory && !selectedAuthor && !selectedTag && !selectedDraftFilter) {
+                displayArticles(allArticles);
+                return;
+            }
+            
+            try {
+                // For client-side filtering if API is not working
+                let filteredArticles = allArticles.filter(article => {
+                    const matchesSearch = !searchTerm || 
+                        article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        article.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        article.author.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        (article.tags && article.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase())));
+                    
+                    const matchesCategory = !selectedCategory || article.category === selectedCategory;
+                    const matchesAuthor = !selectedAuthor || article.author === selectedAuthor;
+                    const matchesTag = !selectedTag || (article.tags && article.tags.includes(selectedTag));
+                    
+                    return matchesSearch && matchesCategory && matchesAuthor && matchesTag;
+                });
+                
+                // Apply draft filter
+                if (selectedDraftFilter === 'drafts') {
+                    filteredArticles = filteredArticles.filter(article => 
+                        article.title.includes('(Draft)') && 
+                        (article.author === currentUser.email || article.author === currentUser.name)
+                    );
+                } else if (selectedDraftFilter === 'published') {
+                    filteredArticles = filteredArticles.filter(article => 
+                        !article.title.includes('(Draft)')
+                    );
+                }
+                
+                displayArticles(filteredArticles);
+                
+                if (filteredArticles.length === 0) {
+                    document.getElementById('articles-container').innerHTML = 
+                        '<div class="text-center py-5"><h4>No articles match your filters</h4><p class="text-muted">Try different keywords or clear filters</p><button class="btn btn-outline-secondary" onclick="clearFilters()">Clear Filters</button></div>';
+                }
+                
+            } catch (error) {
+                console.error('Error filtering articles:', error);
+                // Fallback to showing all articles
+                displayArticles(allArticles);
+            }
+        }
+
+        function clearFilters() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('category-filter').value = '';
+            document.getElementById('author-filter').value = '';
+            document.getElementById('tag-filter').value = '';
+            document.getElementById('draft-filter').value = '';
+            document.querySelectorAll('.tag-cloud-item').forEach(el => el.classList.remove('active'));
+            displayArticles(allArticles);
+        }
+
+        async function deleteArticle(articleId, articleTitle) {
+            if (!confirm(`Are you sure you want to delete "${articleTitle}"? This action cannot be undone.`)) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${ARTICLES_API}?action=delete&article_id=${articleId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + authToken
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Article deleted successfully!');
+                    // Reload articles to reflect the deletion
+                    await loadArticles();
+                } else {
+                    alert('Error deleting article: ' + data.error);
+                }
+            } catch (error) {
+                console.error('Error deleting article:', error);
+                alert('Error deleting article. Please try again.');
+            }
+        }
+
+        function viewMyPage() {
+            const userData = localStorage.getItem('user_data');
+            if (userData) {
+                const user = JSON.parse(userData);
+                window.location.href = `user-page.html?user=${encodeURIComponent(user.email)}`;
+            }
+        }
+        
+        function shareArticle(platform, articleId, articleTitle) {
+            const articleUrl = `${window.location.origin}/article.html?id=${articleId}`;
+            const encodedUrl = encodeURIComponent(articleUrl);
+            const encodedTitle = encodeURIComponent(articleTitle);
+            
+            let shareUrl = '';
+            
+            switch(platform) {
+                case 'facebook':
+                    shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+                    break;
+                case 'twitter':
+                    const tweetText = encodeURIComponent(`Check out this article: ${articleTitle}`);
+                    shareUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodedUrl}`;
+                    break;
+                case 'linkedin':
+                    shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+                    break;
+            }
+            
+            if (shareUrl) {
+                window.open(shareUrl, '_blank', 'width=600,height=400');
+            }
+        }
+        
+        function copyArticleLink(articleId, buttonElement) {
+            const articleUrl = `${window.location.origin}/article.html?id=${articleId}`;
+            
+            // Create temporary input to copy text
+            const tempInput = document.createElement('input');
+            tempInput.value = articleUrl;
+            document.body.appendChild(tempInput);
+            tempInput.select();
+            tempInput.setSelectionRange(0, 99999);
+            
+            try {
+                document.execCommand('copy');
+                buttonElement.textContent = '✓ Copied!';
+                buttonElement.classList.add('copied');
+                
+                setTimeout(() => {
+                    buttonElement.textContent = '🔗 Copy';
+                    buttonElement.classList.remove('copied');
+                }, 2000);
+            } catch (err) {
+                // Fallback for browsers that don't support execCommand
+                navigator.clipboard.writeText(articleUrl).then(() => {
+                    buttonElement.textContent = '✓ Copied!';
+                    buttonElement.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        buttonElement.textContent = '🔗 Copy';
+                        buttonElement.classList.remove('copied');
+                    }, 2000);
+                }).catch(() => {
+                    alert('Please manually copy this link: ' + articleUrl);
+                });
+            } finally {
+                document.body.removeChild(tempInput);
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

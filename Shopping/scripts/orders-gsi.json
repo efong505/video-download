@@ -1,0 +1,26 @@
+[
+  {
+    "IndexName": "user_id-order_date-index",
+    "KeySchema": [
+      {"AttributeName": "user_id", "KeyType": "HASH"},
+      {"AttributeName": "order_date", "KeyType": "RANGE"}
+    ],
+    "Projection": {"ProjectionType": "ALL"}
+  },
+  {
+    "IndexName": "order_status-order_date-index",
+    "KeySchema": [
+      {"AttributeName": "order_status", "KeyType": "HASH"},
+      {"AttributeName": "order_date", "KeyType": "RANGE"}
+    ],
+    "Projection": {"ProjectionType": "ALL"}
+  },
+  {
+    "IndexName": "payment_status-order_date-index",
+    "KeySchema": [
+      {"AttributeName": "payment_status", "KeyType": "HASH"},
+      {"AttributeName": "order_date", "KeyType": "RANGE"}
+    ],
+    "Projection": {"ProjectionType": "ALL"}
+  }
+]

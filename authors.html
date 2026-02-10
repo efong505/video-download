@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authors - Christian Conservative Platform</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+            padding-top: 90px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .dashboard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .nav-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0;
+        }
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255,255,255,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .nav-link:hover {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .nav-link.logout {
+            background: rgba(220,53,69,0.8);
+            border-color: rgba(220,53,69,0.9);
+        }
+        .nav-link.logout:hover {
+            background: rgba(220,53,69,1);
+        }
+        .author-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 25px;
+            margin-bottom: 25px;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        .author-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .author-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin: 0 auto 15px;
+        }
+        .author-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        @media (max-width: 768px) {
+            .nav-brand {
+                font-size: 1.4rem;
+            }
+            .nav-links {
+                gap: 8px;
+                justify-content: center;
+                width: 100%;
+                margin-top: 10px;
+            }
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+            .dashboard-nav {
+                justify-content: center;
+                text-align: center;
+            }
+        }
+        @media (max-width: 576px) {
+            .nav-links {
+                gap: 5px;
+            }
+            .nav-link {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+            }
+            .nav-brand {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Unified Navbar -->
+    <div id="navbar-container" data-page="authors"></div>
+    <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            });
+    </script>
+    
+    <div class="dashboard-header">
+        <div class="container">
+            <div class="dashboard-nav">
+                <h1 class="nav-brand">👥 Authors</h1>
+                <div class="nav-links" id="nav-links-old" style="display:none;">
+                    <a href="/" class="nav-link">🏠 Home</a>
+                    <a href="videos.html" class="nav-link">🎬 Videos</a>
+                    <a href="articles.html" class="nav-link">📝 Articles</a>
+                    <a href="resources.html" class="nav-link">📚 Resources</a>
+                    <a href="profile.html" class="nav-link">👤 Profile</a>
+                    <a href="#" onclick="viewMyPage()" class="nav-link">📄 My Page</a>
+                    <a href="#" onclick="logout()" class="nav-link logout">🚪 Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Browse Content Creators</h5>
+                        <p class="text-muted">Discover videos and articles from Christian conservative authors and content creators.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="loading" class="text-center py-5">
+            <div class="spinner-border" role="status"></div>
+            <p class="mt-3">Loading authors...</p>
+        </div>
+
+        <div id="authors-container" class="row" style="display: none;">
+            <!-- Authors will be loaded here -->
+        </div>
+
+        <div id="no-authors" class="text-center py-5" style="display: none;">
+            <h4>No authors found</h4>
+            <p class="text-muted">No content creators found at this time.</p>
+        </div>
+    </div>
+
+    <script>
+        const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
+        const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';
+        const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
+
+        let allAuthors = [];
+
+        window.addEventListener('load', function() {
+            // Check authentication first
+            const authToken = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+            
+            if (!authToken || !userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            // Admin link is now handled by unified navbar
+            
+            loadAuthors();
+        });
+
+        async function loadAuthors() {
+            try {
+                // Load videos to get video authors
+                const videoResponse = await fetch(TAG_API + '?action=list');
+                const videoData = await videoResponse.json();
+                
+                // Load articles to get article authors
+                const articleResponse = await fetch(ARTICLES_API + '?action=list&visibility=public');
+                const articleData = await articleResponse.json();
+                
+                const authorStats = {};
+                
+                // Count videos per author
+                if (videoData.videos) {
+                    videoData.videos.forEach(video => {
+                        if (video.owner && video.visibility === 'public') {
+                            if (!authorStats[video.owner]) {
+                                authorStats[video.owner] = { videos: 0, articles: 0, email: video.owner };
+                            }
+                            authorStats[video.owner].videos++;
+                        }
+                    });
+                }
+                
+                // Count articles per author
+                if (articleData.articles) {
+                    articleData.articles.forEach(article => {
+                        if (article.author) {
+                            if (!authorStats[article.author]) {
+                                authorStats[article.author] = { videos: 0, articles: 0, email: article.author };
+                            }
+                            authorStats[article.author].articles++;
+                        }
+                    });
+                }
+                
+                // Convert to array and get user names
+                allAuthors = Object.values(authorStats).filter(author => 
+                    author.videos > 0 || author.articles > 0
+                );
+                
+                // Use email username as display name
+                allAuthors.forEach(author => {
+                    author.name = author.email.split('@')[0].replace(/[._-]/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+                });
+                
+                displayAuthors(allAuthors.sort((a, b) => (b.videos + b.articles) - (a.videos + a.articles)));
+                
+            } catch (error) {
+                console.error('Error loading authors:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('no-authors').style.display = 'block';
+            }
+        }
+
+        function displayAuthors(authors) {
+            const container = document.getElementById('authors-container');
+            
+            if (authors.length === 0) {
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('no-authors').style.display = 'block';
+                return;
+            }
+            
+            container.innerHTML = '';
+            
+            authors.forEach(author => {
+                const col = document.createElement('div');
+                col.className = 'col-lg-4 col-md-6 mb-4';
+                
+                const initials = author.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+                
+                col.innerHTML = `
+                    <div class="author-card">
+                        <div class="author-avatar">
+                            ${initials}
+                        </div>
+                        <h5>${author.name}</h5>
+                        <div class="author-stats">
+                            <div class="stat-item">
+                                <div class="stat-number">${author.videos}</div>
+                                <div class="stat-label">Videos</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-number">${author.articles}</div>
+                                <div class="stat-label">Articles</div>
+                            </div>
+                        </div>
+                        <a href="user-page.html?user=${encodeURIComponent(author.email)}" class="btn btn-primary">
+                            📄 View Page
+                        </a>
+                    </div>
+                `;
+                
+                container.appendChild(col);
+            });
+            
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('authors-container').style.display = 'flex';
+        }
+
+        function viewMyPage() {
+            const userData = localStorage.getItem('user_data');
+            if (userData) {
+                const user = JSON.parse(userData);
+                window.location.href = `user-page.html?user=${encodeURIComponent(user.email)}`;
+            }
+        }
+        
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
