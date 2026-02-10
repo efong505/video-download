@@ -66,7 +66,7 @@ resource "aws_api_gateway_integration" "this" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = var.lambda_function_arn
+  uri                     = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/${var.lambda_function_arn}/invocations"
 }
 
 # Grant API Gateway permission to invoke Lambda
@@ -75,7 +75,7 @@ resource "aws_lambda_permission" "this" {
   action        = "lambda:InvokeFunction"
   function_name = var.lambda_function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${var.api_id}/*/*"
+  source_arn    = "arn:aws:execute-api:us-east-1:371751795928:${var.api_id}/*/*"
 }
 
 # CORS OPTIONS method (if enabled)

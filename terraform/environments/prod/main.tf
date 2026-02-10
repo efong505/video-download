@@ -280,3 +280,77 @@ module "lambda_notifications_api" {
   environment_variables = {}
 }
 
+
+# ============================================
+# Unified API Gateway
+# ============================================
+
+module "unified_api" {
+  source = "../../modules/api-gateway"
+  
+  api_name        = "ministry-platform-api"
+  api_description = "Unified API for Christian Conservative Platform"
+  stage_name      = "prod"
+}
+
+# Auth endpoint
+module "api_auth" {
+  source = "../../modules/api-gateway-lambda-integration"
+  
+  api_id               = module.unified_api.api_id
+  root_resource_id     = module.unified_api.root_resource_id
+  path_part            = "auth"
+  http_method          = "ANY"
+  lambda_function_name = module.lambda_auth_api.function_name
+  lambda_function_arn  = module.lambda_auth_api.function_arn
+  enable_cors          = true
+}
+
+# Articles endpoint
+module "api_articles" {
+  source = "../../modules/api-gateway-lambda-integration"
+  
+  api_id               = module.unified_api.api_id
+  root_resource_id     = module.unified_api.root_resource_id
+  path_part            = "articles"
+  http_method          = "ANY"
+  lambda_function_name = module.lambda_articles_api.function_name
+  lambda_function_arn  = module.lambda_articles_api.function_arn
+  enable_cors          = true
+}
+
+# News endpoint
+module "api_news" {
+  source = "../../modules/api-gateway-lambda-integration"
+  
+  api_id               = module.unified_api.api_id
+  root_resource_id     = module.unified_api.root_resource_id
+  path_part            = "news"
+  http_method          = "ANY"
+  lambda_function_name = module.lambda_news_api.function_name
+  lambda_function_arn  = module.lambda_news_api.function_arn
+  enable_cors          = true
+}
+
+# ============================================
+# Outputs
+# ============================================
+
+output "api_gateway_url" {
+  value       = module.unified_api.invoke_url
+  description = "Base URL for the unified API Gateway"
+}
+
+output "api_gateway_id" {
+  value       = module.unified_api.api_id
+  description = "API Gateway ID"
+}
+
+output "api_endpoints" {
+  value = {
+    auth     = "${module.unified_api.invoke_url}/auth"
+    articles = "${module.unified_api.invoke_url}/articles"
+    news     = "${module.unified_api.invoke_url}/news"
+  }
+  description = "Full URLs for all API endpoints"
+}
