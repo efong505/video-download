@@ -11,6 +11,7 @@ from enum import Enum
 dynamodb = boto3.resource('dynamodb')
 articles_table = dynamodb.Table('articles')
 users_table = dynamodb.Table('users')
+s3_client = boto3.client('s3')
 
 # Bible API configuration
 BIBLE_API_BASE = 'https://bible-api.com'
@@ -893,7 +894,19 @@ def delete_article(event):
                 'body': json.dumps({'error': 'You can only delete your own articles'})
             }
         
-        # Delete the article
+        # Delete featured image from S3 if it exists
+        featured_image = article.get('featured_image', '')
+        if featured_image and 'my-video-downloads-bucket' in featured_image:
+            try:
+                # Extract S3 key from URL
+                # URL format: https://my-video-downloads-bucket.s3.amazonaws.com/images/filename.jpg
+                key = featured_image.split('.com/')[-1]
+                s3_client.delete_object(Bucket='my-video-downloads-bucket', Key=key)
+                print(f'Deleted S3 image: {key}')
+            except Exception as e:
+                print(f'Failed to delete S3 image: {e}')
+        
+        # Delete the article from DynamoDB
         dynamodb_breaker.call(articles_table.delete_item, Key={'article_id': article_id})
         
         return {

@@ -147,7 +147,7 @@ function initNavbar() {
 }
 
 function loadNotificationCount(email) {
-    fetch(`https://lc7w6ebg4m.execute-api.us-east-1.amazonaws.com/prod/notifications?action=get_user_notifications&email=${encodeURIComponent(email)}`)
+    fetch(`https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/notifications?action=get_user_notifications&email=${encodeURIComponent(email)}`)
         .then(r => r.json())
         .then(data => {
             const unread = (data.notifications || []).filter(n => !n.read).length;

@@ -332,6 +332,149 @@ module "api_news" {
   enable_cors          = true
 }
 
+# Admin endpoint
+module "api_admin" {
+  source = "../../modules/api-gateway-lambda-integration"
+  
+  api_id               = module.unified_api.api_id
+  root_resource_id     = module.unified_api.root_resource_id
+  path_part            = "admin"
+  http_method          = "ANY"
+  lambda_function_name = module.lambda_admin_api.function_name
+  lambda_function_arn  = module.lambda_admin_api.function_arn
+  enable_cors          = true
+}
+
+# Comments endpoint
+module "api_comments" {
+  source = "../../modules/api-gateway-lambda-integration"
+  
+  api_id               = module.unified_api.api_id
+  root_resource_id     = module.unified_api.root_resource_id
+  path_part            = "comments"
+  http_method          = "ANY"
+  lambda_function_name = module.lambda_comments_api.function_name
+  lambda_function_arn  = module.lambda_comments_api.function_arn
+  enable_cors          = true
+}
+
+# Contributors endpoint
+module "api_contributors" {
+  source = "../../modules/api-gateway-lambda-integration"
+  
+  api_id               = module.unified_api.api_id
+  root_resource_id     = module.unified_api.root_resource_id
+  path_part            = "contributors"
+  http_method          = "ANY"
+  lambda_function_name = module.lambda_contributors_api.function_name
+  lambda_function_arn  = module.lambda_contributors_api.function_arn
+  enable_cors          = true
+}
+
+# Resources endpoint
+module "api_resources" {
+  source = "../../modules/api-gateway-lambda-integration"
+  
+  api_id               = module.unified_api.api_id
+  root_resource_id     = module.unified_api.root_resource_id
+  path_part            = "resources"
+  http_method          = "ANY"
+  lambda_function_name = module.lambda_resources_api.function_name
+  lambda_function_arn  = module.lambda_resources_api.function_arn
+  enable_cors          = true
+}
+
+# Videos endpoint
+module "api_videos" {
+  source = "../../modules/api-gateway-lambda-integration"
+  
+  api_id               = module.unified_api.api_id
+  root_resource_id     = module.unified_api.root_resource_id
+  path_part            = "videos"
+  http_method          = "ANY"
+  lambda_function_name = module.lambda_video_list_api.function_name
+  lambda_function_arn  = module.lambda_video_list_api.function_arn
+  enable_cors          = true
+}
+
+# Tags endpoint
+module "api_tags" {
+  source = "../../modules/api-gateway-lambda-integration"
+  
+  api_id               = module.unified_api.api_id
+  root_resource_id     = module.unified_api.root_resource_id
+  path_part            = "tags"
+  http_method          = "ANY"
+  lambda_function_name = module.lambda_video_tag_api.function_name
+  lambda_function_arn  = module.lambda_video_tag_api.function_arn
+  enable_cors          = true
+}
+
+# Download endpoint
+module "api_download" {
+  source = "../../modules/api-gateway-lambda-integration"
+  
+  api_id               = module.unified_api.api_id
+  root_resource_id     = module.unified_api.root_resource_id
+  path_part            = "download"
+  http_method          = "ANY"
+  lambda_function_name = module.lambda_video_download_router.function_name
+  lambda_function_arn  = module.lambda_video_download_router.function_arn
+  enable_cors          = true
+}
+
+# PayPal endpoint
+module "api_paypal" {
+  source = "../../modules/api-gateway-lambda-integration"
+  
+  api_id               = module.unified_api.api_id
+  root_resource_id     = module.unified_api.root_resource_id
+  path_part            = "paypal"
+  http_method          = "ANY"
+  lambda_function_name = module.lambda_paypal_billing_api.function_name
+  lambda_function_arn  = module.lambda_paypal_billing_api.function_arn
+  enable_cors          = true
+}
+
+# Analyze endpoint
+module "api_analyze" {
+  source = "../../modules/api-gateway-lambda-integration"
+  
+  api_id               = module.unified_api.api_id
+  root_resource_id     = module.unified_api.root_resource_id
+  path_part            = "analyze"
+  http_method          = "ANY"
+  lambda_function_name = module.lambda_url_analysis_api.function_name
+  lambda_function_arn  = module.lambda_url_analysis_api.function_arn
+  enable_cors          = true
+}
+
+# Prayer endpoint
+module "api_prayer" {
+  source = "../../modules/api-gateway-lambda-integration"
+  
+  api_id               = module.unified_api.api_id
+  root_resource_id     = module.unified_api.root_resource_id
+  path_part            = "prayer"
+  http_method          = "ANY"
+  lambda_function_name = module.lambda_prayer_api.function_name
+  lambda_function_arn  = module.lambda_prayer_api.function_arn
+  enable_cors          = true
+}
+
+# Notifications endpoint
+module "api_notifications" {
+  source = "../../modules/api-gateway-lambda-integration"
+  
+  api_id               = module.unified_api.api_id
+  root_resource_id     = module.unified_api.root_resource_id
+  path_part            = "notifications"
+  http_method          = "ANY"
+  lambda_function_name = module.lambda_notifications_api.function_name
+  lambda_function_arn  = module.lambda_notifications_api.function_arn
+  enable_cors          = true
+}
+
 # ============================================
 # Outputs
 # ============================================
@@ -348,9 +491,20 @@ output "api_gateway_id" {
 
 output "api_endpoints" {
   value = {
-    auth     = "${module.unified_api.invoke_url}/auth"
-    articles = "${module.unified_api.invoke_url}/articles"
-    news     = "${module.unified_api.invoke_url}/news"
+    auth          = "${module.unified_api.invoke_url}/auth"
+    articles      = "${module.unified_api.invoke_url}/articles"
+    news          = "${module.unified_api.invoke_url}/news"
+    admin         = "${module.unified_api.invoke_url}/admin"
+    comments      = "${module.unified_api.invoke_url}/comments"
+    contributors  = "${module.unified_api.invoke_url}/contributors"
+    resources     = "${module.unified_api.invoke_url}/resources"
+    videos        = "${module.unified_api.invoke_url}/videos"
+    tags          = "${module.unified_api.invoke_url}/tags"
+    download      = "${module.unified_api.invoke_url}/download"
+    paypal        = "${module.unified_api.invoke_url}/paypal"
+    analyze       = "${module.unified_api.invoke_url}/analyze"
+    prayer        = "${module.unified_api.invoke_url}/prayer"
+    notifications = "${module.unified_api.invoke_url}/notifications"
   }
-  description = "Full URLs for all API endpoints"
+  description = "All API endpoint URLs"
 }

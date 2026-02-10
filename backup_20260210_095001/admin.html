@@ -1,0 +1,4302 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Video Downloader</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 0;
+
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .dashboard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .nav-brand {
+            font-size: 1.8rem;
+            font-weight: bold;
+            margin: 0;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .nav-link.logout {
+            background: rgba(220, 53, 69, 0.8);
+            border-color: rgba(220, 53, 69, 0.9);
+        }
+
+        .nav-link.logout:hover {
+            background: rgba(220, 53, 69, 1);
+        }
+
+        @media (max-width: 768px) {
+            .nav-brand {
+                font-size: 1.4rem;
+            }
+
+            .nav-links {
+                gap: 8px;
+                justify-content: center;
+                width: 100%;
+                margin-top: 10px;
+            }
+
+            .nav-link {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                white-space: nowrap;
+            }
+
+            .dashboard-nav {
+                justify-content: center;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-links {
+                gap: 5px;
+            }
+
+            .nav-link {
+                padding: 5px 8px;
+                font-size: 0.75rem;
+            }
+
+            .nav-brand {
+                font-size: 1.2rem;
+            }
+        }
+
+        .container {
+            max-width: 1200px;
+            /* margin: 20px auto; */
+            padding: 0 20px;
+        }
+
+        .tabs {
+            display: flex;
+            background: white;
+            border-radius: 8px 8px 0 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            flex-wrap: wrap;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px 20px;
+            text-align: center;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            min-width: 100px;
+        }
+
+        @media (max-width: 991px) {
+            
+            .admin-secondary-menu  {
+                top: 100px;
+            }   
+            .tab {
+                padding: 10px 12px;
+                font-size: 0.9rem;
+                min-width: 80px;
+            }
+            
+        }
+
+        @media (max-width: 576px) {
+            .tab {
+                padding: 8px 10px;
+                font-size: 0.85rem;
+                min-width: 70px;
+            }
+        }
+
+        .tab.active {
+            border-bottom-color: #667eea;
+            background: #f8f9ff;
+        }
+
+        .tab-content {
+            background: white;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            min-height: 500px;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .data-table tr:hover {
+            background: #f8f9ff;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 2px;
+        }
+
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+
+        */
+
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+
+        */
+
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+
+        */
+
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+
+        */
+
+        /* CONSOLIDATED TO card-styles.css or form-styles.css
+
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 10px 0;
+        }
+
+
+        */
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+        }
+
+        .close {
+            float: right;
+            font-size: 28px;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        /* padding for android */
+        @media (max-width: 590px) {
+            .header {
+                padding-top: 66px;
+            }
+        }
+    </style>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/form-styles.css">
+    <script src="assets/js/token-validator.js"></script>
+    <style>
+        body {
+            padding-top: 160px;
+        }
+
+        .navbar {
+            z-index: 1030;
+        }
+
+        .admin-secondary-menu {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            right: 0;
+            background: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 8px 0;
+            z-index: 1020;
+        }
+
+        .admin-secondary-menu .container {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .admin-menu-link {
+            color: #2c3e50;
+            text-decoration: none;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .admin-menu-link:hover {
+            background: #e9ecef;
+            color: #2c5aa0;
+        }
+
+        @media (max-width: 991px) {
+            body {
+                padding-top: 160px;
+            }
+
+            .admin-secondary-menu {
+                top: 56px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .data-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Unified Navbar -->
+    <div id="navbar-container" data-page="admin"></div>
+    <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            })
+            .catch(err => console.error('Failed to load navbar:', err));
+    </script>
+
+    <!-- Admin Secondary Menu -->
+    <div class="admin-secondary-menu" style="margin-top: 26px;">
+        <div class="container">
+            <a href="authors.html" class="admin-menu-link">👥 Authors</a>
+            <a href="user-upload.html" class="admin-menu-link">⬆️ Upload Video</a>
+            <a href="admin-contributors.html" class="admin-menu-link">🗺️ Contributors</a>
+            <a href="admin-resources.html" class="admin-menu-link">📚 Manage Resources</a>
+            <a href="admin-templates.html" class="admin-menu-link">📄 Templates</a>
+            <a href="admin-prayers.html" class="admin-menu-link">🙏 Prayer Requests</a>
+            <a href="admin-events.html" class="admin-menu-link">📅 Manage Events</a>
+            <a href="events-calendar.html" class="admin-menu-link">📅 View Calendar</a>
+            <a href="admin-newsletters.html" class="admin-menu-link">📧 Newsletters</a>
+        </div>
+    </div>
+
+    <div class="header">
+        <div class="container">
+            <h1 style="margin: 0; font-size: 2rem;">⚙️ Admin Dashboard</h1>
+        </div>
+    </div>
+
+    <div class="container" style="margin-top: 30px;">
+        <div class="tabs">
+            <div class="tab active" onclick="showTab('overview')">Overview</div>
+            <div class="tab" onclick="showTab('users')">Users</div>
+            <div class="tab" onclick="showTab('videos')">Videos</div>
+            <div class="tab" onclick="showTab('tags')">Tags</div>
+            <div class="tab" onclick="showTab('analytics')">Analytics</div>
+            <div class="tab" onclick="showTab('resources')">Resources</div>
+            <div class="tab" onclick="showTab('comments')">Comments</div>
+            <div class="tab" onclick="showTab('news')">News</div>
+            <div class="tab" onclick="showTab('subscriptions')">Subscriptions</div>
+        </div>
+
+        <div class="tab-content">
+            <!-- Overview Tab -->
+            <div id="overview" class="tab-pane active">
+                <h2>System Overview</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-users">-</div>
+                        <div class="stat-label">Total Users</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-videos">-</div>
+                        <div class="stat-label">Total Videos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-tags">-</div>
+                        <div class="stat-label">Total Tags</div>
+                    </div>
+                </div>
+                <div id="overview-message"></div>
+            </div>
+
+            <!-- Users Tab -->
+            <div id="users" class="tab-pane">
+                <h2>User Management</h2>
+                <button class="btn btn-primary" onclick="showCreateUserModal()" style="margin-bottom: 20px;">Create New
+                    User</button>
+                <div id="users-message"></div>
+                <div id="users-loading" class="loading">Loading users...</div>
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <table id="users-table" class="data-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Created</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="users-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Videos Tab -->
+            <div id="videos" class="tab-pane">
+                <h2>Video Management</h2>
+
+                <!-- Category Order Management -->
+                <div
+                    style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+                    <h3>Video Category Display Order</h3>
+                    <p style="color: #666; margin-bottom: 15px;">Drag and drop to reorder how categories appear on the
+                        videos page</p>
+                    <div id="category-order-list"
+                        style="min-height: 100px; border: 2px dashed #ddd; border-radius: 8px; padding: 15px;">
+                        <!-- Category order items will be loaded here -->
+                    </div>
+                    <button class="btn btn-primary" onclick="saveCategoryOrder()" style="margin-top: 15px;">💾 Save
+                        Order</button>
+                    <button class="btn btn-secondary" onclick="resetCategoryOrder()"
+                        style="margin-top: 15px; margin-left: 10px;">🔄 Reset to Default</button>
+                </div>
+
+                <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="showUploadModal()">📁 Upload Video</button>
+                    <button class="btn btn-primary" onclick="showDownloadModal()">⬇️ Download from URL</button>
+                    <button class="btn btn-primary" onclick="showExternalVideoModal()">🔗 Add External Video</button>
+                    <a href="download-status.html" class="btn"
+                        style="background: #28a745; color: white; text-decoration: none;">📊 Download Status</a>
+                    <button class="btn btn-danger" onclick="bulkDeleteVideos()" id="bulk-delete-videos-btn" disabled>🗑️ Delete Selected</button>
+                    <button class="btn btn-warning" onclick="bulkChangeVisibility()" id="bulk-visibility-btn" disabled>👁️ Change Visibility</button>
+                    <button class="btn" onclick="bulkChangeTags()" id="bulk-tags-btn" disabled style="background: #17a2b8; color: white;">🏷️ Update Tags</button>
+                </div>
+
+                <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin-bottom: 20px; display: none;"
+                    id="admin-search-filter">
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; align-items: center;">
+                        <div style="flex: 1; min-width: 200px;">
+                            <input type="text" id="admin-search-input" placeholder="Search videos..."
+                                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div style="min-width: 150px;">
+                            <select id="admin-tag-filter"
+                                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <option value="">All Tags</option>
+                            </select>
+                        </div>
+                        <div style="min-width: 120px;">
+                            <select id="admin-visibility-filter"
+                                style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <option value="">All Videos</option>
+                                <option value="public">Public Only</option>
+                                <option value="private">Private Only</option>
+                            </select>
+                        </div>
+                        <button class="btn" onclick="clearAdminFilters()"
+                            style="background: #6c757d; color: white;">Clear</button>
+                    </div>
+                </div>
+                <div id="videos-message"></div>
+                <div id="videos-loading" class="loading">Loading videos...</div>
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <table id="videos-table" class="data-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="select-all-videos" onchange="toggleAllVideos()"></th>
+                                <th>Filename</th>
+                                <th>Title</th>
+                                <th>Owner</th>
+                                <th>Visibility</th>
+                                <th>Size</th>
+                                <th>Tags</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="videos-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Analytics Tab -->
+            <div id="analytics" class="tab-pane">
+                <h2>Article Analytics</h2>
+                <div class="stats-grid" style="margin-bottom: 30px;">
+                    <div class="stat-card">
+                        <div class="stat-number" id="analytics-total-articles">-</div>
+                        <div class="stat-label">Total Articles</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="analytics-total-views">-</div>
+                        <div class="stat-label">Total Views</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="analytics-avg-views">-</div>
+                        <div class="stat-label">Avg Views/Article</div>
+                    </div>
+                </div>
+
+                <h3>Top 10 Most Viewed Articles</h3>
+                <div id="analytics-loading" class="loading">Loading analytics...</div>
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <table id="analytics-table" class="data-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Category</th>
+                                <th>Views</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="analytics-tbody"></tbody>
+                    </table>
+                </div>
+
+                <h3 style="margin-top: 40px;">Category Performance</h3>
+                <div id="category-stats-container" style="margin-top: 20px;">
+                    <!-- Category stats will be loaded here -->
+                </div>
+
+                <div id="analytics-message"></div>
+            </div>
+
+            <!-- Articles Tab -->
+            <div id="articles" class="tab-pane">
+                <h2>Article Management</h2>
+
+                <!-- Article Categories -->
+                <div
+                    style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+                    <h3>Article Categories</h3>
+                    <div id="article-categories-list"
+                        style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+                        <span class="category-badge category-sermon">Sermon</span>
+                        <span class="category-badge category-politics">Politics</span>
+                        <span class="category-badge category-devotional">Devotional</span>
+                        <span class="category-badge category-apologetics">Apologetics</span>
+                        <span class="category-badge category-ministry">Ministry</span>
+                        <span class="category-badge category-service_notes">Service Notes</span>
+                        <span class="category-badge category-study_notes">Study Notes</span>
+                        <span class="category-badge category-bible_study">Bible Study</span>
+                        <span class="category-badge category-general">General</span>
+                    </div>
+                    <p style="color: #666; margin-top: 15px; font-size: 0.9rem;">Categories are predefined. Use tags for
+                        custom organization.</p>
+                </div>
+
+                <!-- Article Tags Management -->
+                <div
+                    style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+                    <h3>Article Tags</h3>
+                    <div id="article-tags-loading" class="text-center" style="padding: 20px;">
+                        <div class="spinner-border" role="status"></div>
+                        <p class="mt-2">Loading tags...</p>
+                    </div>
+                    <div id="article-tags-container" style="display: none;">
+                        <div id="article-tags-list"
+                            style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px;">
+                            <!-- Tags will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div id="articles-message"></div>
+            </div>
+
+            <!-- Tags Tab -->
+            <div id="tags" class="tab-pane">
+                <h2>Tag Management</h2>
+                <div id="tags-message"></div>
+                <div id="tags-loading" class="loading">Loading tags...</div>
+                <div id="tags-container" style="display: none;">
+                    <div style="margin-bottom: 20px;">
+                        <input type="text" id="new-tag-name" placeholder="New tag name"
+                            style="padding: 8px; margin-right: 10px;">
+                        <button class="btn btn-primary" onclick="createTag()">Create Tag</button>
+                    </div>
+                    <table id="tags-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Tag Name</th>
+                                <th>Video Count</th>
+                                <th>Videos Using This Tag</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tags-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Resources Tab -->
+            <div id="resources" class="tab-pane">
+                <h2>Resource Management</h2>
+
+                <!-- Category Order Management -->
+                <div
+                    style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+                    <h3>Resource Category Display Order</h3>
+                    <p style="color: #666; margin-bottom: 15px;">Drag and drop to reorder how categories appear on the
+                        resources page</p>
+                    <div id="resource-category-order-list"
+                        style="min-height: 100px; border: 2px dashed #ddd; border-radius: 8px; padding: 15px;">
+                        <!-- Category order items will be loaded here -->
+                    </div>
+                    <button class="btn btn-primary" onclick="saveResourceCategoryOrder()" style="margin-top: 15px;">💾
+                        Save Order</button>
+                </div>
+
+                <!-- Category Management -->
+                <div
+                    style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+                    <h3>Manage Categories</h3>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="text" id="new-category-name" placeholder="New category name"
+                            style="flex: 1; width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                        <button class="btn btn-primary" onclick="addCategory()">Add Category</button>
+                    </div>
+                    <div id="categories-list" style="margin-top: 20px; display: flex; flex-wrap: wrap; gap: 10px;">
+                        <!-- Categories will be loaded here -->
+                    </div>
+                </div>
+
+                <!-- Add Resource Form -->
+                <div
+                    style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+                    <h3>Add New Resource</h3>
+                    <form id="resource-form-admin">
+                        <div class="form-group">
+                            <label>Resource Name:</label>
+                            <input type="text" id="resource-name" placeholder="Dr. Frank Turek" required
+                                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <div class="form-group">
+                            <label>Categories:</label>
+                            <div id="resource-category"></div>
+                            <small style="color: #666;">Select one or more categories</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Website URL:</label>
+                            <div style="display: flex; gap: 10px;">
+                                <input type="url" id="resource-url" placeholder="https://example.com" required
+                                    style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                                <button type="button" class="btn btn-primary" onclick="analyzeResourceUrl()"
+                                    id="analyze-resource-btn" style="white-space: nowrap;">
+                                    <span id="analyze-resource-text">🔍 Auto-Fill</span>
+                                    <span id="analyze-resource-spinner" class="spinner-border spinner-border-sm"
+                                        style="display:none;"></span>
+                                </button>
+                            </div>
+                            <small style="color: #666;">Paste URL and click Auto-Fill to extract title and
+                                description</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Description:</label>
+                            <input type="text" id="resource-description" placeholder="Brief description of the resource"
+                                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Resource</button>
+                    </form>
+                </div>
+
+                <!-- Existing Resources -->
+                <div
+                    style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
+                    <h3>Existing Resources</h3>
+                    <div id="resources-list-admin">
+                        <div class="text-center">
+                            <div class="spinner-border" role="status"></div>
+                            <p class="mt-2">Loading resources...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="resources-message"></div>
+            </div>
+
+            <!-- Comments Tab -->
+            <div id="comments" class="tab-pane">
+                <h2>Comment Moderation</h2>
+                <div class="stats-grid" style="margin-bottom: 30px;">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-comments">-</div>
+                        <div class="stat-label">Total Comments</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="active-comments">-</div>
+                        <div class="stat-label">Active Comments</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="deleted-comments">-</div>
+                        <div class="stat-label">Deleted Comments</div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                    <button class="btn btn-danger" onclick="bulkDeleteComments()" id="bulk-delete-btn" disabled>🗑️
+                        Delete Selected</button>
+                    <button class="btn btn-primary" onclick="bulkRestoreComments()" id="bulk-restore-btn" disabled>🔄
+                        Restore Selected</button>
+                    <button class="btn" onclick="selectAllComments()" style="background: #6c757d; color: white;">☑️
+                        Select All</button>
+                    <button class="btn" onclick="clearCommentSelection()" style="background: #6c757d; color: white;">❌
+                        Clear Selection</button>
+                </div>
+                <div id="comments-message"></div>
+                <div id="comments-loading" class="loading">Loading comments...</div>
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <table id="comments-table" class="data-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="select-all-comments" onchange="toggleAllComments()"></th>
+                                <th>Author</th>
+                                <th>Article</th>
+                                <th>Content</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comments-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- News Tab -->
+            <div id="news" class="tab-pane">
+                <h2>News Management</h2>
+                <div style="margin-bottom: 20px; margin-top: 20px;">
+                    <a href="create-news.html" class="btn btn-primary">Create News Article</a>
+                    <a href="news.html" class="btn" style="background: #28a745; color: white; margin-left: 10px;">View
+                        News Page</a>
+                </div>
+                <div id="news-message"></div>
+                <div id="news-loading" class="loading">Loading news...</div>
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <table id="news-table" class="data-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Author</th>
+                                <th>Status</th>
+                                <th>Breaking</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="news-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Subscriptions Tab -->
+            <div id="subscriptions" class="tab-pane">
+                <h2>Subscription Management</h2>
+                <div style="margin-bottom: 20px;">
+                    <a href="reset-subscription.html" class="btn btn-warning" target="_blank">🔧 Reset User Subscription</a>
+                    <small style="color: #666; margin-left: 10px;">Use this tool to fix users stuck in "pending" status</small>
+                </div>
+                <div class="stats-grid" style="margin-bottom: 30px;">
+                    <div class="stat-card">
+                        <div class="stat-number" id="total-subscribers">-</div>
+                        <div class="stat-label">Total Subscribers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="active-subscriptions">-</div>
+                        <div class="stat-label">Active Subscriptions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="monthly-revenue">-</div>
+                        <div class="stat-label">Monthly Revenue</div>
+                    </div>
+                </div>
+                <div id="subscriptions-message"></div>
+                <div id="subscriptions-loading" class="loading">Loading subscriptions...</div>
+                <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
+                    <table id="subscriptions-table" class="data-table" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Email</th>
+                                <th>Tier</th>
+                                <th>Status</th>
+                                <th>Usage</th>
+                                <th>Next Billing</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subscriptions-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit User Modal -->
+    <div id="edit-user-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('edit-user-modal')">&times;</span>
+            <h3>Edit User Role</h3>
+            <div class="form-group">
+                <label>First Name:</label>
+                <input type="text" id="edit-user-first-name">
+            </div>
+            <div class="form-group">
+                <label>Last Name:</label>
+                <input type="text" id="edit-user-last-name">
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="text" id="edit-user-email" readonly>
+            </div>
+            <div class="form-group">
+                <label>Role:</label>
+                <select id="edit-user-role">
+                    <!-- Options populated dynamically based on current user role -->
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="updateUserRole()">Update Role</button>
+        </div>
+    </div>
+
+    <!-- Edit Video Modal -->
+    <div id="edit-video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('edit-video-modal')">&times;</span>
+            <h3>Edit Video</h3>
+            <div class="form-group">
+                <label>Filename:</label>
+                <input type="text" id="edit-video-filename" readonly>
+            </div>
+            <div class="form-group">
+                <label>Title:</label>
+                <input type="text" id="edit-video-title">
+            </div>
+            <div class="form-group">
+                <label>Tags (comma-separated):</label>
+                <input type="text" id="edit-video-tags" placeholder="news, politics, 2024" autocomplete="off">
+                <div id="edit-tag-suggestions"
+                    style="display: none; border: 1px solid #ddd; max-height: 150px; overflow-y: auto; background: white; position: absolute; z-index: 1000; width: calc(100% - 40px);">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Owner:</label>
+                <select id="edit-video-owner-select" style="display: none;">
+                    <!-- Populated dynamically -->
+                </select>
+                <input type="text" id="edit-video-owner">
+                <button type="button" class="btn" onclick="toggleOwnerDropdown()"
+                    style="margin-left: 10px; padding: 5px 10px; font-size: 12px;">📋 Select User</button>
+            </div>
+            <div class="form-group">
+                <label>Visibility:</label>
+                <select id="edit-video-visibility">
+                    <option value="public">Public (visible to all users)</option>
+                    <option value="private">Private (only visible to owner)</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="updateVideo()">Update Video</button>
+        </div>
+    </div>
+
+    <!-- Create User Modal -->
+    <div id="create-user-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('create-user-modal')">&times;</span>
+            <h3>Create New User</h3>
+            <div class="form-group">
+                <label>First Name:</label>
+                <input type="text" id="create-user-first-name" placeholder="John">
+            </div>
+            <div class="form-group">
+                <label>Last Name:</label>
+                <input type="text" id="create-user-last-name" placeholder="Smith">
+            </div>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="email" id="create-user-email" placeholder="user@example.com">
+            </div>
+            <div class="form-group">
+                <label>Password:</label>
+                <input type="password" id="create-user-password" placeholder="Enter secure password">
+            </div>
+            <div class="form-group">
+                <label>Role:</label>
+                <select id="create-user-role">
+                    <!-- Options populated dynamically based on current user role -->
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="createUser()">Create User</button>
+        </div>
+    </div>
+
+    <!-- Reset Password Modal -->
+    <div id="reset-password-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('reset-password-modal')">&times;</span>
+            <h3>Reset User Password</h3>
+            <div class="form-group">
+                <label>Email:</label>
+                <input type="text" id="reset-password-email" readonly>
+            </div>
+            <div class="form-group">
+                <label>New Password:</label>
+                <input type="password" id="reset-password-new" placeholder="Enter new password">
+            </div>
+            <button class="btn btn-primary" onclick="updateUserPassword()">Reset Password</button>
+        </div>
+    </div>
+
+    <!-- Edit Tag Videos Modal -->
+    <div id="edit-tag-videos-modal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span class="close" onclick="closeModal('edit-tag-videos-modal')">&times;</span>
+            <h3 id="edit-tag-videos-title">Edit Videos for Tag</h3>
+            <div style="margin-bottom: 20px;">
+                <p>Select which videos should have this tag:</p>
+            </div>
+            <div id="tag-videos-list"
+                style="max-height: 400px; overflow-y: auto; border: 1px solid #ddd; padding: 10px;">
+                <!-- Video checkboxes will be populated here -->
+            </div>
+            <div style="margin-top: 20px;">
+                <button class="btn btn-primary" onclick="saveTagVideoAssociations()">Save Changes</button>
+                <button class="btn" onclick="closeModal('edit-tag-videos-modal')"
+                    style="margin-left: 10px;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Video Modal -->
+    <div id="upload-video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('upload-video-modal')">&times;</span>
+            <h3>Upload Video</h3>
+            <div class="form-group">
+                <label>Select Video File:</label>
+                <input type="file" id="upload-video-file" accept="video/*">
+                <small style="color: #666; font-size: 12px;">File will be uploaded to S3 with thumbnail
+                    generation</small>
+            </div>
+            <div class="form-group">
+                <label>Title:</label>
+                <input type="text" id="upload-video-title" placeholder="Video title">
+            </div>
+            <div class="form-group">
+                <label>Tags (comma-separated):</label>
+                <input type="text" id="upload-video-tags" placeholder="news, politics, 2024" autocomplete="off">
+                <div id="upload-tag-suggestions"
+                    style="display: none; border: 1px solid #ddd; max-height: 150px; overflow-y: auto; background: white; position: absolute; z-index: 1000; width: calc(100% - 40px);">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Visibility:</label>
+                <select id="upload-video-visibility">
+                    <option value="public">Public (visible to all users)</option>
+                    <option value="private">Private (only visible to you)</option>
+                </select>
+            </div>
+            <div id="upload-progress" style="display: none;">
+                <div style="background: #f0f0f0; border-radius: 10px; overflow: hidden; margin: 10px 0;">
+                    <div id="upload-progress-bar"
+                        style="background: #667eea; height: 20px; width: 0%; transition: width 0.3s;"></div>
+                </div>
+                <div id="upload-status">Preparing upload...</div>
+            </div>
+            <button class="btn btn-primary" onclick="uploadVideo()" id="upload-btn">Upload Video</button>
+        </div>
+    </div>
+
+    <!-- Download Video Modal -->
+    <div id="download-video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('download-video-modal')">&times;</span>
+            <h3>Download Video from URL</h3>
+            <div class="form-group">
+                <label>Video URL:</label>
+                <input type="url" id="download-video-url" placeholder="https://youtube.com/watch?v=...">
+            </div>
+            <div class="form-group">
+                <label>Output Filename:</label>
+                <input type="text" id="download-video-filename" placeholder="my-video.mp4">
+            </div>
+            <div class="form-group">
+                <label>Title:</label>
+                <input type="text" id="download-video-title" placeholder="Video title">
+            </div>
+            <div class="form-group">
+                <label>Tags (comma-separated):</label>
+                <input type="text" id="download-video-tags" placeholder="news, politics, 2024" autocomplete="off">
+                <div id="download-tag-suggestions"
+                    style="display: none; border: 1px solid #ddd; max-height: 150px; overflow-y: auto; background: white; position: absolute; z-index: 1000; width: calc(100% - 40px);">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Visibility:</label>
+                <select id="download-video-visibility">
+                    <option value="public">Public (visible to all users)</option>
+                    <option value="private">Private (only visible to you)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="download-force-fargate"> Force Fargate (for long videos)
+                </label>
+            </div>
+            <button class="btn btn-primary" onclick="startDownload()">Start Download</button>
+        </div>
+    </div>
+
+    <!-- View Video Modal -->
+    <div id="view-video-modal" class="modal">
+        <div class="modal-content" style="max-width: 800px;">
+            <span class="close" onclick="closeModal('view-video-modal')">&times;</span>
+            <h3 id="view-video-title">Video Title</h3>
+            <video id="view-video-player" controls style="width: 100%; max-height: 400px; background: #000;">
+                <source id="view-video-source" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+    </div>
+
+    <!-- Add External Video Modal -->
+    <div id="external-video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('external-video-modal')">&times;</span>
+            <h3>Add External Video</h3>
+            <div class="form-group">
+                <label>Video URL:</label>
+                <input type="url" id="external-video-url"
+                    placeholder="https://youtube.com/watch?v=... or https://rumble.com/...">
+            </div>
+            <div class="form-group">
+                <label>Title:</label>
+                <input type="text" id="external-video-title" placeholder="Video title">
+            </div>
+            <div class="form-group">
+                <label>Tags (comma-separated):</label>
+                <input type="text" id="external-video-tags" placeholder="news, politics, 2024" autocomplete="off">
+                <div id="external-tag-suggestions"
+                    style="display: none; border: 1px solid #ddd; max-height: 150px; overflow-y: auto; background: white; position: absolute; z-index: 1000; width: calc(100% - 40px);">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Visibility:</label>
+                <select id="external-video-visibility">
+                    <option value="public">Public (visible to all users)</option>
+                    <option value="private">Private (only visible to you)</option>
+                </select>
+            </div>
+            <button class="btn btn-primary" onclick="addExternalVideo()">Add External Video</button>
+        </div>
+    </div>
+
+    <!-- Edit Subscription Modal -->
+    <div id="edit-subscription-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('edit-subscription-modal')">&times;</span>
+            <h3>Edit User Subscription</h3>
+            <div class="form-group">
+                <label>User:</label>
+                <input type="text" id="edit-sub-user-email" readonly>
+            </div>
+            <div class="form-group">
+                <label>Subscription Tier:</label>
+                <select id="edit-sub-tier">
+                    <option value="free">Free (2GB, 50 videos)</option>
+                    <option value="premium">Premium (25GB, 500 videos)</option>
+                    <option value="pro">Pro (100GB, 2000 videos)</option>
+                    <option value="enterprise">Enterprise (Unlimited)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status:</label>
+                <select id="edit-sub-status">
+                    <option value="active">Active</option>
+                    <option value="pending">Pending</option>
+                    <option value="cancelled">Cancelled</option>
+                    <option value="expired">Expired</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Next Billing Date:</label>
+                <input type="date" id="edit-sub-billing-date">
+            </div>
+            <button class="btn btn-primary" onclick="updateSubscription()">Update Subscription</button>
+            <button class="btn btn-danger" onclick="cancelUserSubscription()" style="margin-left: 10px;">Cancel
+                Subscription</button>
+        </div>
+    </div>
+
+    <script>
+        const AUTH_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/auth';
+        const ADMIN_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/admin';
+        const TAG_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/tags';
+        const COMMENTS_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/comments';
+        const NEWS_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/news';
+        const URL_ANALYSIS_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/analyze';
+        const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
+        const ARTICLES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/articles';
+
+        let currentUser = null;
+        let authToken = null;
+        let allTags = [];
+        let allAdminVideos = [];
+        let filteredAdminVideos = [];
+
+        // Initialize dashboard
+        window.addEventListener('load', function () {
+            authToken = localStorage.getItem('auth_token');
+            const userData = localStorage.getItem('user_data');
+
+            if (!authToken || !userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            currentUser = JSON.parse(userData);
+
+            if (currentUser.role !== 'admin' && currentUser.role !== 'super_user') {
+                alert('Admin access required');
+                window.location.href = 'videos.html';
+                return;
+            }
+
+            loadAllTags();
+            loadOverview();
+            
+            // Check for hash in URL to open specific tab
+            setTimeout(() => {
+                const hash = window.location.hash.substring(1);
+                if (hash && document.getElementById(hash)) {
+                    const tabElement = document.querySelector('.tab[onclick*="' + hash + '"]');
+                    if (tabElement) {
+                        tabElement.click();
+                    }
+                }
+            }, 100);
+        });
+
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+            // Show selected tab
+            if (typeof event !== 'undefined' && event.target) {
+                event.target.classList.add('active');
+            } else {
+                const tabElement = document.querySelector('.tab[onclick*="' + tabName + '"]');
+                if (tabElement) tabElement.classList.add('active');
+            }
+            document.getElementById(tabName).classList.add('active');
+
+            // Load data for tab
+            if (tabName === 'users') loadUsers();
+            if (tabName === 'videos') {loadVideos(); loadCategoryOrder();}
+            if (tabName === 'tags') loadTags();
+            if (tabName === 'articles') loadArticleTags();
+            if (tabName === 'analytics') loadAnalytics();
+            if (tabName === 'resources') loadResourcesAdmin();
+            if (tabName === 'comments') loadComments();
+            if (tabName === 'news') loadNews();
+            if (tabName === 'subscriptions') loadSubscriptions();
+            if (tabName === 'overview') loadOverview();
+        }
+
+        async function loadOverview() {
+            try {
+                const [usersRes, videosRes, tagsRes] = await Promise.all([
+                    fetch(`${ADMIN_API}?action=users`, {
+                        headers: {'Authorization': `Bearer ${authToken}`}
+                    }),
+                    fetch(`${ADMIN_API}?action=videos`, {
+                        headers: {'Authorization': `Bearer ${authToken}`}
+                    }),
+                    fetch(`${TAG_API}?action=get_all_tags`)
+                ]);
+
+                const users = await usersRes.json();
+                const videos = await videosRes.json();
+                const tags = await tagsRes.json();
+
+                document.getElementById('total-users').textContent = users.count || 0;
+                document.getElementById('total-videos').textContent = videos.count || 0;
+                document.getElementById('total-tags').textContent = tags.count || 0;
+
+                document.getElementById('overview-message').innerHTML =
+                    '<div class="success">System overview loaded successfully</div>';
+            } catch (error) {
+                document.getElementById('overview-message').innerHTML =
+                    '<div class="error">Failed to load overview data</div>';
+            }
+        }
+
+        async function loadUsers() {
+            document.getElementById('users-loading').style.display = 'block';
+            document.getElementById('users-table').style.display = 'none';
+
+            try {
+                const response = await fetch(`${ADMIN_API}?action=users`, {
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayUsers(data.users);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('users-message').innerHTML =
+                    `<div class="error">Failed to load users: ${error.message}</div>`;
+            } finally {
+                document.getElementById('users-loading').style.display = 'none';
+            }
+        }
+
+        function displayUsers(users) {
+            const tbody = document.getElementById('users-tbody');
+            tbody.innerHTML = '';
+
+            users.forEach(user => {
+                const displayName = user.first_name && user.last_name ?
+                    `${user.first_name} ${user.last_name}` :
+                    (user.first_name || user.last_name || 'No name set');
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${displayName}</td>
+                    <td>${user.email}</td>
+                    <td><span class="badge ${user.role === 'admin' ? 'badge-primary' : 'badge-secondary'}">${user.role}</span></td>
+                    <td>${new Date(user.created_at).toLocaleDateString()}</td>
+                    <td>${user.active ? 'Active' : 'Inactive'}</td>
+                    <td>
+                        <button class="btn btn-warning" onclick="editUser('${user.user_id}', '${user.email}', '${user.role}', '${user.first_name || ''}', '${user.last_name || ''}')">Edit</button>
+                        <button class="btn btn-primary" onclick="resetUserPassword('${user.user_id}', '${user.email}')">Reset Password</button>
+                        <button class="btn btn-danger" onclick="deleteUser('${user.user_id}', '${user.email}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            document.getElementById('users-table').style.display = 'table';
+        }
+
+        async function loadVideos() {
+            document.getElementById('videos-loading').style.display = 'block';
+            document.getElementById('videos-table').style.display = 'none';
+
+            try {
+                // Use ADMIN API to get ALL videos (including those without tags)
+                const response = await fetch(`${ADMIN_API}?action=videos`, {
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayVideos(data.videos);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('videos-message').innerHTML =
+                    `<div class="error">Failed to load videos: ${error.message}</div>`;
+            } finally {
+                document.getElementById('videos-loading').style.display = 'none';
+            }
+        }
+
+        function displayVideos(videos) {
+            allAdminVideos = videos;
+            filteredAdminVideos = [...videos];
+
+            // Setup admin filters
+            setupAdminFilters();
+
+            renderAdminVideos(filteredAdminVideos);
+            document.getElementById('videos-table').style.display = 'table';
+            document.getElementById('admin-search-filter').style.display = 'block';
+        }
+
+        function renderAdminVideos(videos) {
+            const tbody = document.getElementById('videos-tbody');
+            tbody.innerHTML = '';
+
+            videos.forEach(video => {
+                const row = document.createElement('tr');
+                const sizeInMB = (video.size / (1024 * 1024)).toFixed(1);
+                const videoTags = video.tags || []; // Handle null/undefined tags
+                const tags = videoTags.length > 0 ? videoTags.join(', ') : 'No tags';
+
+                const embedUrl = `https://christianconservativestoday.com/embed.html?v=${video.filename}&t=${encodeURIComponent(video.title)}`;
+                const owner = video.owner || 'system';
+                const visibility = video.visibility || 'public';
+                const videoType = video.video_type || 'local';
+                const visibilityBadge = visibility === 'private' ? '<span style="background: #dc3545; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px;">Private</span>' : '<span style="background: #28a745; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px;">Public</span>';
+                const typeBadge = videoType === 'local' ? '' : `<span style="background: #007bff; color: white; padding: 2px 6px; border-radius: 3px; font-size: 11px; margin-left: 5px;">${videoType.toUpperCase()}</span>`;
+
+                row.innerHTML = `
+                    <td><input type="checkbox" class="video-checkbox" value="${video.filename}"></td>
+                    <td>${video.filename}${typeBadge}</td>
+                    <td>${video.title}</td>
+                    <td>${owner}</td>
+                    <td>${visibilityBadge}</td>
+                    <td>${videoType === 'local' ? sizeInMB + ' MB' : 'External'}</td>
+                    <td>${tags}</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="viewVideo('${video.filename}', '${video.title}', '${videoType}', '${video.external_url || ''}')" style="margin-right: 5px; font-size: 12px;">👁️ View</button>
+                        <button class="btn" onclick="copyEmbedLink('${embedUrl}')" style="margin-right: 5px; font-size: 12px; background: #28a745; color: white;">🔗 Embed</button>
+                        <button class="btn btn-warning edit-video-btn" data-filename="${encodeURIComponent(video.filename)}" data-title="${encodeURIComponent(video.title)}" data-tags="${encodeURIComponent(video.tags.join(','))}" data-owner="${encodeURIComponent(owner)}" data-visibility="${encodeURIComponent(visibility)}" style="margin-right: 5px; font-size: 12px;">Edit</button>
+                        <button class="btn btn-danger" onclick="deleteVideo('${video.filename}')" style="font-size: 12px;">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            // Add event listeners for edit buttons
+            document.querySelectorAll('.edit-video-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const filename = decodeURIComponent(this.dataset.filename);
+                    const title = decodeURIComponent(this.dataset.title);
+                    const tags = decodeURIComponent(this.dataset.tags);
+                    const owner = decodeURIComponent(this.dataset.owner);
+                    const visibility = decodeURIComponent(this.dataset.visibility);
+                    editVideo(filename, title, tags, owner, visibility);
+                });
+            });
+        }
+
+        function setupAdminFilters() {
+            const searchInput = document.getElementById('admin-search-input');
+            const tagFilter = document.getElementById('admin-tag-filter');
+
+            // Setup tag filter
+            tagFilter.innerHTML = '<option value="">All Tags</option>';
+            const uniqueTags = new Set();
+            allAdminVideos.forEach(video => {
+                const videoTags = video.tags || [];
+                videoTags.forEach(tag => uniqueTags.add(tag));
+            });
+
+            Array.from(uniqueTags).sort().forEach(tag => {
+                const option = document.createElement('option');
+                option.value = tag;
+                option.textContent = tag;
+                tagFilter.appendChild(option);
+            });
+
+            // Add event listeners
+            const visibilityFilter = document.getElementById('admin-visibility-filter');
+            searchInput.addEventListener('input', applyAdminFilters);
+            tagFilter.addEventListener('change', applyAdminFilters);
+            visibilityFilter.addEventListener('change', applyAdminFilters);
+        }
+
+        function applyAdminFilters() {
+            const searchTerm = document.getElementById('admin-search-input').value.toLowerCase();
+            const selectedTag = document.getElementById('admin-tag-filter').value;
+            const selectedVisibility = document.getElementById('admin-visibility-filter').value;
+
+            filteredAdminVideos = allAdminVideos.filter(video => {
+                const matchesSearch = !searchTerm ||
+                    video.title.toLowerCase().includes(searchTerm) ||
+                    video.filename.toLowerCase().includes(searchTerm);
+
+                const videoTags = video.tags || [];
+                const matchesTag = !selectedTag || videoTags.includes(selectedTag);
+
+                const matchesVisibility = !selectedVisibility ||
+                    (video.visibility || 'public') === selectedVisibility;
+
+                return matchesSearch && matchesTag && matchesVisibility;
+            });
+
+            renderAdminVideos(filteredAdminVideos);
+        }
+
+        function clearAdminFilters() {
+            document.getElementById('admin-search-input').value = '';
+            document.getElementById('admin-tag-filter').value = '';
+            document.getElementById('admin-visibility-filter').value = '';
+            applyAdminFilters();
+        }
+        
+        function toggleAllVideos() {
+            const selectAll = document.getElementById('select-all-videos');
+            const checkboxes = document.querySelectorAll('.video-checkbox');
+            checkboxes.forEach(cb => cb.checked = selectAll.checked);
+            updateBulkVideoButtons();
+        }
+        
+        function updateBulkVideoButtons() {
+            const selected = document.querySelectorAll('.video-checkbox:checked');
+            const btns = ['bulk-delete-videos-btn', 'bulk-visibility-btn', 'bulk-tags-btn'];
+            btns.forEach(id => document.getElementById(id).disabled = selected.length === 0);
+        }
+        
+        async function bulkDeleteVideos() {
+            const selected = Array.from(document.querySelectorAll('.video-checkbox:checked')).map(cb => cb.value);
+            if (!confirm(`Delete ${selected.length} video(s)?`)) return;
+            
+            for (const filename of selected) {
+                await fetch(`${ADMIN_API}?action=video&filename=${encodeURIComponent(filename)}`, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+            }
+            document.getElementById('videos-message').innerHTML = '<div class="success">Videos deleted</div>';
+            loadVideos();
+        }
+        
+        async function bulkChangeVisibility() {
+            const selected = Array.from(document.querySelectorAll('.video-checkbox:checked')).map(cb => cb.value);
+            const visibility = prompt('Set visibility to (public/private):', 'public');
+            if (!visibility || !['public', 'private'].includes(visibility)) return;
+            
+            for (const filename of selected) {
+                const video = allAdminVideos.find(v => v.filename === filename);
+                await fetch(`${TAG_API}?action=update_video`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        video_id: filename,
+                        title: video.title,
+                        tags: video.tags,
+                        owner: video.owner,
+                        visibility: visibility
+                    })
+                });
+            }
+            document.getElementById('videos-message').innerHTML = '<div class="success">Visibility updated</div>';
+            loadVideos();
+        }
+        
+        async function bulkChangeTags() {
+            const selected = Array.from(document.querySelectorAll('.video-checkbox:checked')).map(cb => cb.value);
+            const action = prompt('Add or Remove tags? (add/remove):', 'add');
+            if (!action || !['add', 'remove'].includes(action)) return;
+            
+            const tagsStr = prompt(`Enter tags to ${action} (comma-separated):`, '');
+            if (!tagsStr) return;
+            const tags = tagsStr.split(',').map(t => t.trim()).filter(t => t);
+            
+            for (const filename of selected) {
+                const video = allAdminVideos.find(v => v.filename === filename);
+                let newTags = [...video.tags];
+                if (action === 'add') {
+                    newTags = [...new Set([...newTags, ...tags])];
+                } else {
+                    newTags = newTags.filter(t => !tags.includes(t));
+                }
+                await fetch(`${TAG_API}?action=update_video`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        video_id: filename,
+                        title: video.title,
+                        tags: newTags,
+                        owner: video.owner,
+                        visibility: video.visibility
+                    })
+                });
+            }
+            document.getElementById('videos-message').innerHTML = '<div class="success">Tags updated</div>';
+            loadVideos();
+        }
+
+        function editUser(userId, email, role, firstName = '', lastName = '') {
+            document.getElementById('edit-user-first-name').value = firstName;
+            document.getElementById('edit-user-last-name').value = lastName;
+            document.getElementById('edit-user-email').value = email;
+
+            // Set role options based on current user role
+            const roleSelect = document.getElementById('edit-user-role');
+            roleSelect.innerHTML = '';
+
+            if (currentUser.role === 'super_user') {
+                // Super users can set all roles
+                roleSelect.innerHTML = `
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                    <option value="super_user">Super User</option>
+                `;
+            } else {
+                // Admins can only set user and admin roles
+                roleSelect.innerHTML = `
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                `;
+            }
+
+            roleSelect.value = role;
+            document.getElementById('edit-user-modal').dataset.userId = userId;
+            document.getElementById('edit-user-modal').style.display = 'block';
+        }
+
+        async function updateUserRole() {
+            const userId = document.getElementById('edit-user-modal').dataset.userId;
+            const firstName = document.getElementById('edit-user-first-name').value;
+            const lastName = document.getElementById('edit-user-last-name').value;
+            const newRole = document.getElementById('edit-user-role').value;
+
+            try {
+                const response = await fetch(`${ADMIN_API}?action=user_role`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        role: newRole,
+                        first_name: firstName,
+                        last_name: lastName
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('users-message').innerHTML =
+                        '<div class="success">User updated successfully</div>';
+                    closeModal('edit-user-modal');
+                    loadUsers();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('users-message').innerHTML =
+                    `<div class="error">Failed to update user: ${error.message}</div>`;
+            }
+        }
+
+        async function deleteUser(userId, email) {
+            if (!confirm(`Are you sure you want to delete user: ${email}? Their videos will be transferred to 'system'.`)) return;
+
+            try {
+                // First, reassign all videos owned by this user to 'system'
+                const videosResponse = await fetch(`${TAG_API}?action=list&user=${encodeURIComponent(currentUser.email)}&role=${encodeURIComponent(currentUser.role)}`);
+                const videosData = await videosResponse.json();
+
+                if (videosData.videos) {
+                    const userVideos = videosData.videos.filter(video => video.owner === email);
+                    for (const video of userVideos) {
+                        await fetch(`${TAG_API}?action=add_video`, {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                video_id: video.filename,
+                                filename: video.filename,
+                                title: video.title,
+                                tags: video.tags,
+                                owner: 'system',
+                                visibility: video.visibility,
+                                video_type: video.video_type,
+                                external_url: video.external_url
+                            })
+                        });
+                    }
+                }
+
+                // Then delete the user
+                const response = await fetch(`${ADMIN_API}?action=user&user_id=${userId}`, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('users-message').innerHTML =
+                        '<div class="success">User deleted successfully. Their videos have been transferred to system.</div>';
+                    loadUsers();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('users-message').innerHTML =
+                    `<div class="error">Failed to delete user: ${error.message}</div>`;
+            }
+        }
+
+        async function deleteVideo(filename) {
+            if (!filename || filename.trim() === '') {
+                document.getElementById('videos-message').innerHTML =
+                    '<div class="error">Cannot delete video: Invalid filename</div>';
+                return;
+            }
+            
+            if (!confirm(`Are you sure you want to delete video: ${filename}?`)) return;
+
+            try {
+                // Build URL manually to avoid encoding issues
+                const deleteUrl = `${ADMIN_API}?action=video&filename=${encodeURIComponent(filename)}`;
+                console.log('Delete URL:', deleteUrl);
+
+                const response = await fetch(deleteUrl, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+
+                console.log('Response status:', response.status);
+                const responseText = await response.text();
+                console.log('Response text:', responseText);
+
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    data = {error: responseText};
+                }
+
+                if (response.ok) {
+                    document.getElementById('videos-message').innerHTML =
+                        '<div class="success">Video deleted successfully</div>';
+                    loadVideos();
+                    loadOverview(); // Refresh stats
+                } else {
+                    throw new Error(data.error || `HTTP ${response.status}`);
+                }
+            } catch (error) {
+                console.error('Delete error:', error);
+                document.getElementById('videos-message').innerHTML =
+                    `<div class="error">Failed to delete video: ${error.message}</div>`;
+            }
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        function showCreateUserModal() {
+            document.getElementById('create-user-first-name').value = '';
+            document.getElementById('create-user-last-name').value = '';
+            document.getElementById('create-user-email').value = '';
+            document.getElementById('create-user-password').value = '';
+
+            // Set role options based on current user role
+            const roleSelect = document.getElementById('create-user-role');
+            roleSelect.innerHTML = '';
+
+            if (currentUser.role === 'super_user') {
+                // Super users can create all roles
+                roleSelect.innerHTML = `
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                    <option value="super_user">Super User</option>
+                `;
+            } else {
+                // Admins can only create users and admins
+                roleSelect.innerHTML = `
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                `;
+            }
+
+            roleSelect.value = 'user';
+            document.getElementById('create-user-modal').style.display = 'block';
+        }
+
+        async function createUser() {
+            const firstName = document.getElementById('create-user-first-name').value;
+            const lastName = document.getElementById('create-user-last-name').value;
+            const email = document.getElementById('create-user-email').value;
+            const password = document.getElementById('create-user-password').value;
+            const role = document.getElementById('create-user-role').value;
+
+            if (!email || !password) {
+                document.getElementById('users-message').innerHTML =
+                    '<div class="error">Please fill in email and password</div>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${AUTH_API}?action=register`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify({
+                        first_name: firstName,
+                        last_name: lastName,
+                        email: email,
+                        password: password,
+                        role: role
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('users-message').innerHTML =
+                        '<div class="success">User created successfully</div>';
+                    closeModal('create-user-modal');
+                    loadUsers();
+                } else {
+                    throw new Error(data.error || 'Failed to create user');
+                }
+            } catch (error) {
+                document.getElementById('users-message').innerHTML =
+                    `<div class="error">Failed to create user: ${error.message}</div>`;
+            }
+        }
+
+        function showUploadModal() {
+            document.getElementById('upload-video-file').value = '';
+            document.getElementById('upload-video-title').value = '';
+            document.getElementById('upload-video-tags').value = '';
+            document.getElementById('upload-video-visibility').value = 'public';
+            document.getElementById('upload-progress').style.display = 'none';
+            document.getElementById('upload-video-modal').style.display = 'block';
+            setupTagAutocomplete('upload-video-tags', 'upload-tag-suggestions');
+        }
+
+        function showDownloadModal() {
+            document.getElementById('download-video-url').value = '';
+            document.getElementById('download-video-filename').value = '';
+            document.getElementById('download-video-title').value = '';
+            document.getElementById('download-video-tags').value = '';
+            document.getElementById('download-video-visibility').value = 'public';
+            document.getElementById('download-force-fargate').checked = false;
+            document.getElementById('download-video-modal').style.display = 'block';
+            setupTagAutocomplete('download-video-tags', 'download-tag-suggestions');
+        }
+
+        function showExternalVideoModal() {
+            document.getElementById('external-video-url').value = '';
+            document.getElementById('external-video-title').value = '';
+            document.getElementById('external-video-tags').value = '';
+            document.getElementById('external-video-visibility').value = 'public';
+            document.getElementById('external-video-modal').style.display = 'block';
+            setupTagAutocomplete('external-video-tags', 'external-tag-suggestions');
+        }
+
+        function viewVideo(filename, title, videoType = 'local', externalUrl = '') {
+            const modalContent = document.querySelector('#view-video-modal .modal-content');
+            document.getElementById('view-video-title').textContent = title;
+
+            if (videoType === 'local') {
+                const videoUrl = `https://christianconservativestoday.com/videos/${filename}`;
+                const player = document.getElementById('view-video-player');
+                const source = document.getElementById('view-video-source');
+
+                // Show video player, hide iframe
+                player.style.display = 'block';
+                const existingIframe = modalContent.querySelector('iframe');
+                if (existingIframe) existingIframe.remove();
+
+                // Clear any existing sources and force reload
+                player.pause();
+                source.src = '';
+                player.load();
+
+                // Set CloudFront URL
+                source.src = videoUrl;
+                player.load();
+            } else {
+                // Hide video player
+                document.getElementById('view-video-player').style.display = 'none';
+
+                // Remove existing iframe
+                const existingIframe = modalContent.querySelector('iframe');
+                if (existingIframe) existingIframe.remove();
+
+                // Create iframe for external video
+                const iframe = document.createElement('iframe');
+                iframe.style.cssText = 'width: 100%; height: 400px; border: none;';
+
+                if (videoType === 'youtube') {
+                    const videoId = externalUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
+                    if (videoId) {
+                        iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                    }
+                } else if (videoType === 'rumble') {
+                    // Extract Rumble video ID and create proper embed URL
+                    const rumbleMatch = externalUrl.match(/rumble\.com\/v([a-zA-Z0-9]+)/);
+                    if (rumbleMatch) {
+                        iframe.src = `https://rumble.com/embed/${rumbleMatch[1]}/`;
+                    } else {
+                        iframe.src = externalUrl;
+                    }
+                } else if (videoType === 'facebook') {
+                    // Facebook embed format
+                    iframe.src = `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(externalUrl)}&show_text=false&width=560&height=315`;
+                }
+
+                modalContent.appendChild(iframe);
+            }
+
+            document.getElementById('view-video-modal').style.display = 'block';
+        }
+
+        async function uploadVideo() {
+            const fileInput = document.getElementById('upload-video-file');
+            const title = document.getElementById('upload-video-title').value;
+            const tags = document.getElementById('upload-video-tags').value.split(',').map(t => t.trim()).filter(t => t);
+
+            if (!fileInput.files[0]) {
+                document.getElementById('videos-message').innerHTML =
+                    '<div class="error">Please select a video file</div>';
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const filename = file.name;
+
+            document.getElementById('upload-progress').style.display = 'block';
+            document.getElementById('upload-btn').disabled = true;
+            document.getElementById('upload-status').textContent = 'Getting upload URL...';
+
+            try {
+                // Get presigned URL from admin API
+                const urlResponse = await fetch(`${ADMIN_API}?action=upload_url`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({filename: `videos/${filename}`})
+                });
+
+                const urlData = await urlResponse.json();
+                if (!urlResponse.ok) throw new Error(urlData.error);
+
+                document.getElementById('upload-progress-bar').style.width = '20%';
+                document.getElementById('upload-status').textContent = 'Uploading to S3...';
+
+                // Upload file to S3
+                const uploadResponse = await fetch(urlData.upload_url, {
+                    method: 'PUT',
+                    body: file,
+                    headers: {'Content-Type': file.type}
+                });
+
+                if (!uploadResponse.ok) throw new Error('S3 upload failed');
+
+                document.getElementById('upload-progress-bar').style.width = '70%';
+                document.getElementById('upload-status').textContent = 'Adding metadata...';
+
+                // Add video metadata
+                const visibility = document.getElementById('upload-video-visibility').value;
+                await fetch(`${TAG_API}?action=add_video`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        video_id: filename,
+                        filename: filename,
+                        title: title || filename,
+                        tags: tags,
+                        owner: currentUser.email,
+                        visibility: visibility,
+                        size: file.size
+                    })
+                });
+
+                document.getElementById('upload-progress-bar').style.width = '100%';
+                document.getElementById('upload-status').textContent = 'Upload complete! Thumbnail will be generated automatically...';
+
+                setTimeout(() => {
+                    document.getElementById('videos-message').innerHTML =
+                        '<div class="success">Video uploaded successfully!</div>';
+                    closeModal('upload-video-modal');
+                    loadVideos();
+                }, 1000);
+            } catch (error) {
+                document.getElementById('videos-message').innerHTML =
+                    `<div class="error">Upload failed: ${error.message}</div>`;
+            } finally {
+                document.getElementById('upload-btn').disabled = false;
+            }
+        }
+
+        async function startDownload() {
+            const url = document.getElementById('download-video-url').value;
+            const filename = document.getElementById('download-video-filename').value;
+            const title = document.getElementById('download-video-title').value;
+            const tags = document.getElementById('download-video-tags').value.split(',').map(t => t.trim()).filter(t => t);
+            const visibility = document.getElementById('download-video-visibility').value;
+            const forceFargate = document.getElementById('download-force-fargate').checked;
+
+            if (!url || !filename) {
+                document.getElementById('videos-message').innerHTML =
+                    '<div class="error">Please fill in URL and filename</div>';
+                return;
+            }
+
+            try {
+                const response = await fetch('https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/download', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        url: url,
+                        output_name: filename,
+                        title: title,
+                        force_fargate: forceFargate,
+                        tags: tags,
+                        owner: currentUser.email,
+                        visibility: visibility,
+                        role: currentUser.role
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('videos-message').innerHTML =
+                        '<div class="success">Download started! Check the Download Status page for progress.</div>';
+                    closeModal('download-video-modal');
+                } else if (response.status === 403 && data.error === 'Storage quota exceeded') {
+                    showQuotaExceededModal(data);
+                } else {
+                    throw new Error(data.error || 'Download failed');
+                }
+            } catch (error) {
+                document.getElementById('videos-message').innerHTML =
+                    `<div class="error">Failed to start download: ${error.message}</div>`;
+            }
+        }
+
+        function editVideo(filename, title, tags, owner, visibility) {
+            document.getElementById('edit-video-filename').value = filename;
+            document.getElementById('edit-video-title').value = title;
+            document.getElementById('edit-video-tags').value = tags;
+            document.getElementById('edit-video-owner').value = owner || 'system';
+            document.getElementById('edit-video-visibility').value = visibility || 'public';
+            loadUsersForOwnerDropdown();
+            document.getElementById('edit-video-modal').style.display = 'block';
+            setupTagAutocomplete('edit-video-tags', 'edit-tag-suggestions');
+        }
+
+        async function loadUsersForOwnerDropdown() {
+            try {
+                const response = await fetch(`${ADMIN_API}?action=users`, {
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+                const data = await response.json();
+
+                if (response.ok) {
+                    const select = document.getElementById('edit-video-owner-select');
+                    select.innerHTML = '<option value="">Select user...</option>';
+                    data.users.forEach(user => {
+                        const option = document.createElement('option');
+                        option.value = user.email;
+                        option.textContent = `${user.email} (${user.role})`;
+                        select.appendChild(option);
+                    });
+                }
+            } catch (error) {
+                console.log('Failed to load users:', error);
+            }
+        }
+
+        function toggleOwnerDropdown() {
+            const select = document.getElementById('edit-video-owner-select');
+            const input = document.getElementById('edit-video-owner');
+
+            if (select.style.display === 'none') {
+                select.style.display = 'block';
+                input.style.display = 'none';
+                select.addEventListener('change', function () {
+                    if (this.value) {
+                        input.value = this.value;
+                        input.style.display = 'block';
+                        this.style.display = 'none';
+                    }
+                });
+            } else {
+                select.style.display = 'none';
+                input.style.display = 'block';
+            }
+        }
+
+        async function updateVideo() {
+            const filename = document.getElementById('edit-video-filename').value;
+            const title = document.getElementById('edit-video-title').value;
+            const tagsStr = document.getElementById('edit-video-tags').value;
+            const tags = tagsStr.split(',').map(tag => tag.trim()).filter(tag => tag);
+            const owner = document.getElementById('edit-video-owner').value;
+            const visibility = document.getElementById('edit-video-visibility').value;
+
+            try {
+                const response = await fetch(`${TAG_API}?action=update_video`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        video_id: filename,
+                        title: title,
+                        tags: tags,
+                        owner: owner,
+                        visibility: visibility
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('videos-message').innerHTML =
+                        '<div class="success">Video updated successfully</div>';
+                    closeModal('edit-video-modal');
+                    loadVideos();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('videos-message').innerHTML =
+                    `<div class="error">Failed to update video: ${error.message}</div>`;
+            }
+        }
+
+        function resetUserPassword(userId, email) {
+            document.getElementById('reset-password-email').value = email;
+            document.getElementById('reset-password-new').value = '';
+            document.getElementById('reset-password-modal').dataset.userId = userId;
+            document.getElementById('reset-password-modal').style.display = 'block';
+        }
+
+        async function updateUserPassword() {
+            const userId = document.getElementById('reset-password-modal').dataset.userId;
+            const newPassword = document.getElementById('reset-password-new').value;
+
+            if (!newPassword) {
+                document.getElementById('users-message').innerHTML =
+                    '<div class="error">Please enter a new password</div>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${ADMIN_API}?action=reset_password`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        new_password: newPassword
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('users-message').innerHTML =
+                        '<div class="success">Password reset successfully</div>';
+                    closeModal('reset-password-modal');
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('users-message').innerHTML =
+                    `<div class="error">Failed to reset password: ${error.message}</div>`;
+            }
+        }
+
+        function viewMyPage() {
+            const userData = localStorage.getItem('user_data');
+            if (userData) {
+                const user = JSON.parse(userData);
+                window.location.href = `user-page.html?user=${encodeURIComponent(user.email)}`;
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('auth_token');
+            localStorage.removeItem('user_data');
+            window.location.href = 'login.html';
+        }
+
+        async function loadAllTags() {
+            try {
+                const response = await fetch(`${TAG_API}?action=get_all_tags`);
+                const data = await response.json();
+                allTags = data.tags || [];
+            } catch (error) {
+                console.log('Error loading tags:', error);
+            }
+        }
+
+        function setupTagAutocomplete(inputId, suggestionsId) {
+            const input = document.getElementById(inputId);
+            const suggestions = document.getElementById(suggestionsId);
+
+            input.addEventListener('input', function () {
+                const value = this.value;
+                const lastComma = value.lastIndexOf(',');
+                const currentTag = value.substring(lastComma + 1).trim().toLowerCase();
+
+                if (currentTag.length < 2) {
+                    suggestions.style.display = 'none';
+                    return;
+                }
+
+                const matches = allTags.filter(tag =>
+                    tag.toLowerCase().includes(currentTag) &&
+                    !value.toLowerCase().includes(tag.toLowerCase())
+                );
+
+                if (matches.length > 0) {
+                    suggestions.innerHTML = matches.map(tag =>
+                        `<div style="padding: 8px; cursor: pointer; border-bottom: 1px solid #eee;" onclick="selectTag('${inputId}', '${tag}')">${tag}</div>`
+                    ).join('');
+                    suggestions.style.display = 'block';
+                } else {
+                    suggestions.style.display = 'none';
+                }
+            });
+
+            input.addEventListener('blur', function () {
+                setTimeout(() => suggestions.style.display = 'none', 200);
+            });
+        }
+
+        function selectTag(inputId, tag) {
+            const input = document.getElementById(inputId);
+            const value = input.value;
+            const lastComma = value.lastIndexOf(',');
+
+            if (lastComma >= 0) {
+                input.value = value.substring(0, lastComma + 1) + ' ' + tag + ', ';
+            } else {
+                input.value = tag + ', ';
+            }
+
+            input.focus();
+        }
+
+        async function loadTags() {
+            document.getElementById('tags-loading').style.display = 'block';
+            document.getElementById('tags-container').style.display = 'none';
+
+            try {
+                // Get all tags and videos
+                const [tagsRes, videosRes] = await Promise.all([
+                    fetch(`${TAG_API}?action=get_all_tags`),
+                    fetch(`${ADMIN_API}?action=videos`, {
+                        headers: {'Authorization': `Bearer ${authToken}`}
+                    })
+                ]);
+
+                const tagsData = await tagsRes.json();
+                const videosData = await videosRes.json();
+
+                if (tagsRes.ok && videosRes.ok) {
+                    displayTagsWithVideos(tagsData.tags || [], videosData.videos || []);
+                } else {
+                    throw new Error('Failed to load tag data');
+                }
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML =
+                    `<div class="error">Failed to load tags: ${error.message}</div>`;
+            } finally {
+                document.getElementById('tags-loading').style.display = 'none';
+            }
+        }
+
+        function displayTagsWithVideos(tags, videos) {
+            const tbody = document.getElementById('tags-tbody');
+            tbody.innerHTML = '';
+
+            // Create tag usage map
+            const tagUsage = {};
+            tags.forEach(tag => {
+                tagUsage[tag] = videos.filter(video => video.tags.includes(tag));
+            });
+
+            // Display each tag
+            Object.entries(tagUsage).forEach(([tag, tagVideos]) => {
+                const row = document.createElement('tr');
+                const videoList = tagVideos.map(v => v.title || v.filename).join(', ');
+
+                row.innerHTML = `
+                    <td><strong>${tag}</strong></td>
+                    <td>${tagVideos.length}</td>
+                    <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis;" title="${videoList}">${videoList || 'No videos'}</td>
+                    <td>
+                        <button class="btn btn-primary" onclick="editTagVideos('${tag}')" style="font-size: 12px; margin-right: 5px;">Edit Videos</button>
+                        <button class="btn btn-warning" onclick="renameTag('${tag}')" style="font-size: 12px; margin-right: 5px;">Rename</button>
+                        <button class="btn btn-danger" onclick="deleteTag('${tag}', ${tagVideos.length})" style="font-size: 12px;">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            document.getElementById('tags-container').style.display = 'block';
+        }
+
+        async function createTag() {
+            const tagName = document.getElementById('new-tag-name').value.trim();
+            if (!tagName) {
+                document.getElementById('tags-message').innerHTML =
+                    '<div class="error">Please enter a tag name</div>';
+                return;
+            }
+
+            // Create a dummy video entry with just the tag to add it to the system
+            try {
+                await fetch(`${TAG_API}?action=add_video`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        video_id: `_tag_placeholder_${Date.now()}`,
+                        filename: `_tag_placeholder_${Date.now()}`,
+                        title: 'Tag Placeholder',
+                        tags: [tagName]
+                    })
+                });
+
+                document.getElementById('new-tag-name').value = '';
+                document.getElementById('tags-message').innerHTML =
+                    `<div class="success">Tag "${tagName}" created successfully</div>`;
+                loadTags();
+                loadAllTags(); // Refresh autocomplete
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML =
+                    `<div class="error">Failed to create tag: ${error.message}</div>`;
+            }
+        }
+
+        async function renameTag(oldTag) {
+            const newTag = prompt(`Rename tag "${oldTag}" to:`, oldTag);
+            if (!newTag || newTag === oldTag) return;
+
+            try {
+                // Get all videos with this tag
+                const response = await fetch(`${TAG_API}?action=get_videos_by_tag&tag=${encodeURIComponent(oldTag)}`);
+                const data = await response.json();
+
+                if (response.ok && data.videos) {
+                    // Update each video to replace old tag with new tag
+                    for (const video of data.videos) {
+                        const updatedTags = video.tags.map(tag => tag === oldTag ? newTag : tag);
+                        await fetch(`${TAG_API}?action=add_video`, {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                video_id: video.video_id,
+                                filename: video.filename,
+                                title: video.title,
+                                tags: updatedTags
+                            })
+                        });
+                    }
+
+                    document.getElementById('tags-message').innerHTML =
+                        `<div class="success">Tag "${oldTag}" renamed to "${newTag}"</div>`;
+                    loadTags();
+                    loadAllTags(); // Refresh autocomplete
+                } else {
+                    throw new Error('Failed to get videos for tag');
+                }
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML =
+                    `<div class="error">Failed to rename tag: ${error.message}</div>`;
+            }
+        }
+
+        async function deleteTag(tag, videoCount) {
+            if (!confirm(`Are you sure you want to delete tag "${tag}"? This will remove it from ${videoCount} video(s).`)) return;
+
+            try {
+                // Get all videos with this tag
+                const response = await fetch(`${TAG_API}?action=get_videos_by_tag&tag=${encodeURIComponent(tag)}`);
+                const data = await response.json();
+
+                if (response.ok && data.videos) {
+                    // Update each video to remove the tag
+                    for (const video of data.videos) {
+                        const updatedTags = video.tags.filter(t => t !== tag);
+                        await fetch(`${TAG_API}?action=add_video`, {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                video_id: video.video_id,
+                                filename: video.filename,
+                                title: video.title,
+                                tags: updatedTags
+                            })
+                        });
+                    }
+
+                    document.getElementById('tags-message').innerHTML =
+                        `<div class="success">Tag "${tag}" deleted successfully</div>`;
+                    loadTags();
+                    loadAllTags(); // Refresh autocomplete
+                } else {
+                    throw new Error('Failed to get videos for tag');
+                }
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML =
+                    `<div class="error">Failed to delete tag: ${error.message}</div>`;
+            }
+        }
+
+        let currentEditingTag = '';
+        let allVideosForTagEdit = [];
+
+        async function editTagVideos(tag) {
+            currentEditingTag = tag;
+            document.getElementById('edit-tag-videos-title').textContent = `Edit Videos for Tag: "${tag}"`;
+
+            try {
+                // Get all videos
+                const response = await fetch(`${ADMIN_API}?action=videos`, {
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+                const data = await response.json();
+
+                if (response.ok && data.videos) {
+                    allVideosForTagEdit = data.videos;
+                    displayVideoCheckboxes(tag, data.videos);
+                    document.getElementById('edit-tag-videos-modal').style.display = 'block';
+                } else {
+                    throw new Error('Failed to load videos');
+                }
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML =
+                    `<div class="error">Failed to load videos: ${error.message}</div>`;
+            }
+        }
+
+        function displayVideoCheckboxes(tag, videos) {
+            const container = document.getElementById('tag-videos-list');
+            container.innerHTML = '';
+
+            videos.forEach(video => {
+                const isChecked = video.tags.includes(tag);
+                const checkboxDiv = document.createElement('div');
+                checkboxDiv.style.cssText = 'margin-bottom: 10px; padding: 8px; border-bottom: 1px solid #eee;';
+
+                checkboxDiv.innerHTML = `
+                    <label style="display: flex; align-items: center; cursor: pointer;">
+                        <input type="checkbox" ${isChecked ? 'checked' : ''} 
+                               data-video-id="${video.filename}" 
+                               style="margin-right: 10px;">
+                        <div>
+                            <strong>${video.title || video.filename}</strong>
+                            <br><small style="color: #666;">${video.filename}</small>
+                        </div>
+                    </label>
+                `;
+
+                container.appendChild(checkboxDiv);
+            });
+        }
+
+        async function saveTagVideoAssociations() {
+            const checkboxes = document.querySelectorAll('#tag-videos-list input[type="checkbox"]');
+            const updates = [];
+
+            try {
+                for (const checkbox of checkboxes) {
+                    const videoId = checkbox.dataset.videoId;
+                    const video = allVideosForTagEdit.find(v => v.filename === videoId);
+                    const isChecked = checkbox.checked;
+                    const hasTag = video.tags.includes(currentEditingTag);
+
+                    // Only update if there's a change
+                    if (isChecked !== hasTag) {
+                        let updatedTags;
+                        if (isChecked) {
+                            // Add tag
+                            updatedTags = [...video.tags, currentEditingTag];
+                        } else {
+                            // Remove tag
+                            updatedTags = video.tags.filter(t => t !== currentEditingTag);
+                        }
+
+                        updates.push({
+                            video_id: video.filename,
+                            filename: video.filename,
+                            title: video.title,
+                            tags: updatedTags
+                        });
+                    }
+                }
+
+                // Apply all updates
+                for (const update of updates) {
+                    await fetch(`${TAG_API}?action=add_video`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify(update)
+                    });
+                }
+
+                document.getElementById('tags-message').innerHTML =
+                    `<div class="success">Updated ${updates.length} video(s) for tag "${currentEditingTag}"</div>`;
+                closeModal('edit-tag-videos-modal');
+                loadTags();
+
+            } catch (error) {
+                document.getElementById('tags-message').innerHTML =
+                    `<div class="error">Failed to update video associations: ${error.message}</div>`;
+            }
+        }
+
+        function copyEmbedLink(embedUrl) {
+            navigator.clipboard.writeText(embedUrl).then(() => {
+                document.getElementById('videos-message').innerHTML =
+                    '<div class="success">Embed link copied to clipboard!</div>';
+                setTimeout(() => {
+                    document.getElementById('videos-message').innerHTML = '';
+                }, 3000);
+            }).catch(() => {
+                prompt('Copy this embed link:', embedUrl);
+            });
+        }
+
+        function getVideoType(url) {
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                return 'youtube';
+            } else if (url.includes('rumble.com')) {
+                return 'rumble';
+            } else if (url.includes('facebook.com')) {
+                return 'facebook';
+            }
+            return 'external';
+        }
+
+        function generateVideoId(url, title) {
+            const videoType = getVideoType(url);
+            const timestamp = Date.now();
+            const cleanTitle = title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase();
+            return `${videoType}-${cleanTitle}-${timestamp}`;
+        }
+
+        async function addExternalVideo() {
+            const url = document.getElementById('external-video-url').value;
+            const title = document.getElementById('external-video-title').value;
+            const tags = document.getElementById('external-video-tags').value.split(',').map(t => t.trim()).filter(t => t);
+            const visibility = document.getElementById('external-video-visibility').value;
+
+            if (!url || !title) {
+                document.getElementById('videos-message').innerHTML =
+                    '<div class="error">Please fill in URL and title</div>';
+                return;
+            }
+
+            try {
+                const videoType = getVideoType(url);
+                const videoId = generateVideoId(url, title);
+
+                // Extract thumbnail URL for YouTube videos
+                let thumbnailUrl = '';
+                if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                    const ytVideoId = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
+                    if (ytVideoId) {
+                        thumbnailUrl = `https://img.youtube.com/vi/${ytVideoId}/maxresdefault.jpg`;
+                    }
+                }
+
+                const response = await fetch(`${TAG_API}?action=add_video`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        video_id: videoId,
+                        filename: videoId,
+                        title: title,
+                        tags: tags,
+                        owner: currentUser.email,
+                        visibility: visibility,
+                        external_url: url,
+                        video_type: videoType,
+                        thumbnail_url: thumbnailUrl,
+                        size: 0  // External videos have no size
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    // For YouTube videos, thumbnail URL is already set
+                    // For other platforms, attempt thumbnail generation
+                    if (videoType !== 'youtube' && thumbnailUrl === '') {
+                        try {
+                            await fetch(`${ADMIN_API}?action=generate_thumbnail`, {
+                                method: 'POST',
+                                headers: {
+                                    'Authorization': `Bearer ${authToken}`,
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    filename: videoId,
+                                    video_type: videoType,
+                                    external_url: url
+                                })
+                            });
+                        } catch (error) {
+                            console.log('Thumbnail generation failed (non-critical):', error);
+                        }
+                    }
+
+                    document.getElementById('videos-message').innerHTML =
+                        '<div class="success">External video added successfully!</div>';
+                    closeModal('external-video-modal');
+                    loadVideos();
+                } else {
+                    throw new Error(data.error || 'Failed to add external video');
+                }
+            } catch (error) {
+                document.getElementById('videos-message').innerHTML =
+                    `<div class="error">Failed to add external video: ${error.message}</div>`;
+            }
+        }
+
+        async function loadSubscriptions() {
+            document.getElementById('subscriptions-loading').style.display = 'block';
+            document.getElementById('subscriptions-table').style.display = 'none';
+
+            try {
+                const response = await fetch(`${ADMIN_API}?action=users`, {
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    await displaySubscriptions(data.users);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('subscriptions-message').innerHTML =
+                    `<div class="error">Failed to load subscriptions: ${error.message}</div>`;
+            } finally {
+                document.getElementById('subscriptions-loading').style.display = 'none';
+            }
+        }
+
+        async function displaySubscriptions(users) {
+            const tbody = document.getElementById('subscriptions-tbody');
+            tbody.innerHTML = '';
+
+            let totalSubscribers = 0;
+            let activeSubscriptions = 0;
+            let monthlyRevenue = 0;
+
+            const tierPrices = {free: 0, premium: 9.99, pro: 24.99, enterprise: 99.99};
+
+            for (const user of users) {
+                const tier = user.subscription_tier || 'free';
+                const status = user.subscription_status || 'active';
+
+                if (tier !== 'free') totalSubscribers++;
+                if (status === 'active' && tier !== 'free') {
+                    activeSubscriptions++;
+                    monthlyRevenue += tierPrices[tier] || 0;
+                }
+
+                // Get usage data
+                let usageData = {storage_used: 0, video_count: 0, storage_limit: 0, video_limit: 0};
+                try {
+                    const usageResponse = await fetch(`https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal?action=subscription_status&user_id=${user.user_id}`);
+                    if (usageResponse.ok) {
+                        usageData = await usageResponse.json();
+                    }
+                } catch (error) {
+                    console.log('Failed to get usage for user:', user.email);
+                }
+
+                const displayName = user.first_name && user.last_name ?
+                    `${user.first_name} ${user.last_name}` :
+                    (user.first_name || user.last_name || 'No name set');
+
+                const storageUsedMB = Math.round(usageData.storage_used / (1024 * 1024));
+                const storageLimitGB = Math.round(usageData.storage_limit / (1024 * 1024 * 1024));
+                const usagePercent = usageData.storage_limit > 0 ?
+                    Math.round((usageData.storage_used / usageData.storage_limit) * 100) : 0;
+
+                const tierBadge = getTierBadge(tier);
+                const statusBadge = getStatusBadge(status);
+                const nextBilling = user.next_billing_date ?
+                    new Date(user.next_billing_date).toLocaleDateString() : 'N/A';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${displayName}</td>
+                    <td>${user.email}</td>
+                    <td>${tierBadge}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        <div style="font-size: 12px;">
+                            <div>Storage: ${storageUsedMB}MB / ${storageLimitGB}GB (${usagePercent}%)</div>
+                            <div>Videos: ${usageData.video_count} / ${usageData.video_limit}</div>
+                        </div>
+                    </td>
+                    <td>${nextBilling}</td>
+                    <td>
+                        <button class="btn btn-warning" onclick="editSubscription('${user.user_id}', '${user.email}', '${tier}', '${status}', '${user.next_billing_date || ''}')" style="font-size: 12px;">Edit</button>
+                        <button class="btn btn-primary" onclick="viewUsageDetails('${user.user_id}', '${user.email}')" style="font-size: 12px; margin-left: 5px;">Usage</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            }
+
+            // Update stats
+            document.getElementById('total-subscribers').textContent = totalSubscribers;
+            document.getElementById('active-subscriptions').textContent = activeSubscriptions;
+            document.getElementById('monthly-revenue').textContent = `$${monthlyRevenue.toFixed(2)}`;
+
+            document.getElementById('subscriptions-table').style.display = 'table';
+        }
+
+        function getTierBadge(tier) {
+            const colors = {
+                free: '#6c757d',
+                premium: '#007bff',
+                pro: '#28a745',
+                enterprise: '#dc3545'
+            };
+            return `<span style="background: ${colors[tier] || '#6c757d'}; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px;">${tier.toUpperCase()}</span>`;
+        }
+
+        function getStatusBadge(status) {
+            const colors = {
+                active: '#28a745',
+                pending: '#ffc107',
+                cancelled: '#dc3545',
+                expired: '#6c757d'
+            };
+            return `<span style="background: ${colors[status] || '#6c757d'}; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px;">${status.toUpperCase()}</span>`;
+        }
+
+        function editSubscription(userId, email, tier, status, billingDate) {
+            document.getElementById('edit-sub-user-email').value = email;
+            document.getElementById('edit-sub-tier').value = tier;
+            document.getElementById('edit-sub-status').value = status;
+
+            if (billingDate && billingDate !== 'null') {
+                const date = new Date(billingDate);
+                document.getElementById('edit-sub-billing-date').value = date.toISOString().split('T')[0];
+            } else {
+                document.getElementById('edit-sub-billing-date').value = '';
+            }
+
+            document.getElementById('edit-subscription-modal').dataset.userId = userId;
+            document.getElementById('edit-subscription-modal').style.display = 'block';
+        }
+
+        async function updateSubscription() {
+            const userId = document.getElementById('edit-subscription-modal').dataset.userId;
+            const tier = document.getElementById('edit-sub-tier').value;
+            const status = document.getElementById('edit-sub-status').value;
+            const billingDate = document.getElementById('edit-sub-billing-date').value;
+
+            const tierLimits = {
+                free: {storage: 2147483648, videos: 50},
+                premium: {storage: 26843545600, videos: 500},
+                pro: {storage: 107374182400, videos: 2000},
+                enterprise: {storage: -1, videos: -1}
+            };
+
+            try {
+                const response = await fetch(`${ADMIN_API}?action=user_subscription`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: userId,
+                        subscription_tier: tier,
+                        subscription_status: status,
+                        storage_limit: tierLimits[tier].storage,
+                        video_limit: tierLimits[tier].videos,
+                        next_billing_date: billingDate || null
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('subscriptions-message').innerHTML =
+                        '<div class="success">Subscription updated successfully</div>';
+                    closeModal('edit-subscription-modal');
+                    loadSubscriptions();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('subscriptions-message').innerHTML =
+                    `<div class="error">Failed to update subscription: ${error.message}</div>`;
+            }
+        }
+
+        async function cancelUserSubscription() {
+            const userId = document.getElementById('edit-subscription-modal').dataset.userId;
+            const email = document.getElementById('edit-sub-user-email').value;
+
+            if (!confirm(`Are you sure you want to cancel the subscription for ${email}?`)) return;
+
+            try {
+                const response = await fetch(`https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal?action=cancel_subscription`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({user_id: userId})
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('subscriptions-message').innerHTML =
+                        '<div class="success">Subscription cancelled successfully</div>';
+                    closeModal('edit-subscription-modal');
+                    loadSubscriptions();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('subscriptions-message').innerHTML =
+                    `<div class="error">Failed to cancel subscription: ${error.message}</div>`;
+            }
+        }
+
+        async function viewUsageDetails(userId, email) {
+            try {
+                const response = await fetch(`https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal?action=usage&user_id=${userId}`);
+                const data = await response.json();
+
+                if (response.ok) {
+                    const storageUsedMB = Math.round(data.storage_used / (1024 * 1024));
+                    const storageLimitGB = Math.round(data.storage_limit / (1024 * 1024 * 1024));
+                    const storagePercent = data.storage_limit > 0 ?
+                        Math.round((data.storage_used / data.storage_limit) * 100) : 0;
+                    const videoPercent = data.video_limit > 0 ?
+                        Math.round((data.video_count / data.video_limit) * 100) : 0;
+
+                    alert(`Usage Details for ${email}:\n\n` +
+                        `Storage: ${storageUsedMB} MB / ${storageLimitGB} GB (${storagePercent}%)\n` +
+                        `Videos: ${data.video_count} / ${data.video_limit} (${videoPercent}%)\n\n` +
+                        `Storage Percentage: ${data.storage_percentage?.toFixed(1)}%\n` +
+                        `Video Percentage: ${data.video_percentage?.toFixed(1)}%`);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                alert(`Failed to get usage details: ${error.message}`);
+            }
+        }
+
+        // Resources Management Functions
+        function loadResourcesAdmin() {
+            initializeSampleResources();
+            loadResourceCategories();
+            loadResourceCategoryOrder();
+            loadResourcesList();
+            setupResourceForm();
+        }
+
+        async function loadResourceCategories() {
+            try {
+                // Check if we need to migrate from localStorage
+                await migrateLocalCategoriesToAPI();
+
+                const response = await fetch(`${RESOURCES_API}?action=get_categories`);
+                const categories = await response.json();
+                displayCategories(categories);
+                populateCategorySelect(categories);
+            } catch (error) {
+                console.error('Failed to load categories:', error);
+                const defaultCategories = ['Research Resources', 'Educational', 'Financial', 'News & Media', 'Ministry Tools', 'Apologetics'];
+                displayCategories(defaultCategories);
+                populateCategorySelect(defaultCategories);
+            }
+        }
+
+        async function migrateLocalCategoriesToAPI() {
+            const migrated = localStorage.getItem('categories_migrated');
+            if (migrated) return; // Already migrated
+
+            try {
+                const localCategories = JSON.parse(localStorage.getItem('resource_categories') || '[]');
+                if (localCategories.length > 0) {
+                    // Get existing API categories
+                    const response = await fetch(`${RESOURCES_API}?action=get_categories`);
+                    const apiCategories = await response.json();
+
+                    // Merge local categories with API categories (avoid duplicates)
+                    const mergedCategories = [...new Set([...apiCategories, ...localCategories])];
+
+                    // Save merged categories to API
+                    await fetch(`${RESOURCES_API}?action=save_categories`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({categories: mergedCategories})
+                    });
+
+                    console.log('Migrated categories from localStorage to API:', localCategories);
+                }
+
+                // Mark as migrated
+                localStorage.setItem('categories_migrated', 'true');
+            } catch (error) {
+                console.error('Failed to migrate categories:', error);
+            }
+        }
+
+        function displayCategories(categories) {
+            const container = document.getElementById('categories-list');
+            container.innerHTML = '';
+
+            categories.forEach(category => {
+                const emoji = getCategoryEmoji(category);
+                const categoryDiv = document.createElement('div');
+                categoryDiv.style.cssText = 'background: #667eea; color: white; padding: 8px 12px; border-radius: 20px; display: flex; align-items: center; gap: 8px;';
+                categoryDiv.innerHTML = `
+                    <span>${emoji} ${category}</span>
+                    <button onclick="editCategory('${category}')" style="background: rgba(255,255,255,0.2); border: none; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer;">✏️</button>
+                    <button onclick="deleteCategory('${category}')" style="background: rgba(255,255,255,0.2); border: none; color: white; border-radius: 50%; width: 20px; height: 20px; font-size: 12px; cursor: pointer;">🗑️</button>
+                `;
+                container.appendChild(categoryDiv);
+            });
+        }
+
+        function populateCategorySelect(categories) {
+            const container = document.getElementById('resource-category');
+            container.innerHTML = '';
+            container.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; padding: 10px; background: white;';
+            categories.forEach(category => {
+                const label = document.createElement('label');
+                label.style.cssText = 'display: flex; align-items: center; cursor: pointer;';
+                label.innerHTML = `<input type="checkbox" class="resource-category-checkbox" value="${category}" style="margin-right: 8px;"> ${category}`;
+                container.appendChild(label);
+            });
+        }
+
+        async function addCategory() {
+            const name = document.getElementById('new-category-name').value.trim();
+            if (!name) {
+                document.getElementById('resources-message').innerHTML = '<div class="error">Please enter a category name</div>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${RESOURCES_API}?action=get_categories`);
+                const categories = await response.json();
+
+                if (categories.includes(name)) {
+                    document.getElementById('resources-message').innerHTML = '<div class="error">Category already exists</div>';
+                    return;
+                }
+
+                categories.push(name);
+                await fetch(`${RESOURCES_API}?action=save_categories`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({categories: categories})
+                });
+
+                document.getElementById('new-category-name').value = '';
+                document.getElementById('resources-message').innerHTML = '<div class="success">Category added successfully</div>';
+                loadResourceCategories();
+                loadResourceCategoryOrder();
+            } catch (error) {
+                document.getElementById('resources-message').innerHTML = `<div class="error">Failed to add category: ${error.message}</div>`;
+            }
+        }
+
+        async function editCategory(oldName) {
+            const newName = prompt(`Rename category "${oldName}" to:`, oldName);
+            if (!newName || newName === oldName) return;
+
+            try {
+                const catResponse = await fetch(`${RESOURCES_API}?action=get_categories`);
+                const categories = await catResponse.json();
+                const index = categories.indexOf(oldName);
+
+                if (index !== -1) {
+                    categories[index] = newName;
+                    await fetch(`${RESOURCES_API}?action=save_categories`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({categories: categories})
+                    });
+
+                    // Update existing resources with this category
+                    const resResponse = await fetch(`${RESOURCES_API}?action=list`);
+                    const resources = await resResponse.json();
+
+                    for (const resource of resources) {
+                        if (resource.category === oldName) {
+                            await fetch(`${RESOURCES_API}?action=update`, {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({
+                                    id: resource.id,
+                                    name: resource.name,
+                                    category: newName,
+                                    url: resource.url,
+                                    description: resource.description
+                                })
+                            });
+                        }
+                    }
+
+                    document.getElementById('resources-message').innerHTML = '<div class="success">Category renamed successfully</div>';
+                    loadResourceCategories();
+                    loadResourceCategoryOrder();
+                }
+            } catch (error) {
+                document.getElementById('resources-message').innerHTML = `<div class="error">Failed to rename category: ${error.message}</div>`;
+            }
+        }
+
+        async function deleteCategory(categoryName) {
+            if (!confirm(`Are you sure you want to delete category "${categoryName}"? Resources in this category will be moved to "General".`)) return;
+
+            try {
+                const catResponse = await fetch(`${RESOURCES_API}?action=get_categories`);
+                let categories = await catResponse.json();
+                categories = categories.filter(cat => cat !== categoryName);
+
+                // Ensure "General" category exists
+                if (!categories.includes('General')) {
+                    categories.push('General');
+                }
+
+                await fetch(`${RESOURCES_API}?action=save_categories`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({categories: categories})
+                });
+
+                // Update existing resources with this category
+                const resResponse = await fetch(`${RESOURCES_API}?action=list`);
+                const resources = await resResponse.json();
+
+                for (const resource of resources) {
+                    if (resource.category === categoryName) {
+                        await fetch(`${RESOURCES_API}?action=update`, {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                id: resource.id,
+                                name: resource.name,
+                                category: 'General',
+                                url: resource.url,
+                                description: resource.description
+                            })
+                        });
+                    }
+                }
+
+                document.getElementById('resources-message').innerHTML = '<div class="success">Category deleted successfully</div>';
+                loadResourceCategories();
+                loadResourceCategoryOrder();
+                loadResourcesList();
+            } catch (error) {
+                document.getElementById('resources-message').innerHTML = `<div class="error">Failed to delete category: ${error.message}</div>`;
+            }
+        }
+
+        function setupResourceForm() {
+            document.getElementById('resource-form-admin').addEventListener('submit', function (e) {
+                e.preventDefault();
+                addResource();
+            });
+        }
+
+        async function addResource() {
+            const form = document.getElementById('resource-form-admin');
+            const editingId = form.dataset.editingId;
+
+            const name = document.getElementById('resource-name').value.trim();
+            const checkboxes = document.querySelectorAll('.resource-category-checkbox:checked');
+            const categories = Array.from(checkboxes).map(cb => cb.value);
+            const url = document.getElementById('resource-url').value.trim();
+            const description = document.getElementById('resource-description').value.trim();
+
+            if (!name || categories.length === 0 || !url) {
+                document.getElementById('resources-message').innerHTML = '<div class="error">Please fill in name, at least one category, and URL</div>';
+                return;
+            }
+
+            try {
+                const action = editingId ? 'update' : 'create';
+                const response = await fetch(`${RESOURCES_API}?action=${action}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        id: editingId || Date.now().toString(),
+                        name: name,
+                        category: categories,
+                        url: url,
+                        description: description
+                    })
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error);
+
+                form.reset();
+                delete form.dataset.editingId;
+                const submitBtn = form.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Add Resource';
+                submitBtn.style.background = '';
+
+                document.getElementById('resources-message').innerHTML = `<div class="success">Resource ${editingId ? 'updated' : 'added'} successfully</div>`;
+                loadResourcesList();
+            } catch (error) {
+                document.getElementById('resources-message').innerHTML = `<div class="error">Failed to ${editingId ? 'update' : 'add'} resource: ${error.message}</div>`;
+            }
+        }
+
+        // Initialize sample data if none exists
+        function initializeSampleResources() {
+            let resources = JSON.parse(localStorage.getItem('admin_resources') || '[]');
+            if (resources.length === 0) {
+                resources = [
+                    {id: '1', name: 'Dr. Frank Turek', category: 'Research Resources', url: 'https://crossexamined.org/dr-frank-turek/', description: 'Christian apologetics and worldview training'},
+                    {id: '2', name: 'Hillsdale College', category: 'Educational', url: 'https://online.hillsdale.edu/courses/promo/marxism-socialism-communism', description: 'Free online courses on Marxism, Socialism, and Communism'},
+                    {id: '3', name: 'Patriot Academy', category: 'Educational', url: 'https://patriotacademy.com', description: 'Constitutional training and civic education'},
+                    {id: '4', name: 'Wall Builders', category: 'Research Resources', url: 'https://wallbuilders.com/', description: 'American history and constitutional principles'},
+                    {id: '5', name: 'George Barna', category: 'Research Resources', url: 'https://www.barna.com/', description: 'Christian research and cultural analysis'},
+                    {id: '6', name: 'Financial Peace - Dave Ramsey', category: 'Financial', url: 'https://www.ramseysolutions.com/', description: 'Biblical financial principles and debt-free living'}
+                ];
+                localStorage.setItem('admin_resources', JSON.stringify(resources));
+            }
+        }
+
+        async function loadResourcesList() {
+            try {
+                const response = await fetch(`${RESOURCES_API}?action=list`);
+                const resources = await response.json();
+                displayResourcesList(resources);
+            } catch (error) {
+                document.getElementById('resources-message').innerHTML = `<div class="error">Failed to load resources: ${error.message}</div>`;
+            }
+        }
+
+        function displayResourcesList(resources) {
+            const container = document.getElementById('resources-list-admin');
+            container.innerHTML = '';
+
+            if (resources.length === 0) {
+                container.innerHTML = '<p class="text-muted">No resources added yet.</p>';
+                return;
+            }
+
+            resources.forEach(resource => {
+                const resourceDiv = document.createElement('div');
+                resourceDiv.style.cssText = 'background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 15px; border-left: 4px solid #2c5aa0;';
+
+                const contentDiv = document.createElement('div');
+                contentDiv.style.cssText = 'display: flex; justify-content: space-between; align-items: start;';
+
+                const cats = Array.isArray(resource.category) ? resource.category.join(', ') : resource.category;
+                contentDiv.innerHTML = `
+                    <div style="flex-grow: 1;">
+                        <h5 style="margin-bottom: 5px;">${resource.name}</h5>
+                        <p style="margin-bottom: 5px;"><strong>Categories:</strong> ${cats}</p>
+                        <p style="margin-bottom: 5px;"><strong>URL:</strong> <a href="${resource.url}" target="_blank">${resource.url}</a></p>
+                        <p style="margin-bottom: 0;"><strong>Description:</strong> ${resource.description || 'No description'}</p>
+                    </div>
+                `;
+
+                const btnContainer = document.createElement('div');
+                btnContainer.style.cssText = 'display: flex; gap: 5px;';
+
+                const editBtn = document.createElement('button');
+                editBtn.className = 'btn btn-warning btn-sm';
+                editBtn.textContent = 'Edit';
+                editBtn.onclick = () => editResource(resource);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn btn-danger btn-sm';
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.onclick = () => deleteResource(resource.id);
+
+                btnContainer.appendChild(editBtn);
+                btnContainer.appendChild(deleteBtn);
+                contentDiv.appendChild(btnContainer);
+                resourceDiv.appendChild(contentDiv);
+                container.appendChild(resourceDiv);
+            });
+        }
+
+        async function analyzeResourceUrl() {
+            const url = document.getElementById('resource-url').value.trim();
+            if (!url) {
+                alert('Please enter a URL first');
+                return;
+            }
+
+            const analyzeBtn = document.getElementById('analyze-resource-btn');
+            const analyzeText = document.getElementById('analyze-resource-text');
+            const analyzeSpinner = document.getElementById('analyze-resource-spinner');
+
+            analyzeBtn.disabled = true;
+            analyzeText.style.display = 'none';
+            analyzeSpinner.style.display = 'inline-block';
+
+            try {
+                const response = await fetch(URL_ANALYSIS_API, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({url: url, context: 'resource'})
+                });
+
+                const data = await response.json();
+                console.log('URL Analysis Response:', data);
+
+                if (data.error) {
+                    alert('Error analyzing URL: ' + data.error);
+                } else {
+                    // Populate title
+                    if (data.title && !document.getElementById('resource-name').value) {
+                        console.log('Setting title:', data.title);
+                        document.getElementById('resource-name').value = data.title;
+                    }
+
+                    // Populate description - prioritize AI summary, fallback to meta description
+                    if (data.ai_summary) {
+                        console.log('Setting AI summary:', data.ai_summary);
+                        document.getElementById('resource-description').value = data.ai_summary;
+                    } else if (data.description) {
+                        console.log('Setting meta description:', data.description);
+                        document.getElementById('resource-description').value = data.description;
+                    } else {
+                        console.log('No description found in response');
+                    }
+
+                    document.getElementById('resources-message').innerHTML = '<div class="success">Resource information extracted successfully!</div>';
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to analyze URL: ' + error.message);
+            } finally {
+                analyzeBtn.disabled = false;
+                analyzeText.style.display = 'inline';
+                analyzeSpinner.style.display = 'none';
+            }
+        }
+
+        function editResource(resource) {
+            document.getElementById('resource-name').value = resource.name;
+            document.querySelectorAll('.resource-category-checkbox').forEach(cb => {
+                const cats = Array.isArray(resource.category) ? resource.category : [resource.category];
+                cb.checked = cats.includes(cb.value);
+            });
+            document.getElementById('resource-url').value = resource.url;
+            document.getElementById('resource-description').value = resource.description || '';
+
+            const form = document.getElementById('resource-form-admin');
+            form.dataset.editingId = resource.id;
+
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Update Resource';
+            submitBtn.style.background = '#ffc107';
+
+            document.getElementById('resources-message').innerHTML = '<div class="success">Editing resource - update the fields and click Update</div>';
+            form.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+
+        async function deleteResource(resourceId) {
+            if (!confirm('Are you sure you want to delete this resource?')) return;
+
+            try {
+                const response = await fetch(`${RESOURCES_API}?action=delete&resource_id=${resourceId}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error);
+
+                document.getElementById('resources-message').innerHTML = '<div class="success">Resource deleted successfully</div>';
+                loadResourcesList();
+            } catch (error) {
+                document.getElementById('resources-message').innerHTML = `<div class="error">Failed to delete resource: ${error.message}</div>`;
+            }
+        }
+
+        // Resource Category Order Management Functions
+        async function loadResourceCategoryOrder() {
+            try {
+                // Get categories from API (same source as Manage Categories section)
+                const response = await fetch(`${RESOURCES_API}?action=get_categories`);
+                const categories = await response.json();
+
+                // Get saved order from API
+                const orderResponse = await fetch(`${RESOURCES_API}?action=get_order`);
+                const savedOrder = await orderResponse.json();
+
+                let categoryOrder = [];
+
+                if (savedOrder && savedOrder.length > 0) {
+                    // Use saved order, but add any new categories that aren't in the order yet
+                    categoryOrder = [...savedOrder];
+                    categories.forEach(cat => {
+                        if (!categoryOrder.includes(cat)) {
+                            categoryOrder.push(cat);
+                        }
+                    });
+                } else {
+                    // No saved order, use categories as-is
+                    categoryOrder = categories;
+                }
+
+                displayResourceCategoryOrder(categoryOrder);
+            } catch (error) {
+                console.error('Failed to load resource categories:', error);
+            }
+        }
+
+        function displayResourceCategoryOrder(categories) {
+            const container = document.getElementById('resource-category-order-list');
+            container.innerHTML = '';
+
+            if (categories.length === 0) {
+                container.innerHTML = '<p style="color: #999; text-align: center;">No categories yet. Add resources to create categories.</p>';
+                return;
+            }
+
+            categories.forEach((category, index) => {
+                const item = document.createElement('div');
+                item.className = 'resource-category-order-item';
+                item.draggable = true;
+                item.dataset.category = category;
+                item.style.cssText = 'background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px 15px; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; cursor: move; user-select: none;';
+
+                const numberSpan = document.createElement('span');
+                numberSpan.style.cssText = 'color: #666;';
+                numberSpan.textContent = `${index + 1}.`;
+
+                const nameSpan = document.createElement('span');
+                nameSpan.style.cssText = 'font-weight: 500; flex-grow: 1;';
+                nameSpan.textContent = category;
+
+                const dragIcon = document.createElement('span');
+                dragIcon.style.cssText = 'color: #999; margin-left: auto;';
+                dragIcon.textContent = '☰';
+
+                const editBtn = document.createElement('button');
+                editBtn.textContent = '✏️';
+                editBtn.style.cssText = 'background: #ffc107; border: none; color: white; border-radius: 3px; padding: 2px 6px; cursor: pointer; font-size: 12px; margin-left: 8px;';
+                editBtn.onclick = (e) => {e.stopPropagation(); editResourceCategory(category);};
+
+                item.appendChild(numberSpan);
+                item.appendChild(nameSpan);
+                item.appendChild(dragIcon);
+                item.appendChild(editBtn);
+
+                item.addEventListener('dragstart', handleResourceDragStart);
+                item.addEventListener('dragover', handleResourceDragOver);
+                item.addEventListener('drop', handleResourceDrop);
+                item.addEventListener('dragend', handleResourceDragEnd);
+                item.addEventListener('touchstart', handleResourceTouchStart, {passive: false});
+                item.addEventListener('touchmove', handleResourceTouchMove, {passive: false});
+                item.addEventListener('touchend', handleResourceTouchEnd);
+
+                container.appendChild(item);
+            });
+        }
+
+        async function editResourceCategory(oldName) {
+            const newName = prompt(`Rename category "${oldName}" to:`, oldName);
+            if (!newName || newName === oldName) return;
+
+            try {
+                const response = await fetch(`${RESOURCES_API}?action=list`);
+                const resources = await response.json();
+
+                // Update all resources with this category
+                const updates = resources.filter(r => r.category === oldName);
+                for (const resource of updates) {
+                    await fetch(`${RESOURCES_API}?action=update`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            id: resource.id,
+                            name: resource.name,
+                            category: newName,
+                            url: resource.url,
+                            description: resource.description
+                        })
+                    });
+                }
+
+                document.getElementById('resources-message').innerHTML = '<div class="success">Category renamed successfully</div>';
+                loadResourceCategoryOrder();
+                loadResourcesList();
+            } catch (error) {
+                document.getElementById('resources-message').innerHTML = `<div class="error">Failed to rename category: ${error.message}</div>`;
+            }
+        }
+
+        let draggedResourceElement = null;
+
+        function handleResourceDragStart(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                return false;
+            }
+            draggedResourceElement = this;
+            this.style.opacity = '0.5';
+        }
+
+        function handleResourceDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleResourceDrop(e) {
+            e.preventDefault();
+            if (this !== draggedResourceElement) {
+                const container = document.getElementById('resource-category-order-list');
+                const allItems = Array.from(container.children);
+                const draggedIndex = allItems.indexOf(draggedResourceElement);
+                const targetIndex = allItems.indexOf(this);
+
+                if (draggedIndex < targetIndex) {
+                    container.insertBefore(draggedResourceElement, this.nextSibling);
+                } else {
+                    container.insertBefore(draggedResourceElement, this);
+                }
+            }
+        }
+
+        function handleResourceDragEnd(e) {
+            this.style.opacity = '1';
+            draggedResourceElement = null;
+
+            const items = document.querySelectorAll('.resource-category-order-item');
+            items.forEach((item, index) => {
+                const numberSpan = item.querySelector('span');
+                numberSpan.textContent = `${index + 1}.`;
+            });
+        }
+
+        let touchDragItem = null;
+        let touchStartY = 0;
+
+        function handleResourceTouchStart(e) {
+            touchDragItem = e.currentTarget;
+            touchStartY = e.touches[0].clientY;
+            touchDragItem.style.opacity = '0.5';
+            touchDragItem.style.transform = 'scale(1.05)';
+            touchDragItem.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+        }
+
+        function handleResourceTouchMove(e) {
+            if (!touchDragItem) return;
+            e.preventDefault();
+            const touchY = e.touches[0].clientY;
+            const items = Array.from(document.querySelectorAll('.resource-category-order-item'));
+            const dragIndex = items.indexOf(touchDragItem);
+            
+            items.forEach((item, index) => {
+                if (item === touchDragItem) return;
+                const rect = item.getBoundingClientRect();
+                if (touchY > rect.top && touchY < rect.bottom) {
+                    if (index < dragIndex) {
+                        item.parentNode.insertBefore(touchDragItem, item);
+                    } else {
+                        item.parentNode.insertBefore(touchDragItem, item.nextSibling);
+                    }
+                }
+            });
+        }
+
+        function handleResourceTouchEnd(e) {
+            if (touchDragItem) {
+                touchDragItem.style.opacity = '1';
+                touchDragItem.style.transform = '';
+                touchDragItem.style.boxShadow = '';
+                const items = document.querySelectorAll('.resource-category-order-item');
+                items.forEach((item, index) => {
+                    const numberSpan = item.querySelector('span');
+                    numberSpan.textContent = `${index + 1}.`;
+                });
+                touchDragItem = null;
+            }
+        }
+
+        async function saveResourceCategoryOrder() {
+            const items = document.querySelectorAll('.resource-category-order-item');
+            const newOrder = Array.from(items).map(item => item.dataset.category);
+
+            try {
+                const response = await fetch(`${RESOURCES_API}?action=save_order`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({order: newOrder})
+                });
+
+                if (response.ok) {
+                    localStorage.setItem('resource_category_order', JSON.stringify(newOrder));
+                    document.getElementById('resources-message').innerHTML =
+                        '<div class="success">Category order saved globally!</div>';
+                    loadResourceCategoryOrder();
+                } else {
+                    throw new Error('Failed to save order');
+                }
+            } catch (error) {
+                document.getElementById('resources-message').innerHTML =
+                    `<div class="error">Failed to save order: ${error.message}</div>`;
+            }
+        }
+
+        // Category Order Management Functions
+        async function loadCategoryOrder() {
+            try {
+                // Get actual categories from videos
+                const response = await fetch(`${TAG_API}?action=list&user=${encodeURIComponent(currentUser.email)}&role=${encodeURIComponent(currentUser.role)}`);
+                const data = await response.json();
+
+                let actualCategories = [];
+                if (data.videos) {
+                    const categorySet = new Set();
+                    data.videos.forEach(video => {
+                        if (video.tags && video.tags.length > 0) {
+                            categorySet.add(video.tags[0]); // Primary tag becomes category
+                        }
+                    });
+                    actualCategories = Array.from(categorySet).sort();
+                }
+
+                const savedOrder = localStorage.getItem('video_category_order');
+                let categoryOrder = [];
+
+                if (savedOrder) {
+                    const saved = JSON.parse(savedOrder);
+                    // Merge saved order with actual categories
+                    categoryOrder = [...saved];
+                    actualCategories.forEach(cat => {
+                        if (!categoryOrder.includes(cat)) {
+                            categoryOrder.push(cat);
+                        }
+                    });
+                } else {
+                    categoryOrder = actualCategories;
+                }
+
+                localStorage.setItem('video_category_order', JSON.stringify(categoryOrder));
+                displayCategoryOrder(categoryOrder);
+            } catch (error) {
+                console.error('Failed to load categories:', error);
+                // Fallback to default
+                const defaultOrder = ['news', 'politics', 'sermons', 'teaching', 'apologetics', 'ministry', 'bible', 'worship', 'prayer', 'family'];
+                displayCategoryOrder(defaultOrder);
+            }
+        }
+
+        function displayCategoryOrder(categories) {
+            const container = document.getElementById('category-order-list');
+            container.innerHTML = '';
+
+            categories.forEach((category, index) => {
+                const item = document.createElement('div');
+                item.className = 'category-order-item';
+                item.draggable = true;
+                item.dataset.category = category;
+                item.style.cssText = 'background: #f8f9fa; border: 1px solid #dee2e6; border-radius: 6px; padding: 10px 15px; margin: 5px; display: inline-block; cursor: move; user-select: none;';
+                item.innerHTML = `
+                    <span style="margin-right: 10px; color: #666;">${index + 1}.</span>
+                    <span style="font-weight: 500;">${category.charAt(0).toUpperCase() + category.slice(1)}</span>
+                    <span style="margin-left: 10px; color: #999;">☰</span>
+                `;
+
+                item.addEventListener('dragstart', handleDragStart);
+                item.addEventListener('dragover', handleDragOver);
+                item.addEventListener('drop', handleDrop);
+                item.addEventListener('dragend', handleDragEnd);
+                item.addEventListener('touchstart', handleTouchStart, {passive: false});
+                item.addEventListener('touchmove', handleTouchMove, {passive: false});
+                item.addEventListener('touchend', handleTouchEnd);
+
+                container.appendChild(item);
+            });
+        }
+
+        let draggedElement = null;
+        let touchDragVideoItem = null;
+        let touchStartVideoY = 0;
+
+        function handleDragStart(e) {
+            if (window.innerWidth <= 768) {
+                e.preventDefault();
+                return false;
+            }
+            draggedElement = this;
+            this.style.opacity = '0.5';
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            if (this !== draggedElement) {
+                const container = document.getElementById('category-order-list');
+                const allItems = Array.from(container.children);
+                const draggedIndex = allItems.indexOf(draggedElement);
+                const targetIndex = allItems.indexOf(this);
+
+                if (draggedIndex < targetIndex) {
+                    container.insertBefore(draggedElement, this.nextSibling);
+                } else {
+                    container.insertBefore(draggedElement, this);
+                }
+            }
+        }
+
+        function handleDragEnd(e) {
+            this.style.opacity = '1';
+            draggedElement = null;
+
+            const items = document.querySelectorAll('.category-order-item');
+            items.forEach((item, index) => {
+                const numberSpan = item.querySelector('span');
+                numberSpan.textContent = `${index + 1}.`;
+            });
+        }
+
+        function handleTouchStart(e) {
+            touchDragVideoItem = e.currentTarget;
+            touchStartVideoY = e.touches[0].clientY;
+            touchDragVideoItem.style.opacity = '0.5';
+            touchDragVideoItem.style.transform = 'scale(1.05)';
+            touchDragVideoItem.style.boxShadow = '0 4px 12px rgba(0,0,0,0.3)';
+        }
+
+        function handleTouchMove(e) {
+            if (!touchDragVideoItem) return;
+            e.preventDefault();
+            const touchY = e.touches[0].clientY;
+            const items = Array.from(document.querySelectorAll('.category-order-item'));
+            const dragIndex = items.indexOf(touchDragVideoItem);
+            
+            items.forEach((item, index) => {
+                if (item === touchDragVideoItem) return;
+                const rect = item.getBoundingClientRect();
+                if (touchY > rect.top && touchY < rect.bottom) {
+                    if (index < dragIndex) {
+                        item.parentNode.insertBefore(touchDragVideoItem, item);
+                    } else {
+                        item.parentNode.insertBefore(touchDragVideoItem, item.nextSibling);
+                    }
+                }
+            });
+        }
+
+        function handleTouchEnd(e) {
+            if (touchDragVideoItem) {
+                touchDragVideoItem.style.opacity = '1';
+                touchDragVideoItem.style.transform = '';
+                touchDragVideoItem.style.boxShadow = '';
+                const items = document.querySelectorAll('.category-order-item');
+                items.forEach((item, index) => {
+                    const numberSpan = item.querySelector('span');
+                    numberSpan.textContent = `${index + 1}.`;
+                });
+                touchDragVideoItem = null;
+            }
+        }
+
+        function saveCategoryOrder() {
+            const items = document.querySelectorAll('.category-order-item');
+            const newOrder = Array.from(items).map(item => item.dataset.category);
+
+            localStorage.setItem('video_category_order', JSON.stringify(newOrder));
+            localStorage.setItem('category_order_changed', Date.now().toString());
+
+            document.getElementById('videos-message').innerHTML =
+                '<div class="success">Category order saved successfully! Changes will appear when you visit the videos page.</div>';
+        }
+
+        function resetCategoryOrder() {
+            const defaultOrder = ['news', 'politics', 'sermons', 'teaching', 'apologetics', 'ministry', 'bible', 'worship', 'prayer', 'family'];
+            localStorage.setItem('video_category_order', JSON.stringify(defaultOrder));
+            displayCategoryOrder(defaultOrder);
+
+            document.getElementById('videos-message').innerHTML =
+                '<div class="success">Category order reset to default!</div>';
+        }
+
+        // Comment Management Functions
+        async function loadComments() {
+            document.getElementById('comments-loading').style.display = 'block';
+            document.getElementById('comments-table').style.display = 'none';
+
+            try {
+                const response = await fetch(`${COMMENTS_API}?action=admin_list`, {
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayComments(data.comments);
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('comments-message').innerHTML =
+                    `<div class="error">Failed to load comments: ${error.message}</div>`;
+            } finally {
+                document.getElementById('comments-loading').style.display = 'none';
+            }
+        }
+
+        function displayComments(comments) {
+            const tbody = document.getElementById('comments-tbody');
+            tbody.innerHTML = '';
+
+            let totalComments = comments.length;
+            let activeComments = comments.filter(c => !c.is_deleted).length;
+            let deletedComments = comments.filter(c => c.is_deleted).length;
+
+            document.getElementById('total-comments').textContent = totalComments;
+            document.getElementById('active-comments').textContent = activeComments;
+            document.getElementById('deleted-comments').textContent = deletedComments;
+
+            comments.forEach(comment => {
+                const row = document.createElement('tr');
+                const createdDate = new Date(comment.created_at).toLocaleDateString();
+                const statusBadge = comment.is_deleted ?
+                    '<span style="background: #dc3545; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px;">DELETED</span>' :
+                    '<span style="background: #28a745; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px;">ACTIVE</span>';
+
+                const contentPreview = comment.content.length > 100 ?
+                    comment.content.substring(0, 100) + '...' : comment.content;
+
+                row.innerHTML = `
+                    <td><input type="checkbox" class="comment-checkbox" value="${comment.comment_id}"></td>
+                    <td>${comment.author}</td>
+                    <td><small>${comment.article_id}</small></td>
+                    <td title="${comment.content}">${contentPreview}</td>
+                    <td>${createdDate}</td>
+                    <td>${statusBadge}</td>
+                    <td>
+                        ${!comment.is_deleted ?
+                        `<button class="btn btn-danger" onclick="deleteComment('${comment.comment_id}')" style="font-size: 12px; margin-right: 5px;">Delete</button>` :
+                        `<button class="btn btn-primary" onclick="restoreComment('${comment.comment_id}')" style="font-size: 12px; margin-right: 5px;">Restore</button>`
+                    }
+                        <button class="btn btn-warning" onclick="viewCommentDetails('${comment.comment_id}', '${comment.author}', '${comment.article_id}', '${comment.content.replace(/'/g, "\\'")}')">View</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            document.getElementById('comments-table').style.display = 'table';
+            updateBulkActionButtons();
+        }
+
+        function toggleAllComments() {
+            const selectAll = document.getElementById('select-all-comments');
+            const checkboxes = document.querySelectorAll('.comment-checkbox');
+
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAll.checked;
+            });
+
+            updateBulkActionButtons();
+        }
+
+        function selectAllComments() {
+            const checkboxes = document.querySelectorAll('.comment-checkbox');
+            checkboxes.forEach(checkbox => checkbox.checked = true);
+            document.getElementById('select-all-comments').checked = true;
+            updateBulkActionButtons();
+        }
+
+        function clearCommentSelection() {
+            const checkboxes = document.querySelectorAll('.comment-checkbox');
+            checkboxes.forEach(checkbox => checkbox.checked = false);
+            document.getElementById('select-all-comments').checked = false;
+            updateBulkActionButtons();
+        }
+
+        function updateBulkActionButtons() {
+            const selectedCheckboxes = document.querySelectorAll('.comment-checkbox:checked');
+            const deleteBtn = document.getElementById('bulk-delete-btn');
+            const restoreBtn = document.getElementById('bulk-restore-btn');
+
+            if (selectedCheckboxes.length > 0) {
+                deleteBtn.disabled = false;
+                restoreBtn.disabled = false;
+            } else {
+                deleteBtn.disabled = true;
+                restoreBtn.disabled = true;
+            }
+        }
+
+        async function deleteComment(commentId) {
+            if (!confirm('Are you sure you want to delete this comment?')) return;
+
+            try {
+                const response = await fetch(`${COMMENTS_API}?action=delete&comment_id=${commentId}`, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('comments-message').innerHTML =
+                        '<div class="success">Comment deleted successfully</div>';
+                    loadComments();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('comments-message').innerHTML =
+                    `<div class="error">Failed to delete comment: ${error.message}</div>`;
+            }
+        }
+
+        async function restoreComment(commentId) {
+            try {
+                const response = await fetch(`${COMMENTS_API}?action=bulk_action`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        comment_ids: [commentId],
+                        action: 'restore'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('comments-message').innerHTML =
+                        '<div class="success">Comment restored successfully</div>';
+                    loadComments();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('comments-message').innerHTML =
+                    `<div class="error">Failed to restore comment: ${error.message}</div>`;
+            }
+        }
+
+        async function bulkDeleteComments() {
+            const selectedCheckboxes = document.querySelectorAll('.comment-checkbox:checked');
+            const commentIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+
+            if (commentIds.length === 0) {
+                alert('Please select comments to delete');
+                return;
+            }
+
+            if (!confirm(`Are you sure you want to delete ${commentIds.length} comment(s)?`)) return;
+
+            try {
+                const response = await fetch(`${COMMENTS_API}?action=bulk_action`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        comment_ids: commentIds,
+                        action: 'delete'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('comments-message').innerHTML =
+                        `<div class="success">${data.message}</div>`;
+                    loadComments();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('comments-message').innerHTML =
+                    `<div class="error">Failed to delete comments: ${error.message}</div>`;
+            }
+        }
+
+        async function bulkRestoreComments() {
+            const selectedCheckboxes = document.querySelectorAll('.comment-checkbox:checked');
+            const commentIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+
+            if (commentIds.length === 0) {
+                alert('Please select comments to restore');
+                return;
+            }
+
+            if (!confirm(`Are you sure you want to restore ${commentIds.length} comment(s)?`)) return;
+
+            try {
+                const response = await fetch(`${COMMENTS_API}?action=bulk_action`, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `Bearer ${authToken}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        comment_ids: commentIds,
+                        action: 'restore'
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('comments-message').innerHTML =
+                        `<div class="success">${data.message}</div>`;
+                    loadComments();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('comments-message').innerHTML =
+                    `<div class="error">Failed to restore comments: ${error.message}</div>`;
+            }
+        }
+
+        function viewCommentDetails(commentId, author, articleId, content) {
+            alert(`Comment Details:\n\nAuthor: ${author}\nArticle ID: ${articleId}\nContent: ${content}\nComment ID: ${commentId}`);
+        }
+
+        // Add event listeners for checkboxes
+        document.addEventListener('change', function (e) {
+            if (e.target.classList.contains('comment-checkbox')) {
+                updateBulkActionButtons();
+            }
+            if (e.target.classList.contains('video-checkbox')) {
+                updateBulkVideoButtons();
+            }
+        });
+
+        // News Management Functions
+        async function loadNews() {
+            document.getElementById('news-loading').style.display = 'block';
+            document.getElementById('news-table').style.display = 'none';
+
+            try {
+                // Get fresh token from localStorage
+                const token = localStorage.getItem('auth_token');
+                const response = await fetch(`${NEWS_API}?action=list`, {
+                    headers: {'Authorization': `Bearer ${token}`}
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    displayNews(data);
+                } else {
+                    throw new Error(data.error || 'Failed to load news');
+                }
+            } catch (error) {
+                document.getElementById('news-message').innerHTML =
+                    `<div class="error">Failed to load news: ${error.message}</div>`;
+            } finally {
+                document.getElementById('news-loading').style.display = 'none';
+            }
+        }
+
+        function displayNews(newsItems) {
+            const tbody = document.getElementById('news-tbody');
+            tbody.innerHTML = '';
+
+            if (!newsItems || newsItems.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center;">No news articles found</td></tr>';
+                document.getElementById('news-table').style.display = 'table';
+                return;
+            }
+
+            newsItems.forEach(news => {
+                const row = document.createElement('tr');
+                const createdDate = new Date(news.created_at).toLocaleDateString();
+                const breakingBadge = news.is_breaking ?
+                    '<span style="background: #dc3545; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px;">BREAKING</span>' : '-';
+                const statusBadge = news.status === 'published' ?
+                    '<span style="background: #28a745; color: white; padding: 2px 8px; border-radius: 3px; font-size: 11px;">PUBLISHED</span>' :
+                    '<span style="background: #ffc107; color: #212529; padding: 2px 8px; border-radius: 3px; font-size: 11px;">' + news.status.toUpperCase() + '</span>';
+
+                row.innerHTML = `
+                    <td>${news.title}</td>
+                    <td>${news.category || 'general'}</td>
+                    <td>${news.author_name || news.author}</td>
+                    <td>${statusBadge}</td>
+                    <td>${breakingBadge}</td>
+                    <td>${createdDate}</td>
+                    <td>
+                        <a href="news-article.html?id=${news.news_id}" class="btn btn-primary" style="font-size: 12px; margin-right: 5px;">View</a>
+                        <a href="edit-news.html?id=${news.news_id}" class="btn btn-warning" style="font-size: 12px; margin-right: 5px;">Edit</a>
+                        <button class="btn btn-danger" onclick="deleteNewsItem('${news.news_id}', '${news.title.replace(/'/g, "\\'")}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            document.getElementById('news-table').style.display = 'table';
+        }
+
+        async function deleteNewsItem(newsId, title) {
+            if (!confirm(`Are you sure you want to delete news article: "${title}"?`)) return;
+
+            try {
+                const response = await fetch(`${NEWS_API}?action=delete&news_id=${newsId}`, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${authToken}`}
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('news-message').innerHTML =
+                        '<div class="success">News article deleted successfully</div>';
+                    loadNews();
+                } else {
+                    throw new Error(data.error);
+                }
+            } catch (error) {
+                document.getElementById('news-message').innerHTML =
+                    `<div class="error">Failed to delete news: ${error.message}</div>`;
+            }
+        }
+
+        // Article Tags Management
+        async function loadArticleTags() {
+            document.getElementById('article-tags-loading').style.display = 'block';
+            document.getElementById('article-tags-container').style.display = 'none';
+
+            try {
+                const response = await fetch(`${ARTICLES_API}?action=list&visibility=public`);
+                const data = await response.json();
+
+                if (response.ok && data.articles) {
+                    displayArticleTags(data.articles);
+                } else {
+                    throw new Error('Failed to load articles');
+                }
+            } catch (error) {
+                document.getElementById('articles-message').innerHTML =
+                    `<div class="error">Failed to load article tags: ${error.message}</div>`;
+            } finally {
+                document.getElementById('article-tags-loading').style.display = 'none';
+            }
+        }
+
+        function displayArticleTags(articles) {
+            const tagCounts = {};
+            articles.forEach(article => {
+                if (article.tags && Array.isArray(article.tags)) {
+                    article.tags.forEach(tag => {
+                        tagCounts[tag] = (tagCounts[tag] || 0) + 1;
+                    });
+                }
+            });
+
+            const sortedTags = Object.entries(tagCounts).sort((a, b) => b[1] - a[1]);
+
+            const container = document.getElementById('article-tags-list');
+            container.innerHTML = '';
+
+            if (sortedTags.length === 0) {
+                container.innerHTML = '<p class="text-muted">No tags found. Tags are created when articles are published.</p>';
+            } else {
+                sortedTags.forEach(([tag, count]) => {
+                    const tagBadge = document.createElement('span');
+                    tagBadge.style.cssText = 'background: #667eea; color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 8px;';
+                    tagBadge.innerHTML = `
+                        <span>🏷️ ${tag}</span>
+                        <span style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 10px; font-size: 0.8rem;">${count}</span>
+                    `;
+                    container.appendChild(tagBadge);
+                });
+            }
+
+            document.getElementById('article-tags-container').style.display = 'block';
+        }
+
+        async function loadAnalytics() {
+            document.getElementById('analytics-loading').style.display = 'block';
+            document.getElementById('analytics-table').style.display = 'none';
+
+            try {
+                const response = await fetch(`${ARTICLES_API}?action=analytics`);
+                const data = await response.json();
+
+                if (response.ok && data.analytics) {
+                    displayAnalytics(data.analytics);
+                } else {
+                    throw new Error(data.error || 'Failed to load analytics');
+                }
+            } catch (error) {
+                document.getElementById('analytics-message').innerHTML =
+                    `<div class="error">Failed to load analytics: ${error.message}</div>`;
+            } finally {
+                document.getElementById('analytics-loading').style.display = 'none';
+            }
+        }
+
+        function displayAnalytics(analytics) {
+            // Update stats
+            document.getElementById('analytics-total-articles').textContent = analytics.total_articles;
+            document.getElementById('analytics-total-views').textContent = analytics.total_views.toLocaleString();
+            document.getElementById('analytics-avg-views').textContent = analytics.average_views;
+
+            // Display top articles
+            const tbody = document.getElementById('analytics-tbody');
+            tbody.innerHTML = '';
+
+            if (analytics.top_articles.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" style="text-align: center;">No articles found</td></tr>';
+            } else {
+                analytics.top_articles.forEach((article, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td><strong>#${index + 1}</strong></td>
+                        <td>${article.title}</td>
+                        <td>${article.author}</td>
+                        <td><span class="badge bg-primary">${article.category}</span></td>
+                        <td><strong>${article.view_count.toLocaleString()}</strong></td>
+                        <td>
+                            <a href="article.html?id=${article.article_id}" class="btn btn-primary" style="font-size: 12px;" target="_blank">View</a>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }
+
+            // Display category stats
+            const categoryContainer = document.getElementById('category-stats-container');
+            categoryContainer.innerHTML = '';
+
+            const sortedCategories = Object.entries(analytics.category_stats)
+                .sort((a, b) => b[1].views - a[1].views);
+
+            sortedCategories.forEach(([category, stats]) => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.style.cssText = 'background: #f8f9fa; border-radius: 8px; padding: 15px; margin-bottom: 10px; border-left: 4px solid #667eea;';
+                categoryDiv.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong style="font-size: 1.1rem;">${category}</strong>
+                            <div style="color: #666; margin-top: 5px;">
+                                ${stats.count} article${stats.count !== 1 ? 's' : ''} • 
+                                ${stats.views.toLocaleString()} total views • 
+                                ${Math.round(stats.views / stats.count)} avg views
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 1.5rem; font-weight: bold; color: #667eea;">${stats.views.toLocaleString()}</div>
+                            <div style="font-size: 0.8rem; color: #999;">views</div>
+                        </div>
+                    </div>
+                `;
+                categoryContainer.appendChild(categoryDiv);
+            });
+
+            document.getElementById('analytics-table').style.display = 'table';
+        }
+
+        function getCategoryEmoji(categoryName) {
+            const name = categoryName.toLowerCase();
+            const emojiMap = {
+                'business': '💼',
+                'research': '🔍',
+                'educational': '🎓',
+                'education': '🎓',
+                'school': '🎓',
+                'learning': '🎓',
+                'financial': '💰',
+                'finance': '💰',
+                'money': '💰',
+                'news': '📰',
+                'media': '📺',
+                'ministry': '✝️',
+                'church': '⛪',
+                'christian': '✝️',
+                'apologetics': '🛡️',
+                'general': '📁',
+                'tools': '🔧',
+                'resources': '📚',
+                'bible': '📖',
+                'prayer': '🙏',
+                'worship': '🎵',
+                'music': '🎵',
+                'family': '👨‍👩‍👧‍👦',
+                'politics': '🏛️',
+                'government': '🏛️',
+                'health': '🏥',
+                'medical': '🏥',
+                'technology': '💻',
+                'tech': '💻',
+                'computer': '💻',
+                'science': '🔬',
+                'book': '📚',
+                'video': '🎬',
+                'podcast': '🎙️',
+                'audio': '🎧',
+                'design': '🎨',
+                'art': '🎨',
+                'graphic': '🎨',
+                'legal': '⚖️',
+                'law': '⚖️',
+                'community': '👥',
+                'social': '👥',
+                'charity': '❤️',
+                'nonprofit': '🤝',
+                'mission': '🌍',
+                'outreach': '🌍'
+            };
+
+            for (const [key, emoji] of Object.entries(emojiMap)) {
+                if (name.includes(key)) {
+                    return emoji;
+                }
+            }
+            return '📁'; // Default emoji
+        }
+
+        function showQuotaExceededModal(data) {
+            const usage = data.current_usage || {};
+            const storageUsedGB = (usage.storage_used / (1024**3)).toFixed(2);
+            const storageLimitGB = (usage.storage_limit / (1024**3)).toFixed(1);
+            const storagePercent = usage.storage_limit > 0 ? ((usage.storage_used / usage.storage_limit) * 100).toFixed(1) : 0;
+            const videoPercent = usage.video_limit > 0 ? ((usage.video_count / usage.video_limit) * 100).toFixed(1) : 0;
+            
+            document.getElementById('quota-message').innerHTML = `
+                <p style="font-size: 1.1rem;">${data.message}</p>
+                <p>You need to either upgrade your plan or delete some videos to make room for new uploads.</p>
+            `;
+            
+            document.getElementById('quota-usage').innerHTML = `
+                <h4 style="margin-bottom: 15px;">Current Usage:</h4>
+                <div style="margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span><strong>Storage:</strong></span>
+                        <span>${storageUsedGB} GB / ${storageLimitGB} GB (${storagePercent}%)</span>
+                    </div>
+                    <div style="background: #e9ecef; height: 20px; border-radius: 10px; overflow: hidden;">
+                        <div style="background: ${storagePercent >= 90 ? '#dc3545' : '#ffc107'}; height: 100%; width: ${Math.min(storagePercent, 100)}%; transition: width 0.3s;"></div>
+                    </div>
+                </div>
+                <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                        <span><strong>Videos:</strong></span>
+                        <span>${usage.video_count} / ${usage.video_limit} (${videoPercent}%)</span>
+                    </div>
+                    <div style="background: #e9ecef; height: 20px; border-radius: 10px; overflow: hidden;">
+                        <div style="background: ${videoPercent >= 90 ? '#dc3545' : '#ffc107'}; height: 100%; width: ${Math.min(videoPercent, 100)}%; transition: width 0.3s;"></div>
+                    </div>
+                </div>
+            `;
+            
+            closeModal('download-video-modal');
+            document.getElementById('quota-exceeded-modal').style.display = 'block';
+        }
+        
+        function manageVideos() {
+            closeModal('quota-exceeded-modal');
+            showTab('videos');
+            document.getElementById('videos-message').innerHTML = 
+                '<div class="error">Please delete some videos to free up space for new uploads.</div>';
+        }
+
+        // Close modals when clicking outside
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+    </script>
+    <!-- Quota Exceeded Modal -->
+    <div id="quota-exceeded-modal" class="modal">
+        <div class="modal-content" style="max-width: 600px;">
+            <span class="close" onclick="closeModal('quota-exceeded-modal')">&times;</span>
+            <h3 style="color: #dc3545;">⚠️ Storage Limit Reached</h3>
+            <div id="quota-message" style="margin: 20px 0;"></div>
+            <div id="quota-usage" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0;"></div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="window.location.href='profile.html#subscription'" style="flex: 1;">💎 Upgrade Plan</button>
+                <button class="btn" onclick="manageVideos()" style="flex: 1; background: #6c757d; color: white;">🗑️ Delete Videos</button>
+                <button class="btn" onclick="closeModal('quota-exceeded-modal')" style="background: #f8f9fa;">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -415,6 +415,23 @@ def delete_news(event, headers):
                 'body': json.dumps({'error': 'news_id required'})
             }
         
+        # Get the news item to check for featured image
+        response = news_table.get_item(Key={'news_id': news_id})
+        news_item = response.get('Item')
+        
+        if news_item:
+            # Delete featured image from S3 if it exists
+            featured_image = news_item.get('featured_image', '')
+            if featured_image and 'my-video-downloads-bucket' in featured_image:
+                try:
+                    # Extract S3 key from URL
+                    key = featured_image.split('.com/')[-1]
+                    s3.delete_object(Bucket=S3_BUCKET, Key=key)
+                    print(f'Deleted S3 image: {key}')
+                except Exception as e:
+                    print(f'Failed to delete S3 image: {e}')
+        
+        # Delete the news item from DynamoDB
         news_table.delete_item(Key={'news_id': news_id})
         
         return {

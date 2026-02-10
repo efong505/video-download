@@ -1,0 +1,704 @@
+[
+  {
+    "File": "test-admin-api.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "const response = await fetch('https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin?action=users', {"
+  },
+  {
+    "File": "test-admin-api.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "const response = await fetch('https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin?action=users', {"
+  },
+  {
+    "File": "test-article-lookup.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "test-articles-api.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "test-auth.html",
+    "OldURL": "https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth",
+    "NewURL": null,
+    "LinePreview": "const response = await fetch('https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth?action=login', {"
+  },
+  {
+    "File": "test-bible-lookup.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "test-news-api.html",
+    "OldURL": "https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news",
+    "NewURL": null,
+    "LinePreview": "const response = await fetch('https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news?action=create', {"
+  },
+  {
+    "File": "test-rumble.html",
+    "OldURL": "https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod",
+    "NewURL": null,
+    "LinePreview": "const API_BASE = 'https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod';"
+  },
+  {
+    "File": "common-utils.js",
+    "OldURL": "https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth",
+    "NewURL": null,
+    "LinePreview": "AUTH: 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth',"
+  },
+  {
+    "File": "common-utils.js",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "ADMIN: 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin',"
+  },
+  {
+    "File": "common-utils.js",
+    "OldURL": "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags",
+    "NewURL": null,
+    "LinePreview": "TAG: 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags',"
+  },
+  {
+    "File": "common-utils.js",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "ARTICLES: 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles',"
+  },
+  {
+    "File": "common-utils.js",
+    "OldURL": "https://yvqx5yjqo3.execute-api.us-east-1.amazonaws.com/prod/news",
+    "NewURL": null,
+    "LinePreview": "NEWS: 'https://yvqx5yjqo3.execute-api.us-east-1.amazonaws.com/prod/news',"
+  },
+  {
+    "File": "common-utils.js",
+    "OldURL": "https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/resources",
+    "NewURL": null,
+    "LinePreview": "RESOURCES: 'https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/resources',"
+  },
+  {
+    "File": "common-utils.js",
+    "OldURL": "https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors",
+    "NewURL": null,
+    "LinePreview": "CONTRIBUTORS: 'https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors',"
+  },
+  {
+    "File": "common-utils.js",
+    "OldURL": "https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/comments",
+    "NewURL": null,
+    "LinePreview": "COMMENTS: 'https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/comments',"
+  },
+  {
+    "File": "common-utils.js",
+    "OldURL": "https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal",
+    "NewURL": null,
+    "LinePreview": "PAYPAL: 'https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal',"
+  },
+  {
+    "File": "common-utils.js",
+    "OldURL": "https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/download",
+    "NewURL": null,
+    "LinePreview": "ROUTER: 'https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/download'"
+  },
+  {
+    "File": "admin-products.html",
+    "OldURL": "https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/products",
+    "NewURL": null,
+    "LinePreview": "const API = 'https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/products';"
+  },
+  {
+    "File": "cart.html",
+    "OldURL": "https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/orders",
+    "NewURL": null,
+    "LinePreview": "const response = await fetch('https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/orders?action=create', {"
+  },
+  {
+    "File": "product.html",
+    "OldURL": "https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/products",
+    "NewURL": null,
+    "LinePreview": "const API_PRODUCTS = 'https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/products';"
+  },
+  {
+    "File": "product.html",
+    "OldURL": "https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/reviews",
+    "NewURL": null,
+    "LinePreview": "const API_REVIEWS = 'https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/reviews';"
+  },
+  {
+    "File": "shop.html",
+    "OldURL": "https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/products",
+    "NewURL": null,
+    "LinePreview": "const API = 'https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/products';"
+  },
+  {
+    "File": "test-products.html",
+    "OldURL": "https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/products",
+    "NewURL": null,
+    "LinePreview": "const API = 'https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/products';"
+  },
+  {
+    "File": "test-admin-api.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "const response = await fetch('https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin?action=users', {"
+  },
+  {
+    "File": "test-admin-api.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "const response = await fetch('https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin?action=users', {"
+  },
+  {
+    "File": "test-article-lookup.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "test-articles-api.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "test-auth.html",
+    "OldURL": "https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth",
+    "NewURL": null,
+    "LinePreview": "const response = await fetch('https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth?action=login', {"
+  },
+  {
+    "File": "test-bible-lookup.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "test-news-api.html",
+    "OldURL": "https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news",
+    "NewURL": null,
+    "LinePreview": "const response = await fetch('https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news?action=create', {"
+  },
+  {
+    "File": "test-rumble.html",
+    "OldURL": "https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod",
+    "NewURL": null,
+    "LinePreview": "const API_BASE = 'https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod';"
+  },
+  {
+    "File": "admin-book-subscribers.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "fetch('https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin?action=list_book_subscribers', {"
+  },
+  {
+    "File": "admin-book-subscribers.html",
+    "OldURL": "https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe",
+    "NewURL": null,
+    "LinePreview": "fetch('https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe', {"
+  },
+  {
+    "File": "admin-book-subscribers.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "fetch('https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin?action=list_book_subscribers', {"
+  },
+  {
+    "File": "admin-book-subscribers.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "fetch('https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin?action=list_book_subscribers', {"
+  },
+  {
+    "File": "admin-contributors.html",
+    "OldURL": "https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors",
+    "NewURL": null,
+    "LinePreview": "const API = 'https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors';"
+  },
+  {
+    "File": "admin-contributors.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';"
+  },
+  {
+    "File": "admin-events.html",
+    "OldURL": "https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/events",
+    "NewURL": null,
+    "LinePreview": "const API_URL = 'https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/events';"
+  },
+  {
+    "File": "admin-events.html",
+    "OldURL": "https://cayl9dmtaf.execute-api.us-east-1.amazonaws.com/prod/contributors",
+    "NewURL": null,
+    "LinePreview": "const response = await fetch('https://cayl9dmtaf.execute-api.us-east-1.amazonaws.com/prod/contributors?action=get_races');"
+  },
+  {
+    "File": "admin-newsletters-new.html",
+    "OldURL": "https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/newsletter",
+    "NewURL": null,
+    "LinePreview": "const API_URL = 'https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/newsletter';"
+  },
+  {
+    "File": "admin-newsletters.html",
+    "OldURL": "https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/newsletter",
+    "NewURL": null,
+    "LinePreview": "const API_URL = 'https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/newsletter';"
+  },
+  {
+    "File": "admin-pending-changes.html",
+    "OldURL": "https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors",
+    "NewURL": null,
+    "LinePreview": "const API_URL = 'https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors';"
+  },
+  {
+    "File": "admin-prayers.html",
+    "OldURL": "https://cayl9dmtaf.execute-api.us-east-1.amazonaws.com/prod",
+    "NewURL": null,
+    "LinePreview": "const API_URL = 'https://cayl9dmtaf.execute-api.us-east-1.amazonaws.com/prod';"
+  },
+  {
+    "File": "admin-resources.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/resources",
+    "NewURL": null,
+    "LinePreview": "const RESOURCES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/resources';"
+  },
+  {
+    "File": "admin-resources.html",
+    "OldURL": "https://q65k3dbpd7.execute-api.us-east-1.amazonaws.com/prod/analyze",
+    "NewURL": null,
+    "LinePreview": "const URL_ANALYSIS_API = 'https://q65k3dbpd7.execute-api.us-east-1.amazonaws.com/prod/analyze';"
+  },
+  {
+    "File": "admin-templates.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "admin.html",
+    "OldURL": "https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth",
+    "NewURL": null,
+    "LinePreview": "const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';"
+  },
+  {
+    "File": "admin.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';"
+  },
+  {
+    "File": "admin.html",
+    "OldURL": "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags",
+    "NewURL": null,
+    "LinePreview": "const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';"
+  },
+  {
+    "File": "admin.html",
+    "OldURL": "https://l10alau5g3.execute-api.us-east-1.amazonaws.com/prod/comments",
+    "NewURL": null,
+    "LinePreview": "const COMMENTS_API = 'https://l10alau5g3.execute-api.us-east-1.amazonaws.com/prod/comments';"
+  },
+  {
+    "File": "admin.html",
+    "OldURL": "https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news",
+    "NewURL": null,
+    "LinePreview": "const NEWS_API = 'https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news';"
+  },
+  {
+    "File": "admin.html",
+    "OldURL": "https://q65k3dbpd7.execute-api.us-east-1.amazonaws.com/prod/analyze",
+    "NewURL": null,
+    "LinePreview": "const URL_ANALYSIS_API = 'https://q65k3dbpd7.execute-api.us-east-1.amazonaws.com/prod/analyze';"
+  },
+  {
+    "File": "admin.html",
+    "OldURL": "https://ckbtfz4vbl.execute-api.us-east-1.amazonaws.com/prod/resources",
+    "NewURL": null,
+    "LinePreview": "const RESOURCES_API = 'https://ckbtfz4vbl.execute-api.us-east-1.amazonaws.com/prod/resources';"
+  },
+  {
+    "File": "admin.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "admin.html",
+    "OldURL": "https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/download",
+    "NewURL": null,
+    "LinePreview": "const response = await fetch('https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/download', {"
+  },
+  {
+    "File": "admin.html",
+    "OldURL": "https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal",
+    "NewURL": null,
+    "LinePreview": "const usageResponse = await fetch(`https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal?action=subscription_status&user_id=${user.user_id}`);"
+  },
+  {
+    "File": "admin.html",
+    "OldURL": "https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal",
+    "NewURL": null,
+    "LinePreview": "const usageResponse = await fetch(`https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal?action=subscription_status&user_id=${user.user_id}`);"
+  },
+  {
+    "File": "admin.html",
+    "OldURL": "https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal",
+    "NewURL": null,
+    "LinePreview": "const usageResponse = await fetch(`https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal?action=subscription_status&user_id=${user.user_id}`);"
+  },
+  {
+    "File": "article.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "article.html",
+    "OldURL": "https://l10alau5g3.execute-api.us-east-1.amazonaws.com/prod/comments",
+    "NewURL": null,
+    "LinePreview": "const COMMENTS_API = 'https://l10alau5g3.execute-api.us-east-1.amazonaws.com/prod/comments';"
+  },
+  {
+    "File": "articles.html",
+    "OldURL": "https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth",
+    "NewURL": null,
+    "LinePreview": "const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';"
+  },
+  {
+    "File": "articles.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "authors.html",
+    "OldURL": "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags",
+    "NewURL": null,
+    "LinePreview": "const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';"
+  },
+  {
+    "File": "authors.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "authors.html",
+    "OldURL": "https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth",
+    "NewURL": null,
+    "LinePreview": "const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';"
+  },
+  {
+    "File": "category.html",
+    "OldURL": "https://wfeds5lejb.execute-api.us-east-1.amazonaws.com/prod/api/videos",
+    "NewURL": null,
+    "LinePreview": "const VIDEO_LIST_API = 'https://wfeds5lejb.execute-api.us-east-1.amazonaws.com/prod/api/videos';"
+  },
+  {
+    "File": "category.html",
+    "OldURL": "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags",
+    "NewURL": null,
+    "LinePreview": "const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';"
+  },
+  {
+    "File": "confirm-email.html",
+    "OldURL": "https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/newsletter",
+    "NewURL": null,
+    "LinePreview": "const API_URL = 'https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/newsletter';"
+  },
+  {
+    "File": "create-article-from-aws.html",
+    "OldURL": "https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth",
+    "NewURL": null,
+    "LinePreview": "const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';"
+  },
+  {
+    "File": "create-article-from-aws.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "create-article-v2.html",
+    "OldURL": "https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth",
+    "NewURL": null,
+    "LinePreview": "var AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';"
+  },
+  {
+    "File": "create-article-v2.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "var ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "create-article.html",
+    "OldURL": "https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth",
+    "NewURL": null,
+    "LinePreview": "var AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';"
+  },
+  {
+    "File": "create-article.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "var ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "create-article.html",
+    "OldURL": "https://q65k3dbpd7.execute-api.us-east-1.amazonaws.com/prod/analyze",
+    "NewURL": null,
+    "LinePreview": "var URL_ANALYSIS_API = 'https://q65k3dbpd7.execute-api.us-east-1.amazonaws.com/prod/analyze';"
+  },
+  {
+    "File": "create-article.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "var ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';"
+  },
+  {
+    "File": "debug-videos.html",
+    "OldURL": "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags",
+    "NewURL": null,
+    "LinePreview": "const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';"
+  },
+  {
+    "File": "debug-videos.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';"
+  },
+  {
+    "File": "download-status.html",
+    "OldURL": "https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/download",
+    "NewURL": null,
+    "LinePreview": "const DOWNLOAD_API = 'https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/download';"
+  },
+  {
+    "File": "edit-article.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "edit-article.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';"
+  },
+  {
+    "File": "edit-news.html",
+    "OldURL": "https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news",
+    "NewURL": null,
+    "LinePreview": "var NEWS_API = 'https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news';"
+  },
+  {
+    "File": "edit-news.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "var ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';"
+  },
+  {
+    "File": "election-map.html",
+    "OldURL": "https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors",
+    "NewURL": null,
+    "LinePreview": "const CONTRIBUTORS_API = 'https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors';"
+  },
+  {
+    "File": "embed.html",
+    "OldURL": "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags",
+    "NewURL": null,
+    "LinePreview": "const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';"
+  },
+  {
+    "File": "events-calendar-enhanced.html",
+    "OldURL": "https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/events",
+    "NewURL": null,
+    "LinePreview": "const API_URL = 'https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/events';"
+  },
+  {
+    "File": "events-calendar.html",
+    "OldURL": "https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/events",
+    "NewURL": null,
+    "LinePreview": "const API_URL = 'https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/events';"
+  },
+  {
+    "File": "find-duplicates.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';"
+  },
+  {
+    "File": "index.html",
+    "OldURL": "https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe",
+    "NewURL": null,
+    "LinePreview": "const response = await fetch('https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe', {"
+  },
+  {
+    "File": "login.html",
+    "OldURL": "https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth",
+    "NewURL": null,
+    "LinePreview": "const API_BASE = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';"
+  },
+  {
+    "File": "navbar.js",
+    "OldURL": "https://lc7w6ebg4m.execute-api.us-east-1.amazonaws.com/prod/notifications",
+    "NewURL": null,
+    "LinePreview": "fetch(`https://lc7w6ebg4m.execute-api.us-east-1.amazonaws.com/prod/notifications?action=get_user_notifications&email=${encodeURIComponent(email)}`)"
+  },
+  {
+    "File": "news-article.html",
+    "OldURL": "https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news",
+    "NewURL": null,
+    "LinePreview": "var NEWS_API = 'https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news';"
+  },
+  {
+    "File": "news.html",
+    "OldURL": "https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news",
+    "NewURL": null,
+    "LinePreview": "var NEWS_API = 'https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news';"
+  },
+  {
+    "File": "newsletter-archive.html",
+    "OldURL": "https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/newsletter",
+    "NewURL": null,
+    "LinePreview": "const API_URL = 'https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/newsletter';"
+  },
+  {
+    "File": "notification-settings.html",
+    "OldURL": "https://lc7w6ebg4m.execute-api.us-east-1.amazonaws.com/prod/notifications",
+    "NewURL": null,
+    "LinePreview": "const API_URL = 'https://lc7w6ebg4m.execute-api.us-east-1.amazonaws.com/prod/notifications';"
+  },
+  {
+    "File": "playlists.html",
+    "OldURL": "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags",
+    "NewURL": null,
+    "LinePreview": "const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';"
+  },
+  {
+    "File": "prayer-wall.html",
+    "OldURL": "https://cayl9dmtaf.execute-api.us-east-1.amazonaws.com/prod",
+    "NewURL": null,
+    "LinePreview": "const API_URL = 'https://cayl9dmtaf.execute-api.us-east-1.amazonaws.com/prod';"
+  },
+  {
+    "File": "reset-subscription.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';"
+  },
+  {
+    "File": "reset-subscription.html",
+    "OldURL": "https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/paypal",
+    "NewURL": null,
+    "LinePreview": "const PAYPAL_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/paypal';"
+  },
+  {
+    "File": "resources.html",
+    "OldURL": "https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth",
+    "NewURL": null,
+    "LinePreview": "const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';"
+  },
+  {
+    "File": "resources.html",
+    "OldURL": "https://ckbtfz4vbl.execute-api.us-east-1.amazonaws.com/prod/resources",
+    "NewURL": null,
+    "LinePreview": "const RESOURCES_API = 'https://ckbtfz4vbl.execute-api.us-east-1.amazonaws.com/prod/resources';"
+  },
+  {
+    "File": "subscribe.html",
+    "OldURL": "https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/newsletter",
+    "NewURL": null,
+    "LinePreview": "const API_URL = 'https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/newsletter';"
+  },
+  {
+    "File": "the-necessary-evil-book-original.html",
+    "OldURL": "https://k2zbtkeh67.execute-api.us-east-1.amazonaws.com/prod/contact",
+    "NewURL": null,
+    "LinePreview": "fetch('https://k2zbtkeh67.execute-api.us-east-1.amazonaws.com/prod/contact', {"
+  },
+  {
+    "File": "the-necessary-evil-book-original.html",
+    "OldURL": "https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe",
+    "NewURL": null,
+    "LinePreview": "fetch('https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe', {"
+  },
+  {
+    "File": "the-necessary-evil-book.html",
+    "OldURL": "https://k2zbtkeh67.execute-api.us-east-1.amazonaws.com/prod/contact",
+    "NewURL": null,
+    "LinePreview": "fetch('https://k2zbtkeh67.execute-api.us-east-1.amazonaws.com/prod/contact', {"
+  },
+  {
+    "File": "the-necessary-evil-book.html",
+    "OldURL": "https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe",
+    "NewURL": null,
+    "LinePreview": "fetch('https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe', {"
+  },
+  {
+    "File": "unsubscribe.html",
+    "OldURL": "https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/newsletter",
+    "NewURL": null,
+    "LinePreview": "const API_URL = 'https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/newsletter';"
+  },
+  {
+    "File": "user-page.html",
+    "OldURL": "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags",
+    "NewURL": null,
+    "LinePreview": "const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';"
+  },
+  {
+    "File": "user-page.html",
+    "OldURL": "https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles",
+    "NewURL": null,
+    "LinePreview": "const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';"
+  },
+  {
+    "File": "user-page.html",
+    "OldURL": "https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth",
+    "NewURL": null,
+    "LinePreview": "const response = await fetch('https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth?action=get_user&email=' + encodeURIComponent(userEmail));"
+  },
+  {
+    "File": "user-upload.html",
+    "OldURL": "https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth",
+    "NewURL": null,
+    "LinePreview": "const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';"
+  },
+  {
+    "File": "user-upload.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';"
+  },
+  {
+    "File": "user-upload.html",
+    "OldURL": "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags",
+    "NewURL": null,
+    "LinePreview": "const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';"
+  },
+  {
+    "File": "videos.html",
+    "OldURL": "https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth",
+    "NewURL": null,
+    "LinePreview": "const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';"
+  },
+  {
+    "File": "videos.html",
+    "OldURL": "https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags",
+    "NewURL": null,
+    "LinePreview": "const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';"
+  },
+  {
+    "File": "videos.html",
+    "OldURL": "https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin",
+    "NewURL": null,
+    "LinePreview": "const response = await fetch('https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin?action=generate_thumbnail', {"
+  }
+]

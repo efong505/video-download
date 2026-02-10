@@ -1203,14 +1203,14 @@
     </div>
 
     <script>
-        const AUTH_API = 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth';
-        const ADMIN_API = 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin';
-        const TAG_API = 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags';
-        const COMMENTS_API = 'https://l10alau5g3.execute-api.us-east-1.amazonaws.com/prod/comments';
-        const NEWS_API = 'https://xr1xcc83bj.execute-api.us-east-1.amazonaws.com/prod/news';
-        const URL_ANALYSIS_API = 'https://q65k3dbpd7.execute-api.us-east-1.amazonaws.com/prod/analyze';
-        const RESOURCES_API = 'https://ckbtfz4vbl.execute-api.us-east-1.amazonaws.com/prod/resources';
-        const ARTICLES_API = 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles';
+        const AUTH_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/auth';
+        const ADMIN_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/admin';
+        const TAG_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/tags';
+        const COMMENTS_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/comments';
+        const NEWS_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/news';
+        const URL_ANALYSIS_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/analyze';
+        const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
+        const ARTICLES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/articles';
 
         let currentUser = null;
         let authToken = null;
@@ -2001,7 +2001,7 @@
             }
 
             try {
-                const response = await fetch('https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/download', {
+                const response = await fetch('https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/download', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({
@@ -2668,7 +2668,7 @@
                 // Get usage data
                 let usageData = {storage_used: 0, video_count: 0, storage_limit: 0, video_limit: 0};
                 try {
-                    const usageResponse = await fetch(`https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal?action=subscription_status&user_id=${user.user_id}`);
+                    const usageResponse = await fetch(`https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/paypal?action=subscription_status&user_id=${user.user_id}`);
                     if (usageResponse.ok) {
                         usageData = await usageResponse.json();
                     }
@@ -2808,7 +2808,7 @@
             if (!confirm(`Are you sure you want to cancel the subscription for ${email}?`)) return;
 
             try {
-                const response = await fetch(`https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal?action=cancel_subscription`, {
+                const response = await fetch(`https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/paypal?action=cancel_subscription`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify({user_id: userId})
@@ -2832,7 +2832,7 @@
 
         async function viewUsageDetails(userId, email) {
             try {
-                const response = await fetch(`https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal?action=usage&user_id=${userId}`);
+                const response = await fetch(`https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/paypal?action=usage&user_id=${userId}`);
                 const data = await response.json();
 
                 if (response.ok) {

@@ -5,16 +5,16 @@
 
 // API Endpoints
 const API_ENDPOINTS = {
-    AUTH: 'https://r6l0z3605f.execute-api.us-east-1.amazonaws.com/prod/auth',
-    ADMIN: 'https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin',
-    TAG: 'https://h4hoegi26b.execute-api.us-east-1.amazonaws.com/prod/tags',
-    ARTICLES: 'https://fr3hh94h4a.execute-api.us-east-1.amazonaws.com/prod/articles',
-    NEWS: 'https://yvqx5yjqo3.execute-api.us-east-1.amazonaws.com/prod/news',
-    RESOURCES: 'https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/resources',
-    CONTRIBUTORS: 'https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors',
-    COMMENTS: 'https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/comments',
-    PAYPAL: 'https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/paypal',
-    ROUTER: 'https://j3w8kgqlvi.execute-api.us-east-1.amazonaws.com/prod/download'
+    AUTH: 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/auth',
+    ADMIN: 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/admin',
+    TAG: 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/tags',
+    ARTICLES: 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/articles',
+    NEWS: 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/news',
+    RESOURCES: 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources',
+    CONTRIBUTORS: 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/contributors',
+    COMMENTS: 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/comments',
+    PAYPAL: 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/paypal',
+    ROUTER: 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/download'
 };
 
 // Authentication Functions

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prayer Wall - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2c5aa0;
+            --secondary: #8b4513;
+            --accent: #d4af37;
+        }
+        body { padding-top: 70px; background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); }
+        
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 40px;
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .prayer-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            border-left: 5px solid var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .prayer-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .prayer-card.answered {
+            border-left-color: #28a745;
+            background: linear-gradient(135deg, #ffffff 0%, #f0f9f4 100%);
+        }
+        
+        .category-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .prayer-count {
+            font-size: 1.5rem;
+            color: var(--primary);
+            font-weight: bold;
+        }
+        
+        .submit-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            position: sticky;
+            top: 90px;
+        }
+        
+        .submit-card .card-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-radius: 10px 10px 0 0;
+            padding: 20px;
+            margin: -30px -30px 20px -30px;
+        }
+        
+        .btn-pray {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-pray:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+        }
+        
+        .filter-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        }
+        
+        .testimony-box {
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+        
+        .stats-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .stats-box:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+        }
+        
+        .stats-box.active {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+        }
+        
+        .stats-box.active .stats-number,
+        .stats-box.active .text-muted {
+            color: white !important;
+        }
+        
+        .stats-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="prayer-wall"></div>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+        <div class="container text-center">
+            <h1 class="display-4 fw-bold mb-3">
+                <i class="fas fa-praying-hands me-3"></i>Prayer Wall
+            </h1>
+            <p class="lead mb-0">Join our community in prayer. Submit requests, pray for others, and witness God's faithfulness.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Stats Row -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="stats-box" onclick="filterByStatus('')" id="totalStats">
+                    <div class="stats-number" id="totalPrayers">0</div>
+                    <div class="text-muted">Total Prayers</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-box active" onclick="filterByStatus('active')" id="activeStats">
+                    <div class="stats-number" id="activePrayers">0</div>
+                    <div class="text-muted">Active Requests</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-box" onclick="filterByStatus('answered')" id="answeredStats">
+                    <div class="stats-number" id="answeredPrayers">0</div>
+                    <div class="text-muted">Answered Prayers</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Filters -->
+                <div class="filter-card">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Category</label>
+                            <select id="categoryFilter" class="form-select">
+                                <option value="">All Categories</option>
+                                <option value="personal">Personal</option>
+                                <option value="election">Election</option>
+                                <option value="ministry">Ministry</option>
+                                <option value="nation">Nation</option>
+                                <option value="state">State</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">Status</label>
+                            <select id="statusFilter" class="form-select">
+                                <option value="active">Active</option>
+                                <option value="answered">Answered</option>
+                                <option value="">All</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">State</label>
+                            <select id="stateFilter" class="form-select">
+                                <option value="">All States</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prayer Requests -->
+                <div id="prayerList"></div>
+            </div>
+
+            <div class="col-lg-4">
+                <!-- Submit Prayer Request -->
+                <div class="submit-card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Submit Prayer Request</h5>
+                    </div>
+                    <form id="prayerForm">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="prayerTitle" placeholder="Prayer Title" required>
+                        </div>
+                        <div class="mb-3">
+                            <textarea class="form-control" id="prayerDescription" rows="4" placeholder="Share your prayer request..." required></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <select class="form-select" id="prayerCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="personal">Personal</option>
+                                <option value="election">Election</option>
+                                <option value="ministry">Ministry</option>
+                                <option value="nation">Nation</option>
+                                <option value="state">State</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <input type="text" class="form-control" id="prayerName" placeholder="Your Name" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" class="form-control" id="prayerEmail" placeholder="Email (optional)">
+                        </div>
+                        <div class="mb-3">
+                            <select class="form-select" id="prayerState">
+                                <option value="">State (optional)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" class="form-check-input" id="prayerPrivacy">
+                            <label class="form-check-label" for="prayerPrivacy">Keep anonymous</label>
+                        </div>
+                        <button type="submit" class="btn btn-pray w-100">
+                            <i class="fas fa-paper-plane me-2"></i>Submit Request
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html').then(r => r.text()).then(html => {
+            document.getElementById('navbar-container').innerHTML = html;
+            initNavbar();
+        });
+    </script>
+    <script>
+        const API_URL = 'https://cayl9dmtaf.execute-api.us-east-1.amazonaws.com/prod';
+        const states = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+
+        $(document).ready(function() {
+            populateStateDropdowns();
+            loadPrayers();
+            $('#categoryFilter, #stateFilter').change(loadPrayers);
+            $('#statusFilter').change(function() {
+                loadPrayers();
+                updateStatsHighlight();
+            });
+            $('#prayerForm').submit(submitPrayer);
+        });
+
+        function filterByStatus(status) {
+            $('#statusFilter').val(status);
+            loadPrayers();
+            updateStatsHighlight();
+        }
+
+        function updateStatsHighlight() {
+            $('.stats-box').removeClass('active');
+            const status = $('#statusFilter').val();
+            if (status === 'active') $('#activeStats').addClass('active');
+            else if (status === 'answered') $('#answeredStats').addClass('active');
+            else $('#totalStats').addClass('active');
+        }
+
+        function populateStateDropdowns() {
+            states.forEach(state => {
+                $('#stateFilter, #prayerState').append(`<option value="${state}">${state}</option>`);
+            });
+        }
+
+        function loadPrayers() {
+            const category = $('#categoryFilter').val();
+            const status = $('#statusFilter').val();
+            const state = $('#stateFilter').val();
+
+            let url = `${API_URL}?action=list`;
+            if (category) url += `&category=${category}`;
+            if (status) url += `&status=${status}`;
+            if (state) url += `&state=${state}`;
+
+            $.get(url, function(data) {
+                displayPrayers(data.prayers || []);
+                updateStats(data.prayers || []);
+            }).fail(function() {
+                $('#prayerList').html('<div class="alert alert-danger">Failed to load prayers</div>');
+            });
+        }
+
+        function updateStats(prayers) {
+            $.get(API_URL + '?action=list', function(allData) {
+                const allPrayers = allData.prayers || [];
+                const totalCount = allPrayers.reduce((sum, p) => sum + (p.prayer_count || 0), 0);
+                const activeCount = allPrayers.filter(p => p.status === 'active').length;
+                const answeredCount = allPrayers.filter(p => p.status === 'answered').length;
+                
+                $('#totalPrayers').text(totalCount);
+                $('#activePrayers').text(activeCount);
+                $('#answeredPrayers').text(answeredCount);
+            });
+        }
+
+        function displayPrayers(prayers) {
+            if (prayers.length === 0) {
+                $('#prayerList').html('<div class="alert alert-info">No prayer requests found</div>');
+                return;
+            }
+
+            let html = '';
+            prayers.forEach(prayer => {
+                const isAnswered = prayer.status === 'answered';
+                const cardClass = isAnswered ? 'prayer-card answered' : 'prayer-card';
+                const categoryColors = {
+                    personal: 'primary', election: 'danger', ministry: 'success',
+                    nation: 'warning', state: 'info'
+                };
+                const badgeColor = categoryColors[prayer.category] || 'secondary';
+
+                html += `
+                    <div class="${cardClass}">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <h5 class="mb-0"><i class="fas fa-praying-hands me-2 text-primary"></i>${escapeHtml(prayer.title)}</h5>
+                            <span class="badge bg-${badgeColor} category-badge">${prayer.category}</span>
+                        </div>
+                        <p class="text-muted mb-3">${escapeHtml(prayer.description)}</p>
+                        ${prayer.testimony ? `<div class="testimony-box"><strong><i class="fas fa-check-circle me-2"></i>Answered!</strong> ${escapeHtml(prayer.testimony)}</div>` : ''}
+                        <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
+                            <small class="text-muted">
+                                <i class="fas fa-user me-1"></i>${prayer.privacy === 'private' ? 'Anonymous' : escapeHtml(prayer.submitted_by_name)}
+                                ${prayer.state ? ` • <i class="fas fa-map-marker-alt me-1"></i>${prayer.state}` : ''}
+                                • <i class="fas fa-clock me-1"></i>${formatDate(prayer.created_at)}
+                            </small>
+                            <div>
+                                <span class="prayer-count me-3"><i class="fas fa-praying-hands me-1"></i>${prayer.prayer_count || 0}</span>
+                                ${!isAnswered ? `<button class="btn btn-pray btn-sm" onclick="prayForRequest('${prayer.request_id}')"><i class="fas fa-hands me-1"></i>I Prayed</button>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            $('#prayerList').html(html);
+        }
+
+        function submitPrayer(e) {
+            e.preventDefault();
+
+            const data = {
+                action: 'create',
+                title: $('#prayerTitle').val(),
+                description: $('#prayerDescription').val(),
+                category: $('#prayerCategory').val(),
+                submitted_by_name: $('#prayerName').val(),
+                submitted_by: $('#prayerEmail').val() || 'anonymous@prayer.com',
+                state: $('#prayerState').val(),
+                privacy: $('#prayerPrivacy').is(':checked') ? 'private' : 'public'
+            };
+
+            $.ajax({
+                url: API_URL,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                success: function() {
+                    alert('✅ Prayer request submitted! It will appear after admin approval.');
+                    $('#prayerForm')[0].reset();
+                },
+                error: function() {
+                    alert('❌ Failed to submit prayer request');
+                }
+            });
+        }
+
+        function prayForRequest(requestId) {
+            $.ajax({
+                url: API_URL,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ action: 'pray', request_id: requestId }),
+                success: function() {
+                    loadPrayers();
+                }
+            });
+        }
+
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diff = now - date;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            
+            if (days === 0) return 'Today';
+            if (days === 1) return 'Yesterday';
+            if (days < 7) return `${days} days ago`;
+            return date.toLocaleDateString();
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

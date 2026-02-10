@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Products</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">Admin - Products</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="shop.html">Shop</a></li>
+                    <li class="nav-item"><a class="nav-link" href="admin-products.html">Manage Products</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <div class="d-flex justify-content-between mb-4">
+            <h1>Manage Products</h1>
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#productModal" onclick="resetForm()">Add Product</button>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Category</th>
+                    <th>Rating</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="products-table"></tbody>
+        </table>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal fade" id="productModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Add Product</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="product-id">
+                    <div class="mb-3">
+                        <label>Name</label>
+                        <input type="text" id="name" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>Description</label>
+                        <textarea id="description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label>Price</label>
+                        <input type="number" id="price" class="form-control" step="0.01">
+                    </div>
+                    <div class="mb-3">
+                        <label>Stock</label>
+                        <input type="number" id="stock" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>Category</label>
+                        <select id="category" class="form-select">
+                            <option value="apparel">Apparel</option>
+                            <option value="books">Books</option>
+                            <option value="accessories">Accessories</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label>Image URL</label>
+                        <input type="text" id="image-url" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label>Featured</label>
+                        <select id="featured" class="form-select">
+                            <option value="0">No</option>
+                            <option value="1">Yes</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button class="btn btn-primary" onclick="saveProduct()">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API = 'https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/products';
+
+        async function loadProducts() {
+            const response = await fetch(`${API}?action=list&limit=100`);
+            const data = await response.json();
+
+            const tbody = document.getElementById('products-table');
+            tbody.innerHTML = data.products.map(p => `
+                <tr>
+                    <td><img src="${p.image_url}" width="50"></td>
+                    <td>${p.name}</td>
+                    <td>$${p.price}</td>
+                    <td>${p.stock}</td>
+                    <td>${p.category}</td>
+                    <td>${p.average_rating || 0} ⭐ (${p.review_count || 0})</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary" onclick='editProduct(${JSON.stringify(p)})'>Edit</button>
+                        <button class="btn btn-sm btn-danger" onclick="deleteProduct('${p.product_id}')">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function resetForm() {
+            document.getElementById('modalTitle').textContent = 'Add Product';
+            document.getElementById('product-id').value = '';
+            document.getElementById('name').value = '';
+            document.getElementById('description').value = '';
+            document.getElementById('price').value = '';
+            document.getElementById('stock').value = '';
+            document.getElementById('category').value = 'apparel';
+            document.getElementById('image-url').value = '';
+            document.getElementById('featured').value = '0';
+        }
+
+        function editProduct(product) {
+            document.getElementById('modalTitle').textContent = 'Edit Product';
+            document.getElementById('product-id').value = product.product_id;
+            document.getElementById('name').value = product.name;
+            document.getElementById('description').value = product.description;
+            document.getElementById('price').value = product.price;
+            document.getElementById('stock').value = product.stock;
+            document.getElementById('category').value = product.category;
+            document.getElementById('image-url').value = product.image_url;
+            document.getElementById('featured').value = product.featured;
+
+            new bootstrap.Modal(document.getElementById('productModal')).show();
+        }
+
+        async function saveProduct() {
+            const productId = document.getElementById('product-id').value;
+            const product = {
+                name: document.getElementById('name').value,
+                description: document.getElementById('description').value,
+                price: parseFloat(document.getElementById('price').value),
+                stock: parseInt(document.getElementById('stock').value),
+                category: document.getElementById('category').value,
+                image_url: document.getElementById('image-url').value,
+                featured: document.getElementById('featured').value
+            };
+
+            const action = productId ? 'update' : 'create';
+            if (productId) product.product_id = productId;
+
+            await fetch(`${API}?action=${action}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(product)
+            });
+
+            bootstrap.Modal.getInstance(document.getElementById('productModal')).hide();
+            loadProducts();
+        }
+
+        async function deleteProduct(productId) {
+            if (!confirm('Delete this product?')) return;
+
+            await fetch(`${API}?action=delete`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({product_id: productId})
+            });
+
+            loadProducts();
+        }
+
+        loadProducts();
+    </script>
+</body>
+</html>

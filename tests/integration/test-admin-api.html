@@ -18,7 +18,7 @@
             
             try {
                 // Test getting users first
-                const response = await fetch('https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin?action=users', {
+                const response = await fetch('https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/admin?action=users', {
                     headers: { 'Authorization': `Bearer ${authToken}` }
                 });
                 
@@ -48,7 +48,7 @@
             const authToken = localStorage.getItem('auth_token');
             
             try {
-                const response = await fetch('https://k2avuckm38.execute-api.us-east-1.amazonaws.com/prod/admin?action=user_role', {
+                const response = await fetch('https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/admin?action=user_role', {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${authToken}`,

@@ -54,8 +54,12 @@ def send_notification(body, headers):
     
     # Check user preferences
     try:
-        user_response = users_table.get_item(Key={'email': recipient_email})
-        user = user_response.get('Item', {})
+        user_response = users_table.scan(
+            FilterExpression='email = :email',
+            ExpressionAttributeValues={':email': recipient_email}
+        )
+        users = user_response.get('Items', [])
+        user = users[0] if users else {}
         prefs = user.get('notification_preferences', {})
         
         if not prefs.get(f'{notification_type}_email', True):
@@ -137,8 +141,14 @@ def mark_read(body, headers):
 def get_preferences(params, headers):
     email = params.get('email')
     
-    response = users_table.get_item(Key={'email': email})
-    user = response.get('Item', {})
+    # Scan to find user by email since email is not the primary key
+    response = users_table.scan(
+        FilterExpression='email = :email',
+        ExpressionAttributeValues={':email': email}
+    )
+    
+    users = response.get('Items', [])
+    user = users[0] if users else {}
     prefs = user.get('notification_preferences', {
         'comment_reply_email': True,
         'article_published_email': True,
@@ -153,8 +163,20 @@ def update_preferences(body, headers):
     email = body['email']
     prefs = body['preferences']
     
+    # Find user by email first
+    response = users_table.scan(
+        FilterExpression='email = :email',
+        ExpressionAttributeValues={':email': email}
+    )
+    
+    users = response.get('Items', [])
+    if not users:
+        return {'statusCode': 404, 'headers': headers, 'body': json.dumps({'error': 'User not found'})}
+    
+    user_id = users[0]['user_id']
+    
     users_table.update_item(
-        Key={'email': email},
+        Key={'user_id': user_id},
         UpdateExpression='SET notification_preferences = :prefs',
         ExpressionAttributeValues={':prefs': prefs}
     )
