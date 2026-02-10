@@ -2,14 +2,14 @@
 
 terraform {
   required_version = ">= 1.0"
-  
+
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
   }
-  
+
   backend "s3" {
     bucket         = "techcross-terraform-state"
     key            = "prod/terraform.tfstate"
@@ -21,7 +21,7 @@ terraform {
 
 provider "aws" {
   region = "us-east-1"
-  
+
   default_tags {
     tags = {
       Environment = "production"
@@ -34,88 +34,131 @@ provider "aws" {
 # S3 Buckets
 module "s3_videos" {
   source = "../../modules/s3"
-  
+
   bucket_name = "my-video-downloads-bucket"
   environment = "prod"
 }
 
+# IAM Role for Lambda Functions
+module "lambda_execution_role" {
+  source = "../../modules/iam-role"
+
+  role_name = "lambda-execution-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Principal = {
+          Service = [
+            "lambda.amazonaws.com",
+            "edgelambda.amazonaws.com"
+          ]
+        }
+        Action = "sts:AssumeRole"
+      }
+    ]
+  })
+
+  managed_policy_arns = [
+    "arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole",
+    "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess",
+    "arn:aws:iam::aws:policy/AmazonSESFullAccess",
+    "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+    "arn:aws:iam::aws:policy/AmazonSNSFullAccess",
+    "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess",
+    "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess",
+    "arn:aws:iam::aws:policy/AmazonBedrockFullAccess",
+    "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
+  ]
+
+  tags = {
+    Environment = "production"
+    ManagedBy   = "terraform"
+    Project     = "ministry-platform"
+  }
+}
+
+
+
 # Lambda Functions
 module "lambda_admin_api" {
   source = "../../modules/lambda"
-  
+
   function_name = "admin-api"
   runtime       = "python3.12"
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  
+
   environment_variables = {}
 }
 
 module "lambda_auth_api" {
   source = "../../modules/lambda"
-  
+
   function_name = "auth-api"
   runtime       = "python3.12"
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  
+
   environment_variables = {}
 }
 
 module "lambda_articles_api" {
   source = "../../modules/lambda"
-  
+
   function_name = "articles-api"
   runtime       = "python3.12"
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  
+
   environment_variables = {}
 }
 
 module "lambda_news_api" {
   source = "../../modules/lambda"
-  
+
   function_name = "news-api"
   runtime       = "python3.12"
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  
+
   environment_variables = {}
 }
 
 module "lambda_comments_api" {
   source = "../../modules/lambda"
-  
+
   function_name = "comments-api"
   runtime       = "python3.12"
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 3
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  
-  environment_variables = {} 
+
+  environment_variables = {}
 }
 
 module "lambda_contributors_api" {
   source = "../../modules/lambda"
-  
+
   function_name = "contributors-api"
   runtime       = "python3.11"
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  
-  environment_variables = {} 
+
+  environment_variables = {}
 }
 
 module "lambda_resources_api" {
@@ -127,8 +170,8 @@ module "lambda_resources_api" {
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  
-  environment_variables = {} 
+
+  environment_variables = {}
 }
 
 module "lambda_video_list_api" {
@@ -140,7 +183,7 @@ module "lambda_video_list_api" {
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  
+
   environment_variables = {}
 }
 
@@ -153,7 +196,7 @@ module "lambda_video_tag_api" {
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  
+
   environment_variables = {}
 }
 
@@ -167,7 +210,7 @@ module "lambda_url_analysis_api" {
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
   layers        = ["arn:aws:lambda:us-east-1:371751795928:layer:requests-layer:1"]
-  
+
   environment_variables = {}
 }
 
@@ -180,7 +223,7 @@ module "lambda_paypal_billing_api" {
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  
+
   environment_variables = {}
 }
 
@@ -193,9 +236,9 @@ module "lambda_video_downloader" {
   memory_size   = 2048
   timeout       = 900
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  layers        = [
-        "arn:aws:lambda:us-east-1:371751795928:layer:yt-dlp-layer-v2:1",
-        "arn:aws:lambda:us-east-1:371751795928:layer:ffmpeg-layer:1"
+  layers = [
+    "arn:aws:lambda:us-east-1:371751795928:layer:yt-dlp-layer-v2:1",
+    "arn:aws:lambda:us-east-1:371751795928:layer:ffmpeg-layer:1"
   ]
 
   environment_variables = {}
@@ -224,7 +267,7 @@ module "lambda_s3_thumbnail_trigger" {
   memory_size   = 1024
   timeout       = 300
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  
+
   environment_variables = {}
 }
 
@@ -237,7 +280,7 @@ module "lambda_video_download_router" {
   memory_size   = 512
   timeout       = 60
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  
+
   environment_variables = {}
 }
 
@@ -250,7 +293,7 @@ module "lambda_prayer_api" {
   memory_size   = 512
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  
+
   environment_variables = {}
 }
 
@@ -263,7 +306,7 @@ module "lambda_events_api" {
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  
+
   environment_variables = {}
 }
 
@@ -276,7 +319,7 @@ module "lambda_notifications_api" {
   memory_size   = 256
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  
+
   environment_variables = {}
 }
 
@@ -287,7 +330,7 @@ module "lambda_notifications_api" {
 
 module "unified_api" {
   source = "../../modules/api-gateway"
-  
+
   api_name        = "ministry-platform-api"
   api_description = "Unified API for Christian Conservative Platform"
   stage_name      = "prod"
@@ -296,7 +339,7 @@ module "unified_api" {
 # Auth endpoint
 module "api_auth" {
   source = "../../modules/api-gateway-lambda-integration"
-  
+
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
   path_part            = "auth"
@@ -309,7 +352,7 @@ module "api_auth" {
 # Articles endpoint
 module "api_articles" {
   source = "../../modules/api-gateway-lambda-integration"
-  
+
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
   path_part            = "articles"
@@ -322,7 +365,7 @@ module "api_articles" {
 # News endpoint
 module "api_news" {
   source = "../../modules/api-gateway-lambda-integration"
-  
+
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
   path_part            = "news"
@@ -335,7 +378,7 @@ module "api_news" {
 # Admin endpoint
 module "api_admin" {
   source = "../../modules/api-gateway-lambda-integration"
-  
+
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
   path_part            = "admin"
@@ -348,7 +391,7 @@ module "api_admin" {
 # Comments endpoint
 module "api_comments" {
   source = "../../modules/api-gateway-lambda-integration"
-  
+
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
   path_part            = "comments"
@@ -361,7 +404,7 @@ module "api_comments" {
 # Contributors endpoint
 module "api_contributors" {
   source = "../../modules/api-gateway-lambda-integration"
-  
+
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
   path_part            = "contributors"
@@ -374,7 +417,7 @@ module "api_contributors" {
 # Resources endpoint
 module "api_resources" {
   source = "../../modules/api-gateway-lambda-integration"
-  
+
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
   path_part            = "resources"
@@ -387,7 +430,7 @@ module "api_resources" {
 # Videos endpoint
 module "api_videos" {
   source = "../../modules/api-gateway-lambda-integration"
-  
+
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
   path_part            = "videos"
@@ -400,7 +443,7 @@ module "api_videos" {
 # Tags endpoint
 module "api_tags" {
   source = "../../modules/api-gateway-lambda-integration"
-  
+
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
   path_part            = "tags"
@@ -413,7 +456,7 @@ module "api_tags" {
 # Download endpoint
 module "api_download" {
   source = "../../modules/api-gateway-lambda-integration"
-  
+
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
   path_part            = "download"
@@ -426,7 +469,7 @@ module "api_download" {
 # PayPal endpoint
 module "api_paypal" {
   source = "../../modules/api-gateway-lambda-integration"
-  
+
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
   path_part            = "paypal"
@@ -439,7 +482,7 @@ module "api_paypal" {
 # Analyze endpoint
 module "api_analyze" {
   source = "../../modules/api-gateway-lambda-integration"
-  
+
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
   path_part            = "analyze"
@@ -452,7 +495,7 @@ module "api_analyze" {
 # Prayer endpoint
 module "api_prayer" {
   source = "../../modules/api-gateway-lambda-integration"
-  
+
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
   path_part            = "prayer"
@@ -465,7 +508,7 @@ module "api_prayer" {
 # Notifications endpoint
 module "api_notifications" {
   source = "../../modules/api-gateway-lambda-integration"
-  
+
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
   path_part            = "notifications"
@@ -473,6 +516,320 @@ module "api_notifications" {
   lambda_function_name = module.lambda_notifications_api.function_name
   lambda_function_arn  = module.lambda_notifications_api.function_arn
   enable_cors          = true
+}
+
+# ============================================
+# DynamoDB Tables
+# ============================================
+
+# Articles table
+module "dynamodb_articles" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "articles"
+  hash_key     = "article_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "article_id", type = "S" }
+  ]
+}
+
+# Users table
+module "dynamodb_users" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "users"
+  hash_key     = "user_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "user_id", type = "S" },
+    { name = "email", type = "S" }
+  ]
+
+  global_secondary_indexes = [
+    {
+      name            = "email-index"
+      hash_key        = "email"
+      range_key       = null
+      projection_type = "ALL"
+    }
+  ]
+}
+
+# News table
+module "dynamodb_news" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "news-table"
+  hash_key     = "news_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "news_id", type = "S" }
+  ]
+}
+
+# Comments table
+module "dynamodb_comments" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "comments"
+  hash_key     = "comment_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "comment_id", type = "S" }
+  ]
+}
+
+# Video metadata table
+module "dynamodb_video_metadata" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "video-metadata"
+  hash_key     = "video_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "video_id", type = "S" }
+  ]
+}
+
+# Resources table
+module "dynamodb_resources" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "resources-table"
+  hash_key     = "resource_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "resource_id", type = "S" }
+  ]
+}
+
+# Contributors table
+module "dynamodb_contributors" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "contributors"
+  hash_key     = "contributor_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "contributor_id", type = "S" }
+  ]
+}
+
+# Rate limits table
+module "dynamodb_rate_limits" {
+  source = "../../modules/dynamodb"
+
+  table_name    = "rate-limits"
+  hash_key      = "rate_key"
+  billing_mode  = "PAY_PER_REQUEST"
+  ttl_enabled   = true
+  ttl_attribute = "ttl"
+
+  attributes = [
+    { name = "rate_key", type = "S" }
+  ]
+}
+
+# Book subscribers table
+module "dynamodb_book_subscribers" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "book-subscribers"
+  hash_key     = "email"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "email", type = "S" }
+  ]
+}
+
+# Book purchases table
+module "dynamodb_book_purchases" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "book_purchases"
+  hash_key     = "transaction_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "transaction_id", type = "S" }
+  ]
+}
+
+# Notifications table
+module "dynamodb_notifications" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "notifications"
+  hash_key     = "notification_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "notification_id", type = "S" }
+  ]
+}
+
+# Events table
+module "dynamodb_events" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "events"
+  hash_key     = "event_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "event_id", type = "S" }
+  ]
+}
+
+# Prayer requests table
+module "dynamodb_prayer_requests" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "prayer-requests"
+  hash_key     = "request_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "request_id", type = "S" }
+  ]
+}
+
+# Video analytics table
+module "dynamodb_video_analytics" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "video-analytics"
+  hash_key     = "video_id"
+  range_key    = "timestamp"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "video_id", type = "S" },
+    { name = "timestamp", type = "N" }
+  ]
+}
+
+# Video playlists table
+module "dynamodb_video_playlists" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "video-playlists"
+  hash_key     = "playlist_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "playlist_id", type = "S" }
+  ]
+}
+
+# Download jobs table
+module "dynamodb_download_jobs" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "download-jobs"
+  hash_key     = "job_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "job_id", type = "S" }
+  ]
+}
+
+# Testimonies table
+module "dynamodb_testimonies" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "testimonies"
+  hash_key     = "testimonyId"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "testimonyId", type = "S" },
+    { name = "userEmail", type = "S" }
+  ]
+
+  global_secondary_indexes = [
+    {
+      name            = "UserEmailIndex"
+      hash_key        = "userEmail"
+      range_key       = null
+      projection_type = "ALL"
+    }
+  ]
+}
+
+# Testimony users table
+module "dynamodb_testimony_users" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "testimony-users"
+  hash_key     = "email"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "email", type = "S" }
+  ]
+}
+
+# Candidates table
+module "dynamodb_candidates" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "candidates"
+  hash_key     = "candidate_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "candidate_id", type = "S" }
+  ]
+}
+
+# Races table
+module "dynamodb_races" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "races"
+  hash_key     = "race_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "race_id", type = "S" }
+  ]
+}
+
+# State summaries table
+module "dynamodb_state_summaries" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "state-summaries"
+  hash_key     = "state"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "state", type = "S" }
+  ]
+}
+
+# Election events table
+module "dynamodb_election_events" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "election-events"
+  hash_key     = "event_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "event_id", type = "S" }
+  ]
 }
 
 # ============================================
