@@ -1,0 +1,695 @@
+{
+  "RESTAPIs": [
+    {
+      "Integrations": [
+        {
+          "Lambda": "recipe-scraper-lambda",
+          "Path": "/scrape",
+          "Method": "GET"
+        }
+      ],
+      "Type": "REST",
+      "Name": "recipe-scraper-api",
+      "ID": "1lgppg87fe",
+      "CreatedDate": "2025-10-17T16:03:16-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "prayer_api",
+          "Path": "/",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "prayer_api",
+          "Path": "/",
+          "Method": "POST"
+        }
+      ],
+      "Type": "REST",
+      "Name": "prayer-api",
+      "ID": "cayl9dmtaf",
+      "CreatedDate": "2025-11-03T21:49:51-07:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "resources-api",
+          "Path": "/resources",
+          "Method": "ANY"
+        }
+      ],
+      "Type": "REST",
+      "Name": "resources-api",
+      "ID": "ckbtfz4vbl",
+      "CreatedDate": "2025-10-19T11:37:49-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "articles-api",
+          "Path": "/",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "articles-api",
+          "Path": "/",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "articles-api",
+          "Path": "/articles",
+          "Method": "DELETE"
+        },
+        {
+          "Lambda": "articles-api",
+          "Path": "/articles",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "articles-api",
+          "Path": "/articles",
+          "Method": "OPTIONS"
+        },
+        {
+          "Lambda": "articles-api",
+          "Path": "/articles",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "articles-api",
+          "Path": "/articles",
+          "Method": "PUT"
+        }
+      ],
+      "Type": "REST",
+      "Name": "articles-api",
+      "ID": "fr3hh94h4a",
+      "CreatedDate": "2025-10-13T14:50:07-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "video-tag-api",
+          "Path": "/tags",
+          "Method": "ANY"
+        }
+      ],
+      "Type": "REST",
+      "Name": "video-tag-api",
+      "ID": "h4hoegi26b",
+      "CreatedDate": "2025-10-09T21:36:46-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "contributors-api",
+          "Path": "/contributors",
+          "Method": "DELETE"
+        },
+        {
+          "Lambda": "contributors-api",
+          "Path": "/contributors",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "contributors-api",
+          "Path": "/contributors",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "contributors-api",
+          "Path": "/contributors",
+          "Method": "PUT"
+        }
+      ],
+      "Type": "REST",
+      "Name": "contributors-api",
+      "ID": "hzursivfuk",
+      "CreatedDate": "2025-10-20T14:51:24-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "paypal-billing-api",
+          "Path": "/paypal",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "paypal-billing-api",
+          "Path": "/paypal",
+          "Method": "OPTIONS"
+        },
+        {
+          "Lambda": "paypal-billing-api",
+          "Path": "/paypal",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "video-download-router",
+          "Path": "/download",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "video-download-router",
+          "Path": "/download",
+          "Method": "POST"
+        }
+      ],
+      "Type": "REST",
+      "Name": "video-downloader-api",
+      "ID": "j3w8kgqlvi",
+      "CreatedDate": "2025-10-06T20:13:50-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "admin-api",
+          "Path": "/admin",
+          "Method": "ANY"
+        },
+        {
+          "Lambda": "admin-api",
+          "Path": "/admin",
+          "Method": "OPTIONS"
+        }
+      ],
+      "Type": "REST",
+      "Name": "admin-api",
+      "ID": "k2avuckm38",
+      "CreatedDate": "2025-10-09T23:11:23-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "book-delivery-api",
+          "Path": "/",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "book-delivery-api",
+          "Path": "/",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "contact-form-api",
+          "Path": "/contact",
+          "Method": "POST"
+        }
+      ],
+      "Type": "REST",
+      "Name": "Book Delivery API",
+      "ID": "k2zbtkeh67",
+      "CreatedDate": "2026-01-20T09:39:56-07:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "comments-api",
+          "Path": "/comments",
+          "Method": "ANY"
+        }
+      ],
+      "Type": "REST",
+      "Name": "comments-api",
+      "ID": "l10alau5g3",
+      "CreatedDate": "2025-10-17T20:12:25-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "notifications_api",
+          "Path": "/notifications",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "notifications_api",
+          "Path": "/notifications",
+          "Method": "OPTIONS"
+        },
+        {
+          "Lambda": "notifications_api",
+          "Path": "/notifications",
+          "Method": "POST"
+        }
+      ],
+      "Type": "REST",
+      "Name": "notifications-api",
+      "ID": "lc7w6ebg4m",
+      "CreatedDate": "2025-11-04T23:45:47-07:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "contributors-api",
+          "Path": "/contributors",
+          "Method": "DELETE"
+        },
+        {
+          "Lambda": "contributors-api",
+          "Path": "/contributors",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "contributors-api",
+          "Path": "/contributors",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "contributors-api",
+          "Path": "/contributors",
+          "Method": "PUT"
+        }
+      ],
+      "Type": "REST",
+      "Name": "contributors-api",
+      "ID": "o0mzmvcs59",
+      "CreatedDate": "2025-10-20T14:52:49-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "url-analysis-api",
+          "Path": "/analyze",
+          "Method": "OPTIONS"
+        },
+        {
+          "Lambda": "url-analysis-api",
+          "Path": "/analyze",
+          "Method": "POST"
+        }
+      ],
+      "Type": "REST",
+      "Name": "url-analysis-api",
+      "ID": "q65k3dbpd7",
+      "CreatedDate": "2025-10-19T02:17:35-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "video-download-router",
+          "Path": "/status/{task_id}",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "video-download-router",
+          "Path": "/download",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "video-url-generator",
+          "Path": "/video/{filename}",
+          "Method": "GET"
+        }
+      ],
+      "Type": "REST",
+      "Name": "video-downloader-api",
+      "ID": "qdk8y6nna6",
+      "CreatedDate": "2025-10-06T20:09:00-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "auth-api",
+          "Path": "/auth",
+          "Method": "ANY"
+        },
+        {
+          "Lambda": "auth-api",
+          "Path": "/auth",
+          "Method": "OPTIONS"
+        }
+      ],
+      "Type": "REST",
+      "Name": "auth-api",
+      "ID": "r6l0z3605f",
+      "CreatedDate": "2025-10-09T23:08:35-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "musicFunction",
+          "Path": "/signed-url/{songId}/{format}",
+          "Method": "GET"
+        }
+      ],
+      "Type": "REST",
+      "Name": "MyMusicAPI",
+      "ID": "sljzs4mmue",
+      "CreatedDate": "2025-09-30T10:48:52-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "video-list-api",
+          "Path": "/api/videos",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "video-tag-api",
+          "Path": "/tags",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "video-tag-api",
+          "Path": "/tags",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "video-tag-api",
+          "Path": "/tags",
+          "Method": "PUT"
+        }
+      ],
+      "Type": "REST",
+      "Name": "video-api",
+      "ID": "wfeds5lejb",
+      "CreatedDate": "2025-10-09T15:57:31-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "testimony-crud",
+          "Path": "/testimony/{id}",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "testimony-admin",
+          "Path": "/admin/flags/{id}",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "testimony-admin",
+          "Path": "/admin/flags",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "testimony-admin",
+          "Path": "/admin/flags/{id}/approve",
+          "Method": "PUT"
+        },
+        {
+          "Lambda": "testimony-admin",
+          "Path": "/admin/admins",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "testimony-admin",
+          "Path": "/admin/admins",
+          "Method": "OPTIONS"
+        },
+        {
+          "Lambda": "testimony-admin",
+          "Path": "/admin/admins",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "testimony-admin",
+          "Path": "/admin/users/{email}",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "testimony-admin",
+          "Path": "/admin/users/{email}",
+          "Method": "PUT"
+        },
+        {
+          "Lambda": "testimony-crud",
+          "Path": "/testimonies",
+          "Method": "DELETE"
+        },
+        {
+          "Lambda": "testimony-crud",
+          "Path": "/testimonies",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "testimony-crud",
+          "Path": "/testimonies",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "testimony-crud",
+          "Path": "/testimonies",
+          "Method": "PUT"
+        },
+        {
+          "Lambda": "testimony-auth",
+          "Path": "/register",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "testimony-admin",
+          "Path": "/admin-login",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "testimony-admin",
+          "Path": "/admin/testimonies/{id}",
+          "Method": "DELETE"
+        },
+        {
+          "Lambda": "testimony-admin",
+          "Path": "/admin/flags/{id}/reject",
+          "Method": "PUT"
+        },
+        {
+          "Lambda": "testimony-admin",
+          "Path": "/admin/testimonies",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "testimony-crud",
+          "Path": "/share-testimony",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "testimony-email-ses",
+          "Path": "/send-email-ses",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "testimony-auth",
+          "Path": "/login",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "testimony-crud",
+          "Path": "/testimonies/public",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "testimony-crud",
+          "Path": "/testimonies/public",
+          "Method": "OPTIONS"
+        },
+        {
+          "Lambda": "testimony-auth",
+          "Path": "/update-salvation",
+          "Method": "OPTIONS"
+        },
+        {
+          "Lambda": "testimony-auth",
+          "Path": "/update-salvation",
+          "Method": "PUT"
+        },
+        {
+          "Lambda": "testimony-crud",
+          "Path": "/testimonies/visibility",
+          "Method": "OPTIONS"
+        },
+        {
+          "Lambda": "testimony-crud",
+          "Path": "/testimonies/visibility",
+          "Method": "PUT"
+        },
+        {
+          "Lambda": "testimony-admin",
+          "Path": "/admin/admins/{username}",
+          "Method": "OPTIONS"
+        },
+        {
+          "Lambda": "testimony-admin",
+          "Path": "/admin/admins/{username}",
+          "Method": "PUT"
+        },
+        {
+          "Lambda": "testimony-admin",
+          "Path": "/admin/users",
+          "Method": "GET"
+        }
+      ],
+      "Type": "REST",
+      "Name": "MyTestimony API",
+      "ID": "wm234jgiv3",
+      "CreatedDate": "2025-10-12T04:47:43-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "contributors-api",
+          "Path": "/contributors",
+          "Method": "DELETE"
+        },
+        {
+          "Lambda": "contributors-api",
+          "Path": "/contributors",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "contributors-api",
+          "Path": "/contributors",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "contributors-api",
+          "Path": "/contributors",
+          "Method": "PUT"
+        }
+      ],
+      "Type": "REST",
+      "Name": "contributors-api",
+      "ID": "wzn7e1ipjf",
+      "CreatedDate": "2025-10-20T14:54:03-06:00"
+    },
+    {
+      "Integrations": [],
+      "Type": "REST",
+      "Name": "NewsScraperAPI",
+      "ID": "xi6azy9cp9",
+      "CreatedDate": "2025-11-20T12:33:00-07:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "news-api",
+          "Path": "/news",
+          "Method": "DELETE"
+        },
+        {
+          "Lambda": "news-api",
+          "Path": "/news",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "news-api",
+          "Path": "/news",
+          "Method": "OPTIONS"
+        },
+        {
+          "Lambda": "news-api",
+          "Path": "/news",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "news-api",
+          "Path": "/news",
+          "Method": "PUT"
+        }
+      ],
+      "Type": "REST",
+      "Name": "news-api",
+      "ID": "xr1xcc83bj",
+      "CreatedDate": "2025-10-18T12:45:22-06:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "products-api",
+          "Path": "/products",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "products-api",
+          "Path": "/products",
+          "Method": "OPTIONS"
+        },
+        {
+          "Lambda": "products-api",
+          "Path": "/products",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "orders-api",
+          "Path": "/orders",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "orders-api",
+          "Path": "/orders",
+          "Method": "POST"
+        },
+        {
+          "Lambda": "reviews-api",
+          "Path": "/reviews",
+          "Method": "GET"
+        },
+        {
+          "Lambda": "reviews-api",
+          "Path": "/reviews",
+          "Method": "POST"
+        }
+      ],
+      "Type": "REST",
+      "Name": "shopping-api",
+      "ID": "ydq9xzya5d",
+      "CreatedDate": "2025-11-13T15:25:23-07:00"
+    }
+  ],
+  "TotalAPIs": 25,
+  "HTTPAPIs": [
+    {
+      "Integrations": [
+        {
+          "Lambda": "admin_api",
+          "IntegrationType": "AWS_PROXY"
+        },
+        {
+          "Lambda": "storage_api",
+          "IntegrationType": "AWS_PROXY"
+        },
+        {
+          "Lambda": "auth_api",
+          "IntegrationType": "AWS_PROXY"
+        },
+        {
+          "Lambda": "subscription_api",
+          "IntegrationType": "AWS_PROXY"
+        }
+      ],
+      "Type": "HTTP",
+      "Name": "storage-subscription-api",
+      "ID": "fm52xqjuz3",
+      "CreatedDate": "2025-11-17T15:59:22-07:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "events_api",
+          "IntegrationType": "AWS_PROXY"
+        },
+        {
+          "Lambda": "newsletter_api",
+          "IntegrationType": "AWS_PROXY"
+        }
+      ],
+      "Type": "HTTP",
+      "Name": "ministry-tools-api",
+      "ID": "gu6c08ctel",
+      "CreatedDate": "2025-11-04T00:29:17-07:00"
+    },
+    {
+      "Integrations": [
+        {
+          "Lambda": "email-subscription-handler",
+          "IntegrationType": "AWS_PROXY"
+        }
+      ],
+      "Type": "HTTP",
+      "Name": "email-subscription-api",
+      "ID": "niexv1rw75",
+      "CreatedDate": "2025-10-23T15:31:51-06:00"
+    }
+  ],
+  "AnalysisDate": "2026-02-09 20:39:24"
+}
