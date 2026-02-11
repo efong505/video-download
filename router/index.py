@@ -1,5 +1,5 @@
 
-# CI/CD Pipeline Test - This comment will trigger deployment
+# CI/CD Pipeline Test - This another test of the deployment
 import json
 import boto3
 import os
