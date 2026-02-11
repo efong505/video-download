@@ -1,5 +1,5 @@
 name: Deploy Lambda Functions
-# test
+
 on:
   push:
     branches:
@@ -46,39 +46,65 @@ jobs:
           echo "Detecting changed Lambda functions..."
           
           # Get list of changed files
-          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD || echo "")
+          
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No files changed. Skipping deployment."
+            exit 0
+          fi
           
           echo "Changed files:"
           echo "$CHANGED_FILES"
           
-          # Track which Lambda functions to deploy (avoid duplicates)
-          declare -A LAMBDAS_TO_DEPLOY
+          # Track which Lambda functions to deploy
+          LAMBDAS_TO_DEPLOY=""
           
           # Identify Lambda directories from changed files
           for file in $CHANGED_FILES; do
-            lambda_dir=$(echo $file | cut -d'/' -f1)
+            lambda_dir=$(echo "$file" | cut -d'/' -f1)
             
             # Check if it's a Lambda directory with index.py
             if [ -f "$lambda_dir/index.py" ]; then
-              LAMBDAS_TO_DEPLOY[$lambda_dir]=1
+              # Check if not already in list
+              if ! echo "$LAMBDAS_TO_DEPLOY" | grep -q "$lambda_dir"; then
+                LAMBDAS_TO_DEPLOY="$LAMBDAS_TO_DEPLOY $lambda_dir"
+              fi
             fi
           done
           
+          # Trim whitespace
+          LAMBDAS_TO_DEPLOY=$(echo "$LAMBDAS_TO_DEPLOY" | xargs)
+          
+          if [ -z "$LAMBDAS_TO_DEPLOY" ]; then
+            echo "No Lambda functions to deploy."
+            exit 0
+          fi
+          
+          echo "Lambda functions to deploy: $LAMBDAS_TO_DEPLOY"
+          
           # Deploy each unique Lambda function
-          for lambda_dir in "${!LAMBDAS_TO_DEPLOY[@]}"; do
+          for lambda_dir in $LAMBDAS_TO_DEPLOY; do
             echo "========================================"
             echo "Deploying $lambda_dir..."
             echo "========================================"
             
-            cd $lambda_dir
+            cd "$lambda_dir"
             
             # Create deployment package (exclude unnecessary files)
-            zip -r function.zip . -x "*.zip" "*.pyc" "__pycache__/*" "*.md" "*.txt" "*.ps1"
+            zip -r function.zip . -x "*.zip" "*.pyc" "__pycache__/*" "*.md" "*.txt" "*.ps1" || {
+              echo "Error: Failed to create ZIP for $lambda_dir"
+              cd ..
+              continue
+            }
             
             # Deploy to AWS Lambda
             aws lambda update-function-code \
-              --function-name $lambda_dir \
-              --zip-file fileb://function.zip
+              --function-name "$lambda_dir" \
+              --zip-file fileb://function.zip || {
+              echo "Error: Failed to deploy $lambda_dir"
+              cd ..
+              continue
+            }
             
             echo "✓ Successfully deployed $lambda_dir"
             cd ..
