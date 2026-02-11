@@ -39,6 +39,28 @@ module "s3_videos" {
   environment = "prod"
 }
 
+# CloudFront Origin Access Control
+module "cloudfront_oac" {
+  source = "../../modules/cloudfront-oac"
+
+  name        = "my-video-downloads-bucket.s3.us-east-1.amazonaws.com"
+  description = "Origin Access Control for video downloads bucket"
+}
+
+# CloudFront Distribution
+module "cloudfront_distribution" {
+  source = "../../modules/cloudfront"
+
+  bucket_name                  = "my-video-downloads-bucket"
+  bucket_regional_domain_name  = module.s3_videos.bucket_regional_domain_name
+  origin_access_control_id     = module.cloudfront_oac.id
+  aliases                      = ["videos.mytestimony.click", "christianconservativestoday.com"]
+  acm_certificate_arn          = "arn:aws:acm:us-east-1:371751795928:certificate/d29ff60a-9c7e-4b6a-920b-e9b6db5202b4"
+  comment                      = "Christian Conservative Platform CDN"
+  default_root_object          = "index.html"
+  price_class                  = "PriceClass_100"
+}
+
 # IAM Role for Lambda Functions
 module "lambda_execution_role" {
   source = "../../modules/iam-role"
@@ -1176,4 +1198,23 @@ output "api_endpoints" {
     notifications = "${module.unified_api.invoke_url}/notifications"
   }
   description = "All API endpoint URLs"
+}
+
+output "cloudfront_distribution_id" {
+  value       = module.cloudfront_distribution.distribution_id
+  description = "CloudFront distribution ID"
+}
+
+output "cloudfront_domain_name" {
+  value       = module.cloudfront_distribution.distribution_domain_name
+  description = "CloudFront distribution domain name"
+}
+
+output "website_urls" {
+  value = {
+    cloudfront = "https://${module.cloudfront_distribution.distribution_domain_name}"
+    custom1    = "https://videos.mytestimony.click"
+    custom2    = "https://christianconservativestoday.com"
+  }
+  description = "Website URLs"
 }

@@ -6,7 +6,7 @@ variable "environment" {
   type = string
 }
 
-resource "aws_s3_bucket" "this" {
+resource "aws_s3_bucket" "main" {
   bucket = var.bucket_name
 
   lifecycle {
@@ -14,16 +14,16 @@ resource "aws_s3_bucket" "this" {
   }
 }
 
-resource "aws_s3_bucket_versioning" "this" {
-  bucket = aws_s3_bucket.this.id
+resource "aws_s3_bucket_versioning" "main" {
+  bucket = aws_s3_bucket.main.id
 
   versioning_configuration {
     status = "Enabled"
   }
 }
 
-resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
-  bucket = aws_s3_bucket.this.id
+resource "aws_s3_bucket_server_side_encryption_configuration" "main" {
+  bucket = aws_s3_bucket.main.id
 
   rule {
     apply_server_side_encryption_by_default {
@@ -32,8 +32,8 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "this" {
   }
 }
 
-resource "aws_s3_bucket_cors_configuration" "this" {
-  bucket = aws_s3_bucket.this.id
+resource "aws_s3_bucket_cors_configuration" "main" {
+  bucket = aws_s3_bucket.main.id
 
   cors_rule {
     allowed_headers = ["*"]
@@ -44,8 +44,8 @@ resource "aws_s3_bucket_cors_configuration" "this" {
   }
 }
 
-resource "aws_s3_bucket_policy" "this" {
-  bucket = aws_s3_bucket.this.id
+resource "aws_s3_bucket_policy" "main" {
+  bucket = aws_s3_bucket.main.id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -57,7 +57,7 @@ resource "aws_s3_bucket_policy" "this" {
           Service = "cloudfront.amazonaws.com"
         }
         Action    = "s3:GetObject"
-        Resource  = "${aws_s3_bucket.this.arn}/*"
+        Resource  = "${aws_s3_bucket.main.arn}/*"
         Condition = {
           StringEquals = {
             "AWS:SourceArn" = "arn:aws:cloudfront::371751795928:distribution/E3N00R2D2NE9C5"
@@ -85,8 +85,8 @@ resource "aws_s3_bucket_policy" "this" {
           "s3:GetBucketCORS"
         ]
         Resource = [
-          aws_s3_bucket.this.arn,
-          "${aws_s3_bucket.this.arn}/*"
+          aws_s3_bucket.main.arn,
+          "${aws_s3_bucket.main.arn}/*"
         ]
       }
     ]
@@ -94,9 +94,14 @@ resource "aws_s3_bucket_policy" "this" {
 }
 
 output "bucket_id" {
-  value = aws_s3_bucket.this.id
+  value = aws_s3_bucket.main.id
 }
 
 output "bucket_arn" {
-  value = aws_s3_bucket.this.arn
+  value = aws_s3_bucket.main.arn
+}
+
+output "bucket_regional_domain_name" {
+  description = "S3 bucket regional domain name"
+  value       = aws_s3_bucket.main.bucket_regional_domain_name
 }
