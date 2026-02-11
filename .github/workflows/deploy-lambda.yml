@@ -52,7 +52,6 @@ jobs:
         run: |
           pytest tests/integration -v --tb=short -m "not slow"
         continue-on-error: true
-        if: false  # Disabled - requires working API Gateway deployment
 
   deploy:
     runs-on: ubuntu-latest

@@ -52,7 +52,7 @@ class TestAPIGatewayEndpoints:
     def test_auth_endpoint_requires_body(self):
         """Test that /auth endpoint requires request body"""
         response = requests.post(
-            f"{API_BASE_URL}/auth",
+            f"{API_BASE_URL}/auth?action=login",
             headers={"Content-Type": "application/json"}
         )
         
@@ -61,7 +61,7 @@ class TestAPIGatewayEndpoints:
     
     def test_articles_endpoint_accessible(self):
         """Test that /articles endpoint is accessible"""
-        response = requests.get(f"{API_BASE_URL}/articles")
+        response = requests.get(f"{API_BASE_URL}/articles?action=list")
         
         # Should return 200 or 401 (if auth required)
         assert response.status_code in [200, 401, 403]
@@ -101,7 +101,7 @@ class TestAPIGatewayErrorHandling:
     def test_malformed_json_returns_error(self):
         """Test that malformed JSON returns appropriate error"""
         response = requests.post(
-            f"{API_BASE_URL}/auth",
+            f"{API_BASE_URL}/auth?action=login",
             headers={"Content-Type": "application/json"},
             data="invalid json {{"
         )
@@ -111,7 +111,7 @@ class TestAPIGatewayErrorHandling:
     def test_missing_content_type_header(self):
         """Test request without Content-Type header"""
         response = requests.post(
-            f"{API_BASE_URL}/auth",
+            f"{API_BASE_URL}/auth?action=login",
             data=json.dumps({"email": "test@example.com", "password": "test"})
         )
         
