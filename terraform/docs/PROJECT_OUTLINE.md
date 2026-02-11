@@ -358,43 +358,58 @@ Code Change → Git Push → Run Tests → Tests Pass → Deploy Lambda
 
 ### Objectives
 - Add CloudWatch monitoring for all Lambda functions
-- Create alarms for errors, throttles, and duration
+- Create actionable alarms (not excessive)
 - Set up SNS notifications
-- Create monitoring dashboard
+- Validate alarm system with intentional testing
+- Document operational runbooks
 
 ### Planned Actions
 1. Create CloudWatch Log Group module
 2. Import existing log groups (18 Lambda functions)
-3. Set 30-day log retention policies
-4. Create CloudWatch Alarm module
-5. Create SNS Topic module
-6. Configure critical alarms (errors, throttles)
-7. Configure warning alarms (duration, invocations)
-8. Create CloudWatch Dashboard
-9. Test alarm notifications
-10. Document alarm response procedures
+3. Set retention policies by criticality (7/14/30 days)
+4. Create SNS Topic module
+5. Create CloudWatch Alarm module with treat_missing_data
+6. Deploy 18 Lambda error alarms (all functions)
+7. Deploy 8 critical function alarms (duration + throttle for 4 functions)
+8. Deploy 1 API Gateway 5XX alarm
+9. **Post-deployment validation: Intentionally trigger 2-3 alarms**
+10. Document alarm response procedures (ALARM_RUNBOOK.md)
+11. Document validation results (ALARM_VALIDATION.md)
+12. Create CloudWatch Dashboard (last step)
 
 ### Modules to Create
 - `terraform/modules/cloudwatch-log-group/`
 - `terraform/modules/cloudwatch-alarm/`
 - `terraform/modules/sns-topic/`
 
-### Alarms to Configure (per Lambda function)
-- **Critical**: Error rate > 5%, Duration > 80% timeout
-- **Warning**: Error rate > 1%, Throttles > 0
-- **Info**: Invocation count, concurrent executions
+### Alarms to Configure (27 total)
+- **API Gateway**: 1 alarm (5XX errors, latency deferred)
+- **Lambda Errors**: 18 alarms (all functions)
+- **Lambda Critical**: 8 alarms (duration + throttle for router, downloader, auth-api, paypal-billing-api)
+
+### Alarm Strategy
+- All alarms use `treat_missing_data = "notBreaching"`
+- Error threshold: > 3 errors in 5 minutes
+- Duration threshold: > 80% of timeout
+- Throttle threshold: > 0
+- Focus on actionable alerts, not noise
 
 ### Expected Benefits
-- Automated error alerts
-- Proactive issue detection
+- Automated error alerts via SNS
+- Proactive issue detection before user reports
+- Validated operational runbooks
 - Centralized monitoring dashboard
-- 30-day audit trail
+- 7-30 day audit trail (by function criticality)
+- Cost-aware monitoring ($10-11/month)
+- **Operational authority: "I operate an alerting system"**
 
 ### Estimated Cost
-- **CloudWatch Logs**: $5-10/month
-- **CloudWatch Alarms**: $5.40/month (18 functions × 3 alarms)
+- **CloudWatch Logs**: $5-6/month (1GB ingestion + storage)
+- **CloudWatch Alarms**: $1.70/month (27 alarms, first 10 free)
 - **SNS**: $0/month (free tier)
-- **Total**: $10-15/month
+- **Dashboard**: $3/month
+- **Total**: $10-11/month
+- **Note**: Costs incur even with zero activity (flat fees for alarms and dashboard)
 
 ### Estimated Timeline
 - **Duration**: 2 weeks
