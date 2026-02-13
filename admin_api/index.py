@@ -5,6 +5,7 @@ import base64
 import hmac
 import hashlib
 from decimal import Decimal
+import os
 
 class DecimalEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -19,7 +20,7 @@ users_table = dynamodb.Table('users')
 metadata_table = dynamodb.Table('video-metadata')
 book_subscribers_table = dynamodb.Table('book-subscribers')
 
-JWT_SECRET = 'your-jwt-secret-key'
+JWT_SECRET = os.environ.get('JWT_SECRET', 'your-jwt-secret-key')
 
 def lambda_handler(event, context):
     try:
@@ -627,10 +628,11 @@ def upload_image(event):
             # Old multipart format - body is base64 encoded multipart data
             print("Falling back to multipart format")
             
-            if is_base64:
-                body_bytes = base64.b64decode(body_str)
-            else:
-                body_bytes = body_str.encode('latin-1')
+            # API Gateway should base64 encode binary data
+            if not is_base64:
+                raise ValueError('Binary data must be base64 encoded by API Gateway')
+            
+            body_bytes = base64.b64decode(body_str)
             
             # Extract file from multipart
             content_type = event.get('headers', {}).get('content-type', '') or event.get('headers', {}).get('Content-Type', '')

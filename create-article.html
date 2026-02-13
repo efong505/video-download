@@ -588,27 +588,38 @@ Code block
         }
         
         function uploadImageToS3(file) {
-            var formData = new FormData();
-            formData.append('file', file);
-            fetch(ADMIN_API + '?action=upload_image', {
-                method: 'POST',
-                headers: {'Authorization': 'Bearer ' + authToken},
-                body: formData
-            })
-            .then(function(response) { return response.json(); })
-            .then(function(data) {
-                if (data.url) {
-                    document.getElementById('featured-image-url').value = data.url;
-                    showFeaturedImagePreview(data.url);
-                    alert('Image uploaded to S3 successfully!');
-                } else {
-                    alert('Error uploading image: ' + (data.error || 'Unknown error'));
-                }
-            })
-            .catch(function(error) {
-                console.error('Upload error:', error);
-                alert('Failed to upload image');
-            });
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var base64Data = e.target.result.split(',')[1];
+                var fileExt = file.name.split('.').pop().toLowerCase();
+                
+                fetch(ADMIN_API + '?action=upload_image', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + authToken
+                    },
+                    body: JSON.stringify({
+                        file_data: base64Data,
+                        file_ext: fileExt
+                    })
+                })
+                .then(function(response) { return response.json(); })
+                .then(function(data) {
+                    if (data.url) {
+                        document.getElementById('featured-image-url').value = data.url;
+                        showFeaturedImagePreview(data.url);
+                        alert('Image uploaded to S3 successfully!');
+                    } else {
+                        alert('Error uploading image: ' + (data.error || 'Unknown error'));
+                    }
+                })
+                .catch(function(error) {
+                    console.error('Upload error:', error);
+                    alert('Failed to upload image');
+                });
+            };
+            reader.readAsDataURL(file);
         }
         
         function showFeaturedImagePreview(dataUrl) {

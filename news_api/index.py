@@ -4,6 +4,7 @@ import uuid
 from datetime import datetime
 from decimal import Decimal
 import base64
+import os
 
 # Initialize AWS services
 dynamodb = boto3.resource('dynamodb')
@@ -14,7 +15,7 @@ users_table = dynamodb.Table('users')
 subscribers_table = dynamodb.Table('email_subscribers')
 
 # Configuration
-JWT_SECRET = 'your-jwt-secret-key'
+JWT_SECRET = os.environ.get('JWT_SECRET', 'your-jwt-secret-key')
 S3_BUCKET = 'my-video-downloads-bucket'
 CLOUDFRONT_URL = 'https://christianconservativestoday.com'
 

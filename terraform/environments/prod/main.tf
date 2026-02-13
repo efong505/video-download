@@ -31,7 +31,87 @@ provider "aws" {
   }
 }
 
+# ============================================
+# Route53 & ACM Certificates
+# ============================================
+
+# Get Route53 hosted zone
+data "aws_route53_zone" "main" {
+  name         = "christianconservativestoday.com."
+  private_zone = false
+}
+
+# Production API certificate
+module "acm_api_prod" {
+  source = "../../modules/acm-certificate"
+
+  domain_name    = "api.christianconservativestoday.com"
+  hosted_zone_id = data.aws_route53_zone.main.zone_id
+
+  tags = {
+    Environment = "production"
+    Purpose     = "API Gateway Custom Domain"
+  }
+}
+
+# Staging API certificate
+module "acm_api_staging" {
+  source = "../../modules/acm-certificate"
+
+  domain_name    = "api-staging.christianconservativestoday.com"
+  hosted_zone_id = data.aws_route53_zone.main.zone_id
+
+  tags = {
+    Environment = "staging"
+    Purpose     = "API Gateway Custom Domain"
+  }
+}
+
+# ============================================
+# API Gateway Custom Domains
+# ============================================
+
+# Production API custom domain
+module "api_domain_prod" {
+  source = "../../modules/api-gateway-domain-name"
+
+  domain_name      = "api.christianconservativestoday.com"
+  certificate_arn  = module.acm_api_prod.certificate_arn
+  api_id           = module.unified_api.api_id
+  stage_name       = "prod"
+  base_path        = ""
+  hosted_zone_id   = data.aws_route53_zone.main.zone_id
+
+  tags = {
+    Environment = "production"
+    Purpose     = "API Custom Domain"
+  }
+
+  depends_on = [module.unified_api]
+}
+
+# Staging API custom domain
+module "api_domain_staging" {
+  source = "../../modules/api-gateway-domain-name"
+
+  domain_name      = "api-staging.christianconservativestoday.com"
+  certificate_arn  = module.acm_api_staging.certificate_arn
+  api_id           = module.unified_api.api_id
+  stage_name       = "staging"
+  base_path        = ""
+  hosted_zone_id   = data.aws_route53_zone.main.zone_id
+
+  tags = {
+    Environment = "staging"
+    Purpose     = "API Custom Domain"
+  }
+
+  depends_on = [module.unified_api]
+}
+
+# ============================================
 # S3 Buckets
+# ============================================
 module "s3_videos" {
   source = "../../modules/s3"
 
@@ -104,7 +184,39 @@ module "lambda_execution_role" {
 
 
 
+# ============================================
+# Lambda Layers
+# ============================================
+
+# yt-dlp Layer
+module "layer_yt_dlp" {
+  source = "../../modules/lambda-layer"
+
+  layer_name          = "yt-dlp-layer-v2"
+  description         = "yt-dlp binary for Lambda"
+  compatible_runtimes = ["python3.11"]
+}
+
+# FFmpeg Layer
+module "layer_ffmpeg" {
+  source = "../../modules/lambda-layer"
+
+  layer_name          = "ffmpeg-layer"
+  description         = "FFmpeg binaries for video conversion"
+  compatible_runtimes = ["python3.11"]
+}
+
+# Requests Layer
+module "layer_requests" {
+  source = "../../modules/lambda-layer"
+
+  layer_name          = "requests-layer"
+  compatible_runtimes = ["python3.9", "python3.10", "python3.11", "python3.12"]
+}
+
+# ============================================
 # Lambda Functions
+# ============================================
 module "lambda_admin_api" {
   source = "../../modules/lambda"
 
@@ -114,6 +226,9 @@ module "lambda_admin_api" {
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -127,6 +242,9 @@ module "lambda_auth_api" {
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -140,6 +258,9 @@ module "lambda_articles_api" {
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -153,6 +274,9 @@ module "lambda_news_api" {
   memory_size   = 256
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -166,6 +290,9 @@ module "lambda_comments_api" {
   memory_size   = 128
   timeout       = 3
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -179,6 +306,9 @@ module "lambda_contributors_api" {
   memory_size   = 256
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -192,6 +322,9 @@ module "lambda_resources_api" {
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -205,6 +338,9 @@ module "lambda_video_list_api" {
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -218,6 +354,9 @@ module "lambda_video_tag_api" {
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -232,6 +371,9 @@ module "lambda_url_analysis_api" {
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
   layers        = ["arn:aws:lambda:us-east-1:371751795928:layer:requests-layer:1"]
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -245,6 +387,9 @@ module "lambda_paypal_billing_api" {
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -262,6 +407,9 @@ module "lambda_video_downloader" {
     "arn:aws:lambda:us-east-1:371751795928:layer:yt-dlp-layer-v2:1",
     "arn:aws:lambda:us-east-1:371751795928:layer:ffmpeg-layer:1"
   ]
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -276,6 +424,9 @@ module "lambda_thumbnail_generator" {
   timeout       = 300
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
   layers        = ["arn:aws:lambda:us-east-1:371751795928:layer:ffmpeg-layer:1"]
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -289,6 +440,9 @@ module "lambda_s3_thumbnail_trigger" {
   memory_size   = 1024
   timeout       = 300
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -302,6 +456,9 @@ module "lambda_video_download_router" {
   memory_size   = 512
   timeout       = 60
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -315,6 +472,9 @@ module "lambda_prayer_api" {
   memory_size   = 512
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -328,6 +488,9 @@ module "lambda_events_api" {
   memory_size   = 128
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -341,6 +504,9 @@ module "lambda_notifications_api" {
   memory_size   = 256
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = true
+  alias_name    = "live"
 
   environment_variables = {}
 }
@@ -356,6 +522,13 @@ module "unified_api" {
   api_name        = "ministry-platform-api"
   api_description = "Unified API for Christian Conservative Platform"
   stage_name      = "prod"
+}
+
+# Staging stage
+resource "aws_api_gateway_stage" "staging" {
+  deployment_id = module.unified_api.deployment_id
+  rest_api_id   = module.unified_api.api_id
+  stage_name    = "staging"
 }
 
 # Auth endpoint
@@ -873,10 +1046,12 @@ module "dynamodb_email_events" {
 
   table_name   = "email-events"
   hash_key     = "event_id"
+  range_key    = "timestamp"
   billing_mode = "PAY_PER_REQUEST"
 
   attributes = [
-    { name = "event_id", type = "S" }
+    { name = "event_id", type = "S" },
+    { name = "timestamp", type = "N" }
   ]
 }
 
@@ -919,252 +1094,7 @@ module "dynamodb_newsletter_templates" {
   ]
 }
 
-# Newsletter analytics table
-module "dynamodb_newsletter_analytics" {
-  source = "../../modules/dynamodb"
 
-  table_name   = "newsletter_analytics"
-  hash_key     = "analytics_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "analytics_id", type = "S" }
-  ]
-}
-
-# User email subscribers table
-module "dynamodb_user_email_subscribers" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "user-email-subscribers"
-  hash_key     = "subscriber_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "subscriber_id", type = "S" }
-  ]
-}
-
-# User email campaigns table
-module "dynamodb_user_email_campaigns" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "user-email-campaigns"
-  hash_key     = "campaign_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "campaign_id", type = "S" }
-  ]
-}
-
-# User email events table
-module "dynamodb_user_email_events" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "user-email-events"
-  hash_key     = "event_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "event_id", type = "S" }
-  ]
-}
-
-# Pending changes table
-module "dynamodb_pending_changes" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "pending-changes"
-  hash_key     = "change_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "change_id", type = "S" }
-  ]
-}
-
-# User flags table
-module "dynamodb_user_flags" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "user-flags"
-  hash_key     = "flag_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "flag_id", type = "S" }
-  ]
-}
-
-# Admin users table
-module "dynamodb_admin_users" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "admin-users"
-  hash_key     = "user_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "user_id", type = "S" }
-  ]
-}
-
-# Templates table
-module "dynamodb_templates" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "Templates"
-  hash_key     = "template_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "template_id", type = "S" }
-  ]
-}
-
-# Cards table
-module "dynamodb_cards" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "Cards"
-  hash_key     = "card_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "card_id", type = "S" }
-  ]
-}
-
-# Cart table
-module "dynamodb_cart" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "Cart"
-  hash_key     = "cart_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "cart_id", type = "S" }
-  ]
-}
-
-# Orders table
-module "dynamodb_orders" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "Orders"
-  hash_key     = "order_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "order_id", type = "S" }
-  ]
-}
-
-# Products table
-module "dynamodb_products" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "Products"
-  hash_key     = "product_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "product_id", type = "S" }
-  ]
-}
-
-# Reviews table
-module "dynamodb_reviews" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "Reviews"
-  hash_key     = "review_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "review_id", type = "S" }
-  ]
-}
-
-# Storage files table
-module "dynamodb_storage_files" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "StorageFiles"
-  hash_key     = "file_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "file_id", type = "S" }
-  ]
-}
-
-# Storage users table
-module "dynamodb_storage_users" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "StorageUsers"
-  hash_key     = "user_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "user_id", type = "S" }
-  ]
-}
-
-# Users legacy table
-module "dynamodb_users_legacy" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "Users"
-  hash_key     = "user_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "user_id", type = "S" }
-  ]
-}
-
-# Website configs table
-module "dynamodb_website_configs" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "WebsiteConfigs"
-  hash_key     = "config_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "config_id", type = "S" }
-  ]
-}
-
-# News articles legacy table
-module "dynamodb_news_articles" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "NewsArticles"
-  hash_key     = "article_id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "article_id", type = "S" }
-  ]
-}
-
-# Demo table
-module "dynamodb_demo_table" {
-  source = "../../modules/dynamodb"
-
-  table_name   = "DemoTable"
-  hash_key     = "id"
-  billing_mode = "PAY_PER_REQUEST"
-
-  attributes = [
-    { name = "id", type = "S" }
-  ]
-}
 
 # ============================================
 # Outputs

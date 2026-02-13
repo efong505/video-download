@@ -32,10 +32,6 @@ resource "aws_api_gateway_rest_api" "this" {
 resource "aws_api_gateway_deployment" "this" {
   rest_api_id = aws_api_gateway_rest_api.this.id
 
-  triggers = {
-    redeployment = timestamp()
-  }
-
   lifecycle {
     create_before_destroy = true
   }
@@ -61,6 +57,10 @@ resource "aws_api_gateway_gateway_response" "cors" {
     "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
     "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
     "gatewayresponse.header.Access-Control-Allow-Methods" = "'*'"
+  }
+
+  response_templates = {
+    "application/json" = "{\"message\":$context.error.messageString}"
   }
 }
 
@@ -88,4 +88,9 @@ output "invoke_url" {
 output "stage_arn" {
   value       = aws_api_gateway_stage.this.arn
   description = "The ARN of the stage"
+}
+
+output "deployment_id" {
+  value       = aws_api_gateway_deployment.this.id
+  description = "The ID of the deployment"
 }

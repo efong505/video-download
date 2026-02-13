@@ -4,12 +4,13 @@ import hashlib
 import uuid
 import base64
 import hmac
+import os
 from datetime import datetime, timedelta
 
 dynamodb = boto3.resource('dynamodb')
 users_table = dynamodb.Table('users')
 
-JWT_SECRET = 'your-jwt-secret-key'  # In production, use AWS Secrets Manager
+JWT_SECRET = os.environ.get('JWT_SECRET', 'your-jwt-secret-key')
 
 def lambda_handler(event, context):
     try:
