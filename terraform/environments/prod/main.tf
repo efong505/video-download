@@ -1100,6 +1100,21 @@ module "dynamodb_newsletter_templates" {
 # Outputs
 # ============================================
 
+output "s3_bucket_name" {
+  value = module.s3_videos.bucket_id
+  description = "S3 bucket name for video storage"
+}
+
+output "s3_bucket_arn" {
+  value = module.s3_videos.bucket_arn
+  description = "ARN of the S3 bucket for video storage"
+}
+
+output "s3_bucket_domain" {
+  value = module.s3_videos.bucket_regional_domain_name
+  description = "s3 bucket regional domain name"
+}
+
 output "api_gateway_url" {
   value       = module.unified_api.invoke_url
   description = "Base URL for the unified API Gateway"
