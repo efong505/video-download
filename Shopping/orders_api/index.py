@@ -80,6 +80,9 @@ def create_order(event):
             'tax': Decimal(str(body['tax'])),
             'total': Decimal(str(body['total'])),
             'status': 'pending',
+            'order_status': 'pending',
+            'order_date': timestamp,
+            'payment_status': 'pending',
             'shipping_address': body.get('shipping_address', {}),
             'payment_method': body.get('payment_method', 'pending'),
             'created_at': timestamp,
@@ -157,7 +160,7 @@ def update_order_status(event):
     
     orders_table.update_item(
         Key={'order_id': order_id},
-        UpdateExpression='SET #status = :status, updated_at = :updated',
+        UpdateExpression='SET #status = :status, order_status = :status, updated_at = :updated',
         ExpressionAttributeNames={'#status': 'status'},
         ExpressionAttributeValues={
             ':status': new_status,
