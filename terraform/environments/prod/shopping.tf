@@ -159,6 +159,72 @@ module "dynamodb_shopping_reviews" {
   ]
 }
 
+# ============================================
+# Shopping Lambda Functions
+# ============================================
+
+module "lambda_products_api" {
+  source = "../../modules/lambda"
+  
+  function_name = "products-api"
+  runtime       = "python3.12"
+  handler       = "index.lambda_handler"
+  memory_size   = 512
+  timeout       = 30
+  role_arn      = "arn:aws:iam::371751795928:role/testimony-lambda-role"
+}
+
+module "lambda_orders_api" {
+  source = "../../modules/lambda"
+  
+  function_name = "orders-api"
+  runtime       = "python3.12"
+  handler       = "index.lambda_handler"
+  memory_size   = 128
+  timeout       = 30
+  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+}
+
+module "lambda_reviews_api" {
+  source = "../../modules/lambda"
+  
+  function_name = "reviews-api"
+  runtime       = "python3.12"
+  handler       = "index.lambda_handler"
+  memory_size   = 128
+  timeout       = 30
+  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+}
+
+# ============================================
+# Shopping API Gateway (Separate from Unified API)
+# ============================================
+
+resource "aws_api_gateway_rest_api" "shopping_api" {
+  name        = "shopping-api"
+  description = "Shopping system API endpoints"
+  
+  endpoint_configuration {
+    types = ["EDGE"]
+  }
+
+  lifecycle {
+    # Don't manage the actual resources/methods/integrations
+    # They were created manually and are working
+    ignore_changes = [body, policy]
+  }
+}
+
+output "shopping_api_id" {
+  value       = aws_api_gateway_rest_api.shopping_api.id
+  description = "Shopping API Gateway ID"
+}
+
+output "shopping_api_endpoint" {
+  value       = aws_api_gateway_rest_api.shopping_api.execution_arn
+  description = "Shopping API Gateway execution ARN"
+}
+
 # Outputs
 output "shopping_queue_urls" {
   value = {
@@ -170,4 +236,13 @@ output "shopping_queue_urls" {
   description = "Shopping system SQS queue URLs"
 }
 
+output "shopping_dynamodb_tables" {
+  description = "Shopping DynamoDB table names"
+  value = {
+    products = module.dynamodb_shopping_products.table_name
+    orders   = module.dynamodb_shopping_orders.table_name
+    cart     = module.dynamodb_shopping_cart.table_name
+    reviews  = module.dynamodb_shopping_reviews.table_name
+  }
+}
 

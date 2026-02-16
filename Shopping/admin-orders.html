@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Orders</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">Admin - Orders</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="admin-products.html">Products</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="admin-orders.html">Orders</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container my-5">
+        <h1 class="mb-4">Order Management</h1>
+
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <select id="status-filter" class="form-select" onchange="filterOrders()">
+                    <option value="">All Orders</option>
+                    <option value="pending">Pending</option>
+                    <option value="processing">Processing</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+        </div>
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Items</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="orders-table"></tbody>
+        </table>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API = 'https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/orders';
+        let allOrders = [];
+
+        async function loadOrders() {
+            const response = await fetch(`${API}?action=list&user_id=guest`);
+            const data = await response.json();
+            allOrders = data.orders;
+            displayOrders(allOrders);
+        }
+
+        function displayOrders(orders) {
+            const tbody = document.getElementById('orders-table');
+            
+            if (orders.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" class="text-center">No orders found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = orders.map(order => `
+                <tr>
+                    <td>${order.order_id.substring(0, 8)}...</td>
+                    <td>${new Date(order.created_at).toLocaleDateString()}</td>
+                    <td>${order.user_id}</td>
+                    <td>${order.items.length}</td>
+                    <td>$${order.total}</td>
+                    <td><span class="badge bg-${getStatusColor(order.status)}">${order.status}</span></td>
+                    <td>
+                        <select class="form-select form-select-sm" onchange="updateStatus('${order.order_id}', this.value)">
+                            <option value="">Change Status</option>
+                            <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+                            <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
+                            <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+                            <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                            <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                        </select>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function getStatusColor(status) {
+            const colors = {
+                'pending': 'warning',
+                'processing': 'info',
+                'shipped': 'primary',
+                'delivered': 'success',
+                'cancelled': 'danger'
+            };
+            return colors[status] || 'secondary';
+        }
+
+        async function updateStatus(orderId, newStatus) {
+            if (!newStatus) return;
+
+            await fetch(`${API}?action=update_status`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({order_id: orderId, status: newStatus})
+            });
+
+            loadOrders();
+        }
+
+        function filterOrders() {
+            const status = document.getElementById('status-filter').value;
+            if (status) {
+                const filtered = allOrders.filter(o => o.status === status);
+                displayOrders(filtered);
+            } else {
+                displayOrders(allOrders);
+            }
+        }
+
+        loadOrders();
+    </script>
+</body>
+</html>

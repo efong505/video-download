@@ -28,6 +28,8 @@ def lambda_handler(event, context):
             return get_order(params)
         elif action == 'list':
             return list_orders(params)
+        elif action == 'update_status':
+            return update_order_status(event)
         else:
             return {
                 'statusCode': 400,
@@ -122,11 +124,23 @@ def get_order(params):
 
 def list_orders(params):
     user_id = params.get('user_id', 'guest')
-    response = orders_table.query(
-        IndexName='user_id-index',
-        KeyConditionExpression='user_id = :uid',
-        ExpressionAttributeValues={':uid': user_id}
-    )
+    status_filter = params.get('status')
+    
+    if status_filter:
+        # Filter by status
+        response = orders_table.query(
+            IndexName='order_status-order_date-index',
+            KeyConditionExpression='#status = :status',
+            ExpressionAttributeNames={'#status': 'status'},
+            ExpressionAttributeValues={':status': status_filter}
+        )
+    else:
+        # Get all orders for user
+        response = orders_table.query(
+            IndexName='user_id-index',
+            KeyConditionExpression='user_id = :uid',
+            ExpressionAttributeValues={':uid': user_id}
+        )
     
     orders = decimal_to_float(response.get('Items', []))
     
@@ -134,4 +148,25 @@ def list_orders(params):
         'statusCode': 200,
         'headers': {'Access-Control-Allow-Origin': '*'},
         'body': json.dumps({'orders': orders, 'count': len(orders)})
+    }
+
+def update_order_status(event):
+    body = json.loads(event.get('body', '{}'))
+    order_id = body['order_id']
+    new_status = body['status']
+    
+    orders_table.update_item(
+        Key={'order_id': order_id},
+        UpdateExpression='SET #status = :status, updated_at = :updated',
+        ExpressionAttributeNames={'#status': 'status'},
+        ExpressionAttributeValues={
+            ':status': new_status,
+            ':updated': datetime.utcnow().isoformat()
+        }
+    )
+    
+    return {
+        'statusCode': 200,
+        'headers': {'Access-Control-Allow-Origin': '*'},
+        'body': json.dumps({'status': 'updated'})
     }
