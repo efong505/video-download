@@ -59,7 +59,7 @@
                                 </div>
                             </div>
                             <div class="col-md-4 text-end">
-                                <h4 class="text-primary">$${order.total}</h4>
+                                <h4 class="text-primary">$${parseFloat(order.total).toFixed(2)}</h4>
                                 <button class="btn btn-sm btn-outline-primary mt-2" onclick="viewOrder('${order.order_id}')">View Details</button>
                             </div>
                         </div>

@@ -77,7 +77,7 @@
                     <td>${new Date(order.created_at).toLocaleDateString()}</td>
                     <td>${order.user_id}</td>
                     <td>${order.items.length}</td>
-                    <td>$${order.total}</td>
+                    <td>$${parseFloat(order.total).toFixed(2)}</td>
                     <td><span class="badge bg-${getStatusColor(order.status)}">${order.status}</span></td>
                     <td>
                         <select class="form-select form-select-sm" onchange="updateStatus('${order.order_id}', this.value)">

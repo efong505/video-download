@@ -5,10 +5,10 @@
 
 ---
 
-## Overall Progress: 5/9 weeks (56%)
+## Overall Progress: 6/9 weeks (67%)
 
 ```
-[████████████████████████████░░░░░░░░░░░░░░░░░░░░░░] 56%
+[████████████████████████████████████░░░░░░░░░░░░░░] 67%
 ```
 
 ---
@@ -119,27 +119,28 @@
 
 ---
 
-## Week 6: Order Management & History ⏭️ READY TO START
+## Week 6: Order Management & History ✅ COMPLETE
 
-**Status:** ⏭️ Ready to begin  
-**Estimated Time:** 6 hours  
-**Target:** Next implementation
+**Status:** ✅ Complete  
+**Actual Time:** 4 hours  
+**Completed:** January 2025
 
 ### Order Management:
-- [ ] Create orders.html (user order history)
-- [ ] Create admin-orders.html (admin order dashboard)
-- [ ] Add order status updates (pending → processing → shipped → delivered)
-- [ ] Implement order search and filtering
-- [ ] Add order details view
-- [ ] Update orders_api with status management
-- [ ] Test order workflows
+- [x] Create orders.html (user order history)
+- [x] Create admin-orders.html (admin order dashboard)
+- [x] Add order status updates (pending → processing → shipped → delivered)
+- [x] Implement order filtering by status
+- [x] Update orders_api with status management
+- [x] Fix GSI queries and required fields
+- [x] Test order workflows
 
 ---
 
-## Week 7: Behavioral Tracking ⏸️ PENDING
+## Week 7: Behavioral Tracking ⏭️ READY TO START
 
-**Status:** ⏸️ Waiting for Week 6  
-**Estimated Time:** 8 hours
+**Status:** ⏭️ Ready to begin  
+**Estimated Time:** 8 hours  
+**Target:** Next implementation
 
 ### Tracking System:
 - [ ] Create ProductViews table
@@ -259,8 +260,8 @@
 | 3 | Checkout & Orders | ✅ Complete | November 2025 |
 | 4 | Reviews & Ratings | ✅ Complete | November 2025 |
 | 5 | Admin Products | ✅ Complete | November 2025 |
-| 6 | Order Management | ⏭️ Next | TBD |
-| 7 | Payment Integration | ⏸️ Pending | TBD |
+| 6 | Order Management | ✅ Complete | January 2025 |
+| 7 | Behavioral Tracking | ⏭️ Next | TBD |
 | 8 | User Authentication | ⏸️ Pending | TBD |
 | 9 | Testing + Launch | ⏸️ Pending | TBD |
 
@@ -268,10 +269,10 @@
 
 ## Current Status
 
-**Phase:** Week 6 - Order Management & History  
-**Next Action:** Create orders.html and admin-orders.html
+**Phase:** Week 7 - Behavioral Tracking  
+**Next Action:** Create ProductViews and WatchList tables
 
-**Weeks 1-5 Complete!** 🎉
+**Weeks 1-6 Complete!** 🎉
 
 **Infrastructure:**
 - 8 SQS queues deployed (4 main + 4 DLQ)
@@ -290,6 +291,8 @@
 - cart.html: Shopping cart with checkout
 - product.html: Product details with reviews
 - admin-products.html: Product management
+- orders.html: User order history
+- admin-orders.html: Admin order dashboard
 
 **Features Working:**
 - ✅ Browse products with star ratings
@@ -298,9 +301,10 @@
 - ✅ Stock updates automatically
 - ✅ Write and vote on reviews
 - ✅ Admin product CRUD
+- ✅ Order history and status management
 
 **Still Needed:**
-- ⏭️ Order history and management
+- ⏭️ Behavioral tracking (views, watchlist)
 - ⏸️ Payment processing (Stripe/PayPal)
 - ⏸️ User authentication
 - ⏸️ Email notifications
