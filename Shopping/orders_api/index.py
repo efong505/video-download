@@ -101,6 +101,9 @@ def create_order(event):
         order = {
             'order_id': order_id,
             'user_id': user_id,
+            'user_email': body.get('user_email', user_id),
+            'user_name': body.get('user_name', ''),
+            'user_phone': body.get('user_phone', ''),
             'items': items,
             'subtotal': Decimal(str(body['subtotal'])),
             'tax': Decimal(str(body['tax'])),
