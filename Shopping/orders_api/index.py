@@ -137,7 +137,7 @@ def list_orders(params):
     else:
         # Get all orders for user
         response = orders_table.query(
-            IndexName='user_id-index',
+            IndexName='user_id-order_date-index',
             KeyConditionExpression='user_id = :uid',
             ExpressionAttributeValues={':uid': user_id}
         )
