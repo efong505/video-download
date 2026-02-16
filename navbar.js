@@ -11,7 +11,8 @@ function initNavbar() {
         {page: 'videos', label: 'Videos', emoji: '🎥', fa: 'fa-video'},
         {page: 'video-analytics', label: 'Analytics', emoji: '📊', fa: 'fa-chart-bar', requiresAuth: true},
         {page: 'articles', label: 'Articles', emoji: '📖', fa: 'fa-book'},
-        {page: 'news', label: 'News', emoji: '📰', fa: 'fa-newspaper'}
+        {page: 'news', label: 'News', emoji: '📰', fa: 'fa-newspaper'},
+        {page: 'Shopping/shop', label: 'Shop', emoji: '🛒', fa: 'fa-shopping-cart'}
     ];
     
     const ministryLinks = [

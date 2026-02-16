@@ -1,12 +1,16 @@
 import json
 import boto3
 import uuid
+import jwt
+import os
 from datetime import datetime
 from decimal import Decimal
 
 dynamodb = boto3.resource('dynamodb')
 orders_table = dynamodb.Table('Orders')
 products_table = dynamodb.Table('Products')
+
+JWT_SECRET = os.environ.get('JWT_SECRET', 'your-secret-key-here')
 
 def decimal_to_float(obj):
     if isinstance(obj, list):
@@ -47,6 +51,29 @@ def lambda_handler(event, context):
 def create_order(event):
     try:
         print('Event:', json.dumps(event))
+        
+        # Extract and validate JWT token
+        headers = event.get('headers', {})
+        auth_header = headers.get('Authorization') or headers.get('authorization', '')
+        token = auth_header.replace('Bearer ', '')
+        
+        if not token:
+            return {
+                'statusCode': 401,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': 'Authentication required'})
+            }
+        
+        try:
+            user = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
+            user_id = user['email']
+        except:
+            return {
+                'statusCode': 401,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': 'Invalid token'})
+            }
+        
         body = json.loads(event.get('body', '{}'))
         print('Body:', body)
         
@@ -74,7 +101,7 @@ def create_order(event):
         # Create order
         order = {
             'order_id': order_id,
-            'user_id': body.get('user_id', 'guest'),
+            'user_id': user_id,
             'items': items,
             'subtotal': Decimal(str(body['subtotal'])),
             'tax': Decimal(str(body['tax'])),
@@ -126,6 +153,8 @@ def get_order(params):
     }
 
 def list_orders(params):
+    # Note: In production, validate JWT and extract user_id from token
+    # For now, accepting user_id from params for backward compatibility
     user_id = params.get('user_id', 'guest')
     status_filter = params.get('status')
     
