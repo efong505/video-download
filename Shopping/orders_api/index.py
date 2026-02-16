@@ -57,22 +57,15 @@ def create_order(event):
         auth_header = headers.get('Authorization') or headers.get('authorization', '')
         token = auth_header.replace('Bearer ', '')
         
-        if not token:
-            return {
-                'statusCode': 401,
-                'headers': {'Access-Control-Allow-Origin': '*'},
-                'body': json.dumps({'error': 'Authentication required'})
-            }
+        user_id = 'guest'  # Default
         
-        try:
-            user = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
-            user_id = user['email']
-        except:
-            return {
-                'statusCode': 401,
-                'headers': {'Access-Control-Allow-Origin': '*'},
-                'body': json.dumps({'error': 'Invalid token'})
-            }
+        if token:
+            try:
+                user = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
+                user_id = user['email']
+            except Exception as jwt_error:
+                print(f'JWT decode error: {jwt_error}')
+                # Continue with guest if token invalid
         
         body = json.loads(event.get('body', '{}'))
         print('Body:', body)
