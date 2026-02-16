@@ -1,11 +1,3 @@
-variable "bucket_name" {
-  type = string
-}
-
-variable "environment" {
-  type = string
-}
-
 resource "aws_s3_bucket" "main" {
   bucket = var.bucket_name
 
@@ -14,20 +6,22 @@ resource "aws_s3_bucket" "main" {
   }
 }
 
+# Bucket versioning
 resource "aws_s3_bucket_versioning" "main" {
   bucket = aws_s3_bucket.main.id
 
   versioning_configuration {
-    status = "Enabled"
+    status = var.versioning_enabled ? "Enabled" : "Suspended"
   }
 }
 
+# Server-side encryption
 resource "aws_s3_bucket_server_side_encryption_configuration" "main" {
   bucket = aws_s3_bucket.main.id
 
   rule {
     apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
+      sse_algorithm = var.sse_algorithm
     }
   }
 }
@@ -51,13 +45,13 @@ resource "aws_s3_bucket_policy" "main" {
     Version = "2012-10-17"
     Statement = [
       {
-        Sid       = "AllowCloudFrontServicePrincipal"
-        Effect    = "Allow"
+        Sid    = "AllowCloudFrontServicePrincipal"
+        Effect = "Allow"
         Principal = {
           Service = "cloudfront.amazonaws.com"
         }
-        Action    = "s3:GetObject"
-        Resource  = "${aws_s3_bucket.main.arn}/*"
+        Action   = "s3:GetObject"
+        Resource = "${aws_s3_bucket.main.arn}/*"
         Condition = {
           StringEquals = {
             "AWS:SourceArn" = "arn:aws:cloudfront::371751795928:distribution/E3N00R2D2NE9C5"
@@ -65,8 +59,8 @@ resource "aws_s3_bucket_policy" "main" {
         }
       },
       {
-        Sid       = "AllowCrossAccountAccess"
-        Effect    = "Allow"
+        Sid    = "AllowCrossAccountAccess"
+        Effect = "Allow"
         Principal = {
           AWS = [
             "arn:aws:iam::628478946937:root",
@@ -91,17 +85,4 @@ resource "aws_s3_bucket_policy" "main" {
       }
     ]
   })
-}
-
-output "bucket_id" {
-  value = aws_s3_bucket.main.id
-}
-
-output "bucket_arn" {
-  value = aws_s3_bucket.main.arn
-}
-
-output "bucket_regional_domain_name" {
-  description = "S3 bucket regional domain name"
-  value       = aws_s3_bucket.main.bucket_regional_domain_name
 }

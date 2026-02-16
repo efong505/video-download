@@ -14,3 +14,10 @@ variable "display_name" {
     type        = string
     default     = null
 }
+
+variable "versioning_enabled" {
+  description = "Enable versioning for this bucket"
+  type = bool
+  default = true
+}
+
