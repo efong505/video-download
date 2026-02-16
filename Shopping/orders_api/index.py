@@ -1,7 +1,6 @@
 import json
 import boto3
 import uuid
-import jwt
 import os
 from datetime import datetime
 from decimal import Decimal
@@ -11,6 +10,13 @@ orders_table = dynamodb.Table('Orders')
 products_table = dynamodb.Table('Products')
 
 JWT_SECRET = os.environ.get('JWT_SECRET', 'your-secret-key-here')
+
+try:
+    import jwt
+    JWT_AVAILABLE = True
+except ImportError:
+    JWT_AVAILABLE = False
+    print('PyJWT not available, JWT validation disabled')
 
 def decimal_to_float(obj):
     if isinstance(obj, list):
@@ -59,7 +65,7 @@ def create_order(event):
         
         user_id = 'guest'  # Default
         
-        if token:
+        if token and JWT_AVAILABLE:
             try:
                 user = jwt.decode(token, JWT_SECRET, algorithms=['HS256'])
                 user_id = user['email']
