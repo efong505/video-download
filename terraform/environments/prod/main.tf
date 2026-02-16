@@ -114,9 +114,11 @@ module "api_domain_staging" {
 # ============================================
 module "s3_videos" {
   source = "../../modules/s3"
-
+  
   bucket_name = "my-video-downloads-bucket"
+  versioning_enabled = true
   environment = "prod"
+  
 }
 
 # CloudFront Origin Access Control
