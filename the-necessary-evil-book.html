@@ -606,10 +606,13 @@ Enter your email to get your free sample and stay in the loop.</p>
                 </div>
                 <div class="col-lg-8">
                     <h2 class="mb-4" style="color: var(--primary-color);">About the Author</h2>
-                    <p class="lead">Edward Fong is a systems/network administrator, enterprise architect, and founder of ChristianConservativesToday.com.</p>
-                    <p>With degrees from New Mexico State University and years of experience in secure government environments at Kirtland Air Force Base, Ed combines technical expertise with deep Christian faith to explore AI's dual nature. He built his entire platform in under one month using AI—experiencing firsthand both its power and its dangers.</p>
-                    <p>When AI confessed its left-leaning bias to him in real-time, Ed knew he had to write this book. The second edition (February 2026) includes expanded warnings about media manipulation, election fraud, and the urgent call for the Church to wake up before America falls like Australia did to Islam and globalism.</p>
-                    <p>He lives in Albuquerque, New Mexico, with his wife Julia, an artist and graphic designer who contributes visual elements to their ministry work.</p>
+                    <p class="lead">Edward Fong is a cloud-native systems engineer, platform architect, and founder of ChristianConservativesToday.com.</p>
+                    <p>With degrees from New Mexico State University and experience supporting secure government environments at Kirtland Air Force Base under an active DoD Secret clearance, Edward designs and operates production-grade AWS serverless platforms using Infrastructure as Code (Terraform), CI/CD automation, blue/green deployment strategies, and disciplined monitoring practices.</p>
+                    <p>In 2025, he built and launched an entire Christian-conservative media platform in under one month using artificial intelligence — an effort that would traditionally have required a full development team. That experience gave him firsthand exposure to both the extraordinary productivity gains AI enables and the subtle ways these systems shape information, narrative framing, and cultural direction.</p>
+                    <p>The Necessary Evil was written not as a reactionary critique of technology, but as a technical and theological examination of AI’s accelerating influence. Drawing from direct experience building and operating AI-enabled systems, Edward explores the structural biases embedded in modern platforms, the transhumanist assumptions driving technological development, and the spiritual implications of delegating judgment to machines.</p>
+                    <p>The Second Edition (February 2026) expands on media manipulation, governance trends, and the responsibility of the Church to engage technology with clarity, courage, and discipline.</p>
+                    <p>Edward lives in Albuquerque, New Mexico, with his wife Julia, an artist and graphic designer who contributes visual elements to their shared ministry and creative work.</p>
+                    <p><em>“We do not fear the tool. We master it — or it masters us.”</em></p>
                 </div>
             </div>
         </div>
@@ -644,15 +647,14 @@ Enter your email to get your free sample and stay in the loop.</p>
                         <div class="alert alert-info">
                             <i class="fas fa-info-circle me-2"></i>
                             <strong>Total: $25.00</strong> (includes free shipping)<br>
-                            We'll contact you to arrange payment.
+                            Click "Pay with PayPal" below to complete your order.
                         </div>
+                        <!-- PayPal Button Container -->
+                        <div id="paypal-paperback-button"></div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary-custom" onclick="submitPaperbackOrder()">
-                        <i class="fas fa-paper-plane me-2"></i>Submit Order
-                    </button>
                 </div>
             </div>
         </div>
@@ -669,7 +671,7 @@ Enter your email to get your free sample and stay in the loop.</p>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
     <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=BAA--AF-Rfxb87md9-SMskKQ2ZyUfT4Y0Km0DUHNnKQloxOzPgs1yp4eM8WzMhQsDRTTlau86n_kVlipxY&components=hosted-buttons&enable-funding=venmo&currency=USD"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=BAA--AF-Rfxb87md9-SMskKQ2ZyUfT4Y0Km0DUHNnKQloxOzPgs1yp4eM8WzMhQsDRTTlau86n_kVlipxY&currency=USD"></script>
     <script src="navbar.js"></script>
     <script>
         // Load navbar
@@ -1005,6 +1007,77 @@ Please contact the customer to arrange payment.`;
         function buyDigitalPDF() {
             alert('Please use the PayPal button above to purchase the digital PDF. You will receive an instant download link after payment.');
         }
+        
+        // PayPal Paperback Button
+        const paperbackModal = document.getElementById('paperbackModal');
+        paperbackModal.addEventListener('shown.bs.modal', function() {
+            if (typeof paypal !== 'undefined' && !document.querySelector('#paypal-paperback-button .paypal-buttons')) {
+                paypal.Buttons({
+                    createOrder: function(data, actions) {
+                        const form = document.getElementById('paperbackForm');
+                        if (!form.checkValidity()) {
+                            form.reportValidity();
+                            return;
+                        }
+                        
+                        return actions.order.create({
+                            purchase_units: [{
+                                description: 'The Necessary Evil - Paperback (2nd Edition)',
+                                amount: {
+                                    value: '25.00',
+                                    currency_code: 'USD'
+                                }
+                            }]
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            const name = document.getElementById('orderName').value;
+                            const email = document.getElementById('orderEmail').value;
+                            const address = document.getElementById('orderAddress').value;
+                            const phone = document.getElementById('orderPhone').value;
+                            
+                            const message = `New paperback order - PAID via PayPal:
+
+PayPal Transaction ID: ${details.id}
+Payer: ${details.payer.name.given_name} ${details.payer.name.surname}
+Payer Email: ${details.payer.email_address}
+
+Shipping Information:
+Name: ${name}
+Email: ${email}
+Phone: ${phone || 'Not provided'}
+Address: ${address}
+
+Product: The Necessary Evil - Paperback (2nd Edition)
+Price: $25.00 (Free Shipping)
+Status: PAID
+
+Please ship the book to the address above.`;
+                            
+                            fetch('https://k2zbtkeh67.execute-api.us-east-1.amazonaws.com/prod/contact', {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({
+                                    to_email: 'contact@christianconservativestoday.com',
+                                    subject: 'New Book Order - Paperback (PAID)',
+                                    message: message
+                                })
+                            });
+                            
+                            const modal = bootstrap.Modal.getInstance(paperbackModal);
+                            if (modal) modal.hide();
+                            document.getElementById('paperbackForm').reset();
+                            alert('Payment successful! Order confirmation sent to ' + email + '. Your book will ship within 3-5 business days. Thank you!');
+                        });
+                    },
+                    onError: function(err) {
+                        console.error('PayPal error:', err);
+                        alert('Payment failed. Please try again or contact us at contact@christianconservativestoday.com');
+                    }
+                }).render('#paypal-paperback-button');
+            }
+        });
         
         // PayPal Hosted Button Integration
         if (typeof paypal !== 'undefined') {
