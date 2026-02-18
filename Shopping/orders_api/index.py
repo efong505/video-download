@@ -8,8 +8,10 @@ from decimal import Decimal
 dynamodb = boto3.resource('dynamodb')
 orders_table = dynamodb.Table('Orders')
 products_table = dynamodb.Table('Products')
+sns = boto3.client('sns')
 
 JWT_SECRET = os.environ.get('JWT_SECRET', 'your-secret-key-here')
+SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:371751795928:platform-critical-alerts'
 
 try:
     import jwt
@@ -119,6 +121,41 @@ def create_order(event):
         }
         
         orders_table.put_item(Item=order)
+        
+        # Send SNS notification
+        try:
+            items_summary = '\n'.join([f"  - {item['name']} x{item['quantity']} @ ${float(item['price']):.2f}" for item in body['items']])
+            
+            message = f"""NEW ORDER RECEIVED
+
+Order ID: {order_id}
+Customer: {order.get('user_name', 'N/A')}
+Email: {order.get('user_email', user_id)}
+Phone: {order.get('user_phone', 'N/A')}
+
+Items:
+{items_summary}
+
+Subtotal: ${float(order['subtotal']):.2f}
+Tax: ${float(order['tax']):.2f}
+Total: ${float(order['total']):.2f}
+
+Shipping Address:
+{order.get('shipping_address', 'N/A')}
+
+Payment: {order['payment_method']}
+Status: {order['status']}
+Date: {timestamp}
+"""
+            
+            sns.publish(
+                TopicArn=SNS_TOPIC_ARN,
+                Subject=f'New Order #{order_id[:8]} - ${float(order["total"]):.2f}',
+                Message=message
+            )
+        except Exception as sns_error:
+            print(f'SNS notification error: {sns_error}')
+            # Don't fail the order if SNS fails
         
         # Update stock
         for item in body['items']:
