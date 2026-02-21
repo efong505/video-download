@@ -1563,3 +1563,155 @@ aws s3 cp admin.html s3://my-video-downloads-bucket/ --content-type "text/html"
 **Prevention**: This issue occurs when the `addExternalVideo()` function is modified without preserving the `size: 0` field and conditional thumbnail generation logic.
 
 ---
+
+
+## Issue 22: API Gateway Lambda Integration Missing Invoke Permission
+
+**Symptom**: API Gateway returns 500 "Internal server error" with log message "Invalid permissions on Lambda function". CORS errors appear in browser even though Lambda has CORS headers.
+
+**Root Cause**: When manually creating API Gateway resources/methods, the Lambda invoke permission is not automatically added. API Gateway needs explicit permission to invoke the Lambda function.
+
+**How to Identify**:
+1. API Gateway test shows: "Execution failed due to configuration error: Invalid permissions on Lambda function"
+2. Browser shows CORS errors (because 500 error doesn't include CORS headers)
+3. Lambda CloudWatch logs show no invocations (Lambda never gets called)
+
+**Complete Fix Steps**:
+
+### Step 1: Create API Gateway Resource
+```bash
+aws apigateway create-resource \
+  --rest-api-id diz6ceeb22 \
+  --parent-id nfsxhlagje \
+  --path-part orders \
+  --region us-east-1
+```
+
+### Step 2: Add Methods (ANY + OPTIONS)
+```bash
+# Add ANY method
+aws apigateway put-method \
+  --rest-api-id diz6ceeb22 \
+  --resource-id 5hhu2e \
+  --http-method ANY \
+  --authorization-type NONE \
+  --region us-east-1
+
+# Add OPTIONS for CORS
+aws apigateway put-method \
+  --rest-api-id diz6ceeb22 \
+  --resource-id 5hhu2e \
+  --http-method OPTIONS \
+  --authorization-type NONE \
+  --region us-east-1
+```
+
+### Step 3: Configure Lambda Integration
+```bash
+aws apigateway put-integration \
+  --rest-api-id diz6ceeb22 \
+  --resource-id 5hhu2e \
+  --http-method ANY \
+  --type AWS_PROXY \
+  --integration-http-method POST \
+  --uri arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:371751795928:function:orders-api/invocations \
+  --region us-east-1
+```
+
+### Step 4: Configure CORS for OPTIONS
+```bash
+# Add method response
+aws apigateway put-method-response \
+  --rest-api-id diz6ceeb22 \
+  --resource-id 5hhu2e \
+  --http-method OPTIONS \
+  --status-code 200 \
+  --response-parameters '{"method.response.header.Access-Control-Allow-Headers":true,"method.response.header.Access-Control-Allow-Methods":true,"method.response.header.Access-Control-Allow-Origin":true}' \
+  --region us-east-1
+
+# Add integration (MOCK)
+aws apigateway put-integration \
+  --rest-api-id diz6ceeb22 \
+  --resource-id 5hhu2e \
+  --http-method OPTIONS \
+  --type MOCK \
+  --request-templates '{"application/json":"{\"statusCode\": 200}"}' \
+  --region us-east-1
+
+# Add integration response
+aws apigateway put-integration-response \
+  --rest-api-id diz6ceeb22 \
+  --resource-id 5hhu2e \
+  --http-method OPTIONS \
+  --status-code 200 \
+  --response-parameters '{"method.response.header.Access-Control-Allow-Headers":"'"'"'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"'"'","method.response.header.Access-Control-Allow-Methods":"'"'"'GET,POST,PUT,DELETE,OPTIONS'"'"'","method.response.header.Access-Control-Allow-Origin":"'"'"'*'"'"'"}' \
+  --region us-east-1
+```
+
+### Step 5: Add Lambda Invoke Permission (CRITICAL)
+```bash
+aws lambda add-permission \
+  --function-name orders-api \
+  --statement-id apigateway-invoke-orders \
+  --action lambda:InvokeFunction \
+  --principal apigateway.amazonaws.com \
+  --source-arn "arn:aws:execute-api:us-east-1:371751795928:diz6ceeb22/*/*/*" \
+  --region us-east-1
+```
+
+### Step 6: Deploy API Gateway
+```bash
+aws apigateway create-deployment \
+  --rest-api-id diz6ceeb22 \
+  --stage-name prod \
+  --region us-east-1
+```
+
+### Step 7: Add Test Products (if needed)
+```bash
+aws dynamodb put-item \
+  --table-name Products \
+  --item '{"product_id":{"S":"book-paperback-001"},"name":{"S":"The Necessary Evil - Paperback"},"price":{"N":"25.00"},"stock":{"N":"100"},"status":{"S":"active"},"category":{"S":"Books"},"featured":{"S":"yes"},"created_at":{"S":"2026-02-18T15:00:00Z"},"sales_count":{"N":"0"}}' \
+  --region us-east-1
+```
+
+**Verification**:
+```bash
+# Test API Gateway integration
+aws apigateway test-invoke-method \
+  --rest-api-id diz6ceeb22 \
+  --resource-id 5hhu2e \
+  --http-method POST \
+  --path-with-query-string "/orders?action=create" \
+  --body '{"user_email":"test@test.com","items":[{"product_id":"book-paperback-001","name":"Test","price":25,"quantity":1}],"subtotal":25,"tax":2,"total":27}' \
+  --region us-east-1
+```
+
+Should return 200 with order_id, not 500 with "Invalid permissions".
+
+**Common Mistakes**:
+- ❌ Forgetting Lambda invoke permission (most common - causes 500 error)
+- ❌ Using wrong source-arn pattern (should be `/*/*/*` for all methods/stages/paths)
+- ❌ Not deploying API Gateway after configuration changes
+- ❌ Lambda has CORS headers but API Gateway blocks request before Lambda is invoked
+
+**Why This Happens**:
+- Terraform/CloudFormation automatically add invoke permissions
+- Manual AWS CLI/Console creation requires explicit permission
+- API Gateway needs permission to call Lambda, separate from Lambda's execution role
+- Without permission, API Gateway returns 500 before Lambda is invoked
+- 500 errors don't include CORS headers, causing CORS errors in browser
+
+**Key Takeaway**: Always add Lambda invoke permission when manually creating API Gateway integrations. The permission is separate from the Lambda's execution role.
+
+**Real Example (Orders API)**:
+- Created `/orders` resource in unified API Gateway (diz6ceeb22)
+- Added ANY and OPTIONS methods
+- Configured Lambda proxy integration to orders-api function
+- Set up CORS for OPTIONS method
+- **Added invoke permission** - this was the critical fix
+- Deployed to prod stage
+- Added test products to Products table
+- Result: Orders API working with customer confirmation emails + SNS notifications
+
+---

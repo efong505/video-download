@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generate LinkedIn Image</title>
+</head>
+<body>
+    <h2>LinkedIn Image Generator</h2>
+    <canvas id="canvas" width="1200" height="627" style="border:1px solid #ccc;"></canvas>
+    <br><br>
+    <button onclick="download()">Download Image</button>
+    
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Background gradient
+        const gradient = ctx.createLinearGradient(0, 0, 1200, 627);
+        gradient.addColorStop(0, '#2c5aa0');
+        gradient.addColorStop(1, '#8b4513');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 1200, 627);
+        
+        // Load book cover
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = function() {
+            // Draw book cover on left (scaled to fit height)
+            const scale = 500 / img.height;
+            const width = img.width * scale;
+            ctx.drawImage(img, 50, 63.5, width, 500);
+            
+            // Add text on right
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 60px Arial';
+            ctx.fillText('The Necessary Evil', 500, 200);
+            
+            ctx.font = '32px Arial';
+            ctx.fillText('Master AI Without', 500, 280);
+            ctx.fillText('Losing Your Soul', 500, 330);
+            
+            ctx.font = 'bold 28px Arial';
+            ctx.fillText('2nd Edition - 2026', 500, 400);
+            
+            ctx.font = '24px Arial';
+            ctx.fillText('200+ Pages | Scripture-Based', 500, 480);
+            ctx.fillText('Christian Conservative Perspective', 500, 520);
+        };
+        img.src = 'second-edition-book-cover-front.png';
+        
+        function download() {
+            const link = document.createElement('a');
+            link.download = 'linkedin-share-image.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+    </script>
+</body>
+</html>

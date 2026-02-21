@@ -12,9 +12,12 @@ from datetime import datetime
 # Initialize AWS services
 dynamodb = boto3.resource('dynamodb')
 ses = boto3.client('ses', region_name='us-east-1')
+sns = boto3.client('sns', region_name='us-east-1')
 subscribers_table = dynamodb.Table('email-subscribers')
 book_subscribers_table = dynamodb.Table('book-subscribers')
 events_table = dynamodb.Table('email-events')
+
+SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:371751795928:platform-critical-alerts'
 
 # Configuration
 DOMAIN = 'https://christianconservativestoday.com'
@@ -125,22 +128,59 @@ def handle_subscription(event):
             book_subscribers_table.put_item(Item={
                 'email': email,
                 'first_name': first_name,
+                'last_name': last_name,
                 'subscribed_at': datetime.now().isoformat(),
                 'source': body.get('source', 'book_landing_page')
             })
             
-            # Notify admin
+            # Send customer confirmation email
             try:
+                greeting = f"Hi {first_name}!" if first_name else "Hello!"
+                print(f'Sending customer confirmation to: {email}')
                 ses.send_email(
                     Source=FROM_EMAIL,
-                    Destination={'ToAddresses': ['contact@christianconservativestoday.com']},
+                    Destination={'ToAddresses': [email]},
                     Message={
-                        'Subject': {'Data': 'New Book Mailing List Subscriber'},
-                        'Body': {'Text': {'Data': f'New book subscriber:\n\nEmail: {email}\nName: {first_name}\nSource: {body.get("source", "book_landing_page")}'}}
+                        'Subject': {'Data': '✓ You\'re on the list! - The Necessary Evil Book Updates'},
+                        'Body': {
+                            'Text': {'Data': f"""{greeting}
+
+Thank you for joining our book mailing list!
+
+You'll receive:
+• Book launch updates and announcements
+• Exclusive discount codes for future releases
+• Free downloadable study guide for small groups
+• Access to author Q&A webinar
+
+Stay tuned for updates!
+
+Christian Conservatives Today
+https://christianconservativestoday.com/the-necessary-evil-book.html"""}
+                        }
                     }
                 )
-            except:
-                pass
+                print(f'Customer confirmation sent successfully to: {email}')
+            except Exception as email_error:
+                print(f'Customer confirmation email error: {email_error}')
+                import traceback
+                traceback.print_exc()
+            
+            # Send SNS notification
+            try:
+                sns.publish(
+                    TopicArn=SNS_TOPIC_ARN,
+                    Subject=f'New Book Subscriber - {email}',
+                    Message=f"""NEW BOOK MAILING LIST SUBSCRIBER
+
+Email: {email}
+Name: {first_name}
+Source: {body.get('source', 'book_landing_page')}
+Subscribed: {datetime.now().isoformat()}
+"""
+                )
+            except Exception as sns_error:
+                print(f'SNS notification error: {sns_error}')
             
             return cors_response(200, {'message': 'Subscription successful', 'email': email})
         

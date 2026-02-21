@@ -9,6 +9,7 @@ dynamodb = boto3.resource('dynamodb')
 orders_table = dynamodb.Table('Orders')
 products_table = dynamodb.Table('Products')
 sns = boto3.client('sns')
+ses = boto3.client('ses', region_name='us-east-1')
 
 JWT_SECRET = os.environ.get('JWT_SECRET', 'your-secret-key-here')
 SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:371751795928:platform-critical-alerts'
@@ -31,6 +32,18 @@ def decimal_to_float(obj):
 
 def lambda_handler(event, context):
     try:
+        method = event.get('httpMethod', '')
+        if method == 'OPTIONS':
+            return {
+                'statusCode': 200,
+                'headers': {
+                    'Access-Control-Allow-Origin': '*',
+                    'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+                    'Access-Control-Allow-Methods': 'GET,POST,PUT,DELETE,OPTIONS'
+                },
+                'body': ''
+            }
+        
         params = event.get('queryStringParameters') or {}
         action = params.get('action', 'create')
         
@@ -50,6 +63,9 @@ def lambda_handler(event, context):
             }
             
     except Exception as e:
+        print(f'Lambda handler error: {str(e)}')
+        import traceback
+        traceback.print_exc()
         return {
             'statusCode': 500,
             'headers': {'Access-Control-Allow-Origin': '*'},
@@ -83,12 +99,27 @@ def create_order(event):
         
         # Validate stock
         for item in body['items']:
-            product = products_table.get_item(Key={'product_id': item['product_id']})['Item']
-            if product['stock'] < item['quantity']:
+            try:
+                response = products_table.get_item(Key={'product_id': item['product_id']})
+                if 'Item' not in response:
+                    return {
+                        'statusCode': 400,
+                        'headers': {'Access-Control-Allow-Origin': '*'},
+                        'body': json.dumps({'error': f'Product not found: {item["product_id"]}'})
+                    }
+                product = response['Item']
+                if product['stock'] < item['quantity']:
+                    return {
+                        'statusCode': 400,
+                        'headers': {'Access-Control-Allow-Origin': '*'},
+                        'body': json.dumps({'error': f'Insufficient stock for {product["name"]}'})
+                    }
+            except Exception as product_error:
+                print(f'Product validation error: {product_error}')
                 return {
                     'statusCode': 400,
                     'headers': {'Access-Control-Allow-Origin': '*'},
-                    'body': json.dumps({'error': f'Insufficient stock for {product["name"]}'})
+                    'body': json.dumps({'error': f'Error validating product: {str(product_error)}'})
                 }
         
         # Convert items to Decimal
@@ -121,6 +152,55 @@ def create_order(event):
         }
         
         orders_table.put_item(Item=order)
+        
+        # Send customer confirmation email
+        try:
+            customer_email = order.get('user_email', user_id)
+            customer_name = order.get('user_name', 'Customer')
+            
+            items_list = '\n'.join([f"  • {item['name']} (Qty: {item['quantity']}) - ${float(item['price']):.2f}" for item in body['items']])
+            
+            ses.send_email(
+                Source='Christian Conservatives Today <contact@christianconservativestoday.com>',
+                Destination={'ToAddresses': [customer_email]},
+                Message={
+                    'Subject': {'Data': f'Order Confirmation #{order_id[:8]} - Christian Conservatives Today'},
+                    'Body': {
+                        'Text': {'Data': f"""Thank you for your order, {customer_name}!
+
+Your order has been received and is being processed.
+
+Order Details:
+Order ID: {order_id}
+Order Date: {timestamp}
+
+Items Ordered:
+{items_list}
+
+Order Summary:
+Subtotal: ${float(order['subtotal']):.2f}
+Tax: ${float(order['tax']):.2f}
+Total: ${float(order['total']):.2f}
+
+Shipping Address:
+{order.get('shipping_address', 'N/A')}
+
+Payment Method: {order['payment_method']}
+Order Status: {order['status']}
+
+We'll send you another email when your order ships.
+
+Thank you for shopping with us!
+
+Christian Conservatives Today
+https://christianconservativestoday.com
+
+Questions? Reply to this email or contact us at contact@christianconservativestoday.com"""}
+                    }
+                }
+            )
+        except Exception as email_error:
+            print(f'Customer email error: {email_error}')
         
         # Send SNS notification
         try:

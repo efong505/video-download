@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Paperback Order</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>Test Paperback Order (No Payment)</h4>
+            </div>
+            <div class="card-body">
+                <form id="testForm">
+                    <div class="mb-3">
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" class="form-control" id="orderName" value="Test Customer" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email Address *</label>
+                        <input type="email" class="form-control" id="orderEmail" value="test@example.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Shipping Address *</label>
+                        <textarea class="form-control" id="orderAddress" rows="3" required>123 Test St
+Test City, TS 12345</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="orderPhone" value="555-1234">
+                    </div>
+                    <button type="button" class="btn btn-success btn-lg w-100" onclick="testOrder()">
+                        Send Test Order Email
+                    </button>
+                </form>
+                <div id="result" class="mt-3"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function testOrder() {
+            const form = document.getElementById('testForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const name = document.getElementById('orderName').value;
+            const email = document.getElementById('orderEmail').value;
+            const address = document.getElementById('orderAddress').value;
+            const phone = document.getElementById('orderPhone').value;
+            
+            const testData = {
+                id: 'TEST_' + Date.now(),
+                payer: {
+                    name: { given_name: name.split(' ')[0], surname: name.split(' ')[1] || '' },
+                    email_address: email
+                }
+            };
+            
+            const message = `New paperback order - PAID via PayPal:
+
+PayPal Transaction ID: ${testData.id}
+Payer: ${testData.payer.name.given_name} ${testData.payer.name.surname}
+Payer Email: ${testData.payer.email_address}
+
+Shipping Information:
+Name: ${name}
+Email: ${email}
+Phone: ${phone || 'Not provided'}
+Address: ${address}
+
+Product: The Necessary Evil - Paperback (2nd Edition)
+Price: $25.00 (Free Shipping)
+Status: PAID (TEST ORDER - NO REAL PAYMENT)
+
+Please ship the book to the address above.`;
+            
+            document.getElementById('result').innerHTML = '<div class="alert alert-info">Sending test email...</div>';
+            
+            fetch('https://k2zbtkeh67.execute-api.us-east-1.amazonaws.com/prod/contact', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    to_email: 'contact@christianconservativestoday.com',
+                    subject: 'TEST - New Book Order - Paperback (PAID)',
+                    message: message
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerHTML = 
+                    '<div class="alert alert-success"><strong>Success!</strong> Test email sent to contact@christianconservativestoday.com<br>Transaction ID: ' + testData.id + '</div>';
+            })
+            .catch(error => {
+                document.getElementById('result').innerHTML = 
+                    '<div class="alert alert-danger"><strong>Error:</strong> ' + error.message + '</div>';
+            });
+        }
+    </script>
+</body>
+</html>

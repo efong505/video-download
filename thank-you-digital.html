@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Complete - The Necessary Evil</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #8b4513;
+            --accent-color: #d4af37;
+        }
+        .thank-you-hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 100px 0;
+            padding-top: 140px;
+            text-align: center;
+        }
+        .checkmark-circle {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            animation: scaleIn 0.5s ease;
+        }
+        @keyframes scaleIn {
+            from { transform: scale(0); }
+            to { transform: scale(1); }
+        }
+        .checkmark {
+            color: #28a745;
+            font-size: 50px;
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="book"></div>
+
+    <section class="thank-you-hero">
+        <div class="container">
+            <div class="checkmark-circle">
+                <i class="fas fa-check checkmark"></i>
+            </div>
+            <h1 class="display-3 fw-bold mb-3">Payment Successful!</h1>
+            <p class="lead mb-4">Thank you for purchasing The Necessary Evil (Digital PDF)</p>
+        </div>
+    </section>
+
+    <section class="py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-lg">
+                        <div class="card-body p-5">
+                            <h3 class="mb-4" style="color: var(--primary-color);">What Happens Next?</h3>
+                            
+                            <div class="alert alert-success">
+                                <i class="fas fa-envelope me-2"></i>
+                                <strong>Check Your Email</strong><br>
+                                Your PDF download link will be sent to your PayPal email address within 24 hours.
+                            </div>
+
+                            <div class="row g-4 mt-3">
+                                <div class="col-md-4 text-center">
+                                    <i class="fas fa-clock fa-3x mb-3" style="color: var(--primary-color);"></i>
+                                    <h5>Processing</h5>
+                                    <p class="text-muted">Your order is being processed</p>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <i class="fas fa-paper-plane fa-3x mb-3" style="color: var(--primary-color);"></i>
+                                    <h5>Email Sent</h5>
+                                    <p class="text-muted">Download link sent within 24 hours</p>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <i class="fas fa-download fa-3x mb-3" style="color: var(--primary-color);"></i>
+                                    <h5>Download</h5>
+                                    <p class="text-muted">Click link to download your PDF</p>
+                                </div>
+                            </div>
+
+                            <hr class="my-4">
+
+                            <h5 class="mb-3">Order Details</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>Product:</strong> The Necessary Evil - Digital PDF (2nd Edition)</li>
+                                <li><strong>Price:</strong> $12.99</li>
+                                <li><strong>Format:</strong> PDF (readable on any device)</li>
+                            </ul>
+
+                            <div class="alert alert-info mt-4">
+                                <i class="fas fa-info-circle me-2"></i>
+                                <strong>Didn't receive your email?</strong><br>
+                                Check your spam folder or contact us at <a href="mailto:contact@christianconservativestoday.com">contact@christianconservativestoday.com</a>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <a href="the-necessary-evil-book.html" class="btn btn-outline-primary me-2">
+                                    <i class="fas fa-arrow-left me-2"></i>Back to Book Page
+                                </a>
+                                <a href="index.html" class="btn btn-primary">
+                                    <i class="fas fa-home me-2"></i>Go to Homepage
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mt-4 bg-light border-0">
+                        <div class="card-body p-4">
+                            <h5 class="mb-3">While You Wait...</h5>
+                            <p>Explore more Christian-conservative content:</p>
+                            <div class="d-flex gap-2 flex-wrap">
+                                <a href="articles.html" class="btn btn-sm btn-outline-primary">Read Articles</a>
+                                <a href="videos.html" class="btn btn-sm btn-outline-primary">Watch Videos</a>
+                                <a href="election-map.html" class="btn btn-sm btn-outline-primary">Election Guide</a>
+                                <a href="resources.html" class="btn btn-sm btn-outline-primary">Resources</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; <span id="current-year"></span> Christian Conservatives Today. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            });
+        
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>
