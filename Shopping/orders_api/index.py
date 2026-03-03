@@ -47,6 +47,11 @@ def lambda_handler(event, context):
         params = event.get('queryStringParameters') or {}
         action = params.get('action', 'create')
         
+        # Handle POST body actions
+        if method == 'POST':
+            body = json.loads(event.get('body', '{}'))
+            action = body.get('action', action)
+        
         if action == 'create':
             return create_order(event)
         elif action == 'get':
@@ -55,6 +60,8 @@ def lambda_handler(event, context):
             return list_orders(params)
         elif action == 'update_status':
             return update_order_status(event)
+        elif action == 'cancel':
+            return cancel_order(event)
         else:
             return {
                 'statusCode': 400,
@@ -321,3 +328,109 @@ def update_order_status(event):
         'headers': {'Access-Control-Allow-Origin': '*'},
         'body': json.dumps({'status': 'updated'})
     }
+
+
+def cancel_order(event):
+    try:
+        body = json.loads(event.get('body', '{}'))
+        order_id = body.get('order_id')
+        user_id = body.get('user_id')
+        
+        if not order_id:
+            return {
+                'statusCode': 400,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': 'order_id required'})
+            }
+        
+        # Get order
+        response = orders_table.get_item(Key={'order_id': order_id})
+        order = response.get('Item')
+        
+        if not order:
+            return {
+                'statusCode': 404,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': 'Order not found'})
+            }
+        
+        # Verify user owns the order
+        if order['user_id'] != user_id:
+            return {
+                'statusCode': 403,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': 'Unauthorized'})
+            }
+        
+        # Check if order can be cancelled
+        if order['status'] not in ['pending', 'processing']:
+            return {
+                'statusCode': 400,
+                'headers': {'Access-Control-Allow-Origin': '*'},
+                'body': json.dumps({'error': f'Cannot cancel order with status: {order["status"]}'})
+            }
+        
+        # Update order status to cancelled
+        orders_table.update_item(
+            Key={'order_id': order_id},
+            UpdateExpression='SET #status = :status, order_status = :status, updated_at = :updated',
+            ExpressionAttributeNames={'#status': 'status'},
+            ExpressionAttributeValues={
+                ':status': 'cancelled',
+                ':updated': datetime.utcnow().isoformat()
+            }
+        )
+        
+        # Restore stock
+        for item in order['items']:
+            products_table.update_item(
+                Key={'product_id': item['product_id']},
+                UpdateExpression='SET stock = stock + :qty',
+                ExpressionAttributeValues={':qty': int(item['quantity'])}
+            )
+        
+        # Send cancellation email
+        try:
+            customer_email = order.get('user_email', user_id)
+            customer_name = order.get('user_name', 'Customer')
+            
+            ses.send_email(
+                Source='Christian Conservatives Today <contact@christianconservativestoday.com>',
+                Destination={'ToAddresses': [customer_email]},
+                Message={
+                    'Subject': {'Data': f'Order Cancelled #{order_id[:8]} - Christian Conservatives Today'},
+                    'Body': {
+                        'Text': {'Data': f"""Dear {customer_name},
+
+Your order #{order_id[:8]} has been cancelled as requested.
+
+Order Total: ${float(order['total']):.2f}
+
+If you were charged, a refund will be processed within 5-7 business days.
+
+If you have any questions, please contact us at contact@christianconservativestoday.com
+
+Thank you,
+Christian Conservatives Today
+https://christianconservativestoday.com"""}
+                    }
+                }
+            )
+        except Exception as email_error:
+            print(f'Cancellation email error: {email_error}')
+        
+        return {
+            'statusCode': 200,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'success': True, 'message': 'Order cancelled successfully'})
+        }
+        
+    except Exception as e:
+        print(f'Error cancelling order: {str(e)}')
+        import traceback
+        traceback.print_exc()
+        return {
+            'statusCode': 500,
+            'headers': {'Access-Control-Allow-Origin': '*'},
+            'body': json.dumps({'error': str(e)})
+        }

@@ -5,7 +5,7 @@ resource "aws_iam_role" "this" {
   tags = var.tags
 
   lifecycle {
-    prevent_destroy = true
+    prevent_destroy = false  # Disabled for practice environment
   }
 }
 

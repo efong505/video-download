@@ -615,17 +615,19 @@
             
             var previewHTML = '<!DOCTYPE html>\n<html lang="en">\n<head>\n' +
                 '<meta charset="UTF-8">\n' +
+                '<meta name="viewport" content="width=device-width, initial-scale=1.0">\n' +
                 '<meta property="og:type" content="article">\n' +
                 '<meta property="og:site_name" content="Christian Conservatives Today">\n' +
                 '<meta property="og:title" content="' + escapeHtml(title) + '">\n' +
                 '<meta property="og:description" content="' + escapeHtml(excerpt) + '">\n' +
-                '<meta property="og:url" content="https://christianconservativestoday.com/previews/news-' + newsId + '.html">\n' +
+                '<meta property="og:url" content="https://christianconservativestoday.com/news-article.html?id=' + newsId + '">\n' +
                 '<meta property="og:image" content="' + imageUrl + '">\n' +
                 '<meta property="og:image:secure_url" content="' + imageUrl + '">\n' +
                 '<meta property="og:image:type" content="image/jpeg">\n' +
                 '<meta property="og:image:width" content="1200">\n' +
                 '<meta property="og:image:height" content="630">\n' +
                 '<meta name="twitter:card" content="summary_large_image">\n' +
+                '<meta name="twitter:site" content="@CCToday">\n' +
                 '<meta name="twitter:title" content="' + escapeHtml(title) + '">\n' +
                 '<meta name="twitter:description" content="' + escapeHtml(excerpt) + '">\n' +
                 '<meta name="twitter:image" content="' + imageUrl + '">\n' +

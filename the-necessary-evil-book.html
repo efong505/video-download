@@ -173,7 +173,7 @@
                 <i class="fas fa-check-circle me-2"></i>Now Live Everywhere!
             </h3>
             <p class="mb-0" style="font-size: 1.1rem;">
-                Master AI from a Christian perspective – available on <strong>Amazon</strong> (Kindle & Paperback) and <strong>Lulu</strong>.
+                Master AI from a Christian perspective – available on <strong>Amazon</strong> (Kindle, Hardcover & Paperback) and <strong>Lulu</strong>.
             </p>
         </div>
     </div>
@@ -564,7 +564,7 @@ Enter your email to get your free sample and stay in the loop.</p>
                                 </div>
                                 <div class="col-md-7">
                                     <h4 class="mb-2"><strong>Buy on Amazon (Kindle Unlimited Available)</strong></h4>
-                                    <p class="mb-2"><strong>$25.99 Paperback / $9.99 eBook</strong></p>
+                                    <p class="mb-2"><strong>$31.99 Hardcover / $25.99 Paperback / $9.99 eBook</strong></p>
                                     <p class="text-muted mb-0">Fast shipping, reviews, and Kindle reading</p>
                                 </div>
                                 <div class="col-md-3 text-center">
@@ -586,11 +586,11 @@ Enter your email to get your free sample and stay in the loop.</p>
                                 </div>
                                 <div class="col-md-7">
                                     <h4 class="mb-2"><strong>Buy Direct from Edward Fong</strong></h4>
-                                    <p class="mb-2"><strong>$25.99 (Signed Available)</strong></p>
+                                    <p class="mb-2"><strong>$31.99 Hardcover (Signed) / $25.99 Paperback (Signed)</strong></p>
                                     <p class="text-muted mb-0">Personal note + supports the ministry directly</p>
                                 </div>
                                 <div class="col-md-3 text-center">
-                                    <button class="btn btn-lg w-100" style="background: var(--accent-color); color: white; font-weight: bold;" data-bs-toggle="modal" data-bs-target="#paperbackModal">
+                                    <button class="btn btn-lg w-100" style="background: var(--accent-color); color: white; font-weight: bold;" data-bs-toggle="modal" data-bs-target="#directPurchaseModal">
                                         <i class="fas fa-signature me-2"></i>Buy Direct
                                     </button>
                                 </div>
@@ -698,12 +698,57 @@ Enter your email to get your free sample and stay in the loop.</p>
         </div>
     </div>
 
+    <!-- Direct Purchase Modal -->
+    <div class="modal fade" id="directPurchaseModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background: var(--primary-color); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-book me-2"></i>Choose Your Format</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-grid gap-3">
+                        <button class="btn btn-lg" style="background: var(--accent-color); color: white;" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#hardcoverModal">
+                            <i class="fas fa-book me-2"></i>Hardcover - $31.99 (Signed)
+                        </button>
+                        <button class="btn btn-lg" style="background: var(--primary-color); color: white;" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#paperbackModal">
+                            <i class="fas fa-book-open me-2"></i>Paperback - $25.99 (Signed)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hardcover Order Modal -->
+    <div class="modal fade" id="hardcoverModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background: var(--primary-color); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-book me-2"></i>Order Hardcover (Signed)</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Total: $31.99</strong> (includes free shipping)<br>
+                        Complete your order with PayPal below.
+                    </div>
+                    <div id="paypal-hardcover-button"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Paperback Order Modal -->
     <div class="modal fade" id="paperbackModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header" style="background: var(--primary-color); color: white;">
-                    <h5 class="modal-title"><i class="fas fa-book me-2"></i>Order Paperback</h5>
+                    <h5 class="modal-title"><i class="fas fa-book me-2"></i>Order Paperback (Signed)</h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -1023,6 +1068,26 @@ Enter your email to get your free sample and stay in the loop.</p>
         
 
         
+        // PayPal Hardcover Button
+        const hardcoverModal = document.getElementById('hardcoverModal');
+        hardcoverModal.addEventListener('shown.bs.modal', function() {
+            if (typeof paypal !== 'undefined' && !document.querySelector('#paypal-hardcover-button .paypal-buttons')) {
+                paypal.Buttons({
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{ description: 'The Necessary Evil - Hardcover Signed (2nd Edition)', amount: { value: '31.99' } }]
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            bootstrap.Modal.getInstance(hardcoverModal).hide();
+                            window.location.href = 'thank-you-paperback.html';
+                        });
+                    }
+                }).render('#paypal-hardcover-button');
+            }
+        });
+        
         // PayPal Paperback Button (Standard Buttons API)
         const paperbackModal = document.getElementById('paperbackModal');
         paperbackModal.addEventListener('shown.bs.modal', function() {
@@ -1030,7 +1095,7 @@ Enter your email to get your free sample and stay in the loop.</p>
                 paypal.Buttons({
                     createOrder: function(data, actions) {
                         return actions.order.create({
-                            purchase_units: [{ description: 'The Necessary Evil - Paperback (2nd Edition)', amount: { value: '25.99' } }]
+                            purchase_units: [{ description: 'The Necessary Evil - Paperback Signed (2nd Edition)', amount: { value: '25.99' } }]
                         });
                     },
                     onApprove: function(data, actions) {

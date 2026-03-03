@@ -91,7 +91,7 @@
         }
 
         function viewOrder(orderId) {
-            alert(`Order details for ${orderId} - Full details page coming soon!`);
+            window.location.href = `order-details.html?id=${orderId}`;
         }
 
         loadOrders();

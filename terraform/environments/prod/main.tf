@@ -1197,3 +1197,74 @@ output "website_urls" {
   }
   description = "Website URLs"
 }
+
+
+# ============================================
+# CloudWatch Dashboard
+# ============================================
+
+module "platform_dashboard" {
+  source = "../../modules/cloudwatch-dashboard"
+
+  dashboard_name  = "ChristianConservativePlatform-Monitoring"
+  region          = "us-east-1"
+  account_id      = "371751795928"
+  api_gateway_id  = module.unified_api.api_id
+
+  lambda_functions = [
+    "admin-api",
+    "auth-api",
+    "articles-api",
+    "news-api",
+    "comments-api",
+    "contributors-api",
+    "resources-api",
+    "video-list-api",
+    "video-tag-api",
+    "url-analysis-api",
+    "paypal-billing-api",
+    "video-downloader",
+    "thumbnail-generator",
+    "s3-thumbnail-trigger",
+    "video-download-router",
+    "prayer_api",
+    "events_api",
+    "notifications_api",
+    "paypal-ipn-handler"
+  ]
+
+  alarm_names = [
+    "API-Gateway-5XX-Errors",
+    "Lambda-Admin-Errors",
+    "Lambda-Articles-Errors",
+    "Lambda-Auth-ConcurrentExecutions",
+    "Lambda-Auth-Duration",
+    "Lambda-Auth-Errors",
+    "Lambda-Comments-Errors",
+    "Lambda-Contributors-Errors",
+    "Lambda-Downloader-Duration",
+    "Lambda-Downloader-Errors",
+    "Lambda-Downloader-Throttles",
+    "Lambda-Events-Errors",
+    "Lambda-News-Errors",
+    "Lambda-Notifications-Errors",
+    "Lambda-PayPal-Duration",
+    "Lambda-PayPal-Errors",
+    "Lambda-PayPal-Throttles",
+    "Lambda-Prayer-Errors",
+    "Lambda-Resources-Errors",
+    "Lambda-Router-Duration",
+    "Lambda-Router-Errors",
+    "Lambda-Router-Throttles",
+    "Lambda-S3Trigger-Errors",
+    "Lambda-Thumbnail-Errors",
+    "Lambda-URLAnalysis-Errors",
+    "Lambda-VideoList-Errors",
+    "Lambda-VideoTag-Errors"
+  ]
+}
+
+output "dashboard_url" {
+  value       = module.platform_dashboard.dashboard_url
+  description = "URL to view the CloudWatch dashboard"
+}
