@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Video Downloader</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        button { padding: 12px 24px; background: #007cba; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #005a87; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .status { margin: 20px 0; padding: 15px; border-radius: 4px; }
+        .status.info { background: #e3f2fd; border-left: 4px solid #2196f3; }
+        .status.success { background: #e8f5e8; border-left: 4px solid #4caf50; }
+        .status.error { background: #ffebee; border-left: 4px solid #f44336; }
+        video { width: 100%; max-width: 800px; margin-top: 20px; }
+        .progress { background: #f0f0f0; border-radius: 4px; overflow: hidden; margin: 10px 0; }
+        .progress-bar { height: 20px; background: #007cba; transition: width 0.3s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎥 Video Downloader</h1>
+        <input type="text" id="videoUrl" placeholder="Enter video URL (YouTube, Facebook, etc.)" />
+        <button id="downloadBtn" onclick="startDownload()">Download Video</button>
+        
+        <div id="status" style="display: none;"></div>
+        <div id="progress" style="display: none;">
+            <div class="progress">
+                <div id="progressBar" class="progress-bar" style="width: 0%"></div>
+            </div>
+            <div id="progressText">Starting...</div>
+        </div>
+        
+        <video id="videoPlayer" controls style="display: none;">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+
+    <script>
+        const API_BASE = 'https://qdk8y6nna6.execute-api.us-east-1.amazonaws.com/prod';
+        let currentTaskId = null;
+        let pollInterval = null;
+
+        function showStatus(message, type = 'info') {
+            const status = document.getElementById('status');
+            status.className = `status ${type}`;
+            status.innerHTML = message;
+            status.style.display = 'block';
+        }
+
+        function updateProgress(text, percent = null) {
+            const progressDiv = document.getElementById('progress');
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            
+            progressDiv.style.display = 'block';
+            progressText.textContent = text;
+            
+            if (percent !== null) {
+                progressBar.style.width = percent + '%';
+            }
+        }
+
+        function generateFilename(url) {
+            const urlPart = url.split('/').pop().replace(/[^a-zA-Z0-9._-]/g, '_').substring(0, 50);
+            return urlPart + '.%(ext)s';
+        }
+
+        async function startDownload() {
+            const url = document.getElementById('videoUrl').value.trim();
+            if (!url) {
+                showStatus('Please enter a video URL', 'error');
+                return;
+            }
+
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.disabled = true;
+            downloadBtn.textContent = 'Downloading...';
+
+            try {
+                showStatus('Initiating download...', 'info');
+                
+                const response = await fetch(`${API_BASE}/download`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        url: url,
+                        output_name: generateFilename(url)
+                    })
+                });
+
+                const result = await response.json();
+                
+                if (result.task_id) {
+                    currentTaskId = result.task_id;
+                    showStatus(`Download started! Task ID: ${currentTaskId}`, 'info');
+                    updateProgress('Download in progress...');
+                    startPolling();
+                } else if (result.s3_location) {
+                    // Lambda completed immediately
+                    showStatus('Download completed!', 'success');
+                    playVideo(result.s3_location);
+                } else {
+                    showStatus('Download started but no tracking available', 'info');
+                }
+            } catch (error) {
+                showStatus(`Error: ${error.message}`, 'error');
+                resetUI();
+            }
+        }
+
+        function startPolling() {
+            pollInterval = setInterval(async () => {
+                try {
+                    const response = await fetch(`${API_BASE}/status/${currentTaskId}`);
+                    const status = await response.json();
+                    
+                    switch (status.status) {
+                        case 'PENDING':
+                            updateProgress('Waiting to start...');
+                            break;
+                        case 'RUNNING':
+                            const progressText = status.progress || 'Downloading...';
+                            updateProgress(progressText);
+                            break;
+                        case 'STOPPED':
+                            clearInterval(pollInterval);
+                            showStatus('✅ Download completed successfully!', 'success');
+                            document.getElementById('progress').style.display = 'none';
+                            playVideo(status.s3_location);
+                            resetUI();
+                            break;
+                        case 'FAILED':
+                            clearInterval(pollInterval);
+                            showStatus(`❌ Download failed: ${status.error || 'Unknown error'}`, 'error');
+                            resetUI();
+                            break;
+                    }
+                } catch (error) {
+                    console.error('Polling error:', error);
+                }
+            }, 3000);
+        }
+
+        async function playVideo(s3Location) {
+            const filename = s3Location.replace('s3://my-video-downloads-bucket/', '');
+            
+            try {
+                // Get signed URL
+                const response = await fetch(`${API_BASE}/video/${filename}`);
+                const result = await response.json();
+                
+                if (result.signed_url) {
+                    const video = document.getElementById('videoPlayer');
+                    video.src = result.signed_url;
+                    video.style.display = 'block';
+                    video.load();
+                    
+                    showStatus(`🎬 Video ready! (expires in 1 hour)`, 'success');
+                } else {
+                    showStatus(`❌ Could not generate video URL: ${result.error}`, 'error');
+                }
+            } catch (error) {
+                showStatus(`❌ Error loading video: ${error.message}`, 'error');
+            }
+        }
+
+        function resetUI() {
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.disabled = false;
+            downloadBtn.textContent = 'Download Video';
+            currentTaskId = null;
+        }
+
+        // Auto-start if URL is in hash
+        if (window.location.hash) {
+            document.getElementById('videoUrl').value = decodeURIComponent(window.location.hash.substring(1));
+            startDownload();
+        }
+    </script>
+</body>
+</html>
