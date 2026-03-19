@@ -21,8 +21,10 @@ if (-not $Files -or $Files.Count -eq 0) {
 }
 
 $bucket = "my-video-downloads-bucket"
+$profile = "ekewaka"
+$region = "us-east-1"
 
-Write-Host "Uploading $($Files.Count) file(s) to S3..." -ForegroundColor Cyan
+Write-Host "Uploading $($Files.Count) file(s) to S3 (Account: ekewaka, Region: $region)..." -ForegroundColor Cyan
 
 foreach ($file in $Files) {
     if (Test-Path $file) {
@@ -50,7 +52,7 @@ foreach ($file in $Files) {
         }
         
         if ($awsCli) {
-            & $awsCli s3 cp $file $destination
+            & $awsCli s3 cp $file $destination --profile $profile --region $region
         } else {
             Write-Host "AWS CLI not found. Install from https://aws.amazon.com/cli/" -ForegroundColor Red
             exit 1

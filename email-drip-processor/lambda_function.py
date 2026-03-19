@@ -62,42 +62,38 @@ def process_enrollment(enrollment):
     """
     user_id = enrollment['user_id']
     subscriber_email = enrollment['subscriber_email']
-    campaign_id = enrollment['campaign_id']
-    current_sequence = int(enrollment.get('current_sequence', 0))
-    enrolled_at = datetime.fromisoformat(enrollment['enrolled_at'])
+    sequence_name = enrollment.get('sequence_name', enrollment.get('campaign_id', ''))
+    filter_tags = enrollment.get('filter_tags', [])
+    current_sequence = int(enrollment.get('current_sequence_number', enrollment.get('current_sequence', 0)))
+    enrolled_at = datetime.fromisoformat(enrollment['enrolled_at'].replace('Z', ''))
     last_sent_at = enrollment.get('last_sent_at')
-    
-    # Get campaign to find next email in sequence
-    camp_response = campaigns_table.get_item(
-        Key={'user_id': user_id, 'campaign_id': campaign_id}
-    )
-    
-    if 'Item' not in camp_response:
-        print(f"Campaign {campaign_id} not found")
-        return False
-    
-    campaign = camp_response['Item']
-    
-    # Check if this is a drip campaign
-    if campaign.get('campaign_type') != 'drip':
-        print(f"Campaign {campaign_id} is not a drip campaign")
-        return False
     
     # Get all campaigns for this drip sequence (sorted by sequence_number)
     all_campaigns_response = campaigns_table.query(
         KeyConditionExpression='user_id = :uid',
-        FilterExpression='campaign_type = :type AND filter_tags = :tags',
-        ExpressionAttributeValues={
-            ':uid': user_id,
-            ':type': 'drip',
-            ':tags': campaign.get('filter_tags', [])
-        }
+        FilterExpression='attribute_exists(sequence_number)',
+        ExpressionAttributeValues={':uid': user_id}
     )
     
-    drip_campaigns = sorted(
-        all_campaigns_response['Items'],
-        key=lambda x: int(x.get('sequence_number', 0))
-    )
+    print(f"Found {len(all_campaigns_response['Items'])} campaigns with sequence_number")
+    
+    # Filter by tags if specified
+    drip_campaigns = []
+    for camp in all_campaigns_response['Items']:
+        camp_tags = camp.get('filter_tags', [])
+        print(f"Campaign {camp['campaign_id'][:8]}... has tags: {camp_tags}")
+        if filter_tags and set(filter_tags).intersection(set(camp_tags)):
+            drip_campaigns.append(camp)
+            print(f"  -> Matched filter_tags {filter_tags}")
+        elif not filter_tags:
+            drip_campaigns.append(camp)
+            print(f"  -> No filter_tags, including")
+    
+    drip_campaigns = sorted(drip_campaigns, key=lambda x: int(x.get('sequence_number', 0)))
+    
+    if not drip_campaigns:
+        print(f"No drip campaigns found for {sequence_name}")
+        return False
     
     # Find next email to send
     next_email = None
@@ -125,7 +121,7 @@ def process_enrollment(enrollment):
     delay_days = int(next_email.get('delay_days', 1))
     
     if last_sent_at:
-        last_sent = datetime.fromisoformat(last_sent_at)
+        last_sent = datetime.fromisoformat(last_sent_at.replace('Z', ''))
         due_date = last_sent + timedelta(days=delay_days)
     else:
         # First email after enrollment
@@ -172,7 +168,7 @@ def process_enrollment(enrollment):
     # Update enrollment
     enrollments_table.update_item(
         Key={'user_id': user_id, 'enrollment_id': enrollment['enrollment_id']},
-        UpdateExpression='SET current_sequence = :seq, last_sent_at = :ts',
+        UpdateExpression='SET current_sequence_number = :seq, last_sent_at = :ts',
         ExpressionAttributeValues={
             ':seq': next_email['sequence_number'],
             ':ts': now.isoformat()

@@ -27,7 +27,7 @@ mt_subscribers_table = dynamodb.Table('user-email-subscribers')
 mt_users_table = dynamodb.Table('users')
 mt_drip_enrollments_table = dynamodb.Table('user-email-drip-enrollments')
 PLATFORM_OWNER_ID = 'effa3242-cf64-4021-b2b0-c8a5a9dfd6d2'
-BOOK_DRIP_CAMPAIGN_ID = 'book-welcome-sequence'
+BOOK_DRIP_SEQUENCE_NAME = 'book-welcome-sequence'
 
 SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:371751795928:platform-critical-alerts'
 
@@ -694,14 +694,15 @@ def bridge_to_email_marketing(email, first_name, last_name, source):
         
         # Auto-enroll in book drip sequence
         try:
-            enrollment_id = f"{email}_{BOOK_DRIP_CAMPAIGN_ID}"
+            enrollment_id = f"{email}#{BOOK_DRIP_SEQUENCE_NAME}"
             mt_drip_enrollments_table.put_item(Item={
                 'user_id': PLATFORM_OWNER_ID,
                 'enrollment_id': enrollment_id,
                 'subscriber_email': email,
-                'campaign_id': BOOK_DRIP_CAMPAIGN_ID,
+                'sequence_name': BOOK_DRIP_SEQUENCE_NAME,
+                'filter_tags': ['book', 'survival-kit'],
                 'enrolled_at': datetime.now().isoformat(),
-                'current_sequence': 0,
+                'current_sequence_number': 0,
                 'status': 'active'
             })
             print(f'Bridge: {email} enrolled in drip sequence')
