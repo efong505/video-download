@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Email Preferences - Christian Conservatives Today</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            color: #2c5aa0;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+        
+        .preference-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .preference-section h3 {
+            color: #2c5aa0;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        
+        .checkbox-group {
+            margin-bottom: 15px;
+        }
+        
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: white;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .checkbox-group label:hover {
+            background: #e9ecef;
+        }
+        
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            cursor: pointer;
+        }
+        
+        .checkbox-group .description {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-save {
+            background: #16a34a;
+            color: white;
+        }
+        
+        .btn-save:hover {
+            background: #15803d;
+        }
+        
+        .btn-unsubscribe {
+            background: #dc2626;
+            color: white;
+        }
+        
+        .btn-unsubscribe:hover {
+            background: #b91c1c;
+        }
+        
+        .message {
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        
+        .message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #10b981;
+        }
+        
+        .message.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #ef4444;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+        }
+        
+        .email-display {
+            background: #e9ecef;
+            padding: 10px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #2c5aa0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📧 Manage Email Preferences</h1>
+        <p class="subtitle">Choose which emails you'd like to receive</p>
+        
+        <div id="message" class="message"></div>
+        
+        <div id="loading" class="loading">Loading your preferences...</div>
+        
+        <div id="content" style="display: none;">
+            <div class="email-display" id="email-display"></div>
+            
+            <div class="preference-section">
+                <h3>Email Subscriptions</h3>
+                
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="drip-emails" checked>
+                        <div>
+                            <div><strong>AI Book Email Series</strong></div>
+                            <div class="description">Receive our 7-email series about AI and faith (Days 1, 3, 5, 7, 10, 14)</div>
+                        </div>
+                    </label>
+                </div>
+                
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="promotional-emails" checked>
+                        <div>
+                            <div><strong>Book Updates & Promotions</strong></div>
+                            <div class="description">Special offers, new resources, and book announcements</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="button-group">
+                <button class="btn-save" onclick="savePreferences()">💾 Save Preferences</button>
+                <button class="btn-unsubscribe" onclick="unsubscribeAll()">🚫 Unsubscribe from All</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE = 'https://niexv1rw75.execute-api.us-east-1.amazonaws.com';
+        let userEmail = '';
+        
+        async function init() {
+            // Get email from URL parameter
+            const params = new URLSearchParams(window.location.search);
+            userEmail = params.get('email');
+            
+            if (!userEmail) {
+                showMessage('error', 'No email address provided');
+                return;
+            }
+            
+            document.getElementById('email-display').textContent = userEmail;
+            
+            // Load current preferences
+            await loadPreferences();
+            
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+        }
+        
+        async function loadPreferences() {
+            try {
+                // Check if user is enrolled in drip
+                const enrollmentResponse = await fetch(`${API_BASE}/subscribe?action=list_drip_enrollments`);
+                const enrollmentData = await enrollmentResponse.json();
+                
+                const userEnrollment = enrollmentData.enrollments?.find(e => 
+                    e.subscriber_email === userEmail
+                );
+                
+                if (userEnrollment) {
+                    document.getElementById('drip-emails').checked = userEnrollment.status === 'active';
+                }
+                
+                // Check if user is a subscriber
+                const subResponse = await fetch(`${API_BASE}/subscribe?action=check_subscriber&email=${encodeURIComponent(userEmail)}`);
+                const subData = await subResponse.json();
+                
+                document.getElementById('promotional-emails').checked = subData.is_subscriber;
+                
+            } catch (error) {
+                console.error('Error loading preferences:', error);
+                showMessage('error', 'Failed to load preferences');
+            }
+        }
+        
+        async function savePreferences() {
+            const dripEnabled = document.getElementById('drip-emails').checked;
+            const promoEnabled = document.getElementById('promotional-emails').checked;
+            
+            try {
+                // Update drip enrollment status
+                const response = await fetch(`${API_BASE}/subscribe`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'update_preferences',
+                        email: userEmail,
+                        drip_enabled: dripEnabled,
+                        promotional_enabled: promoEnabled
+                    })
+                });
+                
+                if (response.ok) {
+                    showMessage('success', '✓ Preferences saved successfully!');
+                } else {
+                    showMessage('error', 'Failed to save preferences. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error saving preferences:', error);
+                showMessage('error', 'Failed to save preferences. Please try again.');
+            }
+        }
+        
+        async function unsubscribeAll() {
+            if (!confirm('Are you sure you want to unsubscribe from all emails? You can always re-subscribe later.')) {
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/subscribe`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'unsubscribe_all',
+                        email: userEmail
+                    })
+                });
+                
+                if (response.ok) {
+                    showMessage('success', '✓ You have been unsubscribed from all emails.');
+                    document.getElementById('drip-emails').checked = false;
+                    document.getElementById('promotional-emails').checked = false;
+                    document.getElementById('drip-emails').disabled = true;
+                    document.getElementById('promotional-emails').disabled = true;
+                } else {
+                    showMessage('error', 'Failed to unsubscribe. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error unsubscribing:', error);
+                showMessage('error', 'Failed to unsubscribe. Please try again.');
+            }
+        }
+        
+        function showMessage(type, text) {
+            const messageEl = document.getElementById('message');
+            messageEl.className = `message ${type}`;
+            messageEl.textContent = text;
+            messageEl.style.display = 'block';
+            
+            setTimeout(() => {
+                messageEl.style.display = 'none';
+            }, 5000);
+        }
+        
+        // Initialize on page load
+        init();
+    </script>
+</body>
+</html>

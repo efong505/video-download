@@ -52,16 +52,27 @@ def lambda_handler(event, context):
         return cors_response(200, {'message': 'OK'})
     
     # Route to appropriate handler
-    if path == '/subscribe' or (method == 'POST' and not path.startswith('/track')):
-        # Check if it's a list_book_subscribers request
+    if path == '/subscribe':
         params = event.get('queryStringParameters') or {}
         if params.get('action') == 'list_book_subscribers':
             return list_book_subscribers()
+        elif params.get('action') == 'list_drip_enrollments':
+            return list_drip_enrollments()
         elif params.get('action') == 'check_subscriber':
             return check_subscriber_status(params.get('email', ''))
         elif params.get('action') == 'resend_book_email':
             return handle_resend_book_email(event)
-        return handle_subscription(event)
+        elif method == 'POST':
+            body = json.loads(event.get('body', '{}'))
+            action = body.get('action')
+            if action == 'update_preferences':
+                return handle_update_preferences(body)
+            elif action == 'unsubscribe_all':
+                return handle_unsubscribe_all(body)
+            else:
+                return handle_subscription(event)
+        else:
+            return cors_response(400, {'error': 'Invalid request'})
     elif path == '/list_book_subscribers':
         return list_book_subscribers()
     elif path == '/confirm':
@@ -863,6 +874,26 @@ def list_book_subscribers():
         print(f"List book subscribers error: {str(e)}")
         return cors_response(500, {'error': 'Failed to list subscribers'})
 
+def list_drip_enrollments():
+    """List all drip enrollments for analytics"""
+    try:
+        response = mt_drip_enrollments_table.query(
+            KeyConditionExpression='user_id = :uid',
+            ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID}
+        )
+        enrollments = response.get('Items', [])
+        
+        # Convert Decimal to int/float for JSON serialization
+        for enrollment in enrollments:
+            if 'current_sequence_number' in enrollment:
+                enrollment['current_sequence_number'] = int(enrollment['current_sequence_number'])
+        
+        enrollments.sort(key=lambda x: x.get('enrolled_at', ''), reverse=True)
+        return cors_response(200, {'enrollments': enrollments})
+    except Exception as e:
+        print(f"List enrollments error: {str(e)}")
+        return cors_response(500, {'error': 'Failed to list enrollments'})
+
 def check_subscriber_status(email):
     """Check if email is a book subscriber"""
     try:
@@ -909,3 +940,78 @@ def handle_resend_book_email(event):
         import traceback
         traceback.print_exc()
         return cors_response(500, {'error': 'Failed to resend email'})
+
+def handle_update_preferences(body):
+    """Update user email preferences"""
+    try:
+        email = body.get('email', '').strip().lower()
+        drip_enabled = body.get('drip_enabled', True)
+        
+        if not email:
+            return cors_response(400, {'error': 'Email required'})
+        
+        # Update drip enrollment status
+        enrollment_id = f"{email}#{BOOK_DRIP_SEQUENCE_NAME}"
+        
+        try:
+            if drip_enabled:
+                # Reactivate enrollment
+                mt_drip_enrollments_table.update_item(
+                    Key={'user_id': PLATFORM_OWNER_ID, 'enrollment_id': enrollment_id},
+                    UpdateExpression='SET #status = :status',
+                    ExpressionAttributeNames={'#status': 'status'},
+                    ExpressionAttributeValues={':status': 'active'}
+                )
+            else:
+                # Pause enrollment
+                mt_drip_enrollments_table.update_item(
+                    Key={'user_id': PLATFORM_OWNER_ID, 'enrollment_id': enrollment_id},
+                    UpdateExpression='SET #status = :status',
+                    ExpressionAttributeNames={'#status': 'status'},
+                    ExpressionAttributeValues={':status': 'paused'}
+                )
+        except Exception as e:
+            print(f"Error updating enrollment: {str(e)}")
+        
+        return cors_response(200, {'message': 'Preferences updated', 'email': email})
+        
+    except Exception as e:
+        print(f"Update preferences error: {str(e)}")
+        return cors_response(500, {'error': 'Failed to update preferences'})
+
+def handle_unsubscribe_all(body):
+    """Unsubscribe user from all emails"""
+    try:
+        email = body.get('email', '').strip().lower()
+        
+        if not email:
+            return cors_response(400, {'error': 'Email required'})
+        
+        # Pause drip enrollment
+        enrollment_id = f"{email}#{BOOK_DRIP_SEQUENCE_NAME}"
+        try:
+            mt_drip_enrollments_table.update_item(
+                Key={'user_id': PLATFORM_OWNER_ID, 'enrollment_id': enrollment_id},
+                UpdateExpression='SET #status = :status',
+                ExpressionAttributeNames={'#status': 'status'},
+                ExpressionAttributeValues={':status': 'paused'}
+            )
+        except Exception as e:
+            print(f"Error pausing enrollment: {str(e)}")
+        
+        # Update subscriber status
+        try:
+            mt_subscribers_table.update_item(
+                Key={'user_id': PLATFORM_OWNER_ID, 'subscriber_email': email},
+                UpdateExpression='SET #status = :status',
+                ExpressionAttributeNames={'#status': 'status'},
+                ExpressionAttributeValues={':status': 'unsubscribed'}
+            )
+        except Exception as e:
+            print(f"Error updating subscriber: {str(e)}")
+        
+        return cors_response(200, {'message': 'Unsubscribed from all emails', 'email': email})
+        
+    except Exception as e:
+        print(f"Unsubscribe all error: {str(e)}")
+        return cors_response(500, {'error': 'Failed to unsubscribe'})
