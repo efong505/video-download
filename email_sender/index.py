@@ -11,6 +11,7 @@ events_table = dynamodb.Table('user-email-events')
 users_table = dynamodb.Table('users')
 
 def lambda_handler(event, context):
+    print(f"Processing {len(event['Records'])} message(s)")
     for record in event['Records']:
         message = json.loads(record['body'])
         user_id = message['user_id']
@@ -19,6 +20,9 @@ def lambda_handler(event, context):
         
         # Get campaign
         campaign = campaigns_table.get_item(Key={'user_id': user_id, 'campaign_id': campaign_id})['Item']
+        
+        # Support both 'content' and 'html_content' field names
+        email_content = campaign.get('html_content') or campaign.get('content', '')
         
         # Get user info
         user = users_table.get_item(Key={'user_id': user_id})['Item']
@@ -33,7 +37,7 @@ def lambda_handler(event, context):
             ).get('Item', {})
             
             # Apply mail merge
-            content = apply_mail_merge(campaign['content'], subscriber, user_id, campaign_id, recipient_email)
+            content = apply_mail_merge(email_content, subscriber, user_id, campaign_id, recipient_email)
             
             # Add tracking pixel
             tracking_id = generate_tracking_id(user_id, campaign_id, recipient_email)
@@ -51,6 +55,7 @@ def lambda_handler(event, context):
                     }
                 )
                 sent_count += 1
+                print(f"Sent email to {recipient_email}")
                 
                 # Log event
                 events_table.put_item(Item={

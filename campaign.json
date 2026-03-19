@@ -1,0 +1,9 @@
+{
+    "campaign_type": {
+        "S": "drip"
+    },
+    "click_count": {
+        "N": "0"
+    },
+    "content": {
+        "S": 
