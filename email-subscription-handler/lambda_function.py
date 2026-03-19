@@ -798,8 +798,9 @@ def send_book_signup_email_with_pdfs(email, first_name):
             
             <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
             
-            <p style="font-size: 12px; color: #999; line-height: 1.6;">
+            <p style="font-size: 12px; color: #999; line-height: 1.6; text-align: center;">
                 You're receiving this email because you signed up for the Christian AI Survival Kit at christianconservativestoday.com<br>
+                <a href="{DOMAIN}/manage-email-preferences.html?email={email}" style="color: #16a34a;">Manage Email Preferences</a> | 
                 <a href="{DOMAIN}" style="color: #16a34a;">Visit Website</a>
             </p>
         </div>
