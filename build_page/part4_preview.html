@@ -1,0 +1,84 @@
+
+    <!-- Free Preview Section (Gated) -->
+    <section class="py-5 bg-light" id="preview">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 style="color: var(--primary-color);">Read Free Preview</h2>
+                <p class="lead">Get a taste of 30+ pages absolutely free</p>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card shadow-lg preview-gated">
+                        <!-- Blur overlay for anonymous users -->
+                        <div class="preview-blur-overlay anonymous-only" id="preview-overlay">
+                            <div class="preview-unlock-card">
+                                <i class="fas fa-lock fa-3x mb-3" style="color: var(--kit-green);"></i>
+                                <h3>Unlock the Free Preview</h3>
+                                <p class="text-muted">Get the Christian AI Survival Kit to unlock 30+ pages of the book — plus a survival guide, discussion guide, and webinar invite.</p>
+                                <a href="#survival-kit" class="btn btn-kit btn-lg">
+                                    <i class="fas fa-gift me-2"></i>Get Free Kit & Unlock Preview
+                                </a>
+                            </div>
+                        </div>
+
+                        <div class="card-body p-0">
+                            <div id="pdf-viewer" style="min-height: 600px; overflow: auto; display: flex; align-items: center; justify-content: center;">
+                                <div class="text-center p-5">
+                                    <div class="spinner-border text-primary mb-3" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p>Loading preview...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white p-4 subscriber-only">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <button id="first-page" class="btn btn-outline-secondary btn-sm" title="First Page">
+                                        <i class="fas fa-angle-double-left"></i>
+                                    </button>
+                                    <button id="prev-page" class="btn btn-outline-primary">
+                                        <i class="fas fa-chevron-left"></i> Previous
+                                    </button>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span>Page</span>
+                                        <input type="number" id="page-input" class="form-control form-control-sm" style="width: 60px;" min="1" value="1">
+                                        <span>of <span id="page-count">-</span></span>
+                                    </div>
+                                    <button id="next-page" class="btn btn-outline-primary">
+                                        Next <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                    <button id="last-page" class="btn btn-outline-secondary btn-sm" title="Last Page">
+                                        <i class="fas fa-angle-double-right"></i>
+                                    </button>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <button id="zoom-out" class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-search-minus"></i>
+                                    </button>
+                                    <span id="zoom-level" class="small text-muted">100%</span>
+                                    <button id="zoom-in" class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-search-plus"></i>
+                                    </button>
+                                    <button id="fit-page" class="btn btn-sm btn-outline-secondary" title="Fit to Page">
+                                        <i class="fas fa-compress"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <small class="text-muted">Use arrow keys to navigate • Scroll to zoom when zoomed in</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4 subscriber-only">
+                        <p class="text-muted">Enjoying the preview? Get the full book now!</p>
+                        <a href="#purchase" class="btn btn-primary-custom">
+                            <i class="fas fa-book me-2"></i>Purchase Full Book
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>

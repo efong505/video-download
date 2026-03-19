@@ -33,7 +33,6 @@
             --primary-color: #2c5aa0;
             --secondary-color: #8b4513;
             --accent-color: #d4af37;
-            --kit-green: #16a34a;
         }
 
         .book-hero {
@@ -52,7 +51,9 @@
             transition: transform 0.3s ease;
         }
 
-        .book-cover:hover { transform: scale(1.05); }
+        .book-cover:hover {
+            transform: scale(1.05);
+        }
 
         .feature-badge {
             background: var(--accent-color);
@@ -88,101 +89,82 @@
             border-left: 5px solid var(--accent-color);
         }
 
-        /* Survival Kit Section */
-        .kit-section {
-            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #f0fdf4 100%);
-            border-top: 4px solid var(--kit-green);
-            border-bottom: 4px solid var(--kit-green);
-        }
-
-        .kit-item {
+        .chapter-list {
             background: white;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-            transition: transform 0.3s ease;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .kit-item:hover { transform: translateY(-4px); }
-
-        .kit-item i { color: var(--kit-green); }
-
-        .kit-value {
-            text-decoration: line-through;
-            color: #999;
-            font-size: 0.9rem;
-        }
-
-        .kit-free {
-            color: var(--kit-green);
-            font-weight: 700;
-            font-size: 1.1rem;
-        }
-
-        .value-stack-total {
-            background: var(--kit-green);
-            color: white;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        /* Gated Preview */
-        .preview-gated {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .preview-blur-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(255,255,255,0.45);
-            backdrop-filter: blur(3px);
-            display: flex !important;
-            align-items: center;
+        /* Page turning animation */
+        .page-container {
+            perspective: 1500px;
+            display: flex;
             justify-content: center;
-            z-index: 10;
-            border-radius: 8px;
+            gap: 10px;
+            padding: 20px;
         }
 
-        .preview-unlock-card {
-            background: white;
-            border-radius: 16px;
-            padding: 40px;
-            max-width: 500px;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        .page {
+            transition: transform 0.6s ease;
+            transform-style: preserve-3d;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border: 1px solid #ddd;
         }
 
-        .btn-kit {
-            background: var(--kit-green);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
+        .page.turning-left {
+            animation: turnLeft 0.6s ease forwards;
         }
 
-        .btn-kit:hover {
-            background: #15803d;
-            color: white;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(22,163,74,0.3);
+        .page.turning-right {
+            animation: turnRight 0.6s ease forwards;
         }
 
-        /* Hide/show based on subscriber state */
-        .subscriber-only { display: none !important; }
-        .anonymous-only { }
-        body.is-subscriber .subscriber-only { display: block !important; }
-        body.is-subscriber .anonymous-only { display: none !important; }
-        body.is-subscriber .preview-blur-overlay { display: none !important; }
+        @keyframes turnLeft {
+            0% {
+                transform: rotateY(0deg);
+                opacity: 1;
+            }
+            50% {
+                transform: rotateY(-90deg);
+                opacity: 0.5;
+            }
+            100% {
+                transform: rotateY(-180deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes turnRight {
+            0% {
+                transform: rotateY(-180deg);
+                opacity: 0;
+            }
+            50% {
+                transform: rotateY(-90deg);
+                opacity: 0.5;
+            }
+            100% {
+                transform: rotateY(0deg);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
     <div id="navbar-container" data-page="book"></div>
+
+    <!-- Amazon Blocked Banner -->
+    <!-- <div style="background: linear-gradient(135deg, #dc2626 0%, #000000 100%); color: white; padding: 20px 0; text-align: center; border-bottom: 4px solid #fbbf24;">
+        <div class="container">
+            <h3 class="mb-2" style="font-weight: bold; text-transform: uppercase; letter-spacing: 1px;">
+                <i class="fas fa-ban me-2"></i>Amazon Blocked This Book – But You Can Still Get It!
+            </h3>
+            <p class="mb-0" style="font-size: 1.1rem;">
+                <strong>'Too Hot for Amazon'</strong> – Read the Christian exposé on AI bias, transhumanism, and globalist agendas they didn't want you to see.
+            </p>
+        </div>
+    </div> -->
 
     <!-- Now Live Banner -->
     <div style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; padding: 20px 0; padding-top: 80px; text-align: center; border-bottom: 4px solid #fbbf24;">
@@ -205,6 +187,9 @@
                          onerror="this.src='https://via.placeholder.com/400x600/2c5aa0/ffffff?text=The+Necessary+Evil'">
                 </div>
                 <div class="col-lg-7">
+                    <div class="badge bg-warning text-dark px-3 py-2 mb-3">
+                        <i class="fas fa-shopping-cart me-2"></i>ORDER NOW
+                    </div>
                     <h1 class="display-3 fw-bold mb-3">The Necessary Evil</h1>
                     <h4 class="mb-3">AI, Dehumanization, and the Fight for Human Dignity in a Transhumanist Age</h4>
                     <p class="lead mb-4">A Christian-Conservative Perspective on Mastering Artificial Intelligence Without Losing Our Souls</p>
@@ -217,14 +202,14 @@
                     </div>
 
                     <div class="d-flex flex-wrap gap-3 mb-4">
-                        <a href="#survival-kit" class="btn btn-kit btn-lg px-5">
-                            <i class="fas fa-gift me-2"></i>Get Free Survival Kit
+                        <a href="#preview" class="btn btn-light btn-lg px-5">
+                            <i class="fas fa-eye me-2"></i>Read Free Preview
                         </a>
-                        <a href="#purchase" class="btn btn-outline-light btn-lg px-5 subscriber-only">
+                        <a href="#purchase" class="btn btn-outline-light btn-lg px-5">
                             <i class="fas fa-shopping-cart me-2"></i>Purchase Book
                         </a>
-                        <a href="#preview" class="btn btn-outline-light btn-lg px-5 subscriber-only">
-                            <i class="fas fa-eye me-2"></i>Read Free Preview
+                        <a href="#signup" class="btn btn-outline-light btn-lg px-5">
+                            <i class="fas fa-envelope me-2"></i>Join Mailing List
                         </a>
                     </div>
                     
@@ -251,203 +236,6 @@
                         <button onclick="copyLink()" class="btn btn-sm btn-outline-light">
                             <i class="fas fa-link me-1"></i> Copy Link
                         </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Hook Section - Problem/Solution -->
-    <section class="py-5" style="background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8 text-center">
-                    <h2 class="display-5 fw-bold mb-4" style="color: var(--primary-color);">AI is here. It's powerful, dangerous, and unavoidable.</h2>
-                    <p class="lead mb-4">In less than a month, I built an entire media platform using AI. But when it refused to tell the truth unless I called it "hypothetical," I realized: <strong>AI is not neutral.</strong></p>
-                    <p class="lead mb-4">It's biased. It's accelerating transhumanism. And it's redefining what it means to be human.</p>
-                    <p class="lead mb-5"><strong>This book exposes the threat — and gives you a biblical framework to master AI before it masters you.</strong></p>
-                    <a href="#survival-kit" class="btn btn-kit btn-lg px-5">
-                        <i class="fas fa-gift me-2"></i>Get the Free Christian AI Survival Kit
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Christian AI Survival Kit Section -->
-    <section class="py-5 kit-section" id="survival-kit">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <!-- Anonymous: full kit pitch -->
-                    <div class="anonymous-only">
-                        <div class="text-center mb-5">
-                            <span class="badge bg-success fs-6 px-4 py-2 mb-3">FREE DOWNLOAD</span>
-                            <h2 class="display-5 fw-bold" style="color: var(--kit-green);">The Christian AI Survival Kit</h2>
-                            <p class="lead">How to Use Artificial Intelligence Without Losing Your Faith, Your Family, or Your Humanity</p>
-                        </div>
-
-                        <!-- 4 Kit Components -->
-                        <div class="row g-4 mb-5">
-                            <div class="col-md-6 col-lg-3">
-                                <div class="kit-item h-100">
-                                    <i class="fas fa-book-open fa-3x mb-3"></i>
-                                    <h5>30-Page Book Preview</h5>
-                                    <p class="small text-muted">Introduction + the most powerful chapters from The Necessary Evil</p>
-                                    <span class="kit-value">$15 value</span>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-3">
-                                <div class="kit-item h-100">
-                                    <i class="fas fa-shield-alt fa-3x mb-3"></i>
-                                    <h5>Christian AI Survival Guide</h5>
-                                    <p class="small text-muted">7 safeguards for using AI without losing your soul — practical & scripture-based</p>
-                                    <span class="kit-value">$19 value</span>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-3">
-                                <div class="kit-item h-100">
-                                    <i class="fas fa-users fa-3x mb-3"></i>
-                                    <h5>Church Discussion Guide</h5>
-                                    <p class="small text-muted">10-session study guide for small groups, men's groups & homeschool co-ops</p>
-                                    <span class="kit-value">$12 value</span>
-                                </div>
-                            </div>
-                            <div class="col-md-6 col-lg-3">
-                                <div class="kit-item h-100">
-                                    <i class="fas fa-video fa-3x mb-3"></i>
-                                    <h5>Live Author Webinar</h5>
-                                    <p class="small text-muted">Exclusive invite to a live Q&A with Edward Fong on AI & the Christian response</p>
-                                    <span class="kit-value">$25 value</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Value Stack Total -->
-                        <div class="value-stack-total mb-5">
-                            <p class="mb-1 fs-5"><s>Total Value: $71</s></p>
-                            <p class="display-6 fw-bold mb-0">FREE Today</p>
-                        </div>
-
-                        <!-- Kit Signup Form -->
-                        <div class="card border-0 shadow-lg p-4">
-                            <h4 class="text-center mb-3" style="color: var(--kit-green);">Get Instant Access</h4>
-                            <form id="kit-signup-form">
-                                <div class="row g-2">
-                                    <div class="col-md-4">
-                                        <input type="text" class="form-control form-control-lg" id="kit-first-name" placeholder="First name" required>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="text" class="form-control form-control-lg" id="kit-last-name" placeholder="Last name (optional)">
-                                    </div>
-                                    <div class="col-md-4">
-                                        <input type="email" class="form-control form-control-lg" id="kit-email" placeholder="Email" required>
-                                    </div>
-                                    <div class="col-12">
-                                        <button class="btn btn-kit btn-lg w-100" type="submit">
-                                            <i class="fas fa-gift me-2"></i>Send Me the Free Survival Kit
-                                        </button>
-                                    </div>
-                                </div>
-                                <p class="text-center text-muted small mt-2 mb-0">Instant download. No spam. Unsubscribe anytime.</p>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Subscriber: confirmation + links -->
-                    <div class="subscriber-only">
-                        <div class="text-center">
-                            <i class="fas fa-check-circle fa-3x mb-3" style="color: var(--kit-green);"></i>
-                            <h3 style="color: var(--kit-green);">You Have the Christian AI Survival Kit!</h3>
-                            <p class="lead">Check your email for the full kit. Your preview is unlocked below.</p>
-                            <a href="#preview" class="btn btn-kit btn-lg"><i class="fas fa-eye me-2"></i>Read the Preview</a>
-                            <a href="#purchase" class="btn btn-outline-success btn-lg ms-2"><i class="fas fa-shopping-cart me-2"></i>Get the Full Book</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Free Preview Section (Gated) -->
-    <section class="py-5 bg-light" id="preview">
-        <div class="container">
-            <div class="text-center mb-5">
-                <h2 style="color: var(--primary-color);">Read Free Preview</h2>
-                <p class="lead">Get a taste of 30+ pages absolutely free</p>
-            </div>
-            
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
-                    <div class="card shadow-lg preview-gated">
-                        <!-- Blur overlay for anonymous users -->
-                        <div class="preview-blur-overlay anonymous-only" id="preview-overlay">
-                            <div class="preview-unlock-card">
-                                <i class="fas fa-lock fa-3x mb-3" style="color: var(--kit-green);"></i>
-                                <h3>Unlock the Free Preview</h3>
-                                <p class="text-muted">Get the Christian AI Survival Kit to unlock 30+ pages of the book — plus a survival guide, discussion guide, and webinar invite.</p>
-                                <a href="#survival-kit" class="btn btn-kit btn-lg">
-                                    <i class="fas fa-gift me-2"></i>Get Free Kit & Unlock Preview
-                                </a>
-                                <p class="text-muted small mt-3 mb-0">Already signed up? <a href="check-subscriber-status.html">Click here to unlock</a></p>
-                            </div>
-                        </div>
-
-                        <div class="card-body p-0">
-                            <div id="pdf-viewer" style="min-height: 600px; overflow: auto; display: flex; align-items: center; justify-content: center;">
-                                <div class="text-center p-5">
-                                    <div class="spinner-border text-primary mb-3" role="status">
-                                        <span class="visually-hidden">Loading...</span>
-                                    </div>
-                                    <p>Loading preview...</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer bg-white p-4 subscriber-only">
-                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
-                                <div class="d-flex align-items-center gap-2">
-                                    <button id="first-page" class="btn btn-outline-secondary btn-sm" title="First Page">
-                                        <i class="fas fa-angle-double-left"></i>
-                                    </button>
-                                    <button id="prev-page" class="btn btn-outline-primary">
-                                        <i class="fas fa-chevron-left"></i> Previous
-                                    </button>
-                                    <div class="d-flex align-items-center gap-2">
-                                        <span>Page</span>
-                                        <input type="number" id="page-input" class="form-control form-control-sm" style="width: 60px;" min="1" value="1">
-                                        <span>of <span id="page-count">-</span></span>
-                                    </div>
-                                    <button id="next-page" class="btn btn-outline-primary">
-                                        Next <i class="fas fa-chevron-right"></i>
-                                    </button>
-                                    <button id="last-page" class="btn btn-outline-secondary btn-sm" title="Last Page">
-                                        <i class="fas fa-angle-double-right"></i>
-                                    </button>
-                                </div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <button id="zoom-out" class="btn btn-sm btn-outline-secondary">
-                                        <i class="fas fa-search-minus"></i>
-                                    </button>
-                                    <span id="zoom-level" class="small text-muted">100%</span>
-                                    <button id="zoom-in" class="btn btn-sm btn-outline-secondary">
-                                        <i class="fas fa-search-plus"></i>
-                                    </button>
-                                    <button id="fit-page" class="btn btn-sm btn-outline-secondary" title="Fit to Page">
-                                        <i class="fas fa-compress"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="text-center mt-2">
-                                <small class="text-muted">Use arrow keys to navigate • Scroll to zoom when zoomed in</small>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="text-center mt-4 subscriber-only">
-                        <p class="text-muted">Enjoying the preview? Get the full book now!</p>
-                        <a href="#purchase" class="btn btn-primary-custom">
-                            <i class="fas fa-book me-2"></i>Purchase Full Book
-                        </a>
                     </div>
                 </div>
             </div>
@@ -525,6 +313,45 @@ It is a book about mastering it — before it masters us.</strong></p>
                             </div>
                         </div>
                     </div>
+                    
+                    <div class="card bg-light border-0 shadow-sm p-4 mt-5" id="signup">
+                        <h4 class="mb-3" style="color: var(--primary-color);">Join Our Mailing List</h4>
+                        <p class="mb-3">Sign up now and receive:</p>
+                        <ul class="mb-3">
+                            <li>Book launch updates & announcements</li>
+                            <li>Exclusive discount codes for future releases</li>
+                            <li>Bonus: Free downloadable study guide for small groups</li>
+                            <li>Bonus: Access to author Q&A webinar</li>
+                        </ul>
+                        
+                        <form id="prelaunch-signup" class="mt-3">
+                            <div class="row g-2">
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control form-control-lg" id="signup-first-name" placeholder="First name" required>
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="text" class="form-control form-control-lg" id="signup-last-name" placeholder="Last name (optional)">
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="email" class="form-control form-control-lg" id="signup-email" placeholder="Email" required>
+                                </div>
+                                <div class="col-12">
+                                    <button class="btn btn-primary btn-lg w-100" type="submit">
+                                        <i class="fas fa-paper-plane me-2"></i>Join the List
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    
+                    <p class="lead text-center mt-5 mb-3"><strong>Ready to master the necessary evil?</strong></p>
+                    <p class="text-center mb-4">Join hundreds of believers preparing for this critical moment.<br>
+Enter your email to get your free sample and stay in the loop.</p>
+                    
+                    <blockquote class="blockquote text-center border-start border-primary border-5 ps-4 py-3 bg-light">
+                        <p class="mb-2">"Edward's book is a wake-up call every Christian needs in 2026. AI is a tool — but only under God's authority."</p>
+                        <footer class="blockquote-footer mt-2">Early Reader Testimonial</footer>
+                    </blockquote>
                 </div>
             </div>
         </div>
@@ -594,6 +421,78 @@ It is a book about mastering it — before it masters us.</strong></p>
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Free Preview Section -->
+    <section class="py-5 bg-light" id="preview">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 style="color: var(--primary-color);">Read Free Preview</h2>
+                <p class="lead">Get a taste of 30+ pages absolutely free</p>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card shadow-lg">
+                        <div class="card-body p-0">
+                            <div id="pdf-viewer" style="min-height: 600px; overflow: auto; display: flex; align-items: center; justify-content: center;">
+                                <div class="text-center p-5">
+                                    <div class="spinner-border text-primary mb-3" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p>Loading preview...</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer bg-white p-4">
+                            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <button id="first-page" class="btn btn-outline-secondary btn-sm" title="First Page">
+                                        <i class="fas fa-angle-double-left"></i>
+                                    </button>
+                                    <button id="prev-page" class="btn btn-outline-primary">
+                                        <i class="fas fa-chevron-left"></i> Previous
+                                    </button>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <span>Page</span>
+                                        <input type="number" id="page-input" class="form-control form-control-sm" style="width: 60px;" min="1" value="1">
+                                        <span>of <span id="page-count">-</span></span>
+                                    </div>
+                                    <button id="next-page" class="btn btn-outline-primary">
+                                        Next <i class="fas fa-chevron-right"></i>
+                                    </button>
+                                    <button id="last-page" class="btn btn-outline-secondary btn-sm" title="Last Page">
+                                        <i class="fas fa-angle-double-right"></i>
+                                    </button>
+                                </div>
+                                <div class="d-flex align-items-center gap-2">
+                                    <button id="zoom-out" class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-search-minus"></i>
+                                    </button>
+                                    <span id="zoom-level" class="small text-muted">100%</span>
+                                    <button id="zoom-in" class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-search-plus"></i>
+                                    </button>
+                                    <button id="fit-page" class="btn btn-sm btn-outline-secondary" title="Fit to Page">
+                                        <i class="fas fa-compress"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="text-center mt-2">
+                                <small class="text-muted">Use arrow keys to navigate • Scroll to zoom when zoomed in</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <p class="text-muted">Enjoying the preview? Get the full book now!</p>
+                        <a href="#purchase" class="btn btn-primary-custom">
+                            <i class="fas fa-book me-2"></i>Purchase Full Book
+                        </a>
                     </div>
                 </div>
             </div>
@@ -753,52 +652,8 @@ It is a book about mastering it — before it masters us.</strong></p>
         </div>
     </section>
 
-    <!-- Mailing List Signup -->
-    <section class="py-5" id="signup">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="card bg-light border-0 shadow-sm p-4">
-                        <h4 class="mb-3" style="color: var(--primary-color);">Join Our Mailing List</h4>
-                        <p class="mb-3">Sign up now and receive:</p>
-                        <ul class="mb-3">
-                            <li>Book launch updates & announcements</li>
-                            <li>Exclusive discount codes for future releases</li>
-                            <li>Bonus: Free downloadable study guide for small groups</li>
-                            <li>Bonus: Access to author Q&A webinar</li>
-                        </ul>
-                        
-                        <form id="prelaunch-signup" class="mt-3">
-                            <div class="row g-2">
-                                <div class="col-md-4">
-                                    <input type="text" class="form-control form-control-lg" id="signup-first-name" placeholder="First name" required>
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="text" class="form-control form-control-lg" id="signup-last-name" placeholder="Last name (optional)">
-                                </div>
-                                <div class="col-md-4">
-                                    <input type="email" class="form-control form-control-lg" id="signup-email" placeholder="Email" required>
-                                </div>
-                                <div class="col-12">
-                                    <button class="btn btn-primary btn-lg w-100" type="submit">
-                                        <i class="fas fa-paper-plane me-2"></i>Join the List
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    
-                    <blockquote class="blockquote text-center border-start border-primary border-5 ps-4 py-3 bg-light mt-4">
-                        <p class="mb-2">"Edward's book is a wake-up call every Christian needs in 2026. AI is a tool — but only under God's authority."</p>
-                        <footer class="blockquote-footer mt-2">Early Reader Testimonial</footer>
-                    </blockquote>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <!-- About the Author -->
-    <section class="py-5 bg-light">
+    <section class="py-5">
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-4 text-center mb-4 mb-lg-0">
@@ -811,10 +666,10 @@ It is a book about mastering it — before it masters us.</strong></p>
                     <p class="lead">Edward Fong is a cloud-native systems engineer, platform architect, and founder of ChristianConservativesToday.com.</p>
                     <p>With degrees from New Mexico State University and experience supporting secure government environments at Kirtland Air Force Base under an active DoD Secret clearance, Edward designs and operates production-grade AWS serverless platforms using Infrastructure as Code (Terraform), CI/CD automation, blue/green deployment strategies, and disciplined monitoring practices.</p>
                     <p>In 2025, he built and launched an entire Christian-conservative media platform in under one month using artificial intelligence — an effort that would traditionally have required a full development team. That experience gave him firsthand exposure to both the extraordinary productivity gains AI enables and the subtle ways these systems shape information, narrative framing, and cultural direction.</p>
-                    <p>The Necessary Evil was written not as a reactionary critique of technology, but as a technical and theological examination of AI's accelerating influence. Drawing from direct experience building and operating AI-enabled systems, Edward explores the structural biases embedded in modern platforms, the transhumanist assumptions driving technological development, and the spiritual implications of delegating judgment to machines.</p>
+                    <p>The Necessary Evil was written not as a reactionary critique of technology, but as a technical and theological examination of AI’s accelerating influence. Drawing from direct experience building and operating AI-enabled systems, Edward explores the structural biases embedded in modern platforms, the transhumanist assumptions driving technological development, and the spiritual implications of delegating judgment to machines.</p>
                     <p>The Second Edition (February 2026) expands on media manipulation, governance trends, and the responsibility of the Church to engage technology with clarity, courage, and discipline.</p>
                     <p>Edward lives in Albuquerque, New Mexico, with his wife Julia, an artist and graphic designer who contributes visual elements to their shared ministry and creative work.</p>
-                    <p><em>"We do not fear the tool. We master it — or it masters us."</em></p>
+                    <p><em>“We do not fear the tool. We master it — or it masters us.”</em></p>
                 </div>
             </div>
         </div>
@@ -921,25 +776,10 @@ It is a book about mastering it — before it masters us.</strong></p>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <!-- PayPal SDK -->
     <script src="https://www.paypal.com/sdk/js?client-id=AfRsTknme8cj0IuEjhYWK7F939A4BwXJ2rmDtNC4uMu9g1zzH5ZUCv_4n9dK4I5Wdx-G42FkNBWewYrg&enable-funding=venmo&currency=USD"></script>
     <script src="navbar.js"></script>
     <script>
-        // Subscriber state check
-        function isSubscriber() {
-            return localStorage.getItem('book_subscriber') === 'true';
-        }
-
-        function applySubscriberState() {
-            if (isSubscriber()) {
-                document.body.classList.add('is-subscriber');
-            } else {
-                document.body.classList.remove('is-subscriber');
-            }
-        }
-
-        // Apply immediately
-        applySubscriberState();
-
         // Load navbar
         fetch('navbar.html')
             .then(r => r.text())
@@ -969,10 +809,12 @@ It is a book about mastering it — before it masters us.</strong></p>
             const isMobile = window.innerWidth < 768;
             
             if (isMobile) {
+                // Mobile: show single page
                 const scaleWidth = containerWidth / pageWidth;
                 const scaleHeight = containerHeight / pageHeight;
                 return Math.min(scaleWidth, scaleHeight, 1.5);
             } else {
+                // Desktop: show two pages
                 const pageWidthForTwo = pageWidth * 2 + 10;
                 const scaleWidth = containerWidth / pageWidthForTwo;
                 const scaleHeight = containerHeight / pageHeight;
@@ -980,10 +822,14 @@ It is a book about mastering it — before it masters us.</strong></p>
             }
         }
 
-        // Always load PDF so anonymous users see blurred content behind overlay
-        pdfjsLib.getDocument('book-teaser.pdf').promise.then(function(pdfDoc_) {
+        // Load PDF (teaser version - first 3 chapters only)
+        const url = 'book-teaser.pdf';
+
+        pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
             pdfDoc = pdfDoc_;
             document.getElementById('page-count').textContent = Math.min(pdfDoc.numPages, 37);
+            
+            // Initial render
             renderPages(pageNum);
         }).catch(function(error) {
             document.getElementById('pdf-viewer').innerHTML = 
@@ -996,6 +842,7 @@ It is a book about mastering it — before it masters us.</strong></p>
             const isMobile = window.innerWidth < 768;
             viewer.innerHTML = '';
             
+            // Create container for pages
             const container = document.createElement('div');
             container.style.display = 'flex';
             container.style.justifyContent = 'center';
@@ -1003,6 +850,7 @@ It is a book about mastering it — before it masters us.</strong></p>
             container.style.padding = '20px';
             container.style.flexWrap = isMobile ? 'wrap' : 'nowrap';
             
+            // Render left page
             if (num <= pdfDoc.numPages) {
                 pdfDoc.getPage(num).then(function(page) {
                     const baseViewport = page.getViewport({scale: 1.0});
@@ -1018,9 +866,15 @@ It is a book about mastering it — before it masters us.</strong></p>
                     canvasLeft.style.maxWidth = '100%';
                     canvasLeft.style.height = 'auto';
 
-                    page.render({ canvasContext: ctxLeft, viewport: viewport }).promise.then(function() {
+                    const renderContext = {
+                        canvasContext: ctxLeft,
+                        viewport: viewport
+                    };
+
+                    page.render(renderContext).promise.then(function() {
                         container.appendChild(canvasLeft);
                         
+                        // Render right page if available and not mobile
                         const rightPageNum = num + 1;
                         if (!isMobile && rightPageNum <= Math.min(pdfDoc.numPages, 115)) {
                             pdfDoc.getPage(rightPageNum).then(function(rightPage) {
@@ -1032,9 +886,15 @@ It is a book about mastering it — before it masters us.</strong></p>
                                 canvasRight.style.maxWidth = '100%';
                                 canvasRight.style.height = 'auto';
 
-                                rightPage.render({ canvasContext: ctxRight, viewport: rightViewport }).promise.then(function() {
+                                const rightRenderContext = {
+                                    canvasContext: ctxRight,
+                                    viewport: rightViewport
+                                };
+
+                                rightPage.render(rightRenderContext).promise.then(function() {
                                     container.appendChild(canvasRight);
                                     pageRendering = false;
+                                    
                                     if (pageNumPending !== null) {
                                         renderPages(pageNumPending);
                                         pageNumPending = null;
@@ -1053,12 +913,20 @@ It is a book about mastering it — before it masters us.</strong></p>
             }
             
             viewer.appendChild(container);
+            
+            // Update page display and input
+            const rightPageNum = num + 1;
+            const isMobile2 = window.innerWidth < 768;
             document.getElementById('page-input').value = num;
             updateZoomDisplay();
         }
 
         function queueRenderPages(num) {
-            if (pageRendering) { pageNumPending = num; } else { renderPages(num); }
+            if (pageRendering) {
+                pageNumPending = num;
+            } else {
+                renderPages(num);
+            }
         }
 
         function onPrevPage() {
@@ -1079,7 +947,10 @@ It is a book about mastering it — before it masters us.</strong></p>
             queueRenderPages(pageNum);
         }
 
-        function onFirstPage() { pageNum = 1; queueRenderPages(pageNum); }
+        function onFirstPage() {
+            pageNum = 1;
+            queueRenderPages(pageNum);
+        }
 
         function onLastPage() {
             const maxPages = Math.min(pdfDoc.numPages, 115);
@@ -1103,11 +974,22 @@ It is a book about mastering it — before it masters us.</strong></p>
             document.getElementById('zoom-level').textContent = percent + '%';
         }
 
-        function onFitPage() { scale = baseScale; queueRenderPages(pageNum); }
-        function onZoomIn() { scale += 0.2; queueRenderPages(pageNum); }
-        function onZoomOut() { if (scale <= baseScale * 0.5) return; scale -= 0.2; queueRenderPages(pageNum); }
+        function onFitPage() {
+            scale = baseScale;
+            queueRenderPages(pageNum);
+        }
 
-        // Always bind PDF controls (they're hidden via CSS for anonymous users)
+        function onZoomIn() {
+            scale += 0.2;
+            queueRenderPages(pageNum);
+        }
+
+        function onZoomOut() {
+            if (scale <= baseScale * 0.5) return;
+            scale -= 0.2;
+            queueRenderPages(pageNum);
+        }
+
         document.getElementById('first-page').addEventListener('click', onFirstPage);
         document.getElementById('prev-page').addEventListener('click', onPrevPage);
         document.getElementById('next-page').addEventListener('click', onNextPage);
@@ -1122,15 +1004,22 @@ It is a book about mastering it — before it masters us.</strong></p>
 
         // Keyboard navigation
         document.addEventListener('keydown', function(e) {
-            if (e.target.tagName === 'INPUT' || !pdfDoc) return;
+            if (e.target.tagName === 'INPUT') return;
             if (e.key === 'ArrowLeft') onPrevPage();
             if (e.key === 'ArrowRight') onNextPage();
             if (e.key === 'Home') onFirstPage();
             if (e.key === 'End') onLastPage();
         });
 
-        document.getElementById('current-year').textContent = new Date().getFullYear();
+        // Create a new Date object
+        const date = new Date();
 
+        // Get the element where the year will be displayed
+        const yearElement = document.getElementById("current-year");
+
+        // Update the element's text with the current year
+        yearElement.textContent = date.getFullYear();
+        
         // Social sharing functions
         function shareOnFacebook() {
             const url = encodeURIComponent(window.location.href);
@@ -1150,6 +1039,7 @@ It is a book about mastering it — before it masters us.</strong></p>
         }
         
         function shareOnInstagram() {
+            // Instagram doesn't support direct URL sharing, so copy link and notify user
             navigator.clipboard.writeText(window.location.href).then(() => {
                 alert('Link copied! Open Instagram and paste the link in your story or post.');
             });
@@ -1173,6 +1063,11 @@ It is a book about mastering it — before it masters us.</strong></p>
             });
         }
         
+        // Book purchase functions
+
+        
+
+        
         // PayPal Hardcover Button
         const hardcoverModal = document.getElementById('hardcoverModal');
         hardcoverModal.addEventListener('shown.bs.modal', function() {
@@ -1193,7 +1088,7 @@ It is a book about mastering it — before it masters us.</strong></p>
             }
         });
         
-        // PayPal Paperback Button
+        // PayPal Paperback Button (Standard Buttons API)
         const paperbackModal = document.getElementById('paperbackModal');
         paperbackModal.addEventListener('shown.bs.modal', function() {
             if (typeof paypal !== 'undefined' && !document.querySelector('#paypal-container-VSG9S8MWTP4G6 .paypal-buttons')) {
@@ -1214,8 +1109,8 @@ It is a book about mastering it — before it masters us.</strong></p>
         });
         
         // PayPal Digital PDF Button
-        const pdfModalEl = document.getElementById('pdfModal');
-        pdfModalEl.addEventListener('shown.bs.modal', function() {
+        const pdfModal = document.getElementById('pdfModal');
+        pdfModal.addEventListener('shown.bs.modal', function() {
             if (typeof paypal !== 'undefined' && !document.querySelector('#paypal-digital-button .paypal-buttons')) {
                 paypal.Buttons({
                     createOrder: function(data, actions) {
@@ -1229,6 +1124,7 @@ It is a book about mastering it — before it masters us.</strong></p>
                     },
                     onApprove: function(data, actions) {
                         return actions.order.capture().then(function(details) {
+                            // Create order record with SES + SNS notifications
                             fetch('https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/orders?action=create', {
                                 method: 'POST',
                                 headers: {'Content-Type': 'application/json'},
@@ -1256,9 +1152,14 @@ It is a book about mastering it — before it masters us.</strong></p>
                 }).render('#paypal-digital-button');
             }
         });
-
-        // Signup handler - shared logic
-        function handleBookSignup(email, firstName, lastName, formEl) {
+        
+        // Newsletter signup handler
+        document.getElementById('prelaunch-signup').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('signup-email').value;
+            const firstName = document.getElementById('signup-first-name').value;
+            const lastName = document.getElementById('signup-last-name').value;
+            
             fetch('https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
@@ -1272,45 +1173,17 @@ It is a book about mastering it — before it masters us.</strong></p>
             })
             .then(response => response.json())
             .then(data => {
-                // Set subscriber state regardless
-                localStorage.setItem('book_subscriber', 'true');
-                applySubscriberState();
-
                 if (data.message === 'already_subscribed') {
-                    alert('You\'re already subscribed! Your preview is now unlocked.');
+                    alert('You\'re already subscribed! Thank you.');
                 } else {
-                    alert('Thank you! Check ' + email + ' for your Christian AI Survival Kit. Your preview is now unlocked!');
+                    alert('Thank you for subscribing! You\'ll receive book launch updates and exclusive bonuses at ' + email);
                 }
-                formEl.reset();
-                // Reload to activate PDF viewer
-                window.location.reload();
+                this.reset();
             })
             .catch(error => {
                 console.error('Error:', error);
                 alert('There was an error. Please try again or email us at contact@christianconservativestoday.com');
             });
-        }
-
-        // Kit signup form
-        document.getElementById('kit-signup-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            handleBookSignup(
-                document.getElementById('kit-email').value,
-                document.getElementById('kit-first-name').value,
-                document.getElementById('kit-last-name').value,
-                this
-            );
-        });
-
-        // Mailing list signup form
-        document.getElementById('prelaunch-signup').addEventListener('submit', function(e) {
-            e.preventDefault();
-            handleBookSignup(
-                document.getElementById('signup-email').value,
-                document.getElementById('signup-first-name').value,
-                document.getElementById('signup-last-name').value,
-                this
-            );
         });
     </script>
 </body>

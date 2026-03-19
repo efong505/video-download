@@ -1,0 +1,212 @@
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script src="https://www.paypal.com/sdk/js?client-id=AfRsTknme8cj0IuEjhYWK7F939A4BwXJ2rmDtNC4uMu9g1zzH5ZUCv_4n9dK4I5Wdx-G42FkNBWewYrg&enable-funding=venmo&currency=USD"></script>
+    <script src="navbar.js"></script>
+    <script>
+        // Subscriber state check
+        function isSubscriber() {
+            return localStorage.getItem('book_subscriber') === 'true';
+        }
+
+        function applySubscriberState() {
+            if (isSubscriber()) {
+                document.body.classList.add('is-subscriber');
+            } else {
+                document.body.classList.remove('is-subscriber');
+            }
+        }
+
+        // Apply immediately
+        applySubscriberState();
+
+        // Load navbar
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            });
+
+        // PDF.js setup
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+        let pdfDoc = null;
+        let pageNum = 1;
+        let pageRendering = false;
+        let pageNumPending = null;
+        let baseScale = 1.0;
+        let scale = 1.0;
+        const canvasLeft = document.createElement('canvas');
+        const canvasRight = document.createElement('canvas');
+        const ctxLeft = canvasLeft.getContext('2d');
+        const ctxRight = canvasRight.getContext('2d');
+        
+        function calculateOptimalScale(pageWidth, pageHeight) {
+            const viewer = document.getElementById('pdf-viewer');
+            const containerWidth = viewer.clientWidth - 60;
+            const containerHeight = viewer.clientHeight - 40;
+            const isMobile = window.innerWidth < 768;
+            
+            if (isMobile) {
+                const scaleWidth = containerWidth / pageWidth;
+                const scaleHeight = containerHeight / pageHeight;
+                return Math.min(scaleWidth, scaleHeight, 1.5);
+            } else {
+                const pageWidthForTwo = pageWidth * 2 + 10;
+                const scaleWidth = containerWidth / pageWidthForTwo;
+                const scaleHeight = containerHeight / pageHeight;
+                return Math.min(scaleWidth, scaleHeight, 1.5);
+            }
+        }
+
+        // Always load PDF so anonymous users see blurred content behind overlay
+        pdfjsLib.getDocument('book-teaser.pdf').promise.then(function(pdfDoc_) {
+            pdfDoc = pdfDoc_;
+            document.getElementById('page-count').textContent = Math.min(pdfDoc.numPages, 37);
+            renderPages(pageNum);
+        }).catch(function(error) {
+            document.getElementById('pdf-viewer').innerHTML = 
+                '<div class="alert alert-info m-4">Preview coming soon! The book is currently being prepared for online viewing.</div>';
+        });
+
+        function renderPages(num) {
+            pageRendering = true;
+            const viewer = document.getElementById('pdf-viewer');
+            const isMobile = window.innerWidth < 768;
+            viewer.innerHTML = '';
+            
+            const container = document.createElement('div');
+            container.style.display = 'flex';
+            container.style.justifyContent = 'center';
+            container.style.gap = '10px';
+            container.style.padding = '20px';
+            container.style.flexWrap = isMobile ? 'wrap' : 'nowrap';
+            
+            if (num <= pdfDoc.numPages) {
+                pdfDoc.getPage(num).then(function(page) {
+                    const baseViewport = page.getViewport({scale: 1.0});
+                    if (baseScale === 1.0) {
+                        baseScale = calculateOptimalScale(baseViewport.width, baseViewport.height);
+                        scale = baseScale;
+                    }
+                    const viewport = page.getViewport({scale: scale});
+                    canvasLeft.height = viewport.height;
+                    canvasLeft.width = viewport.width;
+                    canvasLeft.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+                    canvasLeft.style.border = '1px solid #ddd';
+                    canvasLeft.style.maxWidth = '100%';
+                    canvasLeft.style.height = 'auto';
+
+                    page.render({ canvasContext: ctxLeft, viewport: viewport }).promise.then(function() {
+                        container.appendChild(canvasLeft);
+                        
+                        const rightPageNum = num + 1;
+                        if (!isMobile && rightPageNum <= Math.min(pdfDoc.numPages, 115)) {
+                            pdfDoc.getPage(rightPageNum).then(function(rightPage) {
+                                const rightViewport = rightPage.getViewport({scale: scale});
+                                canvasRight.height = rightViewport.height;
+                                canvasRight.width = rightViewport.width;
+                                canvasRight.style.boxShadow = '0 4px 8px rgba(0,0,0,0.2)';
+                                canvasRight.style.border = '1px solid #ddd';
+                                canvasRight.style.maxWidth = '100%';
+                                canvasRight.style.height = 'auto';
+
+                                rightPage.render({ canvasContext: ctxRight, viewport: rightViewport }).promise.then(function() {
+                                    container.appendChild(canvasRight);
+                                    pageRendering = false;
+                                    if (pageNumPending !== null) {
+                                        renderPages(pageNumPending);
+                                        pageNumPending = null;
+                                    }
+                                });
+                            });
+                        } else {
+                            pageRendering = false;
+                            if (pageNumPending !== null) {
+                                renderPages(pageNumPending);
+                                pageNumPending = null;
+                            }
+                        }
+                    });
+                });
+            }
+            
+            viewer.appendChild(container);
+            document.getElementById('page-input').value = num;
+            updateZoomDisplay();
+        }
+
+        function queueRenderPages(num) {
+            if (pageRendering) { pageNumPending = num; } else { renderPages(num); }
+        }
+
+        function onPrevPage() {
+            const isMobile = window.innerWidth < 768;
+            if (pageNum <= 1) return;
+            pageNum = Math.max(1, pageNum - (isMobile ? 1 : 2));
+            queueRenderPages(pageNum);
+        }
+
+        function onNextPage() {
+            const isMobile = window.innerWidth < 768;
+            const maxPages = Math.min(pdfDoc.numPages, 115);
+            if (pageNum >= maxPages) {
+                alert('End of preview! Purchase the full book to continue reading.');
+                return;
+            }
+            pageNum = Math.min(maxPages, pageNum + (isMobile ? 1 : 2));
+            queueRenderPages(pageNum);
+        }
+
+        function onFirstPage() { pageNum = 1; queueRenderPages(pageNum); }
+
+        function onLastPage() {
+            const maxPages = Math.min(pdfDoc.numPages, 115);
+            const isMobile = window.innerWidth < 768;
+            pageNum = isMobile ? maxPages : (maxPages % 2 === 0 ? maxPages - 1 : maxPages);
+            queueRenderPages(pageNum);
+        }
+
+        function onPageInput() {
+            const input = document.getElementById('page-input');
+            let num = parseInt(input.value);
+            const maxPages = Math.min(pdfDoc.numPages, 115);
+            if (isNaN(num) || num < 1) num = 1;
+            if (num > maxPages) num = maxPages;
+            pageNum = num;
+            queueRenderPages(pageNum);
+        }
+
+        function updateZoomDisplay() {
+            const percent = Math.round((scale / baseScale) * 100);
+            document.getElementById('zoom-level').textContent = percent + '%';
+        }
+
+        function onFitPage() { scale = baseScale; queueRenderPages(pageNum); }
+        function onZoomIn() { scale += 0.2; queueRenderPages(pageNum); }
+        function onZoomOut() { if (scale <= baseScale * 0.5) return; scale -= 0.2; queueRenderPages(pageNum); }
+
+        // Always bind PDF controls (they're hidden via CSS for anonymous users)
+        document.getElementById('first-page').addEventListener('click', onFirstPage);
+        document.getElementById('prev-page').addEventListener('click', onPrevPage);
+        document.getElementById('next-page').addEventListener('click', onNextPage);
+        document.getElementById('last-page').addEventListener('click', onLastPage);
+        document.getElementById('page-input').addEventListener('change', onPageInput);
+        document.getElementById('page-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') onPageInput();
+        });
+        document.getElementById('zoom-in').addEventListener('click', onZoomIn);
+        document.getElementById('zoom-out').addEventListener('click', onZoomOut);
+        document.getElementById('fit-page').addEventListener('click', onFitPage);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT' || !pdfDoc) return;
+            if (e.key === 'ArrowLeft') onPrevPage();
+            if (e.key === 'ArrowRight') onNextPage();
+            if (e.key === 'Home') onFirstPage();
+            if (e.key === 'End') onLastPage();
+        });
+
+        document.getElementById('current-year').textContent = new Date().getFullYear();

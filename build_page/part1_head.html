@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Necessary Evil - Book by Ed | Christian Conservatives Today</title>
+    <meta name="description" content="Master AI without losing your soul. Expose Big Tech bias, transhumanism, and globalism. Protect your family with biblical wisdom and practical strategies.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="book">
+    <meta property="og:url" content="https://christianconservativestoday.com/the-necessary-evil-book.html">
+    <meta property="og:title" content="The Necessary Evil - Master AI Without Losing Your Soul-Second Edition">
+    <meta property="og:description" content="AI is powerful, dangerous, and unavoidable. Discover how ChatGPT confessed its bias, the hidden dangers to children, and practical steps to protect human dignity. A Christian-conservative guide to mastering AI before it masters us.">
+    <meta property="og:image" content="https://christianconservativestoday.com/second-edition-book-cover-front.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="627">
+    <meta property="book:author" content="Ed">
+    <meta property="book:isbn" content="978-1-105-81297-2">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://christianconservativestoday.com/the-necessary-evil-book.html">
+    <meta property="twitter:title" content="The Necessary Evil - Master AI Without Losing Your Soul">
+    <meta property="twitter:description" content="AI is powerful, dangerous, and unavoidable. Discover ChatGPT's bias confession, hidden dangers to children, and biblical strategies to protect human dignity.">
+    <meta property="twitter:image" content="https://christianconservativestoday.com/second-edition-book-cover-front.png">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #2c5aa0;
+            --secondary-color: #8b4513;
+            --accent-color: #d4af37;
+            --kit-green: #16a34a;
+        }
+
+        .book-hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 80px 0;
+            padding-top: 120px;
+        }
+
+        .book-cover {
+            max-width: 100%;
+            width: 400px;
+            height: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .book-cover:hover { transform: scale(1.05); }
+
+        .feature-badge {
+            background: var(--accent-color);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 25px;
+            display: inline-block;
+            margin: 5px;
+            font-weight: 600;
+        }
+
+        .btn-primary-custom {
+            background: var(--primary-color);
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary-custom:hover {
+            background: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .testimonial-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            border-left: 5px solid var(--accent-color);
+        }
+
+        /* Survival Kit Section */
+        .kit-section {
+            background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #f0fdf4 100%);
+            border-top: 4px solid var(--kit-green);
+            border-bottom: 4px solid var(--kit-green);
+        }
+
+        .kit-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .kit-item:hover { transform: translateY(-4px); }
+
+        .kit-item i { color: var(--kit-green); }
+
+        .kit-value {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 0.9rem;
+        }
+
+        .kit-free {
+            color: var(--kit-green);
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .value-stack-total {
+            background: var(--kit-green);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Gated Preview */
+        .preview-gated {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .preview-blur-overlay {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.45);
+            backdrop-filter: blur(3px);
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            border-radius: 8px;
+        }
+
+        .preview-unlock-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .btn-kit {
+            background: var(--kit-green);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-kit:hover {
+            background: #15803d;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(22,163,74,0.3);
+        }
+
+        /* Hide/show based on subscriber state */
+        .subscriber-only { display: none !important; }
+        .anonymous-only { }
+        body.is-subscriber .subscriber-only { display: block !important; }
+        body.is-subscriber .anonymous-only { display: none !important; }
+        body.is-subscriber .preview-blur-overlay { display: none !important; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="book"></div>

@@ -103,6 +103,34 @@ Shipping Address:
 
 Date: {timestamp}"""
             )
+            
+            # Send direct email notification to admin
+            try:
+                admin_email = 'waianaeboy702@aol.com'
+                ses.send_email(
+                    Source='Christian Conservatives Today <contact@christianconservativestoday.com>',
+                    Destination={'ToAddresses': [admin_email]},
+                    Message={
+                        'Subject': {'Data': f'💰 New Book Purchase: ${amount} from {payer_name}'},
+                        'Body': {'Text': {'Data': f"""NEW BOOK PURCHASE
+
+Transaction ID: {txn_id}
+Customer: {payer_name}
+Email: {payer_email}
+Product: {item_name}
+Amount: ${amount}
+
+Shipping Address:
+{address}
+
+Date: {datetime.fromisoformat(timestamp).strftime('%Y-%m-%d %I:%M %p')} UTC
+
+Action Required: Ship the book within 3-5 business days."""}}
+                    }
+                )
+                print(f'Admin notification sent for purchase: {txn_id}')
+            except Exception as admin_error:
+                print(f'Admin email error: {admin_error}')
         
         return {'statusCode': 200, 'body': 'IPN processed'}
         

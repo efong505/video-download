@@ -8,24 +8,14 @@ import boto3
 import uuid
 import base64
 from datetime import datetime
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from email.mime.application import MIMEApplication
-import os
 
 # Initialize AWS services
 dynamodb = boto3.resource('dynamodb')
 ses = boto3.client('ses', region_name='us-east-1')
 sns = boto3.client('sns', region_name='us-east-1')
-s3 = boto3.client('s3', region_name='us-east-1')
 subscribers_table = dynamodb.Table('email-subscribers')
 book_subscribers_table = dynamodb.Table('book-subscribers')
 events_table = dynamodb.Table('email-events')
-
-# Multi-tenant email marketing bridge
-mt_subscribers_table = dynamodb.Table('user-email-subscribers')
-mt_users_table = dynamodb.Table('users')
-PLATFORM_OWNER_ID = 'effa3242-cf64-4021-b2b0-c8a5a9dfd6d2'
 
 SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:371751795928:platform-critical-alerts'
 
@@ -33,8 +23,6 @@ SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:371751795928:platform-critical-alerts'
 DOMAIN = 'https://christianconservativestoday.com'
 API_GATEWAY = 'https://niexv1rw75.execute-api.us-east-1.amazonaws.com'
 FROM_EMAIL = 'Christian Conservatives Today <contact@christianconservativestoday.com>'
-PDF_BUCKET = 'my-video-downloads-bucket'
-PDF_PREFIX = 'book-pdfs/'
 
 def lambda_handler(event, context):
     """Main Lambda handler - routes requests to appropriate function"""
@@ -55,10 +43,6 @@ def lambda_handler(event, context):
         params = event.get('queryStringParameters') or {}
         if params.get('action') == 'list_book_subscribers':
             return list_book_subscribers()
-        elif params.get('action') == 'check_subscriber':
-            return check_subscriber_status(params.get('email', ''))
-        elif params.get('action') == 'resend_book_email':
-            return handle_resend_book_email(event)
         return handle_subscription(event)
     elif path == '/list_book_subscribers':
         return list_book_subscribers()
@@ -149,12 +133,36 @@ def handle_subscription(event):
                 'source': body.get('source', 'book_landing_page')
             })
             
-            # Send customer confirmation email with PDFs
+            # Send customer confirmation email
             try:
-                send_book_signup_email_with_pdfs(email, first_name)
-                print(f'Book signup email with PDFs sent to: {email}')
+                greeting = f"Hi {first_name}!" if first_name else "Hello!"
+                print(f'Sending customer confirmation to: {email}')
+                ses.send_email(
+                    Source=FROM_EMAIL,
+                    Destination={'ToAddresses': [email]},
+                    Message={
+                        'Subject': {'Data': '✓ You\'re on the list! - The Necessary Evil Book Updates'},
+                        'Body': {
+                            'Text': {'Data': f"""{greeting}
+
+Thank you for joining our book mailing list!
+
+You'll receive:
+• Book launch updates and announcements
+• Exclusive discount codes for future releases
+• Free downloadable study guide for small groups
+• Access to author Q&A webinar
+
+Stay tuned for updates!
+
+Christian Conservatives Today
+https://christianconservativestoday.com/the-necessary-evil-book.html"""}
+                        }
+                    }
+                )
+                print(f'Customer confirmation sent successfully to: {email}')
             except Exception as email_error:
-                print(f'Book signup email error: {email_error}')
+                print(f'Customer confirmation email error: {email_error}')
                 import traceback
                 traceback.print_exc()
             
@@ -166,42 +174,13 @@ def handle_subscription(event):
                     Message=f"""NEW BOOK MAILING LIST SUBSCRIBER
 
 Email: {email}
-Name: {first_name} {last_name}
+Name: {first_name}
 Source: {body.get('source', 'book_landing_page')}
 Subscribed: {datetime.now().isoformat()}
 """
                 )
             except Exception as sns_error:
                 print(f'SNS notification error: {sns_error}')
-            
-            # Send direct email notification to admin
-            try:
-                admin_email = 'hawaiianintucson@gmail.com'
-                ses.send_email(
-                    Source=FROM_EMAIL,
-                    Destination={'ToAddresses': [admin_email]},
-                    Message={
-                        'Subject': {'Data': f'🎉 New Book Subscriber: {email}'},
-                        'Body': {
-                            'Text': {'Data': f"""NEW BOOK SUBSCRIBER
-
-Email: {email}
-First Name: {first_name}
-Last Name: {last_name}
-Source: {body.get('source', 'book_landing_page')}
-Subscribed: {datetime.now().strftime('%Y-%m-%d %I:%M %p')}
-
-Total book subscribers: Check DynamoDB for count
-"""}
-                        }
-                    }
-                )
-                print(f'Admin notification sent for: {email}')
-            except Exception as admin_error:
-                print(f'Admin email error: {admin_error}')
-            
-            # Bridge: also write to multi-tenant email marketing system
-            bridge_to_email_marketing(email, first_name, last_name, body.get('source', 'book_landing_page'))
             
             return cors_response(200, {'message': 'Subscription successful', 'email': email})
         
@@ -653,186 +632,6 @@ def cors_response(status_code, body):
         'body': json.dumps(body)
     }
 
-def bridge_to_email_marketing(email, first_name, last_name, source):
-    """Dual-write book subscriber to multi-tenant email marketing system"""
-    try:
-        existing = mt_subscribers_table.get_item(
-            Key={'user_id': PLATFORM_OWNER_ID, 'subscriber_email': email}
-        )
-        if 'Item' in existing:
-            current_tags = existing['Item'].get('tags', [])
-            needed_tags = {'book', 'survival-kit'}
-            if not needed_tags.issubset(set(current_tags)):
-                merged = list(set(current_tags) | needed_tags)
-                mt_subscribers_table.update_item(
-                    Key={'user_id': PLATFORM_OWNER_ID, 'subscriber_email': email},
-                    UpdateExpression='SET tags = :tags',
-                    ExpressionAttributeValues={':tags': merged}
-                )
-            return
-
-        mt_subscribers_table.put_item(Item={
-            'user_id': PLATFORM_OWNER_ID,
-            'subscriber_email': email,
-            'first_name': first_name or '',
-            'last_name': last_name or '',
-            'phone': '',
-            'status': 'active',
-            'subscribed_at': datetime.now().isoformat(),
-            'source': source,
-            'tags': ['book', 'survival-kit']
-        })
-
-        mt_users_table.update_item(
-            Key={'user_id': PLATFORM_OWNER_ID},
-            UpdateExpression='SET email_subscribers_count = email_subscribers_count + :inc',
-            ExpressionAttributeValues={':inc': 1}
-        )
-        print(f'Bridge: {email} added to email marketing system')
-    except Exception as e:
-        print(f'Bridge error (non-fatal): {str(e)}')
-
-def send_book_signup_email_with_pdfs(email, first_name):
-    """Send book signup confirmation with 3 PDF attachments from S3"""
-    greeting = f"Hi {first_name}!" if first_name else "Hello!"
-    
-    msg = MIMEMultipart('mixed')
-    msg['Subject'] = '🎁 Your Free Christian AI Survival Kit is Here!'
-    msg['From'] = FROM_EMAIL
-    msg['To'] = email
-    
-    html_body = f"""
-    <html>
-    <head><meta charset="UTF-8"></head>
-    <body style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
-        <div style="background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-            <div style="background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); padding: 20px; border-radius: 8px; text-align: center; margin-bottom: 30px;">
-                <h2 style="color: white; margin: 0;">🎁 Your Free Christian AI Survival Kit</h2>
-            </div>
-            
-            <p style="font-size: 16px; line-height: 1.6; color: #333;">{greeting}</p>
-            
-            <p style="font-size: 16px; line-height: 1.6; color: #333;">
-                Thank you for downloading the <strong>Christian AI Survival Kit</strong>!
-            </p>
-            
-            <p style="font-size: 16px; line-height: 1.6; color: #333;">
-                You now have access to <strong>$71 worth of resources</strong> to help you master AI without losing your soul:
-            </p>
-            
-            <div style="background: #f0fdf4; padding: 20px; border-radius: 8px; border-left: 4px solid #16a34a; margin: 20px 0;">
-                <h3 style="color: #16a34a; margin-top: 0;">📦 What's Included (Attached):</h3>
-                <ul style="font-size: 15px; line-height: 1.8; color: #555;">
-                    <li><strong>30-Page Book Preview</strong> — Introduction + the most powerful chapters</li>
-                    <li><strong>Christian AI Survival Guide</strong> — 7 safeguards for using AI without losing your soul</li>
-                    <li><strong>Church Discussion Guide</strong> — 10-session study for small groups</li>
-                    <li><strong>AI Parent Guide</strong> — How to protect your children in an AI-driven world</li>
-                </ul>
-            </div>
-            
-            <p style="font-size: 16px; line-height: 1.6; color: #333;">
-                <strong>Plus:</strong> You can now read the <strong>30-page book preview</strong> online at:
-            </p>
-            
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="{DOMAIN}/the-necessary-evil-book.html#preview" 
-                   style="display: inline-block; background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); 
-                          color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; 
-                          font-weight: bold; font-size: 16px;">
-                    📖 Read the Book Preview
-                </a>
-            </div>
-            
-            <div style="background: #f0f9ff; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #2c5aa0;">
-                <p style="margin: 0; font-size: 14px; color: #666;">
-                    <strong>📥 Need to re-download?</strong> Access your PDFs anytime at:<br>
-                    <a href="{DOMAIN}/book-resources.html?email={email}" style="color: #2c5aa0; font-weight: bold;">{DOMAIN}/book-resources.html</a>
-                </p>
-            </div>
-            
-            <div style="background: #fffbeb; padding: 15px; border-radius: 5px; margin: 20px 0; border-left: 4px solid #d4af37;">
-                <p style="margin: 0; font-size: 14px; color: #666;">
-                    <strong>💡 Next Step:</strong> Check out the full book <em>The Necessary Evil</em> — 
-                    available on Amazon (Kindle, Hardcover & Paperback) and as a signed copy direct from the author.
-                </p>
-            </div>
-            
-            <div style="text-align: center; margin: 30px 0;">
-                <a href="{DOMAIN}/the-necessary-evil-book.html#purchase" 
-                   style="display: inline-block; background: #2c5aa0; 
-                          color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; 
-                          font-weight: bold; font-size: 14px;">
-                    📚 Get the Full Book
-                </a>
-            </div>
-            
-            <hr style="border: none; border-top: 1px solid #eee; margin: 30px 0;">
-            
-            <p style="font-size: 12px; color: #999; line-height: 1.6;">
-                You're receiving this email because you signed up for the Christian AI Survival Kit at christianconservativestoday.com<br>
-                <a href="{DOMAIN}" style="color: #16a34a;">Visit Website</a>
-            </p>
-        </div>
-    </body>
-    </html>
-    """
-    
-    text_body = f"""{greeting}
-
-Thank you for downloading the Christian AI Survival Kit!
-
-You now have access to $71 worth of resources to help you master AI without losing your soul:
-
-WHAT'S INCLUDED (Attached):
-* 30-Page Book Preview - Introduction + the most powerful chapters
-* Christian AI Survival Guide - 7 safeguards for using AI without losing your soul
-* Church Discussion Guide - 10-session study for small groups  
-* AI Parent Guide - How to protect your children in an AI-driven world
-
-PLUS: You can now read the 30-page book preview online at:
-{DOMAIN}/the-necessary-evil-book.html#preview
-
-Need to re-download? Access your PDFs anytime at:
-{DOMAIN}/book-resources.html?email={email}
-
-NEXT STEP: Check out the full book "The Necessary Evil" - available on Amazon and as a signed copy direct from the author.
-{DOMAIN}/the-necessary-evil-book.html#purchase
-
----
-You're receiving this because you signed up at christianconservativestoday.com
-"""
-    
-    msg_body = MIMEMultipart('alternative')
-    msg_body.attach(MIMEText(text_body, 'plain', 'utf-8'))
-    msg_body.attach(MIMEText(html_body, 'html', 'utf-8'))
-    msg.attach(msg_body)
-    
-    pdf_files = [
-        'christian-ai-survival-guide.pdf',
-        'church-discussion-guide.pdf',
-        'ai-parent-guide.pdf',
-        'book-teaser.pdf'
-    ]
-    
-    for pdf_file in pdf_files:
-        try:
-            s3_key = f"{PDF_PREFIX}{pdf_file}"
-            response = s3.get_object(Bucket=PDF_BUCKET, Key=s3_key)
-            pdf_data = response['Body'].read()
-            
-            pdf_part = MIMEApplication(pdf_data, _subtype='pdf')
-            pdf_part.add_header('Content-Disposition', 'attachment', filename=pdf_file)
-            msg.attach(pdf_part)
-            print(f"Attached {pdf_file}")
-        except Exception as e:
-            print(f"Error attaching {pdf_file}: {str(e)}")
-    
-    ses.send_raw_email(
-        Source=FROM_EMAIL,
-        Destinations=[email],
-        RawMessage={'Data': msg.as_string()}
-    )
-
 def list_book_subscribers():
     """List all book subscribers"""
     try:
@@ -843,50 +642,3 @@ def list_book_subscribers():
     except Exception as e:
         print(f"List book subscribers error: {str(e)}")
         return cors_response(500, {'error': 'Failed to list subscribers'})
-
-def check_subscriber_status(email):
-    """Check if email is a book subscriber"""
-    try:
-        if not email:
-            return cors_response(400, {'error': 'Email required'})
-        
-        email = email.strip().lower()
-        response = book_subscribers_table.get_item(Key={'email': email})
-        
-        if 'Item' in response:
-            return cors_response(200, {'is_subscriber': True, 'email': email})
-        else:
-            return cors_response(200, {'is_subscriber': False, 'email': email})
-    except Exception as e:
-        print(f"Check subscriber error: {str(e)}")
-        return cors_response(500, {'error': 'Failed to check status'})
-
-def handle_resend_book_email(event):
-    """Resend book signup email with PDFs"""
-    try:
-        body = json.loads(event.get('body', '{}'))
-        email = body.get('email', '').strip().lower()
-        first_name = body.get('first_name', '').strip()
-        
-        if not email:
-            return cors_response(400, {'error': 'Email required'})
-        
-        # Verify subscriber exists
-        response = book_subscribers_table.get_item(Key={'email': email})
-        if 'Item' not in response:
-            return cors_response(404, {'error': 'Subscriber not found'})
-        
-        # Get first name from DB if not provided
-        if not first_name:
-            first_name = response['Item'].get('first_name', '')
-        
-        # Resend email
-        send_book_signup_email_with_pdfs(email, first_name)
-        print(f'Resent book email to: {email}')
-        
-        return cors_response(200, {'message': 'success', 'email': email})
-    except Exception as e:
-        print(f"Resend email error: {str(e)}")
-        import traceback
-        traceback.print_exc()
-        return cors_response(500, {'error': 'Failed to resend email'})

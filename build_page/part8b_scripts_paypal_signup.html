@@ -1,0 +1,185 @@
+
+        // Social sharing functions
+        function shareOnFacebook() {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}`, '_blank', 'width=600,height=400');
+        }
+        
+        function shareOnTwitter() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out "The Necessary Evil" (2nd Edition) - Master AI without losing your soul!');
+            window.open(`https://twitter.com/intent/tweet?url=${url}&text=${text}`, '_blank', 'width=600,height=400');
+        }
+        
+        function shareOnTruthSocial() {
+            const url = encodeURIComponent(window.location.href);
+            const text = encodeURIComponent('Check out "The Necessary Evil" (2nd Edition) - Master AI without losing your soul!');
+            window.open(`https://truthsocial.com/share?url=${url}&title=${text}`, '_blank', 'width=600,height=400');
+        }
+        
+        function shareOnInstagram() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Link copied! Open Instagram and paste the link in your story or post.');
+            });
+        }
+        
+        function shareOnPinterest() {
+            const url = encodeURIComponent(window.location.href);
+            const description = encodeURIComponent('Master AI without losing your soul - The Necessary Evil (2nd Edition)');
+            const media = encodeURIComponent('https://christianconservativestoday.com/second-edition-book-cover-front.png');
+            window.open(`https://pinterest.com/pin/create/button/?url=${url}&media=${media}&description=${description}`, '_blank', 'width=600,height=400');
+        }
+        
+        function shareOnLinkedIn() {
+            const url = encodeURIComponent(window.location.href);
+            window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}`, '_blank', 'width=600,height=400');
+        }
+        
+        function copyLink() {
+            navigator.clipboard.writeText(window.location.href).then(() => {
+                alert('Link copied to clipboard!');
+            });
+        }
+        
+        // PayPal Hardcover Button
+        const hardcoverModal = document.getElementById('hardcoverModal');
+        hardcoverModal.addEventListener('shown.bs.modal', function() {
+            if (typeof paypal !== 'undefined' && !document.querySelector('#paypal-hardcover-button .paypal-buttons')) {
+                paypal.Buttons({
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{ description: 'The Necessary Evil - Hardcover Signed (2nd Edition)', amount: { value: '31.99' } }]
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            bootstrap.Modal.getInstance(hardcoverModal).hide();
+                            window.location.href = 'thank-you-paperback.html';
+                        });
+                    }
+                }).render('#paypal-hardcover-button');
+            }
+        });
+        
+        // PayPal Paperback Button
+        const paperbackModal = document.getElementById('paperbackModal');
+        paperbackModal.addEventListener('shown.bs.modal', function() {
+            if (typeof paypal !== 'undefined' && !document.querySelector('#paypal-container-VSG9S8MWTP4G6 .paypal-buttons')) {
+                paypal.Buttons({
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{ description: 'The Necessary Evil - Paperback Signed (2nd Edition)', amount: { value: '25.99' } }]
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            bootstrap.Modal.getInstance(paperbackModal).hide();
+                            window.location.href = 'thank-you-paperback.html';
+                        });
+                    }
+                }).render('#paypal-container-VSG9S8MWTP4G6');
+            }
+        });
+        
+        // PayPal Digital PDF Button
+        const pdfModalEl = document.getElementById('pdfModal');
+        pdfModalEl.addEventListener('shown.bs.modal', function() {
+            if (typeof paypal !== 'undefined' && !document.querySelector('#paypal-digital-button .paypal-buttons')) {
+                paypal.Buttons({
+                    createOrder: function(data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{ description: 'The Necessary Evil - Digital PDF (2nd Edition)', amount: { value: '12.99' } }],
+                            application_context: {
+                                return_url: 'https://christianconservativestoday.com/thank-you-digital.html',
+                                cancel_url: 'https://christianconservativestoday.com/the-necessary-evil-book.html'
+                            }
+                        });
+                    },
+                    onApprove: function(data, actions) {
+                        return actions.order.capture().then(function(details) {
+                            fetch('https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/orders?action=create', {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                body: JSON.stringify({
+                                    user_email: details.payer.email_address,
+                                    user_name: details.payer.name.given_name + ' ' + details.payer.name.surname,
+                                    items: [{
+                                        product_id: 'digital-pdf',
+                                        name: 'The Necessary Evil - Digital PDF (2nd Edition)',
+                                        price: 12.99,
+                                        quantity: 1
+                                    }],
+                                    subtotal: 12.99,
+                                    tax: 0,
+                                    total: 12.99,
+                                    payment_method: 'PayPal',
+                                    payment_status: 'paid',
+                                    status: 'paid',
+                                    shipping_address: 'Digital Download'
+                                })
+                            });
+                            window.location.href = 'thank-you-digital.html';
+                        });
+                    }
+                }).render('#paypal-digital-button');
+            }
+        });
+
+        // Signup handler - shared logic
+        function handleBookSignup(email, firstName, lastName, formEl) {
+            fetch('https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    email: email,
+                    first_name: firstName,
+                    last_name: lastName,
+                    list_type: 'book',
+                    source: 'book_landing_page'
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Set subscriber state regardless
+                localStorage.setItem('book_subscriber', 'true');
+                applySubscriberState();
+
+                if (data.message === 'already_subscribed') {
+                    alert('You\'re already subscribed! Your preview is now unlocked.');
+                } else {
+                    alert('Thank you! Check ' + email + ' for your Christian AI Survival Kit. Your preview is now unlocked!');
+                }
+                formEl.reset();
+                // Reload to activate PDF viewer
+                window.location.reload();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error. Please try again or email us at contact@christianconservativestoday.com');
+            });
+        }
+
+        // Kit signup form
+        document.getElementById('kit-signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleBookSignup(
+                document.getElementById('kit-email').value,
+                document.getElementById('kit-first-name').value,
+                document.getElementById('kit-last-name').value,
+                this
+            );
+        });
+
+        // Mailing list signup form
+        document.getElementById('prelaunch-signup').addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleBookSignup(
+                document.getElementById('signup-email').value,
+                document.getElementById('signup-first-name').value,
+                document.getElementById('signup-last-name').value,
+                this
+            );
+        });
+    </script>
+</body>
+</html>

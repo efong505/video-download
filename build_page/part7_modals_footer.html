@@ -1,0 +1,99 @@
+
+    <!-- PDF Order Modal -->
+    <div class="modal fade" id="pdfModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background: var(--primary-color); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-file-pdf me-2"></i>Purchase Digital PDF</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Total: $12.99</strong><br>
+                        Click "Pay with PayPal" below to complete your purchase.
+                    </div>
+                    <div id="paypal-digital-button"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Direct Purchase Modal -->
+    <div class="modal fade" id="directPurchaseModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background: var(--primary-color); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-book me-2"></i>Choose Your Format</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-grid gap-3">
+                        <button class="btn btn-lg" style="background: var(--accent-color); color: white;" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#hardcoverModal">
+                            <i class="fas fa-book me-2"></i>Hardcover - $31.99 (Signed)
+                        </button>
+                        <button class="btn btn-lg" style="background: var(--primary-color); color: white;" data-bs-dismiss="modal" data-bs-toggle="modal" data-bs-target="#paperbackModal">
+                            <i class="fas fa-book-open me-2"></i>Paperback - $25.99 (Signed)
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hardcover Order Modal -->
+    <div class="modal fade" id="hardcoverModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background: var(--primary-color); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-book me-2"></i>Order Hardcover (Signed)</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Total: $31.99</strong> (includes free shipping)<br>
+                        Complete your order with PayPal below.
+                    </div>
+                    <div id="paypal-hardcover-button"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Paperback Order Modal -->
+    <div class="modal fade" id="paperbackModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background: var(--primary-color); color: white;">
+                    <h5 class="modal-title"><i class="fas fa-book me-2"></i>Order Paperback (Signed)</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i>
+                        <strong>Total: $25.99</strong> (includes free shipping)<br>
+                        Complete your order with PayPal below.
+                    </div>
+                    <div id="paypal-container-VSG9S8MWTP4G6"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; <span id="current-year"></span> Christian Conservatives Today. All rights reserved.</p>
+            <p class="mb-0"><a href="index.html" class="text-white">Back to Home</a></p>
+        </div>
+    </footer>

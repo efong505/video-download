@@ -173,6 +173,9 @@
                     <td>${new Date(sub.subscribed_at).toLocaleDateString()}</td>
                     <td>${sub.source || '-'}</td>
                     <td>
+                        <button class="btn btn-sm btn-outline-success me-1" onclick='resendEmail("${sub.email}", "${sub.first_name || ''}")'>
+                            <i class="fas fa-envelope"></i> Resend
+                        </button>
                         <button class="btn btn-sm btn-outline-primary me-1" onclick='editSubscriber(${JSON.stringify(sub)})'>
                             <i class="fas fa-edit"></i> Edit
                         </button>
@@ -294,6 +297,28 @@
             .catch(error => {
                 console.error('Error:', error);
                 alert('Error deleting subscriber');
+            });
+        }
+
+        function resendEmail(email, firstName) {
+            if (!confirm(`Resend welcome email with PDFs to ${email}?`)) return;
+            
+            fetch('https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe?action=resend_book_email', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({email, first_name: firstName})
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.message === 'success') {
+                    alert('Email resent successfully!');
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Error resending email');
             });
         }
 
