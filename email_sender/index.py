@@ -21,15 +21,16 @@ def lambda_handler(event, context):
         # Get campaign
         campaign = campaigns_table.get_item(Key={'user_id': user_id, 'campaign_id': campaign_id})['Item']
         
-        # Support both 'content' and 'html_content' field names
-        # Prefer 'content' for drip campaigns, fallback to 'html_content'
-        email_content = campaign.get('content') or campaign.get('html_content', '')
+        # Concatenate content and html_content (footer)
+        email_body = campaign.get('content', '')
+        email_footer = campaign.get('html_content', '')
+        email_content = email_body + email_footer
         
         if not email_content:
             print(f"ERROR: No content found for campaign {campaign_id}")
             continue
         
-        print(f"Email content length: {len(email_content)} chars")
+        print(f"Email content length: {len(email_content)} chars (body: {len(email_body)}, footer: {len(email_footer)})")
         
         # Get user info
         user = users_table.get_item(Key={'user_id': user_id})['Item']
@@ -101,6 +102,7 @@ def apply_mail_merge(content, subscriber, user_id, campaign_id, recipient_email)
     content = content.replace('{{first_name}}', subscriber.get('first_name', ''))
     content = content.replace('{{last_name}}', subscriber.get('last_name', ''))
     content = content.replace('{{email}}', recipient_email)
+    content = content.replace('{{subscriber_email}}', recipient_email)
     
     # Unsubscribe link
     unsubscribe_token = base64.urlsafe_b64encode(
