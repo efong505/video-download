@@ -25,7 +25,9 @@ events_table = dynamodb.Table('email-events')
 # Multi-tenant email marketing bridge
 mt_subscribers_table = dynamodb.Table('user-email-subscribers')
 mt_users_table = dynamodb.Table('users')
+mt_drip_enrollments_table = dynamodb.Table('user-email-drip-enrollments')
 PLATFORM_OWNER_ID = 'effa3242-cf64-4021-b2b0-c8a5a9dfd6d2'
+BOOK_DRIP_CAMPAIGN_ID = 'book-welcome-sequence'
 
 SNS_TOPIC_ARN = 'arn:aws:sns:us-east-1:371751795928:platform-critical-alerts'
 
@@ -689,6 +691,22 @@ def bridge_to_email_marketing(email, first_name, last_name, source):
             ExpressionAttributeValues={':inc': 1}
         )
         print(f'Bridge: {email} added to email marketing system')
+        
+        # Auto-enroll in book drip sequence
+        try:
+            enrollment_id = f"{email}_{BOOK_DRIP_CAMPAIGN_ID}"
+            mt_drip_enrollments_table.put_item(Item={
+                'user_id': PLATFORM_OWNER_ID,
+                'enrollment_id': enrollment_id,
+                'subscriber_email': email,
+                'campaign_id': BOOK_DRIP_CAMPAIGN_ID,
+                'enrolled_at': datetime.now().isoformat(),
+                'current_sequence': 0,
+                'status': 'active'
+            })
+            print(f'Bridge: {email} enrolled in drip sequence')
+        except Exception as drip_error:
+            print(f'Drip enrollment error (non-fatal): {str(drip_error)}')
     except Exception as e:
         print(f'Bridge error (non-fatal): {str(e)}')
 
