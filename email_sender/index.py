@@ -22,7 +22,14 @@ def lambda_handler(event, context):
         campaign = campaigns_table.get_item(Key={'user_id': user_id, 'campaign_id': campaign_id})['Item']
         
         # Support both 'content' and 'html_content' field names
-        email_content = campaign.get('html_content') or campaign.get('content', '')
+        # Prefer 'content' for drip campaigns, fallback to 'html_content'
+        email_content = campaign.get('content') or campaign.get('html_content', '')
+        
+        if not email_content:
+            print(f"ERROR: No content found for campaign {campaign_id}")
+            continue
+        
+        print(f"Email content length: {len(email_content)} chars")
         
         # Get user info
         user = users_table.get_item(Key={'user_id': user_id})['Item']
