@@ -1,0 +1,86 @@
+<!-- Navigation Bar Component -->
+<style>
+    .top-nav {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        padding: 15px 0;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        margin-bottom: 20px;
+    }
+    
+    .top-nav .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .top-nav .logo {
+        font-size: 20px;
+        font-weight: bold;
+        color: #2c5aa0;
+        text-decoration: none;
+    }
+    
+    .top-nav .nav-links {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+    
+    .top-nav .nav-links a {
+        color: #2c5aa0;
+        text-decoration: none;
+        font-weight: 500;
+        padding: 8px 15px;
+        border-radius: 5px;
+        transition: all 0.2s;
+    }
+    
+    .top-nav .nav-links a:hover {
+        background: #e9ecef;
+    }
+    
+    .top-nav .nav-links a.active {
+        background: #2c5aa0;
+        color: white;
+    }
+    
+    @media (max-width: 768px) {
+        .top-nav .nav-links {
+            flex-direction: column;
+            gap: 10px;
+        }
+    }
+</style>
+
+<nav class="top-nav">
+    <div class="container">
+        <a href="/" class="logo">Christian Conservatives Today</a>
+        <div class="nav-links">
+            <a href="/the-necessary-evil-book.html">📖 Book</a>
+            <a href="/admin-book-subscribers.html">👥 Subscribers</a>
+            <a href="/email-analytics.html">📊 Analytics</a>
+            <a href="/book-resources.html">📥 Resources</a>
+        </div>
+    </div>
+</nav>
+
+<script>
+    // Highlight active page
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentPath = window.location.pathname;
+        const links = document.querySelectorAll('.top-nav .nav-links a');
+        links.forEach(link => {
+            if (link.getAttribute('href') === currentPath || 
+                (currentPath.includes(link.getAttribute('href')) && link.getAttribute('href') !== '/')) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>

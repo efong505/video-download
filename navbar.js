@@ -29,7 +29,8 @@ function initNavbar() {
         {page: 'admin-contributors', label: 'Contributors', emoji: '🗺️', fa: 'fa-map-marked'},
         {page: 'admin-resources', label: 'Manage Resources', emoji: '📚', fa: 'fa-tasks'},
         {page: 'admin-templates', label: 'Templates', emoji: '📄', fa: 'fa-file-alt'},
-        {page: 'admin-book-subscribers', label: 'Book Subscribers', emoji: '📖', fa: 'fa-book'}
+        {page: 'admin-book-subscribers', label: 'Book Subscribers', emoji: '📖', fa: 'fa-book'},
+        {page: 'email-analytics', label: 'Email Analytics', emoji: '📊', fa: 'fa-chart-line'}
     ];
     
     const token = localStorage.getItem('auth_token');
