@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Funnel System Architecture</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        #auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+        
+        #auth-box {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        #auth-box h2 {
+            color: #2d3748;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        #auth-box p {
+            color: #718096;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        #auth-box input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1em;
+            margin-bottom: 15px;
+            transition: border-color 0.3s;
+        }
+        
+        #auth-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        #auth-box button {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        #auth-box button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .error-message {
+            color: #e53e3e;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        
+        .content-hidden {
+            display: none;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #718096;
+            margin-bottom: 40px;
+            font-size: 1.1em;
+        }
+        .subtitle.links {
+            margin-bottom: .5%;
+        }
+        
+        .funnel-stage {
+            margin-bottom: 50px;
+            position: relative;
+        }
+        
+        .stage-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .stage-number {
+            background: rgba(255,255,255,0.3);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2em;
+        }
+        
+        .components {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+        }
+        
+        .component {
+            background: #f7fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .component:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            border-color: #667eea;
+        }
+        
+        .component-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        
+        .component-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+        }
+        
+        .component-desc {
+            color: #718096;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        
+        .component-tech {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #e2e8f0;
+            font-size: 0.85em;
+            color: #667eea;
+            font-weight: 600;
+        }
+        
+        .flow-arrow {
+            text-align: center;
+            margin: 30px 0;
+            font-size: 3em;
+            color: #667eea;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .data-flow {
+            background: #edf2f7;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 30px 0;
+            border-radius: 8px;
+        }
+        
+        .data-flow-title {
+            font-weight: bold;
+            color: #2d3748;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+        
+        .data-flow-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .data-item {
+            background: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            color: #4a5568;
+            border: 1px solid #cbd5e0;
+        }
+        
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 10px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .legend-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .aws-service { background: #FF9900; }
+        .frontend { background: #61DAFB; }
+        .database { background: #4DB33D; }
+        .automation { background: #FF6B6B; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Authentication Overlay -->
+    <div id="auth-overlay">
+        <div id="auth-box">
+            <h2>🔐 Admin Access Required</h2>
+            <p>Enter password to view system architecture</p>
+            <input type="password" id="password-input" placeholder="Enter password" />
+            <button onclick="checkPassword()">Access Diagram</button>
+            <div id="error-message" class="error-message"></div>
+        </div>
+    </div>
+    
+    <div class="container content-hidden" id="main-content">
+        <h1>📚 Book Funnel System Architecture</h1>
+        <p class="subtitle">Complete Email Marketing & Drip Campaign System</p>
+        <p class="subtitle links">Link to: <a href="./book-funnel-simple.html">A simple guide to understanding the automated email journey</a></p>
+        <p class="subtitle links">Link to: <a href="./book-funnel-visual.html">Visual Book Flow</a></p>
+        <p class="subtitle">Link to: <a href="./book-funnel-complete.html">Visual Flow + Detailed Explanations</a></p>
+
+        
+        
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-number">7</div>
+                <div class="stat-label">Drip Emails</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">4</div>
+                <div class="stat-label">PDF Resources</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">14</div>
+                <div class="stat-label">Day Sequence</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">5</div>
+                <div class="stat-label">Lambda Functions</div>
+            </div>
+        </div>
+
+        <!-- STAGE 1: LANDING PAGE -->
+        <div class="funnel-stage">
+            <div class="stage-header">
+                <div class="stage-number">1</div>
+                <div>Landing Page & Lead Capture</div>
+            </div>
+            
+            <div class="components">
+                <div class="component">
+                    <div class="component-icon">🌐</div>
+                    <div class="component-title">Book Landing Page</div>
+                    <div class="component-desc">
+                        Marketing page with hero section, hook, Survival Kit value stack ($71), gated PDF preview, and purchase CTA
+                    </div>
+                    <div class="component-tech">📄 the-necessary-evil-book.html</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">🔧</div>
+                    <div class="component-title">Modular Build System</div>
+                    <div class="component-desc">
+                        10 HTML parts assembled via Python script for easy maintenance and updates
+                    </div>
+                    <div class="component-tech">🐍 build_page/assemble.py</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">🔒</div>
+                    <div class="component-title">Access Control</div>
+                    <div class="component-desc">
+                        localStorage-based gating system for PDF preview access after email signup
+                    </div>
+                    <div class="component-tech">💾 JavaScript + localStorage</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <!-- STAGE 2: SUBSCRIPTION -->
+        <div class="funnel-stage">
+            <div class="stage-header">
+                <div class="stage-number">2</div>
+                <div>Email Subscription & Dual-Write Bridge</div>
+            </div>
+            
+            <div class="components">
+                <div class="component">
+                    <div class="component-icon">⚡</div>
+                    <div class="component-title">Subscription Handler</div>
+                    <div class="component-desc">
+                        Processes book signups, sends welcome email with 4 PDF attachments, notifies admin
+                    </div>
+                    <div class="component-tech">🔧 Lambda: email-subscription-handler</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">🌉</div>
+                    <div class="component-title">Multi-Tenant Bridge</div>
+                    <div class="component-desc">
+                        Dual-write to both simple book-subscribers table and multi-tenant user-email-subscribers system
+                    </div>
+                    <div class="component-tech">🔗 Bridge Function in Lambda</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">📧</div>
+                    <div class="component-title">Welcome Email</div>
+                    <div class="component-desc">
+                        Immediate email with 4 PDFs attached (Survival Guide, Discussion Guide, Parent Guide) + download page link
+                    </div>
+                    <div class="component-tech">📨 AWS SES</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">🎯</div>
+                    <div class="component-title">Auto-Enrollment</div>
+                    <div class="component-desc">
+                        Automatically enrolls new subscribers in 7-email drip sequence with 'book' and 'survival-kit' tags
+                    </div>
+                    <div class="component-tech">📊 user-email-drip-enrollments</div>
+                </div>
+            </div>
+            
+            <div class="data-flow">
+                <div class="data-flow-title">📦 Data Stored:</div>
+                <div class="data-flow-items">
+                    <div class="data-item">First Name</div>
+                    <div class="data-item">Last Name</div>
+                    <div class="data-item">Email</div>
+                    <div class="data-item">List Type: 'book'</div>
+                    <div class="data-item">Tags: ['book', 'survival-kit']</div>
+                    <div class="data-item">Timestamp</div>
+                    <div class="data-item">Status: 'active'</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <!-- STAGE 3: DRIP CAMPAIGN -->
+        <div class="funnel-stage">
+            <div class="stage-header">
+                <div class="stage-number">3</div>
+                <div>Automated 7-Email Drip Sequence</div>
+            </div>
+            
+            <div class="components">
+                <div class="component">
+                    <div class="component-icon">📅</div>
+                    <div class="component-title">EventBridge Scheduler</div>
+                    <div class="component-desc">
+                        Triggers drip processor daily at 9am EST to check for due emails
+                    </div>
+                    <div class="component-tech">⏰ Cron: 0 14 * * ? *</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">🔄</div>
+                    <div class="component-title">Drip Processor</div>
+                    <div class="component-desc">
+                        Scans active enrollments, calculates due dates based on delay_days, queues emails via SQS
+                    </div>
+                    <div class="component-tech">🔧 Lambda: email-drip-processor</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">📬</div>
+                    <div class="component-title">SQS Queue</div>
+                    <div class="component-desc">
+                        Message queue for reliable email delivery with retry logic
+                    </div>
+                    <div class="component-tech">📮 email-sending-queue</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">✉️</div>
+                    <div class="component-title">Email Sender</div>
+                    <div class="component-desc">
+                        Processes queue, applies mail merge ({{first_name}}, {{subscriber_email}}), concatenates body + footer, sends via SES
+                    </div>
+                    <div class="component-tech">🔧 Lambda: email-sender</div>
+                </div>
+            </div>
+            
+            <div class="data-flow">
+                <div class="data-flow-title">📧 Email Sequence Schedule:</div>
+                <div class="data-flow-items">
+                    <div class="data-item">Day 0: Welcome (immediate)</div>
+                    <div class="data-item">Day 1: First Step with AI</div>
+                    <div class="data-item">Day 3: Understanding AI Bias</div>
+                    <div class="data-item">Day 5: Protecting Your Family</div>
+                    <div class="data-item">Day 7: Church & Community</div>
+                    <div class="data-item">Day 10: Taking Action</div>
+                    <div class="data-item">Day 14: Final Thoughts</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <!-- STAGE 4: ENGAGEMENT -->
+        <div class="funnel-stage">
+            <div class="stage-header">
+                <div class="stage-number">4</div>
+                <div>Subscriber Engagement & Management</div>
+            </div>
+            
+            <div class="components">
+                <div class="component">
+                    <div class="component-icon">⚙️</div>
+                    <div class="component-title">Preference Management</div>
+                    <div class="component-desc">
+                        Subscribers can pause/resume drip emails, toggle promotional emails, or unsubscribe
+                    </div>
+                    <div class="component-tech">📄 manage-email-preferences.html</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">🔍</div>
+                    <div class="component-title">Subscriber Verification</div>
+                    <div class="component-desc">
+                        Returning users can verify email to unlock resources without re-subscribing
+                    </div>
+                    <div class="component-tech">📄 check-subscriber-status.html</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">📥</div>
+                    <div class="component-title">Resource Download Page</div>
+                    <div class="component-desc">
+                        Dedicated page for subscribers to download all 4 PDF resources
+                    </div>
+                    <div class="component-tech">📄 book-resources.html</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">🔁</div>
+                    <div class="component-title">Resend System</div>
+                    <div class="component-desc">
+                        Admin can resend welcome email with PDFs to any subscriber
+                    </div>
+                    <div class="component-tech">🔧 Lambda endpoint: resend_book_email</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flow-arrow">↓</div>
+
+        <!-- STAGE 5: ANALYTICS -->
+        <div class="funnel-stage">
+            <div class="stage-header">
+                <div class="stage-number">5</div>
+                <div>Analytics & Admin Dashboard</div>
+            </div>
+            
+            <div class="components">
+                <div class="component">
+                    <div class="component-icon">📊</div>
+                    <div class="component-title">Email Analytics</div>
+                    <div class="component-desc">
+                        Real-time metrics: total subscribers, active enrollments, drip progress visualization, auto-refresh
+                    </div>
+                    <div class="component-tech">📄 email-analytics.html</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">👥</div>
+                    <div class="component-title">Subscriber Management</div>
+                    <div class="component-desc">
+                        View all book subscribers, resend emails, track signup dates
+                    </div>
+                    <div class="component-tech">📄 admin-subscribers.html</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">📧</div>
+                    <div class="component-title">Admin Notifications</div>
+                    <div class="component-desc">
+                        Email alerts to hawaiianintucson@gmail.com for new signups and PayPal purchases
+                    </div>
+                    <div class="component-tech">📨 AWS SES</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">🔐</div>
+                    <div class="component-title">Unified Navigation</div>
+                    <div class="component-desc">
+                        Integrated navbar system with admin dropdown for all management pages
+                    </div>
+                    <div class="component-tech">📄 navbar.js</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DATABASE LAYER -->
+        <div class="funnel-stage">
+            <div class="stage-header">
+                <div class="stage-number">💾</div>
+                <div>Data Storage Layer</div>
+            </div>
+            
+            <div class="components">
+                <div class="component">
+                    <div class="component-icon">📋</div>
+                    <div class="component-title">book-subscribers</div>
+                    <div class="component-desc">
+                        Simple subscriber list for book signups
+                    </div>
+                    <div class="component-tech">🗄️ DynamoDB Table</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">👤</div>
+                    <div class="component-title">user-email-subscribers</div>
+                    <div class="component-desc">
+                        Multi-tenant subscriber table with user_id + subscriber_email composite key, tags, preferences
+                    </div>
+                    <div class="component-tech">🗄️ DynamoDB Table</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">📧</div>
+                    <div class="component-title">user-email-campaigns</div>
+                    <div class="component-desc">
+                        Campaign storage with sequence_number, delay_days, filter_tags, content, html_content (footer)
+                    </div>
+                    <div class="component-tech">🗄️ DynamoDB Table</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">🎯</div>
+                    <div class="component-title">user-email-drip-enrollments</div>
+                    <div class="component-desc">
+                        Enrollment tracking: sequence_name, current_sequence_number, enrolled_at, last_sent_at, status
+                    </div>
+                    <div class="component-tech">🗄️ DynamoDB Table</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">📈</div>
+                    <div class="component-title">user-email-events</div>
+                    <div class="component-desc">
+                        Email event logging for tracking sends, opens, clicks
+                    </div>
+                    <div class="component-tech">🗄️ DynamoDB Table</div>
+                </div>
+                
+                <div class="component">
+                    <div class="component-icon">📦</div>
+                    <div class="component-title">S3 Bucket</div>
+                    <div class="component-desc">
+                        Storage for 4 PDF resources in book-pdfs/ prefix
+                    </div>
+                    <div class="component-tech">☁️ my-video-downloads-bucket</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LEGEND -->
+        <div class="legend">
+            <div class="legend-item">
+                <div class="legend-icon aws-service">⚡</div>
+                <span>AWS Lambda</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-icon frontend">🌐</div>
+                <span>Frontend Pages</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-icon database">💾</div>
+                <span>DynamoDB Tables</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-icon automation">🔄</div>
+                <span>Automation</span>
+            </div>
+        </div>
+
+        <!-- KEY FEATURES -->
+        <div class="data-flow" style="margin-top: 40px;">
+            <div class="data-flow-title">🎯 Key Features:</div>
+            <div class="data-flow-items">
+                <div class="data-item">✅ Personalized Mail Merge</div>
+                <div class="data-item">✅ Tag-Based Filtering</div>
+                <div class="data-item">✅ Multi-Tenant Architecture</div>
+                <div class="data-item">✅ Preference Management</div>
+                <div class="data-item">✅ Unsubscribe Links</div>
+                <div class="data-item">✅ Real-Time Analytics</div>
+                <div class="data-item">✅ PDF Attachments</div>
+                <div class="data-item">✅ Admin Notifications</div>
+                <div class="data-item">✅ Automated Scheduling</div>
+                <div class="data-item">✅ SQS Queue Reliability</div>
+            </div>
+        </div>
+
+        <!-- TECHNICAL SPECS -->
+        <div class="data-flow">
+            <div class="data-flow-title">🔧 Technical Specifications:</div>
+            <div class="data-flow-items">
+                <div class="data-item">AWS Account: 371751795928</div>
+                <div class="data-item">Region: us-east-1</div>
+                <div class="data-item">Profile: ekewaka</div>
+                <div class="data-item">User ID: effa3242-cf64-4021-b2b0-c8a5a9dfd6d2</div>
+                <div class="data-item">Admin Email: hawaiianintucson@gmail.com</div>
+                <div class="data-item">API Gateway: niexv1rw75.execute-api.us-east-1.amazonaws.com</div>
+                <div class="data-item">SES: Production Mode (Out of Sandbox)</div>
+                <div class="data-item">Schedule: Daily 9am EST (14:00 UTC)</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Password protection
+        const ADMIN_PASSWORD = 'BookFunnel2026!'; // Change this to your desired password
+        
+        function checkPassword() {
+            const input = document.getElementById('password-input');
+            const errorMsg = document.getElementById('error-message');
+            
+            if (input.value === ADMIN_PASSWORD) {
+                // Correct password - show content
+                document.getElementById('auth-overlay').style.display = 'none';
+                document.getElementById('main-content').classList.remove('content-hidden');
+                
+                // Store authentication in sessionStorage (only for current tab session)
+                sessionStorage.setItem('authenticated', 'true');
+            } else {
+                // Wrong password
+                errorMsg.textContent = '❌ Incorrect password. Please try again.';
+                input.value = '';
+                input.focus();
+            }
+        }
+        
+        // Allow Enter key to submit
+        document.getElementById('password-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkPassword();
+            }
+        });
+        
+        // Check if already authenticated in this session
+        window.addEventListener('load', function() {
+            if (sessionStorage.getItem('authenticated') === 'true') {
+                document.getElementById('auth-overlay').style.display = 'none';
+                document.getElementById('main-content').classList.remove('content-hidden');
+            } else {
+                document.getElementById('password-input').focus();
+            }
+        });
+    </script>
+</body>
+</html>

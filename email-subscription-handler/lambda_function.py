@@ -878,6 +878,9 @@ def list_book_subscribers():
 def list_drip_enrollments():
     """List all drip enrollments for analytics"""
     try:
+        from boto3.dynamodb.types import TypeDeserializer
+        from decimal import Decimal
+        
         response = mt_drip_enrollments_table.query(
             KeyConditionExpression='user_id = :uid',
             ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID}
@@ -885,15 +888,26 @@ def list_drip_enrollments():
         enrollments = response.get('Items', [])
         
         # Convert Decimal to int/float for JSON serialization
-        for enrollment in enrollments:
-            if 'current_sequence_number' in enrollment:
-                enrollment['current_sequence_number'] = int(enrollment['current_sequence_number'])
+        def convert_decimals(obj):
+            if isinstance(obj, list):
+                return [convert_decimals(i) for i in obj]
+            elif isinstance(obj, dict):
+                return {k: convert_decimals(v) for k, v in obj.items()}
+            elif isinstance(obj, Decimal):
+                return int(obj) if obj % 1 == 0 else float(obj)
+            else:
+                return obj
         
+        enrollments = convert_decimals(enrollments)
         enrollments.sort(key=lambda x: x.get('enrolled_at', ''), reverse=True)
+        
+        print(f"Successfully retrieved {len(enrollments)} enrollments")
         return cors_response(200, {'enrollments': enrollments})
     except Exception as e:
         print(f"List enrollments error: {str(e)}")
-        return cors_response(500, {'error': 'Failed to list enrollments'})
+        import traceback
+        traceback.print_exc()
+        return cors_response(500, {'error': f'Failed to list enrollments: {str(e)}'})
 
 def check_subscriber_status(email):
     """Check if email is a book subscriber"""
