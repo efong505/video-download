@@ -126,3 +126,11 @@ override.tf.json
 *_override.tf.json
 .terraformrc
 terraform.rc
+
+# Design and Source Files
+*.psd
+*.docx
+*.pptx
+B16AI.jpg
+Family.jpg
+video_url_generator/Vl5AI.jpg
