@@ -1320,6 +1320,8 @@ def get_subscriber_analytics():
 def get_recent_events(limit='100'):
     """Get recent email events"""
     try:
+        from decimal import Decimal
+        
         # Scan events table (limited)
         response = events_table.scan(
             Limit=int(limit)
@@ -1327,6 +1329,19 @@ def get_recent_events(limit='100'):
         
         events = response.get('Items', [])
         events.sort(key=lambda x: x.get('timestamp', 0), reverse=True)
+        
+        # Convert Decimal to int/float
+        def convert_decimals(obj):
+            if isinstance(obj, list):
+                return [convert_decimals(i) for i in obj]
+            elif isinstance(obj, dict):
+                return {k: convert_decimals(v) for k, v in obj.items()}
+            elif isinstance(obj, Decimal):
+                return int(obj) if obj % 1 == 0 else float(obj)
+            else:
+                return obj
+        
+        events = convert_decimals(events)
         
         return cors_response(200, {'events': events})
     except Exception as e:
