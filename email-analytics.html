@@ -247,6 +247,54 @@
                 </tbody>
             </table>
         </div>
+
+        <!-- Manual Email Management Section -->
+        <div class="chart-container" style="margin-top: 20px;">
+            <h2>✉️ Manual Email Management</h2>
+            
+            <!-- Send Specific Drip Email -->
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+                <h3 style="color: #2c5aa0; font-size: 18px; margin-bottom: 15px;">Send Specific Drip Email</h3>
+                <div class="row g-3">
+                    <div class="col-md-5">
+                        <label class="form-label">Subscriber Email</label>
+                        <input type="email" id="drip-email" class="form-control" placeholder="subscriber@example.com">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Email Number (1-6)</label>
+                        <input type="number" id="drip-number" class="form-control" min="1" max="6" value="1">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">&nbsp;</label>
+                        <button class="btn btn-primary w-100" onclick="sendSpecificDripEmail()" style="background: #2c5aa0;">Send Drip Email</button>
+                    </div>
+                </div>
+                <div id="drip-result" style="margin-top: 10px;"></div>
+            </div>
+
+            <!-- Send Custom Email -->
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 8px;">
+                <h3 style="color: #2c5aa0; font-size: 18px; margin-bottom: 15px;">Send Custom Email</h3>
+                <div class="row g-3">
+                    <div class="col-md-12">
+                        <label class="form-label">Recipient Email(s) - comma separated for multiple</label>
+                        <input type="text" id="custom-emails" class="form-control" placeholder="email1@example.com, email2@example.com">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Subject</label>
+                        <input type="text" id="custom-subject" class="form-control" placeholder="Email subject">
+                    </div>
+                    <div class="col-md-12">
+                        <label class="form-label">Message (HTML supported)</label>
+                        <textarea id="custom-message" class="form-control" rows="6" placeholder="Your email message here..."></textarea>
+                    </div>
+                    <div class="col-md-12">
+                        <button class="btn btn-success w-100" onclick="sendCustomEmail()">Send Custom Email</button>
+                    </div>
+                </div>
+                <div id="custom-result" style="margin-top: 10px;"></div>
+            </div>
+        </div>
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -384,6 +432,87 @@
         
         // Auto-refresh every 60 seconds
         setInterval(loadAllData, 60000);
+
+        // Manual email functions
+        async function sendSpecificDripEmail() {
+            const email = document.getElementById('drip-email').value.trim();
+            const emailNumber = parseInt(document.getElementById('drip-number').value);
+            const resultDiv = document.getElementById('drip-result');
+
+            if (!email || !emailNumber || emailNumber < 1 || emailNumber > 6) {
+                resultDiv.innerHTML = '<div class="alert alert-danger">Please enter a valid email and number (1-6)</div>';
+                return;
+            }
+
+            resultDiv.innerHTML = '<div class="alert alert-info">Sending email...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/subscribe?action=send_specific_drip`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: email,
+                        sequence_number: emailNumber
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="alert alert-success">✅ Email ${emailNumber} sent to ${email}</div>`;
+                    setTimeout(() => resultDiv.innerHTML = '', 5000);
+                } else {
+                    resultDiv.innerHTML = `<div class="alert alert-danger">❌ Error: ${data.error || 'Failed to send email'}</div>`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `<div class="alert alert-danger">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function sendCustomEmail() {
+            const emails = document.getElementById('custom-emails').value.trim();
+            const subject = document.getElementById('custom-subject').value.trim();
+            const message = document.getElementById('custom-message').value.trim();
+            const resultDiv = document.getElementById('custom-result');
+
+            if (!emails || !subject || !message) {
+                resultDiv.innerHTML = '<div class="alert alert-danger">Please fill in all fields</div>';
+                return;
+            }
+
+            const emailList = emails.split(',').map(e => e.trim()).filter(e => e);
+
+            resultDiv.innerHTML = '<div class="alert alert-info">Sending custom email...</div>';
+
+            try {
+                const response = await fetch(`${API_BASE}/subscribe?action=send_custom_email`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        recipients: emailList,
+                        subject: subject,
+                        message: message
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    resultDiv.innerHTML = `<div class="alert alert-success">✅ Custom email sent to ${emailList.length} recipient(s)</div>`;
+                    // Clear form
+                    document.getElementById('custom-emails').value = '';
+                    document.getElementById('custom-subject').value = '';
+                    document.getElementById('custom-message').value = '';
+                    setTimeout(() => resultDiv.innerHTML = '', 5000);
+                } else {
+                    resultDiv.innerHTML = `<div class="alert alert-danger">❌ Error: ${data.error || 'Failed to send email'}</div>`;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `<div class="alert alert-danger">❌ Error: ${error.message}</div>`;
+            }
+        }
     </script>
 </body>
 </html>
