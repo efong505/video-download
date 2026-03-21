@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Mountain - Christian Conservatives Today</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .mountain-hero {
+            background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-banner {
+            width: 1200px;
+            max-width: 95%;
+            height: 500px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 12px;
+            margin: 2rem auto;
+            display: block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 4px solid rgba(255,255,255,0.2);
+        }
+        @media (max-width: 768px) {
+            .hero-banner {
+                height: 300px;
+            }
+            .mountain-hero h1 {
+                font-size: 2rem;
+            }
+            .mountain-hero p {
+                font-size: 1rem;
+            }
+        }
+        .mountain-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .mountain-hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background: #f3f4f6;
+            padding: 1rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 1rem 2rem;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
+            color: #dc2626;
+        }
+        .tab:hover {
+            background: #dc2626;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .tab.active {
+            background: #dc2626;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .action-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-left: 4px solid #dc2626;
+        }
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(220,38,38,0.2);
+        }
+        .action-card h3 {
+            color: #dc2626;
+            margin-bottom: 1rem;
+        }
+        .action-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #dc2626;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 1rem;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .action-btn:hover {
+            background: #991b1b;
+            transform: scale(1.05);
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            padding: 1rem;
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #dc2626;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="mountain-hero">
+        <h1>⛰️ Family Mountain</h1>
+        <p>Strengthening families as the foundation of society and faith</p>
+        <img src="Family.png" alt="Family Mountain" class="hero-banner">
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab(event, 'promote')">Promote</button>
+        <button class="tab" onclick="switchTab(event, 'expose')">Expose & Fight</button>
+        <button class="tab" onclick="switchTab(event, 'involved')">Get Involved</button>
+        <button class="tab" onclick="switchTab(event, 'resources')">Resources</button>
+    </div>
+
+    <div id="promote" class="tab-content active">
+        <h2>Promote Strong Families</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>📖 Share Family Resources</h3>
+                <p>Upload articles, videos, and testimonies about biblical family values and parenting wisdom.</p>
+                <a href="user-upload.html" class="action-btn">Upload Content</a>
+            </div>
+            <div class="action-card">
+                <h3>🙏 Family Prayer Wall</h3>
+                <p>Post prayer requests for families in crisis and pray for others walking through challenges.</p>
+                <a href="prayer-wall.html" class="action-btn">Visit Prayer Wall</a>
+            </div>
+            <div class="action-card">
+                <h3>👨‍👩‍👧‍👦 Family Ministry Templates</h3>
+                <p>Access ready-to-use resources for family ministries, marriage enrichment, and parenting groups.</p>
+                <a href="ministry-templates.html" class="action-btn">Get Templates</a>
+            </div>
+            <div class="action-card">
+                <h3>📺 Family Content Library</h3>
+                <p>Browse inspiring videos and articles celebrating biblical family values and success stories.</p>
+                <a href="videos.html" class="action-btn">Watch Videos</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="expose" class="tab-content">
+        <h2>Expose Threats to the Family</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>🚨 Report Anti-Family Policies</h3>
+                <p>Document and expose legislation, school policies, and cultural trends undermining families.</p>
+                <a href="user-upload.html" class="action-btn">Submit Report</a>
+            </div>
+            <div class="action-card">
+                <h3>📰 Family News & Alerts</h3>
+                <p>Stay informed about threats to parental rights, religious freedom, and family values.</p>
+                <a href="articles.html" class="action-btn">Read Articles</a>
+            </div>
+            <div class="action-card">
+                <h3>⚖️ Legal Resources</h3>
+                <p>Connect with legal organizations defending parental rights and family freedoms.</p>
+                <a href="#" class="action-btn">Find Help</a>
+            </div>
+            <div class="action-card">
+                <h3>🎯 Action Campaigns</h3>
+                <p>Join coordinated efforts to oppose anti-family legislation and cultural attacks.</p>
+                <a href="events-calendar.html" class="action-btn">View Campaigns</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="involved" class="tab-content">
+        <h2>Get Involved in Family Restoration</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>✍️ Take the Family Pledge</h3>
+                <p>Commit to biblical family values and join thousands standing for marriage and parenting.</p>
+                <a href="7-mountains.html#pledge" class="action-btn">Take Pledge</a>
+            </div>
+            <div class="action-card">
+                <h3>📅 Family Events</h3>
+                <p>Find marriage conferences, parenting workshops, and family ministry events near you.</p>
+                <a href="events-calendar.html" class="action-btn">Find Events</a>
+            </div>
+            <div class="action-card">
+                <h3>🤝 Start a Family Group</h3>
+                <p>Launch a small group focused on marriage enrichment, parenting support, or family discipleship.</p>
+                <a href="ministry-templates.html" class="action-btn">Get Started</a>
+            </div>
+            <div class="action-card">
+                <h3>💬 Family Forums</h3>
+                <p>Connect with other believers navigating family challenges and celebrating victories.</p>
+                <a href="#" class="action-btn">Join Discussion</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="resources" class="tab-content">
+        <h2>Family Mountain Resources</h2>
+        <ul class="resource-list">
+            <li><strong>Biblical Marriage Resources</strong> - Courses, books, and videos on God's design for marriage</li>
+            <li><strong>Parenting Guides</strong> - Biblical parenting principles for every age and stage</li>
+            <li><strong>Family Devotionals</strong> - Daily devotions and Bible studies for families</li>
+            <li><strong>Crisis Support</strong> - Resources for families facing divorce, addiction, or rebellion</li>
+            <li><strong>Homeschool Networks</strong> - Connect with homeschooling families and resources</li>
+            <li><strong>Adoption & Foster Care</strong> - Christian adoption agencies and foster care ministries</li>
+            <li><strong>Financial Planning</strong> - Biblical financial wisdom for families</li>
+            <li><strong>Purity & Dating</strong> - Resources for teaching biblical sexuality and relationships</li>
+        </ul>
+    </div>
+
+    <script>
+        function switchTab(event, tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+    </script>
+</body>
+</html>

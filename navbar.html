@@ -43,6 +43,24 @@
     .nav-link:hover {
         color: #2c5aa0 !important;
     }
+    .dropdown-submenu {
+        position: relative;
+    }
+    .dropdown-submenu .dropdown-menu {
+        top: 0;
+        left: 100%;
+        margin-top: -1px;
+    }
+    .dropdown-submenu:hover > .dropdown-menu {
+        display: block;
+    }
+    @media (max-width: 991px) {
+        .dropdown-submenu .dropdown-menu {
+            position: static;
+            left: 0;
+            margin-left: 1rem;
+        }
+    }
     @media (min-width: 992px) and (max-width: 1399px) {
         .nav-link {
             padding: 0.4rem 0.4rem !important;

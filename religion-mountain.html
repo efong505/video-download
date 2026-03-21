@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Religion Mountain - Christian Conservatives Today</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .mountain-hero {
+            background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-banner {
+            width: 1200px;
+            max-width: 95%;
+            height: 500px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 12px;
+            margin: 2rem auto;
+            display: block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 4px solid rgba(255,255,255,0.2);
+        }
+        @media (max-width: 768px) {
+            .hero-banner {
+                height: 300px;
+            }
+            .mountain-hero h1 {
+                font-size: 2rem;
+            }
+            .mountain-hero p {
+                font-size: 1rem;
+            }
+        }
+        .mountain-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .mountain-hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background: #f3f4f6;
+            padding: 1rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 1rem 2rem;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
+            color: #2563eb;
+        }
+        .tab:hover {
+            background: #2563eb;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .tab.active {
+            background: #2563eb;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .action-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-left: 4px solid #2563eb;
+        }
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(37,99,235,0.2);
+        }
+        .action-card h3 {
+            color: #2563eb;
+            margin-bottom: 1rem;
+        }
+        .action-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #2563eb;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 1rem;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .action-btn:hover {
+            background: #1e40af;
+            transform: scale(1.05);
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            padding: 1rem;
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #2563eb;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="mountain-hero">
+        <h1>⛰️ Religion Mountain</h1>
+        <p>Advancing the Gospel and defending religious freedom</p>
+        <img src="religion.jpg" alt="Religion Mountain" class="hero-banner">
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab(event, 'promote')">Promote</button>
+        <button class="tab" onclick="switchTab(event, 'expose')">Expose & Fight</button>
+        <button class="tab" onclick="switchTab(event, 'involved')">Get Involved</button>
+        <button class="tab" onclick="switchTab(event, 'resources')">Resources</button>
+    </div>
+
+    <div id="promote" class="tab-content active">
+        <h2>Promote the Gospel & Revival</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>📖 Share Sermons & Teachings</h3>
+                <p>Upload powerful sermons, Bible teachings, and testimonies of God's transforming power.</p>
+                <a href="user-upload.html" class="action-btn">Upload Content</a>
+            </div>
+            <div class="action-card">
+                <h3>🙏 Prayer Wall</h3>
+                <p>Post prayer requests and intercede for revival, awakening, and spiritual breakthrough.</p>
+                <a href="prayer-wall.html" class="action-btn">Visit Prayer Wall</a>
+            </div>
+            <div class="action-card">
+                <h3>⛪ Ministry Resources</h3>
+                <p>Access sermon outlines, small group materials, and evangelism tools for your ministry.</p>
+                <a href="ministry-templates.html" class="action-btn">Get Resources</a>
+            </div>
+            <div class="action-card">
+                <h3>📺 Spiritual Content</h3>
+                <p>Watch inspiring messages, worship sessions, and testimonies of faith and miracles.</p>
+                <a href="videos.html" class="action-btn">Watch Videos</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="expose" class="tab-content">
+        <h2>Expose Attacks on Faith</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>🚨 Report Religious Persecution</h3>
+                <p>Document cases of religious discrimination, church closures, and attacks on believers.</p>
+                <a href="user-upload.html" class="action-btn">Submit Report</a>
+            </div>
+            <div class="action-card">
+                <h3>📰 Religious Freedom News</h3>
+                <p>Stay informed about threats to religious liberty and church freedoms worldwide.</p>
+                <a href="articles.html" class="action-btn">Read Articles</a>
+            </div>
+            <div class="action-card">
+                <h3>⚖️ Legal Defense</h3>
+                <p>Connect with legal organizations defending churches and religious freedom rights.</p>
+                <a href="#" class="action-btn">Find Help</a>
+            </div>
+            <div class="action-card">
+                <h3>🎯 Spiritual Warfare</h3>
+                <p>Join prayer campaigns against spiritual darkness and demonic strongholds in culture.</p>
+                <a href="prayer-wall.html" class="action-btn">Join Prayer</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="involved" class="tab-content">
+        <h2>Get Involved in Kingdom Advancement</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>✍️ Take the Faith Pledge</h3>
+                <p>Commit to bold faith, evangelism, and standing firm for biblical truth in every sphere.</p>
+                <a href="7-mountains.html#pledge" class="action-btn">Take Pledge</a>
+            </div>
+            <div class="action-card">
+                <h3>📅 Revival Events</h3>
+                <p>Find prayer gatherings, revival meetings, and evangelistic events in your area.</p>
+                <a href="events-calendar.html" class="action-btn">Find Events</a>
+            </div>
+            <div class="action-card">
+                <h3>🤝 Start a Prayer Group</h3>
+                <p>Launch an intercessory prayer group focused on revival and cultural transformation.</p>
+                <a href="ministry-templates.html" class="action-btn">Get Started</a>
+            </div>
+            <div class="action-card">
+                <h3>💬 Theology Forums</h3>
+                <p>Engage in biblical discussions and theological training with fellow believers.</p>
+                <a href="#" class="action-btn">Join Discussion</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="resources" class="tab-content">
+        <h2>Religion Mountain Resources</h2>
+        <ul class="resource-list">
+            <li><strong>Evangelism Training</strong> - Tools and courses for effective Gospel sharing</li>
+            <li><strong>Discipleship Materials</strong> - Resources for making and mentoring disciples</li>
+            <li><strong>Prayer Guides</strong> - Intercessory prayer strategies and spiritual warfare resources</li>
+            <li><strong>Apologetics Resources</strong> - Defending the faith with reason and evidence</li>
+            <li><strong>Church Planting</strong> - Resources for starting and growing churches</li>
+            <li><strong>Missions Support</strong> - Connect with missionaries and global ministry opportunities</li>
+            <li><strong>Worship Resources</strong> - Music, liturgy, and worship planning materials</li>
+            <li><strong>Biblical Theology</strong> - Systematic theology courses and doctrinal studies</li>
+        </ul>
+    </div>
+
+    <script>
+        function switchTab(event, tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+    </script>
+</body>
+</html>

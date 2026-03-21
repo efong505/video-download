@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art & Entertainment Mountain - Christian Conservatives Today</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .mountain-hero {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-banner {
+            width: 1200px;
+            max-width: 95%;
+            height: 500px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 12px;
+            margin: 2rem auto;
+            display: block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 4px solid rgba(255,255,255,0.2);
+        }
+        @media (max-width: 768px) {
+            .hero-banner {
+                height: 300px;
+            }
+            .mountain-hero h1 {
+                font-size: 2rem;
+            }
+            .mountain-hero p {
+                font-size: 1rem;
+            }
+        }
+        .mountain-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .mountain-hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background: #f3f4f6;
+            padding: 1rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 1rem 2rem;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
+            color: #f59e0b;
+        }
+        .tab:hover {
+            background: #f59e0b;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .tab.active {
+            background: #f59e0b;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .action-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-left: 4px solid #f59e0b;
+        }
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(245,158,11,0.2);
+        }
+        .action-card h3 {
+            color: #f59e0b;
+            margin-bottom: 1rem;
+        }
+        .action-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #f59e0b;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 1rem;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .action-btn:hover {
+            background: #d97706;
+            transform: scale(1.05);
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            padding: 1rem;
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #f59e0b;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="mountain-hero">
+        <h1>⛰️ Art & Entertainment Mountain</h1>
+        <p>Creating culture that glorifies God and inspires truth</p>
+        <img src="Art.jpg" alt="Art & Entertainment Mountain" class="hero-banner">
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab(event, 'promote')">Promote</button>
+        <button class="tab" onclick="switchTab(event, 'expose')">Expose & Fight</button>
+        <button class="tab" onclick="switchTab(event, 'involved')">Get Involved</button>
+        <button class="tab" onclick="switchTab(event, 'resources')">Resources</button>
+    </div>
+
+    <div id="promote" class="tab-content active">
+        <h2>Promote Godly Art & Entertainment</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>🎬 Share Christian Films</h3>
+                <p>Upload and promote faith-based movies, documentaries, and video content.</p>
+                <a href="user-upload.html" class="action-btn">Upload Content</a>
+            </div>
+            <div class="action-card">
+                <h3>🎵 Christian Music</h3>
+                <p>Discover and share worship music, Christian artists, and faith-inspired songs.</p>
+                <a href="videos.html" class="action-btn">Explore Music</a>
+            </div>
+            <div class="action-card">
+                <h3>🎨 Visual Arts Gallery</h3>
+                <p>Showcase Christian art, photography, and creative works that honor God.</p>
+                <a href="#" class="action-btn">View Gallery</a>
+            </div>
+            <div class="action-card">
+                <h3>📚 Christian Literature</h3>
+                <p>Promote books, poetry, and written works from a biblical worldview.</p>
+                <a href="articles.html" class="action-btn">Read More</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="expose" class="tab-content">
+        <h2>Expose Cultural Corruption</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>🚨 Report Immoral Content</h3>
+                <p>Document Hollywood's promotion of immorality, blasphemy, and anti-Christian themes.</p>
+                <a href="user-upload.html" class="action-btn">Submit Report</a>
+            </div>
+            <div class="action-card">
+                <h3>🎭 Entertainment Reviews</h3>
+                <p>Read biblical reviews of movies, TV shows, music, and entertainment content.</p>
+                <a href="articles.html" class="action-btn">Read Reviews</a>
+            </div>
+            <div class="action-card">
+                <h3>💰 Boycott Tracker</h3>
+                <p>Track companies and entertainers promoting anti-Christian values and immorality.</p>
+                <a href="#" class="action-btn">View Boycotts</a>
+            </div>
+            <div class="action-card">
+                <h3>🎯 Cultural Campaigns</h3>
+                <p>Join efforts to oppose blasphemous content and support family-friendly entertainment.</p>
+                <a href="events-calendar.html" class="action-btn">View Campaigns</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="involved" class="tab-content">
+        <h2>Get Involved in Cultural Transformation</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>✍️ Take the Arts Pledge</h3>
+                <p>Commit to creating and supporting art that glorifies God and promotes truth.</p>
+                <a href="7-mountains.html#pledge" class="action-btn">Take Pledge</a>
+            </div>
+            <div class="action-card">
+                <h3>🎬 Become a Creator</h3>
+                <p>Learn filmmaking, music production, writing, and other creative skills for ministry.</p>
+                <a href="#" class="action-btn">Get Training</a>
+            </div>
+            <div class="action-card">
+                <h3>📅 Arts Events</h3>
+                <p>Find film festivals, concerts, art shows, and creative conferences near you.</p>
+                <a href="events-calendar.html" class="action-btn">Find Events</a>
+            </div>
+            <div class="action-card">
+                <h3>💬 Artist Forums</h3>
+                <p>Connect with Christian filmmakers, musicians, writers, and visual artists.</p>
+                <a href="#" class="action-btn">Join Discussion</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="resources" class="tab-content">
+        <h2>Art & Entertainment Mountain Resources</h2>
+        <ul class="resource-list">
+            <li><strong>Filmmaking Resources</strong> - Equipment, training, and distribution for Christian films</li>
+            <li><strong>Music Production</strong> - Recording, mixing, and promoting Christian music</li>
+            <li><strong>Writing Workshops</strong> - Courses on Christian fiction, screenwriting, and storytelling</li>
+            <li><strong>Visual Arts Training</strong> - Painting, photography, and digital art from a biblical perspective</li>
+            <li><strong>Theater & Drama</strong> - Resources for Christian theater and dramatic arts</li>
+            <li><strong>Publishing Platforms</strong> - Christian-friendly platforms for books, music, and films</li>
+            <li><strong>Funding & Grants</strong> - Financial support for Christian artists and creative projects</li>
+            <li><strong>Entertainment Alternatives</strong> - Family-friendly streaming services and content platforms</li>
+        </ul>
+    </div>
+
+    <script>
+        function switchTab(event, tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+    </script>
+</body>
+</html>

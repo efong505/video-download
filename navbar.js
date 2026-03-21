@@ -16,11 +16,22 @@ function initNavbar() {
     ];
     
     const ministryLinks = [
+        {page: '7-mountains', label: '7 Mountains', emoji: '⛰️', fa: 'fa-mountain', hasSubmenu: true},
         {page: 'election-map', label: 'Election Map', emoji: '🗺️', fa: 'fa-map'},
         {page: 'prayer-wall', label: 'Prayer Wall', emoji: '🙏', fa: 'fa-praying-hands'},
         {page: 'events-calendar', label: 'Events', emoji: '📅', fa: 'fa-calendar'},
         {page: 'resources', label: 'Resources', emoji: '📚', fa: 'fa-book-open'},
         {page: 'the-necessary-evil-book', label: 'The Necessary Evil', emoji: '📕', fa: 'fa-book'}
+    ];
+    
+    const mountainLinks = [
+        {page: 'family-mountain', label: 'Family', emoji: '👨‍👩‍👧‍👦', fa: 'fa-home'},
+        {page: 'religion-mountain', label: 'Religion', emoji: '⛪', fa: 'fa-church'},
+        {page: 'education-mountain', label: 'Education', emoji: '🎓', fa: 'fa-graduation-cap'},
+        {page: 'media-mountain', label: 'Media', emoji: '📺', fa: 'fa-tv'},
+        {page: 'art-mountain', label: 'Art & Entertainment', emoji: '🎨', fa: 'fa-palette'},
+        {page: 'economics-mountain', label: 'Economics & Business', emoji: '💼', fa: 'fa-briefcase'},
+        {page: 'government-mountain', label: 'Government', emoji: '🏛️', fa: 'fa-landmark'}
     ];
     
     const adminLinks = [
@@ -70,7 +81,20 @@ function initNavbar() {
     ministryLinks.forEach(link => {
         if (link.page === currentPage) return;
         const icon = iconStyle === 'fontawesome' ? `<i class="fas ${link.fa} me-2"></i>` : link.emoji + ' ';
-        html += `<li><a class="dropdown-item" href="${link.page}.html">${icon}${link.label}</a></li>`;
+        
+        if (link.hasSubmenu) {
+            // 7 Mountains with nested submenu
+            html += `<li class="dropdown-submenu">
+                <a class="dropdown-item dropdown-toggle" href="${link.page}.html">${icon}${link.label}</a>
+                <ul class="dropdown-menu">`;
+            mountainLinks.forEach(mLink => {
+                const mIcon = iconStyle === 'fontawesome' ? `<i class="fas ${mLink.fa} me-2"></i>` : mLink.emoji + ' ';
+                html += `<li><a class="dropdown-item" href="${mLink.page}.html">${mIcon}${mLink.label}</a></li>`;
+            });
+            html += `</ul></li>`;
+        } else {
+            html += `<li><a class="dropdown-item" href="${link.page}.html">${icon}${link.label}</a></li>`;
+        }
     });
     html += `</ul></li>`;
     

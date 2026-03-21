@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 7 Mountains Mandate 2026 - Christian Conservatives Today</title>
+    <meta name="description" content="Reclaiming the Spheres of Culture for the Kingdom of God - Family, Religion, Education, Media, Art & Entertainment, Economics & Business, Government">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #2c5aa0;
+            --dark-navy: #1a2332;
+            --gold-accent: #d4af37;
+            --light-bg: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-top: 80px;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--primary-blue) 100%);
+            color: white;
+            padding: 80px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><path d="M0,300 Q300,100 600,300 T1200,300 L1200,600 L0,600 Z" fill="rgba(255,255,255,0.05)"/></svg>') no-repeat center bottom;
+            background-size: cover;
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+            color: var(--gold-accent);
+        }
+
+        .mountain-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 5px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 25px;
+            font-size: 1rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .mountain-card {
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            height: 100%;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .mountain-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+        }
+
+        .mountain-card-header {
+            padding: 25px;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-align: center;
+            position: relative;
+        }
+
+        .mountain-card-header i {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .mountain-card-body {
+            padding: 25px;
+            background: white;
+        }
+
+        .mountain-family { background: linear-gradient(135deg, #dc3545 0%, #c82333 100%); }
+        .mountain-religion { background: linear-gradient(135deg, #2c5aa0 0%, #1a3d7a 100%); }
+        .mountain-education { background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%); }
+        .mountain-media { background: linear-gradient(135deg, #17a2b8 0%, #117a8b 100%); }
+        .mountain-art { background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%); }
+        .mountain-economics { background: linear-gradient(135deg, #6c757d 0%, #545b62 100%); }
+        .mountain-government { background: linear-gradient(135deg, #343a40 0%, #23272b 100%); }
+
+        .promote-section {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .expose-section {
+            background: #ffebee;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .cta-section {
+            background: var(--light-bg);
+            padding: 60px 0;
+        }
+
+        .cta-box {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .btn-mountain {
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-mountain:hover {
+            transform: scale(1.05);
+        }
+
+        .intro-section {
+            padding: 60px 0;
+            background: white;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--dark-navy);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .mountains-grid {
+            padding: 60px 0;
+            background: var(--light-bg);
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            .hero-subtitle {
+                font-size: 1.2rem;
+            }
+            .mountain-badge {
+                font-size: 0.85rem;
+                padding: 6px 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <div id="navbar-container"></div>
+    <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            })
+            .catch(err => console.error('Failed to load navbar:', err));
+    </script>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container hero-content">
+            <h1 class="hero-title text-center">The 7 Mountains Mandate 2026</h1>
+            <p class="hero-subtitle text-center">Reclaiming the Spheres of Culture for the Kingdom of God</p>
+            
+            <div class="text-center mb-4">
+                <span class="mountain-badge"><i class="fas fa-home"></i> Family</span>
+                <span class="mountain-badge"><i class="fas fa-church"></i> Religion</span>
+                <span class="mountain-badge"><i class="fas fa-graduation-cap"></i> Education</span>
+                <span class="mountain-badge"><i class="fas fa-tv"></i> Media</span>
+                <span class="mountain-badge"><i class="fas fa-palette"></i> Art & Entertainment</span>
+                <span class="mountain-badge"><i class="fas fa-briefcase"></i> Economics & Business</span>
+                <span class="mountain-badge"><i class="fas fa-landmark"></i> Government</span>
+            </div>
+
+            <div class="text-center mt-5 mb-4">
+                <img src="7 Mountains.png" alt="7 Mountains of Influence - Biblical Worldview" class="img-fluid rounded shadow-lg" style="max-height: 900px; max-width: 82%; border: 3px solid rgba(255,255,255,0.3);">
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="#mountains-grid" class="btn btn-light btn-mountain me-3 mb-3">
+                    <i class="fas fa-mountain"></i> Explore the 7 Mountains
+                </a>
+                <a href="apply-correspondent.html" class="btn btn-warning btn-mountain me-3 mb-3">
+                    <i class="fas fa-hand-fist"></i> Take the Pledge & Get Your Badge
+                </a>
+                <a href="user-upload.html" class="btn btn-success btn-mountain mb-3">
+                    <i class="fas fa-upload"></i> Publish in a Mountain Now
+                </a>
+            </div>
+
+            <p class="text-center mt-4 small">
+                Built on biblical principles. Powered by uncensored video hosting, ministry templates, voter guides, Prayer Wall & upcoming Courses.
+            </p>
+        </div>
+    </section>
+
+    <!-- Intro Section -->
+    <section class="intro-section">
+        <div class="container">
+            <h2 class="section-title">Why the 7 Mountains Are on ChristianConservativesToday.com</h2>
+            <p class="lead text-center mb-4">
+                This is not just another Christian website. This is your <strong>command center</strong> to promote biblical truth 
+                and expose darkness in every sphere of society — exactly as the 2026 Expanded Mandate calls for. Every tool you need 
+                (video upload, article templates, events, courses, forums, shop) is already here so you can take action today.
+            </p>
+            <div class="text-center mt-4">
+                <a href="prayer-wall.html" class="btn btn-outline-primary btn-lg me-3 mb-3">
+                    <i class="fas fa-praying-hands"></i> Pray for the Mountains
+                </a>
+                <a href="events-calendar.html" class="btn btn-outline-primary btn-lg mb-3">
+                    <i class="fas fa-calendar-alt"></i> Join a 7 Mountains Event
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mountains Grid -->
+    <section id="mountains-grid" class="mountains-grid">
+        <div class="container">
+            <h2 class="section-title mb-5">The 7 Mountains Expanded 2026 – Exact Framework</h2>
+            
+            <div class="row g-4">
+                <!-- Family Mountain -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card mountain-card">
+                        <div class="mountain-card-header mountain-family">
+                            <i class="fas fa-home"></i>
+                            <div>FAMILY</div>
+                        </div>
+                        <div class="mountain-card-body">
+                            <div class="promote-section">
+                                <strong><i class="fas fa-check-circle text-success"></i> Promote:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Biblical marriage</li>
+                                    <li>Family restoration</li>
+                                    <li>Sanctity of life</li>
+                                </ul>
+                            </div>
+                            <div class="expose-section">
+                                <strong><i class="fas fa-exclamation-triangle text-danger"></i> Expose & Fight:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Children out of wedlock</li>
+                                    <li>Abortion</li>
+                                    <li>Attacks on traditional family</li>
+                                </ul>
+                            </div>
+                            <a href="family-mountain.html" class="btn btn-danger w-100 mt-3">
+                                Open Family Mountain Hub <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Religion Mountain -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card mountain-card">
+                        <div class="mountain-card-header mountain-religion">
+                            <i class="fas fa-church"></i>
+                            <div>RELIGION</div>
+                        </div>
+                        <div class="mountain-card-body">
+                            <div class="promote-section">
+                                <strong><i class="fas fa-check-circle text-success"></i> Promote:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Biblical doctrine</li>
+                                    <li>Biblical worldview</li>
+                                    <li>Spirit-led ministry</li>
+                                </ul>
+                            </div>
+                            <div class="expose-section">
+                                <strong><i class="fas fa-exclamation-triangle text-danger"></i> Expose & Fight:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>False teachings</li>
+                                    <li>Radical anti-God perspectives</li>
+                                    <li>Compromised theology</li>
+                                </ul>
+                            </div>
+                            <a href="religion-mountain.html" class="btn btn-primary w-100 mt-3">
+                                Open Religion Mountain Hub <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Education Mountain -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card mountain-card">
+                        <div class="mountain-card-header mountain-education">
+                            <i class="fas fa-graduation-cap"></i>
+                            <div>EDUCATION</div>
+                        </div>
+                        <div class="mountain-card-body">
+                            <div class="promote-section">
+                                <strong><i class="fas fa-check-circle text-success"></i> Promote:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>True history</li>
+                                    <li>Real science</li>
+                                    <li>Biblical religion</li>
+                                </ul>
+                            </div>
+                            <div class="expose-section">
+                                <strong><i class="fas fa-exclamation-triangle text-danger"></i> Expose & Fight:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Historical revisionism</li>
+                                    <li>Fake science</li>
+                                    <li>False doctrine in schools</li>
+                                </ul>
+                            </div>
+                            <a href="education-mountain.html" class="btn btn-success w-100 mt-3">
+                                Open Education Mountain + Patriot Academy <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Media Mountain -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card mountain-card">
+                        <div class="mountain-card-header mountain-media">
+                            <i class="fas fa-tv"></i>
+                            <div>MEDIA</div>
+                        </div>
+                        <div class="mountain-card-body">
+                            <div class="promote-section">
+                                <strong><i class="fas fa-check-circle text-success"></i> Promote:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Godly kid content</li>
+                                    <li>Christian social media</li>
+                                    <li>Truth news</li>
+                                </ul>
+                            </div>
+                            <div class="expose-section">
+                                <strong><i class="fas fa-exclamation-triangle text-danger"></i> Expose & Fight:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Fake news</li>
+                                    <li>Ungodly media influence</li>
+                                    <li>Censorship of truth</li>
+                                </ul>
+                            </div>
+                            <a href="media-mountain.html" class="btn btn-info w-100 mt-3 text-white">
+                                Open Media Mountain – Upload Now <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Art & Entertainment Mountain -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card mountain-card">
+                        <div class="mountain-card-header mountain-art">
+                            <i class="fas fa-palette"></i>
+                            <div>ART & ENTERTAINMENT</div>
+                        </div>
+                        <div class="mountain-card-body">
+                            <div class="promote-section">
+                                <strong><i class="fas fa-check-circle text-success"></i> Promote:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Godly wholesomeness</li>
+                                    <li>Christian music & art</li>
+                                    <li>Kid books & games</li>
+                                </ul>
+                            </div>
+                            <div class="expose-section">
+                                <strong><i class="fas fa-exclamation-triangle text-danger"></i> Expose & Fight:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Ungodliness in entertainment</li>
+                                    <li>Violence in games/movies</li>
+                                    <li>Corrupted children's content</li>
+                                </ul>
+                            </div>
+                            <a href="art-mountain.html" class="btn btn-warning w-100 mt-3">
+                                Open Art Mountain – Submit Creation <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Economics & Business Mountain -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card mountain-card">
+                        <div class="mountain-card-header mountain-economics">
+                            <i class="fas fa-briefcase"></i>
+                            <div>ECONOMICS & BUSINESS</div>
+                        </div>
+                        <div class="mountain-card-body">
+                            <div class="promote-section">
+                                <strong><i class="fas fa-check-circle text-success"></i> Promote:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Ingenuity & innovation</li>
+                                    <li>Anti-globalist approach</li>
+                                    <li>Kingdom businesses</li>
+                                </ul>
+                            </div>
+                            <div class="expose-section">
+                                <strong><i class="fas fa-exclamation-triangle text-danger"></i> Expose & Fight:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Government overreach</li>
+                                    <li>Globalist agenda</li>
+                                    <li>Economic tyranny</li>
+                                </ul>
+                            </div>
+                            <a href="economics-mountain.html" class="btn btn-secondary w-100 mt-3 text-white">
+                                Open Economics Mountain + Shop <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Government Mountain -->
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="card mountain-card">
+                        <div class="mountain-card-header mountain-government">
+                            <i class="fas fa-landmark"></i>
+                            <div>GOVERNMENT</div>
+                        </div>
+                        <div class="mountain-card-body">
+                            <div class="promote-section">
+                                <strong><i class="fas fa-check-circle text-success"></i> Promote:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Biblical American history</li>
+                                    <li>Historical truth</li>
+                                    <li>Patriot Academy</li>
+                                </ul>
+                            </div>
+                            <div class="expose-section">
+                                <strong><i class="fas fa-exclamation-triangle text-danger"></i> Expose & Fight:</strong>
+                                <ul class="mb-0 mt-2">
+                                    <li>Political corruption</li>
+                                    <li>Constitutional violations</li>
+                                    <li>Tyrannical policies</li>
+                                </ul>
+                            </div>
+                            <a href="government-mountain.html" class="btn btn-dark w-100 mt-3 text-white">
+                                Open Government Mountain – Voter Guides <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5">
+                <a href="user-upload.html" class="btn btn-primary btn-lg btn-mountain">
+                    <i class="fas fa-rocket"></i> One-Click: Publish in ANY Mountain Right Now
+                </a>
+                <p class="mt-3 text-muted">Uses your existing ministry templates (Sermon • Political Commentary • Bible Study • Devotional)</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-box">
+                <h2 class="mb-4">Ready to Move Mountains?</h2>
+                <p class="lead mb-4">
+                    Choose your plan and instantly unlock mountain-specific templates, featured placement, and badges.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <a href="the-necessary-evil-book.html" class="btn btn-success btn-lg btn-mountain">
+                        <i class="fas fa-star"></i> Get Started Today
+                    </a>
+                    <a href="apply-correspondent.html" class="btn btn-outline-dark btn-lg btn-mountain">
+                        <i class="fas fa-hand-fist"></i> Take the Pledge • Get "Mountain Warrior" Badge
+                    </a>
+                </div>
+                <p class="mt-4 text-muted">
+                    Next steps already built: Prayer Wall filter • Event Calendar • Upcoming Course Platform (Patriot Academy track) • 
+                    Forums • Mobile Apps (push alerts per mountain)
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-4">
+        <div class="container">
+            <p class="mb-0">© 2026 Christian Conservatives Today • The 7 Mountains are now LIVE on the platform that gives you the tools to win them.</p>
+            <p class="small mt-2 mb-0">
+                <a href="index.html" class="text-white-50 me-3">Home</a>
+                <a href="prayer-wall.html" class="text-white-50 me-3">Prayer Wall</a>
+                <a href="events-calendar.html" class="text-white-50 me-3">Events</a>
+                <a href="election-map.html" class="text-white-50">Voter Guides</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

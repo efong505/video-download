@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Mountain - Christian Conservatives Today</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .mountain-hero {
+            background: linear-gradient(135deg, #343a40 0%, #23272b 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-banner {
+            width: 1200px;
+            max-width: 95%;
+            height: 500px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 12px;
+            margin: 2rem auto;
+            display: block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 4px solid rgba(255,255,255,0.2);
+        }
+        @media (max-width: 768px) {
+            .hero-banner {
+                height: 300px;
+            }
+            .mountain-hero h1 {
+                font-size: 2rem;
+            }
+            .mountain-hero p {
+                font-size: 1rem;
+            }
+        }
+        .mountain-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .mountain-hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background: #f3f4f6;
+            padding: 1rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 1rem 2rem;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
+            color: #343a40;
+        }
+        .tab:hover {
+            background: #343a40;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .tab.active {
+            background: #343a40;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .action-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-left: 4px solid #343a40;
+        }
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(52,58,64,0.2);
+        }
+        .action-card h3 {
+            color: #343a40;
+            margin-bottom: 1rem;
+        }
+        .action-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #343a40;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 1rem;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .action-btn:hover {
+            background: #23272b;
+            transform: scale(1.05);
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            padding: 1rem;
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #343a40;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="mountain-hero">
+        <h1>⛰️ Government Mountain</h1>
+        <p>Reclaiming government for biblical truth and constitutional principles</p>
+        <img src="Government.jpg" alt="Government Mountain" class="hero-banner">
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab(event, 'promote')">Promote</button>
+        <button class="tab" onclick="switchTab(event, 'expose')">Expose & Fight</button>
+        <button class="tab" onclick="switchTab(event, 'involved')">Get Involved</button>
+        <button class="tab" onclick="switchTab(event, 'resources')">Resources</button>
+    </div>
+
+    <div id="promote" class="tab-content active">
+        <h2>Promote Biblical Government</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>📊 50-State Voter Guides</h3>
+                <p>Access comprehensive election information and candidate profiles for all 50 states.</p>
+                <a href="election-map.html" class="action-btn">View Voter Guides</a>
+            </div>
+            <div class="action-card">
+                <h3>📰 Political Commentary</h3>
+                <p>Share biblical analysis of current government issues and political developments.</p>
+                <a href="user-upload.html" class="action-btn">Upload Content</a>
+            </div>
+            <div class="action-card">
+                <h3>🎓 Patriot Academy</h3>
+                <p>Constitutional training and civic education for engaged citizens and leaders.</p>
+                <a href="#" class="action-btn">Learn More</a>
+            </div>
+            <div class="action-card">
+                <h3>📚 Founding Documents</h3>
+                <p>Study the Constitution, Declaration of Independence, and America's biblical heritage.</p>
+                <a href="articles.html" class="action-btn">Read More</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="expose" class="tab-content">
+        <h2>Expose Government Corruption</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>🚨 Report Corruption</h3>
+                <p>Document political corruption, constitutional violations, and government overreach.</p>
+                <a href="user-upload.html" class="action-btn">Submit Report</a>
+            </div>
+            <div class="action-card">
+                <h3>📰 Political News</h3>
+                <p>Stay informed about tyrannical policies and threats to constitutional freedoms.</p>
+                <a href="articles.html" class="action-btn">Read Articles</a>
+            </div>
+            <div class="action-card">
+                <h3>⚖️ Legal Action</h3>
+                <p>Connect with legal organizations defending constitutional rights and religious freedom.</p>
+                <a href="#" class="action-btn">Find Help</a>
+            </div>
+            <div class="action-card">
+                <h3>🎯 Political Campaigns</h3>
+                <p>Join efforts to oppose bad legislation and support constitutional candidates.</p>
+                <a href="events-calendar.html" class="action-btn">View Campaigns</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="involved" class="tab-content">
+        <h2>Get Involved in Government Transformation</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>✍️ Take the Government Pledge</h3>
+                <p>Commit to biblical citizenship and defending constitutional principles.</p>
+                <a href="7-mountains.html#pledge" class="action-btn">Take Pledge</a>
+            </div>
+            <div class="action-card">
+                <h3>🗳️ Election Resources</h3>
+                <p>Find voter guides, candidate information, and election dates for your state.</p>
+                <a href="election-map.html" class="action-btn">View Elections</a>
+            </div>
+            <div class="action-card">
+                <h3>📅 Political Events</h3>
+                <p>Attend town halls, candidate forums, and civic engagement training events.</p>
+                <a href="events-calendar.html" class="action-btn">Find Events</a>
+            </div>
+            <div class="action-card">
+                <h3>🙏 Pray for Leaders</h3>
+                <p>Intercede for government officials and pray for righteous leadership.</p>
+                <a href="prayer-wall.html" class="action-btn">Visit Prayer Wall</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="resources" class="tab-content">
+        <h2>Government Mountain Resources</h2>
+        <ul class="resource-list">
+            <li><strong>Constitutional Training</strong> - Courses on the Constitution and founding principles</li>
+            <li><strong>Voter Guides</strong> - Comprehensive election information for all 50 states</li>
+            <li><strong>Civic Engagement</strong> - How to effectively participate in local government</li>
+            <li><strong>Biblical Citizenship</strong> - Understanding government from a biblical worldview</li>
+            <li><strong>Candidate Vetting</strong> - How to research and evaluate political candidates</li>
+            <li><strong>Legislative Tracking</strong> - Monitor bills and legislation in your state</li>
+            <li><strong>Political Action</strong> - Strategies for influencing policy and elections</li>
+            <li><strong>Historical Resources</strong> - America's Christian heritage and founding documents</li>
+        </ul>
+    </div>
+
+    <script>
+        function switchTab(event, tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+    </script>
+</body>
+</html>

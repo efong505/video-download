@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Economics & Business Mountain - Christian Conservatives Today</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .mountain-hero {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-banner {
+            width: 1200px;
+            max-width: 95%;
+            height: 500px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 12px;
+            margin: 2rem auto;
+            display: block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 4px solid rgba(255,255,255,0.2);
+        }
+        @media (max-width: 768px) {
+            .hero-banner {
+                height: 300px;
+            }
+            .mountain-hero h1 {
+                font-size: 2rem;
+            }
+            .mountain-hero p {
+                font-size: 1rem;
+            }
+        }
+        .mountain-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .mountain-hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background: #f3f4f6;
+            padding: 1rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 1rem 2rem;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
+            color: #6b7280;
+        }
+        .tab:hover {
+            background: #6b7280;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .tab.active {
+            background: #6b7280;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .action-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-left: 4px solid #6b7280;
+        }
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(107,114,128,0.2);
+        }
+        .action-card h3 {
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+        .action-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #6b7280;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 1rem;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .action-btn:hover {
+            background: #4b5563;
+            transform: scale(1.05);
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            padding: 1rem;
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #6b7280;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="mountain-hero">
+        <h1>⛰️ Economics & Business Mountain</h1>
+        <p>Building kingdom businesses and biblical economic systems</p>
+        <img src="Money.png" alt="Economics & Business Mountain" class="hero-banner">
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab(event, 'promote')">Promote</button>
+        <button class="tab" onclick="switchTab(event, 'expose')">Expose & Fight</button>
+        <button class="tab" onclick="switchTab(event, 'involved')">Get Involved</button>
+        <button class="tab" onclick="switchTab(event, 'resources')">Resources</button>
+    </div>
+
+    <div id="promote" class="tab-content active">
+        <h2>Promote Biblical Economics</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>💼 Christian Business Directory</h3>
+                <p>Find and promote Christian-owned businesses and faith-based entrepreneurs.</p>
+                <a href="#" class="action-btn">View Directory</a>
+            </div>
+            <div class="action-card">
+                <h3>📊 Economic Content</h3>
+                <p>Share articles and videos on biblical economics, free markets, and financial wisdom.</p>
+                <a href="user-upload.html" class="action-btn">Upload Content</a>
+            </div>
+            <div class="action-card">
+                <h3>🤝 Kingdom Partnerships</h3>
+                <p>Connect Christian businesses for collaboration, networking, and mutual support.</p>
+                <a href="#" class="action-btn">Find Partners</a>
+            </div>
+            <div class="action-card">
+                <h3>💰 Financial Stewardship</h3>
+                <p>Access biblical teaching on money management, investing, and generosity.</p>
+                <a href="videos.html" class="action-btn">Watch Videos</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="expose" class="tab-content">
+        <h2>Expose Economic Corruption</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>🚨 Report Corporate Wokeness</h3>
+                <p>Document companies pushing ESG, DEI, and anti-Christian corporate policies.</p>
+                <a href="user-upload.html" class="action-btn">Submit Report</a>
+            </div>
+            <div class="action-card">
+                <h3>📰 Economic News</h3>
+                <p>Stay informed about socialist policies, economic tyranny, and market manipulation.</p>
+                <a href="articles.html" class="action-btn">Read Articles</a>
+            </div>
+            <div class="action-card">
+                <h3>💳 Boycott Tracker</h3>
+                <p>Track and boycott companies discriminating against Christians and conservatives.</p>
+                <a href="#" class="action-btn">View Boycotts</a>
+            </div>
+            <div class="action-card">
+                <h3>🎯 Economic Campaigns</h3>
+                <p>Join efforts to oppose socialist legislation and promote free market principles.</p>
+                <a href="events-calendar.html" class="action-btn">View Campaigns</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="involved" class="tab-content">
+        <h2>Get Involved in Economic Transformation</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>✍️ Take the Business Pledge</h3>
+                <p>Commit to biblical business practices and supporting Christian entrepreneurs.</p>
+                <a href="7-mountains.html#pledge" class="action-btn">Take Pledge</a>
+            </div>
+            <div class="action-card">
+                <h3>🚀 Start a Kingdom Business</h3>
+                <p>Learn to launch and grow a business based on biblical principles and values.</p>
+                <a href="#" class="action-btn">Get Training</a>
+            </div>
+            <div class="action-card">
+                <h3>📅 Business Events</h3>
+                <p>Attend Christian business conferences, networking events, and economic forums.</p>
+                <a href="events-calendar.html" class="action-btn">Find Events</a>
+            </div>
+            <div class="action-card">
+                <h3>💬 Entrepreneur Forums</h3>
+                <p>Connect with Christian business owners, investors, and economic leaders.</p>
+                <a href="#" class="action-btn">Join Discussion</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="resources" class="tab-content">
+        <h2>Economics & Business Mountain Resources</h2>
+        <ul class="resource-list">
+            <li><strong>Biblical Business Principles</strong> - Courses on running businesses God's way</li>
+            <li><strong>Financial Planning</strong> - Budgeting, investing, and wealth building from a biblical perspective</li>
+            <li><strong>Entrepreneurship Training</strong> - How to start and scale kingdom businesses</li>
+            <li><strong>Christian Investors Network</strong> - Connect with faith-based investors and funding</li>
+            <li><strong>Economic Policy Resources</strong> - Understanding free markets vs. socialism</li>
+            <li><strong>Workplace Ministry</strong> - Bringing faith into the marketplace and workplace</li>
+            <li><strong>Generosity & Giving</strong> - Biblical stewardship and charitable giving strategies</li>
+            <li><strong>Alternative Banking</strong> - Christian-friendly financial institutions and services</li>
+        </ul>
+    </div>
+
+    <script>
+        function switchTab(event, tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+    </script>
+</body>
+</html>

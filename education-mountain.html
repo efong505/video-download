@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Education Mountain - Christian Conservatives Today</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .mountain-hero {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-banner {
+            width: 1200px;
+            max-width: 95%;
+            height: 500px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 12px;
+            margin: 2rem auto;
+            display: block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 4px solid rgba(255,255,255,0.2);
+        }
+        @media (max-width: 768px) {
+            .hero-banner {
+                height: 300px;
+            }
+            .mountain-hero h1 {
+                font-size: 2rem;
+            }
+            .mountain-hero p {
+                font-size: 1rem;
+            }
+        }
+        .mountain-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .mountain-hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background: #f3f4f6;
+            padding: 1rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 1rem 2rem;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
+            color: #16a34a;
+        }
+        .tab:hover {
+            background: #16a34a;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .tab.active {
+            background: #16a34a;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .action-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-left: 4px solid #16a34a;
+        }
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(22,163,74,0.2);
+        }
+        .action-card h3 {
+            color: #16a34a;
+            margin-bottom: 1rem;
+        }
+        .action-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #16a34a;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 1rem;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .action-btn:hover {
+            background: #15803d;
+            transform: scale(1.05);
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            padding: 1rem;
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a34a;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="mountain-hero">
+        <h1>⛰️ Education Mountain</h1>
+        <p>Reclaiming education with biblical truth and wisdom</p>
+        <img src="education.jpg" alt="Education Mountain" class="hero-banner">
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab(event, 'promote')">Promote</button>
+        <button class="tab" onclick="switchTab(event, 'expose')">Expose & Fight</button>
+        <button class="tab" onclick="switchTab(event, 'involved')">Get Involved</button>
+        <button class="tab" onclick="switchTab(event, 'resources')">Resources</button>
+    </div>
+
+    <div id="promote" class="tab-content active">
+        <h2>Promote Biblical Education</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>📚 Share Educational Content</h3>
+                <p>Upload curriculum, teaching resources, and success stories from Christian education.</p>
+                <a href="user-upload.html" class="action-btn">Upload Content</a>
+            </div>
+            <div class="action-card">
+                <h3>🏫 Homeschool Resources</h3>
+                <p>Access biblical curriculum, lesson plans, and homeschooling support materials.</p>
+                <a href="ministry-templates.html" class="action-btn">Get Resources</a>
+            </div>
+            <div class="action-card">
+                <h3>🎓 Christian Schools Directory</h3>
+                <p>Find and promote Christian schools, classical academies, and faith-based education.</p>
+                <a href="#" class="action-btn">View Directory</a>
+            </div>
+            <div class="action-card">
+                <h3>📺 Educational Videos</h3>
+                <p>Watch teaching videos on biblical worldview, history, science, and critical thinking.</p>
+                <a href="videos.html" class="action-btn">Watch Videos</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="expose" class="tab-content">
+        <h2>Expose Educational Corruption</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>🚨 Report Indoctrination</h3>
+                <p>Document CRT, gender ideology, and anti-Christian bias in schools and universities.</p>
+                <a href="user-upload.html" class="action-btn">Submit Report</a>
+            </div>
+            <div class="action-card">
+                <h3>📰 Education News</h3>
+                <p>Stay informed about curriculum battles, school board issues, and parental rights.</p>
+                <a href="articles.html" class="action-btn">Read Articles</a>
+            </div>
+            <div class="action-card">
+                <h3>📋 Review School Policies</h3>
+                <p>Analyze and expose problematic school policies, textbooks, and teaching materials.</p>
+                <a href="#" class="action-btn">Review Policies</a>
+            </div>
+            <div class="action-card">
+                <h3>🎯 School Board Campaigns</h3>
+                <p>Support conservative school board candidates and parental rights initiatives.</p>
+                <a href="events-calendar.html" class="action-btn">View Campaigns</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="involved" class="tab-content">
+        <h2>Get Involved in Education Reform</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>✍️ Take the Education Pledge</h3>
+                <p>Commit to biblical education and protecting children from secular indoctrination.</p>
+                <a href="7-mountains.html#pledge" class="action-btn">Take Pledge</a>
+            </div>
+            <div class="action-card">
+                <h3>🗳️ School Board Elections</h3>
+                <p>Find school board candidates, election dates, and voter guides for your district.</p>
+                <a href="election-map.html" class="action-btn">View Elections</a>
+            </div>
+            <div class="action-card">
+                <h3>📅 Education Events</h3>
+                <p>Attend school board meetings, parent rallies, and education reform conferences.</p>
+                <a href="events-calendar.html" class="action-btn">Find Events</a>
+            </div>
+            <div class="action-card">
+                <h3>💬 Parent Forums</h3>
+                <p>Connect with parents fighting for educational freedom and biblical values.</p>
+                <a href="#" class="action-btn">Join Discussion</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="resources" class="tab-content">
+        <h2>Education Mountain Resources</h2>
+        <ul class="resource-list">
+            <li><strong>Homeschool Curriculum</strong> - Biblical curriculum for all grades and subjects</li>
+            <li><strong>Classical Education</strong> - Resources for classical Christian education methods</li>
+            <li><strong>School Choice Guides</strong> - Information on vouchers, ESAs, and education freedom</li>
+            <li><strong>Parental Rights Toolkit</strong> - Legal resources for protecting parental authority</li>
+            <li><strong>Worldview Training</strong> - Teaching biblical worldview to counter secular ideology</li>
+            <li><strong>School Board Strategy</strong> - How to run for school board and influence policy</li>
+            <li><strong>College Alternatives</strong> - Christian colleges, trade schools, and apprenticeships</li>
+            <li><strong>Teacher Resources</strong> - Support for Christian teachers in public schools</li>
+        </ul>
+    </div>
+
+    <script>
+        function switchTab(event, tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+    </script>
+</body>
+</html>

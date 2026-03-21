@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Mountain - Christian Conservatives Today</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .mountain-hero {
+            background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-banner {
+            width: 1200px;
+            max-width: 95%;
+            height: 500px;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 12px;
+            margin: 2rem auto;
+            display: block;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 4px solid rgba(255,255,255,0.2);
+        }
+        @media (max-width: 768px) {
+            .hero-banner {
+                height: 300px;
+            }
+            .mountain-hero h1 {
+                font-size: 2rem;
+            }
+            .mountain-hero p {
+                font-size: 1rem;
+            }
+        }
+        .mountain-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        .mountain-hero p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background: #f3f4f6;
+            padding: 1rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .tab {
+            padding: 1rem 2rem;
+            background: white;
+            border: none;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.3s;
+            color: #06b6d4;
+        }
+        .tab:hover {
+            background: #06b6d4;
+            color: white;
+            transform: translateY(-2px);
+        }
+        .tab.active {
+            background: #06b6d4;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 3rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .action-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-left: 4px solid #06b6d4;
+        }
+        .action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(6,182,212,0.2);
+        }
+        .action-card h3 {
+            color: #06b6d4;
+            margin-bottom: 1rem;
+        }
+        .action-btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: #06b6d4;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 1rem;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        .action-btn:hover {
+            background: #0891b2;
+            transform: scale(1.05);
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .resource-list li {
+            padding: 1rem;
+            background: white;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid #06b6d4;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="mountain-hero">
+        <h1>⛰️ Media Mountain</h1>
+        <p>Spreading truth and exposing lies in news and journalism</p>
+        <img src="Downloader/media.jpg" alt="Media Mountain" class="hero-banner">
+    </div>
+
+    <div class="tabs">
+        <button class="tab active" onclick="switchTab(event, 'promote')">Promote</button>
+        <button class="tab" onclick="switchTab(event, 'expose')">Expose & Fight</button>
+        <button class="tab" onclick="switchTab(event, 'involved')">Get Involved</button>
+        <button class="tab" onclick="switchTab(event, 'resources')">Resources</button>
+    </div>
+
+    <div id="promote" class="tab-content active">
+        <h2>Promote Truth in Media</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>📰 Share News & Articles</h3>
+                <p>Upload articles, investigative reports, and truthful journalism from a biblical perspective.</p>
+                <a href="user-upload.html" class="action-btn">Upload Content</a>
+            </div>
+            <div class="action-card">
+                <h3>📺 Video Journalism</h3>
+                <p>Create and share video reports, interviews, and documentary content exposing truth.</p>
+                <a href="videos.html" class="action-btn">Watch Videos</a>
+            </div>
+            <div class="action-card">
+                <h3>🎙️ Podcast Directory</h3>
+                <p>Discover and promote Christian conservative podcasts and audio content.</p>
+                <a href="#" class="action-btn">Find Podcasts</a>
+            </div>
+            <div class="action-card">
+                <h3>📱 Social Media Toolkit</h3>
+                <p>Get shareable graphics, memes, and content to spread truth on social platforms.</p>
+                <a href="#" class="action-btn">Get Toolkit</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="expose" class="tab-content">
+        <h2>Expose Media Bias & Lies</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>🚨 Report Fake News</h3>
+                <p>Document mainstream media lies, propaganda, and censorship of conservative voices.</p>
+                <a href="user-upload.html" class="action-btn">Submit Report</a>
+            </div>
+            <div class="action-card">
+                <h3>🔍 Fact-Check Database</h3>
+                <p>Access fact-checks debunking liberal media narratives and false reporting.</p>
+                <a href="articles.html" class="action-btn">View Fact-Checks</a>
+            </div>
+            <div class="action-card">
+                <h3>📊 Media Bias Tracker</h3>
+                <p>Track and expose bias in major news outlets, journalists, and media companies.</p>
+                <a href="#" class="action-btn">View Tracker</a>
+            </div>
+            <div class="action-card">
+                <h3>🎯 Counter-Narrative Campaigns</h3>
+                <p>Join coordinated efforts to challenge false narratives with truth and evidence.</p>
+                <a href="events-calendar.html" class="action-btn">View Campaigns</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="involved" class="tab-content">
+        <h2>Get Involved in Media Transformation</h2>
+        <div class="action-grid">
+            <div class="action-card">
+                <h3>✍️ Take the Media Pledge</h3>
+                <p>Commit to sharing truth, boycotting fake news, and supporting honest journalism.</p>
+                <a href="7-mountains.html#pledge" class="action-btn">Take Pledge</a>
+            </div>
+            <div class="action-card">
+                <h3>🎥 Become a Citizen Journalist</h3>
+                <p>Learn to create news content, conduct interviews, and report from a biblical worldview.</p>
+                <a href="#" class="action-btn">Get Training</a>
+            </div>
+            <div class="action-card">
+                <h3>📅 Media Events</h3>
+                <p>Attend journalism workshops, media conferences, and content creator meetups.</p>
+                <a href="events-calendar.html" class="action-btn">Find Events</a>
+            </div>
+            <div class="action-card">
+                <h3>💬 Media Forums</h3>
+                <p>Connect with Christian journalists, content creators, and media professionals.</p>
+                <a href="#" class="action-btn">Join Discussion</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="resources" class="tab-content">
+        <h2>Media Mountain Resources</h2>
+        <ul class="resource-list">
+            <li><strong>Journalism Training</strong> - Courses on investigative reporting and ethical journalism</li>
+            <li><strong>Content Creation Tools</strong> - Video editing, graphic design, and publishing platforms</li>
+            <li><strong>Alternative Media Directory</strong> - Conservative news outlets and independent journalists</li>
+            <li><strong>Social Media Strategy</strong> - How to maximize reach while avoiding censorship</li>
+            <li><strong>Podcasting Resources</strong> - Equipment, hosting, and promotion for Christian podcasts</li>
+            <li><strong>Blogging Platforms</strong> - Free speech-friendly platforms for Christian writers</li>
+            <li><strong>Media Literacy</strong> - Teaching critical thinking and discernment in news consumption</li>
+            <li><strong>Legal Protection</strong> - Resources for journalists facing censorship or lawsuits</li>
+        </ul>
+    </div>
+
+    <script>
+        function switchTab(event, tabName) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+        }
+    </script>
+</body>
+</html>
