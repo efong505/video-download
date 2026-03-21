@@ -60,8 +60,8 @@ def process_send(message):
     message_id = mail.get('messageId', '')
     timestamp = mail.get('timestamp', datetime.now().isoformat())
     
-    tags = {tag['name']: tag['value'] for tag in mail.get('tags', [])}
-    campaign_id = tags.get('campaign_id', 'unknown')
+    tags = mail.get('tags', {})
+    campaign_id = tags.get('campaign_id', ['unknown'])[0] if isinstance(tags.get('campaign_id'), list) else tags.get('campaign_id', 'unknown')
     
     for recipient in destination:
         log_event(recipient, 'sent', campaign_id, {
@@ -81,8 +81,8 @@ def process_delivery(message):
     message_id = mail.get('messageId', '')
     timestamp = delivery.get('timestamp', datetime.now().isoformat())
     
-    tags = {tag['name']: tag['value'] for tag in mail.get('tags', [])}
-    campaign_id = tags.get('campaign_id', 'unknown')
+    tags = mail.get('tags', {})
+    campaign_id = tags.get('campaign_id', ['unknown'])[0] if isinstance(tags.get('campaign_id'), list) else tags.get('campaign_id', 'unknown')
     
     for recipient in recipients:
         log_event(recipient, 'delivered', campaign_id, {
@@ -104,8 +104,8 @@ def process_bounce(message):
     bounce_subtype = bounce.get('bounceSubType', 'Unknown')
     timestamp = bounce.get('timestamp', datetime.now().isoformat())
     
-    tags = {tag['name']: tag['value'] for tag in mail.get('tags', [])}
-    campaign_id = tags.get('campaign_id', 'unknown')
+    tags = mail.get('tags', {})
+    campaign_id = tags.get('campaign_id', ['unknown'])[0] if isinstance(tags.get('campaign_id'), list) else tags.get('campaign_id', 'unknown')
     
     for recipient_info in bounced_recipients:
         recipient = recipient_info.get('emailAddress', '')
@@ -133,8 +133,8 @@ def process_complaint(message):
     complaint_type = complaint.get('complaintFeedbackType', 'Unknown')
     timestamp = complaint.get('timestamp', datetime.now().isoformat())
     
-    tags = {tag['name']: tag['value'] for tag in mail.get('tags', [])}
-    campaign_id = tags.get('campaign_id', 'unknown')
+    tags = mail.get('tags', {})
+    campaign_id = tags.get('campaign_id', ['unknown'])[0] if isinstance(tags.get('campaign_id'), list) else tags.get('campaign_id', 'unknown')
     
     for recipient_info in complained_recipients:
         recipient = recipient_info.get('emailAddress', '')
@@ -158,8 +158,8 @@ def process_reject(message):
     destination = mail.get('destination', [])
     reason = reject.get('reason', 'Unknown')
     
-    tags = {tag['name']: tag['value'] for tag in mail.get('tags', [])}
-    campaign_id = tags.get('campaign_id', 'unknown')
+    tags = mail.get('tags', {})
+    campaign_id = tags.get('campaign_id', ['unknown'])[0] if isinstance(tags.get('campaign_id'), list) else tags.get('campaign_id', 'unknown')
     
     for recipient in destination:
         log_event(recipient, 'rejected', campaign_id, {
@@ -173,9 +173,9 @@ def process_open(message):
     mail = message.get('mail', {})
     open_event = message.get('open', {})
     
-    tags = {tag['name']: tag['value'] for tag in mail.get('tags', [])}
-    campaign_id = tags.get('campaign_id', 'unknown')
-    recipient = tags.get('recipient', 'unknown')
+    tags = mail.get('tags', {})
+    campaign_id = tags.get('campaign_id', ['unknown'])[0] if isinstance(tags.get('campaign_id'), list) else tags.get('campaign_id', 'unknown')
+    recipient = tags.get('recipient', ['unknown'])[0] if isinstance(tags.get('recipient'), list) else tags.get('recipient', 'unknown')
     
     timestamp = open_event.get('timestamp', datetime.now().isoformat())
     user_agent = open_event.get('userAgent', '')
@@ -194,9 +194,9 @@ def process_click(message):
     mail = message.get('mail', {})
     click_event = message.get('click', {})
     
-    tags = {tag['name']: tag['value'] for tag in mail.get('tags', [])}
-    campaign_id = tags.get('campaign_id', 'unknown')
-    recipient = tags.get('recipient', 'unknown')
+    tags = mail.get('tags', {})
+    campaign_id = tags.get('campaign_id', ['unknown'])[0] if isinstance(tags.get('campaign_id'), list) else tags.get('campaign_id', 'unknown')
+    recipient = tags.get('recipient', ['unknown'])[0] if isinstance(tags.get('recipient'), list) else tags.get('recipient', 'unknown')
     
     timestamp = click_event.get('timestamp', datetime.now().isoformat())
     link = click_event.get('link', '')

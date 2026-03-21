@@ -513,45 +513,60 @@
         }
         
         function renderCharts() {
-            // Performance Chart
+            const sent = parseInt(document.getElementById('total-sent').textContent) || 0;
+            const delivered = parseInt(document.getElementById('total-delivered').textContent) || 0;
+            const opens = parseInt(document.getElementById('total-opens').textContent) || 0;
+            const clicks = parseInt(document.getElementById('total-clicks').textContent) || 0;
+            
+            // Only show charts if we have data
+            if (sent === 0) {
+                document.getElementById('performanceChart').parentElement.innerHTML = 
+                    '<div class="alert alert-info">📊 No data yet. Charts will appear once emails are sent with tracking enabled.</div>';
+                document.getElementById('funnelChart').parentElement.innerHTML = 
+                    '<div class="alert alert-info">📊 No data yet. Funnel will appear once emails are sent with tracking enabled.</div>';
+                return;
+            }
+            
+            // Performance Chart - would need time-series data from backend
             const perfCtx = document.getElementById('performanceChart').getContext('2d');
             if (performanceChart) performanceChart.destroy();
             
             performanceChart = new Chart(perfCtx, {
                 type: 'line',
                 data: {
-                    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+                    labels: ['Current'],
                     datasets: [{
                         label: 'Sent',
-                        data: [12, 19, 15, 25, 22, 30, 28],
+                        data: [sent],
                         borderColor: '#2c5aa0',
                         tension: 0.4
                     }, {
                         label: 'Opens',
-                        data: [8, 12, 10, 18, 15, 22, 20],
+                        data: [opens],
                         borderColor: '#16a34a',
                         tension: 0.4
                     }, {
                         label: 'Clicks',
-                        data: [2, 4, 3, 6, 5, 8, 7],
+                        data: [clicks],
                         borderColor: '#d97706',
                         tension: 0.4
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true
+                    maintainAspectRatio: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Note: Time-series data will be available as more emails are sent'
+                        }
+                    }
                 }
             });
             
             // Funnel Chart
             const funnelCtx = document.getElementById('funnelChart').getContext('2d');
             if (funnelChart) funnelChart.destroy();
-            
-            const sent = parseInt(document.getElementById('total-sent').textContent) || 100;
-            const delivered = parseInt(document.getElementById('total-delivered').textContent) || 95;
-            const opens = parseInt(document.getElementById('total-opens').textContent) || 30;
-            const clicks = parseInt(document.getElementById('total-clicks').textContent) || 10;
             
             funnelChart = new Chart(funnelCtx, {
                 type: 'bar',
