@@ -124,8 +124,13 @@ def process_enrollment(enrollment):
         last_sent = datetime.fromisoformat(last_sent_at.replace('Z', ''))
         due_date = last_sent + timedelta(days=delay_days)
     else:
-        # First email after enrollment
-        due_date = enrolled_at + timedelta(days=delay_days)
+        # First email after enrollment - send immediately (or after 1 hour)
+        # Use delay_hours for first email if specified, otherwise send now
+        delay_hours = int(next_email.get('delay_hours', 0))
+        if delay_hours > 0:
+            due_date = enrolled_at + timedelta(hours=delay_hours)
+        else:
+            due_date = enrolled_at  # Send immediately on next processor run
     
     now = datetime.now()
     
