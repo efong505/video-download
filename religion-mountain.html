@@ -137,8 +137,16 @@
 </head>
 <body>
     <!-- Navigation -->
-    <div id="navbar-container"></div>
+    <div id="navbar-container" data-page="religion-mountain" data-icon-style="fontawesome"></div>
     <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            });
+    </script>
     <div class="mountain-hero">
         <h1>⛰️ Religion Mountain</h1>
         <p>Advancing the Gospel and defending religious freedom</p>

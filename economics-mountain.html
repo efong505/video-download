@@ -137,8 +137,16 @@
 </head>
 <body>
     <!-- Navigation -->
-    <div id="navbar-container"></div>
+    <div id="navbar-container" data-page="economics-mountain" data-icon-style="fontawesome"></div>
     <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            });
+    </script>
     <div class="mountain-hero">
         <h1>⛰️ Economics & Business Mountain</h1>
         <p>Building kingdom businesses and biblical economic systems</p>

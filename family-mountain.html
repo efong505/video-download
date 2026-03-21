@@ -137,8 +137,16 @@
 </head>
 <body>
     <!-- Navigation -->
-    <div id="navbar-container"></div>
+    <div id="navbar-container" data-page="family-mountain" data-icon-style="fontawesome"></div>
     <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            });
+    </script>
     <div class="mountain-hero">
         <h1>⛰️ Family Mountain</h1>
         <p>Strengthening families as the foundation of society and faith</p>
