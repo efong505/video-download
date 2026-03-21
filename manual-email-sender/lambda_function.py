@@ -4,6 +4,7 @@ Handles sending specific drip emails and custom emails to subscribers
 """
 import json
 import boto3
+import base64
 from datetime import datetime
 
 dynamodb = boto3.resource('dynamodb')
@@ -119,13 +120,14 @@ def send_specific_drip_email(body):
         
         subscriber = sub_response['Item']
         
-        # Send email via SES
+        # Send email via SES with tracking
         send_email_via_ses(
             recipient=email,
             subject=campaign['subject'],
             body_html=campaign.get('content', ''),
             body_text=campaign.get('body_text', campaign.get('content', '')),
-            subscriber=subscriber
+            subscriber=subscriber,
+            campaign_id=campaign['campaign_id']
         )
         
         # Update enrollment
@@ -208,16 +210,32 @@ def send_custom_email(body):
             'body': json.dumps({'error': str(e)})
         }
 
-def send_email_via_ses(recipient, subject, body_html, body_text, subscriber):
+def send_email_via_ses(recipient, subject, body_html, body_text, subscriber, campaign_id='custom'):
     """
-    Send email via AWS SES
+    Send email via AWS SES with tracking pixels and configuration set
     """
     first_name = subscriber.get('first_name', 'Friend')
     email = subscriber.get('subscriber_email', recipient)
     
+    # Generate tracking pixel
+    tracking_data = f"{email}|{campaign_id}"
+    tracking_id = base64.urlsafe_b64encode(tracking_data.encode()).decode()
+    pixel_url = f"https://niexv1rw75.execute-api.us-east-1.amazonaws.com/track/open/{tracking_id}"
+    
+    # Add tracking pixel to HTML
+    tracking_pixel = f'<img src="{pixel_url}" width="1" height="1" style="display:none;" alt="">'
+    
+    # Replace placeholders
     body_html = body_html.replace('{{first_name}}', first_name).replace('{{email}}', email)
     body_text = body_text.replace('{{first_name}}', first_name).replace('{{email}}', email)
     
+    # Add tracking pixel before closing body tag
+    if '</body>' in body_html:
+        body_html = body_html.replace('</body>', f'{tracking_pixel}</body>')
+    else:
+        body_html += tracking_pixel
+    
+    # Send with configuration set for SES event tracking
     ses.send_email(
         Source='Christian Conservatives Today <contact@christianconservativestoday.com>',
         Destination={'ToAddresses': [recipient]},
@@ -227,5 +245,10 @@ def send_email_via_ses(recipient, subject, body_html, body_text, subscriber):
                 'Html': {'Data': body_html},
                 'Text': {'Data': body_text}
             }
-        }
+        },
+        ConfigurationSetName='email-tracking-config',
+        Tags=[
+            {'Name': 'campaign_id', 'Value': campaign_id},
+            {'Name': 'recipient', 'Value': recipient}
+        ]
     )

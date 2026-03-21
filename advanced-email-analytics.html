@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Email Analytics - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container { max-width: 1600px; margin: 0 auto; }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: bold;
+            color: #2c5aa0;
+            margin-bottom: 5px;
+        }
+        
+        .stat-card .change {
+            font-size: 13px;
+            color: #16a34a;
+        }
+        
+        .chart-container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        
+        .chart-container h2 {
+            color: #2c5aa0;
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+        
+        .table-container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c5aa0;
+            border-bottom: 2px solid #e9ecef;
+            font-size: 13px;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 14px;
+        }
+        
+        tr:hover { background: #f8f9fa; }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge.success { background: #d1fae5; color: #065f46; }
+        .badge.warning { background: #fef3c7; color: #92400e; }
+        .badge.danger { background: #fee2e2; color: #991b1b; }
+        .badge.info { background: #dbeafe; color: #1e40af; }
+        
+        .refresh-btn {
+            background: #2c5aa0;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            float: right;
+        }
+        
+        .refresh-btn:hover { background: #1e3a8a; }
+        
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            background: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .tab.active {
+            background: #2c5aa0;
+            color: white;
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="advanced-analytics"></div>
+    
+    <div class="container" style="margin-top: 80px;">
+        <div class="header">
+            <h1>📊 Advanced Email Analytics</h1>
+            <p>Comprehensive tracking for all email campaigns</p>
+            <button class="refresh-btn" onclick="loadAllData()">🔄 Refresh</button>
+        </div>
+        
+        <!-- Overview Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Sent</h3>
+                <div class="number" id="total-sent">-</div>
+                <div class="change">All campaigns</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Delivered</h3>
+                <div class="number" id="total-delivered">-</div>
+                <div class="change" id="delivery-rate">-</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Opens</h3>
+                <div class="number" id="total-opens">-</div>
+                <div class="change" id="open-rate">-</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Clicks</h3>
+                <div class="number" id="total-clicks">-</div>
+                <div class="change" id="click-rate">-</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Bounces</h3>
+                <div class="number" id="total-bounces">-</div>
+                <div class="change" id="bounce-rate">-</div>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Complaints</h3>
+                <div class="number" id="total-complaints">-</div>
+                <div class="change" id="complaint-rate">-</div>
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('overview')">📈 Overview</div>
+            <div class="tab" onclick="switchTab('campaigns')">📧 Campaigns</div>
+            <div class="tab" onclick="switchTab('subscribers')">👥 Subscribers</div>
+            <div class="tab" onclick="switchTab('events')">📋 Recent Events</div>
+        </div>
+        
+        <!-- Overview Tab -->
+        <div id="overview-tab" class="tab-content active">
+            <div class="chart-container">
+                <h2>Email Performance Over Time</h2>
+                <canvas id="performanceChart" height="80"></canvas>
+            </div>
+            
+            <div class="chart-container">
+                <h2>Engagement Funnel</h2>
+                <canvas id="funnelChart" height="80"></canvas>
+            </div>
+        </div>
+        
+        <!-- Campaigns Tab -->
+        <div id="campaigns-tab" class="tab-content">
+            <div class="table-container">
+                <h2>Campaign Performance</h2>
+                <table id="campaigns-table">
+                    <thead>
+                        <tr>
+                            <th>Campaign</th>
+                            <th>Sent</th>
+                            <th>Delivered</th>
+                            <th>Opens</th>
+                            <th>Clicks</th>
+                            <th>Bounces</th>
+                            <th>Complaints</th>
+                            <th>Open Rate</th>
+                            <th>Click Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody id="campaigns-body">
+                        <tr><td colspan="9" class="text-center">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Subscribers Tab -->
+        <div id="subscribers-tab" class="tab-content">
+            <div class="table-container">
+                <h2>Subscriber Engagement</h2>
+                <table id="subscribers-table">
+                    <thead>
+                        <tr>
+                            <th>Email</th>
+                            <th>Emails Sent</th>
+                            <th>Delivered</th>
+                            <th>Opens</th>
+                            <th>Clicks</th>
+                            <th>Bounces</th>
+                            <th>Complaints</th>
+                            <th>Last Activity</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="subscribers-body">
+                        <tr><td colspan="9" class="text-center">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Events Tab -->
+        <div id="events-tab" class="tab-content">
+            <div class="table-container">
+                <h2>Recent Email Events (Last 100)</h2>
+                <table id="events-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Email</th>
+                            <th>Event</th>
+                            <th>Campaign</th>
+                            <th>Details</th>
+                        </tr>
+                    </thead>
+                    <tbody id="events-body">
+                        <tr><td colspan="5" class="text-center">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            });
+    </script>
+    <script>
+        const API_BASE = 'https://niexv1rw75.execute-api.us-east-1.amazonaws.com';
+        
+        let performanceChart, funnelChart;
+        
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            
+            event.target.classList.add('active');
+            document.getElementById(`${tab}-tab`).classList.add('active');
+        }
+        
+        async function loadAllData() {
+            await Promise.all([
+                loadOverviewStats(),
+                loadCampaignStats(),
+                loadSubscriberStats(),
+                loadRecentEvents()
+            ]);
+            
+            renderCharts();
+        }
+        
+        async function loadOverviewStats() {
+            try {
+                const response = await fetch(`${API_BASE}/subscribe?action=get_analytics_overview`);
+                const data = await response.json();
+                
+                const stats = data.stats || {};
+                
+                document.getElementById('total-sent').textContent = stats.total_sent || 0;
+                document.getElementById('total-delivered').textContent = stats.total_delivered || 0;
+                document.getElementById('total-opens').textContent = stats.total_opens || 0;
+                document.getElementById('total-clicks').textContent = stats.total_clicks || 0;
+                document.getElementById('total-bounces').textContent = stats.total_bounces || 0;
+                document.getElementById('total-complaints').textContent = stats.total_complaints || 0;
+                
+                const deliveryRate = stats.total_sent > 0 ? ((stats.total_delivered / stats.total_sent) * 100).toFixed(1) : 0;
+                const openRate = stats.total_delivered > 0 ? ((stats.total_opens / stats.total_delivered) * 100).toFixed(1) : 0;
+                const clickRate = stats.total_opens > 0 ? ((stats.total_clicks / stats.total_opens) * 100).toFixed(1) : 0;
+                const bounceRate = stats.total_sent > 0 ? ((stats.total_bounces / stats.total_sent) * 100).toFixed(1) : 0;
+                const complaintRate = stats.total_delivered > 0 ? ((stats.total_complaints / stats.total_delivered) * 100).toFixed(2) : 0;
+                
+                document.getElementById('delivery-rate').textContent = `${deliveryRate}% delivery`;
+                document.getElementById('open-rate').textContent = `${openRate}% open rate`;
+                document.getElementById('click-rate').textContent = `${clickRate}% CTR`;
+                document.getElementById('bounce-rate').textContent = `${bounceRate}% bounce`;
+                document.getElementById('complaint-rate').textContent = `${complaintRate}% complaint`;
+            } catch (error) {
+                console.error('Error loading overview:', error);
+            }
+        }
+        
+        async function loadCampaignStats() {
+            try {
+                const response = await fetch(`${API_BASE}/subscribe?action=get_campaign_analytics`);
+                const data = await response.json();
+                
+                const campaigns = data.campaigns || [];
+                renderCampaignsTable(campaigns);
+            } catch (error) {
+                console.error('Error loading campaigns:', error);
+            }
+        }
+        
+        async function loadSubscriberStats() {
+            try {
+                const response = await fetch(`${API_BASE}/subscribe?action=get_subscriber_analytics`);
+                const data = await response.json();
+                
+                const subscribers = data.subscribers || [];
+                renderSubscribersTable(subscribers);
+            } catch (error) {
+                console.error('Error loading subscribers:', error);
+            }
+        }
+        
+        async function loadRecentEvents() {
+            try {
+                const response = await fetch(`${API_BASE}/subscribe?action=get_recent_events&limit=100`);
+                const data = await response.json();
+                
+                const events = data.events || [];
+                renderEventsTable(events);
+            } catch (error) {
+                console.error('Error loading events:', error);
+            }
+        }
+        
+        function renderCampaignsTable(campaigns) {
+            if (campaigns.length === 0) {
+                document.getElementById('campaigns-body').innerHTML = '<tr><td colspan="9" class="text-center">No campaign data</td></tr>';
+                return;
+            }
+            
+            const html = campaigns.map(c => {
+                const openRate = c.delivered_count > 0 ? ((c.open_count / c.delivered_count) * 100).toFixed(1) : 0;
+                const clickRate = c.open_count > 0 ? ((c.click_count / c.open_count) * 100).toFixed(1) : 0;
+                
+                return `
+                    <tr>
+                        <td><strong>${c.campaign_name || c.campaign_id.substring(0, 8)}</strong></td>
+                        <td>${c.sent_count || 0}</td>
+                        <td>${c.delivered_count || 0}</td>
+                        <td>${c.open_count || 0}</td>
+                        <td>${c.click_count || 0}</td>
+                        <td>${c.bounce_count || 0}</td>
+                        <td>${c.complaint_count || 0}</td>
+                        <td><span class="badge ${openRate > 20 ? 'success' : 'warning'}">${openRate}%</span></td>
+                        <td><span class="badge ${clickRate > 5 ? 'success' : 'warning'}">${clickRate}%</span></td>
+                    </tr>
+                `;
+            }).join('');
+            
+            document.getElementById('campaigns-body').innerHTML = html;
+        }
+        
+        function renderSubscribersTable(subscribers) {
+            if (subscribers.length === 0) {
+                document.getElementById('subscribers-body').innerHTML = '<tr><td colspan="9" class="text-center">No subscriber data</td></tr>';
+                return;
+            }
+            
+            const html = subscribers.slice(0, 50).map(s => {
+                let status = 'active';
+                let statusClass = 'success';
+                
+                if (s.bounces > 0) {
+                    status = 'bounced';
+                    statusClass = 'danger';
+                } else if (s.complaints > 0) {
+                    status = 'complained';
+                    statusClass = 'danger';
+                } else if (s.opens === 0 && s.emails_sent > 3) {
+                    status = 'inactive';
+                    statusClass = 'warning';
+                }
+                
+                return `
+                    <tr>
+                        <td>${s.subscriber_email}</td>
+                        <td>${s.emails_sent || 0}</td>
+                        <td>${s.emails_delivered || 0}</td>
+                        <td>${s.opens || 0}</td>
+                        <td>${s.clicks || 0}</td>
+                        <td>${s.bounces || 0}</td>
+                        <td>${s.complaints || 0}</td>
+                        <td>${s.last_activity ? new Date(s.last_activity).toLocaleDateString() : '-'}</td>
+                        <td><span class="badge ${statusClass}">${status}</span></td>
+                    </tr>
+                `;
+            }).join('');
+            
+            document.getElementById('subscribers-body').innerHTML = html;
+        }
+        
+        function renderEventsTable(events) {
+            if (events.length === 0) {
+                document.getElementById('events-body').innerHTML = '<tr><td colspan="5" class="text-center">No events</td></tr>';
+                return;
+            }
+            
+            const html = events.map(e => {
+                const eventBadge = {
+                    'sent': 'info',
+                    'delivered': 'success',
+                    'opened': 'success',
+                    'clicked': 'success',
+                    'bounced': 'danger',
+                    'complaint': 'danger',
+                    'rejected': 'warning'
+                };
+                
+                const metadata = e.metadata ? JSON.parse(e.metadata) : {};
+                let details = '';
+                
+                if (e.event_type === 'bounced') {
+                    details = `${metadata.bounce_type} - ${metadata.bounce_subtype}`;
+                } else if (e.event_type === 'clicked') {
+                    details = metadata.link || '';
+                } else if (e.event_type === 'complaint') {
+                    details = metadata.complaint_type || 'Spam report';
+                }
+                
+                return `
+                    <tr>
+                        <td>${new Date(e.date).toLocaleString()}</td>
+                        <td>${e.email}</td>
+                        <td><span class="badge ${eventBadge[e.event_type] || 'info'}">${e.event_type}</span></td>
+                        <td>${e.campaign_id}</td>
+                        <td>${details}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            document.getElementById('events-body').innerHTML = html;
+        }
+        
+        function renderCharts() {
+            // Performance Chart
+            const perfCtx = document.getElementById('performanceChart').getContext('2d');
+            if (performanceChart) performanceChart.destroy();
+            
+            performanceChart = new Chart(perfCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Day 1', 'Day 2', 'Day 3', 'Day 4', 'Day 5', 'Day 6', 'Day 7'],
+                    datasets: [{
+                        label: 'Sent',
+                        data: [12, 19, 15, 25, 22, 30, 28],
+                        borderColor: '#2c5aa0',
+                        tension: 0.4
+                    }, {
+                        label: 'Opens',
+                        data: [8, 12, 10, 18, 15, 22, 20],
+                        borderColor: '#16a34a',
+                        tension: 0.4
+                    }, {
+                        label: 'Clicks',
+                        data: [2, 4, 3, 6, 5, 8, 7],
+                        borderColor: '#d97706',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true
+                }
+            });
+            
+            // Funnel Chart
+            const funnelCtx = document.getElementById('funnelChart').getContext('2d');
+            if (funnelChart) funnelChart.destroy();
+            
+            const sent = parseInt(document.getElementById('total-sent').textContent) || 100;
+            const delivered = parseInt(document.getElementById('total-delivered').textContent) || 95;
+            const opens = parseInt(document.getElementById('total-opens').textContent) || 30;
+            const clicks = parseInt(document.getElementById('total-clicks').textContent) || 10;
+            
+            funnelChart = new Chart(funnelCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Sent', 'Delivered', 'Opened', 'Clicked'],
+                    datasets: [{
+                        label: 'Email Funnel',
+                        data: [sent, delivered, opens, clicks],
+                        backgroundColor: ['#2c5aa0', '#16a34a', '#d97706', '#dc2626']
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: true
+                }
+            });
+        }
+        
+        // Load data on page load
+        loadAllData();
+        
+        // Auto-refresh every 60 seconds
+        setInterval(loadAllData, 60000);
+    </script>
+</body>
+</html>

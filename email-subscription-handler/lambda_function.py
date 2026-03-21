@@ -27,6 +27,8 @@ mt_subscribers_table = dynamodb.Table('user-email-subscribers')
 mt_users_table = dynamodb.Table('users')
 mt_drip_enrollments_table = dynamodb.Table('user-email-drip-enrollments')
 mt_campaigns_table = dynamodb.Table('user-email-campaigns')
+mt_campaign_stats_table = dynamodb.Table('email-campaign-stats')
+mt_subscriber_stats_table = dynamodb.Table('email-subscriber-stats')
 PLATFORM_OWNER_ID = 'effa3242-cf64-4021-b2b0-c8a5a9dfd6d2'
 BOOK_DRIP_SEQUENCE_NAME = 'book-welcome-sequence'
 
@@ -63,6 +65,14 @@ def lambda_handler(event, context):
             return list_campaigns()
         elif params.get('action') == 'get_campaign':
             return get_campaign(params.get('campaign_id', ''))
+        elif params.get('action') == 'get_analytics_overview':
+            return get_analytics_overview()
+        elif params.get('action') == 'get_campaign_analytics':
+            return get_campaign_analytics()
+        elif params.get('action') == 'get_subscriber_analytics':
+            return get_subscriber_analytics()
+        elif params.get('action') == 'get_recent_events':
+            return get_recent_events(params.get('limit', '100'))
         elif params.get('action') == 'check_subscriber':
             return check_subscriber_status(params.get('email', ''))
         elif params.get('action') == 'resend_book_email':
@@ -1206,3 +1216,119 @@ def delete_campaign(body):
     except Exception as e:
         print(f"Delete campaign error: {str(e)}")
         return cors_response(500, {'error': 'Failed to delete campaign'})
+
+def get_analytics_overview():
+    """Get overview analytics stats"""
+    try:
+        from decimal import Decimal
+        
+        # Scan campaign stats
+        response = mt_campaign_stats_table.scan()
+        campaigns = response.get('Items', [])
+        
+        stats = {
+            'total_sent': 0,
+            'total_delivered': 0,
+            'total_opens': 0,
+            'total_clicks': 0,
+            'total_bounces': 0,
+            'total_complaints': 0
+        }
+        
+        for campaign in campaigns:
+            stats['total_sent'] += int(campaign.get('sent_count', 0))
+            stats['total_delivered'] += int(campaign.get('delivered_count', 0))
+            stats['total_opens'] += int(campaign.get('open_count', 0))
+            stats['total_clicks'] += int(campaign.get('click_count', 0))
+            stats['total_bounces'] += int(campaign.get('bounce_count', 0))
+            stats['total_complaints'] += int(campaign.get('complaint_count', 0))
+        
+        return cors_response(200, {'stats': stats})
+    except Exception as e:
+        print(f"Get analytics overview error: {str(e)}")
+        return cors_response(500, {'error': 'Failed to get analytics'})
+
+def get_campaign_analytics():
+    """Get per-campaign analytics"""
+    try:
+        from decimal import Decimal
+        
+        # Get all campaigns
+        campaigns_response = mt_campaigns_table.query(
+            KeyConditionExpression='user_id = :uid',
+            ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID}
+        )
+        campaigns = campaigns_response.get('Items', [])
+        
+        # Get stats for each campaign
+        campaign_analytics = []
+        for campaign in campaigns:
+            campaign_id = campaign['campaign_id']
+            
+            try:
+                stats_response = mt_campaign_stats_table.get_item(
+                    Key={'campaign_id': campaign_id}
+                )
+                
+                if 'Item' in stats_response:
+                    stats = stats_response['Item']
+                    campaign_analytics.append({
+                        'campaign_id': campaign_id,
+                        'campaign_name': campaign.get('campaign_name', ''),
+                        'sent_count': int(stats.get('sent_count', 0)),
+                        'delivered_count': int(stats.get('delivered_count', 0)),
+                        'open_count': int(stats.get('open_count', 0)),
+                        'click_count': int(stats.get('click_count', 0)),
+                        'bounce_count': int(stats.get('bounce_count', 0)),
+                        'complaint_count': int(stats.get('complaint_count', 0))
+                    })
+            except Exception as e:
+                print(f"Error getting stats for campaign {campaign_id}: {str(e)}")
+        
+        return cors_response(200, {'campaigns': campaign_analytics})
+    except Exception as e:
+        print(f"Get campaign analytics error: {str(e)}")
+        return cors_response(500, {'error': 'Failed to get campaign analytics'})
+
+def get_subscriber_analytics():
+    """Get per-subscriber analytics"""
+    try:
+        from decimal import Decimal
+        
+        response = mt_subscriber_stats_table.scan()
+        subscribers = response.get('Items', [])
+        
+        # Convert Decimal to int
+        def convert_decimals(obj):
+            if isinstance(obj, list):
+                return [convert_decimals(i) for i in obj]
+            elif isinstance(obj, dict):
+                return {k: convert_decimals(v) for k, v in obj.items()}
+            elif isinstance(obj, Decimal):
+                return int(obj) if obj % 1 == 0 else float(obj)
+            else:
+                return obj
+        
+        subscribers = convert_decimals(subscribers)
+        subscribers.sort(key=lambda x: x.get('last_activity', ''), reverse=True)
+        
+        return cors_response(200, {'subscribers': subscribers})
+    except Exception as e:
+        print(f"Get subscriber analytics error: {str(e)}")
+        return cors_response(500, {'error': 'Failed to get subscriber analytics'})
+
+def get_recent_events(limit='100'):
+    """Get recent email events"""
+    try:
+        # Scan events table (limited)
+        response = events_table.scan(
+            Limit=int(limit)
+        )
+        
+        events = response.get('Items', [])
+        events.sort(key=lambda x: x.get('timestamp', 0), reverse=True)
+        
+        return cors_response(200, {'events': events})
+    except Exception as e:
+        print(f"Get recent events error: {str(e)}")
+        return cors_response(500, {'error': 'Failed to get events'})
