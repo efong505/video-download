@@ -26,6 +26,7 @@ events_table = dynamodb.Table('email-events')
 mt_subscribers_table = dynamodb.Table('user-email-subscribers')
 mt_users_table = dynamodb.Table('users')
 mt_drip_enrollments_table = dynamodb.Table('user-email-drip-enrollments')
+mt_campaigns_table = dynamodb.Table('user-email-campaigns')
 PLATFORM_OWNER_ID = 'effa3242-cf64-4021-b2b0-c8a5a9dfd6d2'
 BOOK_DRIP_SEQUENCE_NAME = 'book-welcome-sequence'
 
@@ -58,6 +59,10 @@ def lambda_handler(event, context):
             return list_book_subscribers()
         elif params.get('action') == 'list_drip_enrollments':
             return list_drip_enrollments()
+        elif params.get('action') == 'list_campaigns':
+            return list_campaigns()
+        elif params.get('action') == 'get_campaign':
+            return get_campaign(params.get('campaign_id', ''))
         elif params.get('action') == 'check_subscriber':
             return check_subscriber_status(params.get('email', ''))
         elif params.get('action') == 'resend_book_email':
@@ -69,6 +74,12 @@ def lambda_handler(event, context):
                 return handle_update_preferences(body)
             elif action == 'unsubscribe_all':
                 return handle_unsubscribe_all(body)
+            elif action == 'create_campaign':
+                return create_campaign(body)
+            elif action == 'update_campaign':
+                return update_campaign(body)
+            elif action == 'delete_campaign':
+                return delete_campaign(body)
             else:
                 return handle_subscription(event)
         else:
@@ -1030,3 +1041,168 @@ def handle_unsubscribe_all(body):
     except Exception as e:
         print(f"Unsubscribe all error: {str(e)}")
         return cors_response(500, {'error': 'Failed to unsubscribe'})
+
+def list_campaigns():
+    """List all email campaigns"""
+    try:
+        from decimal import Decimal
+        
+        response = mt_campaigns_table.query(
+            KeyConditionExpression='user_id = :uid',
+            ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID}
+        )
+        campaigns = response.get('Items', [])
+        
+        # Convert Decimal to int/float for JSON
+        def convert_decimals(obj):
+            if isinstance(obj, list):
+                return [convert_decimals(i) for i in obj]
+            elif isinstance(obj, dict):
+                return {k: convert_decimals(v) for k, v in obj.items()}
+            elif isinstance(obj, Decimal):
+                return int(obj) if obj % 1 == 0 else float(obj)
+            else:
+                return obj
+        
+        campaigns = convert_decimals(campaigns)
+        return cors_response(200, {'campaigns': campaigns})
+    except Exception as e:
+        print(f"List campaigns error: {str(e)}")
+        return cors_response(500, {'error': 'Failed to list campaigns'})
+
+def get_campaign(campaign_id):
+    """Get a single campaign by ID"""
+    try:
+        from decimal import Decimal
+        
+        if not campaign_id:
+            return cors_response(400, {'error': 'Campaign ID required'})
+        
+        response = mt_campaigns_table.get_item(
+            Key={'user_id': PLATFORM_OWNER_ID, 'campaign_id': campaign_id}
+        )
+        
+        if 'Item' not in response:
+            return cors_response(404, {'error': 'Campaign not found'})
+        
+        campaign = response['Item']
+        
+        # Convert Decimal to int/float
+        def convert_decimals(obj):
+            if isinstance(obj, list):
+                return [convert_decimals(i) for i in obj]
+            elif isinstance(obj, dict):
+                return {k: convert_decimals(v) for k, v in obj.items()}
+            elif isinstance(obj, Decimal):
+                return int(obj) if obj % 1 == 0 else float(obj)
+            else:
+                return obj
+        
+        campaign = convert_decimals(campaign)
+        return cors_response(200, {'campaign': campaign})
+    except Exception as e:
+        print(f"Get campaign error: {str(e)}")
+        return cors_response(500, {'error': 'Failed to get campaign'})
+
+def create_campaign(body):
+    """Create a new email campaign"""
+    try:
+        campaign_id = str(uuid.uuid4())
+        campaign_name = body.get('campaign_name', '').strip()
+        sequence_number = int(body.get('sequence_number', 1))
+        delay_days = int(body.get('delay_days', 1))
+        subject = body.get('subject', '').strip()
+        content = body.get('content', '').strip()
+        filter_tags = body.get('filter_tags', [])
+        
+        if not campaign_name or not subject or not content:
+            return cors_response(400, {'error': 'Campaign name, subject, and content required'})
+        
+        mt_campaigns_table.put_item(Item={
+            'user_id': PLATFORM_OWNER_ID,
+            'campaign_id': campaign_id,
+            'campaign_name': campaign_name,
+            'sequence_number': sequence_number,
+            'delay_days': delay_days,
+            'delay_hours': 0 if sequence_number > 1 else 0,  # First email sends immediately
+            'subject': subject,
+            'content': content,
+            'filter_tags': filter_tags,
+            'created_at': datetime.now().isoformat(),
+            'updated_at': datetime.now().isoformat()
+        })
+        
+        return cors_response(200, {'message': 'Campaign created', 'campaign_id': campaign_id})
+    except Exception as e:
+        print(f"Create campaign error: {str(e)}")
+        return cors_response(500, {'error': 'Failed to create campaign'})
+
+def update_campaign(body):
+    """Update an existing campaign"""
+    try:
+        campaign_id = body.get('campaign_id', '').strip()
+        
+        if not campaign_id:
+            return cors_response(400, {'error': 'Campaign ID required'})
+        
+        # Build update expression dynamically
+        update_parts = []
+        expr_values = {':updated': datetime.now().isoformat()}
+        
+        if 'campaign_name' in body:
+            update_parts.append('campaign_name = :name')
+            expr_values[':name'] = body['campaign_name'].strip()
+        
+        if 'sequence_number' in body:
+            update_parts.append('sequence_number = :seq')
+            expr_values[':seq'] = int(body['sequence_number'])
+        
+        if 'delay_days' in body:
+            update_parts.append('delay_days = :delay')
+            expr_values[':delay'] = int(body['delay_days'])
+        
+        if 'subject' in body:
+            update_parts.append('subject = :subj')
+            expr_values[':subj'] = body['subject'].strip()
+        
+        if 'content' in body:
+            update_parts.append('content = :cont')
+            expr_values[':cont'] = body['content'].strip()
+        
+        if 'filter_tags' in body:
+            update_parts.append('filter_tags = :tags')
+            expr_values[':tags'] = body['filter_tags']
+        
+        if not update_parts:
+            return cors_response(400, {'error': 'No fields to update'})
+        
+        update_parts.append('updated_at = :updated')
+        update_expr = 'SET ' + ', '.join(update_parts)
+        
+        mt_campaigns_table.update_item(
+            Key={'user_id': PLATFORM_OWNER_ID, 'campaign_id': campaign_id},
+            UpdateExpression=update_expr,
+            ExpressionAttributeValues=expr_values
+        )
+        
+        return cors_response(200, {'message': 'Campaign updated', 'campaign_id': campaign_id})
+    except Exception as e:
+        print(f"Update campaign error: {str(e)}")
+        return cors_response(500, {'error': 'Failed to update campaign'})
+
+def delete_campaign(body):
+    """Delete a campaign"""
+    try:
+        campaign_id = body.get('campaign_id', '').strip()
+        
+        if not campaign_id:
+            return cors_response(400, {'error': 'Campaign ID required'})
+        
+        mt_campaigns_table.delete_item(
+            Key={'user_id': PLATFORM_OWNER_ID, 'campaign_id': campaign_id}
+        )
+        
+        return cors_response(200, {'message': 'Campaign deleted', 'campaign_id': campaign_id})
+    except Exception as e:
+        print(f"Delete campaign error: {str(e)}")
+        return cors_response(500, {'error': 'Failed to delete campaign'})
