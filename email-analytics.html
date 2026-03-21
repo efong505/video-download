@@ -261,8 +261,8 @@
                         <input type="email" id="drip-email" class="form-control" placeholder="subscriber@example.com">
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label">Email Number (1-6)</label>
-                        <input type="number" id="drip-number" class="form-control" min="1" max="6" value="1">
+                        <label class="form-label">Email Number (1-7)</label>
+                        <input type="number" id="drip-number" class="form-control" min="1" max="7" value="1">
                     </div>
                     <div class="col-md-4">
                         <label class="form-label">&nbsp;</label>
@@ -413,10 +413,10 @@
                     <tr>
                         <td>${e.subscriber_email}</td>
                         <td><span class="badge ${e.status}">${e.status}</span></td>
-                        <td>${e.current_sequence_number || 0} of 6</td>
+                        <td>${e.current_sequence_number || 0} of 7</td>
                         <td>
                             <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${((e.current_sequence_number || 0) / 6 * 100)}%"></div>
+                                <div class="progress-fill" style="width: ${((e.current_sequence_number || 0) / 7 * 100)}%"></div>
                             </div>
                         </td>
                         <td>${new Date(e.enrolled_at).toLocaleDateString()}</td>
@@ -439,18 +439,19 @@
             const emailNumber = parseInt(document.getElementById('drip-number').value);
             const resultDiv = document.getElementById('drip-result');
 
-            if (!email || !emailNumber || emailNumber < 1 || emailNumber > 6) {
-                resultDiv.innerHTML = '<div class="alert alert-danger">Please enter a valid email and number (1-6)</div>';
+            if (!email || !emailNumber || emailNumber < 1 || emailNumber > 7) {
+                resultDiv.innerHTML = '<div class="alert alert-danger">Please enter a valid email and number (1-7)</div>';
                 return;
             }
 
             resultDiv.innerHTML = '<div class="alert alert-info">Sending email...</div>';
 
             try {
-                const response = await fetch(`${API_BASE}/subscribe?action=send_specific_drip`, {
+                const response = await fetch(`${API_BASE}/manual-email`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
+                        action: 'send_specific_drip',
                         email: email,
                         sequence_number: emailNumber
                     })
@@ -486,10 +487,11 @@
             resultDiv.innerHTML = '<div class="alert alert-info">Sending custom email...</div>';
 
             try {
-                const response = await fetch(`${API_BASE}/subscribe?action=send_custom_email`, {
+                const response = await fetch(`${API_BASE}/manual-email`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
+                        action: 'send_custom_email',
                         recipients: emailList,
                         subject: subject,
                         message: message
