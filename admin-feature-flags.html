@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Flags Management - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .feature-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .feature-card.enabled {
+            border-color: #28a745;
+            background: #f0fff4;
+        }
+        .feature-card.disabled {
+            border-color: #dc3545;
+            background: #fff5f5;
+        }
+        .badge-seasonal {
+            background: #ffc107;
+            color: #000;
+        }
+        .badge-volunteer {
+            background: #17a2b8;
+            color: #fff;
+        }
+        .volunteer-progress {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2><i class="fas fa-flag"></i> Feature Flags Management</h2>
+            <div>
+                <button class="btn btn-primary" onclick="showCreateModal()">
+                    <i class="fas fa-plus"></i> Create Feature Flag
+                </button>
+                <a href="admin.html" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Admin
+                </a>
+            </div>
+        </div>
+
+        <div class="alert alert-info">
+            <strong><i class="fas fa-info-circle"></i> About Feature Flags:</strong>
+            Control which features are visible to users. Seasonal features can be enabled/disabled based on election cycles.
+            Volunteer-dependent features track active contributors and can be auto-disabled when support drops below threshold.
+        </div>
+
+        <div id="flags-container">
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-3">Loading feature flags...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create/Edit Modal -->
+    <div class="modal fade" id="flagModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitle">Create Feature Flag</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="flagForm">
+                        <input type="hidden" id="flag-id-hidden">
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Feature ID *</label>
+                            <input type="text" class="form-control" id="flag-id" required>
+                            <small class="text-muted">Unique identifier (e.g., election_system, newsletter_system)</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Feature Name *</label>
+                            <input type="text" class="form-control" id="flag-name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" id="flag-description" rows="3"></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flag-enabled">
+                                    <label class="form-check-label" for="flag-enabled">
+                                        <strong>Enabled</strong> - Feature visible to users
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flag-admin-only">
+                                    <label class="form-check-label" for="flag-admin-only">
+                                        <strong>Admin Only Access</strong> - Admins can access when disabled
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flag-seasonal" onchange="toggleSeasonalFields()">
+                                    <label class="form-check-label" for="flag-seasonal">
+                                        <strong>Seasonal Feature</strong>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="flag-volunteer" onchange="toggleVolunteerFields()">
+                                    <label class="form-check-label" for="flag-volunteer">
+                                        <strong>Volunteer Dependent</strong>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="seasonal-fields" style="display: none;">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-title">Seasonal Settings</h6>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Season Start</label>
+                                            <input type="datetime-local" class="form-control" id="flag-season-start">
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Season End</label>
+                                            <input type="datetime-local" class="form-control" id="flag-season-end">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="volunteer-fields" style="display: none;">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-title">Volunteer Settings</h6>
+                                    <div class="mb-3">
+                                        <label class="form-label">Minimum Volunteers Required</label>
+                                        <input type="number" class="form-control" id="flag-min-volunteers" min="0" value="10">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label">Volunteer Signup URL</label>
+                                        <input type="text" class="form-control" id="flag-volunteer-url" placeholder="/apply-correspondent.html">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Disable Reason (shown to users when disabled)</label>
+                            <input type="text" class="form-control" id="flag-disable-reason" placeholder="Between election cycles">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveFlag()">Save Feature Flag</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const FEATURE_FLAGS_API = 'https://0h9mj9ul9j.execute-api.us-east-1.amazonaws.com/prod/feature-flags';
+        const AUTH_TOKEN = localStorage.getItem('auth_token');
+
+        function toggleSeasonalFields() {
+            const seasonal = document.getElementById('flag-seasonal').checked;
+            document.getElementById('seasonal-fields').style.display = seasonal ? 'block' : 'none';
+        }
+
+        function toggleVolunteerFields() {
+            const volunteer = document.getElementById('flag-volunteer').checked;
+            document.getElementById('volunteer-fields').style.display = volunteer ? 'block' : 'none';
+        }
+
+        async function loadFlags() {
+            try {
+                const response = await fetch(FEATURE_FLAGS_API + '?action=list', {
+                    headers: {
+                        'Authorization': 'Bearer ' + AUTH_TOKEN
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to load flags');
+
+                const flags = await response.json();
+                renderFlags(flags);
+            } catch (error) {
+                console.error('Error loading flags:', error);
+                document.getElementById('flags-container').innerHTML = 
+                    '<div class="alert alert-danger">Failed to load feature flags. Please refresh the page.</div>';
+            }
+        }
+
+        function renderFlags(flags) {
+            if (flags.length === 0) {
+                document.getElementById('flags-container').innerHTML = 
+                    '<div class="alert alert-warning">No feature flags configured yet. Create your first flag!</div>';
+                return;
+            }
+
+            const html = flags.map(flag => {
+                const statusClass = flag.enabled ? 'enabled' : 'disabled';
+                const statusBadge = flag.enabled ? 
+                    '<span class="badge bg-success">Enabled</span>' : 
+                    '<span class="badge bg-danger">Disabled</span>';
+                
+                let badges = statusBadge;
+                if (flag.seasonal) {
+                    badges += ' <span class="badge badge-seasonal">Seasonal</span>';
+                }
+                if (flag.volunteer_dependent) {
+                    badges += ' <span class="badge badge-volunteer">Volunteer Dependent</span>';
+                }
+
+                let volunteerInfo = '';
+                if (flag.volunteer_dependent) {
+                    const percentage = flag.min_volunteers_required > 0 ? 
+                        Math.min(100, (flag.active_volunteers / flag.min_volunteers_required) * 100) : 0;
+                    const progressColor = percentage >= 100 ? 'success' : percentage >= 50 ? 'warning' : 'danger';
+                    
+                    volunteerInfo = `
+                        <div class="volunteer-progress">
+                            <small><strong>Active Volunteers:</strong> ${flag.active_volunteers} / ${flag.min_volunteers_required} required</small>
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar bg-${progressColor}" role="progressbar" 
+                                     style="width: ${percentage}%" aria-valuenow="${percentage}" 
+                                     aria-valuemin="0" aria-valuemax="100">
+                                    ${Math.round(percentage)}%
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                let seasonInfo = '';
+                if (flag.seasonal && flag.season_start && flag.season_end) {
+                    const start = new Date(flag.season_start).toLocaleDateString();
+                    const end = new Date(flag.season_end).toLocaleDateString();
+                    seasonInfo = `<p class="mb-1"><small><strong>Season:</strong> ${start} - ${end}</small></p>`;
+                }
+
+                return `
+                    <div class="feature-card ${statusClass}">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h5>${flag.name} ${badges}</h5>
+                                <p class="text-muted mb-2">${flag.description || 'No description'}</p>
+                                <p class="mb-1"><small><strong>Feature ID:</strong> <code>${flag.feature_id}</code></small></p>
+                                ${seasonInfo}
+                                ${flag.disable_reason ? `<p class="mb-1"><small><strong>Disable Reason:</strong> ${flag.disable_reason}</small></p>` : ''}
+                                ${volunteerInfo}
+                                <p class="mb-0 mt-2"><small class="text-muted">Last updated: ${new Date(flag.updated_at).toLocaleString()} by ${flag.updated_by}</small></p>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn btn-sm ${flag.enabled ? 'btn-danger' : 'btn-success'}" 
+                                        onclick="toggleFlag('${flag.feature_id}', ${!flag.enabled})">
+                                    <i class="fas fa-${flag.enabled ? 'times' : 'check'}"></i> 
+                                    ${flag.enabled ? 'Disable' : 'Enable'}
+                                </button>
+                                <button class="btn btn-sm btn-primary" onclick="editFlag('${flag.feature_id}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteFlag('${flag.feature_id}')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('flags-container').innerHTML = html;
+        }
+
+        async function toggleFlag(featureId, enabled) {
+            if (!confirm(`Are you sure you want to ${enabled ? 'enable' : 'disable'} this feature?`)) return;
+
+            try {
+                const response = await fetch(FEATURE_FLAGS_API + '?action=update', {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + AUTH_TOKEN
+                    },
+                    body: JSON.stringify({
+                        feature_id: featureId,
+                        enabled: enabled
+                    })
+                });
+
+                if (!response.ok) throw new Error('Failed to update flag');
+
+                alert('Feature flag updated successfully!');
+                loadFlags();
+            } catch (error) {
+                console.error('Error updating flag:', error);
+                alert('Failed to update feature flag. Please try again.');
+            }
+        }
+
+        function showCreateModal() {
+            document.getElementById('modalTitle').textContent = 'Create Feature Flag';
+            document.getElementById('flagForm').reset();
+            document.getElementById('flag-id').disabled = false;
+            document.getElementById('flag-id-hidden').value = '';
+            document.getElementById('seasonal-fields').style.display = 'none';
+            document.getElementById('volunteer-fields').style.display = 'none';
+            new bootstrap.Modal(document.getElementById('flagModal')).show();
+        }
+
+        async function editFlag(featureId) {
+            try {
+                const response = await fetch(FEATURE_FLAGS_API + '?action=get&feature_id=' + featureId, {
+                    headers: {
+                        'Authorization': 'Bearer ' + AUTH_TOKEN
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to load flag');
+
+                const flag = await response.json();
+
+                document.getElementById('modalTitle').textContent = 'Edit Feature Flag';
+                document.getElementById('flag-id').value = flag.feature_id;
+                document.getElementById('flag-id').disabled = true;
+                document.getElementById('flag-id-hidden').value = flag.feature_id;
+                document.getElementById('flag-name').value = flag.name;
+                document.getElementById('flag-description').value = flag.description || '';
+                document.getElementById('flag-enabled').checked = flag.enabled;
+                document.getElementById('flag-admin-only').checked = flag.admin_only_access;
+                document.getElementById('flag-seasonal').checked = flag.seasonal;
+                document.getElementById('flag-volunteer').checked = flag.volunteer_dependent;
+                document.getElementById('flag-min-volunteers').value = flag.min_volunteers_required || 10;
+                document.getElementById('flag-volunteer-url').value = flag.volunteer_signup_url || '';
+                document.getElementById('flag-disable-reason').value = flag.disable_reason || '';
+
+                if (flag.season_start) {
+                    const start = new Date(flag.season_start);
+                    document.getElementById('flag-season-start').value = start.toISOString().slice(0, 16);
+                }
+                if (flag.season_end) {
+                    const end = new Date(flag.season_end);
+                    document.getElementById('flag-season-end').value = end.toISOString().slice(0, 16);
+                }
+
+                toggleSeasonalFields();
+                toggleVolunteerFields();
+
+                new bootstrap.Modal(document.getElementById('flagModal')).show();
+            } catch (error) {
+                console.error('Error loading flag:', error);
+                alert('Failed to load feature flag. Please try again.');
+            }
+        }
+
+        async function saveFlag() {
+            const featureId = document.getElementById('flag-id-hidden').value || document.getElementById('flag-id').value;
+            const isEdit = document.getElementById('flag-id-hidden').value !== '';
+
+            const data = {
+                feature_id: featureId,
+                name: document.getElementById('flag-name').value,
+                description: document.getElementById('flag-description').value,
+                enabled: document.getElementById('flag-enabled').checked,
+                admin_only_access: document.getElementById('flag-admin-only').checked,
+                seasonal: document.getElementById('flag-seasonal').checked,
+                volunteer_dependent: document.getElementById('flag-volunteer').checked,
+                min_volunteers_required: parseInt(document.getElementById('flag-min-volunteers').value) || 0,
+                volunteer_signup_url: document.getElementById('flag-volunteer-url').value,
+                disable_reason: document.getElementById('flag-disable-reason').value
+            };
+
+            if (data.seasonal) {
+                const start = document.getElementById('flag-season-start').value;
+                const end = document.getElementById('flag-season-end').value;
+                if (start) data.season_start = new Date(start).toISOString();
+                if (end) data.season_end = new Date(end).toISOString();
+            }
+
+            try {
+                const response = await fetch(FEATURE_FLAGS_API + '?action=' + (isEdit ? 'update' : 'create'), {
+                    method: isEdit ? 'PUT' : 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + AUTH_TOKEN
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (!response.ok) throw new Error('Failed to save flag');
+
+                alert('Feature flag saved successfully!');
+                bootstrap.Modal.getInstance(document.getElementById('flagModal')).hide();
+                loadFlags();
+            } catch (error) {
+                console.error('Error saving flag:', error);
+                alert('Failed to save feature flag. Please try again.');
+            }
+        }
+
+        async function deleteFlag(featureId) {
+            if (!confirm('Are you sure you want to delete this feature flag? This action cannot be undone.')) return;
+
+            try {
+                const response = await fetch(FEATURE_FLAGS_API + '?action=delete&feature_id=' + featureId, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': 'Bearer ' + AUTH_TOKEN
+                    }
+                });
+
+                if (!response.ok) throw new Error('Failed to delete flag');
+
+                alert('Feature flag deleted successfully!');
+                loadFlags();
+            } catch (error) {
+                console.error('Error deleting flag:', error);
+                alert('Failed to delete feature flag. Please try again.');
+            }
+        }
+
+        // Load flags on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (!AUTH_TOKEN) {
+                window.location.href = 'login.html';
+                return;
+            }
+            loadFlags();
+        });
+    </script>
+</body>
+</html>

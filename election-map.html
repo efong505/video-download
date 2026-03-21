@@ -388,6 +388,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="feature-flags.js"></script>
     <script>
         const CONTRIBUTORS_API = 'https://hzursivfuk.execute-api.us-east-1.amazonaws.com/prod/contributors';
 
@@ -1037,7 +1038,34 @@
         }
 
         // Allow Enter key to submit email
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Check if election feature is enabled
+            const isEnabled = await FeatureFlags.isEnabled('election_system');
+            
+            if (!isEnabled) {
+                // Feature is disabled - show message to everyone (including admins)
+                document.getElementById('loading-overlay').style.display = 'none';
+                const container = document.querySelector('.container');
+                if (container) {
+                    const flag = await FeatureFlags.getFlag('election_system');
+                    let message = '<div class="alert alert-warning text-center" style="margin-top: 100px;">';
+                    message += '<h3>🚧 Election Tracking Temporarily Unavailable</h3>';
+                    message += '<p>' + (flag.disable_reason || 'This feature is currently disabled.') + '</p>';
+                    
+                    if (flag.volunteer_dependent && flag.active_volunteers < flag.min_volunteers_required) {
+                        message += '<p>We need <strong>' + (flag.min_volunteers_required - flag.active_volunteers) + ' more volunteers</strong> to activate this feature.</p>';
+                        if (flag.volunteer_signup_url) {
+                            message += '<a href="' + flag.volunteer_signup_url + '" class="btn btn-primary">Volunteer to Help</a>';
+                        }
+                    }
+                    
+                    message += '</div>';
+                    container.innerHTML = message;
+                }
+                return;
+            }
+            
+            // Feature is enabled - load normally
             loadData();
             updateLastUpdateDate();
 
