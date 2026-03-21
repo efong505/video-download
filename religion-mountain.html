@@ -138,6 +138,29 @@
             document.getElementById(tabName).classList.add('active');
         }
     </script>
+    <script src="mountain-content-loader.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => loadMountainContent('religion'));
+    </script>
+
+    <!-- Featured Content Section -->
+    <div style="background: #f9fafb; padding: 4rem 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="text-align: center; color: var(--mountain-primary); margin-bottom: 3rem;">📚 Latest Articles</h2>
+            <div class="row g-4" id="featured-articles">
+                <div class="col-12 text-center"><p class="text-muted">Loading articles...</p></div>
+            </div>
+        </div>
+    </div>
+
+    <div style="background: white; padding: 4rem 2rem;">
+        <div style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="text-align: center; color: var(--mountain-primary); margin-bottom: 3rem;">🎥 Featured Videos</h2>
+            <div class="row g-4" id="featured-videos">
+                <div class="col-12 text-center"><p class="text-muted">Loading videos...</p></div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
