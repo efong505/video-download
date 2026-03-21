@@ -41,7 +41,8 @@ function initNavbar() {
         {page: 'admin-resources', label: 'Manage Resources', emoji: '📚', fa: 'fa-tasks'},
         {page: 'admin-templates', label: 'Templates', emoji: '📄', fa: 'fa-file-alt'},
         {page: 'admin-book-subscribers', label: 'Book Subscribers', emoji: '📖', fa: 'fa-book'},
-        {page: 'email-analytics', label: 'Email Analytics', emoji: '📊', fa: 'fa-chart-line'}
+        {page: 'email-analytics', label: 'Email Analytics', emoji: '📊', fa: 'fa-chart-line'},
+        {page: 'campaign-manager', label: 'Campaign Manager', emoji: '📧', fa: 'fa-envelope-open-text'}
     ];
     
     const token = localStorage.getItem('auth_token');

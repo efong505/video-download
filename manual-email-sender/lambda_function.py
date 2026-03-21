@@ -123,8 +123,8 @@ def send_specific_drip_email(body):
         send_email_via_ses(
             recipient=email,
             subject=campaign['subject'],
-            body_html=campaign['body_html'],
-            body_text=campaign.get('body_text', ''),
+            body_html=campaign.get('content', ''),
+            body_text=campaign.get('body_text', campaign.get('content', '')),
             subscriber=subscriber
         )
         
@@ -176,7 +176,7 @@ def send_custom_email(body):
         for recipient in recipients:
             try:
                 ses.send_email(
-                    Source='Christian Conservatives Today <noreply@christianconservativestoday.com>',
+                    Source='Christian Conservatives Today <contact@christianconservativestoday.com>',
                     Destination={'ToAddresses': [recipient]},
                     Message={
                         'Subject': {'Data': subject},
@@ -213,12 +213,13 @@ def send_email_via_ses(recipient, subject, body_html, body_text, subscriber):
     Send email via AWS SES
     """
     first_name = subscriber.get('first_name', 'Friend')
+    email = subscriber.get('subscriber_email', recipient)
     
-    body_html = body_html.replace('{{first_name}}', first_name)
-    body_text = body_text.replace('{{first_name}}', first_name)
+    body_html = body_html.replace('{{first_name}}', first_name).replace('{{email}}', email)
+    body_text = body_text.replace('{{first_name}}', first_name).replace('{{email}}', email)
     
     ses.send_email(
-        Source='Christian Conservatives Today <noreply@christianconservativestoday.com>',
+        Source='Christian Conservatives Today <contact@christianconservativestoday.com>',
         Destination={'ToAddresses': [recipient]},
         Message={
             'Subject': {'Data': subject},
