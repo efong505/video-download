@@ -15,6 +15,9 @@ def lambda_handler(event, context):
     headers = cors_headers()
     
     try:
+        # Log the incoming event for debugging
+        print(f"Event: {json.dumps(event)}")
+        
         method = event.get('httpMethod', 'GET')
         
         if method == 'OPTIONS':
@@ -26,6 +29,8 @@ def lambda_handler(event, context):
         
         query_params = event.get('queryStringParameters') or {}
         action = query_params.get('action')
+        
+        print(f"Method: {method}, Action: {action}")
         
         if method == 'POST' and action == 'create':
             return create_comment(event)
@@ -41,12 +46,18 @@ def lambda_handler(event, context):
             return bulk_comment_action(event)
         else:
             return {
-                'statusCode': 404,
+                'statusCode': 400,
                 'headers': headers,
-                'body': json.dumps({'error': 'Endpoint not found'})
+                'body': json.dumps({
+                    'error': 'Invalid request',
+                    'method': method,
+                    'action': action,
+                    'message': f'No handler found for method={method} action={action}'
+                })
             }
             
     except Exception as e:
+        print(f"Error in lambda_handler: {str(e)}")
         return {
             'statusCode': 500,
             'headers': headers,
@@ -377,17 +388,34 @@ def admin_list_comments(event):
     headers = cors_headers()
     
     try:
+        print(f"admin_list_comments called with event: {json.dumps(event)}")
+        
         user_info = extract_user_from_token(event)
-        if not user_info or user_info['role'] not in ['admin', 'super_user']:
+        print(f"Extracted user_info: {user_info}")
+        
+        if not user_info:
+            print("No user_info - authentication failed")
+            return {
+                'statusCode': 401,
+                'headers': headers,
+                'body': json.dumps({'error': 'Authentication required', 'details': 'Token extraction failed'})
+            }
+        
+        if user_info['role'] not in ['admin', 'super_user']:
+            print(f"User role {user_info['role']} is not admin/super_user")
             return {
                 'statusCode': 403,
                 'headers': headers,
-                'body': json.dumps({'error': 'Admin access required'})
+                'body': json.dumps({'error': 'Admin access required', 'role': user_info['role']})
             }
+        
+        print("User authorized, fetching comments...")
         
         # Get all comments for admin review
         response = comments_table.scan()
         comments = response.get('Items', [])
+        
+        print(f"Found {len(comments)} comments")
         
         # Sort by created_at descending (newest first)
         comments.sort(key=lambda x: x.get('created_at', ''), reverse=True)
@@ -402,10 +430,13 @@ def admin_list_comments(event):
         }
         
     except Exception as e:
+        print(f"Error in admin_list_comments: {str(e)}")
+        import traceback
+        print(f"Traceback: {traceback.format_exc()}")
         return {
             'statusCode': 500,
             'headers': headers,
-            'body': json.dumps({'error': str(e)})
+            'body': json.dumps({'error': str(e), 'type': 'admin_list_comments_error'})
         }
 
 def bulk_comment_action(event):
