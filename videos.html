@@ -527,7 +527,7 @@
             
             if (videoType === 'local') {
                 col.innerHTML = `
-                    <div class="video-card">
+                    <div class="video-card" onclick="window.location.href='video.html?id=${filename}'" style="cursor: pointer;">
                         <div class="thumbnail-container">
                             <img src="${thumbnailUrl}" alt="${title}" class="thumbnail" loading="lazy"
                                  onerror="this.onerror=null; this.src='${fallbackThumbnailUrl}'; if(this.complete && this.naturalHeight === 0) { this.style.display='none'; this.nextElementSibling.style.display='flex'; }" 
@@ -535,20 +535,12 @@
                             <div class="thumbnail" style="display: none; background: linear-gradient(135deg, #667eea, #764ba2); color: white; align-items: center; justify-content: center; font-size: 14px; font-weight: bold;">
                                 📹 ${title.substring(0,20)}${title.length > 20 ? '...' : ''}
                             </div>
-                            <button class="play-button" onclick="playVideo(this, '${videoUrl}')">
+                            <div class="play-button" style="pointer-events: none;">
                                 ▶
-                            </button>
-                        </div>
-                        <video class="video-player" controls preload="metadata" style="display: none; width: 100%; height: 200px; background: #000;">
-                            Your browser does not support the video tag.
-                        </video>
+                            </div>
                         </div>
                         <div class="video-title">
                             ${title}
-                            <div style="margin-top: 8px;">
-                                <button onclick="copyEmbedLink('${embedUrl}')" style="background: #28a745; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; cursor: pointer; margin-right: 5px;">🔗 Share</button>
-                                <button onclick="generateThumbnail('${filename}')" style="background: #ffc107; color: black; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; cursor: pointer;">🖼️ Thumb</button>
-                            </div>
                         </div>
                     </div>
                 `;
@@ -579,7 +571,7 @@
                 const typeBadge = `<span style="background: #007bff; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; position: absolute; top: 5px; right: 5px; z-index: 10;">${platformName}</span>`;
                 
                 col.innerHTML = `
-                    <div class="video-card">
+                    <div class="video-card" onclick="window.location.href='video.html?id=${filename}'" style="cursor: pointer;">
                         <div class="thumbnail-container" style="position: relative;">
                             ${typeBadge}
                             ${thumbnailSrc ? `
@@ -588,30 +580,20 @@
                                 <div class="thumbnail" style="display: none; background: linear-gradient(135deg, #667eea, #764ba2); color: white; align-items: center; justify-content: center; font-size: 14px; font-weight: bold;">
                                     🎬 ${title.substring(0,15)}${title.length > 15 ? '...' : ''}
                                 </div>
-                                <button class="play-button" onclick="playExternalVideo(this, '${embedSrc}')">
+                                <div class="play-button" style="pointer-events: none;">
                                     ▶
-                                </button>
-                                <div class="video-player" style="display: none; width: 100%; height: 200px;">
-                                    <iframe src="" style="width: 100%; height: 100%; border: none;" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
                                 </div>
                             ` : `
                                 <div class="thumbnail" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold;">
                                     🎬 ${title.substring(0,15)}${title.length > 15 ? '...' : ''}
                                 </div>
-                                <button class="play-button" onclick="playExternalVideo(this, '${embedSrc}')">
+                                <div class="play-button" style="pointer-events: none;">
                                     ▶
-                                </button>
-                                <div class="video-player" style="display: none; width: 100%; height: 200px;">
-                                    <iframe src="" style="width: 100%; height: 100%; border: none;" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
                                 </div>
                             `}
                         </div>
                         <div class="video-title">
                             ${title}
-                            <div style="margin-top: 8px;">
-                                <a href="${externalUrl}" target="_blank" style="background: #007bff; color: white; text-decoration: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; margin-right: 5px;">🔗 Open</a>
-                                <button onclick="copyEmbedLink('${embedUrl}')" style="background: #28a745; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 12px; cursor: pointer;">📋 Share</button>
-                            </div>
                         </div>
                     </div>
                 `;
