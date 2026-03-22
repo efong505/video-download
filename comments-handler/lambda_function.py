@@ -127,9 +127,14 @@ def add_comment(body):
         if len(comment_text) > 2000:
             return cors_response(400, {'error': 'Comment too long (max 2000 characters)'})
         
-        # Get user info
-        user_response = users_table.get_item(Key={'email': user_email})
-        user = user_response.get('Item', {})
+        # Get user info (optional - just use provided name if lookup fails)
+        try:
+            user_response = users_table.get_item(Key={'email': user_email})
+            user = user_response.get('Item', {})
+            display_name = user_name or user.get('first_name', 'Anonymous')
+        except:
+            # If user lookup fails, just use the provided name
+            display_name = user_name or 'Anonymous'
         
         comment_id = str(uuid.uuid4())
         timestamp = int(datetime.now().timestamp())
@@ -139,7 +144,7 @@ def add_comment(body):
             'comment_id': comment_id,
             'content_type': content_type,
             'user_email': user_email,
-            'user_name': user_name or user.get('first_name', 'Anonymous'),
+            'user_name': display_name,
             'comment_text': comment_text,
             'created_at': timestamp,
             'created_at_iso': datetime.now().isoformat(),
