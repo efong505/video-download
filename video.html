@@ -266,7 +266,7 @@
             if (videoType === 'local') {
                 playerHtml = `
                     <div class="video-player-wrapper">
-                        <video controls autoplay>
+                        <video controls>
                             <source src="${videoUrl}" type="video/mp4">
                             Your browser does not support the video tag.
                         </video>
@@ -280,7 +280,7 @@
                 if (externalUrl.includes('youtube.com') || externalUrl.includes('youtu.be')) {
                     const videoId = externalUrl.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/)?.[1];
                     if (videoId) {
-                        embedSrc = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+                        embedSrc = `https://www.youtube.com/embed/${videoId}`;
                     }
                 } else if (externalUrl.includes('rumble.com')) {
                     const rumbleMatch = externalUrl.match(/rumble\.com\/v([a-zA-Z0-9]+)/);

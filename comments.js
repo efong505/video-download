@@ -8,7 +8,7 @@
  * <script>initComments();</script>
  */
 
-const COMMENTS_API = 'https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/comments';
+const COMMENTS_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/comments';
 
 function initComments() {
     const container = document.getElementById('comments-section');
