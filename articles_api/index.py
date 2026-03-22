@@ -634,15 +634,22 @@ def list_articles(event):
     author = query_params.get('author')
     
     try:
-        # Scan articles table
+        # Scan articles table with pagination
         scan_kwargs = {}
         
         if visibility == 'public':
             scan_kwargs['FilterExpression'] = 'visibility = :vis'
             scan_kwargs['ExpressionAttributeValues'] = {':vis': 'public'}
         
+        articles = []
         response = dynamodb_breaker.call(articles_table.scan, **scan_kwargs)
-        articles = response.get('Items', [])
+        articles.extend(response.get('Items', []))
+        
+        # Handle pagination - keep scanning until no more results
+        while 'LastEvaluatedKey' in response:
+            scan_kwargs['ExclusiveStartKey'] = response['LastEvaluatedKey']
+            response = dynamodb_breaker.call(articles_table.scan, **scan_kwargs)
+            articles.extend(response.get('Items', []))
         
         # Fix author names for existing articles that have email addresses
         for article in articles:
