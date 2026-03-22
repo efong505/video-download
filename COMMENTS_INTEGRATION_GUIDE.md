@@ -4,13 +4,56 @@
 A complete comments system has been added to ChristianConservativesToday.com with support for:
 - ✅ Threaded replies
 - ✅ Edit/delete own comments
-- ✅ Admin moderation
+- ✅ Admin moderation dashboard
 - ✅ Real-time updates
 - ✅ Character limits (2000 chars)
 - ✅ User authentication required
+- ✅ Bulk comment management
+- ✅ Email notifications for replies
 
 ## API Endpoint
-**Base URL**: `https://gu6c08ctel.execute-api.us-east-1.amazonaws.com/prod/comments`
+**Base URL**: `https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/comments`
+
+## Admin Moderation Dashboard
+
+The admin dashboard (`admin.html`) includes a full Comments tab with:
+
+### Features:
+- **View All Comments**: See all comments across articles and videos
+- **Statistics**: Total, active, and deleted comment counts
+- **Bulk Actions**: 
+  - Delete multiple comments at once
+  - Restore deleted comments
+  - Select all/clear selection
+- **Individual Actions**:
+  - Delete single comment
+  - Restore deleted comment
+  - View full comment details
+- **Filtering**: Comments show content ID, author, text preview, date, and status
+
+### Access:
+Navigate to `admin.html` → Click "Comments" tab
+
+**Requirements**: Admin or Super User role
+
+## Email Notifications
+
+When a user replies to a comment, the original commenter receives an email notification:
+
+### Features:
+- Automatic email sent when someone replies to your comment
+- Email includes:
+  - Name of person who replied
+  - Preview of the reply (first 100 characters)
+  - Direct link to the comment thread
+- No notification if you reply to your own comment
+- Async processing (doesn't slow down comment posting)
+
+### Technical Details:
+- Uses AWS Lambda `notifications_api` function
+- Invoked asynchronously (Event invocation type)
+- Graceful failure - comment still posts even if notification fails
+- Links format: `https://christianconservativestoday.com/article.html?id={content_id}#comment-{comment_id}`
 
 ## How to Add Comments to Any Page
 
@@ -89,6 +132,22 @@ Add this before the closing `</body>` tag:
 - View all comments across site
 
 ## API Actions
+
+### Get All Comments (Admin)
+```javascript
+GET /comments?action=get_all_comments&limit=1000
+```
+
+### Moderate Comment (Admin)
+```javascript
+POST /comments
+{
+  "action": "moderate_comment",
+  "content_id": "article-123",
+  "comment_id": "uuid",
+  "status": "approved"  // approved | pending | flagged | deleted
+}
+```
 
 ### Get Comments
 ```javascript
@@ -180,11 +239,43 @@ The comments system uses Bootstrap 5 classes and custom CSS. You can customize c
 
 ## Next Steps
 
-1. Add comments to `articles.html` (article detail page)
-2. Add comments to `videos.html` (video detail page)
-3. Create admin moderation dashboard
-4. Add email notifications for replies
-5. Add like/upvote functionality
+1. ✅ Add comments to `articles.html` (article detail page)
+2. ✅ Add comments to `videos.html` (video detail page)  
+3. ✅ Create admin moderation dashboard
+4. ✅ Add email notifications for replies
+5. ☐ Add like/upvote functionality
+6. ☐ Move to Phase 2: Content & Growth features
+
+## Recent Updates (March 2026)
+
+### Email Notifications Added
+- Implemented reply notifications using notifications_api Lambda
+- Async invocation to avoid slowing down comment posting
+- Includes reply preview and direct link to comment
+- Graceful failure handling
+
+### Admin Dashboard Integration
+- Fixed API endpoint mismatch between `comments_api` and `comments-handler`
+- Updated admin.html to use correct action: `get_all_comments` instead of `admin_list`
+- Fixed field name mappings: `comment_text`, `content_id`, `user_name`, `status`
+- Resolved quote escaping issues in View button using event listeners
+- Added comprehensive logging for debugging
+- Bulk delete and restore now working correctly
+
+## Deployment
+
+To deploy the comments handler with email notifications:
+
+```powershell
+.\deploy-comments-handler.ps1
+```
+
+Or manually:
+```bash
+cd comments-handler
+zip lambda.zip lambda_function.py
+aws lambda update-function-code --function-name comments-handler --zip-file fileb://lambda.zip --region us-east-1
+```
 
 ## Testing
 

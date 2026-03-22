@@ -11,6 +11,7 @@ from decimal import Decimal
 dynamodb = boto3.resource('dynamodb')
 comments_table = dynamodb.Table('content-comments')
 users_table = dynamodb.Table('users')
+lambda_client = boto3.client('lambda')
 
 def lambda_handler(event, context):
     """Main handler for comments API"""
@@ -166,6 +167,40 @@ def add_comment(body):
                 pass
         
         comments_table.put_item(Item=comment)
+        
+        # Send email notification if this is a reply
+        if parent_comment_id:
+            try:
+                # Get parent comment to find who to notify
+                parent_response = comments_table.get_item(
+                    Key={'content_id': content_id, 'comment_id': parent_comment_id}
+                )
+                
+                if 'Item' in parent_response:
+                    parent_comment = parent_response['Item']
+                    parent_email = parent_comment.get('user_email')
+                    
+                    # Don't notify if replying to own comment
+                    if parent_email and parent_email != user_email:
+                        # Invoke notifications Lambda
+                        lambda_client.invoke(
+                            FunctionName='notifications_api',
+                            InvocationType='Event',  # Async
+                            Payload=json.dumps({
+                                'body': json.dumps({
+                                    'action': 'send_notification',
+                                    'type': 'comment_reply',
+                                    'recipient_email': parent_email,
+                                    'subject': f'New Reply from {display_name}',
+                                    'message': f'{display_name} replied to your comment: "{comment_text[:100]}..."',
+                                    'link': f'https://christianconservativestoday.com/{"article" if content_type == "article" else "video"}.html?id={content_id}#comment-{comment_id}'
+                                })
+                            })
+                        )
+                        print(f'Notification sent to {parent_email} for reply')
+            except Exception as e:
+                print(f'Failed to send notification: {str(e)}')
+                # Don't fail the comment creation if notification fails
         
         return cors_response(200, {
             'message': 'Comment added',
