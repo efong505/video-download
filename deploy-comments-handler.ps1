@@ -13,20 +13,19 @@ Compress-Archive -Path lambda_function.py -DestinationPath lambda.zip
 
 # Update Lambda function
 Write-Host "Updating Lambda function..." -ForegroundColor Yellow
-aws lambda update-function-code `
-    --function-name comments-handler `
-    --zip-file fileb://lambda.zip `
-    --region us-east-1
+aws lambda update-function-code --function-name comments-api --zip-file fileb://lambda.zip --region us-east-1
 
 if ($LASTEXITCODE -eq 0) {
-    Write-Host "✓ Comments Handler deployed successfully!" -ForegroundColor Green
+    Write-Host "Comments Handler deployed successfully!" -ForegroundColor Green
 } else {
-    Write-Host "✗ Deployment failed!" -ForegroundColor Red
+    Write-Host "Deployment failed!" -ForegroundColor Red
+    Set-Location ..
     exit 1
 }
 
 # Return to root directory
 Set-Location ..
 
-Write-Host "`nDeployment complete!" -ForegroundColor Green
+Write-Host ""
+Write-Host "Deployment complete!" -ForegroundColor Green
 Write-Host "Email notifications for comment replies are now active." -ForegroundColor Cyan
