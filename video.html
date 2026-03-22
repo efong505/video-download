@@ -447,8 +447,9 @@
         }
         
         function editVideo(filename) {
-            // Redirect to admin page with video edit mode
-            window.location.href = `admin.html?tab=videos&edit=${encodeURIComponent(filename)}`;
+            // Redirect to admin page with video edit mode - use sessionStorage to pass the filename
+            sessionStorage.setItem('editVideoFilename', filename);
+            window.location.href = 'admin.html#videos';
         }
         
         async function deleteVideo(filename, title) {
@@ -463,13 +464,11 @@
             }
             
             try {
-                const response = await fetch('https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/admin?action=delete_video', {
-                    method: 'POST',
+                const response = await fetch(`https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/admin?action=video&filename=${encodeURIComponent(filename)}`, {
+                    method: 'DELETE',
                     headers: {
-                        'Authorization': `Bearer ${authToken}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ filename: filename })
+                        'Authorization': `Bearer ${authToken}`
+                    }
                 });
                 
                 if (response.ok) {
