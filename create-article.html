@@ -604,6 +604,14 @@ Code block
             setTimeout(function() {
                 loadTemplates();
             }, 100);
+
+            // Auto-select category from query param
+            var params = new URLSearchParams(window.location.search);
+            var mtParam = params.get('mountain');
+            if (mtParam) {
+                var catSelect = document.getElementById('article-category');
+                if (catSelect.querySelector('option[value="' + mtParam + '"]')) catSelect.value = mtParam;
+            }
         });
         
         function setupFeaturedImageHandler() {
@@ -758,9 +766,23 @@ Code block
                 
                 templateCard.appendChild(h6);
                 templateCard.appendChild(p);
+                templateCard.setAttribute('data-template-key', key);
                 templateCard.onclick = function() { selectTemplate(key, template); };
                 container.appendChild(templateCard);
             });
+
+            // Auto-select template from query param
+            var params = new URLSearchParams(window.location.search);
+            var tplParam = params.get('template');
+            if (tplParam && allTemplates[tplParam]) {
+                var card = container.querySelector('[data-template-key="' + tplParam + '"]');
+                if (card) {
+                    card.classList.add('selected');
+                    card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    selectedTemplate = tplParam;
+                    if (quill) quill.root.innerHTML = allTemplates[tplParam].content;
+                }
+            }
         }
 
         function selectTemplate(key, template) {
