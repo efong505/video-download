@@ -27,43 +27,84 @@ Your current backend uses a DynamoDB table (`terraform-state-lock`) for state lo
 
 Your version (1.14.6) fully supports this.
 
-### Step 1: Back Up Your State File
+### ⚠️ CRITICAL: This Lock Table Is Shared by 4 Projects
 
-Before touching anything, download a local copy of your state file:
+The `terraform-state-lock` DynamoDB table is used by **4 separate Terraform projects**. You MUST migrate ALL of them before deleting the table, or the un-migrated projects will break.
 
-```cmd
-aws s3 cp s3://techcross-terraform-state/prod/terraform.tfstate ./terraform.tfstate.backup --profile ekewaka
-```
+| # | S3 Bucket | State Key | Local Project Path | Status |
+|---|-----------|-----------|-------------------|--------|
+| 1 | `techcross-terraform-state` | `prod/terraform.tfstate` | `c:\Users\Ed\Documents\Programming\AWS\Downloader\terraform\environments\prod\` | Active (490KB state, many resources) |
+| 2 | `techcross-terraform-state` | `ministry-platform/terraform.tfstate` | Not found locally — abandoned project | Empty (0 resources, 181 bytes) |
+| 3 | `ed-terraform-remote-backend` | `terraform/tfstate.tfstate` | `c:\Users\Ed\Documents\Post Graduation\Projects\Terraform\backend\` | Active |
+| 4 | `terraform-state-mumbai-practice` | `practice-mumbai/terraform.tfstate` | `c:\Users\Ed\Documents\Programming\AWS\Multi-Region-Practice\terraform\environments\practice-mumbai\` | Active |
 
-Verify the backup exists and has content:
+### How I Found These Projects
 
-```cmd
-dir terraform.tfstate.backup
-```
-
-Keep this file safe. If anything goes wrong, you can restore it:
-
-```cmd
-aws s3 cp ./terraform.tfstate.backup s3://techcross-terraform-state/prod/terraform.tfstate --profile ekewaka
-```
-
-### Step 2: Verify No One Else Is Running Terraform
-
-Check if there's an active lock:
+You can discover which projects share the lock table by scanning it:
 
 ```cmd
 aws dynamodb scan --table-name terraform-state-lock --profile ekewaka --region us-east-1 --output json
 ```
 
-If the `Items` array is empty, no lock is held. If there IS a lock and you're sure no one else is running, you can force-unlock:
+Each item's `LockID` contains the S3 bucket + state key path. The `-md5` suffix entries are digest records (not active locks).
+
+To find the local project files, search for `.tf` files referencing the table:
+
+```cmd
+powershell -Command "Get-ChildItem -Path 'c:\Users\Ed\Documents' -Recurse -Filter '*.tf' -ErrorAction SilentlyContinue | ForEach-Object { $content = Get-Content $_.FullName -Raw -ErrorAction SilentlyContinue; if ($content -match 'terraform-state-lock') { $_.FullName } }"
+```
+
+### Step 1: Back Up ALL State Files
+
+Before touching anything, download local copies of every state file that uses this lock table:
+
+```cmd
+mkdir state-backups
+
+aws s3 cp s3://techcross-terraform-state/prod/terraform.tfstate ./state-backups/prod.tfstate.backup --profile ekewaka
+
+aws s3 cp s3://techcross-terraform-state/ministry-platform/terraform.tfstate ./state-backups/ministry-platform.tfstate.backup --profile ekewaka
+
+aws s3 cp s3://ed-terraform-remote-backend/terraform/tfstate.tfstate ./state-backups/ed-backend.tfstate.backup --profile ekewaka
+
+aws s3 cp s3://terraform-state-mumbai-practice/practice-mumbai/terraform.tfstate ./state-backups/mumbai-practice.tfstate.backup --profile ekewaka
+```
+
+Verify all 4 backups exist:
+
+```cmd
+dir state-backups
+```
+
+Keep these safe. If anything goes wrong, restore with:
+
+```cmd
+aws s3 cp ./state-backups/prod.tfstate.backup s3://techcross-terraform-state/prod/terraform.tfstate --profile ekewaka
+```
+
+(Same pattern for the other 3.)
+
+### Step 2: Verify No Active Locks
+
+```cmd
+aws dynamodb scan --table-name terraform-state-lock --profile ekewaka --region us-east-1 --output json
+```
+
+You should only see items with `-md5` suffix in the `LockID`. Those are digest records, NOT active locks. An active lock would have a `LockID` without `-md5` and an `Info` field with a timestamp.
+
+If there IS an active lock and you're sure no one else is running:
 
 ```cmd
 terraform force-unlock <LOCK_ID>
 ```
 
-### Step 3: Update the Backend Block
+### Step 3: Migrate Project 1 — Prod (Main Platform)
 
-In `main.tf`, change the backend from:
+```cmd
+cd c:\Users\Ed\Documents\Programming\AWS\Downloader\terraform\environments\prod
+```
+
+Edit `main.tf`, change the backend from:
 
 ```hcl
 backend "s3" {
@@ -87,47 +128,182 @@ backend "s3" {
 }
 ```
 
-### Step 4: Re-initialize Terraform
+Then re-initialize:
 
 ```cmd
 terraform init -migrate-state
 ```
 
-Terraform will detect the backend config change and ask:
+Terraform will ask: `Do you want to migrate all workspaces to "s3"?` — type `yes`.
 
-```
-Do you want to migrate all workspaces to "s3"?
-```
-
-Type `yes`. Your state file stays in the same S3 bucket — only the locking mechanism changes.
-
-### Step 5: Verify It Works
+Verify:
 
 ```cmd
 terraform plan
 ```
 
-If the plan runs without errors, the migration succeeded. The lock is now handled by S3 itself (it creates a `.tflock` file next to your state file).
+If the plan runs without errors, Project 1 is migrated. ✅
 
-### Step 6: Delete the DynamoDB Lock Table
+### Step 4: Migrate Project 2 — Ministry Platform (Abandoned)
 
-Only do this AFTER confirming `terraform plan` works:
+This state file has 0 resources — it's an empty/abandoned project. The `.tf` files aren't on your machine anymore. You have two options:
+
+**Option A: Just delete the state file (recommended since it's empty):**
+
+```cmd
+aws s3 rm s3://techcross-terraform-state/ministry-platform/terraform.tfstate --profile ekewaka
+```
+
+**Option B: If you want to keep it, create a temporary directory and migrate:**
+
+```cmd
+mkdir c:\temp\ministry-platform-migrate
+cd c:\temp\ministry-platform-migrate
+```
+
+Create a minimal `main.tf`:
+
+```hcl
+terraform {
+  required_version = ">= 1.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+  backend "s3" {
+    bucket       = "techcross-terraform-state"
+    key          = "ministry-platform/terraform.tfstate"
+    region       = "us-east-1"
+    encrypt      = true
+    use_lockfile = true
+  }
+}
+
+provider "aws" {
+  region  = "us-east-1"
+  profile = "ekewaka"
+}
+```
+
+Then:
+
+```cmd
+terraform init -migrate-state
+```
+
+Type `yes` when prompted. Then clean up the temp directory.
+
+Project 2 done. ✅
+
+### Step 5: Migrate Project 3 — Post Graduation Terraform Backend
+
+```cmd
+cd "c:\Users\Ed\Documents\Post Graduation\Projects\Terraform\backend"
+```
+
+Edit `backend.tf`, change from:
+
+```hcl
+backend "s3" {
+  bucket         = "ed-terraform-remote-backend"
+  key            = "terraform/tfstate.tfstate"
+  region         = "us-east-1"
+  encrypt        = true
+  dynamodb_table = "terraform-state-lock"
+}
+```
+
+To:
+
+```hcl
+backend "s3" {
+  bucket       = "ed-terraform-remote-backend"
+  key          = "terraform/tfstate.tfstate"
+  region       = "us-east-1"
+  encrypt      = true
+  use_lockfile = true
+}
+```
+
+Then:
+
+```cmd
+terraform init -migrate-state
+terraform plan
+```
+
+Project 3 done. ✅
+
+### Step 6: Migrate Project 4 — Mumbai Practice
+
+```cmd
+cd c:\Users\Ed\Documents\Programming\AWS\Multi-Region-Practice\terraform\environments\practice-mumbai
+```
+
+Edit `main.tf`, change the backend from:
+
+```hcl
+backend "s3" {
+  bucket         = "terraform-state-mumbai-practice"
+  key            = "practice-mumbai/terraform.tfstate"
+  region         = "us-east-1"
+  encrypt        = true
+  dynamodb_table = "terraform-state-lock"
+}
+```
+
+To:
+
+```hcl
+backend "s3" {
+  bucket       = "terraform-state-mumbai-practice"
+  key          = "practice-mumbai/terraform.tfstate"
+  region       = "us-east-1"
+  encrypt      = true
+  use_lockfile = true
+}
+```
+
+Then:
+
+```cmd
+terraform init -migrate-state
+terraform plan
+```
+
+Project 4 done. ✅
+
+### Step 7: Delete the DynamoDB Lock Table
+
+Only do this AFTER all 4 projects are migrated and verified:
 
 ```cmd
 aws dynamodb delete-table --table-name terraform-state-lock --profile ekewaka --region us-east-1
 ```
 
-Also remove the `terraform-state-lock` table from `main.tf` if it's defined there (it's not currently, but good to check).
+Verify it's gone:
+
+```cmd
+aws dynamodb describe-table --table-name terraform-state-lock --profile ekewaka --region us-east-1 2>&1
+```
+
+You should see a `ResourceNotFoundException`. The table is gone and you're fully on S3-native locking. 🎉
 
 ### Rollback Plan
 
 If something goes wrong at any point:
 
-1. Restore the backend block to use `dynamodb_table = "terraform-state-lock"`
-2. Run `terraform init -migrate-state` again
-3. If the state file got corrupted, restore from backup:
+1. Restore the backend block in the affected project to use `dynamodb_table = "terraform-state-lock"`
+2. If the DynamoDB table was already deleted, recreate it:
    ```cmd
-   aws s3 cp ./terraform.tfstate.backup s3://techcross-terraform-state/prod/terraform.tfstate --profile ekewaka
+   aws dynamodb create-table --table-name terraform-state-lock --attribute-definitions AttributeName=LockID,AttributeType=S --key-schema AttributeName=LockID,KeyType=HASH --billing-mode PAY_PER_REQUEST --profile ekewaka --region us-east-1
+   ```
+3. Run `terraform init -migrate-state` again in the affected project
+4. If a state file got corrupted, restore from backup:
+   ```cmd
+   aws s3 cp ./state-backups/prod.tfstate.backup s3://techcross-terraform-state/prod/terraform.tfstate --profile ekewaka
    ```
 
 ---
