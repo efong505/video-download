@@ -365,6 +365,49 @@ def get_analytics(user_id, params):
         }
     })
 
+def get_analytics_overview(user_id):
+    # Get all campaigns for user
+    campaigns_response = campaigns_table.query(
+        KeyConditionExpression='user_id = :uid',
+        ExpressionAttributeValues={':uid': user_id}
+    )
+    campaigns = campaigns_response['Items']
+
+    # Get all events for user (query by partition key)
+    events_response = events_table.query(
+        KeyConditionExpression='user_id = :uid',
+        ExpressionAttributeValues={':uid': user_id}
+    )
+    events = events_response['Items']
+
+    # Handle pagination if there are many events
+    while 'LastEvaluatedKey' in events_response:
+        events_response = events_table.query(
+            KeyConditionExpression='user_id = :uid',
+            ExpressionAttributeValues={':uid': user_id},
+            ExclusiveStartKey=events_response['LastEvaluatedKey']
+        )
+        events.extend(events_response['Items'])
+
+    # Aggregate stats
+    total_sent = sum(1 for e in events if e.get('event_type') == 'sent')
+    total_delivered = sum(1 for e in events if e.get('event_type') == 'delivered')
+    total_opens = sum(1 for e in events if e.get('event_type') == 'opened')
+    total_clicks = sum(1 for e in events if e.get('event_type') == 'clicked')
+    total_bounces = sum(1 for e in events if e.get('event_type') == 'bounced')
+    total_complaints = sum(1 for e in events if e.get('event_type') == 'complaint')
+
+    return cors_response(200, {
+        'stats': {
+            'total_sent': total_sent,
+            'total_delivered': total_delivered,
+            'total_opens': total_opens,
+            'total_clicks': total_clicks,
+            'total_bounces': total_bounces,
+            'total_complaints': total_complaints
+        }
+    })
+
 def lambda_handler(event, context):
     if event.get('httpMethod') == 'OPTIONS':
         return cors_response(200, {})
@@ -393,6 +436,7 @@ def lambda_handler(event, context):
         'list_campaigns': lambda: list_campaigns(user_id),
         'send_campaign': lambda: send_campaign(user_id, body),
         'get_analytics': lambda: get_analytics(user_id, params),
+        'get_analytics_overview': lambda: get_analytics_overview(user_id),
     }
 
     handler = actions.get(action)

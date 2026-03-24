@@ -10,7 +10,7 @@ Compress-Archive -Path "index.py" -DestinationPath "news-api.zip" -Force
 
 # Update Lambda function
 Write-Host "Updating Lambda function..." -ForegroundColor Yellow
-aws lambda update-function-code --function-name news-api --zip-file fileb://news-api.zip
+aws lambda update-function-code --function-name news-api --zip-file fileb://news-api.zip --profile ekewaka --region us-east-1
 
 # Clean up
 Remove-Item "news-api.zip"

@@ -200,6 +200,22 @@
             font-size: 0.8em;
             margin-right: 10px;
         }
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .status-badge.scheduled {
+            background-color: #ffc107;
+            color: #000;
+        }
+        .status-badge.draft {
+            background-color: #6c757d;
+            color: #fff;
+        }
         .filter-section {
             background: white;
             border-radius: 15px;
@@ -441,6 +457,15 @@
                 // Category badge
                 html += '<span class="category-badge">' + (news.category || 'General').toUpperCase() + '</span>';
                 
+                // Status badge for admins
+                if (news.status && news.status !== 'published') {
+                    if (news.status === 'scheduled') {
+                        html += '<span class="status-badge scheduled">SCHEDULED</span>';
+                    } else if (news.status === 'draft') {
+                        html += '<span class="status-badge draft">DRAFT</span>';
+                    }
+                }
+                
                 // Title
                 html += '<h3 class="news-title">' + news.title + '</h3>';
                 
@@ -452,9 +477,6 @@
                 html += '<i class="fas fa-eye"></i> ' + (news.view_count || 0) + ' views';
                 if (news.state) {
                     html += ' | <i class="fas fa-map-marker-alt"></i> ' + news.state.toUpperCase();
-                }
-                if (news.status === 'scheduled') {
-                    html += ' | <i class="fas fa-clock"></i> Scheduled';
                 }
                 html += '</div>';
                 

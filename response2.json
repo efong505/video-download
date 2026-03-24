@@ -1,1 +1,1 @@
-{"statusCode": 200, "headers": {"Access-Control-Allow-Origin": "*"}, "body": "{\"message\": \"Email 2 sent to hawaiianintucson@gmail.com\", \"campaign_id\": \"3a3df4d2-119e-4905-84fc-cf73e597b670\"}"}
+{"statusCode": 200, "body": "{\"message\": \"Scheduled publisher completed\", \"checked\": 0, \"published\": 0}"}

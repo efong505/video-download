@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Article API</title>
+</head>
+<body>
+    <h1>Article API Test</h1>
+    <button onclick="testAPI()">Test API</button>
+    <pre id="output"></pre>
+    
+    <script>
+        async function testAPI() {
+            const output = document.getElementById('output');
+            output.textContent = 'Loading...';
+            
+            try {
+                const response = await fetch('https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/articles?action=list&visibility=public');
+                const data = await response.json();
+                
+                output.textContent = 'Total articles: ' + (data.articles ? data.articles.length : 0) + '\n\n';
+                
+                // Find the scheduled article
+                const scheduledArticle = data.articles.find(a => a.title && a.title.includes('second-try'));
+                
+                if (scheduledArticle) {
+                    output.textContent += 'FOUND THE ARTICLE!\n\n';
+                    output.textContent += JSON.stringify(scheduledArticle, null, 2);
+                } else {
+                    output.textContent += 'Article NOT found in response\n\n';
+                    output.textContent += 'All article titles:\n';
+                    data.articles.forEach(a => {
+                        output.textContent += '- ' + a.title + ' (category: ' + a.category + ', status: ' + a.status + ')\n';
+                    });
+                }
+            } catch (error) {
+                output.textContent = 'Error: ' + error.message;
+            }
+        }
+    </script>
+</body>
+</html>

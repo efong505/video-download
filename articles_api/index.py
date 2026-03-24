@@ -1,7 +1,7 @@
 import json
 import boto3
 import time
-from datetime import datetime
+from datetime import datetime, timezone
 import uuid
 import re
 from decimal import Decimal
@@ -75,7 +75,7 @@ dynamodb_breaker = CircuitBreaker(failure_threshold=5, timeout=30, expected_exce
 class RateLimiter:
     def __init__(self, dynamodb_resource):
         self.table = dynamodb_resource.Table('rate-limits')
-        self.limits = {'free': {'requests': 100, 'window': 3600}, 'paid': {'requests': 1000, 'window': 3600}, 'admin': {'requests': 10000, 'window': 3600}, 'anonymous': {'requests': 20, 'window': 3600}}
+        self.limits = {'free': {'requests': 300, 'window': 3600}, 'paid': {'requests': 1000, 'window': 3600}, 'admin': {'requests': 10000, 'window': 3600}, 'anonymous': {'requests': 100, 'window': 3600}}
     def check_rate_limit(self, identifier, tier='free'):
         if tier == 'admin':
             return {'allowed': True, 'remaining': 9999}
@@ -154,13 +154,16 @@ def lambda_handler(event, context):
             try:
                 identifier = rate_limiter.get_identifier(event)
                 tier = rate_limiter.get_tier(event)
-                rate_check = rate_limiter.check_rate_limit(identifier, tier)
-                if not rate_check['allowed']:
-                    return {
-                        'statusCode': 429,
-                        'headers': {**headers, 'X-RateLimit-Limit': str(rate_limiter.limits[tier]['requests']), 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': str(rate_check['reset_at']), 'Retry-After': str(rate_check['retry_after'])},
-                        'body': json.dumps({'error': f"Rate limit exceeded. Retry in {rate_check['retry_after']}s"})
-                    }
+                
+                # Skip rate limiting for admins completely
+                if tier != 'admin':
+                    rate_check = rate_limiter.check_rate_limit(identifier, tier)
+                    if not rate_check['allowed']:
+                        return {
+                            'statusCode': 429,
+                            'headers': {**headers, 'X-RateLimit-Limit': str(rate_limiter.limits[tier]['requests']), 'X-RateLimit-Remaining': '0', 'X-RateLimit-Reset': str(rate_check['reset_at']), 'Retry-After': str(rate_check['retry_after'])},
+                            'body': json.dumps({'error': f"Rate limit exceeded. Retry in {rate_check['retry_after']}s"})
+                        }
             except Exception as e:
                 print(f"Rate limit check error: {e}")
         
@@ -237,6 +240,27 @@ def create_article(event):
         tags = body.get('tags', [])
         visibility = body.get('visibility', 'public')
         featured_image = body.get('featured_image', '')
+        scheduled_publish = body.get('scheduled_publish', '')
+        status = body.get('status', 'published')
+        
+        # Determine status based on scheduled_publish - override user selection if future date
+        if scheduled_publish:
+            try:
+                scheduled_time = datetime.fromisoformat(scheduled_publish.replace('Z', '+00:00'))
+                current_time = datetime.now(timezone.utc)
+                print(f"DEBUG: scheduled_publish={scheduled_publish}")
+                print(f"DEBUG: scheduled_time={scheduled_time}, current_time={current_time}")
+                print(f"DEBUG: scheduled_time > current_time = {scheduled_time > current_time}")
+                if scheduled_time > current_time:
+                    status = 'scheduled'
+                    print(f"DEBUG: Setting status to 'scheduled'")
+                elif status == 'scheduled':
+                    # If scheduled time is in the past but status is scheduled, publish it
+                    status = 'published'
+                    print(f"DEBUG: Scheduled time in past, setting status to 'published'")
+            except Exception as e:
+                print(f"Error parsing scheduled_publish: {e}")
+                pass
         
         # Handle author field - if it contains @, it's an email, otherwise it's a name
         if '@' in author_input:
@@ -271,12 +295,16 @@ def create_article(event):
             'tags': tags,
             'visibility': visibility,
             'featured_image': featured_image,
+            'scheduled_publish': scheduled_publish,
+            'status': status,
             'reading_time': reading_time,
             'view_count': 0,
             'likes_count': 0,
             'created_at': datetime.utcnow().isoformat(),
             'updated_at': datetime.utcnow().isoformat()
         }
+        
+        print(f"DEBUG: Final article status={status}, scheduled_publish={scheduled_publish}")
         
         dynamodb_breaker.call(articles_table.put_item, Item=article)
         
@@ -637,7 +665,17 @@ def list_articles(event):
         # Scan articles table with pagination
         scan_kwargs = {}
         
-        if visibility == 'public':
+        # Get user info to determine if admin
+        user_info = extract_user_from_token(event)
+        is_admin = user_info and user_info.get('role') in ['admin', 'super_user']
+        
+        if visibility == 'public' and not is_admin:
+            # Non-admin users only see published articles (or articles without status field for backward compatibility)
+            scan_kwargs['FilterExpression'] = 'visibility = :vis AND (attribute_not_exists(#status) OR #status = :status)'
+            scan_kwargs['ExpressionAttributeValues'] = {':vis': 'public', ':status': 'published'}
+            scan_kwargs['ExpressionAttributeNames'] = {'#status': 'status'}
+        elif visibility == 'public':
+            # Admins see all public articles regardless of status
             scan_kwargs['FilterExpression'] = 'visibility = :vis'
             scan_kwargs['ExpressionAttributeValues'] = {':vis': 'public'}
         
@@ -785,9 +823,30 @@ def update_article(event):
         }
     
     try:
+        # Determine status based on scheduled_publish if provided
+        status_override = None
+        if 'scheduled_publish' in body:
+            scheduled_publish = body['scheduled_publish']
+            if scheduled_publish:
+                try:
+                    scheduled_time = datetime.fromisoformat(scheduled_publish.replace('Z', '+00:00'))
+                    current_time = datetime.now(timezone.utc)
+                    if scheduled_time > current_time:
+                        status_override = 'scheduled'
+                    elif 'status' in body and body['status'] == 'scheduled':
+                        # If scheduled time is in the past but status is scheduled, publish it
+                        status_override = 'published'
+                except Exception as e:
+                    print(f"Error parsing scheduled_publish: {e}")
+        
+        # Override status if needed
+        if status_override:
+            body['status'] = status_override
+        
         # Update article
         update_expression = 'SET updated_at = :updated'
         expression_values = {':updated': datetime.utcnow().isoformat()}
+        expression_names = {}
         
         if 'title' in body:
             update_expression += ', title = :title'
@@ -817,6 +876,15 @@ def update_article(event):
             update_expression += ', featured_image = :img'
             expression_values[':img'] = body['featured_image']
         
+        if 'status' in body:
+            update_expression += ', #status = :status'
+            expression_values[':status'] = body['status']
+            expression_names['#status'] = 'status'
+        
+        if 'scheduled_publish' in body:
+            update_expression += ', scheduled_publish = :sched'
+            expression_values[':sched'] = body['scheduled_publish']
+        
         if 'author_email' in body:
             # Get new author's name
             new_author_name = get_user_name(body['author_email'])
@@ -828,7 +896,8 @@ def update_article(event):
             articles_table.update_item,
             Key={'article_id': article_id},
             UpdateExpression=update_expression,
-            ExpressionAttributeValues=expression_values
+            ExpressionAttributeValues=expression_values,
+            ExpressionAttributeNames=expression_names if expression_names else None
         )
         
         return {

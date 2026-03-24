@@ -1,7 +1,7 @@
 import json
 import boto3
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from decimal import Decimal
 import base64
 import os
@@ -138,15 +138,20 @@ def create_news(event, headers):
         news_id = str(uuid.uuid4())
         now = datetime.utcnow().isoformat()
         
-        # Determine status based on scheduled_publish
+        # Determine status based on scheduled_publish - override user selection if future date
         scheduled_publish = body.get('scheduled_publish', '')
         status = body.get('status', 'published')
         if scheduled_publish:
             try:
                 scheduled_time = datetime.fromisoformat(scheduled_publish.replace('Z', '+00:00'))
-                if scheduled_time > datetime.utcnow():
+                current_time = datetime.now(timezone.utc)
+                if scheduled_time > current_time:
                     status = 'scheduled'
-            except:
+                elif status == 'scheduled':
+                    # If scheduled time is in the past but status is scheduled, publish it
+                    status = 'published'
+            except Exception as e:
+                print(f"Error parsing scheduled_publish: {e}")
                 pass
         
         # Get author_name from request or derive from email
@@ -341,6 +346,21 @@ def update_news(event, headers):
                 'headers': headers,
                 'body': json.dumps({'error': 'news_id required'})
             }
+        
+        # Determine status based on scheduled_publish if provided
+        if 'scheduled_publish' in body:
+            scheduled_publish = body['scheduled_publish']
+            if scheduled_publish:
+                try:
+                    scheduled_time = datetime.fromisoformat(scheduled_publish.replace('Z', '+00:00'))
+                    current_time = datetime.now(timezone.utc)
+                    if scheduled_time > current_time:
+                        body['status'] = 'scheduled'
+                    elif 'status' in body and body['status'] == 'scheduled':
+                        # If scheduled time is in the past but status is scheduled, publish it
+                        body['status'] = 'published'
+                except Exception as e:
+                    print(f"Error parsing scheduled_publish: {e}")
         
         # Build update expression
         update_expression = 'SET updated_at = :updated_at'

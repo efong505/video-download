@@ -216,6 +216,12 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="scheduled_publish" class="form-label">Schedule Publish (Optional)</label>
+                    <input type="datetime-local" class="form-control" id="scheduled_publish">
+                    <div class="form-text">Leave empty to publish immediately. Set a future date/time to schedule publication.</div>
+                </div>
+
+                <div class="mb-3">
                     <label class="form-label">Breaking News</label>
                     <div>
                         <button type="button" id="breakingToggle" class="breaking-news-toggle" onclick="toggleBreaking()">
@@ -381,6 +387,15 @@
                 document.getElementById('external_url').value = news.external_url || '';
                 document.getElementById('featured_image').value = news.featured_image || '';
                 
+                // Set scheduled_publish if exists
+                if (news.scheduled_publish) {
+                    // Convert ISO string to datetime-local format (YYYY-MM-DDTHH:MM)
+                    var scheduledDate = new Date(news.scheduled_publish);
+                    var localDateTime = new Date(scheduledDate.getTime() - scheduledDate.getTimezoneOffset() * 60000)
+                        .toISOString().slice(0, 16);
+                    document.getElementById('scheduled_publish').value = localDateTime;
+                }
+                
                 // Set content
                 var delta = quill.clipboard.convert(news.content || '');
                 quill.setContents(delta);
@@ -506,6 +521,7 @@
 
         function updateNews() {
             var token = localStorage.getItem('auth_token');
+            var scheduledPublish = document.getElementById('scheduled_publish').value;
             
             var newsData = {
                 news_id: newsId,
@@ -519,6 +535,7 @@
                 is_breaking: isBreaking,
                 external_url: document.getElementById('external_url').value,
                 featured_image: document.getElementById('featured_image').value,
+                scheduled_publish: scheduledPublish ? new Date(scheduledPublish).toISOString() : '',
                 tags: tags
             };
 

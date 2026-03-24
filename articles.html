@@ -731,15 +731,27 @@
                         }
                         
                         // Remove duplicates based on article_id
-                        const uniqueArticles = [];
-                        const seenIds = new Set();
+                        // Keep public version when there's a duplicate (public articles should be visible)
+                        console.log(`Before deduplication: ${loadedArticles.length} articles`);
+                        const beforeCount = loadedArticles.length;
+                        const uniqueArticlesMap = new Map();
                         loadedArticles.forEach(article => {
-                            if (article && article.article_id && !seenIds.has(article.article_id)) {
-                                seenIds.add(article.article_id);
-                                uniqueArticles.push(article);
+                            if (article && article.article_id) {
+                                const existingArticle = uniqueArticlesMap.get(article.article_id);
+                                // Only add if not exists, OR if existing is private and new is public
+                                if (!existingArticle) {
+                                    uniqueArticlesMap.set(article.article_id, article);
+                                } else if (existingArticle.visibility === 'private' && article.visibility === 'public') {
+                                    // Replace private with public version
+                                    uniqueArticlesMap.set(article.article_id, article);
+                                    console.log(`Replaced private article with public version: ${article.title}`);
+                                }
+                                // Otherwise keep the existing one (don't overwrite public with private)
                             }
                         });
-                        loadedArticles = uniqueArticles;
+                        loadedArticles = Array.from(uniqueArticlesMap.values());
+                        console.log(`After deduplication: ${loadedArticles.length} articles`);
+                        console.log(`Removed ${beforeCount - loadedArticles.length} duplicates`);
                         
                     } catch (privateError) {
                         console.warn('Failed to load private articles (continuing with public only):', privateError);
@@ -929,10 +941,18 @@
                         <img src="${article.featured_image}" class="img-fluid rounded" style="max-height: 200px; width: 100%; object-fit: cover; cursor: pointer;" onclick="window.open('article.html?id=${safeArticleId}', '_self')" alt="${safeTitle}">
                     </div>` : '';
                 
+                // Status badge for scheduled/draft articles
+                const statusBadge = article.status === 'scheduled' ? 
+                    `<span class="badge bg-warning text-dark ms-2">SCHEDULED</span>` : 
+                    article.status === 'draft' ? 
+                    `<span class="badge bg-secondary ms-2">DRAFT</span>` : '';
+                
+                console.log('Article:', safeTitle, 'Status:', article.status, 'Badge:', statusBadge);
+                
                 card.innerHTML = `
                     ${featuredImageHtml}
                     <div class="article-meta">
-                        <span class="category-badge category-${safeCategory}">${getCategoryName(safeCategory)}</span>
+                        <span class="category-badge category-${safeCategory}">${getCategoryName(safeCategory)}</span>${statusBadge}
                         <span class="ms-3">By ${safeAuthor}</span>
                         <span class="ms-3">${date}</span>
                         <span class="ms-3">📖 ${safeReadingTime} min read</span>

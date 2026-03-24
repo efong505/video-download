@@ -195,6 +195,15 @@
                                 <option value="service_notes">Service Notes</option>
                                 <option value="study_notes">Study Notes (Personal)</option>
                                 <option value="general">General</option>
+                                <optgroup label="7 Mountains">
+                                    <option value="family">⛰️ Family</option>
+                                    <option value="religion">⛰️ Religion</option>
+                                    <option value="education">⛰️ Education</option>
+                                    <option value="media">⛰️ Media</option>
+                                    <option value="art">⛰️ Art & Entertainment</option>
+                                    <option value="economics">⛰️ Economics & Business</option>
+                                    <option value="government">⛰️ Government</option>
+                                </optgroup>
                             </select>
                         </div>
 
@@ -216,6 +225,26 @@
                                 <option value="public">Public</option>
                                 <option value="private">Private</option>
                             </select>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Status</label>
+                                    <select id="article-status" class="form-select">
+                                        <option value="published">Published</option>
+                                        <option value="draft">Draft</option>
+                                        <option value="scheduled">Scheduled</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Schedule Publish (Optional)</label>
+                                    <input type="datetime-local" class="form-control" id="scheduled-publish">
+                                    <div class="form-text">Leave empty for immediate publish</div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="mb-3">
@@ -652,6 +681,17 @@ Code block
             document.getElementById('article-tags').value = article.tags ? article.tags.join(', ') : '';
             document.getElementById('article-visibility').value = article.visibility;
             
+            // Set status and scheduled_publish
+            if (article.status) {
+                document.getElementById('article-status').value = article.status;
+            }
+            if (article.scheduled_publish) {
+                var scheduledDate = new Date(article.scheduled_publish);
+                var localDateTime = new Date(scheduledDate.getTime() - scheduledDate.getTimezoneOffset() * 60000)
+                    .toISOString().slice(0, 16);
+                document.getElementById('scheduled-publish').value = localDateTime;
+            }
+            
             // Set author if admin/super user
             if (currentUser.role === 'admin' || currentUser.role === 'super_user') {
                 const authorSelect = document.getElementById('article-author');
@@ -709,6 +749,8 @@ Code block
             const category = document.getElementById('article-category').value;
             const tags = document.getElementById('article-tags').value.split(',').map(tag => tag.trim()).filter(tag => tag);
             const visibility = document.getElementById('article-visibility').value;
+            const status = document.getElementById('article-status').value;
+            const scheduledPublish = document.getElementById('scheduled-publish').value;
             const content = getCurrentContent();
             const featuredImageUrl = document.getElementById('featured-image-url').value.trim();
             
@@ -718,7 +760,9 @@ Code block
                 content: content,
                 category: category,
                 tags: tags,
-                visibility: visibility
+                visibility: visibility,
+                status: status,
+                scheduled_publish: scheduledPublish ? new Date(scheduledPublish).toISOString() : ''
             };
             
             // Include featured image URL if present

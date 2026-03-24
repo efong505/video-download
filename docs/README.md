@@ -50,9 +50,9 @@ This folder contains all documentation, tutorials, and guides for the Christian 
 
 #### 📝 **Article System**
 - **Location**: `Downloader/articles_api/`, `Downloader/create-article.html`, `Downloader/articles.html`
-- **Docs**: [ARTICLE_ANALYTICS.md](ARTICLE_ANALYTICS.md), [ARTICLE_CATEGORIES_TAGGING.md](ARTICLE_CATEGORIES_TAGGING.md)
-- **Features**: Rich text editor, Bible verse integration, analytics, comments
-- **Lambda**: `articles_api`, `article_analysis_api`
+- **Docs**: [ARTICLE_ANALYTICS.md](ARTICLE_ANALYTICS.md), [ARTICLE_CATEGORIES_TAGGING.md](ARTICLE_CATEGORIES_TAGGING.md), [SCHEDULED_PUBLISHER.md](SCHEDULED_PUBLISHER.md)
+- **Features**: Rich text editor, Bible verse integration, analytics, comments, scheduled publishing
+- **Lambda**: `articles_api`, `article_analysis_api`, `scheduled-publisher`
 
 #### 🗳️ **Election Tracking System**
 - **Location**: `Downloader/Election Data and Files/`, `Downloader/election-map.html`
@@ -125,6 +125,7 @@ This folder contains all documentation, tutorials, and guides for the Christian 
 - **[ARTICLE_CATEGORIES_TAGGING.md](ARTICLE_CATEGORIES_TAGGING.md)** - Tagging system
 - **[AUTO_SUMMARY_COMPLETE.md](AUTO_SUMMARY_COMPLETE.md)** - Auto-summary feature
 - **[RELATED_ARTICLES.md](RELATED_ARTICLES.md)** - Related articles system
+- **[SCHEDULED_PUBLISHER.md](SCHEDULED_PUBLISHER.md)** - Automated scheduled publishing
 
 ### Download System
 - **[download_system.md](download_system.md)** - Video download system
@@ -247,13 +248,14 @@ This folder contains all documentation, tutorials, and guides for the Christian 
 - **Email Subscribers**: Unlimited capacity
 
 ### Technical
-- **Lambda Functions**: 18+ microservices
+- **Lambda Functions**: 19+ microservices
 - **DynamoDB Tables**: 15+ tables
 - **API Endpoints**: 12+ REST/HTTP APIs
 - **Storage**: S3 with CloudFront CDN
 - **Email Delivery**: AWS SES with tracking
 - **Authentication**: JWT with 24-hour expiration
 - **Roles**: Super User, Admin, Editor, User
+- **Automation**: EventBridge scheduled tasks (scheduled publisher)
 
 ---
 
