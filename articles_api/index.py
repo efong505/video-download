@@ -538,7 +538,48 @@ def get_article_templates(event):
 <p>Cross-references, questions for further study, insights...</p>'''
         }
     }
-    
+
+    # 7 Mountains Ministry Templates
+    mountain_templates = {
+        'mountain_family': {
+            'name': '⛰️ Family Mountain - Restoration Devotional',
+            'description': 'Promoting biblical marriage and family values',
+            'content': '<h2>🏠 Family Mountain Devotional</h2><p><strong>Theme:</strong> Rebuilding Biblical Families</p><h2>📖 Scripture Foundation</h2><p><em>Insert scripture on marriage, family, or parenting...</em></p><h2>✅ What We Promote</h2><ul><li>Biblical marriage between one man and one woman</li><li>Godly parenting and family discipleship</li><li>The sanctity of life from conception</li></ul><h2>⚔️ What We Expose &amp; Fight</h2><ul><li>Attacks on the biblical family structure</li><li>Abortion and threats to the sanctity of life</li><li>Cultural forces undermining parental authority</li></ul><h2>📝 Action Steps</h2><ol><li>[Practical family-building action]</li><li>[Community engagement]</li><li>[Prayer and intercession]</li></ol><h2>🙏 Family Altar Challenge</h2><p>This week, gather your family and...</p><h2>🙏 Prayer</h2><p>Heavenly Father, restore the family as the foundation of society...</p>'
+        },
+        'mountain_religion': {
+            'name': '⛰️ Religion Mountain - Doctrine Defense Sermon',
+            'description': 'Defending biblical doctrine and exposing false teachings',
+            'content': '<h2>⛪ Religion Mountain Sermon</h2><p><strong>Theme:</strong> Defending Biblical Truth in the Modern Church</p><h2>📖 Scripture Foundation</h2><p><em>Insert scripture on sound doctrine or discernment...</em></p><h2>✅ What We Promote</h2><ul><li>Biblical doctrine and sound theology</li><li>Biblical worldview in every area of life</li><li>Spirit-led worship and authentic faith</li></ul><h2>⚔️ What We Expose &amp; Fight</h2><ul><li>False teachings infiltrating the church</li><li>Radical anti-God perspectives in culture</li><li>Compromise of biblical truth</li></ul><h2>📝 Three Biblical Worldview Points</h2><h3>1. [First doctrinal truth]</h3><p>Supporting scripture...</p><h3>2. [Second doctrinal truth]</h3><p>Supporting scripture...</p><h3>3. [Third doctrinal truth]</h3><p>Supporting scripture...</p><h2>💡 Spirit-Led Testimony</h2><p>Share a testimony of God\'s faithfulness...</p><h2>🙏 Prayer</h2><p>Lord, guard Your church from false doctrine and revive us with Your truth...</p>'
+        },
+        'mountain_education': {
+            'name': '⛰️ Education Mountain - Truth in the Classroom',
+            'description': 'Reclaiming education with real history and real science',
+            'content': '<h2>📚 Education Mountain Article</h2><p><strong>Theme:</strong> Real History, Real Science, Biblical Truth</p><h2>📖 Scripture Foundation</h2><p><em>Insert scripture on wisdom, knowledge, or training children...</em></p><h2>✅ What We Promote</h2><ul><li>Accurate history and founding principles</li><li>Real science that honors the Creator</li><li>Biblical worldview in education</li></ul><h2>⚔️ What We Expose &amp; Fight</h2><ul><li>Historical revisionism in textbooks</li><li>Fake science and ideological indoctrination</li><li>Anti-Christian bias in schools</li></ul><h2>📝 Key Facts &amp; Evidence</h2><p>Present your research and evidence here...</p><h2>🎯 Parent Action Toolkit</h2><ol><li>Review your child\'s curriculum for bias</li><li>Attend school board meetings</li><li>Support Christian education alternatives</li></ol><h2>🙏 Prayer</h2><p>Father, give us wisdom to reclaim education for Your glory...</p>'
+        },
+        'mountain_media': {
+            'name': '⛰️ Media Mountain - Truth Bomb Video Script',
+            'description': 'Exposing fake news and promoting godly content',
+            'content': '<h2>📺 Media Mountain Script</h2><p><strong>Theme:</strong> Exposing Lies, Promoting Truth</p><h2>📖 Scripture Foundation</h2><p><em>Insert scripture on truth, light, or discernment...</em></p><h2>✅ What We Promote</h2><ul><li>Truthful, biblical journalism</li><li>Godly content for children and families</li><li>Christian social media alternatives</li></ul><h2>⚔️ What We Expose &amp; Fight</h2><ul><li>Fake news and mainstream media bias</li><li>Censorship of conservative and Christian voices</li><li>Harmful content targeting children</li></ul><h2>📝 This Week\'s Fake News Exposed</h2><p>Identify the false narrative and present the truth...</p><h2>🌟 Godly Content Recommendation</h2><p>Highlight a positive, faith-building resource...</p><h2>🚀 Call to Action</h2><p>Upload your own truth content on ChristianConservativesToday.com!</p>'
+        },
+        'mountain_art': {
+            'name': '⛰️ Art Mountain - Kingdom Creative Brief',
+            'description': 'Creating godly art, music, and entertainment',
+            'content': '<h2>🎨 Art &amp; Entertainment Mountain</h2><p><strong>Theme:</strong> Creating Culture That Glorifies God</p><h2>📖 Scripture Foundation</h2><p><em>Insert scripture on creativity, beauty, or worship...</em></p><h2>✅ What We Promote</h2><ul><li>Godly wholesomeness in entertainment</li><li>Christian music, art, and literature</li><li>Faith-based content for children</li></ul><h2>⚔️ What We Expose &amp; Fight</h2><ul><li>Ungodliness in mainstream entertainment</li><li>Violence in games, movies, and cartoons</li><li>Anti-Christian messaging in popular culture</li></ul><h2>📝 Creative Project Outline</h2><p><strong>Project Type:</strong> [Song / Film / Book / Art / Game]</p><p><strong>Target Audience:</strong> [Children / Families / Youth / Adults]</p><p><strong>Message:</strong> [Core biblical truth to communicate]</p><p><strong>Description:</strong> Describe your creative vision...</p><h2>🙏 Prayer</h2><p>Creator God, inspire us to make art that displaces darkness with Your light...</p>'
+        },
+        'mountain_economics': {
+            'name': '⛰️ Economics Mountain - Kingdom Entrepreneur',
+            'description': 'Building kingdom businesses with biblical principles',
+            'content': '<h2>💼 Economics &amp; Business Mountain</h2><p><strong>Theme:</strong> Building Kingdom Business God\'s Way</p><h2>📖 Scripture Foundation</h2><p><em>Insert scripture on stewardship, work, or provision...</em></p><h2>✅ What We Promote</h2><ul><li>God-given ingenuity and entrepreneurship</li><li>Anti-globalist, people-first economics</li><li>Kingdom businesses using talents for God\'s glory</li></ul><h2>⚔️ What We Expose &amp; Fight</h2><ul><li>Government overreach on businesses</li><li>Globalist economic agendas</li><li>Corporate attacks on Christian values</li></ul><h2>📝 3 Ways to Use Your Talents for the Kingdom</h2><ol><li>[First practical step]</li><li>[Second step]</li><li>[Third step]</li></ol><h2>🙏 Prayer</h2><p>Lord, protect Your people from economic tyranny and bless kingdom businesses...</p>'
+        },
+        'mountain_government': {
+            'name': '⛰️ Government Mountain - Patriot Commentary',
+            'description': 'Biblical American history and civic engagement',
+            'content': '<h2>🏛️ Government Mountain Commentary</h2><p><strong>Theme:</strong> Biblical Citizenship and Constitutional Truth</p><h2>📖 Scripture Foundation</h2><p><em>Insert scripture on government, justice, or authority...</em></p><h2>✅ What We Promote</h2><ul><li>Biblical American history and founding truths</li><li>Constitutional principles and limited government</li><li>Christian civic engagement and leadership</li></ul><h2>⚔️ What We Expose &amp; Fight</h2><ul><li>Historical revisionism about America\'s founding</li><li>Unconstitutional government overreach</li><li>Attacks on religious liberty</li></ul><h2>📜 Historical Truth</h2><p>Share a quote or fact from America\'s Christian founding...</p><h2>📝 Your Next Political Step</h2><ol><li>Study your local candidates using our Voter Guides</li><li>Attend a town hall or school board meeting</li><li>Consider running for local office</li></ol><h2>🙏 Prayer for Leaders</h2><p>Father, raise up righteous leaders and give us courage to engage...</p>'
+        }
+    }
+
+    templates.update(mountain_templates)
+
     return {
         'statusCode': 200,
         'headers': cors_headers(),
