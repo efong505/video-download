@@ -1060,6 +1060,18 @@
         document.addEventListener('DOMContentLoaded', async function() {
             const isAuthenticated = await checkAuth();
             if (isAuthenticated) {
+                // Auto-select category from URL param
+                const params = new URLSearchParams(window.location.search);
+                const catParam = params.get('category');
+                if (catParam) {
+                    currentCategory = catParam;
+                    const catBtn = document.querySelector(`.category-btn[data-category="${catParam}"]`);
+                    if (catBtn) {
+                        document.querySelectorAll('.category-btn').forEach(b => { b.classList.remove('active','btn-primary'); b.classList.add('btn-outline-primary'); });
+                        catBtn.classList.add('active','btn-primary');
+                        catBtn.classList.remove('btn-outline-primary');
+                    }
+                }
                 loadVideos();
                 
                 // Check for category order changes every 2 seconds

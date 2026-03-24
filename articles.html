@@ -631,6 +631,19 @@
             
             await loadArticles();
             setupFilters();
+
+            // Auto-filter from URL params
+            const params = new URLSearchParams(window.location.search);
+            const catParam = params.get('category');
+            const tagParam = params.get('tag');
+            if (catParam) {
+                document.getElementById('category-filter').value = catParam;
+                applyFilters();
+            }
+            if (tagParam) {
+                document.getElementById('search-input').value = tagParam;
+                applyFilters();
+            }
         });
 
         async function loadArticles() {

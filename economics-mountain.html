@@ -5,33 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="mountain-hubs.css"><title>Economics & Business Mountain - Christian Conservatives Today</title>
-    <!-- <link rel="stylesheet" href="assets/css/common-styles.css"> -->
+    <link rel="stylesheet" href="mountain-hubs.css">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <title>Economics &amp; Business Mountain - Christian Conservatives Today</title>
     <style>:root{--mountain-primary:#6b7280;--mountain-secondary:#4b5563;}</style>
 </head>
 <body>
-    <!-- Navigation -->
     <div id="navbar-container" data-page="economics-mountain" data-icon-style="fontawesome"></div>
     <script src="navbar.js"></script>
     <script>
-        fetch('navbar.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('navbar-container').innerHTML = html;
-                initNavbar();
-            });
+        fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});
     </script>
     <div class="mountain-hero">
-        <h1>⛰️ Economics & Business Mountain</h1>
+        <h1>⛰️ Economics &amp; Business Mountain</h1>
         <p>Building kingdom businesses and biblical economic systems</p>
         <img src="Money.png" alt="Economics & Business Mountain" class="hero-banner">
     </div>
 
     <div class="tabs">
-        <button class="tab active" onclick="switchTab(event, 'promote')">Promote</button>
-        <button class="tab" onclick="switchTab(event, 'expose')">Expose & Fight</button>
-        <button class="tab" onclick="switchTab(event, 'involved')">Get Involved</button>
-        <button class="tab" onclick="switchTab(event, 'resources')">Resources</button>
+        <button class="tab active" data-tab="promote">Promote</button>
+        <button class="tab" data-tab="expose">Expose &amp; Fight</button>
+        <button class="tab" data-tab="involved">Get Involved</button>
+        <button class="tab" data-tab="resources">Resources</button>
     </div>
 
     <div id="promote" class="tab-content active">
@@ -40,22 +35,23 @@
             <div class="action-card">
                 <h3>💼 Christian Business Directory</h3>
                 <p>Find and promote Christian-owned businesses and faith-based entrepreneurs.</p>
-                <a href="resources.html" class="action-btn">View Directory</a>
+                <a href="articles.html?category=economics" class="action-btn">Browse Businesses</a>
             </div>
             <div class="action-card">
-                <h3>📊 Economic Content</h3>
+                <h3>📊 Share Economic Content</h3>
                 <p>Share articles and videos on biblical economics, free markets, and financial wisdom.</p>
-                <a href="user-upload.html?mountain=economics" class="action-btn">Upload Content</a>
+                <a href="user-upload.html?mountain=economics" class="action-btn">Upload Video</a>
+                <a href="create-article.html?template=mountain_economics&mountain=economics" class="action-btn" style="margin-top:8px;">Write Article</a>
             </div>
             <div class="action-card">
                 <h3>🤝 Kingdom Partnerships</h3>
                 <p>Connect Christian businesses for collaboration, networking, and mutual support.</p>
-                <a href="resources.html" class="action-btn">Find Partners</a>
+                <a href="articles.html?category=economics" class="action-btn">Find Partners</a>
             </div>
             <div class="action-card">
                 <h3>💰 Financial Stewardship</h3>
                 <p>Access biblical teaching on money management, investing, and generosity.</p>
-                <a href="videos.html" class="action-btn">Watch Videos</a>
+                <a href="videos.html?category=economics" class="action-btn">Watch Videos</a>
             </div>
         </div>
     </div>
@@ -66,17 +62,18 @@
             <div class="action-card">
                 <h3>🚨 Report Corporate Wokeness</h3>
                 <p>Document companies pushing ESG, DEI, and anti-Christian corporate policies.</p>
-                <a href="user-upload.html?mountain=economics" class="action-btn">Submit Report</a>
+                <a href="user-upload.html?mountain=economics" class="action-btn">Upload Video Report</a>
+                <a href="create-article.html?template=mountain_economics&mountain=economics" class="action-btn" style="margin-top:8px;">Write Report</a>
             </div>
             <div class="action-card">
                 <h3>📰 Economic News</h3>
                 <p>Stay informed about socialist policies, economic tyranny, and market manipulation.</p>
-                <a href="articles.html" class="action-btn">Read Articles</a>
+                <a href="articles.html?category=economics" class="action-btn">Read Articles</a>
             </div>
             <div class="action-card">
                 <h3>💳 Boycott Tracker</h3>
                 <p>Track and boycott companies discriminating against Christians and conservatives.</p>
-                <a href="articles.html" class="action-btn">View Boycotts</a>
+                <a href="articles.html?category=economics&tag=boycott" class="action-btn">View Boycotts</a>
             </div>
             <div class="action-card">
                 <h3>🎯 Economic Campaigns</h3>
@@ -96,8 +93,8 @@
             </div>
             <div class="action-card">
                 <h3>🚀 Start a Kingdom Business</h3>
-                <p>Learn to launch and grow a business based on biblical principles and values.</p>
-                <a href="resources.html" class="action-btn">Get Training</a>
+                <p>Use our Economics Mountain template to write about biblical business principles.</p>
+                <a href="create-article.html?template=mountain_economics&mountain=economics" class="action-btn">Use Template</a>
             </div>
             <div class="action-card">
                 <h3>📅 Business Events</h3>
@@ -113,31 +110,38 @@
     </div>
 
     <div id="resources" class="tab-content">
-        <h2>Economics & Business Mountain Resources</h2>
+        <h2>Economics &amp; Business Mountain Resources</h2>
         <ul class="resource-list">
-            <li><strong>Biblical Business Principles</strong> - Courses on running businesses God's way</li>
-            <li><strong>Financial Planning</strong> - Budgeting, investing, and wealth building from a biblical perspective</li>
-            <li><strong>Entrepreneurship Training</strong> - How to start and scale kingdom businesses</li>
-            <li><strong>Christian Investors Network</strong> - Connect with faith-based investors and funding</li>
-            <li><strong>Economic Policy Resources</strong> - Understanding free markets vs. socialism</li>
-            <li><strong>Workplace Ministry</strong> - Bringing faith into the marketplace and workplace</li>
-            <li><strong>Generosity & Giving</strong> - Biblical stewardship and charitable giving strategies</li>
-            <li><strong>Alternative Banking</strong> - Christian-friendly financial institutions and services</li>
+            <li><a href="create-article.html?template=mountain_economics&mountain=economics"><strong>Kingdom Entrepreneur Template</strong></a> - Write articles using our Economics Mountain template</li>
+            <li><a href="articles.html?category=economics"><strong>Economics Articles</strong></a> - Browse all economics and business articles</li>
+            <li><a href="videos.html?category=economics"><strong>Economics Videos</strong></a> - Watch economics and business videos</li>
+            <li><a href="ministry-templates.html"><strong>All Ministry Templates</strong></a> - Browse all 7 Mountains article templates</li>
+            <li><a href="prayer-wall.html"><strong>Prayer Wall</strong></a> - Pray for kingdom businesses and economic transformation</li>
+            <li><a href="events-calendar.html"><strong>Events Calendar</strong></a> - Find business conferences and economic forums</li>
+            <li><a href="user-upload.html?mountain=economics"><strong>Upload Content</strong></a> - Share your own economics videos</li>
+            <li><a href="mountain-pledge.html"><strong>Take the Pledge</strong></a> - Commit to biblical business practices</li>
         </ul>
     </div>
 
     <script>
-        function switchTab(event, tabName) {
-            const tabs = document.querySelectorAll('.tab');
-            const contents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => tab.classList.remove('active'));
-            contents.forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
+        // Tab switching with URL hash persistence
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
             document.getElementById(tabName).classList.add('active');
+            history.replaceState(null, '', '#' + tabName);
         }
+
+        document.querySelectorAll('.tab').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        });
+
+        // Restore tab from hash on load
+        const hash = window.location.hash.replace('#', '');
+        if (hash && document.getElementById(hash)) switchTab(hash);
     </script>
+
     <!-- Pledge Section -->
     <div class="pledge-section">
         <h2>✊ Take the Economics Mountain Pledge</h2>
@@ -183,4 +187,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
