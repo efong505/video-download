@@ -170,6 +170,38 @@ articles-table:
 - [ ] Implement modern state management
 - [ ] Enhanced mobile responsiveness
 
+## 7 Mountains System - COMPLETE
+
+### Phase 4 - Backend Infrastructure
+- [x] DynamoDB tables: mountain-pledges, mountain-badges, mountain-contributions
+- [x] Lambda function: mountains-api (Python 3.12 + PyJWT)
+- [x] API Gateway: lcmogvl3v2 (REST API, prod stage, CORS enabled)
+- [x] Badge system: pledge > contributor (5) > warrior (25) > champion (100)
+- [x] Leaderboard: top 50 contributors per mountain
+- [x] JWT authentication on all endpoints
+- [x] AWS Profile: ekewaka (account 371751795928)
+
+### Frontend Integration
+- [x] Pledge buttons on all 7 mountain hub pages
+- [x] Leaderboard display on all 7 mountain hub pages
+- [x] Badge display on all 7 mountain hub pages
+- [x] Contribution tracking on video upload (user-upload.html)
+- [x] Contribution tracking on article publish (create-article.html)
+- [x] Badge display on profile page (profile.html)
+- [x] Badge earned toast notifications
+- [x] Shared JS: mountains-api.js
+- [x] Shared CSS: mountain-hubs.css
+
+### API Endpoint
+```
+https://lcmogvl3v2.execute-api.us-east-1.amazonaws.com/prod/mountains
+```
+
+### Phase 5 - Ministry Templates - NEXT
+- [ ] Create ministry templates for each mountain
+- [ ] Template library page
+- [ ] Mountain-specific resources
+
 ## Phase 3 Fixes & Enhancements ✅ COMPLETE
 - [x] Articles API Lambda function with Bible integration
 - [x] DynamoDB articles table creation and configuration

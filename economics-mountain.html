@@ -138,9 +138,27 @@
             document.getElementById(tabName).classList.add('active');
         }
     </script>
+    <!-- Pledge Section -->
+    <div class="pledge-section">
+        <h2>✊ Take the Economics Mountain Pledge</h2>
+        <p>Commit to biblical business practices and kingdom economics</p>
+        <button id="pledge-btn" onclick="takePledge('economics')">Take the Pledge ✊</button>
+        <div id="user-badges"></div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="leaderboard-section">
+        <h2>🏆 Top Economics Mountain Contributors</h2>
+        <div id="leaderboard-list"><p class="text-muted text-center">Loading...</p></div>
+    </div>
+
     <script src="mountain-content-loader.js"></script>
+    <script src="mountains-api.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => loadMountainContent('economics'));
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMountainContent('economics');
+            initMountainHub('economics');
+        });
     </script>
 
     <!-- Featured Content Section -->

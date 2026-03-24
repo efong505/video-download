@@ -120,6 +120,23 @@
                     <button class="btn-primary" onclick="changePassword()">Change Password</button>
                 </div>
                 
+                <!-- 7 Mountains Badges -->
+                <div class="profile-card">
+                    <h2 style="margin-bottom: 20px; color: #333;">🏔️ 7 Mountains Badges</h2>
+                    <div id="badges-loading" class="text-center" style="padding: 20px;">
+                        <div class="spinner-border spinner-border-sm" role="status"></div>
+                        <p class="mt-2">Loading badges...</p>
+                    </div>
+                    <div id="badges-content" style="display: none;">
+                        <div id="badges-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px;"></div>
+                        <div id="no-badges" style="display: none; text-align: center; padding: 20px; color: #6c757d;">
+                            <p>No badges earned yet.</p>
+                            <p><a href="7-mountains.html">Visit the 7 Mountains</a> to take pledges and start contributing!</p>
+                        </div>
+                        <div id="pledges-section" style="margin-top: 20px;"></div>
+                    </div>
+                </div>
+
                 <!-- Subscription Dashboard -->
                 <div class="profile-card">
                     <h2 style="margin-bottom: 30px; color: #333;">📊 Subscription & Usage</h2>
@@ -594,6 +611,68 @@
 
     </script>
     
+    <script src="mountains-api.js"></script>
+    <script>
+        const MOUNTAIN_COLORS = {
+            family: '#dc2626', religion: '#2563eb', education: '#16a34a',
+            media: '#06b6d4', art: '#f59e0b', economics: '#6b7280', government: '#343a40'
+        };
+        const BADGE_ICONS = { pledge: '🤝', contributor: '⭐', warrior: '⚔️', champion: '🏆' };
+
+        async function loadProfileBadges() {
+            const loading = document.getElementById('badges-loading');
+            const content = document.getElementById('badges-content');
+            const grid = document.getElementById('badges-grid');
+            const noBadges = document.getElementById('no-badges');
+            const pledgesSection = document.getElementById('pledges-section');
+
+            if (!isLoggedIn()) {
+                loading.innerHTML = '<p class="text-muted">Log in to see your badges</p>';
+                return;
+            }
+
+            try {
+                const [badgeData, pledgeData] = await Promise.all([
+                    mountainApiCall('get_badges', 'GET'),
+                    mountainApiCall('get_pledges', 'GET')
+                ]);
+
+                loading.style.display = 'none';
+                content.style.display = 'block';
+
+                const badges = badgeData?.badges || [];
+                const pledges = pledgeData?.pledges || [];
+
+                if (badges.length === 0) {
+                    noBadges.style.display = 'block';
+                } else {
+                    grid.innerHTML = badges.map(b => `
+                        <div style="text-align:center; padding:15px; background:#f8f9fa; border-radius:10px; border-left:4px solid ${MOUNTAIN_COLORS[b.mountain] || '#667eea'};">
+                            <div style="font-size:2rem;">${BADGE_ICONS[b.badge_type] || '🎖️'}</div>
+                            <div style="font-weight:700; font-size:0.85rem; margin-top:5px;">${b.badge_type.charAt(0).toUpperCase() + b.badge_type.slice(1)}</div>
+                            <div style="font-size:0.75rem; color:#6c757d; text-transform:capitalize;">${b.mountain}</div>
+                        </div>
+                    `).join('');
+                }
+
+                if (pledges.length > 0) {
+                    pledgesSection.innerHTML = `
+                        <h5 style="color:#333; margin-bottom:10px;">✊ My Pledges (${pledges.length}/7)</h5>
+                        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+                            ${pledges.map(p => `<span style="padding:6px 12px; background:${MOUNTAIN_COLORS[p.mountain] || '#667eea'}; color:white; border-radius:20px; font-size:0.85rem; font-weight:600; text-transform:capitalize;">⛰️ ${p.mountain}</span>`).join('')}
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                console.error('Badge load error:', e);
+                loading.innerHTML = '<p class="text-muted">Could not load badges</p>';
+            }
+        }
+
+        window.addEventListener('load', function() {
+            setTimeout(loadProfileBadges, 500);
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="navbar.js"></script>
 </body>

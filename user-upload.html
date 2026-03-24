@@ -469,6 +469,9 @@
                 document.getElementById('upload-progress-bar').style.width = '100%';
                 document.getElementById('upload-status').textContent = 'Upload complete! Thumbnail will be generated automatically...';
 
+                // Track mountain contribution if applicable
+                await trackMountainContribution(category, 'video', filename);
+
                 setTimeout(() => {
                     showMessage('Video uploaded successfully! Redirecting to videos...', 'success');
                     setTimeout(() => {
@@ -572,6 +575,10 @@
                     console.log('Thumbnail generation failed (non-critical):', error);
                 }
 
+                // Track mountain contribution if applicable
+                const extCategory = document.getElementById('video-category')?.value || '';
+                await trackMountainContribution(extCategory, 'video', videoId);
+
                 showMessage('External video added successfully! Redirecting to videos...', 'success');
                 setTimeout(() => {
                     window.location.href = 'videos.html';
@@ -658,6 +665,23 @@
         </div>
     </div>
 
+    <script src="mountains-api.js"></script>
+    <script>
+        const MOUNTAIN_CATEGORIES = ['family', 'religion', 'education', 'media', 'art', 'economics', 'government'];
+        async function trackMountainContribution(category, contentType, contentId) {
+            if (!category || !MOUNTAIN_CATEGORIES.includes(category.toLowerCase())) return;
+            try {
+                const data = await mountainApiCall('track_contribution', 'POST', {
+                    mountain: category.toLowerCase(),
+                    content_type: contentType,
+                    content_id: contentId
+                });
+                if (data && data.badge_awarded) {
+                    showBadgeNotification(data.badge_awarded.badge_type);
+                }
+            } catch (e) { console.log('Mountain tracking skipped:', e); }
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

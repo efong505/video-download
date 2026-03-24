@@ -265,6 +265,26 @@
                             </select>
                         </div>
 
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Schedule Publish (Optional)</label>
+                                    <input type="datetime-local" class="form-control" id="scheduled-publish">
+                                    <div class="form-text">Leave empty to publish immediately</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Status</label>
+                                    <select id="article-status" class="form-select">
+                                        <option value="published">Published</option>
+                                        <option value="draft">Draft</option>
+                                        <option value="scheduled">Scheduled</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="mb-3">
                             <label class="form-label">Resource URL (Optional)</label>
                             <div class="input-group">
@@ -868,6 +888,9 @@ Code block
         });
         
         function submitArticle(title, category, tags, visibility, content, featuredImage) {
+            var scheduledPublish = document.getElementById('scheduled-publish').value;
+            var status = document.getElementById('article-status').value;
+            
             fetch(ARTICLES_API + '?action=create', {
                 method: 'POST',
                 headers: {
@@ -882,7 +905,9 @@ Code block
                     template_used: selectedTemplate || 'custom',
                     tags: tags,
                     visibility: visibility,
-                    featured_image: featuredImage
+                    featured_image: featuredImage,
+                    scheduled_publish: scheduledPublish ? new Date(scheduledPublish).toISOString() : '',
+                    status: status
                 })
             })
             .then(function(response) { return response.json(); })
@@ -890,10 +915,12 @@ Code block
                 if (data.article_id) {
                     // Generate preview HTML for social media
                     generateAndUploadPreview(data.article_id, title, content, featuredImage).then(function() {
+                        trackMountainContribution(category, 'article', data.article_id);
                         alert('Article published successfully!');
                         window.location.href = 'articles.html';
                     }).catch(function(error) {
                         console.error('Preview generation error:', error);
+                        trackMountainContribution(category, 'article', data.article_id);
                         alert('Article published successfully!');
                         window.location.href = 'articles.html';
                     });
@@ -1173,6 +1200,20 @@ Empty line creates new paragraph
     
 
     
+    <script src="mountains-api.js"></script>
+    <script>
+        var MOUNTAIN_CATEGORIES = ['family', 'religion', 'education', 'media', 'art', 'economics', 'government'];
+        function trackMountainContribution(category, contentType, contentId) {
+            if (!category || MOUNTAIN_CATEGORIES.indexOf(category.toLowerCase()) === -1) return;
+            mountainApiCall('track_contribution', 'POST', {
+                mountain: category.toLowerCase(),
+                content_type: contentType,
+                content_id: contentId
+            }).then(function(data) {
+                if (data && data.badge_awarded) showBadgeNotification(data.badge_awarded.badge_type);
+            }).catch(function(e) { console.log('Mountain tracking skipped:', e); });
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

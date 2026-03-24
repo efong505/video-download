@@ -144,10 +144,27 @@
         }
     </script>
     <script src="mountain-content-loader.js"></script>
+    <script src="mountains-api.js"></script>
     <script>
-        // Load featured content for Family Mountain
-        document.addEventListener('DOMContentLoaded', () => loadMountainContent('family'));
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMountainContent('family');
+            initMountainHub('family');
+        });
     </script>
+
+    <!-- Pledge Section -->
+    <div class="pledge-section">
+        <h2>✊ Take the Family Mountain Pledge</h2>
+        <p>Commit to strengthening families as the foundation of society and faith</p>
+        <button id="pledge-btn" onclick="takePledge('family')">Take the Pledge ✊</button>
+        <div id="user-badges"></div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="leaderboard-section">
+        <h2>🏆 Top Family Mountain Contributors</h2>
+        <div id="leaderboard-list"><p class="text-muted text-center">Loading...</p></div>
+    </div>
 
     <!-- Featured Content Section -->
     <div style="background: #f9fafb; padding: 4rem 2rem;">

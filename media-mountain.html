@@ -138,9 +138,27 @@
             document.getElementById(tabName).classList.add('active');
         }
     </script>
+    <!-- Pledge Section -->
+    <div class="pledge-section">
+        <h2>✊ Take the Media Mountain Pledge</h2>
+        <p>Commit to spreading truth and supporting honest journalism</p>
+        <button id="pledge-btn" onclick="takePledge('media')">Take the Pledge ✊</button>
+        <div id="user-badges"></div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="leaderboard-section">
+        <h2>🏆 Top Media Mountain Contributors</h2>
+        <div id="leaderboard-list"><p class="text-muted text-center">Loading...</p></div>
+    </div>
+
     <script src="mountain-content-loader.js"></script>
+    <script src="mountains-api.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => loadMountainContent('media'));
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMountainContent('media');
+            initMountainHub('media');
+        });
     </script>
 
     <!-- Featured Content Section -->
