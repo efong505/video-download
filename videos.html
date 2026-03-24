@@ -734,7 +734,8 @@
                     // Show loading
                     document.getElementById('loading').style.display = 'block';
                     document.getElementById('videos-container').style.display = 'none';
-                    document.getElementById('load-more-container').style.display = 'none';
+                    var lmc = document.getElementById('load-more-container');
+                    if (lmc) lmc.style.display = 'none';
                     
                     loadVideos(1, currentCategory, false);
                 });

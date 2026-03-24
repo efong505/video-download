@@ -603,15 +603,16 @@ Code block
             
             setTimeout(function() {
                 loadTemplates();
+                // Auto-select category from query param (after templates load)
+                var params = new URLSearchParams(window.location.search);
+                var mtParam = params.get('mountain');
+                if (mtParam) {
+                    setTimeout(function() {
+                        var catSelect = document.getElementById('article-category');
+                        if (catSelect) catSelect.value = mtParam;
+                    }, 200);
+                }
             }, 100);
-
-            // Auto-select category from query param
-            var params = new URLSearchParams(window.location.search);
-            var mtParam = params.get('mountain');
-            if (mtParam) {
-                var catSelect = document.getElementById('article-category');
-                if (catSelect.querySelector('option[value="' + mtParam + '"]')) catSelect.value = mtParam;
-            }
         });
         
         function setupFeaturedImageHandler() {
