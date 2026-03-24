@@ -331,6 +331,22 @@
             }
             
             await loadResources();
+
+            // Auto-scroll to category from URL param
+            const urlParams = new URLSearchParams(window.location.search);
+            const filterCat = urlParams.get('category');
+            if (filterCat) {
+                setTimeout(() => {
+                    const headers = document.querySelectorAll('.category-header');
+                    for (const h of headers) {
+                        if (h.textContent.toLowerCase().includes(filterCat.toLowerCase())) {
+                            h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            h.style.outline = '3px solid #d4af37';
+                            break;
+                        }
+                    }
+                }, 500);
+            }
         });
         
         function setupAuthenticatedNav() {

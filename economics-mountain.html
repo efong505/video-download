@@ -111,6 +111,12 @@
 
     <div id="resources" class="tab-content">
         <h2>Economics &amp; Business Mountain Resources</h2>
+
+        <h3 style="margin:1.5rem 0 1rem;">📚 Curated Resources</h3>
+        <div id="dynamic-resources"><p class="text-muted">Loading resources...</p></div>
+        <p style="margin-top:1rem;"><a href="resources.html?category=Financial" class="action-btn" style="display:inline-block;">Browse All Resources →</a></p>
+
+        <h3 style="margin:2rem 0 1rem;">⚡ Quick Links</h3>
         <ul class="resource-list">
             <li><a href="create-article.html?template=mountain_economics&mountain=economics"><strong>Kingdom Entrepreneur Template</strong></a> - Write articles using our Economics Mountain template</li>
             <li><a href="articles.html?category=economics"><strong>Economics Articles</strong></a> - Browse all economics and business articles</li>
@@ -159,9 +165,33 @@
     <script src="mountain-content-loader.js"></script>
     <script src="mountains-api.js"></script>
     <script>
+        const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
+        const ECONOMICS_CATEGORIES = ['Financial', 'Christian Businesses', 'Business', 'Businesses', 'Christian Business'];
+
+        async function loadEconomicsResources() {
+            const container = document.getElementById('dynamic-resources');
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const all = await res.json();
+                const filtered = all.filter(r => {
+                    const cats = Array.isArray(r.category) ? r.category : [r.category];
+                    return cats.some(c => ECONOMICS_CATEGORIES.some(ec => c.toLowerCase().includes(ec.toLowerCase())));
+                });
+                if (!filtered.length) { container.innerHTML = '<p class="text-muted">No economics resources yet. Check back soon!</p>'; return; }
+                container.innerHTML = filtered.map(r => `
+                    <div class="action-card" style="margin-bottom:1rem;">
+                        <h3><a href="${r.url}" target="_blank" style="color:var(--mountain-primary);text-decoration:none;">${r.name}</a></h3>
+                        <p>${r.description ? r.description.substring(0, 200) + (r.description.length > 200 ? '...' : '') : 'No description'}</p>
+                        <a href="${r.url}" target="_blank" class="action-btn">Visit Resource</a>
+                    </div>
+                `).join('');
+            } catch(e) { container.innerHTML = '<p class="text-muted">Could not load resources.</p>'; }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             loadMountainContent('economics');
             initMountainHub('economics');
+            loadEconomicsResources();
         });
     </script>
 
