@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take the Pledge - 7 Mountains Mandate</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding-top: 80px; background: #f8f9fa; }
+        .pledge-hero { background: linear-gradient(135deg, #1a2332 0%, #2c5aa0 100%); color: white; padding: 60px 20px; text-align: center; }
+        .pledge-hero h1 { font-size: 2.8rem; font-weight: 700; }
+        .pledge-hero p { font-size: 1.2rem; color: #d4af37; }
+
+        .badge-progression { background: white; padding: 40px 20px; }
+        .progression-track { display: flex; justify-content: center; align-items: center; gap: 0; flex-wrap: wrap; max-width: 800px; margin: 0 auto; }
+        .progression-step { text-align: center; padding: 20px; flex: 1; min-width: 150px; position: relative; }
+        .progression-step .icon { font-size: 3rem; margin-bottom: 10px; }
+        .progression-step .label { font-weight: 700; font-size: 1.1rem; }
+        .progression-step .desc { font-size: 0.85rem; color: #666; margin-top: 4px; }
+        .progression-arrow { font-size: 1.5rem; color: #ccc; padding: 0 5px; }
+        @media (max-width: 600px) { .progression-arrow { display: none; } }
+
+        .mountains-section { padding: 40px 20px; max-width: 1200px; margin: 0 auto; }
+        .mountain-pledge-card { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.08); transition: transform 0.2s; }
+        .mountain-pledge-card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+        .mpc-header { padding: 20px; color: white; text-align: center; font-size: 1.3rem; font-weight: 700; }
+        .mpc-body { padding: 20px; text-align: center; }
+        .mpc-body .badge-row { margin: 12px 0; }
+        .mpc-body .badge-icon { font-size: 1.5rem; margin: 0 4px; opacity: 0.25; }
+        .mpc-body .badge-icon.earned { opacity: 1; }
+        .mpc-body .contrib-count { font-size: 0.9rem; color: #666; margin: 8px 0; }
+        .pledge-btn { border: none; padding: 10px 24px; border-radius: 25px; font-weight: 600; font-size: 1rem; cursor: pointer; transition: all 0.2s; }
+        .pledge-btn.available { background: #2c5aa0; color: white; }
+        .pledge-btn.available:hover { background: #1a3d7a; transform: scale(1.05); }
+        .pledge-btn.pledged { background: #28a745; color: white; cursor: default; }
+
+        .bg-family { background: linear-gradient(135deg, #dc3545, #c82333); }
+        .bg-religion { background: linear-gradient(135deg, #2c5aa0, #1a3d7a); }
+        .bg-education { background: linear-gradient(135deg, #28a745, #1e7e34); }
+        .bg-media { background: linear-gradient(135deg, #17a2b8, #117a8b); }
+        .bg-art { background: linear-gradient(135deg, #ffc107, #e0a800); }
+        .bg-economics { background: linear-gradient(135deg, #6c757d, #545b62); }
+        .bg-government { background: linear-gradient(135deg, #343a40, #23272b); }
+
+        .my-progress { background: white; padding: 40px 20px; }
+        .my-progress .section-inner { max-width: 800px; margin: 0 auto; }
+        .progress-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 12px; margin-top: 20px; }
+        .earned-badge { text-align: center; padding: 12px; background: #f0f7ff; border-radius: 10px; }
+        .earned-badge .icon { font-size: 2rem; }
+        .earned-badge .name { font-size: 0.75rem; font-weight: 600; margin-top: 4px; }
+        .login-gate { text-align: center; padding: 60px 20px; }
+        .login-gate h2 { margin-bottom: 16px; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container"></div>
+    <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html').then(r => r.text()).then(html => { document.getElementById('navbar-container').innerHTML = html; initNavbar(); });
+    </script>
+
+    <div class="pledge-hero">
+        <h1>✊ Take the 7 Mountains Pledge</h1>
+        <p>Commit to reclaiming culture for the Kingdom — earn badges as you contribute</p>
+    </div>
+
+    <!-- Badge Progression Explainer -->
+    <div class="badge-progression">
+        <h3 class="text-center mb-4">How Badge Progression Works</h3>
+        <div class="progression-track">
+            <div class="progression-step">
+                <div class="icon">🤝</div>
+                <div class="label">Pledge</div>
+                <div class="desc">Take the pledge</div>
+            </div>
+            <div class="progression-arrow">→</div>
+            <div class="progression-step">
+                <div class="icon">⭐</div>
+                <div class="label">Contributor</div>
+                <div class="desc">5 contributions</div>
+            </div>
+            <div class="progression-arrow">→</div>
+            <div class="progression-step">
+                <div class="icon">⚔️</div>
+                <div class="label">Warrior</div>
+                <div class="desc">25 contributions</div>
+            </div>
+            <div class="progression-arrow">→</div>
+            <div class="progression-step">
+                <div class="icon">🏆</div>
+                <div class="label">Champion</div>
+                <div class="desc">100 contributions</div>
+            </div>
+        </div>
+        <p class="text-center text-muted mt-3">Upload videos or publish articles in a mountain category to earn contributions</p>
+    </div>
+
+    <!-- Login Gate (shown if not logged in) -->
+    <div id="login-gate" class="login-gate" style="display:none;">
+        <h2>Log in to take your pledge</h2>
+        <p class="text-muted">You need an account to pledge and track your badge progress</p>
+        <a href="login.html" class="btn btn-primary btn-lg">Log In</a>
+        <p class="mt-3"><a href="subscribe.html">Don't have an account? Sign up</a></p>
+    </div>
+
+    <!-- Mountain Pledge Cards (shown if logged in) -->
+    <div id="pledge-content" style="display:none;">
+        <div class="mountains-section">
+            <h3 class="text-center mb-4">Choose Your Mountain(s)</h3>
+            <div class="row g-4" id="mountain-cards"></div>
+        </div>
+
+        <div class="my-progress" id="my-progress-section" style="display:none;">
+            <div class="section-inner">
+                <h3 class="text-center mb-2">🎖️ Your Badges</h3>
+                <div class="progress-grid" id="my-badges-grid"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="mountains-api.js"></script>
+    <script>
+        const MOUNTAINS = [
+            { id: 'family', name: 'Family', icon: 'fas fa-home', bg: 'bg-family' },
+            { id: 'religion', name: 'Religion', icon: 'fas fa-church', bg: 'bg-religion' },
+            { id: 'education', name: 'Education', icon: 'fas fa-graduation-cap', bg: 'bg-education' },
+            { id: 'media', name: 'Media', icon: 'fas fa-tv', bg: 'bg-media' },
+            { id: 'art', name: 'Art & Entertainment', icon: 'fas fa-palette', bg: 'bg-art' },
+            { id: 'economics', name: 'Economics & Business', icon: 'fas fa-briefcase', bg: 'bg-economics' },
+            { id: 'government', name: 'Government', icon: 'fas fa-landmark', bg: 'bg-government' }
+        ];
+
+        const BADGE_ICONS = { pledge: '🤝', contributor: '⭐', warrior: '⚔️', champion: '🏆' };
+        let userPledges = [];
+        let userBadges = [];
+        let leaderboardData = {};
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (!isLoggedIn()) {
+                document.getElementById('login-gate').style.display = 'block';
+                return;
+            }
+            document.getElementById('pledge-content').style.display = 'block';
+            await loadUserData();
+            renderCards();
+        });
+
+        async function loadUserData() {
+            try {
+                const [pledgeData, badgeData] = await Promise.all([
+                    mountainApiCall('get_pledges', 'GET'),
+                    mountainApiCall('get_badges', 'GET')
+                ]);
+                userPledges = pledgeData?.pledges || [];
+                userBadges = badgeData?.badges || [];
+            } catch (e) { console.error('Failed to load user data:', e); }
+        }
+
+        function renderCards() {
+            const container = document.getElementById('mountain-cards');
+            container.innerHTML = MOUNTAINS.map(m => {
+                const pledged = userPledges.some(p => p.mountain === m.id);
+                const badges = userBadges.filter(b => b.mountain === m.id);
+                const earnedTypes = badges.map(b => b.badge_type);
+                const contribBadge = badges.find(b => ['contributor','warrior','champion'].includes(b.badge_type));
+                const contribCount = contribBadge ? '' : '';
+
+                return `
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+                    <div class="mountain-pledge-card">
+                        <div class="mpc-header ${m.bg}">
+                            <i class="${m.icon}"></i> ${m.name}
+                        </div>
+                        <div class="mpc-body">
+                            <div class="badge-row">
+                                ${['pledge','contributor','warrior','champion'].map(t =>
+                                    `<span class="badge-icon ${earnedTypes.includes(t) ? 'earned' : ''}" title="${t}">${BADGE_ICONS[t]}</span>`
+                                ).join('')}
+                            </div>
+                            <button class="pledge-btn ${pledged ? 'pledged' : 'available'}" 
+                                    id="btn-${m.id}" 
+                                    ${pledged ? 'disabled' : ''}
+                                    onclick="pledgeMountain('${m.id}')">
+                                ${pledged ? '✅ Pledged' : '✊ Take the Pledge'}
+                            </button>
+                            <div style="margin-top:10px;">
+                                <a href="${m.id}-mountain.html" class="text-decoration-none" style="font-size:0.85rem;">
+                                    Visit Hub →
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+
+            // Show earned badges section
+            if (userBadges.length > 0) {
+                document.getElementById('my-progress-section').style.display = 'block';
+                document.getElementById('my-badges-grid').innerHTML = userBadges.map(b => `
+                    <div class="earned-badge">
+                        <div class="icon">${BADGE_ICONS[b.badge_type] || '🎖️'}</div>
+                        <div class="name">${b.mountain}<br>${b.badge_type}</div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        async function pledgeMountain(mountain) {
+            const btn = document.getElementById(`btn-${mountain}`);
+            btn.disabled = true;
+            btn.textContent = 'Submitting...';
+            try {
+                const data = await mountainApiCall('create_pledge', 'POST', { mountain });
+                btn.textContent = '✅ Pledged';
+                btn.classList.remove('available');
+                btn.classList.add('pledged');
+                if (data?.badge_awarded) showBadgeNotification(data.badge_awarded.badge_type);
+                // Refresh badges
+                const badgeData = await mountainApiCall('get_badges', 'GET');
+                userBadges = badgeData?.badges || [];
+                renderCards();
+            } catch (e) {
+                btn.textContent = '✊ Take the Pledge';
+                btn.classList.add('available');
+                btn.disabled = false;
+            }
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -239,6 +239,14 @@
             await loadUserQuota();
             await loadAllTags();
             setupTagAutocomplete();
+
+            // Auto-select mountain category from query param
+            const params = new URLSearchParams(window.location.search);
+            const mountain = params.get('mountain');
+            if (mountain) {
+                const cat = document.getElementById('video-category');
+                if (cat.querySelector(`option[value="${mountain}"]`)) cat.value = mountain;
+            }
             
             // Setup upload type toggle
             document.querySelectorAll('input[name="upload-type"]').forEach(radio => {
