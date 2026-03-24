@@ -161,62 +161,37 @@ Home | Content ▼ | Ministry ▼ | Subscribe | User ▼
 
 ---
 
-### ⏳ Phase 4: Backend Integration (PENDING)
-**Status:** Not Started  
-**Estimated Time:** 2-3 hours
+### ✅ Phase 4: Backend Integration (COMPLETE)
+**Status:** Complete  
+**Completion Date:** Current session
 
-**Database Schema:**
+**DynamoDB Tables Created:**
+- `mountain-pledges` — tracks user pledges per mountain
+- `mountain-badges` — badge progression (pledge → contributor(5) → warrior(25) → champion(100))
+- `mountain-contributions` — tracks content contributions per mountain
 
-#### Table: `mountain_pledges`
-```sql
-CREATE TABLE mountain_pledges (
-    pledge_id VARCHAR(50) PRIMARY KEY,
-    user_id VARCHAR(50) NOT NULL,
-    mountain VARCHAR(50) NOT NULL,
-    pledge_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    active BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-```
+**Lambda:** `mountains-api`  
+**API Gateway:** REST API `lcmogvl3v2` → `prod` stage  
+**Endpoint:** `https://lcmogvl3v2.execute-api.us-east-1.amazonaws.com/prod/mountains`
 
-#### Table: `mountain_badges`
-```sql
-CREATE TABLE mountain_badges (
-    badge_id VARCHAR(50) PRIMARY KEY,
-    user_id VARCHAR(50) NOT NULL,
-    mountain VARCHAR(50) NOT NULL,
-    badge_type VARCHAR(50) NOT NULL, -- 'pledge', 'contributor', 'warrior', 'champion'
-    earned_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-```
+**API Endpoints:**
+- `POST ?action=create_pledge` — Record user pledge
+- `GET ?action=get_pledges` — Get user's pledges
+- `POST ?action=award_badge` — Award badge
+- `GET ?action=get_badges` — Get user's badges
+- `POST ?action=track_contribution` — Track contribution
+- `GET ?action=get_leaderboard` — Get top contributors
 
-#### Table: `mountain_contributions`
-```sql
-CREATE TABLE mountain_contributions (
-    contribution_id VARCHAR(50) PRIMARY KEY,
-    user_id VARCHAR(50) NOT NULL,
-    mountain VARCHAR(50) NOT NULL,
-    content_type VARCHAR(50) NOT NULL, -- 'video', 'article', 'prayer', 'event'
-    content_id VARCHAR(50) NOT NULL,
-    contribution_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(user_id)
-);
-```
-
-**API Endpoints Needed:**
-- `POST /mountains/pledge` - Record user pledge
-- `GET /mountains/pledges/{user_id}` - Get user's pledges
-- `POST /mountains/badges` - Award badge
-- `GET /mountains/badges/{user_id}` - Get user's badges
-- `POST /mountains/contributions` - Track contribution
-- `GET /mountains/leaderboard/{mountain}` - Get top contributors
+**Frontend Files:**
+- `mountains-api.js` — shared JS with API calls, badge notifications
+- `mountain-pledge.html` — dedicated pledge page with badge progression
+- `ministry-templates.html` — template browsing page
 
 ---
 
-### ⏳ Phase 5: Templates & Resources (PENDING)
-**Status:** Not Started  
-**Estimated Time:** 1-2 hours
+### ✅ Phase 5: Templates & Resources (COMPLETE)
+**Status:** Complete  
+**Completion Date:** Current session
 
 **Ministry Templates to Create:**
 
@@ -491,6 +466,46 @@ The 7 Mountains system integrates with existing platform features:
 
 ---
 
+### ✅ Phase 6: Hub-by-Hub Testing & Polish (IN PROGRESS)
+**Status:** Economics hub complete, 6 remaining
+
+**Economics Hub Fixes (Commits 2d66d1b → 7d0cab2):**
+- Category-filtered links for articles/videos
+- Dual upload options (video + article)
+- Tab persistence via URL hash
+- Dynamic resources from API on Resources tab
+- Honest buttons with "Coming Soon" badges
+- Fixed videos.html null element error
+- Fixed create-article.html category auto-select
+- Added ?category= support to resources.html
+
+**Remaining Hubs:** Family → Religion → Education → Media → Art → Government
+
+---
+
+### ⏳ Phase 7: New Feature Pages (NOT STARTED)
+**Status:** Identified during hub testing, building next
+
+**7a. Forum/Discussion System**
+- Threaded discussions by mountain category
+- User posts, replies, upvotes
+- Needed by: All 7 hub "Get Involved" tabs
+- New files: `forum.html`, `forum_api/index.py`, DynamoDB table
+
+**7b. Business Directory**
+- Dedicated Christian business listing/search page
+- Categories, contact info, user submissions
+- Needed by: Economics hub Promote tab
+- New files: `business-directory.html`, possibly new API or extend resources API
+
+**7c. Boycott Tracker**
+- Track companies with boycott status, reasons, alternatives
+- User-submitted reports
+- Needed by: Economics hub Expose tab
+- New files: `boycott-tracker.html`, `boycott_api/index.py`, DynamoDB table
+
+---
+
 ## Maintenance Guide
 
 ### Adding a New Mountain Hub Page
@@ -620,6 +635,7 @@ The 7 Mountains system integrates with existing platform features:
 | 1.0 | Feb 2025 | Initial documentation created | AI Assistant |
 | 1.1 | Feb 2025 | Added Government hub completion | AI Assistant |
 | 2.0 | Feb 2025 | Phase 2 & 3 complete - All 7 hubs + navbar | AI Assistant |
+| 3.0 | Current | Phase 4-5 complete, Phase 6 in progress, Phase 7 planned | AI Assistant |
 
 ---
 
