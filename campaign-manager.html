@@ -102,6 +102,15 @@
             font-weight: 600;
         }
         .modal-body textarea { min-height: 300px; font-family: monospace; }
+        .enrollments-table { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .enrollments-table table { margin: 0; }
+        .enrollments-table th { background: #2c5aa0; color: white; font-size: 13px; white-space: nowrap; }
+        .enrollments-table td { font-size: 13px; vertical-align: middle; }
+        .status-active { color: #16a34a; font-weight: 600; }
+        .status-completed { color: #2c5aa0; font-weight: 600; }
+        .status-paused { color: #d97706; font-weight: 600; }
+        .view-toggle { display: flex; gap: 10px; margin-bottom: 20px; }
+        .view-toggle .btn.active-view { background: #2c5aa0; color: white; }
     </style>
 </head>
 <body>
@@ -119,15 +128,33 @@
             </div>
         </div>
 
-        <!-- Group Tabs -->
-        <div class="group-tabs" id="group-tabs">
-            <div class="group-tab active" onclick="filterGroup('all')">All</div>
+        <!-- View Toggle -->
+        <div class="view-toggle">
+            <button class="btn btn-light active-view" id="btn-campaigns" onclick="switchView('campaigns')">📧 Campaigns</button>
+            <button class="btn btn-light" id="btn-enrollments" onclick="switchView('enrollments')">👥 Enrollments</button>
         </div>
 
-        <div id="campaigns-list">
-            <div class="text-center" style="padding: 40px; color: white;">
-                <div class="spinner-border" role="status"></div>
-                <p>Loading campaigns...</p>
+        <!-- Campaigns View -->
+        <div id="campaigns-view">
+            <div class="group-tabs" id="group-tabs">
+                <div class="group-tab active" onclick="filterGroup('all')">All</div>
+            </div>
+            <div id="campaigns-list">
+                <div class="text-center" style="padding: 40px; color: white;">
+                    <div class="spinner-border" role="status"></div>
+                    <p>Loading campaigns...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Enrollments View -->
+        <div id="enrollments-view" style="display:none;">
+            <div class="group-tabs" id="enroll-group-tabs"></div>
+            <div id="enrollments-content">
+                <div class="text-center" style="padding: 40px; color: white;">
+                    <div class="spinner-border" role="status"></div>
+                    <p>Loading enrollments...</p>
+                </div>
             </div>
         </div>
     </div>
@@ -269,11 +296,15 @@
         let allGroups = [];
         let campaignAnalytics = {};
         let activeGroup = 'all';
+        let allEnrollments = [];
+        let activeEnrollGroup = 'all';
+        let currentView = 'campaigns';
 
         async function loadAll() {
-            await Promise.all([loadCampaigns(), loadGroups(), loadAnalytics()]);
+            await Promise.all([loadCampaigns(), loadGroups(), loadAnalytics(), loadEnrollments()]);
             renderGroupTabs();
             renderCampaigns();
+            renderEnrollments();
         }
 
         async function loadCampaigns() {
@@ -546,6 +577,112 @@
                 resultEl.style.display = 'block';
                 resultEl.className = 'mt-2 alert alert-danger';
                 resultEl.textContent = '❌ Enrollment failed';
+            }
+        }
+
+        // --- Enrollments View ---
+        function switchView(view) {
+            currentView = view;
+            document.getElementById('campaigns-view').style.display = view === 'campaigns' ? '' : 'none';
+            document.getElementById('enrollments-view').style.display = view === 'enrollments' ? '' : 'none';
+            document.getElementById('btn-campaigns').className = `btn btn-light ${view === 'campaigns' ? 'active-view' : ''}`;
+            document.getElementById('btn-enrollments').className = `btn btn-light ${view === 'enrollments' ? 'active-view' : ''}`;
+        }
+
+        async function loadEnrollments() {
+            try {
+                const response = await fetch(`${API_BASE}/subscribe?action=list_drip_enrollments`);
+                const data = await response.json();
+                allEnrollments = (data.enrollments || []).filter(e => e.subscriber_email && !e.subscriber_email.includes('$('));
+            } catch (error) {
+                console.error('Error loading enrollments:', error);
+            }
+        }
+
+        function renderEnrollments() {
+            // Group tabs for enrollments
+            const groups = {};
+            allEnrollments.forEach(e => {
+                const g = e.campaign_group || e.sequence_name || 'unknown';
+                groups[g] = (groups[g] || 0) + 1;
+            });
+            let tabsHtml = `<div class="group-tab ${activeEnrollGroup === 'all' ? 'active' : ''}" onclick="filterEnrollGroup('all')">All <span class="badge bg-light text-dark">${allEnrollments.length}</span></div>`;
+            Object.keys(groups).sort().forEach(g => {
+                tabsHtml += `<div class="group-tab ${activeEnrollGroup === g ? 'active' : ''}" onclick="filterEnrollGroup('${g}')">${g} <span class="badge bg-light text-dark">${groups[g]}</span></div>`;
+            });
+            document.getElementById('enroll-group-tabs').innerHTML = tabsHtml;
+
+            // Filter
+            let filtered = allEnrollments;
+            if (activeEnrollGroup !== 'all') {
+                filtered = allEnrollments.filter(e => (e.campaign_group || e.sequence_name || 'unknown') === activeEnrollGroup);
+            }
+
+            // Count campaigns per group for "X of Y"
+            const groupTotals = {};
+            allCampaigns.forEach(c => {
+                const g = c.campaign_group || '';
+                groupTotals[g] = (groupTotals[g] || 0) + 1;
+            });
+
+            if (filtered.length === 0) {
+                document.getElementById('enrollments-content').innerHTML = '<div class="alert alert-info">No enrollments found.</div>';
+                return;
+            }
+
+            let html = `<div class="enrollments-table"><table class="table table-hover mb-0"><thead><tr>
+                <th>Subscriber</th><th>Campaign Group</th><th>Progress</th><th>Status</th><th>Last Sent</th><th>Enrolled</th><th>Actions</th>
+            </tr></thead><tbody>`;
+
+            filtered.forEach(e => {
+                const g = e.campaign_group || e.sequence_name || '';
+                const cur = e.current_sequence_number || 0;
+                const total = groupTotals[g] || '?';
+                const statusClass = e.status === 'active' ? 'status-active' : e.status === 'completed' ? 'status-completed' : 'status-paused';
+                const lastSent = e.last_sent_at ? new Date(e.last_sent_at).toLocaleDateString() : '—';
+                const enrolled = e.enrolled_at ? new Date(e.enrolled_at).toLocaleDateString() : '—';
+                const canSend = e.status === 'active' && cur < total;
+
+                html += `<tr>
+                    <td><strong>${e.subscriber_email}</strong></td>
+                    <td><span class="group-label">${g}</span></td>
+                    <td>${cur} / ${total}</td>
+                    <td><span class="${statusClass}">${e.status}</span></td>
+                    <td>${lastSent}</td>
+                    <td>${enrolled}</td>
+                    <td>
+                        ${canSend ? `<button class="btn btn-sm btn-warning" onclick="triggerDripNow('${e.enrollment_id}')">⚡ Send Next</button>` : cur >= total ? '<span class="text-muted">Done</span>' : ''}
+                    </td>
+                </tr>`;
+            });
+
+            html += '</tbody></table></div>';
+            document.getElementById('enrollments-content').innerHTML = html;
+        }
+
+        function filterEnrollGroup(group) {
+            activeEnrollGroup = group;
+            renderEnrollments();
+        }
+
+        async function triggerDripNow(enrollmentId) {
+            if (!confirm('Send the next email in this sequence NOW?')) return;
+            try {
+                const response = await fetch(`${API_BASE}/subscribe`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'trigger_drip_now', enrollment_id: enrollmentId })
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    alert(`✅ ${data.message}\n\nSubject: ${data.subject}`);
+                    await loadEnrollments();
+                    renderEnrollments();
+                } else {
+                    alert('❌ ' + (data.error || 'Failed'));
+                }
+            } catch (err) {
+                alert('❌ Error: ' + err.message);
             }
         }
 

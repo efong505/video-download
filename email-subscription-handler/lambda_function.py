@@ -94,6 +94,8 @@ def lambda_handler(event, context):
                 return delete_campaign(body)
             elif action == 'enroll_post_purchase':
                 return enroll_post_purchase(body)
+            elif action == 'trigger_drip_now':
+                return trigger_drip_now(body)
             else:
                 return handle_subscription(event)
         else:
@@ -1391,6 +1393,90 @@ Time: {datetime.now().isoformat()}
         import traceback
         traceback.print_exc()
         return cors_response(500, {'error': 'Enrollment failed'})
+
+def trigger_drip_now(body):
+    """Manually trigger the next drip email for an enrollment (bypasses delay)"""
+    try:
+        enrollment_id = body.get('enrollment_id', '').strip()
+        if not enrollment_id:
+            return cors_response(400, {'error': 'enrollment_id required'})
+
+        # Get enrollment
+        enrollment = mt_drip_enrollments_table.get_item(
+            Key={'user_id': PLATFORM_OWNER_ID, 'enrollment_id': enrollment_id}
+        ).get('Item')
+        if not enrollment:
+            return cors_response(404, {'error': 'Enrollment not found'})
+
+        if enrollment.get('status') != 'active':
+            return cors_response(400, {'error': f"Enrollment status is '{enrollment.get('status')}', must be active"})
+
+        subscriber_email = enrollment['subscriber_email']
+        campaign_group = enrollment.get('campaign_group', '')
+        current_seq = int(enrollment.get('current_sequence_number', 0))
+
+        # Get campaigns in this group
+        from decimal import Decimal
+        all_camps = mt_campaigns_table.query(
+            KeyConditionExpression='user_id = :uid',
+            FilterExpression='attribute_exists(sequence_number)',
+            ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID}
+        ).get('Items', [])
+
+        drip_campaigns = sorted(
+            [c for c in all_camps if c.get('campaign_group') == campaign_group],
+            key=lambda x: int(x.get('sequence_number', 0))
+        )
+
+        # Find next email
+        next_email = None
+        for c in drip_campaigns:
+            if int(c.get('sequence_number', 0)) == current_seq + 1:
+                next_email = c
+                break
+
+        if not next_email:
+            return cors_response(400, {'error': f'No next email — sequence complete (at {current_seq}/{len(drip_campaigns)})'})
+
+        # Verify subscriber is active
+        sub = mt_subscribers_table.get_item(
+            Key={'user_id': PLATFORM_OWNER_ID, 'subscriber_email': subscriber_email}
+        ).get('Item')
+        if not sub or sub.get('status') != 'active':
+            return cors_response(400, {'error': f'Subscriber {subscriber_email} is not active'})
+
+        # Send via SQS
+        sqs = boto3.client('sqs', region_name='us-east-1')
+        sqs.send_message(
+            QueueUrl='https://sqs.us-east-1.amazonaws.com/371751795928/email-sending-queue',
+            MessageBody=json.dumps({
+                'user_id': PLATFORM_OWNER_ID,
+                'campaign_id': next_email['campaign_id'],
+                'recipients': [subscriber_email],
+                'drip_sequence': True
+            })
+        )
+
+        # Update enrollment
+        mt_drip_enrollments_table.update_item(
+            Key={'user_id': PLATFORM_OWNER_ID, 'enrollment_id': enrollment_id},
+            UpdateExpression='SET current_sequence_number = :seq, last_sent_at = :ts',
+            ExpressionAttributeValues={
+                ':seq': next_email['sequence_number'],
+                ':ts': datetime.now().isoformat()
+            }
+        )
+
+        return cors_response(200, {
+            'message': f"Email #{next_email['sequence_number']} queued for {subscriber_email}",
+            'campaign_name': next_email.get('campaign_name', ''),
+            'subject': next_email.get('subject', '')
+        })
+    except Exception as e:
+        print(f"Trigger drip now error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return cors_response(500, {'error': f'Failed to trigger: {str(e)}'})
 
 def get_analytics_overview():
     """Get overview analytics stats from user-email-events (where email_sender logs)"""
