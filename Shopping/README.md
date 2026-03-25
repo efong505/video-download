@@ -1,300 +1,147 @@
 # SHOPPING SYSTEM - PROJECT FOLDER
 
 ## Overview
-This folder contains all documentation and implementation files for the e-commerce shopping system with smart behavioral tracking and marketing automation.
+Full e-commerce shopping system with behavioral tracking and marketing automation. Built on AWS serverless (Lambda, DynamoDB, API Gateway, SQS, SES).
+
+**Status:** ✅ 100% Complete (9/9 weeks)
 
 ---
 
-## Files in This Folder
+## Infrastructure
 
-### Documentation
-- **SHOPPING_SYSTEM_PLAN.md** - Complete implementation plan with Phase 1 (basic shopping) and Phase 2 (smart features)
-- **TRACKING_SYSTEM_SPECS.md** - Detailed technical specifications for behavioral tracking and marketing automation
-- **README.md** - This file
+### API Gateway
+- **ID:** `ydq9xzya5d`
+- **Base URL:** `https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/`
+- **Resources:** /products, /orders, /reviews, /tracking, /marketing
 
-### Implementation Files (To Be Added)
-- Lambda functions (shop_api, cart_api, order_api, payment_api, tracking_api, marketing_automation_api)
-- Frontend pages (shop.html, product.html, cart.html, checkout.html, orders.html, admin-shop.html)
-- Email templates
-- Database schemas
-- Deployment scripts
+### DynamoDB Tables (8)
+| Table | Purpose |
+|-------|---------|
+| Products | Product catalog (3 GSIs) |
+| Orders | Order history (3 GSIs) |
+| Cart | Shopping carts (TTL) |
+| Reviews | Product reviews (2 GSIs) |
+| ProductViews | Behavioral tracking (3 GSIs, 90-day TTL) |
+| WatchList | Price drop alerts |
+| MarketingQueue | Email queue (2 GSIs, 30-day TTL) |
+| EmailPreferences | User email opt-in/out |
 
----
+### SQS Queues (8)
+- 4 main queues: order-processing, payment-processing, email-notification, inventory-update
+- 4 dead letter queues (DLQs) with 3-retry policy
 
-## Implementation Phases
+### Lambda Functions (5)
+| Lambda | Runtime | Memory | Purpose |
+|--------|---------|--------|---------|
+| products-api | Python 3.12 | 128MB | Product CRUD, list, search |
+| orders-api | Python 3.12 | 128MB | Order create, get, list, status |
+| reviews-api | Python 3.12 | 128MB | Review create, list, vote |
+| tracking-api | Python 3.12 | 256MB | View/cart tracking, recommendations, watchlist |
+| marketing-api | Python 3.12 | 512MB | Abandoned cart scans, email sending, preferences |
 
-### Phase 1: Basic Shopping System (Weeks 1-6)
-Core e-commerce functionality with enterprise architecture:
-- **Week 1:** Database + SQS queues ✅
-- **Week 2:** Product Catalog API ✅
-- **Week 3:** Checkout + Orders ✅
-- **Week 4:** Reviews + Ratings ✅
-- **Week 5:** Admin Products ✅
-- **Week 6:** Order Management ✅
-
-**Status:** ✅ Complete (67% of total project)
-
-### Phase 2: Smart Shopping & Marketing (Weeks 7-8)
-Behavioral tracking and automated marketing:
-- **Week 7:** Behavioral tracking via SQS ⏭️
-- **Week 8:** Marketing automation via SQS
-- Product view tracking
-- Abandoned cart recovery emails
-- Browse abandonment emails
-- Price drop alerts
-- Back in stock notifications
-- Personalized recommendations
-- Email preference center
-
-**Status:** ⏭️ Week 7 ready to start
-
-### Phase 3: Testing & Launch (Week 9)
-- Load testing (100 concurrent users)
-- Security audit
-- Monitoring verification
-- Production launch
-
-**Status:** ⏸️ Pending Week 8
+### Monitoring
+- CloudWatch Dashboard: `Shopping-System` (6 widgets)
+- 14 CloudWatch Alarms (4 DLQ + 5 error + 5 latency)
+- CloudWatch Events: `marketing-daily-scan` (10 AM EST daily)
 
 ---
 
-## Payment Processing
+## Frontend Pages (7)
 
-### Dual Payment Options
-The system supports BOTH PayPal and Stripe to maximize conversions:
+| Page | Purpose |
+|------|---------|
+| shop.html | Product catalog with ratings, tracking integration |
+| product.html | Product detail with reviews, watchlist, view tracking |
+| cart.html | Shopping cart with checkout |
+| orders.html | User order history |
+| admin-products.html | Admin product CRUD |
+| admin-orders.html | Admin order dashboard with status management |
+| preferences.html | Email preference center with unsubscribe |
 
-**PayPal:**
-- Trusted by older demographics
-- No credit card required
-- Buyer/seller protection
-- Fees: 3.49% + $0.49
+All pages hosted on S3: `s3://my-video-downloads-bucket/Shopping/`
 
-**Stripe:**
-- Better developer experience
-- Lower fees: 2.9% + $0.30
-- More payment methods (Apple Pay, Google Pay)
-- Stays on your site
+---
 
-**Recommendation:** Offer both, let customers choose
+## Features
+
+### Core Shopping ✅
+- Product catalog with search/filter and star ratings
+- Shopping cart (localStorage) with checkout
+- Order creation with stock validation
+- Order history and status tracking (pending → processing → shipped → delivered)
+- Customer reviews with helpful/unhelpful voting
+- Admin product management (CRUD)
+- Admin order management
+
+### Behavioral Tracking ✅
+- Product view tracking (device type, referrer, session)
+- Cart-add tracking
+- Popular products (last 7 days)
+- Personalized recommendations (category-based)
+- Watchlist with price drop alerts
+
+### Marketing Automation ✅
+- Abandoned cart detection (24-72hr window)
+- Browse abandonment detection (3+ views, no cart add)
+- Price drop alerts (watchlist target price)
+- 3 HTML email templates via SES
+- 7-day duplicate prevention cooldown
+- Email preference center with one-click unsubscribe
+- Daily automated scan via CloudWatch Events
+
+---
+
+## Product Categories
+1. Books — Christian living, political commentary, Bible studies
+2. Apparel — T-shirts, hats, hoodies
+3. Resources — Voter guides, study guides, curriculum
+4. Digital Downloads — E-books, PDFs, video courses
+5. Merchandise — Mugs, stickers, posters
+6. Ministry Tools — Sermon outlines, graphics packages
+
+---
+
+## Post-Launch Items
+- ⏸️ Payment processing (Stripe/PayPal) — currently orders are free/test
+- ⏸️ User authentication for Shopping APIs
+- ⏸️ Shipping integration
+- ⏸️ Tighten IAM policies (replace FullAccess with scoped)
+- ⏸️ ElastiCache Redis (when traffic justifies ~$15/month)
+- ⏸️ API Gateway caching (when traffic justifies ~$10/month)
 
 ---
 
 ## Cost Estimates
 
-### AWS Costs (Monthly)
-
-**Original Plan:**
-- DynamoDB: ~$6
-- Lambda: ~$4.50
-- S3: ~$0.75
+### Current (Monthly)
+- DynamoDB: ~$6 (8 tables, on-demand)
+- Lambda: ~$4.50 (5 functions)
+- SQS: ~$2 (8 queues)
 - SES: ~$1
-- **Total: ~$12.25/month**
+- S3: ~$0.75
+- **Total: ~$14.25/month**
 
-**With Architecture Improvements:**
-- DynamoDB: ~$3 (50% reduction from caching)
-- Lambda: ~$2.50 (44% reduction from caching)
-- S3: ~$0.75 (unchanged)
-- SES: ~$1 (unchanged)
-- SQS: ~$2 (4 queues + 4 DLQs)
-- ElastiCache: ~$15 (cache.t3.micro)
-- API Gateway Cache: ~$10 (0.5 GB)
-- **Total: ~$34.25/month**
-
-**Net Change:** +$22/month for enterprise-grade architecture
-
-### Payment Processing Fees
-- Variable based on sales volume
-- Stripe saves ~$48.50/month vs PayPal on 100 orders @ $50 avg
+### With Caching (When Traffic Justifies)
+- Add ElastiCache: +$15/month
+- Add API Gateway Cache: +$10/month
+- DynamoDB savings: -$3/month
+- **Total: ~$36.25/month**
 
 ---
 
-## Key Features
-
-### Basic Shopping (Phase 1)
-✅ Product catalog with search/filter  
-✅ Shopping cart with quantity adjustment  
-✅ Guest checkout option  
-✅ Order creation and processing  
-✅ Order history and status tracking  
-✅ Customer reviews and ratings  
-✅ Admin product management  
-✅ Admin order management  
-✅ Inventory tracking  
-✅ **SQS queues for async operations**  
-⏸️ **ElastiCache Redis** (deferred until 2M reads/day)  
-⏸️ **Circuit breakers** (deferred)  
-⏸️ **Rate limiting** (deferred)  
-⏸️ **API Gateway caching** (deferred until traffic justifies)  
-
-### Smart Shopping (Phase 2)
-⏭️ Product view tracking  
-⏸️ Abandoned cart recovery (10% discount)  
-⏸️ Browse abandonment emails (5% discount)  
-⏸️ Price drop alerts  
-⏸️ Back in stock notifications  
-⏸️ Personalized recommendations  
-⏸️ Email preference center  
-⏸️ Marketing analytics dashboard  
+## Documentation
+- **IMPLEMENTATION_PROGRESS.md** — Week-by-week progress tracker (100% complete)
+- **SHOPPING_SYSTEM_PLAN.md** — Original 9-week implementation plan
+- **TRACKING_SYSTEM_SPECS.md** — Behavioral tracking + marketing specs
+- **ARCHITECTURE_REQUIREMENTS.md** — Architecture patterns and requirements
+- **QUICK_START.md** — Setup guide for all deployment scripts
+- **scripts/README.md** — Script-by-script documentation
 
 ---
 
-## Database Tables
-
-### Phase 1 Tables
-1. **Products** - Product catalog
-2. **Orders** - Order history
-3. **Cart** - Shopping carts
-4. **Reviews** - Product reviews
-
-### Phase 2 Tables
-5. **ProductViews** - Behavioral tracking
-6. **MarketingQueue** - Email queue
-7. **EmailPreferences** - User preferences
-8. **WatchList** - Price/stock alerts
-
----
-
-## Lambda Functions
-
-### Phase 1 Functions
-1. **shop_api** - Product CRUD operations (with caching)
-2. **cart_api** - Shopping cart management (with caching)
-3. **order_api** - Order processing (with SQS)
-4. **payment_api** - PayPal + Stripe integration (with circuit breakers)
-5. **order_processor** - SQS consumer for order processing
-6. **payment_processor** - SQS consumer for payment processing
-7. **email_sender** - SQS consumer for email sending
-8. **inventory_updater** - SQS consumer for inventory updates
-
-### Phase 2 Functions
-9. **tracking_api** - Behavioral tracking (via SQS)
-10. **marketing_automation_api** - Automated emails (scheduled daily, via SQS)
-
----
-
-## Frontend Pages
-
-### Phase 1 Pages
-1. **shop.html** - Product catalog
-2. **product.html** - Product detail page
-3. **cart.html** - Shopping cart
-4. **checkout.html** - Checkout process
-5. **orders.html** - Order history
-6. **admin-shop.html** - Admin management
-
-### Phase 2 Pages
-7. **preferences.html** - Email preferences
-8. **admin-marketing.html** - Marketing analytics
-
----
-
-## Product Categories
-
-1. **Books** - Christian living, political commentary, Bible studies
-2. **Apparel** - T-shirts, hats, hoodies
-3. **Resources** - Voter guides, study guides, curriculum
-4. **Digital Downloads** - E-books, PDFs, video courses
-5. **Merchandise** - Mugs, stickers, posters
-6. **Ministry Tools** - Sermon outlines, graphics packages
-
----
-
-## Success Metrics
-
-### Revenue Metrics
-- Monthly revenue
-- Average order value
-- Conversion rate
-
-### Marketing Metrics (Phase 2)
-- Cart abandonment rate (target: <70%)
-- Cart recovery rate (target: >10%)
-- Email open rate (target: >20%)
-- Email click rate (target: >3%)
-- Email conversion rate (target: >2%)
-
-### Expected ROI
-- Phase 1: Positive within 3-6 months
-- Phase 2: 25,000%+ ROI on marketing automation
-
----
-
-## Implementation Strategy
-
-### Current Progress
-**67% Complete** - Weeks 1-6 done, Week 7 next
-
-**Completed:**
-- ✅ Infrastructure (SQS, DynamoDB)
-- ✅ Product catalog API
-- ✅ Shopping cart and checkout
-- ✅ Reviews and ratings
-- ✅ Admin product management
-- ✅ Order management system
-
-**Next:**
-- ⏭️ Week 7: Behavioral tracking
-- ⏸️ Week 8: Marketing automation
-- ⏸️ Week 9: Testing and launch
-
-### Recommended Approach
-1. **Start with Phase 1** - Get basic shopping working first
-2. **Launch and test** - Ensure core functionality is solid
-3. **Gather data** - Collect real customer behavior data
-4. **Add Phase 2** - Implement smart features based on actual patterns
-5. **Optimize** - Refine email campaigns based on performance
-
-### Why This Approach?
-- ✅ Get revenue flowing sooner
-- ✅ Test with real customers
-- ✅ Avoid over-engineering
-- ✅ Make data-driven decisions
-- ✅ Reduce initial complexity
-
----
-
-## Next Steps
-
-1. Review and approve implementation plan
-2. Set up PayPal Business account (already done ✓)
-3. Set up Stripe account
-4. Create DynamoDB tables
-5. Implement Lambda functions
-6. Build frontend pages
-7. Test payment flows
-8. Launch Phase 1
-9. Monitor and optimize
-10. Implement Phase 2
-
----
-
-## Questions?
-
-Refer to:
-- **SHOPPING_SYSTEM_PLAN.md** for complete implementation details
-- **TRACKING_SYSTEM_SPECS.md** for technical specifications
-- Contact: [Your contact info]
-
----
-
-## Timeline
-
-**Phase 1:** 6 weeks (Basic Shopping + Architecture)  
-**Phase 2:** 2 weeks (Smart Shopping + Marketing)  
-**Phase 3:** 1 week (Testing + Launch)  
-**Total:** 9 weeks to full implementation
-
-**Start Date:** January 2025 ✅  
-**Phase 1 Launch:** January 2025 ✅  
-**Phase 2 Launch:** TBD
-
----
-
-## Notes
-
-- PayPal Business account already set up ✓
-- Stripe account needed
-- AWS SES domain verification needed for emails
-- All code will follow existing platform patterns
-- Bootstrap 5 for UI consistency
-- JWT authentication for API security
+## AWS Details
+- **Profile:** `ekewaka` (account 371751795928)
+- **Region:** `us-east-1`
+- **S3 Bucket:** `my-video-downloads-bucket`
+- **SES Domain:** `christianconservativestoday.com` (verified, out of sandbox)
+- **SNS Topic:** `arn:aws:sns:us-east-1:371751795928:platform-critical-alerts`

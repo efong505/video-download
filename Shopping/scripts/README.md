@@ -1,195 +1,135 @@
 # Shopping System - Deployment Scripts
 
-## Week 1: Infrastructure Setup (SQS + DynamoDB)
-
-### Step 1: Create SQS Queues
-```powershell
-.\1-create-sqs-queues.ps1
-```
-
-**Creates:**
-- 4 main queues (order, payment, email, inventory)
-- 4 dead letter queues (DLQs)
-- Configures retry logic (3 attempts before DLQ)
-- Sets appropriate timeouts
-
-**Time:** ~2 minutes
+All scripts use `--profile ekewaka` (account 371751795928, us-east-1).
 
 ---
 
-### Step 2: Create DynamoDB Tables
-```powershell
-.\2-create-dynamodb-tables.ps1
-```
+## Scripts Overview
 
-**Creates:**
-- Products table (with 3 GSIs)
-- Orders table (with 3 GSIs)
-- Cart table (with TTL enabled)
-- Reviews table (with 2 GSIs)
+### Infrastructure (Week 1)
 
-**Time:** ~3 minutes (includes waiting for tables to become active)
+**1-create-sqs-queues.ps1**
+- Creates 4 main queues + 4 DLQs (8 total)
+- Configures 3-retry policy before DLQ
+- Queues: order-processing, payment-processing, email-notification, inventory-update
 
----
+**2-create-dynamodb-tables.ps1**
+- Creates Products (3 GSIs), Orders (3 GSIs), Cart (TTL), Reviews (2 GSIs)
+- Uses GSI definition files: `products-gsi.json`, `orders-gsi.json`, `reviews-gsi.json`
 
-### Step 3: Test Infrastructure
-```powershell
-.\3-test-infrastructure.ps1
-```
+**3-test-infrastructure.ps1**
+- Verifies all 8 SQS queues exist
+- Verifies all 4 DynamoDB tables are ACTIVE
+- Sends/receives test SQS message
 
-**Tests:**
-- All SQS queues exist
-- All DynamoDB tables are active
-- Can send/receive messages
-- Infrastructure is ready
-
-**Time:** ~30 seconds
-
----
-
-### Step 4: Update Cache Monitor
-```powershell
-.\4-update-cache-monitor.ps1
-```
-
-**Updates:**
+**4-update-cache-monitor.ps1**
 - Adds Shopping tables to auto-cache-monitor Lambda
-- Monitors combined traffic (main platform + Shopping)
 - Auto-enables ElastiCache at 2M reads/day
-- Auto-enables API Gateway cache at 500K requests/day
 
-**Time:** ~30 seconds
+**monitor-shopping-queues.ps1**
+- Real-time queue depth + DLQ monitoring
+- Refreshes every 5 seconds, Ctrl+C to exit
 
----
+### APIs (Weeks 2-4)
 
-### Step 5: Monitor Queues (Optional)
-```powershell
-.\monitor-shopping-queues.ps1
-```
+**5-deploy-products-api.ps1**
+- Deploys `products-api` Lambda (Python 3.12, 128MB)
+- Creates /products resource on API Gateway `ydq9xzya5d`
 
-**Monitors:**
-- Queue depths (visible messages)
-- In-flight messages
-- DLQ message counts
-- Real-time updates every 5 seconds
+**6-create-api-gateway.ps1**
+- Creates API Gateway resources and methods
+- Configures CORS for all endpoints
 
-**Usage:** Run in separate terminal, press Ctrl+C to exit
+**7-deploy-shopping-frontend.ps1**
+- Uploads all Shopping HTML pages to S3 `my-video-downloads-bucket/Shopping/`
 
----
+**8-deploy-orders-api.ps1**
+- Deploys `orders-api` Lambda with JWT dependency
+- Creates /orders resource on API Gateway
 
-## Week 2: ElastiCache Setup (Deferred)
+**9-deploy-reviews-api.ps1**
+- Deploys `reviews-api` Lambda
+- Creates /reviews resource on API Gateway
 
-ElastiCache setup is deferred until traffic reaches:
-- 10,000 DynamoDB reads/day
-- OR when response times exceed 500ms
+**9-deploy-paypal-ipn.ps1**
+- Deploys PayPal IPN handler Lambda (payment webhook)
 
-**Monitoring:**
-```powershell
-# Check if caching is justified
-cd ..\..\Architecture-Improvements\scripts
-.\monitor-cache-threshold.ps1
-```
+**add-sample-products.py**
+- Python script to seed 5 sample products into Products table
+- Run with: `$env:AWS_PROFILE="ekewaka"; python add-sample-products.py`
 
----
+### Tracking (Week 7)
 
-## Week 3: Lambda Functions
+**10-create-tracking-tables.ps1**
+- Creates ProductViews table (3 GSIs + 90-day TTL)
+- Creates WatchList table
+- Uses `productviews-gsi.json`
 
-Scripts for Lambda deployment will be added in Week 3.
+**11-deploy-tracking-api.ps1**
+- Deploys `tracking-api` Lambda (Python 3.12, 256MB)
+- Creates /tracking resource on API Gateway
+- Uses `tracking-trust-policy.json` for IAM role
 
----
+### Marketing (Week 8)
 
-## Troubleshooting
+**12-create-marketing-tables.ps1**
+- Creates MarketingQueue table (2 GSIs + 30-day TTL)
+- Creates EmailPreferences table
+- Uses `marketingqueue-gsi.json`
 
-### SQS Queue Creation Fails
-```powershell
-# Check AWS credentials
-aws sts get-caller-identity
+**13-deploy-marketing-api.ps1**
+- Deploys `marketing-api` Lambda (Python 3.12, 512MB, 5min timeout)
+- Creates /marketing resource on API Gateway
+- Creates CloudWatch Events rule `marketing-daily-scan` (10 AM EST daily)
 
-# Verify region
-aws configure get region
+### Testing & Monitoring (Week 9)
 
-# Delete and recreate
-aws sqs delete-queue --queue-url <queue-url>
-.\1-create-sqs-queues.ps1
-```
+**14-smoke-test.ps1**
+- Tests all 13 API endpoints across 5 resources
+- Products: list, search, get
+- Reviews: list
+- Orders: list, create
+- Tracking: popular, recommendations, watchlist, track-view, track-cart-add
+- Marketing: stats, preferences, run-scans
 
-### DynamoDB Table Creation Fails
-```powershell
-# Check if table already exists
-aws dynamodb list-tables
+**15-create-monitoring.ps1**
+- Creates CloudWatch Dashboard `Shopping-System` (6 widgets)
+- Creates 14 alarms: 4 DLQ + 5 error rate + 5 latency
+- Uses `shopping-dashboard.json`
 
-# Delete existing table
-aws dynamodb delete-table --table-name Products
-
-# Recreate
-.\2-create-dynamodb-tables.ps1
-```
-
-### Test Script Fails
-```powershell
-# Check queue URLs
-aws sqs list-queues
-
-# Check table status
-aws dynamodb describe-table --table-name Products
-
-# Verify permissions
-aws iam get-user
-```
+**16-e2e-test.ps1**
+- End-to-end test: browse product → track view → track cart add → place order → verify order
+- Tests the full customer journey
 
 ---
 
-## Cost Tracking
+## Support Files
 
-### Week 1 Costs
-- SQS: $0 (free tier covers 1M requests/month)
-- DynamoDB: $0 (free tier covers 25 GB storage)
-- **Total: $0/month** (within free tier)
-
-### Projected Costs (Production)
-- SQS: ~$2/month
-- DynamoDB: ~$3/month (with caching)
-- **Total: ~$5/month** (before ElastiCache)
-
----
-
-## Next Steps
-
-After completing Week 1:
-
-1. ✅ Verify all infrastructure in AWS Console
-2. ✅ Run monitor script to confirm queues are working
-3. ⏭️ Week 2: Set up ElastiCache (when traffic justifies)
-4. ⏭️ Week 3: Implement Lambda functions
-5. ⏭️ Week 4: Build frontend pages
+| File | Used By |
+|------|---------|
+| `products-gsi.json` | Script 2 |
+| `orders-gsi.json` | Script 2 |
+| `reviews-gsi.json` | Script 2 |
+| `productviews-gsi.json` | Script 10 |
+| `marketingqueue-gsi.json` | Script 12 |
+| `shopping-dashboard.json` | Script 15 |
+| `tracking-trust-policy.json` | Script 11 |
 
 ---
 
 ## Rollback
 
-If you need to remove everything:
-
 ```powershell
 # Delete SQS queues
-$queues = @("order-processing-queue", "order-processing-dlq", "payment-processing-queue", "payment-processing-dlq", "email-notification-queue", "email-notification-dlq", "inventory-update-queue", "inventory-update-dlq")
+$queues = @("order-processing-queue", "order-processing-queue-dlq", "payment-processing-queue", "payment-processing-queue-dlq", "email-notification-queue", "email-notification-queue-dlq", "inventory-update-queue", "inventory-update-queue-dlq")
 foreach ($q in $queues) {
-    $url = aws sqs get-queue-url --queue-name $q --query 'QueueUrl' --output text
-    aws sqs delete-queue --queue-url $url
+    $url = aws sqs get-queue-url --queue-name $q --query 'QueueUrl' --output text --profile ekewaka
+    aws sqs delete-queue --queue-url $url --profile ekewaka
 }
 
 # Delete DynamoDB tables
-$tables = @("Products", "Orders", "Cart", "Reviews")
+$tables = @("Products", "Orders", "Cart", "Reviews", "ProductViews", "WatchList", "MarketingQueue", "EmailPreferences")
 foreach ($t in $tables) {
-    aws dynamodb delete-table --table-name $t
+    aws dynamodb delete-table --table-name $t --profile ekewaka
 }
 ```
-
----
-
-## Support
-
-For issues or questions:
-1. Check AWS Console for error messages
-2. Review CloudWatch Logs
-3. Verify IAM permissions
-4. Check this README for troubleshooting steps
