@@ -317,6 +317,7 @@
         const API_BASE = 'https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe';
         
         let performanceChart, funnelChart;
+        let campaignMap = {};
         
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -373,6 +374,8 @@
                 const data = await response.json();
                 
                 const campaigns = data.campaigns || [];
+                campaignMap = {};
+                campaigns.forEach(c => { campaignMap[c.campaign_id] = c.campaign_name || ''; });
                 renderCampaignsTable(campaigns);
             } catch (error) {
                 console.error('Error loading campaigns:', error);
@@ -495,7 +498,7 @@
                         <td>${eventDate}</td>
                         <td>${e.subscriber_email || e.email || '-'}</td>
                         <td><span class="badge ${eventBadge[e.event_type] || 'info'}">${e.event_type}</span></td>
-                        <td>${e.campaign_id}</td>
+                        <td>${campaignMap[e.campaign_id] || e.campaign_id}</td>
                         <td>${details}</td>
                     </tr>
                 `;
