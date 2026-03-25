@@ -1,6 +1,7 @@
 import json
 import boto3
 import base64
+import re
 from datetime import datetime
 
 dynamodb = boto3.resource('dynamodb')
@@ -46,6 +47,9 @@ def lambda_handler(event, context):
             
             # Apply mail merge
             content = apply_mail_merge(email_content, subscriber, user_id, campaign_id, recipient_email)
+            
+            # Add click tracking to links
+            content = add_click_tracking(content, user_id, campaign_id, recipient_email)
             
             # Add tracking pixel
             tracking_id = generate_tracking_id(user_id, campaign_id, recipient_email)
@@ -116,6 +120,24 @@ def apply_mail_merge(content, subscriber, user_id, campaign_id, recipient_email)
 def generate_tracking_id(user_id, campaign_id, recipient_email):
     data = f"{user_id}:{campaign_id}:{recipient_email}"
     return base64.urlsafe_b64encode(data.encode()).decode()
+
+def add_click_tracking(content, user_id, campaign_id, recipient_email):
+    """Wrap all <a href> links with click tracking, skip unsubscribe links"""
+    def replace_link(match):
+        prefix = match.group(1)  # everything before the URL
+        url = match.group(2)     # the actual URL
+        suffix = match.group(3)  # closing quote
+        
+        # Skip unsubscribe, tracking, and mailto links
+        if any(skip in url.lower() for skip in ['unsubscribe', '/track/', 'mailto:']):
+            return match.group(0)
+        
+        data = f"{user_id}:{campaign_id}:{recipient_email}:{url}"
+        tracking_id = base64.urlsafe_b64encode(data.encode()).decode()
+        tracked_url = f"https://christianconservativestoday.com/track/click/{tracking_id}"
+        return f'{prefix}{tracked_url}{suffix}'
+    
+    return re.sub(r'(<a\s[^>]*href=["\'])([^"\'>]+)(["\'])', replace_link, content, flags=re.IGNORECASE)
 
 def add_tracking_pixel(content, tracking_id):
     pixel_url = f"https://christianconservativestoday.com/track/open/{tracking_id}"
