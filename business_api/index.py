@@ -16,7 +16,7 @@ VALID_CATEGORIES = [
     'Financial Services', 'Web & Technology', 'Health & Wellness', 'Food & Beverage',
     'Education & Training', 'Media & Marketing', 'Construction & Trades',
     'Legal Services', 'Real Estate', 'Retail & Shopping', 'Ministry & Nonprofit',
-    'Art & Creative', 'Consulting', 'Other'
+    'Art & Creative', 'Consulting', 'Christian Schools', 'Christian School Resources', 'Other'
 ]
 
 def decimal_default(obj):
