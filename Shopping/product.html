@@ -35,6 +35,7 @@
                 <h2 class="text-primary" id="product-price"></h2>
                 <p id="product-description"></p>
                 <button class="btn btn-primary btn-lg" onclick="addToCart()">Add to Cart</button>
+                <button class="btn btn-outline-warning btn-lg ms-2" onclick="addToWatchlist()" title="Get notified on price drops">👁️ Watch Price</button>
             </div>
         </div>
 
@@ -85,7 +86,16 @@
     <script>
         const API_PRODUCTS = 'https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/products';
         const API_REVIEWS = 'https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/reviews';
+        const API_TRACKING = 'https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/tracking';
         let currentProduct = null;
+
+        function getSessionId() {
+            let sid = localStorage.getItem('tracking_session_id');
+            if (!sid) { sid = 'sess_' + Math.random().toString(36).substr(2, 12); localStorage.setItem('tracking_session_id', sid); }
+            return sid;
+        }
+        function getUserId() { return localStorage.getItem('user_id') || null; }
+        function getDeviceType() { return window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop'; }
 
         const urlParams = new URLSearchParams(window.location.search);
         const productId = urlParams.get('id');
@@ -102,6 +112,7 @@
 
             displayRating(currentProduct.average_rating || 0, currentProduct.review_count || 0);
             loadReviews();
+            trackProductView();
         }
 
         function displayRating(rating, count) {
@@ -186,6 +197,56 @@
             
             localStorage.setItem('cart', JSON.stringify(cart));
             alert('Added to cart!');
+            trackCartAdd();
+        }
+
+        // --- Behavioral Tracking ---
+        function trackProductView() {
+            fetch(`${API_TRACKING}?action=track-view`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    product_id: productId,
+                    product_name: currentProduct.name,
+                    product_price: parseFloat(currentProduct.price),
+                    product_category: currentProduct.category || '',
+                    referrer: document.referrer,
+                    device_type: getDeviceType(),
+                    user_id: getUserId(),
+                    session_id: getSessionId()
+                })
+            }).catch(() => {});
+        }
+
+        function trackCartAdd() {
+            fetch(`${API_TRACKING}?action=track-cart-add`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    product_id: productId,
+                    user_id: getUserId(),
+                    session_id: getSessionId()
+                })
+            }).catch(() => {});
+        }
+
+        function addToWatchlist() {
+            const uid = getUserId() || getSessionId();
+            const targetPrice = parseFloat(prompt('Alert me when price drops below $', (currentProduct.price * 0.8).toFixed(2)));
+            if (!targetPrice || isNaN(targetPrice)) return;
+
+            fetch(`${API_TRACKING}?action=watchlist-add`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    user_id: uid,
+                    product_id: productId,
+                    product_name: currentProduct.name,
+                    current_price: parseFloat(currentProduct.price),
+                    target_price: targetPrice
+                })
+            }).then(() => alert('Added to watchlist! We\'ll notify you on price drops.'))
+              .catch(() => alert('Error adding to watchlist'));
         }
 
         loadProduct();

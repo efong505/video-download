@@ -1,0 +1,20 @@
+[
+  {
+    "IndexName": "sent-scheduled_send_time-index",
+    "KeySchema": [
+      {"AttributeName": "sent", "KeyType": "HASH"},
+      {"AttributeName": "scheduled_send_time", "KeyType": "RANGE"}
+    ],
+    "Projection": {"ProjectionType": "ALL"},
+    "ProvisionedThroughput": {"ReadCapacityUnits": 5, "WriteCapacityUnits": 5}
+  },
+  {
+    "IndexName": "user_email-trigger_type-index",
+    "KeySchema": [
+      {"AttributeName": "user_email", "KeyType": "HASH"},
+      {"AttributeName": "trigger_type", "KeyType": "RANGE"}
+    ],
+    "Projection": {"ProjectionType": "ALL"},
+    "ProvisionedThroughput": {"ReadCapacityUnits": 5, "WriteCapacityUnits": 5}
+  }
+]

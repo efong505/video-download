@@ -1,0 +1,29 @@
+[
+  {
+    "IndexName": "user_id-timestamp-index",
+    "KeySchema": [
+      {"AttributeName": "user_id", "KeyType": "HASH"},
+      {"AttributeName": "timestamp", "KeyType": "RANGE"}
+    ],
+    "Projection": {"ProjectionType": "ALL"},
+    "ProvisionedThroughput": {"ReadCapacityUnits": 5, "WriteCapacityUnits": 5}
+  },
+  {
+    "IndexName": "product_id-timestamp-index",
+    "KeySchema": [
+      {"AttributeName": "product_id", "KeyType": "HASH"},
+      {"AttributeName": "timestamp", "KeyType": "RANGE"}
+    ],
+    "Projection": {"ProjectionType": "ALL"},
+    "ProvisionedThroughput": {"ReadCapacityUnits": 5, "WriteCapacityUnits": 5}
+  },
+  {
+    "IndexName": "session_id-timestamp-index",
+    "KeySchema": [
+      {"AttributeName": "session_id", "KeyType": "HASH"},
+      {"AttributeName": "timestamp", "KeyType": "RANGE"}
+    ],
+    "Projection": {"ProjectionType": "ALL"},
+    "ProvisionedThroughput": {"ReadCapacityUnits": 5, "WriteCapacityUnits": 5}
+  }
+]
