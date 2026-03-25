@@ -5,21 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="mountain-hubs.css"><title>Education Mountain - Christian Conservatives Today</title>
-    <!-- <link rel="stylesheet" href="assets/css/common-styles.css"> -->
+    <link rel="stylesheet" href="mountain-hubs.css">
+    <title>Education Mountain - Christian Conservatives Today</title>
     <style>:root{--mountain-primary:#16a34a;--mountain-secondary:#15803d;}</style>
 </head>
 <body>
-    <!-- Navigation -->
     <div id="navbar-container" data-page="education-mountain" data-icon-style="fontawesome"></div>
     <script src="navbar.js"></script>
     <script>
-        fetch('navbar.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('navbar-container').innerHTML = html;
-                initNavbar();
-            });
+        fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});
     </script>
     <div class="mountain-hero">
         <h1>⛰️ Education Mountain</h1>
@@ -28,10 +22,10 @@
     </div>
 
     <div class="tabs">
-        <button class="tab active" onclick="switchTab(event, 'promote')">Promote</button>
-        <button class="tab" onclick="switchTab(event, 'expose')">Expose & Fight</button>
-        <button class="tab" onclick="switchTab(event, 'involved')">Get Involved</button>
-        <button class="tab" onclick="switchTab(event, 'resources')">Resources</button>
+        <button class="tab active" data-tab="promote">Promote</button>
+        <button class="tab" data-tab="expose">Expose &amp; Fight</button>
+        <button class="tab" data-tab="involved">Get Involved</button>
+        <button class="tab" data-tab="resources">Resources</button>
     </div>
 
     <div id="promote" class="tab-content active">
@@ -40,22 +34,23 @@
             <div class="action-card">
                 <h3>📚 Share Educational Content</h3>
                 <p>Upload curriculum, teaching resources, and success stories from Christian education.</p>
-                <a href="user-upload.html?mountain=education" class="action-btn">Upload Content</a>
+                <a href="user-upload.html?mountain=education" class="action-btn">Upload Video</a>
+                <a href="create-article.html?template=mountain_education&mountain=education" class="action-btn" style="margin-top:8px;">Write Article</a>
             </div>
             <div class="action-card">
                 <h3>🏫 Homeschool Resources</h3>
                 <p>Access biblical curriculum, lesson plans, and homeschooling support materials.</p>
-                <a href="ministry-templates.html" class="action-btn">Get Resources</a>
+                <a href="resources.html?category=education" class="action-btn">Get Resources</a>
             </div>
             <div class="action-card">
                 <h3>🎓 Christian Schools Directory</h3>
                 <p>Find and promote Christian schools, classical academies, and faith-based education.</p>
-                <a href="resources.html" class="action-btn">View Directory</a>
+                <a href="business-directory.html" class="action-btn">View Directory</a>
             </div>
             <div class="action-card">
                 <h3>📺 Educational Videos</h3>
                 <p>Watch teaching videos on biblical worldview, history, science, and critical thinking.</p>
-                <a href="videos.html" class="action-btn">Watch Videos</a>
+                <a href="videos.html?category=education" class="action-btn">Watch Videos</a>
             </div>
         </div>
     </div>
@@ -66,17 +61,18 @@
             <div class="action-card">
                 <h3>🚨 Report Indoctrination</h3>
                 <p>Document CRT, gender ideology, and anti-Christian bias in schools and universities.</p>
-                <a href="user-upload.html?mountain=education" class="action-btn">Submit Report</a>
+                <a href="user-upload.html?mountain=education" class="action-btn">Upload Video Report</a>
+                <a href="create-article.html?template=mountain_education&mountain=education" class="action-btn" style="margin-top:8px;">Write Report</a>
             </div>
             <div class="action-card">
                 <h3>📰 Education News</h3>
                 <p>Stay informed about curriculum battles, school board issues, and parental rights.</p>
-                <a href="articles.html" class="action-btn">Read Articles</a>
+                <a href="articles.html?category=education" class="action-btn">Read Articles</a>
             </div>
             <div class="action-card">
                 <h3>📋 Review School Policies</h3>
                 <p>Analyze and expose problematic school policies, textbooks, and teaching materials.</p>
-                <a href="articles.html" class="action-btn">Review Policies</a>
+                <a href="articles.html?category=education" class="action-btn">Review Policies</a>
             </div>
             <div class="action-card">
                 <h3>🎯 School Board Campaigns</h3>
@@ -95,9 +91,9 @@
                 <a href="mountain-pledge.html" class="action-btn">Take Pledge</a>
             </div>
             <div class="action-card">
-                <h3>🗳️ School Board Elections</h3>
-                <p>Find school board candidates, election dates, and voter guides for your district.</p>
-                <a href="election-map.html" class="action-btn">View Elections</a>
+                <h3>🚀 Write About Education</h3>
+                <p>Use our Education Mountain template to write about biblical education principles.</p>
+                <a href="create-article.html?template=mountain_education&mountain=education" class="action-btn">Use Template</a>
             </div>
             <div class="action-card">
                 <h3>📅 Education Events</h3>
@@ -107,37 +103,54 @@
             <div class="action-card">
                 <h3>💬 Parent Forums</h3>
                 <p>Connect with parents fighting for educational freedom and biblical values.</p>
-                <a href="prayer-wall.html" class="action-btn">Join Discussion</a>
+                <a href="forum.html?mountain=education" class="action-btn">Join Discussion</a>
             </div>
         </div>
     </div>
 
     <div id="resources" class="tab-content">
         <h2>Education Mountain Resources</h2>
+
+        <h3 style="margin:1.5rem 0 1rem;">📚 Curated Resources</h3>
+        <div id="dynamic-resources"><p class="text-muted">Loading resources...</p></div>
+        <p style="margin-top:1rem;"><a href="resources.html?category=education" class="action-btn" style="display:inline-block;">Browse All Resources →</a></p>
+
+        <h3 style="margin:2rem 0 1rem;">⚡ Quick Links</h3>
         <ul class="resource-list">
-            <li><strong>Homeschool Curriculum</strong> - Biblical curriculum for all grades and subjects</li>
-            <li><strong>Classical Education</strong> - Resources for classical Christian education methods</li>
-            <li><strong>School Choice Guides</strong> - Information on vouchers, ESAs, and education freedom</li>
-            <li><strong>Parental Rights Toolkit</strong> - Legal resources for protecting parental authority</li>
-            <li><strong>Worldview Training</strong> - Teaching biblical worldview to counter secular ideology</li>
-            <li><strong>School Board Strategy</strong> - How to run for school board and influence policy</li>
-            <li><strong>College Alternatives</strong> - Christian colleges, trade schools, and apprenticeships</li>
-            <li><strong>Teacher Resources</strong> - Support for Christian teachers in public schools</li>
+            <li><a href="create-article.html?template=mountain_education&mountain=education"><strong>Education Mountain Template</strong></a> - Write articles using our Education Mountain template</li>
+            <li><a href="articles.html?category=education"><strong>Education Articles</strong></a> - Browse all education articles</li>
+            <li><a href="videos.html?category=education"><strong>Education Videos</strong></a> - Watch education and homeschool videos</li>
+            <li><a href="ministry-templates.html"><strong>All Ministry Templates</strong></a> - Browse all 7 Mountains article templates</li>
+            <li><a href="prayer-wall.html"><strong>Prayer Wall</strong></a> - Pray for education reform and biblical truth in schools</li>
+            <li><a href="events-calendar.html"><strong>Events Calendar</strong></a> - Find school board meetings and education conferences</li>
+            <li><a href="user-upload.html?mountain=education"><strong>Upload Content</strong></a> - Share your own education videos</li>
+            <li><a href="mountain-pledge.html"><strong>Take the Pledge</strong></a> - Commit to biblical education</li>
         </ul>
     </div>
 
     <script>
-        function switchTab(event, tabName) {
-            const tabs = document.querySelectorAll('.tab');
-            const contents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => tab.classList.remove('active'));
-            contents.forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
+        // Tab switching with URL hash persistence
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
             document.getElementById(tabName).classList.add('active');
+            history.replaceState(null, '', '#' + tabName);
         }
+
+        document.querySelectorAll('.tab').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        });
+
+        function restoreTab() {
+            const h = window.location.hash.replace('#', '');
+            if (h && document.getElementById(h)) switchTab(h);
+        }
+        restoreTab();
+        window.addEventListener('hashchange', restoreTab);
+        window.addEventListener('pageshow', restoreTab);
     </script>
+
     <!-- Pledge Section -->
     <div class="pledge-section">
         <h2>✊ Take the Education Mountain Pledge</h2>
@@ -155,9 +168,33 @@
     <script src="mountain-content-loader.js"></script>
     <script src="mountains-api.js"></script>
     <script>
+        const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
+        const EDUCATION_CATEGORIES = ['Education', 'Homeschool', 'School', 'Teaching', 'Curriculum', 'Classical Education'];
+
+        async function loadEducationResources() {
+            const container = document.getElementById('dynamic-resources');
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const all = await res.json();
+                const filtered = all.filter(r => {
+                    const cats = Array.isArray(r.category) ? r.category : [r.category];
+                    return cats.some(c => EDUCATION_CATEGORIES.some(ec => c.toLowerCase().includes(ec.toLowerCase())));
+                });
+                if (!filtered.length) { container.innerHTML = '<p class="text-muted">No education resources yet. Check back soon!</p>'; return; }
+                container.innerHTML = filtered.map(r => `
+                    <div class="action-card" style="margin-bottom:1rem;">
+                        <h3><a href="${r.url}" target="_blank" style="color:var(--mountain-primary);text-decoration:none;">${r.name}</a></h3>
+                        <p>${r.description ? r.description.substring(0, 200) + (r.description.length > 200 ? '...' : '') : 'No description'}</p>
+                        <a href="${r.url}" target="_blank" class="action-btn">Visit Resource</a>
+                    </div>
+                `).join('');
+            } catch(e) { container.innerHTML = '<p class="text-muted">Could not load resources.</p>'; }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             loadMountainContent('education');
             initMountainHub('education');
+            loadEducationResources();
         });
     </script>
 
@@ -183,4 +220,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

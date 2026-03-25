@@ -3,11 +3,11 @@
 .mountain-hero {
     background: linear-gradient(135deg, var(--mountain-primary) 0%, var(--mountain-secondary) 100%);
     padding: 3rem 2rem;
+    padding-top: 100px;
     text-align: center;
     color: white;
     position: relative;
     overflow: hidden;
-    margin-top: 2rem;
 }
 
 .hero-banner {

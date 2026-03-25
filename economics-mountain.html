@@ -143,9 +143,13 @@
             btn.addEventListener('click', () => switchTab(btn.dataset.tab));
         });
 
-        // Restore tab from hash on load
-        const hash = window.location.hash.replace('#', '');
-        if (hash && document.getElementById(hash)) switchTab(hash);
+        function restoreTab() {
+            const h = window.location.hash.replace('#', '');
+            if (h && document.getElementById(h)) switchTab(h);
+        }
+        restoreTab();
+        window.addEventListener('hashchange', restoreTab);
+        window.addEventListener('pageshow', restoreTab);
     </script>
 
     <!-- Pledge Section -->

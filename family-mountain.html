@@ -7,26 +7,13 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <title>Family Mountain - Christian Conservatives Today</title>
     <link rel="stylesheet" href="mountain-hubs.css">
-    <link rel="stylesheet" href="assets/css/common-styles.css">
-    <style>
-        :root {
-            --mountain-primary: #dc2626;
-            --mountain-secondary: #991b1b;
-        }
-    </style>
+    <style>:root{--mountain-primary:#dc2626;--mountain-secondary:#991b1b;}</style>
 </head>
 <body>
-    <!-- Navigation -->
     <div id="navbar-container" data-page="family-mountain" data-icon-style="fontawesome"></div>
     <script src="navbar.js"></script>
-    <script>
-        fetch('navbar.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('navbar-container').innerHTML = html;
-                initNavbar();
-            });
-    </script>
+    <script>fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});</script>
+
     <div class="mountain-hero">
         <h1>⛰️ Family Mountain</h1>
         <p>Strengthening families as the foundation of society and faith</p>
@@ -34,10 +21,10 @@
     </div>
 
     <div class="tabs">
-        <button class="tab active" onclick="switchTab(event, 'promote')">Promote</button>
-        <button class="tab" onclick="switchTab(event, 'expose')">Expose & Fight</button>
-        <button class="tab" onclick="switchTab(event, 'involved')">Get Involved</button>
-        <button class="tab" onclick="switchTab(event, 'resources')">Resources</button>
+        <button class="tab active" data-tab="promote">Promote</button>
+        <button class="tab" data-tab="expose">Expose &amp; Fight</button>
+        <button class="tab" data-tab="involved">Get Involved</button>
+        <button class="tab" data-tab="resources">Resources</button>
     </div>
 
     <div id="promote" class="tab-content active">
@@ -46,7 +33,8 @@
             <div class="action-card">
                 <h3>📖 Share Family Resources</h3>
                 <p>Upload articles, videos, and testimonies about biblical family values and parenting wisdom.</p>
-                <a href="user-upload.html?mountain=family" class="action-btn">Upload Content</a>
+                <a href="user-upload.html?mountain=family" class="action-btn">Upload Video</a>
+                <a href="create-article.html?template=mountain_family&mountain=family" class="action-btn" style="margin-top:8px;">Write Article</a>
             </div>
             <div class="action-card">
                 <h3>🙏 Family Prayer Wall</h3>
@@ -55,13 +43,14 @@
             </div>
             <div class="action-card">
                 <h3>👨‍👩‍👧‍👦 Family Ministry Templates</h3>
-                <p>Access ready-to-use resources for family ministries, marriage enrichment, and parenting groups.</p>
-                <a href="resources.html" class="action-btn">Get Templates</a>
+                <p>Access ready-to-use templates for family ministry articles — marriage, parenting, and more.</p>
+                <a href="create-article.html?template=mountain_family&mountain=family" class="action-btn">Use Template</a>
             </div>
             <div class="action-card">
                 <h3>📺 Family Content Library</h3>
                 <p>Browse inspiring videos and articles celebrating biblical family values and success stories.</p>
-                <a href="videos.html" class="action-btn">Watch Videos</a>
+                <a href="videos.html?category=family" class="action-btn">Watch Videos</a>
+                <a href="articles.html?category=family" class="action-btn" style="margin-top:8px;">Read Articles</a>
             </div>
         </div>
     </div>
@@ -72,17 +61,18 @@
             <div class="action-card">
                 <h3>🚨 Report Anti-Family Policies</h3>
                 <p>Document and expose legislation, school policies, and cultural trends undermining families.</p>
-                <a href="user-upload.html?mountain=family" class="action-btn">Submit Report</a>
+                <a href="user-upload.html?mountain=family" class="action-btn">Upload Video Report</a>
+                <a href="create-article.html?template=mountain_family&mountain=family" class="action-btn" style="margin-top:8px;">Write Report</a>
             </div>
             <div class="action-card">
-                <h3>📰 Family News & Alerts</h3>
+                <h3>📰 Family News &amp; Alerts</h3>
                 <p>Stay informed about threats to parental rights, religious freedom, and family values.</p>
-                <a href="articles.html" class="action-btn">Read Articles</a>
+                <a href="articles.html?category=family" class="action-btn">Read Articles</a>
             </div>
             <div class="action-card">
                 <h3>⚖️ Legal Resources</h3>
                 <p>Connect with legal organizations defending parental rights and family freedoms.</p>
-                <a href="resources.html" class="action-btn">Find Help</a>
+                <a href="resources.html?category=Family" class="action-btn">Find Help</a>
             </div>
             <div class="action-card">
                 <h3>🎯 Action Campaigns</h3>
@@ -108,49 +98,57 @@
             <div class="action-card">
                 <h3>🤝 Start a Family Group</h3>
                 <p>Launch a small group focused on marriage enrichment, parenting support, or family discipleship.</p>
-                <a href="resources.html" class="action-btn">Get Started</a>
+                <a href="create-article.html?template=mountain_family&mountain=family" class="action-btn">Use Template</a>
             </div>
             <div class="action-card">
                 <h3>💬 Family Forums</h3>
                 <p>Connect with other believers navigating family challenges and celebrating victories.</p>
-                <a href="prayer-wall.html" class="action-btn">Join Discussion</a>
+                <a href="forum.html?mountain=family" class="action-btn">Join Discussion</a>
             </div>
         </div>
     </div>
 
     <div id="resources" class="tab-content">
         <h2>Family Mountain Resources</h2>
+
+        <h3 style="margin:1.5rem 0 1rem;">📚 Curated Resources</h3>
+        <div id="dynamic-resources"><p class="text-muted">Loading resources...</p></div>
+        <p style="margin-top:1rem;"><a href="resources.html?category=Family" class="action-btn" style="display:inline-block;">Browse All Resources →</a></p>
+
+        <h3 style="margin:2rem 0 1rem;">⚡ Quick Links</h3>
         <ul class="resource-list">
-            <li><strong>Biblical Marriage Resources</strong> - Courses, books, and videos on God's design for marriage</li>
-            <li><strong>Parenting Guides</strong> - Biblical parenting principles for every age and stage</li>
-            <li><strong>Family Devotionals</strong> - Daily devotions and Bible studies for families</li>
-            <li><strong>Crisis Support</strong> - Resources for families facing divorce, addiction, or rebellion</li>
-            <li><strong>Homeschool Networks</strong> - Connect with homeschooling families and resources</li>
-            <li><strong>Adoption & Foster Care</strong> - Christian adoption agencies and foster care ministries</li>
-            <li><strong>Financial Planning</strong> - Biblical financial wisdom for families</li>
-            <li><strong>Purity & Dating</strong> - Resources for teaching biblical sexuality and relationships</li>
+            <li><a href="create-article.html?template=mountain_family&mountain=family"><strong>Family Ministry Template</strong></a> - Write articles using our Family Mountain template</li>
+            <li><a href="articles.html?category=family"><strong>Family Articles</strong></a> - Browse all family-related articles</li>
+            <li><a href="videos.html?category=family"><strong>Family Videos</strong></a> - Watch family and parenting videos</li>
+            <li><a href="ministry-templates.html"><strong>All Ministry Templates</strong></a> - Browse all 7 Mountains article templates</li>
+            <li><a href="prayer-wall.html"><strong>Prayer Wall</strong></a> - Pray for families and family restoration</li>
+            <li><a href="events-calendar.html"><strong>Events Calendar</strong></a> - Find family conferences and workshops</li>
+            <li><a href="user-upload.html?mountain=family"><strong>Upload Content</strong></a> - Share your own family videos</li>
+            <li><a href="mountain-pledge.html"><strong>Take the Pledge</strong></a> - Commit to biblical family values</li>
         </ul>
     </div>
 
     <script>
-        function switchTab(event, tabName) {
-            const tabs = document.querySelectorAll('.tab');
-            const contents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => tab.classList.remove('active'));
-            contents.forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
+        // Tab switching with URL hash persistence
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
             document.getElementById(tabName).classList.add('active');
+            history.replaceState(null, '', '#' + tabName);
         }
-    </script>
-    <script src="mountain-content-loader.js"></script>
-    <script src="mountains-api.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            loadMountainContent('family');
-            initMountainHub('family');
+
+        document.querySelectorAll('.tab').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
         });
+
+        function restoreTab() {
+            const h = window.location.hash.replace('#', '');
+            if (h && document.getElementById(h)) switchTab(h);
+        }
+        restoreTab();
+        window.addEventListener('hashchange', restoreTab);
+        window.addEventListener('pageshow', restoreTab);
     </script>
 
     <!-- Pledge Section -->
@@ -166,6 +164,39 @@
         <h2>🏆 Top Family Mountain Contributors</h2>
         <div id="leaderboard-list"><p class="text-muted text-center">Loading...</p></div>
     </div>
+
+    <script src="mountain-content-loader.js"></script>
+    <script src="mountains-api.js"></script>
+    <script>
+        const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
+        const FAMILY_CATEGORIES = ['Family', 'Marriage', 'Parenting', 'Adoption', 'Foster Care'];
+
+        async function loadFamilyResources() {
+            const container = document.getElementById('dynamic-resources');
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const all = await res.json();
+                const filtered = all.filter(r => {
+                    const cats = Array.isArray(r.category) ? r.category : [r.category];
+                    return cats.some(c => FAMILY_CATEGORIES.some(fc => c.toLowerCase().includes(fc.toLowerCase())));
+                });
+                if (!filtered.length) { container.innerHTML = '<p class="text-muted">No family resources yet. Check back soon!</p>'; return; }
+                container.innerHTML = filtered.map(r => `
+                    <div class="action-card" style="margin-bottom:1rem;">
+                        <h3><a href="${r.url}" target="_blank" style="color:var(--mountain-primary);text-decoration:none;">${r.name}</a></h3>
+                        <p>${r.description ? r.description.substring(0, 200) + (r.description.length > 200 ? '...' : '') : 'No description'}</p>
+                        <a href="${r.url}" target="_blank" class="action-btn">Visit Resource</a>
+                    </div>
+                `).join('');
+            } catch(e) { container.innerHTML = '<p class="text-muted">Could not load resources.</p>'; }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadMountainContent('family');
+            initMountainHub('family');
+            loadFamilyResources();
+        });
+    </script>
 
     <!-- Featured Content Section -->
     <div style="background: #f9fafb; padding: 4rem 2rem;">

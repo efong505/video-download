@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fact-Check Database - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f9fa; margin: 0; }
+        .fc-header { background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); color: white; padding: 100px 0 20px 0; }
+        .fc-header h1 { font-size: 2.2rem; font-weight: 700; }
+        .search-bar { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 20px; margin: -30px auto 24px; max-width: 1200px; position: relative; z-index: 1; }
+        .verdict-tabs { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 24px; }
+        .verdict-tab { padding: 8px 18px; border-radius: 20px; border: 2px solid #dee2e6; background: white; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.2s; }
+        .verdict-tab:hover { border-color: #06b6d4; }
+        .verdict-tab.active { background: #06b6d4; color: white; border-color: #06b6d4; }
+        .fact-card { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 16px; transition: transform 0.2s; }
+        .fact-card:hover { transform: translateY(-2px); }
+        .verdict-badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
+        .verdict-true { background: #dcfce7; color: #166534; }
+        .verdict-false { background: #fee2e2; color: #991b1b; }
+        .verdict-misleading { background: #fef3c7; color: #92400e; }
+        .verdict-unverified { background: #e5e7eb; color: #374151; }
+        .verdict-partly-true { background: #dbeafe; color: #1e40af; }
+        .fact-claim { font-size: 1.1rem; font-weight: 600; color: #1a2332; margin: 10px 0 6px; }
+        .fact-meta { font-size: 0.85rem; color: #6c757d; }
+        .fact-explanation { color: #555; margin: 8px 0; }
+        .vote-btn { border: 1px solid #dee2e6; background: white; padding: 4px 12px; border-radius: 16px; cursor: pointer; font-size: 0.85rem; transition: all 0.2s; }
+        .vote-btn:hover { background: #f0f0f0; }
+        .vote-btn.voted { font-weight: 700; }
+        .vote-btn.voted-agree { background: #dcfce7; border-color: #166534; color: #166534; }
+        .vote-btn.voted-disagree { background: #fee2e2; border-color: #991b1b; color: #991b1b; }
+        .submit-form { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 24px; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #6c757d; }
+        .category-pill { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; background: #e9ecef; color: #495057; margin-left: 6px; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="fact-check"></div>
+    <script src="navbar.js"></script>
+    <script>fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});</script>
+
+    <div class="fc-header">
+        <div class="container">
+            <h1><i class="fas fa-search"></i> Fact-Check Database</h1>
+            <p>Debunking media lies with truth and evidence</p>
+        </div>
+    </div>
+
+    <div class="container" style="max-width:1200px;">
+        <div class="search-bar">
+            <div class="row g-2 align-items-center">
+                <div class="col-md-8">
+                    <input type="text" id="search-input" class="form-control" placeholder="Search claims, sources, or explanations...">
+                </div>
+                <div class="col-md-4 d-flex gap-2">
+                    <button class="btn btn-primary flex-grow-1" onclick="loadFacts()"><i class="fas fa-search"></i> Search</button>
+                    <button class="btn btn-outline-secondary" onclick="toggleSubmit()" id="submit-toggle">+ Submit</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Form -->
+        <div id="submit-section" style="display:none;">
+            <div id="submit-login-prompt" class="text-center mb-3" style="display:none;">
+                <a href="login.html" class="btn btn-outline-primary">Log in to submit a fact-check</a>
+            </div>
+            <div id="submit-form-container" style="display:none;">
+                <div class="submit-form">
+                    <h5><i class="fas fa-plus-circle"></i> Submit a Fact-Check</h5>
+                    <div class="row g-2">
+                        <div class="col-12"><input type="text" id="fc-claim" class="form-control" placeholder="The claim being fact-checked *"></div>
+                        <div class="col-md-4">
+                            <select id="fc-verdict" class="form-select">
+                                <option value="">Verdict *</option>
+                                <option value="false">❌ False</option>
+                                <option value="misleading">⚠️ Misleading</option>
+                                <option value="partly-true">🔵 Partly True</option>
+                                <option value="true">✅ True</option>
+                                <option value="unverified">❓ Unverified</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4"><input type="text" id="fc-source" class="form-control" placeholder="Source (who made the claim)"></div>
+                        <div class="col-md-4">
+                            <select id="fc-category" class="form-select">
+                                <option value="General">Category</option>
+                                <option value="Media">Media</option>
+                                <option value="Government">Government</option>
+                                <option value="Education">Education</option>
+                                <option value="Economics">Economics</option>
+                                <option value="Religion">Religion</option>
+                                <option value="Family">Family</option>
+                                <option value="Art & Entertainment">Art & Entertainment</option>
+                                <option value="Health">Health</option>
+                                <option value="Science">Science</option>
+                            </select>
+                        </div>
+                        <div class="col-12"><input type="url" id="fc-source-url" class="form-control" placeholder="Source URL (link to original claim)"></div>
+                        <div class="col-12"><textarea id="fc-explanation" class="form-control" rows="3" placeholder="Explanation / evidence for the verdict *"></textarea></div>
+                        <div class="col-12"><button class="btn btn-primary" onclick="submitFact()"><i class="fas fa-check"></i> Submit Fact-Check</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Verdict Tabs -->
+        <div class="verdict-tabs">
+            <button class="verdict-tab active" data-verdict="all">All</button>
+            <button class="verdict-tab" data-verdict="false">❌ False</button>
+            <button class="verdict-tab" data-verdict="misleading">⚠️ Misleading</button>
+            <button class="verdict-tab" data-verdict="partly-true">🔵 Partly True</button>
+            <button class="verdict-tab" data-verdict="true">✅ True</button>
+            <button class="verdict-tab" data-verdict="unverified">❓ Unverified</button>
+        </div>
+
+        <!-- Facts List -->
+        <div id="facts-container">
+            <div class="text-center py-4"><div class="spinner-border"></div><p class="mt-2">Loading fact-checks...</p></div>
+        </div>
+    </div>
+
+    <script>
+        const FC_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/fact-checks';
+        let authToken = localStorage.getItem('auth_token');
+        let currentVerdict = 'all';
+        let currentUserId = null;
+
+        // Extract user_id from token
+        try {
+            const payload = JSON.parse(atob(authToken.split('.')[1]));
+            currentUserId = payload.user_id;
+        } catch(e) {}
+
+        window.addEventListener('load', () => {
+            if (authToken && localStorage.getItem('user_data')) {
+                document.getElementById('submit-form-container').style.display = 'block';
+                document.getElementById('submit-login-prompt').style.display = 'none';
+            } else {
+                document.getElementById('submit-form-container').style.display = 'none';
+                document.getElementById('submit-login-prompt').style.display = 'block';
+            }
+            loadFacts();
+        });
+
+        // Verdict tab clicks
+        document.querySelectorAll('.verdict-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.verdict-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentVerdict = tab.dataset.verdict;
+                loadFacts();
+            });
+        });
+
+        document.getElementById('search-input').addEventListener('keypress', e => { if (e.key === 'Enter') loadFacts(); });
+
+        async function loadFacts() {
+            const container = document.getElementById('facts-container');
+            container.innerHTML = '<div class="text-center py-4"><div class="spinner-border"></div></div>';
+            try {
+                let url = `${FC_API}?action=list`;
+                if (currentVerdict !== 'all') url += `&verdict=${currentVerdict}`;
+                const search = document.getElementById('search-input').value.trim();
+                if (search) url += `&search=${encodeURIComponent(search)}`;
+
+                const res = await fetch(url);
+                const data = await res.json();
+
+                if (!data.facts || data.facts.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><i class="fas fa-search" style="font-size:3rem;"></i><h4>No fact-checks yet</h4><p>Be the first to submit a fact-check!</p></div>';
+                    return;
+                }
+
+                container.innerHTML = data.facts.map(f => {
+                    const userVote = f.voted_by && f.voted_by[currentUserId] ? f.voted_by[currentUserId] : null;
+                    return `
+                    <div class="fact-card">
+                        <div class="d-flex align-items-center flex-wrap gap-2">
+                            <span class="verdict-badge verdict-${f.verdict}">${verdictLabel(f.verdict)}</span>
+                            <span class="category-pill">${esc(f.category || 'General')}</span>
+                            <span class="fact-meta ms-auto">${timeAgo(f.created_at)}</span>
+                        </div>
+                        <div class="fact-claim">"${esc(f.claim)}"</div>
+                        ${f.source ? `<div class="fact-meta"><strong>Source:</strong> ${f.source_url ? `<a href="${f.source_url}" target="_blank">${esc(f.source)}</a>` : esc(f.source)}</div>` : ''}
+                        ${f.explanation ? `<div class="fact-explanation">${esc(f.explanation)}</div>` : ''}
+                        <div class="d-flex align-items-center gap-2 mt-2">
+                            <button class="vote-btn ${userVote === 'agree' ? 'voted voted-agree' : ''}" onclick="vote('${f.id}','agree')">👍 Agree <span>${f.agree_votes || 0}</span></button>
+                            <button class="vote-btn ${userVote === 'disagree' ? 'voted voted-disagree' : ''}" onclick="vote('${f.id}','disagree')">👎 Disagree <span>${f.disagree_votes || 0}</span></button>
+                            ${f.submitted_by === currentUserId ? `<button class="vote-btn ms-auto" onclick="deleteFact('${f.id}')" style="color:#dc3545;"><i class="fas fa-trash"></i></button>` : ''}
+                        </div>
+                    </div>`;
+                }).join('');
+            } catch(e) {
+                container.innerHTML = '<div class="empty-state"><p>Could not load fact-checks.</p></div>';
+            }
+        }
+
+        function verdictLabel(v) {
+            return { 'true': '✅ True', 'false': '❌ False', 'misleading': '⚠️ Misleading', 'unverified': '❓ Unverified', 'partly-true': '🔵 Partly True' }[v] || v;
+        }
+
+        function timeAgo(iso) {
+            if (!iso) return '';
+            const diff = (Date.now() - new Date(iso).getTime()) / 1000;
+            if (diff < 60) return 'just now';
+            if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+            if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+            return Math.floor(diff / 86400) + 'd ago';
+        }
+
+        function esc(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function toggleSubmit() {
+            const s = document.getElementById('submit-section');
+            s.style.display = s.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function submitFact() {
+            const claim = document.getElementById('fc-claim').value.trim();
+            const verdict = document.getElementById('fc-verdict').value;
+            const explanation = document.getElementById('fc-explanation').value.trim();
+            if (!claim || !verdict || !explanation) { alert('Claim, verdict, and explanation are required'); return; }
+
+            try {
+                const res = await fetch(`${FC_API}?action=submit`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({
+                        claim, verdict, explanation,
+                        source: document.getElementById('fc-source').value.trim(),
+                        source_url: document.getElementById('fc-source-url').value.trim(),
+                        category: document.getElementById('fc-category').value
+                    })
+                });
+                if (res.ok) {
+                    alert('Fact-check submitted!');
+                    ['fc-claim','fc-source','fc-source-url','fc-explanation'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('fc-verdict').value = '';
+                    document.getElementById('fc-category').value = 'General';
+                    document.getElementById('submit-section').style.display = 'none';
+                    loadFacts();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Failed to submit');
+                }
+            } catch(e) { alert('Error submitting fact-check'); }
+        }
+
+        async function vote(factId, voteType) {
+            if (!authToken) { alert('Log in to vote'); return; }
+            try {
+                await fetch(`${FC_API}?action=vote`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({ fact_id: factId, vote_type: voteType })
+                });
+                loadFacts();
+            } catch(e) {}
+        }
+
+        async function deleteFact(factId) {
+            if (!confirm('Delete this fact-check?')) return;
+            try {
+                await fetch(`${FC_API}?action=delete`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({ fact_id: factId })
+                });
+                loadFacts();
+            } catch(e) {}
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

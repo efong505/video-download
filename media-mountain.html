@@ -5,21 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="mountain-hubs.css"><title>Media Mountain - Christian Conservatives Today</title>
-    <!-- <link rel="stylesheet" href="assets/css/common-styles.css"> -->
+    <link rel="stylesheet" href="mountain-hubs.css">
+    <title>Media Mountain - Christian Conservatives Today</title>
     <style>:root{--mountain-primary:#06b6d4;--mountain-secondary:#0891b2;}</style>
 </head>
 <body>
-    <!-- Navigation -->
     <div id="navbar-container" data-page="media-mountain" data-icon-style="fontawesome"></div>
     <script src="navbar.js"></script>
     <script>
-        fetch('navbar.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('navbar-container').innerHTML = html;
-                initNavbar();
-            });
+        fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});
     </script>
     <div class="mountain-hero">
         <h1>⛰️ Media Mountain</h1>
@@ -28,55 +22,57 @@
     </div>
 
     <div class="tabs">
-        <button class="tab active" onclick="switchTab(event, 'promote')">Promote</button>
-        <button class="tab" onclick="switchTab(event, 'expose')">Expose & Fight</button>
-        <button class="tab" onclick="switchTab(event, 'involved')">Get Involved</button>
-        <button class="tab" onclick="switchTab(event, 'resources')">Resources</button>
+        <button class="tab active" data-tab="promote">Promote</button>
+        <button class="tab" data-tab="expose">Expose &amp; Fight</button>
+        <button class="tab" data-tab="involved">Get Involved</button>
+        <button class="tab" data-tab="resources">Resources</button>
     </div>
 
     <div id="promote" class="tab-content active">
         <h2>Promote Truth in Media</h2>
         <div class="action-grid">
             <div class="action-card">
-                <h3>📰 Share News & Articles</h3>
+                <h3>📰 Share News &amp; Articles</h3>
                 <p>Upload articles, investigative reports, and truthful journalism from a biblical perspective.</p>
-                <a href="user-upload.html?mountain=media" class="action-btn">Upload Content</a>
+                <a href="user-upload.html?mountain=media" class="action-btn">Upload Video</a>
+                <a href="create-article.html?template=mountain_media&mountain=media" class="action-btn" style="margin-top:8px;">Write Article</a>
             </div>
             <div class="action-card">
                 <h3>📺 Video Journalism</h3>
                 <p>Create and share video reports, interviews, and documentary content exposing truth.</p>
-                <a href="videos.html" class="action-btn">Watch Videos</a>
+                <a href="videos.html?category=media" class="action-btn">Watch Videos</a>
             </div>
             <div class="action-card">
                 <h3>🎙️ Podcast Directory</h3>
                 <p>Discover and promote Christian conservative podcasts and audio content.</p>
-                <a href="videos.html" class="action-btn">Find Podcasts</a>
+                <a href="resources.html?category=media" class="action-btn">Find Podcasts</a>
             </div>
             <div class="action-card">
                 <h3>📱 Social Media Toolkit</h3>
                 <p>Get shareable graphics, memes, and content to spread truth on social platforms.</p>
-                <a href="resources.html" class="action-btn">Get Toolkit</a>
+                <a href="resources.html?category=media" class="action-btn">Get Toolkit</a>
             </div>
         </div>
     </div>
 
     <div id="expose" class="tab-content">
-        <h2>Expose Media Bias & Lies</h2>
+        <h2>Expose Media Bias &amp; Lies</h2>
         <div class="action-grid">
             <div class="action-card">
                 <h3>🚨 Report Fake News</h3>
                 <p>Document mainstream media lies, propaganda, and censorship of conservative voices.</p>
-                <a href="user-upload.html?mountain=media" class="action-btn">Submit Report</a>
+                <a href="user-upload.html?mountain=media" class="action-btn">Upload Video Report</a>
+                <a href="create-article.html?template=mountain_media&mountain=media" class="action-btn" style="margin-top:8px;">Write Report</a>
             </div>
             <div class="action-card">
                 <h3>🔍 Fact-Check Database</h3>
                 <p>Access fact-checks debunking liberal media narratives and false reporting.</p>
-                <a href="articles.html" class="action-btn">View Fact-Checks</a>
+                <a href="fact-check.html" class="action-btn">View Fact-Checks</a>
             </div>
             <div class="action-card">
                 <h3>📊 Media Bias Tracker</h3>
                 <p>Track and expose bias in major news outlets, journalists, and media companies.</p>
-                <a href="news.html" class="action-btn">View Tracker</a>
+                <a href="articles.html?category=media" class="action-btn">Read Articles</a>
             </div>
             <div class="action-card">
                 <h3>🎯 Counter-Narrative Campaigns</h3>
@@ -95,9 +91,9 @@
                 <a href="mountain-pledge.html" class="action-btn">Take Pledge</a>
             </div>
             <div class="action-card">
-                <h3>🎥 Become a Citizen Journalist</h3>
-                <p>Learn to create news content, conduct interviews, and report from a biblical worldview.</p>
-                <a href="resources.html" class="action-btn">Get Training</a>
+                <h3>🚀 Become a Citizen Journalist</h3>
+                <p>Use our Media Mountain template to write about truth in media and journalism.</p>
+                <a href="create-article.html?template=mountain_media&mountain=media" class="action-btn">Use Template</a>
             </div>
             <div class="action-card">
                 <h3>📅 Media Events</h3>
@@ -107,37 +103,53 @@
             <div class="action-card">
                 <h3>💬 Media Forums</h3>
                 <p>Connect with Christian journalists, content creators, and media professionals.</p>
-                <a href="prayer-wall.html" class="action-btn">Join Discussion</a>
+                <a href="forum.html?mountain=media" class="action-btn">Join Discussion</a>
             </div>
         </div>
     </div>
 
     <div id="resources" class="tab-content">
         <h2>Media Mountain Resources</h2>
+
+        <h3 style="margin:1.5rem 0 1rem;">📚 Curated Resources</h3>
+        <div id="dynamic-resources"><p class="text-muted">Loading resources...</p></div>
+        <p style="margin-top:1rem;"><a href="resources.html?category=media" class="action-btn" style="display:inline-block;">Browse All Resources →</a></p>
+
+        <h3 style="margin:2rem 0 1rem;">⚡ Quick Links</h3>
         <ul class="resource-list">
-            <li><strong>Journalism Training</strong> - Courses on investigative reporting and ethical journalism</li>
-            <li><strong>Content Creation Tools</strong> - Video editing, graphic design, and publishing platforms</li>
-            <li><strong>Alternative Media Directory</strong> - Conservative news outlets and independent journalists</li>
-            <li><strong>Social Media Strategy</strong> - How to maximize reach while avoiding censorship</li>
-            <li><strong>Podcasting Resources</strong> - Equipment, hosting, and promotion for Christian podcasts</li>
-            <li><strong>Blogging Platforms</strong> - Free speech-friendly platforms for Christian writers</li>
-            <li><strong>Media Literacy</strong> - Teaching critical thinking and discernment in news consumption</li>
-            <li><strong>Legal Protection</strong> - Resources for journalists facing censorship or lawsuits</li>
+            <li><a href="create-article.html?template=mountain_media&mountain=media"><strong>Media Mountain Template</strong></a> - Write articles using our Media Mountain template</li>
+            <li><a href="articles.html?category=media"><strong>Media Articles</strong></a> - Browse all media and journalism articles</li>
+            <li><a href="videos.html?category=media"><strong>Media Videos</strong></a> - Watch media and journalism videos</li>
+            <li><a href="ministry-templates.html"><strong>All Ministry Templates</strong></a> - Browse all 7 Mountains article templates</li>
+            <li><a href="prayer-wall.html"><strong>Prayer Wall</strong></a> - Pray for truth in media and honest journalism</li>
+            <li><a href="events-calendar.html"><strong>Events Calendar</strong></a> - Find media conferences and journalism workshops</li>
+            <li><a href="user-upload.html?mountain=media"><strong>Upload Content</strong></a> - Share your own media videos and reports</li>
+            <li><a href="mountain-pledge.html"><strong>Take the Pledge</strong></a> - Commit to truth in media</li>
         </ul>
     </div>
 
     <script>
-        function switchTab(event, tabName) {
-            const tabs = document.querySelectorAll('.tab');
-            const contents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => tab.classList.remove('active'));
-            contents.forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
             document.getElementById(tabName).classList.add('active');
+            history.replaceState(null, '', '#' + tabName);
         }
+
+        document.querySelectorAll('.tab').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        });
+
+        function restoreTab() {
+            const h = window.location.hash.replace('#', '');
+            if (h && document.getElementById(h)) switchTab(h);
+        }
+        restoreTab();
+        window.addEventListener('hashchange', restoreTab);
+        window.addEventListener('pageshow', restoreTab);
     </script>
+
     <!-- Pledge Section -->
     <div class="pledge-section">
         <h2>✊ Take the Media Mountain Pledge</h2>
@@ -155,9 +167,33 @@
     <script src="mountain-content-loader.js"></script>
     <script src="mountains-api.js"></script>
     <script>
+        const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
+        const MEDIA_CATEGORIES = ['Media', 'News', 'Journalism', 'Podcast', 'Social Media', 'News & Media'];
+
+        async function loadMediaResources() {
+            const container = document.getElementById('dynamic-resources');
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const all = await res.json();
+                const filtered = all.filter(r => {
+                    const cats = Array.isArray(r.category) ? r.category : [r.category];
+                    return cats.some(c => MEDIA_CATEGORIES.some(mc => c.toLowerCase().includes(mc.toLowerCase())));
+                });
+                if (!filtered.length) { container.innerHTML = '<p class="text-muted">No media resources yet. Check back soon!</p>'; return; }
+                container.innerHTML = filtered.map(r => `
+                    <div class="action-card" style="margin-bottom:1rem;">
+                        <h3><a href="${r.url}" target="_blank" style="color:var(--mountain-primary);text-decoration:none;">${r.name}</a></h3>
+                        <p>${r.description ? r.description.substring(0, 200) + (r.description.length > 200 ? '...' : '') : 'No description'}</p>
+                        <a href="${r.url}" target="_blank" class="action-btn">Visit Resource</a>
+                    </div>
+                `).join('');
+            } catch(e) { container.innerHTML = '<p class="text-muted">Could not load resources.</p>'; }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             loadMountainContent('media');
             initMountainHub('media');
+            loadMediaResources();
         });
     </script>
 
@@ -183,4 +219,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
