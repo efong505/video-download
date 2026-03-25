@@ -234,7 +234,12 @@
         <!-- Campaigns Tab -->
         <div id="campaigns-tab" class="tab-content">
             <div class="table-container">
-                <h2>Campaign Performance</h2>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:15px;">
+                    <h2 style="margin:0;">Campaign Performance</h2>
+                    <select id="campaign-group-filter" class="form-select" style="width:auto;min-width:220px;" onchange="renderCampaignsTable(allCampaignStats)">
+                        <option value="all">All Groups</option>
+                    </select>
+                </div>
                 <table id="campaigns-table">
                     <thead>
                         <tr>
@@ -318,6 +323,7 @@
         
         let performanceChart, funnelChart;
         let campaignMap = {};
+        let allCampaignStats = [];
         
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -376,6 +382,8 @@
                 const campaigns = data.campaigns || [];
                 campaignMap = {};
                 campaigns.forEach(c => { campaignMap[c.campaign_id] = c.campaign_name || ''; });
+                allCampaignStats = campaigns;
+                populateCampaignGroupFilter(campaigns);
                 renderCampaignsTable(campaigns);
             } catch (error) {
                 console.error('Error loading campaigns:', error);
@@ -406,13 +414,25 @@
             }
         }
         
+        function populateCampaignGroupFilter(campaigns) {
+            const groups = [...new Set(campaigns.map(c => c.campaign_group).filter(Boolean))].sort();
+            const select = document.getElementById('campaign-group-filter');
+            const current = select.value;
+            select.innerHTML = '<option value="all">All Groups</option>';
+            groups.forEach(g => { select.innerHTML += `<option value="${g}">${g}</option>`; });
+            select.value = current || 'all';
+        }
+
         function renderCampaignsTable(campaigns) {
-            if (campaigns.length === 0) {
+            const filter = document.getElementById('campaign-group-filter').value;
+            const filtered = filter === 'all' ? campaigns : campaigns.filter(c => c.campaign_group === filter);
+
+            if (filtered.length === 0) {
                 document.getElementById('campaigns-body').innerHTML = '<tr><td colspan="9" class="text-center">No campaign data</td></tr>';
                 return;
             }
             
-            const html = campaigns.map(c => {
+            const html = filtered.map(c => {
                 const sent = c.sent_count || 0;
                 const opens = c.open_count || 0;
                 const clicks = c.click_count || 0;
