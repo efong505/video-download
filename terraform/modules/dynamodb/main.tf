@@ -20,6 +20,18 @@ variable "billing_mode" {
   default     = "PAY_PER_REQUEST"
 }
 
+variable "read_capacity" {
+  description = "Read capacity units (only used when billing_mode is PROVISIONED)"
+  type        = number
+  default     = null
+}
+
+variable "write_capacity" {
+  description = "Write capacity units (only used when billing_mode is PROVISIONED)"
+  type        = number
+  default     = null
+}
+
 variable "attributes" {
   description = "List of attribute definitions"
   type = list(object({
@@ -52,10 +64,12 @@ variable "ttl_attribute" {
 }
 
 resource "aws_dynamodb_table" "this" {
-  name         = var.table_name
-  billing_mode = var.billing_mode
-  hash_key     = var.hash_key
-  range_key    = var.range_key
+  name           = var.table_name
+  billing_mode   = var.billing_mode
+  hash_key       = var.hash_key
+  range_key      = var.range_key
+  read_capacity  = var.billing_mode == "PROVISIONED" ? var.read_capacity : null
+  write_capacity = var.billing_mode == "PROVISIONED" ? var.write_capacity : null
 
   dynamic "attribute" {
     for_each = var.attributes

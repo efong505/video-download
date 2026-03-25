@@ -20,3 +20,9 @@ variable "max_receive_count" {
   type = number
   default = 3
 }
+
+variable "dlq_name" {
+  description = "Override DLQ name. Defaults to {queue_name}-dlq if empty."
+  type    = string
+  default = ""
+}

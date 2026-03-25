@@ -1,6 +1,8 @@
 # API Gateway Lambda Integration Module
 # Creates resource, method, integration, and permissions
 
+data "aws_caller_identity" "current" {}
+
 variable "api_id" {
   type        = string
   description = "API Gateway REST API ID"
@@ -81,7 +83,7 @@ resource "aws_lambda_permission" "this" {
   action        = "lambda:InvokeFunction"
   function_name = var.lambda_function_name
   principal     = "apigateway.amazonaws.com"
-  source_arn    = "${replace(var.lambda_function_arn, ":function:${var.lambda_function_name}", "")}:execute-api:*/${var.api_id}/*/*"
+  source_arn    = "arn:aws:execute-api:${var.region}:${data.aws_caller_identity.current.account_id}:${var.api_id}/*/*"
 }
 
 # CORS OPTIONS method (if enabled)

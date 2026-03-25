@@ -114,6 +114,7 @@
             <div class="d-flex gap-2 flex-wrap">
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">+ New Email</button>
                 <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#newGroupModal">+ New Campaign Group</button>
+                <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#enrollModal">👤 Manual Enroll</button>
                 <a href="advanced-email-analytics.html" class="btn btn-outline-secondary ms-auto">📊 Full Analytics</a>
             </div>
         </div>
@@ -213,6 +214,40 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-primary" onclick="createGroup()">Create Group</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Manual Enroll Modal -->
+    <div class="modal fade" id="enrollModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Manual Enroll Subscriber</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" id="enroll-email" class="form-control" placeholder="subscriber@example.com" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">First Name (optional)</label>
+                        <input type="text" id="enroll-first-name" class="form-control" placeholder="First name">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Campaign Group</label>
+                        <select id="enroll-group" class="form-select">
+                            <option value="post-purchase-sequence">post-purchase-sequence</option>
+                            <option value="pre-purchase-book-sequence">pre-purchase-book-sequence</option>
+                        </select>
+                    </div>
+                    <div id="enroll-result" class="mt-2" style="display:none;"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="manualEnroll()">Enroll</button>
                 </div>
             </div>
         </div>
@@ -488,6 +523,40 @@
         }
 
         document.getElementById('createModal').addEventListener('hidden.bs.modal', clearForm);
+
+        async function manualEnroll() {
+            const email = document.getElementById('enroll-email').value.trim();
+            const firstName = document.getElementById('enroll-first-name').value.trim();
+            const group = document.getElementById('enroll-group').value;
+            const resultEl = document.getElementById('enroll-result');
+            if (!email) { alert('Email required'); return; }
+            try {
+                const response = await fetch(`${API_BASE}/subscribe`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'enroll_post_purchase', email, first_name: firstName, campaign_group: group, source: 'manual_enroll_admin' })
+                });
+                const data = await response.json();
+                resultEl.style.display = 'block';
+                resultEl.className = 'mt-2 alert alert-success';
+                resultEl.textContent = `✅ ${data.message} (${email})`;
+                document.getElementById('enroll-email').value = '';
+                document.getElementById('enroll-first-name').value = '';
+            } catch (err) {
+                resultEl.style.display = 'block';
+                resultEl.className = 'mt-2 alert alert-danger';
+                resultEl.textContent = '❌ Enrollment failed';
+            }
+        }
+
+        // Populate enroll group dropdown dynamically
+        document.getElementById('enrollModal').addEventListener('show.bs.modal', function() {
+            const select = document.getElementById('enroll-group');
+            select.innerHTML = '';
+            allGroups.forEach(g => { select.innerHTML += `<option value="${g}">${g}</option>`; });
+            document.getElementById('enroll-result').style.display = 'none';
+        });
+
         loadAll();
     </script>
 </body>

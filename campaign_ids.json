@@ -1,0 +1,63 @@
+{
+    "Items": [
+        {
+            "campaign_id": {
+                "S": "0ad371ae-7065-442f-831f-545a70d5c415"
+            },
+            "user_id": {
+                "S": "effa3242-cf64-4021-b2b0-c8a5a9dfd6d2"
+            }
+        },
+        {
+            "campaign_id": {
+                "S": "3a3df4d2-119e-4905-84fc-cf73e597b670"
+            },
+            "user_id": {
+                "S": "effa3242-cf64-4021-b2b0-c8a5a9dfd6d2"
+            }
+        },
+        {
+            "campaign_id": {
+                "S": "4e26dc60-d6e5-46b7-ac4d-96e904b2642a"
+            },
+            "user_id": {
+                "S": "effa3242-cf64-4021-b2b0-c8a5a9dfd6d2"
+            }
+        },
+        {
+            "campaign_id": {
+                "S": "7ef7b6b6-3f5d-4d2e-97e1-4a41b138add7"
+            },
+            "user_id": {
+                "S": "effa3242-cf64-4021-b2b0-c8a5a9dfd6d2"
+            }
+        },
+        {
+            "campaign_id": {
+                "S": "b4cdaae5-e33d-4dbf-b8bd-24d9afe910b7"
+            },
+            "user_id": {
+                "S": "effa3242-cf64-4021-b2b0-c8a5a9dfd6d2"
+            }
+        },
+        {
+            "campaign_id": {
+                "S": "b514b0f5-7d31-4c56-9df6-261548fe4c65"
+            },
+            "user_id": {
+                "S": "effa3242-cf64-4021-b2b0-c8a5a9dfd6d2"
+            }
+        },
+        {
+            "campaign_id": {
+                "S": "eb60f56c-d4e9-459d-9f3a-20ed48acf54e"
+            },
+            "user_id": {
+                "S": "effa3242-cf64-4021-b2b0-c8a5a9dfd6d2"
+            }
+        }
+    ],
+    "Count": 7,
+    "ScannedCount": 7,
+    "ConsumedCapacity": null
+}

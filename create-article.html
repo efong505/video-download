@@ -195,7 +195,7 @@
         }
     </style>
     <style>
-        body { padding-top: 70px; }
+
     </style>
 </head>
 <body>
@@ -601,18 +601,18 @@ Code block
             addImageResizeFeature();
             setupFeaturedImageHandler();
             
-            setTimeout(function() {
-                loadTemplates();
-                // Auto-select category from query param (after templates load)
-                var params = new URLSearchParams(window.location.search);
-                var mtParam = params.get('mountain');
-                if (mtParam) {
-                    setTimeout(function() {
-                        var catSelect = document.getElementById('article-category');
-                        if (catSelect) catSelect.value = mtParam;
-                    }, 200);
-                }
-            }, 100);
+            loadTemplates();
+            // Auto-select category from query param
+            var params = new URLSearchParams(window.location.search);
+            var mtParam = params.get('mountain');
+            console.log('mountain param:', mtParam);
+            if (mtParam) {
+                var catSelect = document.getElementById('article-category');
+                console.log('catSelect element:', catSelect);
+                console.log('options:', Array.from(catSelect.options).map(o => o.value));
+                catSelect.value = mtParam;
+                console.log('set value to:', catSelect.value);
+            }
         });
         
         function setupFeaturedImageHandler() {

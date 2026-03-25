@@ -16,6 +16,9 @@
 6. [SNS Topics](#6-sns-topics)
 7. [API Gateway Endpoints](#7-api-gateway-endpoints)
 8. [Cleanup — Deciding What NOT to Manage](#8-cleanup)
+9. [Live vs State Audit — How to Find What's Missing](#9-live-vs-state-audit)
+10. [Priority Import Plan](#10-priority-import-plan)
+11. [Case Study — comments-api vs comments-handler](#11-case-study-comments)
 
 ---
 
@@ -795,7 +798,109 @@ terraform import module.dynamodb_user_email_events.aws_dynamodb_table.this user-
 terraform plan -target=module.dynamodb_user_email_events
 ```
 
-#### 3.16 user-email-subscribers
+#### 3.16 forum-posts
+
+```hcl
+module "dynamodb_forum_posts" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "forum-posts"
+  hash_key     = "post_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "post_id", type = "S" },
+    { name = "mountain", type = "S" }
+  ]
+
+  global_secondary_indexes = [
+    {
+      name            = "mountain-index"
+      hash_key        = "mountain"
+      range_key       = null
+      projection_type = "ALL"
+    }
+  ]
+}
+```
+
+Import:
+```cmd
+terraform import module.dynamodb_forum_posts.aws_dynamodb_table.this forum-posts
+terraform plan -target=module.dynamodb_forum_posts
+```
+
+#### 3.17 business-directory
+
+```hcl
+module "dynamodb_business_directory" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "business-directory"
+  hash_key     = "business_id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "business_id", type = "S" },
+    { name = "category", type = "S" }
+  ]
+
+  global_secondary_indexes = [
+    {
+      name            = "category-index"
+      hash_key        = "category"
+      range_key       = null
+      projection_type = "ALL"
+    }
+  ]
+}
+```
+
+Import:
+```cmd
+terraform import module.dynamodb_business_directory.aws_dynamodb_table.this business-directory
+terraform plan -target=module.dynamodb_business_directory
+```
+
+#### 3.19 boycott-tracker
+
+> **Note:** This table uses PROVISIONED billing (5 RCU / 5 WCU), not PAY_PER_REQUEST. The DynamoDB module now supports `read_capacity` and `write_capacity` variables for this.
+
+```hcl
+module "dynamodb_boycott_tracker" {
+  source = "../../modules/dynamodb"
+
+  table_name     = "boycott-tracker"
+  hash_key       = "boycott_id"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 5
+  write_capacity = 5
+
+  attributes = [
+    { name = "boycott_id", type = "S" },
+    { name = "status", type = "S" }
+  ]
+
+  global_secondary_indexes = [
+    {
+      name            = "status-index"
+      hash_key        = "status"
+      range_key       = null
+      projection_type = "ALL"
+    }
+  ]
+}
+```
+
+Import:
+```cmd
+terraform import module.dynamodb_boycott_tracker.aws_dynamodb_table.this boycott-tracker
+terraform plan -target=module.dynamodb_boycott_tracker
+```
+
+> **Tip:** If you'd rather switch this to PAY_PER_REQUEST (the table has 0 items), just use `billing_mode = "PAY_PER_REQUEST"` and omit the capacity settings. Terraform will update it in-place.
+
+#### 3.20 user-email-subscribers
 
 ```hcl
 module "dynamodb_user_email_subscribers" {
@@ -879,6 +984,8 @@ If it returns an error like "Function not found", the alias doesn't exist — us
 
 #### 4.1 mountains-api
 
+> **No live alias** — use `create_alias = false`
+
 ```hcl
 module "lambda_mountains_api" {
   source = "../../modules/lambda"
@@ -890,8 +997,7 @@ module "lambda_mountains_api" {
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
   publish       = true
-  create_alias  = true
-  alias_name    = "live"
+  create_alias  = false
 
   environment_variables = {}
 }
@@ -939,6 +1045,8 @@ module "lambda_digest_generator" {
 
 #### 4.4 scheduled-publisher
 
+> **No live alias** — use `create_alias = false`
+
 ```hcl
 module "lambda_scheduled_publisher" {
   source = "../../modules/lambda"
@@ -950,14 +1058,15 @@ module "lambda_scheduled_publisher" {
   timeout       = 60
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
   publish       = true
-  create_alias  = true
-  alias_name    = "live"
+  create_alias  = false
 
   environment_variables = {}
 }
 ```
 
 #### 4.5 feature-flags-api
+
+> **No live alias** — use `create_alias = false`
 
 ```hcl
 module "lambda_feature_flags_api" {
@@ -970,8 +1079,7 @@ module "lambda_feature_flags_api" {
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
   publish       = true
-  create_alias  = true
-  alias_name    = "live"
+  create_alias  = false
 
   environment_variables = {}
 }
@@ -1039,6 +1147,8 @@ module "lambda_comments_handler" {
 
 #### 4.9 contact-form-api
 
+> **No live alias** — use `create_alias = false`
+
 ```hcl
 module "lambda_contact_form_api" {
   source = "../../modules/lambda"
@@ -1050,8 +1160,7 @@ module "lambda_contact_form_api" {
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
   publish       = true
-  create_alias  = true
-  alias_name    = "live"
+  create_alias  = false
 
   environment_variables = {}
 }
@@ -1159,6 +1268,8 @@ module "lambda_article_meta_tags_edge" {
 
 #### 4.15 user-email-api
 
+> **No live alias** — use `create_alias = false`
+
 ```hcl
 module "lambda_user_email_api" {
   source = "../../modules/lambda"
@@ -1170,14 +1281,202 @@ module "lambda_user_email_api" {
   timeout       = 30
   role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
   publish       = true
-  create_alias  = true
-  alias_name    = "live"
+  create_alias  = false
 
   environment_variables = {}
 }
 ```
 
-#### 4.16–4.20 Testimony Functions (Node.js)
+#### 4.16 forum-api
+
+> **No live alias** — use `create_alias = false`
+
+```hcl
+module "lambda_forum_api" {
+  source = "../../modules/lambda"
+
+  function_name = "forum-api"
+  runtime       = "python3.12"
+  handler       = "index.lambda_handler"
+  memory_size   = 256
+  timeout       = 30
+  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = false
+
+  environment_variables = {}
+}
+```
+
+Import:
+```cmd
+terraform import module.lambda_forum_api.aws_lambda_function.this forum-api
+terraform plan -target=module.lambda_forum_api
+```
+
+#### 4.17 business-api
+
+> **No live alias** — use `create_alias = false`
+
+```hcl
+module "lambda_business_api" {
+  source = "../../modules/lambda"
+
+  function_name = "business-api"
+  runtime       = "python3.12"
+  handler       = "index.lambda_handler"
+  memory_size   = 256
+  timeout       = 30
+  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = false
+
+  environment_variables = {}
+}
+```
+
+Import:
+```cmd
+terraform import module.lambda_business_api.aws_lambda_function.this business-api
+terraform plan -target=module.lambda_business_api
+```
+
+#### 4.18 book-delivery-api
+
+> **No live alias** — use `create_alias = false`
+
+```hcl
+module "lambda_book_delivery_api" {
+  source = "../../modules/lambda"
+
+  function_name = "book-delivery-api"
+  runtime       = "python3.12"
+  handler       = "index.lambda_handler"
+  memory_size   = 256
+  timeout       = 30
+  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = false
+
+  environment_variables = {}
+}
+```
+
+Import:
+```cmd
+terraform import module.lambda_book_delivery_api.aws_lambda_function.this book-delivery-api
+terraform plan -target=module.lambda_book_delivery_api
+```
+
+#### 4.19 boycott-api
+
+> **No live alias** — use `create_alias = false`
+
+```hcl
+module "lambda_boycott_api" {
+  source = "../../modules/lambda"
+
+  function_name = "boycott-api"
+  runtime       = "python3.12"
+  handler       = "index.lambda_handler"
+  memory_size   = 256
+  timeout       = 30
+  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = false
+
+  environment_variables = {}
+}
+```
+
+Import:
+```cmd
+terraform import module.lambda_boycott_api.aws_lambda_function.this boycott-api
+terraform plan -target=module.lambda_boycott_api
+```
+
+#### 4.20 tracking-api
+
+> **No live alias** — use `create_alias = false`
+
+```hcl
+module "lambda_tracking_api" {
+  source = "../../modules/lambda"
+
+  function_name = "tracking-api"
+  runtime       = "python3.12"
+  handler       = "index.lambda_handler"
+  memory_size   = 256
+  timeout       = 15
+  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = false
+
+  environment_variables = {}
+}
+```
+
+Import:
+```cmd
+terraform import module.lambda_tracking_api.aws_lambda_function.this tracking-api
+terraform plan -target=module.lambda_tracking_api
+```
+
+#### 4.21 email-sender
+
+> **No live alias** — use `create_alias = false`
+
+```hcl
+module "lambda_email_sender" {
+  source = "../../modules/lambda"
+
+  function_name = "email-sender"
+  runtime       = "python3.12"
+  handler       = "index.lambda_handler"
+  memory_size   = 512
+  timeout       = 300
+  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = false
+
+  environment_variables = {}
+}
+```
+
+Import:
+```cmd
+terraform import module.lambda_email_sender.aws_lambda_function.this email-sender
+terraform plan -target=module.lambda_email_sender
+```
+
+#### 4.22 NewsScraperLambda
+
+> **No live alias** — use `create_alias = false`
+
+```hcl
+module "lambda_news_scraper" {
+  source = "../../modules/lambda"
+
+  function_name = "NewsScraperLambda"
+  runtime       = "python3.12"
+  handler       = "lambda_function.lambda_handler"
+  memory_size   = 512
+  timeout       = 300
+  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  publish       = true
+  create_alias  = false
+
+  environment_variables = {}
+}
+```
+
+Import:
+```cmd
+terraform import module.lambda_news_scraper.aws_lambda_function.this NewsScraperLambda
+terraform plan -target=module.lambda_news_scraper
+```
+
+#### 4.23–4.27 Testimony Functions (Node.js)
 
 > **Note:** Your Lambda module currently works with Python (placeholder.zip). These Node.js functions use different handlers. The module should still work since it ignores `filename` changes via lifecycle rules, but verify after import.
 
@@ -1677,3 +1976,310 @@ And commit your `main.tf` changes to git:
 git add terraform/environments/prod/main.tf
 git commit -m "terraform: import [RESOURCE_TYPE] into state"
 ```
+
+
+---
+
+## 9. Live vs State Audit — How to Find What's Missing {#9-live-vs-state-audit}
+
+Before importing resources, you need to know what's in AWS but NOT in Terraform state. This section teaches you the methodology.
+
+### The Core Concept
+
+Terraform only knows about resources in its state file. When you run `terraform plan`, it compares your HCL against the state file (after refreshing state from AWS). Resources that exist in AWS but aren't in state are **invisible** to Terraform — it will try to create duplicates if you add HCL without importing first.
+
+### Step 1: List What Terraform Knows
+
+```cmd
+cd c:\Users\Ed\Documents\Programming\AWS\Downloader\terraform\environments\prod
+terraform state list
+```
+
+This outputs every resource address Terraform is tracking. Filter by type:
+
+```cmd
+terraform state list | findstr "dynamodb"
+terraform state list | findstr "lambda"
+terraform state list | findstr "sqs"
+terraform state list | findstr "sns"
+```
+
+### Step 2: List What AWS Has
+
+For each resource type, use AWS CLI:
+
+```cmd
+REM DynamoDB
+aws dynamodb list-tables --profile ekewaka --region us-east-1 --output text
+
+REM Lambda
+aws lambda list-functions --profile ekewaka --region us-east-1 --query "Functions[].FunctionName" --output text
+
+REM SQS
+aws sqs list-queues --profile ekewaka --region us-east-1 --output text
+
+REM SNS
+aws sns list-topics --profile ekewaka --region us-east-1 --query "Topics[].TopicArn" --output text
+
+REM API Gateway
+aws apigateway get-rest-apis --profile ekewaka --region us-east-1 --query "items[].{id:id,name:name}" --output table
+
+REM S3
+aws s3 ls --profile ekewaka
+```
+
+### Step 3: Compare the Two Lists
+
+Manually compare the outputs. Anything in AWS but NOT in `terraform state list` is unmanaged. For a quick count:
+
+```cmd
+REM Count DynamoDB tables in state (use PowerShell — cmd find is unreliable with pipes)
+powershell -Command "(terraform state list | Select-String 'dynamodb').Count"
+
+REM Count DynamoDB tables in AWS
+aws dynamodb list-tables --profile ekewaka --region us-east-1 --query "TableNames | length(@)"
+```
+
+### Audit Results (as of latest session)
+
+| Resource Type | Live in AWS | In Terraform State | Gap |
+|---------------|-------------|-------------------|-----|
+| Lambda Functions | 62 | 22 | ~40 unmanaged |
+| DynamoDB Tables | 63 | 31 | ~32 unmanaged |
+| API Gateways | 13 | 2 | 11 unmanaged |
+| SQS Queues | 23 | 8 | 15 unmanaged |
+| SNS Topics | 10 | 1 | 9 unmanaged |
+| S3 Buckets | 31 | 1 | 30 unmanaged |
+
+> **Note:** Not all gaps need to be closed. Many are demo/learning resources (see Section 8). The Priority Import Plan (Section 10) tells you which ones matter.
+
+### Step 4: Describe Each Missing Resource
+
+Once you identify a missing resource, get its exact config before writing HCL:
+
+```cmd
+REM DynamoDB — get schema, GSIs, billing mode
+aws dynamodb describe-table --table-name TABLE_NAME --profile ekewaka --region us-east-1 --query "Table.{Name:TableName,KeySchema:KeySchema,BillingMode:BillingModeSummary.BillingMode,Attributes:AttributeDefinitions,GSIs:GlobalSecondaryIndexes}" --output json
+
+REM Lambda — get runtime, handler, memory, timeout, layers
+aws lambda get-function-configuration --function-name FUNCTION_NAME --profile ekewaka --region us-east-1 --query "{Runtime:Runtime,Handler:Handler,MemorySize:MemorySize,Timeout:Timeout,Layers:Layers[].Arn}" --output json
+
+REM Lambda — check if it has a "live" alias (determines create_alias setting)
+aws lambda get-alias --function-name FUNCTION_NAME --name live --profile ekewaka --region us-east-1 2>&1
+
+REM SQS — get all attributes
+aws sqs get-queue-attributes --queue-url https://sqs.us-east-1.amazonaws.com/371751795928/QUEUE_NAME --attribute-names All --profile ekewaka --region us-east-1 --output json
+
+REM SNS — get subscriptions
+aws sns list-subscriptions-by-topic --topic-arn arn:aws:sns:us-east-1:371751795928:TOPIC_NAME --profile ekewaka --region us-east-1 --output json
+```
+
+### Batch Alias Check for Lambda
+
+To check ALL Lambda functions for a `live` alias at once (useful when importing many):
+
+```cmd
+for %f in (forum-api business-api scheduled-publisher book-delivery-api mountains-api contact-form-api feature-flags-api user-email-api) do @aws lambda get-alias --function-name %f --name live --profile ekewaka --region us-east-1 2>&1 | findstr /c:"FunctionName" /c:"ResourceNotFoundException"
+```
+
+If you see `ResourceNotFoundException`, that function has no alias — use `create_alias = false` in the HCL block.
+
+---
+
+## 10. Priority Import Plan {#10-priority-import-plan}
+
+Based on the audit, here's what to import and in what order. Priority is based on: is it actively used by the platform? Does the frontend call it? Would losing it break something?
+
+### Priority 1 — CRITICAL (Active Platform Features)
+
+These are called by the live frontend or support core platform functionality.
+
+| Resource | Type | Why Critical | Section |
+|----------|------|-------------|---------|
+| `mountains-api` | Lambda | Powers all 7 mountain hub pages (API ID `lcmogvl3v2`) | 4.1 |
+| `forum-api` | Lambda | Powers forum.html discussions | 4.16 |
+| `business-api` | Lambda | Powers business directory | 4.17 |
+| `scheduled-publisher` | Lambda | Auto-publishes scheduled articles | 4.4 |
+| `book-delivery-api` | Lambda | Book delivery feature (API ID `k2zbtkeh67`) | 4.18 |
+| `boycott-api` | Lambda | Powers boycott tracker page | 4.19 |
+| `comments-handler` | Lambda | Already in main.tf — just applied | 4.8 |
+| `mountain-pledges` | DynamoDB | Stores user pledges for mountains | 3.1 |
+| `mountain-badges` | DynamoDB | Stores earned badges | 3.2 |
+| `mountain-contributions` | DynamoDB | Tracks user contributions | 3.3 |
+| `forum-posts` | DynamoDB | Forum discussion data | 3.16 |
+| `business-directory` | DynamoDB | Business listings | 3.17 |
+| `boycott-tracker` | DynamoDB | Boycott tracker data | 3.19 |
+| `content-comments` | DynamoDB | Article/video comments | 3.5 |
+| `admin-users` | DynamoDB | Admin authentication | 3.4 |
+| `pending-changes` | DynamoDB | Content moderation queue | 3.7 |
+
+### Priority 2 — HIGH (Supporting Infrastructure)
+
+Important but not immediately user-facing, or have workarounds.
+
+| Resource | Type | Why High | Section |
+|----------|------|---------|---------|
+| `user-email-api` | Lambda | User email campaign management | 4.15 |
+| `feature-flags-api` | Lambda | Feature flag toggles | 4.5 |
+| `tracking-api` | Lambda | Analytics/tracking | 4.20 |
+| `email-sender` | Lambda | Email sending | 4.21 |
+| `contact-form-api` | Lambda | Contact form submissions | 4.9 |
+| `feature-flags` | DynamoDB | Feature flag data | 3.6 |
+| `user-email-campaigns` | DynamoDB | Email campaign data | 3.13 |
+| `user-email-subscribers` | DynamoDB | Email subscriber lists | 3.18 |
+| `user-email-drip-enrollments` | DynamoDB | Drip campaign enrollments | 3.14 |
+| `user-email-events` | DynamoDB | Email event tracking | 3.15 |
+| `video-processing-queue` | SQS | Video processing pipeline | 5.1 |
+| `thumbnail-generation-queue` | SQS | Thumbnail generation pipeline | 5.2 |
+| `email-queue` | SQS | Email sending pipeline | 5.3 |
+| `platform-critical-alerts` | SNS | Critical alert notifications | 6.1 |
+| `video-download-notifications` | SNS | Download completion alerts | 6.2 |
+| `ses-bounces` | SNS | Email bounce handling | 6.3 |
+| `ses-email-events` | SNS | SES event processing (Lambda sub) | 6.4 |
+
+### Priority 3 — LOW (Nice to Have)
+
+Functional but lower risk. Import when you have time.
+
+| Resource | Type | Notes |
+|----------|------|-------|
+| `testimony-*` (5 functions) | Lambda | Testimony feature — Node.js functions | 4.19–4.23 |
+| `newsletter_api` | Lambda | Newsletter system | 4.2 |
+| `digest_generator` | Lambda | Newsletter digest | 4.3 |
+| `email-subscription-handler` | Lambda | Email subscription | 4.10 |
+| `email-drip-processor` | Lambda | Drip campaigns | 4.11 |
+| `manual-email-sender` | Lambda | Manual email sends | 4.12 |
+| `ses-event-processor` | Lambda | SES event processing | 4.13 |
+| `NewsScraperLambda` | Lambda | News scraping pipeline | 4.22 |
+| `auto-cache-monitor` | Lambda | Cache monitoring | 4.6 |
+- `NewsScraperQueue` / `NewsScraperDLQ` | SQS | News scraper pipeline |
+| `email-notification-queue` | SQS | Email notifications | 5.4 |
+| `analytics-queue` | SQS | Analytics pipeline | 5.5 |
+| `surveillance-alerts` | SNS | Security alerts | 6.5 |
+| `email-campaign-stats` | DynamoDB | Campaign analytics | 3.9 |
+| `email-subscriber-stats` | DynamoDB | Subscriber analytics | 3.10 |
+| `email_subscribers` | DynamoDB | Legacy subscriber table | 3.11 |
+| `newsletter_analytics` | DynamoDB | Newsletter tracking | 3.12 |
+| `user-flags` | DynamoDB | User flag data | 3.8 |
+
+### Skip (Demo/Learning — Don't Import)
+
+- **Lambda:** `ffmpegLambda`, `musicFunction`, `pollyFunctionTest`, `TrackPollyUsage`, `blue-green-demo`, `createTempate`, `bible-lesson-to-audio`, `recipe-scrapter`, `recipe-scraper`, `recipe-scraper-lambda`, `video-url-generator`, `products-api`, `orders-api`, `reviews-api`, `storage_api`, `subscription_api`, `comments-api` (dead — zero invocations)
+- **DynamoDB:** `Cards`, `Cart`, `DemoTable`, `FindingEtsyDoc`, `NewsArticles`, `Orders`, `Products`, `ProductViews`, `Reviews`, `StorageFiles`, `StorageUsers`, `Templates`, `Users`, `WatchList`, `WebsiteConfigs`, `saas-tf-lock-table`, `terraform-state-lock`
+- **SQS:** `DemoQue`, `DemoQueue.fifo`, `TestQue.fifo`, `order-processing-queue`, `payment-processing-queue`, `inventory-update-queue` (+ their DLQs)
+- **SNS:** `DemoTopic`, `MyFirstTopic`, `PollyUsageAlerts`, `PollyUsageAlertsv2`, `my-textract-completion-topic`
+- **API Gateway:** `MyMusicAPI`, `shopping-api`, `recipe-scraper-api`
+
+### Recommended Workflow
+
+1. Pick a priority tier (start with Priority 1)
+2. For each resource: add HCL block to `main.tf` → `terraform import` → `terraform plan -target` → fix drift
+3. After importing all resources in a tier, run full `terraform plan` to check for surprises
+4. Commit to git: `git commit -m "terraform: import priority 1 resources"`
+5. Move to next tier
+
+---
+
+## 11. Case Study — comments-api vs comments-handler {#11-case-study-comments}
+
+This is a real example of investigating drift between Terraform state and live AWS. It demonstrates the detective work needed when things don't match up.
+
+### The Problem
+
+`main.tf` had a Lambda called `comments-api` with an API Gateway integration pointing to `/comments`. But when checking AWS, the actual API Gateway route for `/comments` pointed to a DIFFERENT function: `comments-handler`.
+
+### Investigation Steps
+
+#### 1. Check what API Gateway actually routes to
+
+```cmd
+aws apigateway get-integration --rest-api-id diz6ceeb22 --resource-id RESOURCE_ID --http-method ANY --profile ekewaka --region us-east-1
+```
+
+The `uri` field in the response contains the Lambda ARN. It pointed to `comments-handler`, not `comments-api`.
+
+#### 2. Check if both functions exist
+
+```cmd
+aws lambda get-function-configuration --function-name comments-api --profile ekewaka --region us-east-1
+aws lambda get-function-configuration --function-name comments-handler --profile ekewaka --region us-east-1
+```
+
+Both existed! Different handlers:
+- `comments-api`: `index.lambda_handler`
+- `comments-handler`: `lambda_function.lambda_handler` (with email notification support)
+
+#### 3. Check which one is actually being called
+
+```cmd
+REM Check invocation metrics for the last 6 weeks
+aws cloudwatch get-metric-statistics --namespace AWS/Lambda --metric-name Invocations --dimensions Name=FunctionName,Value=comments-api --start-time 2025-05-01T00:00:00Z --end-time 2025-06-15T00:00:00Z --period 86400 --statistics Sum --profile ekewaka --region us-east-1
+
+aws cloudwatch get-metric-statistics --namespace AWS/Lambda --metric-name Invocations --dimensions Name=FunctionName,Value=comments-handler --start-time 2025-05-01T00:00:00Z --end-time 2025-06-15T00:00:00Z --period 86400 --statistics Sum --profile ekewaka --region us-east-1
+```
+
+Result: `comments-api` had **zero** invocations. `comments-handler` had active traffic.
+
+#### 4. Check git history for context
+
+```cmd
+git log --all --oneline -- "**/comments*"
+```
+
+Found that `comments-handler` was built first (commit `82cd74a`), and `comments-api` was created later for a standalone API Gateway (`l10alau5g3`) that has since been deleted.
+
+#### 5. Check the frontend
+
+Search the frontend code for which endpoint it calls:
+
+```cmd
+powershell -Command "Get-ChildItem -Path '.' -Recurse -Include '*.html','*.js' | Select-String -Pattern 'comments' -Encoding UTF8 | Select-Object -Property Filename,LineNumber,Line"
+```
+
+Frontend calls `/prod/comments` on the unified API (`diz6ceeb22`), which routes to `comments-handler`.
+
+### The Fix
+
+1. Removed `comments-api` from `main.tf` (it was the wrong function)
+2. Added `comments-handler` with correct config
+3. Updated the API Gateway integration to reference `comments-handler`
+4. Ran `terraform state rm` to detach the old `comments-api` from state (doesn't delete from AWS)
+5. Ran `terraform plan` — clean result: 3 add, 3 change, 2 destroy (all safe)
+
+### Lessons Learned
+
+- **Don't trust the HCL blindly.** The state file and HCL said `comments-api`, but AWS was actually using `comments-handler`.
+- **Check CloudWatch invocations** to see which function is actually being called. Zero invocations = dead code.
+- **Check git history** to understand why two similar resources exist.
+- **Check the frontend** to see what the user actually hits.
+- **`terraform state rm`** is your friend — it detaches a resource from state without deleting it from AWS. Safe way to clean up state mismatches.
+
+### Key Commands Used
+
+```cmd
+REM Detach a resource from state (does NOT delete from AWS)
+terraform state rm module.lambda_comments_api.aws_lambda_function.this
+terraform state rm "module.lambda_comments_api.aws_lambda_alias.this[0]"
+
+REM Verify it's gone from state
+terraform state list | findstr "comments"
+
+REM Check the plan is clean
+terraform plan
+```
+
+### Standalone API Gateways Still Active
+
+During this investigation, we also discovered that the frontend references **18 different API Gateway IDs**. Many standalone APIs are still called directly alongside the unified API:
+
+| Standalone API | API ID | Called From |
+|---------------|--------|------------|
+| mountains-api | `lcmogvl3v2` | All 7 mountain hub pages |
+| prayer-api | `cayl9dmtaf` | prayer-wall.html |
+| contributors-api | `hzursivfuk` | contributors.html |
+| video-downloader-api | `j3w8kgqlvi` | download pages |
+| user-email-api | `olmcyxwc1a` | email management pages |
+| Book Delivery API | `k2zbtkeh67` | book delivery feature |
+| MyTestimony API | `wm234jgiv3` | testimony pages |
+
+These are NOT on the unified API (`diz6ceeb22`) — they're separate REST APIs with their own deployments. Consolidating them is a future project. For now, they need to be imported as-is or left unmanaged.

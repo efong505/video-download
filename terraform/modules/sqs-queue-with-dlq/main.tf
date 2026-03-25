@@ -1,6 +1,6 @@
 # Dead Letter Queue
 resource "aws_sqs_queue" "dlq" {
-  name = "${var.queue_name}-dlq"
+  name = var.dlq_name != "" ? var.dlq_name : "${var.queue_name}-dlq"
   message_retention_seconds = var.message_retention
 }
 

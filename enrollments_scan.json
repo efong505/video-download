@@ -1,0 +1,309 @@
+{
+    "Items": [
+        {
+            "enrollment_id": {
+                "S": "bafrench33@yahoo.com#book-welcome-sequence"
+            },
+            "last_sent_at": {
+                "S": "2026-03-24T14:00:07.255458"
+            },
+            "current_sequence_number": {
+                "N": "1"
+            },
+            "subscriber_email": {
+                "S": "bafrench33@yahoo.com"
+            },
+            "status": {
+                "S": "active"
+            },
+            "filter_tags": {
+                "L": [
+                    {
+                        "S": "book"
+                    },
+                    {
+                        "S": "survival-kit"
+                    }
+                ]
+            },
+            "enrolled_at": {
+                "S": "2026-03-23T21:26:23.106084"
+            },
+            "sequence_name": {
+                "S": "book-welcome-sequence"
+            }
+        },
+        {
+            "enrollment_id": {
+                "S": "efong505@protonmail.com#book-welcome-sequence"
+            },
+            "last_sent_at": {
+                "S": "2026-03-23T14:00:07.502106"
+            },
+            "current_sequence_number": {
+                "N": "1"
+            },
+            "subscriber_email": {
+                "S": "efong505@protonmail.com"
+            },
+            "status": {
+                "S": "active"
+            },
+            "filter_tags": {
+                "L": [
+                    {
+                        "S": "book"
+                    },
+                    {
+                        "S": "survival-kit"
+                    }
+                ]
+            },
+            "enrolled_at": {
+                "S": "2026-03-22T23:14:04.015989"
+            },
+            "sequence_name": {
+                "S": "book-welcome-sequence"
+            }
+        },
+        {
+            "enrollment_id": {
+                "S": "hawaiianintucson@gmail.com#book-welcome-sequence"
+            },
+            "last_sent_at": {
+                "S": "2026-03-24T14:00:07.490061"
+            },
+            "current_sequence_number": {
+                "N": "4"
+            },
+            "subscriber_email": {
+                "S": "hawaiianintucson@gmail.com"
+            },
+            "status": {
+                "S": "active"
+            },
+            "filter_tags": {
+                "L": [
+                    {
+                        "S": "book"
+                    },
+                    {
+                        "S": "survival-kit"
+                    }
+                ]
+            },
+            "enrolled_at": {
+                "S": "2026-03-17T15:17:41.886991"
+            },
+            "sequence_name": {
+                "S": "book-welcome-sequence"
+            }
+        },
+        {
+            "enrollment_id": {
+                "S": "hawaiianintucson@gmail.com_book-welcome-sequence"
+            },
+            "last_sent_at": {
+                "S": "2026-03-24T14:00:07.551901"
+            },
+            "current_sequence_number": {
+                "N": "3"
+            },
+            "subscriber_email": {
+                "S": "hawaiianintucson@gmail.com"
+            },
+            "status": {
+                "S": "active"
+            },
+            "filter_tags": {
+                "L": [
+                    {
+                        "S": "book"
+                    },
+                    {
+                        "S": "survival-kit"
+                    }
+                ]
+            },
+            "enrolled_at": {
+                "S": "2026-03-17T15:17:41.886991"
+            },
+            "sequence_name": {
+                "S": "book-welcome-sequence"
+            }
+        },
+        {
+            "enrollment_id": {
+                "S": "juliahinojos@protonmail.com#book-welcome-sequence"
+            },
+            "last_sent_at": {
+                "S": "2026-03-24T14:00:07.631798"
+            },
+            "current_sequence_number": {
+                "N": "2"
+            },
+            "subscriber_email": {
+                "S": "juliahinojos@protonmail.com"
+            },
+            "status": {
+                "S": "active"
+            },
+            "filter_tags": {
+                "L": [
+                    {
+                        "S": "book"
+                    },
+                    {
+                        "S": "survival-kit"
+                    }
+                ]
+            },
+            "enrolled_at": {
+                "S": "2026-03-21T04:16:13.373752"
+            },
+            "sequence_name": {
+                "S": "book-welcome-sequence"
+            }
+        },
+        {
+            "enrollment_id": {
+                "S": "test-drip-$(get-date -format 'yyyymmddhhmmss')@example.com_book-welcome-sequence"
+            },
+            "last_sent_at": {
+                "S": "2026-03-23T14:00:07.770423"
+            },
+            "current_sequence_number": {
+                "N": "2"
+            },
+            "enrolled_at": {
+                "S": "2026-03-19T20:40:22.025176"
+            },
+            "subscriber_email": {
+                "S": "test-drip-$(get-date -format 'yyyymmddhhmmss')@example.com"
+            },
+            "status": {
+                "S": "active"
+            }
+        },
+        {
+            "enrollment_id": {
+                "S": "test-drip-20260319144031@example.com_book-welcome-sequence"
+            },
+            "last_sent_at": {
+                "S": "2026-03-23T14:00:07.853047"
+            },
+            "current_sequence_number": {
+                "N": "2"
+            },
+            "enrolled_at": {
+                "S": "2026-03-19T20:40:34.524993"
+            },
+            "subscriber_email": {
+                "S": "test-drip-20260319144031@example.com"
+            },
+            "status": {
+                "S": "active"
+            }
+        },
+        {
+            "enrolled_at": {
+                "S": "2026-03-17T14:46:23.624122"
+            },
+            "enrollment_id": {
+                "S": "test-drip-20260319144326@example.com#book-welcome-sequence"
+            }
+        },
+        {
+            "enrollment_id": {
+                "S": "test-drip-20260319144326@example.com_book-welcome-sequence"
+            },
+            "last_sent_at": {
+                "S": "2026-03-23T14:00:07.949212"
+            },
+            "current_sequence_number": {
+                "N": "2"
+            },
+            "enrolled_at": {
+                "S": "2026-03-19T20:43:30.124127"
+            },
+            "subscriber_email": {
+                "S": "test-drip-20260319144326@example.com"
+            },
+            "status": {
+                "S": "active"
+            }
+        },
+        {
+            "enrollment_id": {
+                "S": "test-final-20260319144845@example.com#book-welcome-sequence"
+            },
+            "last_sent_at": {
+                "S": "2026-03-24T14:00:07.791796"
+            },
+            "current_sequence_number": {
+                "N": "3"
+            },
+            "subscriber_email": {
+                "S": "test-final-20260319144845@example.com"
+            },
+            "status": {
+                "S": "active"
+            },
+            "filter_tags": {
+                "L": [
+                    {
+                        "S": "book"
+                    },
+                    {
+                        "S": "survival-kit"
+                    }
+                ]
+            },
+            "enrolled_at": {
+                "S": "2026-03-17T15:39:19.868917"
+            },
+            "sequence_name": {
+                "S": "book-welcome-sequence"
+            }
+        },
+        {
+            "enrollment_id": {
+                "S": "waianaeboy702@aol.com#book-drip-campaign"
+            },
+            "last_sent_at": {
+                "S": "2026-03-23T14:00:08.051926"
+            },
+            "current_sequence_number": {
+                "N": "2"
+            },
+            "enrolled_at": {
+                "S": "2026-03-19T20:39:52.457216Z"
+            },
+            "subscriber_email": {
+                "S": "waianaeboy702@aol.com"
+            },
+            "status": {
+                "S": "active"
+            }
+        },
+        {
+            "enrollment_id": {
+                "S": "waianaeboy702@aol.com#book-welcome-sequence"
+            },
+            "status": {
+                "S": "active"
+            }
+        },
+        {
+            "enrollment_id": {
+                "S": "{{subscriber_email}}#book-welcome-sequence"
+            },
+            "status": {
+                "S": "active"
+            }
+        }
+    ],
+    "Count": 13,
+    "ScannedCount": 13,
+    "ConsumedCapacity": null
+}

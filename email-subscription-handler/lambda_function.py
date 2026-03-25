@@ -1341,7 +1341,7 @@ def enroll_post_purchase(body):
             print(f"Subscriber upsert error: {sub_err}")
         
         # Create drip enrollment for post-purchase sequence
-        group = 'post-purchase-sequence'
+        group = body.get('campaign_group', 'post-purchase-sequence').strip() or 'post-purchase-sequence'
         enrollment_id = f"{email}#{group}"
         
         # Check if already enrolled

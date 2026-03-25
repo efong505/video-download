@@ -1,0 +1,171 @@
+{
+    "Items": [
+        {
+            "campaign_name": {
+                "S": "#3 Subject: How AI is already affecting your family"
+            },
+            "delay_days": {
+                "N": "2"
+            },
+            "subject": {
+                "S": "How AI is already affecting your family"
+            },
+            "filter_tags": {
+                "L": [
+                    {
+                        "S": "book"
+                    },
+                    {
+                        "S": "survival-kit"
+                    }
+                ]
+            },
+            "campaign_id": {
+                "S": "0ad371ae-7065-442f-831f-545a70d5c415"
+            },
+            "sequence_number": {
+                "N": "3"
+            }
+        },
+        {
+            "campaign_name": {
+                "S": "#2 The two paths of AI (and which one we are on)"
+            },
+            "delay_days": {
+                "N": "2"
+            },
+            "subject": {
+                "S": "The two paths of AI (and which one we are on)"
+            },
+            "filter_tags": {
+                "L": [
+                    {
+                        "S": "book"
+                    },
+                    {
+                        "S": "survival-kit"
+                    }
+                ]
+            },
+            "campaign_id": {
+                "S": "3a3df4d2-119e-4905-84fc-cf73e597b670"
+            },
+            "sequence_number": {
+                "N": "2"
+            }
+        },
+        {
+            "delay_days": {
+                "N": "4"
+            },
+            "subject": {
+                "S": "Limited time: Signed copies + bonus webinar"
+            },
+            "filter_tags": {
+                "L": [
+                    {
+                        "S": "book"
+                    },
+                    {
+                        "S": "survival-kit"
+                    }
+                ]
+            },
+            "campaign_id": {
+                "S": "4e26dc60-d6e5-46b7-ac4d-96e904b2642a"
+            },
+            "sequence_number": {
+                "N": "6"
+            }
+        },
+        {
+            "delay_days": {
+                "N": "3"
+            },
+            "subject": {
+                "S": "Is this book anti-AI?"
+            },
+            "filter_tags": {
+                "L": [
+                    {
+                        "S": "book"
+                    },
+                    {
+                        "S": "survival-kit"
+                    }
+                ]
+            },
+            "campaign_id": {
+                "S": "7ef7b6b6-3f5d-4d2e-97e1-4a41b138add7"
+            },
+            "sequence_number": {
+                "N": "5"
+            }
+        },
+        {
+            "campaign_name": {
+                "S": "#4 What readers are saying about The Necessary Evil"
+            },
+            "delay_days": {
+                "N": "2"
+            },
+            "subject": {
+                "S": "What readers are saying about The Necessary Evil"
+            },
+            "filter_tags": {
+                "L": [
+                    {
+                        "S": "book"
+                    },
+                    {
+                        "S": "survival-kit"
+                    }
+                ]
+            },
+            "campaign_id": {
+                "S": "b4cdaae5-e33d-4dbf-b8bd-24d9afe910b7"
+            },
+            "sequence_number": {
+                "N": "4"
+            }
+        },
+        {
+            "campaign_name": {
+                "S": "#1  Why I wrote The Necessary Evil"
+            },
+            "delay_days": {
+                "N": "1"
+            },
+            "subject": {
+                "S": "Why I wrote The Necessary Evil"
+            },
+            "filter_tags": {
+                "L": [
+                    {
+                        "S": "book"
+                    },
+                    {
+                        "S": "survival-kit"
+                    }
+                ]
+            },
+            "campaign_id": {
+                "S": "b514b0f5-7d31-4c56-9df6-261548fe4c65"
+            },
+            "sequence_number": {
+                "N": "1"
+            }
+        },
+        {
+            "campaign_id": {
+                "S": "eb60f56c-d4e9-459d-9f3a-20ed48acf54e"
+            },
+            "subject": {
+                "S": "testing"
+            }
+        }
+    ],
+    "Count": 7,
+    "ScannedCount": 7,
+    "ConsumedCapacity": null
+}
