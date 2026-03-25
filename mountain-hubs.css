@@ -1,5 +1,43 @@
 /* Shared styles for all 7 Mountain Hub Pages */
 
+/* Mountain Hub Navigation Strip */
+.mountain-nav-strip {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: #1a1a2e;
+    flex-wrap: wrap;
+}
+
+.mountain-nav-strip a {
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 0.35rem 0.9rem;
+    border-radius: 20px;
+    color: #ccc;
+    background: rgba(255,255,255,0.08);
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.mountain-nav-strip a:hover {
+    color: white;
+    background: rgba(255,255,255,0.2);
+}
+
+.mountain-nav-strip a.active {
+    color: white;
+    background: var(--mountain-primary);
+}
+
+@media (max-width: 600px) {
+    .mountain-nav-strip { gap: 0.3rem; padding: 0.5rem; }
+    .mountain-nav-strip a { font-size: 0.7rem; padding: 0.25rem 0.6rem; }
+}
+
 .mountain-hero {
     background: linear-gradient(135deg, var(--mountain-primary) 0%, var(--mountain-secondary) 100%);
     padding: 3rem 2rem;
