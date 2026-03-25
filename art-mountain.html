@@ -5,57 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="mountain-hubs.css"><title>Art & Entertainment Mountain - Christian Conservatives Today</title>
-    <!-- <link rel="stylesheet" href="assets/css/common-styles.css"> -->
+    <link rel="stylesheet" href="mountain-hubs.css">
+    <title>Art &amp; Entertainment Mountain - Christian Conservatives Today</title>
     <style>:root{--mountain-primary:#f59e0b;--mountain-secondary:#d97706;}</style>
 </head>
 <body>
-    <!-- Navigation -->
     <div id="navbar-container" data-page="art-mountain" data-icon-style="fontawesome"></div>
     <script src="navbar.js"></script>
     <script>
-        fetch('navbar.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('navbar-container').innerHTML = html;
-                initNavbar();
-            });
+        fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});
     </script>
     <div class="mountain-hero">
-        <h1>⛰️ Art & Entertainment Mountain</h1>
+        <h1>⛰️ Art &amp; Entertainment Mountain</h1>
         <p>Creating culture that glorifies God and inspires truth</p>
         <img src="Art.jpg" alt="Art & Entertainment Mountain" class="hero-banner">
     </div>
 
     <div class="tabs">
-        <button class="tab active" onclick="switchTab(event, 'promote')">Promote</button>
-        <button class="tab" onclick="switchTab(event, 'expose')">Expose & Fight</button>
-        <button class="tab" onclick="switchTab(event, 'involved')">Get Involved</button>
-        <button class="tab" onclick="switchTab(event, 'resources')">Resources</button>
+        <button class="tab active" data-tab="promote">Promote</button>
+        <button class="tab" data-tab="expose">Expose &amp; Fight</button>
+        <button class="tab" data-tab="involved">Get Involved</button>
+        <button class="tab" data-tab="resources">Resources</button>
     </div>
 
     <div id="promote" class="tab-content active">
-        <h2>Promote Godly Art & Entertainment</h2>
+        <h2>Promote Godly Art &amp; Entertainment</h2>
         <div class="action-grid">
             <div class="action-card">
                 <h3>🎬 Share Christian Films</h3>
                 <p>Upload and promote faith-based movies, documentaries, and video content.</p>
-                <a href="user-upload.html?mountain=art" class="action-btn">Upload Content</a>
+                <a href="user-upload.html?mountain=art" class="action-btn">Upload Video</a>
+                <a href="create-article.html?template=mountain_art&mountain=art" class="action-btn" style="margin-top:8px;">Write Article</a>
             </div>
             <div class="action-card">
                 <h3>🎵 Christian Music</h3>
                 <p>Discover and share worship music, Christian artists, and faith-inspired songs.</p>
-                <a href="videos.html" class="action-btn">Explore Music</a>
+                <a href="videos.html?category=art" class="action-btn">Explore Music</a>
             </div>
             <div class="action-card">
                 <h3>🎨 Visual Arts Gallery</h3>
                 <p>Showcase Christian art, photography, and creative works that honor God.</p>
-                <a href="videos.html" class="action-btn">View Gallery</a>
+                <a href="videos.html?category=art" class="action-btn">View Gallery</a>
             </div>
             <div class="action-card">
                 <h3>📚 Christian Literature</h3>
                 <p>Promote books, poetry, and written works from a biblical worldview.</p>
-                <a href="articles.html" class="action-btn">Read More</a>
+                <a href="articles.html?category=art" class="action-btn">Read More</a>
             </div>
         </div>
     </div>
@@ -66,17 +61,18 @@
             <div class="action-card">
                 <h3>🚨 Report Immoral Content</h3>
                 <p>Document Hollywood's promotion of immorality, blasphemy, and anti-Christian themes.</p>
-                <a href="user-upload.html?mountain=art" class="action-btn">Submit Report</a>
+                <a href="user-upload.html?mountain=art" class="action-btn">Upload Video Report</a>
+                <a href="create-article.html?template=mountain_art&mountain=art" class="action-btn" style="margin-top:8px;">Write Report</a>
             </div>
             <div class="action-card">
                 <h3>🎭 Entertainment Reviews</h3>
                 <p>Read biblical reviews of movies, TV shows, music, and entertainment content.</p>
-                <a href="articles.html" class="action-btn">Read Reviews</a>
+                <a href="articles.html?category=art" class="action-btn">Read Reviews</a>
             </div>
             <div class="action-card">
                 <h3>💰 Boycott Tracker</h3>
                 <p>Track companies and entertainers promoting anti-Christian values and immorality.</p>
-                <a href="articles.html" class="action-btn">View Boycotts</a>
+                <a href="boycott-tracker.html" class="action-btn">View Boycotts</a>
             </div>
             <div class="action-card">
                 <h3>🎯 Cultural Campaigns</h3>
@@ -95,9 +91,9 @@
                 <a href="mountain-pledge.html" class="action-btn">Take Pledge</a>
             </div>
             <div class="action-card">
-                <h3>🎬 Become a Creator</h3>
-                <p>Learn filmmaking, music production, writing, and other creative skills for ministry.</p>
-                <a href="resources.html" class="action-btn">Get Training</a>
+                <h3>🚀 Become a Creator</h3>
+                <p>Use our Art Mountain template to write about Christian creativity and culture.</p>
+                <a href="create-article.html?template=mountain_art&mountain=art" class="action-btn">Use Template</a>
             </div>
             <div class="action-card">
                 <h3>📅 Arts Events</h3>
@@ -107,40 +103,56 @@
             <div class="action-card">
                 <h3>💬 Artist Forums</h3>
                 <p>Connect with Christian filmmakers, musicians, writers, and visual artists.</p>
-                <a href="prayer-wall.html" class="action-btn">Join Discussion</a>
+                <a href="forum.html?mountain=art" class="action-btn">Join Discussion</a>
             </div>
         </div>
     </div>
 
     <div id="resources" class="tab-content">
-        <h2>Art & Entertainment Mountain Resources</h2>
+        <h2>Art &amp; Entertainment Mountain Resources</h2>
+
+        <h3 style="margin:1.5rem 0 1rem;">📚 Curated Resources</h3>
+        <div id="dynamic-resources"><p class="text-muted">Loading resources...</p></div>
+        <p style="margin-top:1rem;"><a href="resources.html?category=art" class="action-btn" style="display:inline-block;">Browse All Resources →</a></p>
+
+        <h3 style="margin:2rem 0 1rem;">⚡ Quick Links</h3>
         <ul class="resource-list">
-            <li><strong>Filmmaking Resources</strong> - Equipment, training, and distribution for Christian films</li>
-            <li><strong>Music Production</strong> - Recording, mixing, and promoting Christian music</li>
-            <li><strong>Writing Workshops</strong> - Courses on Christian fiction, screenwriting, and storytelling</li>
-            <li><strong>Visual Arts Training</strong> - Painting, photography, and digital art from a biblical perspective</li>
-            <li><strong>Theater & Drama</strong> - Resources for Christian theater and dramatic arts</li>
-            <li><strong>Publishing Platforms</strong> - Christian-friendly platforms for books, music, and films</li>
-            <li><strong>Funding & Grants</strong> - Financial support for Christian artists and creative projects</li>
-            <li><strong>Entertainment Alternatives</strong> - Family-friendly streaming services and content platforms</li>
+            <li><a href="create-article.html?template=mountain_art&mountain=art"><strong>Art Mountain Template</strong></a> - Write articles using our Art &amp; Entertainment template</li>
+            <li><a href="articles.html?category=art"><strong>Art &amp; Entertainment Articles</strong></a> - Browse all art and entertainment articles</li>
+            <li><a href="videos.html?category=art"><strong>Art &amp; Entertainment Videos</strong></a> - Watch Christian films, music, and creative content</li>
+            <li><a href="ministry-templates.html"><strong>All Ministry Templates</strong></a> - Browse all 7 Mountains article templates</li>
+            <li><a href="prayer-wall.html"><strong>Prayer Wall</strong></a> - Pray for Christian artists and cultural transformation</li>
+            <li><a href="events-calendar.html"><strong>Events Calendar</strong></a> - Find film festivals, concerts, and art shows</li>
+            <li><a href="user-upload.html?mountain=art"><strong>Upload Content</strong></a> - Share your own creative videos and films</li>
+            <li><a href="mountain-pledge.html"><strong>Take the Pledge</strong></a> - Commit to godly art and entertainment</li>
         </ul>
     </div>
 
     <script>
-        function switchTab(event, tabName) {
-            const tabs = document.querySelectorAll('.tab');
-            const contents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => tab.classList.remove('active'));
-            contents.forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
             document.getElementById(tabName).classList.add('active');
+            history.replaceState(null, '', '#' + tabName);
         }
+
+        document.querySelectorAll('.tab').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        });
+
+        function restoreTab() {
+            const h = window.location.hash.replace('#', '');
+            if (h && document.getElementById(h)) switchTab(h);
+        }
+        restoreTab();
+        window.addEventListener('hashchange', restoreTab);
+        window.addEventListener('pageshow', restoreTab);
     </script>
+
     <!-- Pledge Section -->
     <div class="pledge-section">
-        <h2>✊ Take the Art & Entertainment Mountain Pledge</h2>
+        <h2>✊ Take the Art &amp; Entertainment Mountain Pledge</h2>
         <p>Commit to creating and supporting art that glorifies God</p>
         <button id="pledge-btn" onclick="takePledge('art')">Take the Pledge ✊</button>
         <div id="user-badges"></div>
@@ -155,9 +167,33 @@
     <script src="mountain-content-loader.js"></script>
     <script src="mountains-api.js"></script>
     <script>
+        const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
+        const ART_CATEGORIES = ['Art', 'Entertainment', 'Music', 'Film', 'Kids and Family', 'Creative'];
+
+        async function loadArtResources() {
+            const container = document.getElementById('dynamic-resources');
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const all = await res.json();
+                const filtered = all.filter(r => {
+                    const cats = Array.isArray(r.category) ? r.category : [r.category];
+                    return cats.some(c => ART_CATEGORIES.some(ac => c.toLowerCase().includes(ac.toLowerCase())));
+                });
+                if (!filtered.length) { container.innerHTML = '<p class="text-muted">No art resources yet. Check back soon!</p>'; return; }
+                container.innerHTML = filtered.map(r => `
+                    <div class="action-card" style="margin-bottom:1rem;">
+                        <h3><a href="${r.url}" target="_blank" style="color:var(--mountain-primary);text-decoration:none;">${r.name}</a></h3>
+                        <p>${r.description ? r.description.substring(0, 200) + (r.description.length > 200 ? '...' : '') : 'No description'}</p>
+                        <a href="${r.url}" target="_blank" class="action-btn">Visit Resource</a>
+                    </div>
+                `).join('');
+            } catch(e) { container.innerHTML = '<p class="text-muted">Could not load resources.</p>'; }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             loadMountainContent('art');
             initMountainHub('art');
+            loadArtResources();
         });
     </script>
 
@@ -183,4 +219,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-

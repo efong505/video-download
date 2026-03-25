@@ -5,21 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="mountain-hubs.css"><title>Government Mountain - Christian Conservatives Today</title>
-    <!-- <link rel="stylesheet" href="assets/css/common-styles.css"> -->
+    <link rel="stylesheet" href="mountain-hubs.css">
+    <title>Government Mountain - Christian Conservatives Today</title>
     <style>:root{--mountain-primary:#343a40;--mountain-secondary:#23272b;}</style>
 </head>
 <body>
-    <!-- Navigation -->
     <div id="navbar-container" data-page="government-mountain" data-icon-style="fontawesome"></div>
     <script src="navbar.js"></script>
     <script>
-        fetch('navbar.html')
-            .then(response => response.text())
-            .then(html => {
-                document.getElementById('navbar-container').innerHTML = html;
-                initNavbar();
-            });
+        fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});
     </script>
     <div class="mountain-hero">
         <h1>⛰️ Government Mountain</h1>
@@ -28,10 +22,10 @@
     </div>
 
     <div class="tabs">
-        <button class="tab active" onclick="switchTab(event, 'promote')">Promote</button>
-        <button class="tab" onclick="switchTab(event, 'expose')">Expose & Fight</button>
-        <button class="tab" onclick="switchTab(event, 'involved')">Get Involved</button>
-        <button class="tab" onclick="switchTab(event, 'resources')">Resources</button>
+        <button class="tab active" data-tab="promote">Promote</button>
+        <button class="tab" data-tab="expose">Expose &amp; Fight</button>
+        <button class="tab" data-tab="involved">Get Involved</button>
+        <button class="tab" data-tab="resources">Resources</button>
     </div>
 
     <div id="promote" class="tab-content active">
@@ -45,17 +39,18 @@
             <div class="action-card">
                 <h3>📰 Political Commentary</h3>
                 <p>Share biblical analysis of current government issues and political developments.</p>
-                <a href="user-upload.html?mountain=government" class="action-btn">Upload Content</a>
+                <a href="user-upload.html?mountain=government" class="action-btn">Upload Video</a>
+                <a href="create-article.html?template=mountain_government&mountain=government" class="action-btn" style="margin-top:8px;">Write Article</a>
             </div>
             <div class="action-card">
                 <h3>🎓 Patriot Academy</h3>
                 <p>Constitutional training and civic education for engaged citizens and leaders.</p>
-                <a href="election-map.html" class="action-btn">Learn More</a>
+                <a href="resources.html?category=government" class="action-btn">Learn More</a>
             </div>
             <div class="action-card">
                 <h3>📚 Founding Documents</h3>
                 <p>Study the Constitution, Declaration of Independence, and America's biblical heritage.</p>
-                <a href="articles.html" class="action-btn">Read More</a>
+                <a href="articles.html?category=government" class="action-btn">Read More</a>
             </div>
         </div>
     </div>
@@ -66,22 +61,23 @@
             <div class="action-card">
                 <h3>🚨 Report Corruption</h3>
                 <p>Document political corruption, constitutional violations, and government overreach.</p>
-                <a href="user-upload.html?mountain=government" class="action-btn">Submit Report</a>
+                <a href="user-upload.html?mountain=government" class="action-btn">Upload Video Report</a>
+                <a href="create-article.html?template=mountain_government&mountain=government" class="action-btn" style="margin-top:8px;">Write Report</a>
             </div>
             <div class="action-card">
                 <h3>📰 Political News</h3>
                 <p>Stay informed about tyrannical policies and threats to constitutional freedoms.</p>
-                <a href="articles.html" class="action-btn">Read Articles</a>
+                <a href="articles.html?category=government" class="action-btn">Read Articles</a>
             </div>
             <div class="action-card">
                 <h3>⚖️ Legal Action</h3>
                 <p>Connect with legal organizations defending constitutional rights and religious freedom.</p>
-                <a href="resources.html" class="action-btn">Find Help</a>
+                <a href="resources.html?category=government" class="action-btn">Find Help</a>
             </div>
             <div class="action-card">
-                <h3>🎯 Political Campaigns</h3>
-                <p>Join efforts to oppose bad legislation and support constitutional candidates.</p>
-                <a href="events-calendar.html" class="action-btn">View Campaigns</a>
+                <h3>🔍 Fact-Check Politicians</h3>
+                <p>Verify claims made by politicians and hold leaders accountable with evidence.</p>
+                <a href="fact-check.html" class="action-btn">View Fact-Checks</a>
             </div>
         </div>
     </div>
@@ -95,9 +91,9 @@
                 <a href="mountain-pledge.html" class="action-btn">Take Pledge</a>
             </div>
             <div class="action-card">
-                <h3>🗳️ Election Resources</h3>
-                <p>Find voter guides, candidate information, and election dates for your state.</p>
-                <a href="election-map.html" class="action-btn">View Elections</a>
+                <h3>🚀 Write About Government</h3>
+                <p>Use our Government Mountain template to write about constitutional principles.</p>
+                <a href="create-article.html?template=mountain_government&mountain=government" class="action-btn">Use Template</a>
             </div>
             <div class="action-card">
                 <h3>📅 Political Events</h3>
@@ -105,39 +101,56 @@
                 <a href="events-calendar.html" class="action-btn">Find Events</a>
             </div>
             <div class="action-card">
-                <h3>🙏 Pray for Leaders</h3>
-                <p>Intercede for government officials and pray for righteous leadership.</p>
-                <a href="prayer-wall.html" class="action-btn">Visit Prayer Wall</a>
+                <h3>💬 Government Forums</h3>
+                <p>Discuss policy, elections, and constitutional issues with fellow patriots.</p>
+                <a href="forum.html?mountain=government" class="action-btn">Join Discussion</a>
             </div>
         </div>
     </div>
 
     <div id="resources" class="tab-content">
         <h2>Government Mountain Resources</h2>
+
+        <h3 style="margin:1.5rem 0 1rem;">📚 Curated Resources</h3>
+        <div id="dynamic-resources"><p class="text-muted">Loading resources...</p></div>
+        <p style="margin-top:1rem;"><a href="resources.html?category=government" class="action-btn" style="display:inline-block;">Browse All Resources →</a></p>
+
+        <h3 style="margin:2rem 0 1rem;">⚡ Quick Links</h3>
         <ul class="resource-list">
-            <li><strong>Constitutional Training</strong> - Courses on the Constitution and founding principles</li>
-            <li><strong>Voter Guides</strong> - Comprehensive election information for all 50 states</li>
-            <li><strong>Civic Engagement</strong> - How to effectively participate in local government</li>
-            <li><strong>Biblical Citizenship</strong> - Understanding government from a biblical worldview</li>
-            <li><strong>Candidate Vetting</strong> - How to research and evaluate political candidates</li>
-            <li><strong>Legislative Tracking</strong> - Monitor bills and legislation in your state</li>
-            <li><strong>Political Action</strong> - Strategies for influencing policy and elections</li>
-            <li><strong>Historical Resources</strong> - America's Christian heritage and founding documents</li>
+            <li><a href="election-map.html"><strong>50-State Voter Guides</strong></a> - Election info and candidate profiles for every state</li>
+            <li><a href="create-article.html?template=mountain_government&mountain=government"><strong>Government Mountain Template</strong></a> - Write articles using our Government template</li>
+            <li><a href="articles.html?category=government"><strong>Government Articles</strong></a> - Browse all government and political articles</li>
+            <li><a href="videos.html?category=government"><strong>Government Videos</strong></a> - Watch political commentary and constitutional content</li>
+            <li><a href="ministry-templates.html"><strong>All Ministry Templates</strong></a> - Browse all 7 Mountains article templates</li>
+            <li><a href="prayer-wall.html"><strong>Prayer Wall</strong></a> - Pray for government leaders and righteous policy</li>
+            <li><a href="events-calendar.html"><strong>Events Calendar</strong></a> - Find town halls, rallies, and civic events</li>
+            <li><a href="user-upload.html?mountain=government"><strong>Upload Content</strong></a> - Share your own political commentary videos</li>
+            <li><a href="mountain-pledge.html"><strong>Take the Pledge</strong></a> - Commit to biblical citizenship</li>
         </ul>
     </div>
 
     <script>
-        function switchTab(event, tabName) {
-            const tabs = document.querySelectorAll('.tab');
-            const contents = document.querySelectorAll('.tab-content');
-            
-            tabs.forEach(tab => tab.classList.remove('active'));
-            contents.forEach(content => content.classList.remove('active'));
-            
-            event.target.classList.add('active');
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
             document.getElementById(tabName).classList.add('active');
+            history.replaceState(null, '', '#' + tabName);
         }
+
+        document.querySelectorAll('.tab').forEach(btn => {
+            btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+        });
+
+        function restoreTab() {
+            const h = window.location.hash.replace('#', '');
+            if (h && document.getElementById(h)) switchTab(h);
+        }
+        restoreTab();
+        window.addEventListener('hashchange', restoreTab);
+        window.addEventListener('pageshow', restoreTab);
     </script>
+
     <!-- Pledge Section -->
     <div class="pledge-section">
         <h2>✊ Take the Government Mountain Pledge</h2>
@@ -155,9 +168,33 @@
     <script src="mountain-content-loader.js"></script>
     <script src="mountains-api.js"></script>
     <script>
+        const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
+        const GOV_CATEGORIES = ['Christian Politics', 'Election', 'Government', 'Constitutional', 'Patriot', 'Civic'];
+
+        async function loadGovResources() {
+            const container = document.getElementById('dynamic-resources');
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const all = await res.json();
+                const filtered = all.filter(r => {
+                    const cats = Array.isArray(r.category) ? r.category : [r.category];
+                    return cats.some(c => GOV_CATEGORIES.some(gc => c.toLowerCase().includes(gc.toLowerCase())));
+                });
+                if (!filtered.length) { container.innerHTML = '<p class="text-muted">No government resources yet. Check back soon!</p>'; return; }
+                container.innerHTML = filtered.map(r => `
+                    <div class="action-card" style="margin-bottom:1rem;">
+                        <h3><a href="${r.url}" target="_blank" style="color:var(--mountain-primary);text-decoration:none;">${r.name}</a></h3>
+                        <p>${r.description ? r.description.substring(0, 200) + (r.description.length > 200 ? '...' : '') : 'No description'}</p>
+                        <a href="${r.url}" target="_blank" class="action-btn">Visit Resource</a>
+                    </div>
+                `).join('');
+            } catch(e) { container.innerHTML = '<p class="text-muted">Could not load resources.</p>'; }
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
             loadMountainContent('government');
             initMountainHub('government');
+            loadGovResources();
         });
     </script>
 
@@ -183,4 +220,3 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
