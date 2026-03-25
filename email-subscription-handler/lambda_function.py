@@ -92,6 +92,8 @@ def lambda_handler(event, context):
                 return update_campaign(body)
             elif action == 'delete_campaign':
                 return delete_campaign(body)
+            elif action == 'enroll_post_purchase':
+                return enroll_post_purchase(body)
             else:
                 return handle_subscription(event)
         else:
@@ -325,11 +327,14 @@ def handle_open_tracking(event):
         path = event.get('rawPath', event.get('path', ''))
         tracking_id = path.split('/')[-1]
         
-        # Decode to get email and campaign
+        # Decode tracking ID (handles both formats)
         email, campaign_id = decode_tracking_id(tracking_id)
         
-        # Log open event
+        print(f"Open tracked: email={email}, campaign={campaign_id}")
+        
+        # Log to both event tables
         log_event(email, 'opened', campaign_id)
+        log_event_mt(email, 'opened', campaign_id)
         
         # Update subscriber stats
         try:
@@ -381,8 +386,11 @@ def handle_click_tracking(event):
         # Decode to get email, campaign, and destination URL
         email, campaign_id, destination_url = decode_click_tracking_id(tracking_id)
         
-        # Log click event
+        print(f"Click tracked: email={email}, campaign={campaign_id}, url={destination_url}")
+        
+        # Log to both event tables
         log_event(email, 'clicked', campaign_id, {'url': destination_url})
+        log_event_mt(email, 'clicked', campaign_id, {'url': destination_url})
         
         # Update subscriber stats
         try:
@@ -637,9 +645,21 @@ def encode_tracking_id(email, campaign_id):
     return base64.urlsafe_b64encode(data.encode()).decode()
 
 def decode_tracking_id(tracking_id):
-    """Decode tracking ID to email and campaign"""
+    """Decode tracking ID to email and campaign (handles both formats)"""
     data = base64.urlsafe_b64decode(tracking_id.encode()).decode()
-    email, campaign_id = data.split('|')
+    if '|' in data:
+        # Format from subscription_handler: email|campaign_id
+        email, campaign_id = data.split('|')
+    elif ':' in data:
+        # Format from email_sender: user_id:campaign_id:email
+        parts = data.split(':')
+        if len(parts) >= 3:
+            email = parts[-1]
+            campaign_id = parts[-2]
+        else:
+            email, campaign_id = parts[0], parts[1]
+    else:
+        raise ValueError(f"Unknown tracking format: {data}")
     return email, campaign_id
 
 def create_tracked_link(email, campaign_id, destination_url):
@@ -649,13 +669,28 @@ def create_tracked_link(email, campaign_id, destination_url):
     return f"{DOMAIN}/track/click/{tracking_id}"
 
 def decode_click_tracking_id(tracking_id):
-    """Decode click tracking ID to email, campaign, and URL"""
+    """Decode click tracking ID to email, campaign, and URL (handles both formats)"""
     data = base64.urlsafe_b64decode(tracking_id.encode()).decode()
-    parts = data.split('|', 2)  # Split into max 3 parts
-    return parts[0], parts[1], parts[2]
+    if '|' in data:
+        # Format from subscription_handler: email|campaign_id|url
+        parts = data.split('|', 2)
+        return parts[0], parts[1], parts[2]
+    elif ':' in data:
+        # Format from email_sender: user_id:campaign_id:email:https://...
+        # URLs contain colons, so split carefully
+        parts = data.split(':')
+        if len(parts) >= 4:
+            campaign_id = parts[1]
+            email = parts[2]
+            url = ':'.join(parts[3:])  # Rejoin URL parts
+            return email, campaign_id, url
+        else:
+            raise ValueError(f"Unknown click tracking format: {data}")
+    else:
+        raise ValueError(f"Unknown click tracking format: {data}")
 
 def log_event(email, event_type, campaign_id, metadata=None):
-    """Log email event to DynamoDB"""
+    """Log email event to email-events table"""
     event_id = str(uuid.uuid4())
     timestamp = int(datetime.now().timestamp())
     
@@ -675,6 +710,26 @@ def log_event(email, event_type, campaign_id, metadata=None):
         events_table.put_item(Item=item)
     except Exception as e:
         print(f"Error logging event: {str(e)}")
+
+def log_event_mt(email, event_type, campaign_id, metadata=None):
+    """Log email event to user-email-events table (for analytics)"""
+    try:
+        mt_events_table = dynamodb.Table('user-email-events')
+        event_id = f"{campaign_id}_{email}_{event_type}_{int(datetime.now().timestamp())}"
+        item = {
+            'user_id': PLATFORM_OWNER_ID,
+            'event_id': event_id,
+            'campaign_id': campaign_id,
+            'subscriber_email': email,
+            'event_type': event_type,
+            'timestamp': int(datetime.now().timestamp()),
+            'date': datetime.now().isoformat()
+        }
+        if metadata:
+            item['metadata'] = json.dumps(metadata)
+        mt_events_table.put_item(Item=item)
+    except Exception as e:
+        print(f"Error logging MT event: {str(e)}")
 
 def cors_response(status_code, body):
     """Return response with CORS headers"""
@@ -1246,6 +1301,97 @@ def delete_campaign(body):
         print(f"Delete campaign error: {str(e)}")
         return cors_response(500, {'error': 'Failed to delete campaign'})
 
+def enroll_post_purchase(body):
+    """Enroll a buyer in the post-purchase drip sequence"""
+    try:
+        email = body.get('email', '').strip().lower()
+        first_name = body.get('first_name', '').strip()
+        last_name = body.get('last_name', '').strip()
+        source = body.get('source', 'book_purchase')
+        
+        if not email or '@' not in email:
+            return cors_response(400, {'error': 'Valid email required'})
+        
+        # Ensure subscriber exists in multi-tenant system
+        try:
+            existing = mt_subscribers_table.get_item(
+                Key={'user_id': PLATFORM_OWNER_ID, 'subscriber_email': email}
+            )
+            if 'Item' in existing:
+                current_tags = existing['Item'].get('tags', [])
+                if 'purchaser' not in current_tags:
+                    mt_subscribers_table.update_item(
+                        Key={'user_id': PLATFORM_OWNER_ID, 'subscriber_email': email},
+                        UpdateExpression='SET tags = list_append(tags, :t)',
+                        ExpressionAttributeValues={':t': ['purchaser']}
+                    )
+            else:
+                mt_subscribers_table.put_item(Item={
+                    'user_id': PLATFORM_OWNER_ID,
+                    'subscriber_email': email,
+                    'first_name': first_name,
+                    'last_name': last_name,
+                    'phone': '',
+                    'status': 'active',
+                    'subscribed_at': datetime.now().isoformat(),
+                    'source': source,
+                    'tags': ['purchaser']
+                })
+        except Exception as sub_err:
+            print(f"Subscriber upsert error: {sub_err}")
+        
+        # Create drip enrollment for post-purchase sequence
+        group = 'post-purchase-sequence'
+        enrollment_id = f"{email}#{group}"
+        
+        # Check if already enrolled
+        try:
+            existing_enrollment = mt_drip_enrollments_table.get_item(
+                Key={'user_id': PLATFORM_OWNER_ID, 'enrollment_id': enrollment_id}
+            )
+            if 'Item' in existing_enrollment:
+                return cors_response(200, {'message': 'Already enrolled in post-purchase sequence', 'email': email})
+        except:
+            pass
+        
+        mt_drip_enrollments_table.put_item(Item={
+            'user_id': PLATFORM_OWNER_ID,
+            'enrollment_id': enrollment_id,
+            'subscriber_email': email,
+            'sequence_name': group,
+            'campaign_group': group,
+            'filter_tags': ['purchaser'],
+            'enrolled_at': datetime.now().isoformat(),
+            'current_sequence_number': 0,
+            'status': 'active'
+        })
+        
+        print(f"Post-purchase enrollment: {email} enrolled in {group}")
+        
+        # Send SNS notification
+        try:
+            sns.publish(
+                TopicArn=SNS_TOPIC_ARN,
+                Subject=f'New Book Purchase Confirmed - {email}',
+                Message=f"""BOOK PURCHASE CONFIRMED
+
+Email: {email}
+Name: {first_name} {last_name}
+Source: {source}
+Enrolled in: {group}
+Time: {datetime.now().isoformat()}
+"""
+            )
+        except:
+            pass
+        
+        return cors_response(200, {'message': 'Enrolled in post-purchase sequence', 'email': email})
+    except Exception as e:
+        print(f"Post-purchase enrollment error: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        return cors_response(500, {'error': 'Enrollment failed'})
+
 def get_analytics_overview():
     """Get overview analytics stats from user-email-events (where email_sender logs)"""
     try:
@@ -1362,11 +1508,11 @@ def get_campaign_analytics():
         return cors_response(500, {'error': 'Failed to get campaign analytics'})
 
 def get_subscriber_analytics():
-    """Get per-subscriber analytics from user-email-events"""
+    """Get per-subscriber analytics from both event tables"""
     try:
         from decimal import Decimal
         
-        # Get all events
+        # Get events from user-email-events
         mt_events_table = dynamodb.Table('user-email-events')
         events = []
         response = mt_events_table.query(
@@ -1382,10 +1528,22 @@ def get_subscriber_analytics():
             )
             events.extend(response.get('Items', []))
         
+        # Also get from legacy email-events table
+        legacy_response = events_table.scan()
+        legacy_events = legacy_response.get('Items', [])
+        while 'LastEvaluatedKey' in legacy_response:
+            legacy_response = events_table.scan(ExclusiveStartKey=legacy_response['LastEvaluatedKey'])
+            legacy_events.extend(legacy_response.get('Items', []))
+        for le in legacy_events:
+            if 'email' in le and 'subscriber_email' not in le:
+                le['subscriber_email'] = le['email']
+        
+        all_events = events + legacy_events
+        
         # Group by subscriber email
         by_subscriber = {}
-        for e in events:
-            email = e.get('subscriber_email', '')
+        for e in all_events:
+            email = e.get('subscriber_email', e.get('email', ''))
             if not email:
                 continue
             if email not in by_subscriber:

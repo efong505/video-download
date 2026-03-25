@@ -748,6 +748,43 @@ It is a book about mastering it — before it masters us.</strong></p>
                             <i class="fas fa-lock me-2"></i>Secure Checkout
                         </p>
                     </div>
+
+                    <!-- Already Purchased on Amazon/Lulu -->
+                    <div class="card shadow-lg mt-5" style="border: 3px solid #16a34a; background: linear-gradient(135deg, #f0fdf4 0%, #ffffff 100%);" id="already-purchased">
+                        <div class="card-body p-4">
+                            <div class="text-center mb-3">
+                                <span class="badge bg-success fs-6 px-4 py-2">🎁 BONUS CONTENT</span>
+                            </div>
+                            <h4 class="text-center mb-3" style="color: #16a34a;">Already Purchased on Amazon or Lulu?</h4>
+                            <p class="text-center mb-3">Enter your email to unlock <strong>exclusive post-purchase bonuses</strong>:</p>
+                            <ul class="mb-4" style="max-width: 500px; margin: 0 auto;">
+                                <li>📧 7-part deep-dive email series with bonus chapters</li>
+                                <li>🎥 Exclusive author video commentary</li>
+                                <li>📋 Advanced discussion guides for church leaders</li>
+                                <li>🔓 Early access to future books & resources</li>
+                            </ul>
+                            <form id="post-purchase-form" style="max-width: 500px; margin: 0 auto;">
+                                <div class="row g-2">
+                                    <div class="col-md-5">
+                                        <input type="text" class="form-control form-control-lg" id="pp-first-name" placeholder="First name">
+                                    </div>
+                                    <div class="col-md-7">
+                                        <input type="email" class="form-control form-control-lg" id="pp-email" placeholder="Email" required>
+                                    </div>
+                                    <div class="col-12">
+                                        <button class="btn btn-lg w-100" type="submit" style="background: #16a34a; color: white; font-weight: bold;">
+                                            <i class="fas fa-unlock me-2"></i>Unlock My Bonus Content
+                                        </button>
+                                    </div>
+                                </div>
+                                <p class="text-center text-muted small mt-2 mb-0">We'll send your bonuses to this email. No spam.</p>
+                            </form>
+                            <div id="pp-success" class="text-center mt-3" style="display:none;">
+                                <i class="fas fa-check-circle fa-2x mb-2" style="color: #16a34a;"></i>
+                                <h5 style="color: #16a34a;">You're in! Check your email for bonus content.</h5>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1185,6 +1222,7 @@ It is a book about mastering it — before it masters us.</strong></p>
                     },
                     onApprove: function(data, actions) {
                         return actions.order.capture().then(function(details) {
+                            enrollPostPurchase(details.payer.email_address, details.payer.name.given_name, details.payer.name.surname, 'paypal_hardcover');
                             bootstrap.Modal.getInstance(hardcoverModal).hide();
                             window.location.href = 'thank-you-paperback.html';
                         });
@@ -1205,6 +1243,7 @@ It is a book about mastering it — before it masters us.</strong></p>
                     },
                     onApprove: function(data, actions) {
                         return actions.order.capture().then(function(details) {
+                            enrollPostPurchase(details.payer.email_address, details.payer.name.given_name, details.payer.name.surname, 'paypal_paperback');
                             bootstrap.Modal.getInstance(paperbackModal).hide();
                             window.location.href = 'thank-you-paperback.html';
                         });
@@ -1229,6 +1268,7 @@ It is a book about mastering it — before it masters us.</strong></p>
                     },
                     onApprove: function(data, actions) {
                         return actions.order.capture().then(function(details) {
+                            enrollPostPurchase(details.payer.email_address, details.payer.name.given_name, details.payer.name.surname, 'paypal_digital_pdf');
                             fetch('https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/orders?action=create', {
                                 method: 'POST',
                                 headers: {'Content-Type': 'application/json'},
@@ -1312,6 +1352,32 @@ It is a book about mastering it — before it masters us.</strong></p>
                 this
             );
         });
+
+        // Post-purchase enrollment (Amazon/Lulu buyers)
+        document.getElementById('post-purchase-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('pp-email').value.trim();
+            const firstName = document.getElementById('pp-first-name').value.trim();
+            if (!email) return;
+            enrollPostPurchase(email, firstName, '', 'amazon_lulu_self_report');
+            this.style.display = 'none';
+            document.getElementById('pp-success').style.display = 'block';
+        });
+
+        // Shared post-purchase enrollment function
+        function enrollPostPurchase(email, firstName, lastName, source) {
+            fetch('https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    action: 'enroll_post_purchase',
+                    email: email,
+                    first_name: firstName,
+                    last_name: lastName,
+                    source: source
+                })
+            }).catch(err => console.error('Post-purchase enrollment error:', err));
+        }
     </script>
 </body>
 </html>

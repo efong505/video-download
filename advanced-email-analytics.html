@@ -476,21 +476,24 @@
                     'rejected': 'warning'
                 };
                 
-                const metadata = e.metadata ? JSON.parse(e.metadata) : {};
+                let metadata = {};
+                try { metadata = e.metadata ? JSON.parse(e.metadata) : {}; } catch(ex) {}
                 let details = '';
                 
                 if (e.event_type === 'bounced') {
-                    details = `${metadata.bounce_type} - ${metadata.bounce_subtype}`;
+                    details = `${metadata.bounce_type || ''} - ${metadata.bounce_subtype || ''}`;
                 } else if (e.event_type === 'clicked') {
-                    details = metadata.link || '';
+                    details = metadata.url || metadata.link || '';
                 } else if (e.event_type === 'complaint') {
                     details = metadata.complaint_type || 'Spam report';
                 }
                 
+                const eventDate = e.date ? new Date(e.date).toLocaleString() : (e.timestamp ? new Date(e.timestamp * 1000).toLocaleString() : '-');
+                
                 return `
                     <tr>
-                        <td>${new Date(e.date).toLocaleString()}</td>
-                        <td>${e.email}</td>
+                        <td>${eventDate}</td>
+                        <td>${e.subscriber_email || e.email || '-'}</td>
                         <td><span class="badge ${eventBadge[e.event_type] || 'info'}">${e.event_type}</span></td>
                         <td>${e.campaign_id}</td>
                         <td>${details}</td>
