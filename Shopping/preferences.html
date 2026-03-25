@@ -28,14 +28,17 @@
     </nav>
 
     <div class="container my-4">
-        <div class="pref-card" id="prefs-form-card">
+        <div class="pref-card" id="login-required-card" style="display:none">
+            <div class="text-center py-4">
+                <h2>Login Required</h2>
+                <p class="text-muted">Please log in to manage your email preferences.</p>
+                <a href="../login.html?redirect=Shopping/preferences.html" class="btn btn-primary">Login</a>
+            </div>
+        </div>
+
+        <div class="pref-card" id="prefs-form-card" style="display:none">
             <h2 class="mb-4">Email Preferences</h2>
             <p class="text-muted">Choose which emails you'd like to receive from us.</p>
-
-            <div class="mb-3">
-                <label class="form-label fw-bold">Email Address</label>
-                <input type="email" id="email" class="form-control" placeholder="your@email.com" required>
-            </div>
 
             <hr>
             <h5 class="mb-3">Notification Types</h5>
@@ -101,31 +104,39 @@
     <script>
         const API = 'https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/marketing';
         const params = new URLSearchParams(window.location.search);
-        const userId = params.get('user_id') || localStorage.getItem('user_id') || localStorage.getItem('tracking_session_id') || '';
-
         const PREF_FIELDS = ['abandoned_cart_emails', 'browse_abandonment_emails', 'price_drop_alerts', 'back_in_stock_alerts', 'newsletter'];
 
-        // Handle unsubscribe via URL
-        if (params.get('action') === 'unsubscribe' && userId) {
-            document.getElementById('prefs-form-card').style.display = 'none';
+        function getAuthHeaders() {
+            const t = localStorage.getItem('auth_token');
+            return t ? {'Content-Type': 'application/json', 'Authorization': `Bearer ${t}`} : {'Content-Type': 'application/json'};
+        }
+
+        // Handle unsubscribe via URL token (public, no auth needed)
+        if (params.get('action') === 'unsubscribe' && params.get('token')) {
             document.getElementById('unsubscribed-card').style.display = 'block';
-            fetch(`${API}?action=preferences-update`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({user_id: userId, unsubscribed: true, email: ''})
-            });
+            fetch(`${API}?action=unsubscribe&token=${params.get('token')}`);
         } else {
-            loadPreferences();
+            // Check auth
+            const token = localStorage.getItem('auth_token');
+            if (!token) {
+                document.getElementById('login-required-card').style.display = 'block';
+            } else {
+                document.getElementById('prefs-form-card').style.display = 'block';
+                loadPreferences();
+            }
         }
 
         async function loadPreferences() {
-            if (!userId) return;
             try {
-                const resp = await fetch(`${API}?action=preferences-get&user_id=${userId}`);
+                const resp = await fetch(`${API}?action=preferences-get`, { headers: getAuthHeaders() });
+                if (resp.status === 401) {
+                    document.getElementById('prefs-form-card').style.display = 'none';
+                    document.getElementById('login-required-card').style.display = 'block';
+                    return;
+                }
                 const data = await resp.json();
                 const prefs = data.preferences;
 
-                if (prefs.email) document.getElementById('email').value = prefs.email;
                 if (prefs.unsubscribed) {
                     document.getElementById('prefs-form-card').style.display = 'none';
                     document.getElementById('unsubscribed-card').style.display = 'block';
@@ -139,18 +150,14 @@
         }
 
         async function savePreferences() {
-            const body = {
-                user_id: userId,
-                email: document.getElementById('email').value,
-                unsubscribed: false
-            };
+            const body = { unsubscribed: false };
             PREF_FIELDS.forEach(f => { body[f] = document.getElementById(f).checked; });
             body.marketing_emails = PREF_FIELDS.some(f => body[f]);
 
             try {
                 await fetch(`${API}?action=preferences-update`, {
                     method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
+                    headers: getAuthHeaders(),
                     body: JSON.stringify(body)
                 });
                 showMsg('Preferences saved!', 'success');
@@ -161,8 +168,8 @@
             if (!confirm('Are you sure you want to unsubscribe from all marketing emails?')) return;
             await fetch(`${API}?action=preferences-update`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({user_id: userId, email: document.getElementById('email').value, unsubscribed: true})
+                headers: getAuthHeaders(),
+                body: JSON.stringify({ unsubscribed: true })
             });
             document.getElementById('prefs-form-card').style.display = 'none';
             document.getElementById('unsubscribed-card').style.display = 'block';
@@ -171,8 +178,8 @@
         async function resubscribe() {
             await fetch(`${API}?action=preferences-update`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({user_id: userId, unsubscribed: false, email: ''})
+                headers: getAuthHeaders(),
+                body: JSON.stringify({ unsubscribed: false })
             });
             document.getElementById('unsubscribed-card').style.display = 'none';
             document.getElementById('prefs-form-card').style.display = 'block';

@@ -3,6 +3,9 @@ import boto3
 import uuid
 import os
 import time
+import hashlib
+import hmac
+import base64
 from datetime import datetime, timedelta
 from decimal import Decimal
 from collections import Counter
@@ -19,6 +22,7 @@ products_table = dynamodb.Table('Products')
 
 FROM_EMAIL = 'contact@christianconservativestoday.com'
 SITE_URL = 'https://christianconservativestoday.com'
+JWT_SECRET = os.environ.get('JWT_SECRET', '')
 
 HEADERS = {
     'Access-Control-Allow-Origin': '*',
@@ -34,6 +38,41 @@ def decimal_default(obj):
 def respond(status, body):
     return {'statusCode': status, 'headers': HEADERS, 'body': json.dumps(body, default=decimal_default)}
 
+def verify_jwt(event):
+    auth = (event.get('headers') or {}).get('Authorization') or (event.get('headers') or {}).get('authorization', '')
+    if not auth.startswith('Bearer '):
+        return None
+    token = auth.split(' ')[1]
+    try:
+        parts = token.split('.')
+        if len(parts) != 3:
+            return None
+        msg = f"{parts[0]}.{parts[1]}"
+        sig = base64.urlsafe_b64encode(hmac.new(JWT_SECRET.encode(), msg.encode(), hashlib.sha256).digest()).decode().rstrip('=')
+        if sig != parts[2]:
+            return None
+        pad = parts[1] + '=' * (4 - len(parts[1]) % 4)
+        payload = json.loads(base64.urlsafe_b64decode(pad))
+        if payload.get('exp', 0) < datetime.utcnow().timestamp():
+            return None
+        return payload
+    except Exception:
+        return None
+
+def require_auth(event):
+    user = verify_jwt(event)
+    if not user:
+        return None, respond(401, {'error': 'Authentication required'})
+    return user, None
+
+def require_admin(event):
+    user = verify_jwt(event)
+    if not user:
+        return None, respond(401, {'error': 'Authentication required'})
+    if user.get('role') not in ('admin', 'super_user'):
+        return None, respond(403, {'error': 'Admin access required'})
+    return user, None
+
 
 def lambda_handler(event, context):
     # CloudWatch scheduled event — run all scans
@@ -48,15 +87,22 @@ def lambda_handler(event, context):
     method = event.get('httpMethod', 'GET')
 
     try:
+        # Public
+        if action == 'unsubscribe' and method == 'GET':
+            return unsubscribe(event)
+        # Auth required
         if action == 'preferences-get' and method == 'GET':
             return get_preferences(event)
         elif action == 'preferences-update' and method == 'POST':
             return update_preferences(event)
-        elif action == 'unsubscribe' and method == 'GET':
-            return unsubscribe(event)
+        # Admin only
         elif action == 'run-scans' and method == 'POST':
+            user, err = require_admin(event)
+            if err: return err
             return run_all_scans()
         elif action == 'stats' and method == 'GET':
+            user, err = require_admin(event)
+            if err: return err
             return get_stats()
         else:
             return respond(400, {'error': f'Invalid action: {action}'})
@@ -288,23 +334,22 @@ def send_queued_emails():
 # ==================== PREFERENCES ====================
 
 def get_preferences(event):
-    params = event.get('queryStringParameters') or {}
-    user_id = params.get('user_id')
-    if not user_id:
-        return respond(400, {'error': 'user_id required'})
+    user, err = require_auth(event)
+    if err: return err
 
-    resp = prefs_table.get_item(Key={'user_id': user_id})
+    resp = prefs_table.get_item(Key={'user_id': user['email']})
     item = resp.get('Item')
     if not item:
-        return respond(200, {'preferences': _default_prefs(user_id), 'exists': False})
+        return respond(200, {'preferences': _default_prefs(user['email']), 'exists': False})
     return respond(200, {'preferences': item, 'exists': True})
 
 
 def update_preferences(event):
+    user, err = require_auth(event)
+    if err: return err
+
     body = json.loads(event.get('body', '{}'))
-    user_id = body.get('user_id')
-    if not user_id:
-        return respond(400, {'error': 'user_id required'})
+    user_id = user['email']
 
     now = datetime.utcnow().isoformat() + 'Z'
     token = body.get('unsubscribe_token', uuid.uuid4().hex[:16])

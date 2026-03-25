@@ -15,6 +15,7 @@
                     <li class="nav-item"><a class="nav-link" href="shop.html">Shop</a></li>
                     <li class="nav-item"><a class="nav-link" href="cart.html">Cart</a></li>
                     <li class="nav-item"><a class="nav-link active" href="orders.html">My Orders</a></li>
+                    <li class="nav-item" id="nav-auth"></li>
                 </ul>
             </div>
         </div>
@@ -33,14 +34,13 @@
         async function loadOrders() {
             const token = localStorage.getItem('auth_token');
             const userData = JSON.parse(localStorage.getItem('user_data') || '{}');
-            const userId = userData.email;
             
-            if (!token || !userId) {
+            if (!token || !userData.email) {
                 document.getElementById('orders-list').innerHTML = '<p>Please <a href="../login.html?redirect=Shopping/orders.html">login</a> to view your orders.</p>';
                 return;
             }
             
-            const response = await fetch(`${API}?action=list&user_id=${userId}`, {
+            const response = await fetch(`${API}?action=list`, {
                 headers: {'Authorization': `Bearer ${token}`}
             });
             const data = await response.json();
@@ -95,6 +95,18 @@
         }
 
         loadOrders();
+
+        // Auth nav
+        (function() {
+            const auth = JSON.parse(localStorage.getItem('user_data') || 'null');
+            const token = localStorage.getItem('auth_token');
+            const el = document.getElementById('nav-auth');
+            if (token && auth) {
+                el.innerHTML = `<a class="nav-link" href="../login.html">${auth.name || auth.email}</a>`;
+            } else {
+                el.innerHTML = `<a class="nav-link" href="../login.html?redirect=Shopping/orders.html">Login</a>`;
+            }
+        })();
     </script>
 </body>
 </html>

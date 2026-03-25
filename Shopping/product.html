@@ -19,6 +19,7 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="shop.html">Shop</a></li>
                     <li class="nav-item"><a class="nav-link" href="cart.html">Cart</a></li>
+                    <li class="nav-item" id="nav-auth"></li>
                 </ul>
             </div>
         </div>
@@ -89,16 +90,18 @@
         const API_TRACKING = 'https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/tracking';
         let currentProduct = null;
 
+        const urlParams = new URLSearchParams(window.location.search);
+        const productId = urlParams.get('id');
+
         function getSessionId() {
             let sid = localStorage.getItem('tracking_session_id');
             if (!sid) { sid = 'sess_' + Math.random().toString(36).substr(2, 12); localStorage.setItem('tracking_session_id', sid); }
             return sid;
         }
-        function getUserId() { return localStorage.getItem('user_id') || null; }
+        function getUserId() { const u = JSON.parse(localStorage.getItem('user_data') || 'null'); return u ? u.email : null; }
         function getDeviceType() { return window.innerWidth < 768 ? 'mobile' : window.innerWidth < 1024 ? 'tablet' : 'desktop'; }
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const productId = urlParams.get('id');
+        function getAuthHeaders() { const t = localStorage.getItem('auth_token'); return t ? {'Content-Type': 'application/json', 'Authorization': `Bearer ${t}`} : {'Content-Type': 'application/json'}; }
+        function redirectLogin() { window.location.href = `../login.html?redirect=Shopping/product.html?id=${productId}`; }
 
         async function loadProduct() {
             const response = await fetch(`${API_PRODUCTS}?action=get&product_id=${productId}`);
@@ -117,7 +120,7 @@
 
         function displayRating(rating, count) {
             const stars = '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating));
-            document.getElementById('rating-display').innerHTML = 
+            document.getElementById('rating-display').innerHTML =
                 `<span class="star">${stars}</span> ${rating.toFixed(1)} (${count} reviews)`;
         }
 
@@ -138,7 +141,7 @@
                         <span class="star">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</span>
                     </div>
                     <p class="mb-2">${r.review_text}</p>
-                    <small class="text-muted">By ${r.user_id} on ${new Date(r.created_at).toLocaleDateString()}</small>
+                    <small class="text-muted">By ${r.user_name || r.user_id} on ${new Date(r.created_at).toLocaleDateString()}</small>
                     <div class="mt-2">
                         <button class="btn btn-sm btn-outline-success" onclick="voteReview('${r.review_id}', 'helpful')">
                             👍 Helpful (${r.helpful_votes})
@@ -152,29 +155,33 @@
         }
 
         async function submitReview() {
+            if (!localStorage.getItem('auth_token')) { alert('Please log in to write a review.'); redirectLogin(); return; }
+
             const review = {
                 product_id: productId,
                 rating: parseInt(document.getElementById('rating').value),
                 title: document.getElementById('review-title').value,
-                review_text: document.getElementById('review-text').value,
-                user_id: 'guest'
+                review_text: document.getElementById('review-text').value
             };
 
-            await fetch(`${API_REVIEWS}?action=create`, {
+            const resp = await fetch(`${API_REVIEWS}?action=create`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: getAuthHeaders(),
                 body: JSON.stringify(review)
             });
 
+            if (resp.status === 401) { alert('Session expired. Please log in again.'); redirectLogin(); return; }
+
             bootstrap.Modal.getInstance(document.getElementById('reviewModal')).hide();
-            alert('Review submitted! It will appear after moderation.');
+            alert('Review submitted!');
             loadProduct();
         }
 
         async function voteReview(reviewId, voteType) {
+            if (!localStorage.getItem('auth_token')) { alert('Please log in to vote.'); return; }
             await fetch(`${API_REVIEWS}?action=vote`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: getAuthHeaders(),
                 body: JSON.stringify({review_id: reviewId, vote_type: voteType})
             });
             loadReviews();
@@ -183,24 +190,23 @@
         function addToCart() {
             const cart = JSON.parse(localStorage.getItem('cart') || '[]');
             const existing = cart.find(item => item.product_id === productId);
-            
+
             if (existing) {
                 existing.quantity++;
             } else {
                 cart.push({
                     product_id: productId,
                     name: currentProduct.name,
-                    price: currentProduct.price,
+                    price: parseFloat(currentProduct.price),
                     quantity: 1
                 });
             }
-            
+
             localStorage.setItem('cart', JSON.stringify(cart));
             alert('Added to cart!');
             trackCartAdd();
         }
 
-        // --- Behavioral Tracking ---
         function trackProductView() {
             fetch(`${API_TRACKING}?action=track-view`, {
                 method: 'POST',
@@ -231,25 +237,38 @@
         }
 
         function addToWatchlist() {
-            const uid = getUserId() || getSessionId();
+            if (!localStorage.getItem('auth_token')) { alert('Please log in to use the watchlist.'); redirectLogin(); return; }
             const targetPrice = parseFloat(prompt('Alert me when price drops below $', (currentProduct.price * 0.8).toFixed(2)));
             if (!targetPrice || isNaN(targetPrice)) return;
 
             fetch(`${API_TRACKING}?action=watchlist-add`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: getAuthHeaders(),
                 body: JSON.stringify({
-                    user_id: uid,
                     product_id: productId,
                     product_name: currentProduct.name,
                     current_price: parseFloat(currentProduct.price),
                     target_price: targetPrice
                 })
-            }).then(() => alert('Added to watchlist! We\'ll notify you on price drops.'))
-              .catch(() => alert('Error adding to watchlist'));
+            }).then(r => {
+                if (r.status === 401) { alert('Session expired. Please log in again.'); redirectLogin(); return; }
+                alert('Added to watchlist! We\'ll notify you on price drops.');
+            }).catch(() => alert('Error adding to watchlist'));
         }
 
         loadProduct();
+
+        // Auth nav
+        (function() {
+            const auth = JSON.parse(localStorage.getItem('user_data') || 'null');
+            const token = localStorage.getItem('auth_token');
+            const el = document.getElementById('nav-auth');
+            if (token && auth) {
+                el.innerHTML = `<a class="nav-link" href="../login.html">${auth.name || auth.email}</a>`;
+            } else {
+                el.innerHTML = `<a class="nav-link" href="../login.html?redirect=Shopping/product.html?id=${productId}">Login</a>`;
+            }
+        })();
     </script>
 </body>
 </html>

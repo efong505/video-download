@@ -1,45 +1,81 @@
 import json
 import boto3
+import hashlib
+import hmac
+import base64
+import os
 from decimal import Decimal
+from datetime import datetime
 
 dynamodb = boto3.resource('dynamodb')
 products_table = dynamodb.Table('Products')
+JWT_SECRET = os.environ.get('JWT_SECRET', '')
 
 def decimal_default(obj):
     if isinstance(obj, Decimal):
         return float(obj)
     raise TypeError
 
+def verify_jwt(event):
+    auth = (event.get('headers') or {}).get('Authorization') or (event.get('headers') or {}).get('authorization', '')
+    if not auth.startswith('Bearer '):
+        return None
+    token = auth.split(' ')[1]
+    try:
+        parts = token.split('.')
+        if len(parts) != 3:
+            return None
+        msg = f"{parts[0]}.{parts[1]}"
+        sig = base64.urlsafe_b64encode(hmac.new(JWT_SECRET.encode(), msg.encode(), hashlib.sha256).digest()).decode().rstrip('=')
+        if sig != parts[2]:
+            return None
+        pad = parts[1] + '=' * (4 - len(parts[1]) % 4)
+        payload = json.loads(base64.urlsafe_b64decode(pad))
+        if payload.get('exp', 0) < datetime.utcnow().timestamp():
+            return None
+        return payload
+    except Exception:
+        return None
+
+def require_admin(event):
+    user = verify_jwt(event)
+    if not user:
+        return None, {'statusCode': 401, 'headers': HEADERS, 'body': json.dumps({'error': 'Authentication required'})}
+    if user.get('role') not in ('admin', 'super_user'):
+        return None, {'statusCode': 403, 'headers': HEADERS, 'body': json.dumps({'error': 'Admin access required'})}
+    return user, None
+
+HEADERS = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Headers': 'Content-Type,Authorization',
+    'Access-Control-Allow-Methods': 'GET,POST,OPTIONS'
+}
+
 def lambda_handler(event, context):
-    headers = {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'Content-Type,Authorization',
-        'Access-Control-Allow-Methods': 'GET,POST,OPTIONS'
-    }
-    
     try:
         if event.get('httpMethod') == 'OPTIONS':
-            return {'statusCode': 200, 'headers': headers, 'body': ''}
-        
-        action = event.get('queryStringParameters', {}).get('action', 'list')
-        
-        if action == 'list':
-            return list_products(event, headers)
-        elif action == 'get':
-            return get_product(event, headers)
-        elif action == 'search':
-            return search_products(event, headers)
-        elif action == 'create':
-            return create_product(event, headers)
-        elif action == 'update':
-            return update_product(event, headers)
-        elif action == 'delete':
-            return delete_product(event, headers)
-        else:
-            return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'Invalid action'})}
-    
+            return {'statusCode': 200, 'headers': HEADERS, 'body': ''}
+
+        action = (event.get('queryStringParameters') or {}).get('action', 'list')
+
+        # Public endpoints
+        if action in ('list', 'get', 'search'):
+            if action == 'list': return list_products(event, HEADERS)
+            if action == 'get': return get_product(event, HEADERS)
+            return search_products(event, HEADERS)
+
+        # Admin-only endpoints
+        if action in ('create', 'update', 'delete'):
+            user, err = require_admin(event)
+            if err: return err
+            if action == 'create': return create_product(event, HEADERS)
+            if action == 'update': return update_product(event, HEADERS)
+            return delete_product(event, HEADERS)
+
+        return {'statusCode': 400, 'headers': HEADERS, 'body': json.dumps({'error': 'Invalid action'})}
+
     except Exception as e:
-        return {'statusCode': 500, 'headers': headers, 'body': json.dumps({'error': str(e)})}
+        return {'statusCode': 500, 'headers': HEADERS, 'body': json.dumps({'error': str(e)})}
 
 def list_products(event, headers):
     params = event.get('queryStringParameters') or {}

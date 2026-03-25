@@ -2,6 +2,10 @@ import json
 import boto3
 import uuid
 import time
+import hashlib
+import hmac
+import base64
+import os
 from datetime import datetime, timedelta
 from decimal import Decimal
 from collections import Counter
@@ -10,6 +14,7 @@ dynamodb = boto3.resource('dynamodb')
 views_table = dynamodb.Table('ProductViews')
 watchlist_table = dynamodb.Table('WatchList')
 products_table = dynamodb.Table('Products')
+JWT_SECRET = os.environ.get('JWT_SECRET', '')
 
 HEADERS = {
     'Access-Control-Allow-Origin': '*',
@@ -25,6 +30,33 @@ def decimal_default(obj):
 def respond(status, body):
     return {'statusCode': status, 'headers': HEADERS, 'body': json.dumps(body, default=decimal_default)}
 
+def verify_jwt(event):
+    auth = (event.get('headers') or {}).get('Authorization') or (event.get('headers') or {}).get('authorization', '')
+    if not auth.startswith('Bearer '):
+        return None
+    token = auth.split(' ')[1]
+    try:
+        parts = token.split('.')
+        if len(parts) != 3:
+            return None
+        msg = f"{parts[0]}.{parts[1]}"
+        sig = base64.urlsafe_b64encode(hmac.new(JWT_SECRET.encode(), msg.encode(), hashlib.sha256).digest()).decode().rstrip('=')
+        if sig != parts[2]:
+            return None
+        pad = parts[1] + '=' * (4 - len(parts[1]) % 4)
+        payload = json.loads(base64.urlsafe_b64decode(pad))
+        if payload.get('exp', 0) < datetime.utcnow().timestamp():
+            return None
+        return payload
+    except Exception:
+        return None
+
+def require_auth(event):
+    user = verify_jwt(event)
+    if not user:
+        return None, respond(401, {'error': 'Authentication required. Please log in.'})
+    return user, None
+
 def lambda_handler(event, context):
     if event.get('httpMethod') == 'OPTIONS':
         return respond(200, {})
@@ -33,20 +65,22 @@ def lambda_handler(event, context):
     method = event.get('httpMethod', 'GET')
 
     try:
+        # Public endpoints
         if action == 'track-view' and method == 'POST':
             return track_view(event)
         elif action == 'track-cart-add' and method == 'POST':
             return track_cart_add(event)
         elif action == 'recommendations' and method == 'GET':
             return get_recommendations(event)
+        elif action == 'popular' and method == 'GET':
+            return get_popular_products(event)
+        # Auth-required endpoints
         elif action == 'watchlist-add' and method == 'POST':
             return watchlist_add(event)
         elif action == 'watchlist-remove' and method == 'DELETE':
             return watchlist_remove(event)
         elif action == 'watchlist' and method == 'GET':
             return get_watchlist(event)
-        elif action == 'popular' and method == 'GET':
-            return get_popular_products(event)
         else:
             return respond(400, {'error': f'Invalid action: {action}'})
     except Exception as e:
@@ -178,10 +212,10 @@ def get_recommendations(event):
 
 
 def watchlist_add(event):
+    user, err = require_auth(event)
+    if err: return err
     body = json.loads(event.get('body', '{}'))
-    user_id = body.get('user_id')
-    if not user_id:
-        return respond(400, {'error': 'user_id required'})
+    user_id = user['email']
 
     now = datetime.utcnow().isoformat() + 'Z'
 
@@ -203,25 +237,24 @@ def watchlist_add(event):
 
 
 def watchlist_remove(event):
+    user, err = require_auth(event)
+    if err: return err
     params = event.get('queryStringParameters') or {}
-    user_id = params.get('user_id')
     product_id = params.get('product_id')
-    if not user_id or not product_id:
-        return respond(400, {'error': 'user_id and product_id required'})
+    if not product_id:
+        return respond(400, {'error': 'product_id required'})
 
-    watchlist_table.delete_item(Key={'user_id': user_id, 'product_id': product_id})
+    watchlist_table.delete_item(Key={'user_id': user['email'], 'product_id': product_id})
     return respond(200, {'success': True})
 
 
 def get_watchlist(event):
-    params = event.get('queryStringParameters') or {}
-    user_id = params.get('user_id')
-    if not user_id:
-        return respond(400, {'error': 'user_id required'})
+    user, err = require_auth(event)
+    if err: return err
 
     resp = watchlist_table.query(
         KeyConditionExpression='user_id = :uid',
-        ExpressionAttributeValues={':uid': user_id}
+        ExpressionAttributeValues={':uid': user['email']}
     )
 
     return respond(200, {'watchlist': resp.get('Items', []), 'count': resp.get('Count', 0)})

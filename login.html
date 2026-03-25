@@ -283,7 +283,11 @@
                         localStorage.setItem('user_data', JSON.stringify(data.user));
                         
                         setTimeout(() => {
-                            if (data.user.role === 'admin' || data.user.role === 'super_user') {
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const redirect = urlParams.get('redirect');
+                            if (redirect) {
+                                window.location.href = redirect;
+                            } else if (data.user.role === 'admin' || data.user.role === 'super_user') {
                                 window.location.href = 'admin.html';
                             } else {
                                 window.location.href = 'videos.html';

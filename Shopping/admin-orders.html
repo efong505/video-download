@@ -56,8 +56,29 @@
         const API = 'https://ydq9xzya5d.execute-api.us-east-1.amazonaws.com/prod/orders';
         let allOrders = [];
 
+        function getAuthHeaders() {
+            const t = localStorage.getItem('auth_token');
+            return t ? {'Content-Type': 'application/json', 'Authorization': `Bearer ${t}`} : {'Content-Type': 'application/json'};
+        }
+
+        // Check admin access
+        (function() {
+            const token = localStorage.getItem('auth_token');
+            const user = JSON.parse(localStorage.getItem('user_data') || 'null');
+            if (!token || !user || !['admin','super_user'].includes(user.role)) {
+                document.querySelector('.container').innerHTML = '<div class="alert alert-danger mt-5">Admin access required. <a href="../login.html?redirect=Shopping/admin-orders.html">Login</a></div>';
+                return;
+            }
+        })();
+
         async function loadOrders() {
-            const response = await fetch(`${API}?action=list&user_id=guest`);
+            const response = await fetch(`${API}?action=list`, {
+                headers: getAuthHeaders()
+            });
+            if (response.status === 401 || response.status === 403) {
+                document.querySelector('.container').innerHTML = '<div class="alert alert-danger mt-5">Admin access required. <a href="../login.html?redirect=Shopping/admin-orders.html">Login</a></div>';
+                return;
+            }
             const data = await response.json();
             allOrders = data.orders;
             displayOrders(allOrders);
@@ -109,7 +130,7 @@
 
             await fetch(`${API}?action=update_status`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: getAuthHeaders(),
                 body: JSON.stringify({order_id: orderId, status: newStatus})
             });
 
