@@ -64,6 +64,7 @@ def process_enrollment(enrollment):
     subscriber_email = enrollment['subscriber_email']
     sequence_name = enrollment.get('sequence_name', enrollment.get('campaign_id', ''))
     filter_tags = enrollment.get('filter_tags', [])
+    campaign_group = enrollment.get('campaign_group', '')
     current_sequence = int(enrollment.get('current_sequence_number', enrollment.get('current_sequence', 0)))
     enrolled_at = datetime.fromisoformat(enrollment['enrolled_at'].replace('Z', ''))
     last_sent_at = enrollment.get('last_sent_at')
@@ -77,10 +78,20 @@ def process_enrollment(enrollment):
     
     print(f"Found {len(all_campaigns_response['Items'])} campaigns with sequence_number")
     
-    # Filter by tags if specified
+    # Filter by campaign_group first (primary filter), then by tags as fallback
     drip_campaigns = []
     for camp in all_campaigns_response['Items']:
+        camp_group = camp.get('campaign_group', '')
         camp_tags = camp.get('filter_tags', [])
+        
+        # If enrollment has campaign_group, match on that (strict)
+        if campaign_group:
+            if camp_group == campaign_group:
+                drip_campaigns.append(camp)
+                print(f"Campaign {camp['campaign_id'][:8]}... matched campaign_group '{campaign_group}'")
+            continue
+        
+        # Fallback: match by filter_tags (legacy behavior)
         print(f"Campaign {camp['campaign_id'][:8]}... has tags: {camp_tags}")
         if filter_tags and set(filter_tags).intersection(set(camp_tags)):
             drip_campaigns.append(camp)

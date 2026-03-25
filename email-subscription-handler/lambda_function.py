@@ -73,6 +73,8 @@ def lambda_handler(event, context):
             return get_subscriber_analytics()
         elif params.get('action') == 'get_recent_events':
             return get_recent_events(params.get('limit', '100'))
+        elif params.get('action') == 'list_campaign_groups':
+            return list_campaign_groups()
         elif params.get('action') == 'check_subscriber':
             return check_subscriber_status(params.get('email', ''))
         elif params.get('action') == 'resend_book_email':
@@ -1114,6 +1116,24 @@ def get_campaign(campaign_id):
         print(f"Get campaign error: {str(e)}")
         return cors_response(500, {'error': 'Failed to get campaign'})
 
+def list_campaign_groups():
+    """List distinct campaign groups"""
+    try:
+        response = mt_campaigns_table.query(
+            KeyConditionExpression='user_id = :uid',
+            ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID},
+            ProjectionExpression='campaign_group'
+        )
+        groups = set()
+        for item in response.get('Items', []):
+            g = item.get('campaign_group', '')
+            if g:
+                groups.add(g)
+        return cors_response(200, {'groups': sorted(list(groups))})
+    except Exception as e:
+        print(f"List campaign groups error: {str(e)}")
+        return cors_response(500, {'error': 'Failed to list groups'})
+
 def create_campaign(body):
     """Create a new email campaign"""
     try:
@@ -1124,23 +1144,28 @@ def create_campaign(body):
         subject = body.get('subject', '').strip()
         content = body.get('content', '').strip()
         filter_tags = body.get('filter_tags', [])
+        campaign_group = body.get('campaign_group', '').strip()
         
         if not campaign_name or not subject or not content:
             return cors_response(400, {'error': 'Campaign name, subject, and content required'})
         
-        mt_campaigns_table.put_item(Item={
+        item = {
             'user_id': PLATFORM_OWNER_ID,
             'campaign_id': campaign_id,
             'campaign_name': campaign_name,
             'sequence_number': sequence_number,
             'delay_days': delay_days,
-            'delay_hours': 0 if sequence_number > 1 else 0,  # First email sends immediately
+            'delay_hours': 0,
             'subject': subject,
             'content': content,
             'filter_tags': filter_tags,
             'created_at': datetime.now().isoformat(),
             'updated_at': datetime.now().isoformat()
-        })
+        }
+        if campaign_group:
+            item['campaign_group'] = campaign_group
+        
+        mt_campaigns_table.put_item(Item=item)
         
         return cors_response(200, {'message': 'Campaign created', 'campaign_id': campaign_id})
     except Exception as e:
@@ -1183,6 +1208,10 @@ def update_campaign(body):
             update_parts.append('filter_tags = :tags')
             expr_values[':tags'] = body['filter_tags']
         
+        if 'campaign_group' in body:
+            update_parts.append('campaign_group = :cg')
+            expr_values[':cg'] = body['campaign_group'].strip()
+        
         if not update_parts:
             return cors_response(400, {'error': 'No fields to update'})
         
@@ -1218,38 +1247,55 @@ def delete_campaign(body):
         return cors_response(500, {'error': 'Failed to delete campaign'})
 
 def get_analytics_overview():
-    """Get overview analytics stats"""
+    """Get overview analytics stats from user-email-events (where email_sender logs)"""
     try:
         from decimal import Decimal
         
-        # Scan campaign stats
-        response = mt_campaign_stats_table.scan()
-        campaigns = response.get('Items', [])
+        # Read from user-email-events table (the one email_sender actually writes to)
+        mt_events_table = dynamodb.Table('user-email-events')
+        
+        events = []
+        response = mt_events_table.query(
+            KeyConditionExpression='user_id = :uid',
+            ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID}
+        )
+        events.extend(response.get('Items', []))
+        while 'LastEvaluatedKey' in response:
+            response = mt_events_table.query(
+                KeyConditionExpression='user_id = :uid',
+                ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID},
+                ExclusiveStartKey=response['LastEvaluatedKey']
+            )
+            events.extend(response.get('Items', []))
+        
+        # Also pull from legacy email-events table
+        legacy_events = []
+        legacy_response = events_table.scan()
+        legacy_events.extend(legacy_response.get('Items', []))
+        while 'LastEvaluatedKey' in legacy_response:
+            legacy_response = events_table.scan(ExclusiveStartKey=legacy_response['LastEvaluatedKey'])
+            legacy_events.extend(legacy_response.get('Items', []))
+        
+        all_events = events + legacy_events
         
         stats = {
-            'total_sent': 0,
-            'total_delivered': 0,
-            'total_opens': 0,
-            'total_clicks': 0,
-            'total_bounces': 0,
-            'total_complaints': 0
+            'total_sent': sum(1 for e in all_events if e.get('event_type') == 'sent'),
+            'total_delivered': sum(1 for e in all_events if e.get('event_type') in ('sent', 'delivered')),
+            'total_opens': sum(1 for e in all_events if e.get('event_type') == 'opened'),
+            'total_clicks': sum(1 for e in all_events if e.get('event_type') == 'clicked'),
+            'total_bounces': sum(1 for e in all_events if e.get('event_type') == 'bounced'),
+            'total_complaints': sum(1 for e in all_events if e.get('event_type') == 'complaint')
         }
-        
-        for campaign in campaigns:
-            stats['total_sent'] += int(campaign.get('sent_count', 0))
-            stats['total_delivered'] += int(campaign.get('delivered_count', 0))
-            stats['total_opens'] += int(campaign.get('open_count', 0))
-            stats['total_clicks'] += int(campaign.get('click_count', 0))
-            stats['total_bounces'] += int(campaign.get('bounce_count', 0))
-            stats['total_complaints'] += int(campaign.get('complaint_count', 0))
         
         return cors_response(200, {'stats': stats})
     except Exception as e:
         print(f"Get analytics overview error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return cors_response(500, {'error': 'Failed to get analytics'})
 
 def get_campaign_analytics():
-    """Get per-campaign analytics"""
+    """Get per-campaign analytics from user-email-events"""
     try:
         from decimal import Decimal
         
@@ -1260,75 +1306,145 @@ def get_campaign_analytics():
         )
         campaigns = campaigns_response.get('Items', [])
         
-        # Get stats for each campaign
+        # Get all events from user-email-events
+        mt_events_table = dynamodb.Table('user-email-events')
+        events = []
+        response = mt_events_table.query(
+            KeyConditionExpression='user_id = :uid',
+            ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID}
+        )
+        events.extend(response.get('Items', []))
+        while 'LastEvaluatedKey' in response:
+            response = mt_events_table.query(
+                KeyConditionExpression='user_id = :uid',
+                ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID},
+                ExclusiveStartKey=response['LastEvaluatedKey']
+            )
+            events.extend(response.get('Items', []))
+        
+        # Group events by campaign_id
+        events_by_campaign = {}
+        for e in events:
+            cid = e.get('campaign_id', '')
+            if cid not in events_by_campaign:
+                events_by_campaign[cid] = []
+            events_by_campaign[cid].append(e)
+        
         campaign_analytics = []
         for campaign in campaigns:
             campaign_id = campaign['campaign_id']
+            camp_events = events_by_campaign.get(campaign_id, [])
             
-            try:
-                stats_response = mt_campaign_stats_table.get_item(
-                    Key={'campaign_id': campaign_id}
-                )
-                
-                if 'Item' in stats_response:
-                    stats = stats_response['Item']
-                    campaign_analytics.append({
-                        'campaign_id': campaign_id,
-                        'campaign_name': campaign.get('campaign_name', ''),
-                        'sent_count': int(stats.get('sent_count', 0)),
-                        'delivered_count': int(stats.get('delivered_count', 0)),
-                        'open_count': int(stats.get('open_count', 0)),
-                        'click_count': int(stats.get('click_count', 0)),
-                        'bounce_count': int(stats.get('bounce_count', 0)),
-                        'complaint_count': int(stats.get('complaint_count', 0))
-                    })
-            except Exception as e:
-                print(f"Error getting stats for campaign {campaign_id}: {str(e)}")
+            sent = sum(1 for e in camp_events if e.get('event_type') == 'sent')
+            opens = sum(1 for e in camp_events if e.get('event_type') == 'opened')
+            clicks = sum(1 for e in camp_events if e.get('event_type') == 'clicked')
+            bounces = sum(1 for e in camp_events if e.get('event_type') == 'bounced')
+            complaints = sum(1 for e in camp_events if e.get('event_type') == 'complaint')
+            
+            campaign_analytics.append({
+                'campaign_id': campaign_id,
+                'campaign_name': campaign.get('campaign_name', ''),
+                'campaign_group': campaign.get('campaign_group', ''),
+                'sequence_number': int(campaign.get('sequence_number', 0)),
+                'sent_count': sent,
+                'delivered_count': sent,
+                'open_count': opens,
+                'click_count': clicks,
+                'bounce_count': bounces,
+                'complaint_count': complaints
+            })
         
         return cors_response(200, {'campaigns': campaign_analytics})
     except Exception as e:
         print(f"Get campaign analytics error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return cors_response(500, {'error': 'Failed to get campaign analytics'})
 
 def get_subscriber_analytics():
-    """Get per-subscriber analytics"""
+    """Get per-subscriber analytics from user-email-events"""
     try:
         from decimal import Decimal
         
-        response = mt_subscriber_stats_table.scan()
-        subscribers = response.get('Items', [])
+        # Get all events
+        mt_events_table = dynamodb.Table('user-email-events')
+        events = []
+        response = mt_events_table.query(
+            KeyConditionExpression='user_id = :uid',
+            ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID}
+        )
+        events.extend(response.get('Items', []))
+        while 'LastEvaluatedKey' in response:
+            response = mt_events_table.query(
+                KeyConditionExpression='user_id = :uid',
+                ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID},
+                ExclusiveStartKey=response['LastEvaluatedKey']
+            )
+            events.extend(response.get('Items', []))
         
-        # Convert Decimal to int
-        def convert_decimals(obj):
-            if isinstance(obj, list):
-                return [convert_decimals(i) for i in obj]
-            elif isinstance(obj, dict):
-                return {k: convert_decimals(v) for k, v in obj.items()}
-            elif isinstance(obj, Decimal):
-                return int(obj) if obj % 1 == 0 else float(obj)
-            else:
-                return obj
+        # Group by subscriber email
+        by_subscriber = {}
+        for e in events:
+            email = e.get('subscriber_email', '')
+            if not email:
+                continue
+            if email not in by_subscriber:
+                by_subscriber[email] = {'sent': 0, 'opened': 0, 'clicked': 0, 'bounced': 0, 'complaint': 0, 'last_activity': ''}
+            et = e.get('event_type', '')
+            if et in by_subscriber[email]:
+                by_subscriber[email][et] += 1
+            ts = e.get('date', e.get('timestamp', ''))
+            if str(ts) > by_subscriber[email]['last_activity']:
+                by_subscriber[email]['last_activity'] = str(ts)
         
-        subscribers = convert_decimals(subscribers)
+        subscribers = []
+        for email, stats in by_subscriber.items():
+            subscribers.append({
+                'subscriber_email': email,
+                'sent_count': stats['sent'],
+                'open_count': stats['opened'],
+                'click_count': stats['clicked'],
+                'bounce_count': stats['bounced'],
+                'complaint_count': stats['complaint'],
+                'last_activity': stats['last_activity']
+            })
+        
         subscribers.sort(key=lambda x: x.get('last_activity', ''), reverse=True)
-        
         return cors_response(200, {'subscribers': subscribers})
     except Exception as e:
         print(f"Get subscriber analytics error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return cors_response(500, {'error': 'Failed to get subscriber analytics'})
 
 def get_recent_events(limit='100'):
-    """Get recent email events"""
+    """Get recent email events from both tables"""
     try:
         from decimal import Decimal
         
-        # Scan events table (limited)
-        response = events_table.scan(
-            Limit=int(limit)
-        )
+        limit_int = int(limit)
         
+        # Get from user-email-events (where email_sender logs)
+        mt_events_table = dynamodb.Table('user-email-events')
+        response = mt_events_table.query(
+            KeyConditionExpression='user_id = :uid',
+            ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID},
+            ScanIndexForward=False,
+            Limit=limit_int
+        )
         events = response.get('Items', [])
-        events.sort(key=lambda x: x.get('timestamp', 0), reverse=True)
+        
+        # Also get from legacy email-events table
+        legacy_response = events_table.scan(Limit=limit_int)
+        legacy_events = legacy_response.get('Items', [])
+        # Normalize legacy events to have subscriber_email field
+        for le in legacy_events:
+            if 'email' in le and 'subscriber_email' not in le:
+                le['subscriber_email'] = le['email']
+        
+        all_events = events + legacy_events
+        all_events.sort(key=lambda x: int(x.get('timestamp', 0)), reverse=True)
+        all_events = all_events[:limit_int]
         
         # Convert Decimal to int/float
         def convert_decimals(obj):
@@ -1341,9 +1457,11 @@ def get_recent_events(limit='100'):
             else:
                 return obj
         
-        events = convert_decimals(events)
+        all_events = convert_decimals(all_events)
         
-        return cors_response(200, {'events': events})
+        return cors_response(200, {'events': all_events})
     except Exception as e:
         print(f"Get recent events error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return cors_response(500, {'error': 'Failed to get events'})

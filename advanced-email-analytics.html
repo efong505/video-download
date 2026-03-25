@@ -314,7 +314,7 @@
             });
     </script>
     <script>
-        const API_BASE = 'https://olmcyxwc1a.execute-api.us-east-1.amazonaws.com/user-email';
+        const API_BASE = 'https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe';
         
         let performanceChart, funnelChart;
         
@@ -339,10 +339,7 @@
         
         async function loadOverviewStats() {
             try {
-                const token = localStorage.getItem('authToken');
-                const response = await fetch(`${API_BASE}?action=get_analytics_overview`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const response = await fetch(`${API_BASE}?action=get_analytics_overview`);
                 const data = await response.json();
                 
                 const stats = data.stats || {};
@@ -372,26 +369,11 @@
         
         async function loadCampaignStats() {
             try {
-                const token = localStorage.getItem('authToken');
-                const response = await fetch(`${API_BASE}?action=list_campaigns`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const response = await fetch(`${API_BASE}?action=get_campaign_analytics`);
                 const data = await response.json();
                 
                 const campaigns = data.campaigns || [];
-                
-                // Get analytics for each campaign
-                const campaignStats = await Promise.all(
-                    campaigns.map(async (c) => {
-                        const analyticsRes = await fetch(`${API_BASE}?action=get_analytics&campaign_id=${c.campaign_id}`, {
-                            headers: { 'Authorization': `Bearer ${token}` }
-                        });
-                        const analyticsData = await analyticsRes.json();
-                        return { ...c, ...analyticsData.analytics };
-                    })
-                );
-                
-                renderCampaignsTable(campaignStats);
+                renderCampaignsTable(campaigns);
             } catch (error) {
                 console.error('Error loading campaigns:', error);
             }
@@ -399,10 +381,7 @@
         
         async function loadSubscriberStats() {
             try {
-                const token = localStorage.getItem('authToken');
-                const response = await fetch(`${API_BASE}?action=list_subscribers&status=active&limit=50`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
+                const response = await fetch(`${API_BASE}?action=get_subscriber_analytics`);
                 const data = await response.json();
                 
                 const subscribers = data.subscribers || [];
@@ -413,9 +392,15 @@
         }
         
         async function loadRecentEvents() {
-            // Note: Recent events require a separate events query endpoint
-            // For now, show placeholder
-            document.getElementById('events-body').innerHTML = '<tr><td colspan="5" class="text-center">Event tracking coming soon</td></tr>';
+            try {
+                const response = await fetch(`${API_BASE}?action=get_recent_events&limit=100`);
+                const data = await response.json();
+                const events = data.events || [];
+                renderEventsTable(events);
+            } catch (error) {
+                console.error('Error loading events:', error);
+                document.getElementById('events-body').innerHTML = '<tr><td colspan="5" class="text-center">Error loading events</td></tr>';
+            }
         }
         
         function renderCampaignsTable(campaigns) {
@@ -425,18 +410,21 @@
             }
             
             const html = campaigns.map(c => {
-                const openRate = c.recipient_count > 0 ? ((c.open_count / c.recipient_count) * 100).toFixed(1) : 0;
-                const clickRate = c.open_count > 0 ? ((c.click_count / c.open_count) * 100).toFixed(1) : 0;
+                const sent = c.sent_count || 0;
+                const opens = c.open_count || 0;
+                const clicks = c.click_count || 0;
+                const openRate = sent > 0 ? ((opens / sent) * 100).toFixed(1) : 0;
+                const clickRate = opens > 0 ? ((clicks / opens) * 100).toFixed(1) : 0;
                 
                 return `
                     <tr>
-                        <td><strong>${c.title || c.campaign_id.substring(0, 8)}</strong></td>
-                        <td>${c.sent_count || 0}</td>
-                        <td>${c.sent_count || 0}</td>
-                        <td>${c.open_count || 0}</td>
-                        <td>${c.click_count || 0}</td>
-                        <td>0</td>
-                        <td>0</td>
+                        <td><strong>${c.campaign_name || c.campaign_id.substring(0, 8)}</strong>${c.campaign_group ? `<br><small class="text-muted">${c.campaign_group}</small>` : ''}</td>
+                        <td>${sent}</td>
+                        <td>${sent}</td>
+                        <td>${opens}</td>
+                        <td>${clicks}</td>
+                        <td>${c.bounce_count || 0}</td>
+                        <td>${c.complaint_count || 0}</td>
                         <td><span class="badge ${openRate > 20 ? 'success' : 'warning'}">${openRate}%</span></td>
                         <td><span class="badge ${clickRate > 5 ? 'success' : 'warning'}">${clickRate}%</span></td>
                     </tr>
@@ -456,14 +444,14 @@
                 return `
                     <tr>
                         <td>${s.subscriber_email}</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>${s.subscribed_at ? new Date(s.subscribed_at).toLocaleDateString() : '-'}</td>
-                        <td><span class="badge success">${s.status}</span></td>
+                        <td>${s.sent_count || 0}</td>
+                        <td>${s.sent_count || 0}</td>
+                        <td>${s.open_count || 0}</td>
+                        <td>${s.click_count || 0}</td>
+                        <td>${s.bounce_count || 0}</td>
+                        <td>${s.complaint_count || 0}</td>
+                        <td>${s.last_activity || '-'}</td>
+                        <td><span class="badge success">active</span></td>
                     </tr>
                 `;
             }).join('');
