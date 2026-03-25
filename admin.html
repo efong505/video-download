@@ -738,39 +738,39 @@
                 <!-- Add Resource Form -->
                 <div
                     style="background: white; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); padding: 25px; margin-bottom: 25px;">
-                    <h3>Add New Resource</h3>
+                    <h3 id="resource-form-title">➕ Add New Resource</h3>
                     <form id="resource-form-admin">
                         <div class="form-group">
-                            <label>Resource Name:</label>
-                            <input type="text" id="resource-name" placeholder="Dr. Frank Turek" required
-                                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-                        </div>
-                        <div class="form-group">
-                            <label>Categories:</label>
-                            <div id="resource-category"></div>
-                            <small style="color: #666;">Select one or more categories</small>
-                        </div>
-                        <div class="form-group">
-                            <label>Website URL:</label>
+                            <label>Website URL: <small style="color:#999;font-weight:normal;">— paste first, then Auto-Fill</small></label>
                             <div style="display: flex; gap: 10px;">
                                 <input type="url" id="resource-url" placeholder="https://example.com" required
-                                    style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                                    style="flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px;">
                                 <button type="button" class="btn btn-primary" onclick="analyzeResourceUrl()"
-                                    id="analyze-resource-btn" style="white-space: nowrap;">
+                                    id="analyze-resource-btn" style="white-space: nowrap; border-radius: 8px; padding: 10px 18px;">
                                     <span id="analyze-resource-text">🔍 Auto-Fill</span>
                                     <span id="analyze-resource-spinner" class="spinner-border spinner-border-sm"
                                         style="display:none;"></span>
                                 </button>
                             </div>
-                            <small style="color: #666;">Paste URL and click Auto-Fill to extract title and
-                                description</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Resource Name:</label>
+                            <input type="text" id="resource-name" placeholder="e.g. Dr. Frank Turek" required
+                                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 15px;">
                         </div>
                         <div class="form-group">
                             <label>Description:</label>
-                            <input type="text" id="resource-description" placeholder="Brief description of the resource"
-                                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                            <textarea id="resource-description" placeholder="Brief description of the resource" rows="3"
+                                style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; resize: vertical;"></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Add Resource</button>
+                        <div class="form-group">
+                            <label>Categories: <small style="color:#999;font-weight:normal;">— click to toggle</small></label>
+                            <div id="resource-category"></div>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 20px;">
+                            <button type="submit" class="btn btn-primary" style="border-radius: 8px; padding: 10px 24px; font-size: 15px;">Add Resource</button>
+                            <button type="button" class="btn" id="cancel-edit-btn" onclick="cancelResourceEdit()" style="display:none; background:#6c757d; color:white; border-radius: 8px; padding: 10px 24px; font-size: 15px;">Cancel Edit</button>
+                        </div>
                     </form>
                 </div>
 
@@ -2968,12 +2968,19 @@
         function populateCategorySelect(categories) {
             const container = document.getElementById('resource-category');
             container.innerHTML = '';
-            container.style.cssText = 'display: grid; grid-template-columns: 1fr 1fr; gap: 8px; max-height: 200px; overflow-y: auto; border: 1px solid #ddd; border-radius: 4px; padding: 10px; background: white;';
+            container.style.cssText = 'display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px;';
             categories.forEach(category => {
-                const label = document.createElement('label');
-                label.style.cssText = 'display: flex; align-items: center; cursor: pointer;';
-                label.innerHTML = `<input type="checkbox" class="resource-category-checkbox" value="${category}" style="margin-right: 8px;"> ${category}`;
-                container.appendChild(label);
+                const pill = document.createElement('label');
+                pill.style.cssText = 'display: inline-flex; align-items: center; padding: 6px 14px; border-radius: 20px; border: 2px solid #ddd; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; user-select: none;';
+                pill.innerHTML = `<input type="checkbox" class="resource-category-checkbox" value="${category}" style="display:none;"> ${getCategoryEmoji(category)} ${category}`;
+                pill.addEventListener('click', function() {
+                    const cb = this.querySelector('input');
+                    cb.checked = !cb.checked;
+                    this.style.background = cb.checked ? '#667eea' : 'white';
+                    this.style.color = cb.checked ? 'white' : '#333';
+                    this.style.borderColor = cb.checked ? '#667eea' : '#ddd';
+                });
+                container.appendChild(pill);
             });
         }
 
@@ -3144,9 +3151,19 @@
 
                 form.reset();
                 delete form.dataset.editingId;
+                document.getElementById('resource-form-title').textContent = '\u2795 Add New Resource';
                 const submitBtn = form.querySelector('button[type="submit"]');
                 submitBtn.textContent = 'Add Resource';
                 submitBtn.style.background = '';
+                document.getElementById('cancel-edit-btn').style.display = 'none';
+                // Reset category pills
+                document.querySelectorAll('.resource-category-checkbox').forEach(cb => {
+                    cb.checked = false;
+                    const pill = cb.parentElement;
+                    pill.style.background = 'white';
+                    pill.style.color = '#333';
+                    pill.style.borderColor = '#ddd';
+                });
 
                 document.getElementById('resources-message').innerHTML = `<div class="success">Resource ${editingId ? 'updated' : 'added'} successfully</div>`;
                 loadResourcesList();
@@ -3287,22 +3304,49 @@
 
         function editResource(resource) {
             document.getElementById('resource-name').value = resource.name;
-            document.querySelectorAll('.resource-category-checkbox').forEach(cb => {
-                const cats = Array.isArray(resource.category) ? resource.category : [resource.category];
-                cb.checked = cats.includes(cb.value);
-            });
             document.getElementById('resource-url').value = resource.url;
             document.getElementById('resource-description').value = resource.description || '';
+
+            // Update category pills
+            const cats = Array.isArray(resource.category) ? resource.category : [resource.category];
+            document.querySelectorAll('.resource-category-checkbox').forEach(cb => {
+                cb.checked = cats.includes(cb.value);
+                const pill = cb.parentElement;
+                pill.style.background = cb.checked ? '#667eea' : 'white';
+                pill.style.color = cb.checked ? 'white' : '#333';
+                pill.style.borderColor = cb.checked ? '#667eea' : '#ddd';
+            });
 
             const form = document.getElementById('resource-form-admin');
             form.dataset.editingId = resource.id;
 
+            document.getElementById('resource-form-title').textContent = '✏️ Editing: ' + resource.name;
             const submitBtn = form.querySelector('button[type="submit"]');
             submitBtn.textContent = 'Update Resource';
             submitBtn.style.background = '#ffc107';
+            document.getElementById('cancel-edit-btn').style.display = 'inline-block';
 
-            document.getElementById('resources-message').innerHTML = '<div class="success">Editing resource - update the fields and click Update</div>';
             form.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }
+
+        function cancelResourceEdit() {
+            const form = document.getElementById('resource-form-admin');
+            form.reset();
+            delete form.dataset.editingId;
+            document.getElementById('resource-form-title').textContent = '\u2795 Add New Resource';
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Add Resource';
+            submitBtn.style.background = '';
+            document.getElementById('cancel-edit-btn').style.display = 'none';
+            // Reset all category pills
+            document.querySelectorAll('.resource-category-checkbox').forEach(cb => {
+                cb.checked = false;
+                const pill = cb.parentElement;
+                pill.style.background = 'white';
+                pill.style.color = '#333';
+                pill.style.borderColor = '#ddd';
+            });
+            document.getElementById('resources-message').innerHTML = '';
         }
 
         async function deleteResource(resourceId) {
