@@ -2002,32 +2002,38 @@ output "website_urls" {
 module "sqs_video_processing" {
   source = "../../modules/sqs-queue-with-dlq"
 
-  queue_name         = "video-processing-queue"
-  dlq_name           = "video-processing-dlq"
-  visibility_timeout = 900
-  message_retention  = 345600
-  max_receive_count  = 3
+  queue_name             = "video-processing-queue"
+  dlq_name               = "video-processing-dlq"
+  visibility_timeout     = 900
+  message_retention      = 345600
+  max_receive_count      = 3
+  dlq_message_retention  = 1209600
+  dlq_visibility_timeout = 900
 }
 
 # thumbnail-generation queu
 module "sqs_thumbnail_generation" {
   source = "../../modules/sqs-queue-with-dlq"
 
-  queue_name         = "thumbnail-generation-queue"
-  dlq_name           = "thumbnail-generation-dlq"
-  visibility_timeout = 300
-  message_retention  = 86400
-  max_receive_count  = 3
+  queue_name             = "thumbnail-generation-queue"
+  dlq_name               = "thumbnail-generation-dlq"
+  visibility_timeout     = 300
+  message_retention      = 86400
+  max_receive_count      = 3
+  dlq_message_retention  = 1209600
+  dlq_visibility_timeout = 300
 }
 # sqs_email
 module "sqs_email" {
   source = "../../modules/sqs-queue-with-dlq"
 
-  queue_name         = "email-queue"
-  dlq_name           = "email-dlq"
-  visibility_timeout = 60
-  message_retention  = 172800
-  max_receive_count  = 5
+  queue_name             = "email-queue"
+  dlq_name               = "email-dlq"
+  visibility_timeout     = 60
+  message_retention      = 172800
+  max_receive_count      = 5
+  dlq_message_retention  = 1209600
+  dlq_visibility_timeout = 60
 }
 
 # SQS notification queue
@@ -2044,11 +2050,12 @@ module "sqs_email_notification" {
 module "sqs_analytics" {
   source = "../../modules/sqs-queue-with-dlq"
 
-  queue_name         = "analytics-queue"
-  dlq_name           = "analytics-dlq"
-  visibility_timeout = 30
-  message_retention  = 86400
-  max_receive_count  = 2
+  queue_name             = "analytics-queue"
+  dlq_name               = "analytics-dlq"
+  visibility_timeout     = 30
+  message_retention      = 86400
+  max_receive_count      = 2
+  dlq_message_retention  = 1209600
 }
 
 # ============================================

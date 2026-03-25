@@ -26,3 +26,15 @@ variable "dlq_name" {
   type    = string
   default = ""
 }
+
+variable "dlq_message_retention" {
+  description = "DLQ message retention in seconds. Defaults to main queue retention if 0."
+  type    = number
+  default = 0
+}
+
+variable "dlq_visibility_timeout" {
+  description = "DLQ visibility timeout in seconds. Defaults to 30 if 0."
+  type    = number
+  default = 0
+}
