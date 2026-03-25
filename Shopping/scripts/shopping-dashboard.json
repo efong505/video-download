@@ -1,0 +1,88 @@
+{
+  "widgets": [
+    {
+      "type": "text",
+      "x": 0, "y": 0, "width": 24, "height": 1,
+      "properties": { "markdown": "# Shopping System Dashboard" }
+    },
+    {
+      "type": "metric",
+      "x": 0, "y": 1, "width": 12, "height": 6,
+      "properties": {
+        "title": "Lambda Invocations",
+        "metrics": [
+          ["AWS/Lambda", "Invocations", "FunctionName", "products-api", {"stat": "Sum", "period": 300}],
+          ["AWS/Lambda", "Invocations", "FunctionName", "orders-api", {"stat": "Sum", "period": 300}],
+          ["AWS/Lambda", "Invocations", "FunctionName", "reviews-api", {"stat": "Sum", "period": 300}],
+          ["AWS/Lambda", "Invocations", "FunctionName", "tracking-api", {"stat": "Sum", "period": 300}],
+          ["AWS/Lambda", "Invocations", "FunctionName", "marketing-api", {"stat": "Sum", "period": 300}]
+        ],
+        "region": "us-east-1",
+        "period": 300,
+        "view": "timeSeries"
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12, "y": 1, "width": 12, "height": 6,
+      "properties": {
+        "title": "Lambda Errors",
+        "metrics": [
+          ["AWS/Lambda", "Errors", "FunctionName", "products-api", {"stat": "Sum", "period": 300}],
+          ["AWS/Lambda", "Errors", "FunctionName", "orders-api", {"stat": "Sum", "period": 300}],
+          ["AWS/Lambda", "Errors", "FunctionName", "reviews-api", {"stat": "Sum", "period": 300}],
+          ["AWS/Lambda", "Errors", "FunctionName", "tracking-api", {"stat": "Sum", "period": 300}],
+          ["AWS/Lambda", "Errors", "FunctionName", "marketing-api", {"stat": "Sum", "period": 300}]
+        ],
+        "region": "us-east-1",
+        "period": 300,
+        "view": "timeSeries"
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0, "y": 7, "width": 12, "height": 6,
+      "properties": {
+        "title": "Lambda Duration (avg ms)",
+        "metrics": [
+          ["AWS/Lambda", "Duration", "FunctionName", "products-api", {"stat": "Average", "period": 300}],
+          ["AWS/Lambda", "Duration", "FunctionName", "orders-api", {"stat": "Average", "period": 300}],
+          ["AWS/Lambda", "Duration", "FunctionName", "tracking-api", {"stat": "Average", "period": 300}],
+          ["AWS/Lambda", "Duration", "FunctionName", "marketing-api", {"stat": "Average", "period": 300}]
+        ],
+        "region": "us-east-1",
+        "period": 300,
+        "view": "timeSeries"
+      }
+    },
+    {
+      "type": "metric",
+      "x": 12, "y": 7, "width": 12, "height": 6,
+      "properties": {
+        "title": "DLQ Messages (should be 0)",
+        "metrics": [
+          ["AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "order-processing-queue-dlq", {"stat": "Maximum", "period": 300}],
+          ["AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "payment-processing-queue-dlq", {"stat": "Maximum", "period": 300}],
+          ["AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "email-notification-queue-dlq", {"stat": "Maximum", "period": 300}],
+          ["AWS/SQS", "ApproximateNumberOfMessagesVisible", "QueueName", "inventory-update-queue-dlq", {"stat": "Maximum", "period": 300}]
+        ],
+        "region": "us-east-1",
+        "period": 300,
+        "view": "singleValue"
+      }
+    },
+    {
+      "type": "metric",
+      "x": 0, "y": 13, "width": 24, "height": 6,
+      "properties": {
+        "title": "API Gateway 5xx Errors",
+        "metrics": [
+          ["AWS/ApiGateway", "5XXError", "ApiName", "shopping-api", {"stat": "Sum", "period": 300}]
+        ],
+        "region": "us-east-1",
+        "period": 300,
+        "view": "timeSeries"
+      }
+    }
+  ]
+}
