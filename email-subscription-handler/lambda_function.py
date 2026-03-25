@@ -334,8 +334,7 @@ def handle_open_tracking(event):
         
         print(f"Open tracked: email={email}, campaign={campaign_id}")
         
-        # Log to both event tables
-        log_event(email, 'opened', campaign_id)
+        # Log event
         log_event_mt(email, 'opened', campaign_id)
         
         # Update subscriber stats
@@ -390,8 +389,7 @@ def handle_click_tracking(event):
         
         print(f"Click tracked: email={email}, campaign={campaign_id}, url={destination_url}")
         
-        # Log to both event tables
-        log_event(email, 'clicked', campaign_id, {'url': destination_url})
+        # Log event
         log_event_mt(email, 'clicked', campaign_id, {'url': destination_url})
         
         # Update subscriber stats
