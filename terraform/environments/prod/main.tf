@@ -1,5 +1,8 @@
 # Production Environment - Main Configuration
 
+data "aws_caller_identity" "current" {}
+data "aws_region" "current" {}
+
 terraform {
   required_version = ">= 1.0"
 
@@ -21,14 +24,14 @@ terraform {
 }
 
 provider "aws" {
-  region  = "us-east-1"
-  profile = "ekewaka"
+  region  = var.aws_region
+  profile = var.aws_profile
 
   default_tags {
     tags = {
-      Environment = "production"
+      Environment = var.environment
       ManagedBy   = "Terraform"
-      Project     = "ChristianConservativePlatform"
+      Project     = var.project_name
     }
   }
 }
@@ -75,6 +78,7 @@ module "acm_api_staging" {
 
 module "api_events" {
   source = "../../modules/api-gateway-lambda-integration"
+  region = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -143,7 +147,7 @@ module "s3_videos" {
 module "cloudfront_oac" {
   source = "../../modules/cloudfront-oac"
 
-  name        = "my-video-downloads-bucket.s3.us-east-1.amazonaws.com"
+  name        = "my-video-downloads-bucket.s3.${var.aws_region}.amazonaws.com"
   description = "Origin Access Control for video downloads bucket"
 }
 
@@ -151,10 +155,13 @@ module "cloudfront_oac" {
 module "cloudfront_distribution" {
   source = "../../modules/cloudfront"
 
+  aws_region                   = var.aws_region
   bucket_name                  = "my-video-downloads-bucket"
   bucket_regional_domain_name  = module.s3_videos.bucket_regional_domain_name
   origin_access_control_id     = module.cloudfront_oac.id
   aliases                      = ["videos.mytestimony.click", "christianconservativestoday.com"]
+  # TODO: Phase 2 — Replace with module reference using us-east-1 provider
+  # CloudFront requires ACM certificates to be in us-east-1 regardless of resource region
   acm_certificate_arn          = "arn:aws:acm:us-east-1:371751795928:certificate/d29ff60a-9c7e-4b6a-920b-e9b6db5202b4"
   comment                      = "Christian Conservative Platform CDN"
   default_root_object          = "index.html"
@@ -245,7 +252,7 @@ module "lambda_admin_api" {
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -261,7 +268,7 @@ module "lambda_auth_api" {
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -277,7 +284,7 @@ module "lambda_articles_api" {
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -293,7 +300,7 @@ module "lambda_news_api" {
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -309,7 +316,7 @@ module "lambda_comments_handler" {
   handler       = "lambda_function.lambda_handler"
   memory_size   = 128
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -324,7 +331,7 @@ module "lambda_contributors_api" {
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -340,7 +347,7 @@ module "lambda_resources_api" {
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -356,7 +363,7 @@ module "lambda_video_list_api" {
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -372,7 +379,7 @@ module "lambda_video_tag_api" {
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -388,8 +395,8 @@ module "lambda_url_analysis_api" {
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  layers        = ["arn:aws:lambda:us-east-1:371751795928:layer:requests-layer:1"]
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
+  layers        = [module.layer_requests.layer_arn]
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -405,7 +412,7 @@ module "lambda_paypal_billing_api" {
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -421,10 +428,10 @@ module "lambda_video_downloader" {
   handler       = "index.lambda_handler"
   memory_size   = 2048
   timeout       = 900
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   layers = [
-    "arn:aws:lambda:us-east-1:371751795928:layer:yt-dlp-layer-v2:1",
-    "arn:aws:lambda:us-east-1:371751795928:layer:ffmpeg-layer:1"
+    module.layer_yt_dlp.layer_arn,
+    module.layer_ffmpeg.layer_arn
   ]
   publish       = true
   create_alias  = true
@@ -441,8 +448,8 @@ module "lambda_thumbnail_generator" {
   handler       = "index.lambda_handler"
   memory_size   = 1024
   timeout       = 300
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
-  layers        = ["arn:aws:lambda:us-east-1:371751795928:layer:ffmpeg-layer:1"]
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
+  layers        = [module.layer_ffmpeg.layer_arn]
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -458,7 +465,7 @@ module "lambda_s3_thumbnail_trigger" {
   handler       = "index.lambda_handler"
   memory_size   = 1024
   timeout       = 300
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -474,7 +481,7 @@ module "lambda_video_download_router" {
   handler       = "index.lambda_handler"
   memory_size   = 512
   timeout       = 60
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -490,7 +497,7 @@ module "lambda_prayer_api" {
   handler       = "index.lambda_handler"
   memory_size   = 512
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -506,7 +513,7 @@ module "lambda_events_api" {
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -522,7 +529,7 @@ module "lambda_notifications_api" {
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -538,7 +545,7 @@ module "lambda_mountains_api" {
   handler       = "index.lambda_handler"
   memory_size   = 512
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -553,7 +560,7 @@ module "lambda_newsletter_api" {
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -567,7 +574,7 @@ module "lambda_digest_generator" {
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 60
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -581,7 +588,7 @@ module "lambda_scheduled_publisher" {
   handler       = "lambda_function.lambda_handler"
   memory_size   = 256
   timeout       = 60
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -596,7 +603,7 @@ module "lambda_feature_flags_api" {
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/testimony-lambda-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/testimony-lambda-role"
   publish       = true
   create_alias  = false
 
@@ -611,7 +618,7 @@ module "lambda_auto_cache_monitor" {
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 60
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -625,7 +632,7 @@ module "lambda_playlists_api" {
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -640,7 +647,7 @@ module "lambda_contact_form_api" {
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -654,7 +661,7 @@ module "lambda_email_subscription_handler" {
   handler       = "lambda_function.lambda_handler"
   memory_size   = 128
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/service-role/email-subscription-handler-role-s3uqsrwg"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/service-role/email-subscription-handler-role-s3uqsrwg"
   publish       = true
   create_alias  = false
 
@@ -669,7 +676,7 @@ module "lambda_email_drip_processor" {
   handler       = "lambda_function.lambda_handler"
   memory_size   = 256
   timeout       = 300
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -684,7 +691,7 @@ module "lambda_manual_email_sender" {
   handler       = "lambda_function.lambda_handler"
   memory_size   = 128
   timeout       = 60
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -699,7 +706,7 @@ module "lambda_ses_event_processor" {
   handler       = "lambda_function.lambda_handler"
   memory_size   = 256
   timeout       = 60
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -714,7 +721,7 @@ module "lambda_article_meta_tags_edge" {
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 5
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -729,7 +736,7 @@ module "lambda_user_email_api" {
   handler       = "index.lambda_handler"
   memory_size   = 512
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -744,7 +751,7 @@ module "lambda_forum_api" {
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -759,7 +766,7 @@ module "lambda_business_api" {
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -774,7 +781,22 @@ module "lambda_book_delivery_api" {
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
+  publish       = true
+  create_alias  = false
+
+  environment_variables = {}
+}
+
+module "lambda_fact_check_api" {
+  source = "../../modules/lambda"
+
+  function_name = "fact-check-api"
+  runtime       = "python3.12"
+  handler       = "index.lambda_handler"
+  memory_size   = 128
+  timeout       = 15
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -789,7 +811,7 @@ module "lambda_boycott_api" {
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -803,7 +825,7 @@ module "lambda_tracking_api" {
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 15
-  role_arn      = "arn:aws:iam::371751795928:role/tracking-api-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/tracking-api-role"
   publish       = true
   create_alias  = false
 
@@ -817,7 +839,7 @@ module "lambda_email_sender" {
   handler       = "index.lambda_handler"
   memory_size   = 512
   timeout       = 300
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = false
 
@@ -832,7 +854,7 @@ module "lambda_news_scraper" {
   handler       = "lambda_function.lambda_handler"
   memory_size   = 512
   timeout       = 300
-  role_arn      = "arn:aws:iam::371751795928:role/NewsScraperLambdaRole"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/NewsScraperLambdaRole"
   publish       = true
   create_alias  = false
 
@@ -847,7 +869,7 @@ module "lambda_testimony_auth" {
   handler       = "auth.handler"
   memory_size   = 128
   timeout       = 3
-  role_arn      = "arn:aws:iam::371751795928:role/testimony-lambda-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/testimony-lambda-role"
   publish       = true
   create_alias  = false
 
@@ -862,7 +884,7 @@ module "lambda_testimony_crud" {
   handler       = "testimony.handler"
   memory_size   = 128
   timeout       = 3
-  role_arn      = "arn:aws:iam::371751795928:role/testimony-lambda-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/testimony-lambda-role"
   publish       = true
   create_alias  = false
 
@@ -877,7 +899,7 @@ module "lambda_testimony_admin" {
   handler       = "admin.handler"
   memory_size   = 128
   timeout       = 3
-  role_arn      = "arn:aws:iam::371751795928:role/testimony-lambda-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/testimony-lambda-role"
   publish       = true
   create_alias  = false
 
@@ -892,7 +914,7 @@ module "lambda_testimony_email_sharing" {
   handler       = "email-sharing.handler"
   memory_size   = 128
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/testimony-lambda-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/testimony-lambda-role"
   publish       = true
   create_alias  = false
 
@@ -907,7 +929,7 @@ module "lambda_testimony_email_ses" {
   handler       = "email-ses.handler"
   memory_size   = 128
   timeout       = 3
-  role_arn      = "arn:aws:iam::371751795928:role/testimony-lambda-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/testimony-lambda-role"
   publish       = true
   create_alias  = false
 
@@ -925,7 +947,7 @@ module "lambda_paypal_ipn_handler" {
   handler       = "index.lambda_handler"
   memory_size   = 256
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
   publish       = true
   create_alias  = true
   alias_name    = "live"
@@ -936,6 +958,7 @@ module "lambda_paypal_ipn_handler" {
 # PayPal IPN endpoint
 module "api_paypal_ipn" {
   source = "../../modules/api-gateway-lambda-integration"
+  region = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -969,6 +992,7 @@ resource "aws_api_gateway_stage" "staging" {
 # Auth endpoint
 module "api_auth" {
   source = "../../modules/api-gateway-lambda-integration"
+  region = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -981,7 +1005,8 @@ module "api_auth" {
 
 # Articles endpoint
 module "api_articles" {
-  source = "../../modules/api-gateway-lambda-integration"
+  source               = "../../modules/api-gateway-lambda-integration"
+  region               = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -995,6 +1020,7 @@ module "api_articles" {
 # News endpoint
 module "api_news" {
   source = "../../modules/api-gateway-lambda-integration"
+  region               = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -1008,6 +1034,7 @@ module "api_news" {
 # Admin endpoint
 module "api_admin" {
   source = "../../modules/api-gateway-lambda-integration"
+  region               = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -1021,6 +1048,7 @@ module "api_admin" {
 # Comments endpoint
 module "api_comments" {
   source = "../../modules/api-gateway-lambda-integration"
+  region               = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -1034,6 +1062,7 @@ module "api_comments" {
 # Contributors endpoint
 module "api_contributors" {
   source = "../../modules/api-gateway-lambda-integration"
+  region               = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -1047,6 +1076,7 @@ module "api_contributors" {
 # Resources endpoint
 module "api_resources" {
   source = "../../modules/api-gateway-lambda-integration"
+  region               = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -1060,6 +1090,7 @@ module "api_resources" {
 # Videos endpoint
 module "api_videos" {
   source = "../../modules/api-gateway-lambda-integration"
+  region               = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -1073,6 +1104,7 @@ module "api_videos" {
 # Tags endpoint
 module "api_tags" {
   source = "../../modules/api-gateway-lambda-integration"
+  region               = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -1086,6 +1118,7 @@ module "api_tags" {
 # Download endpoint
 module "api_download" {
   source = "../../modules/api-gateway-lambda-integration"
+  region               = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -1099,6 +1132,7 @@ module "api_download" {
 # PayPal endpoint
 module "api_paypal" {
   source = "../../modules/api-gateway-lambda-integration"
+  region               = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -1112,6 +1146,7 @@ module "api_paypal" {
 # Analyze endpoint
 module "api_analyze" {
   source = "../../modules/api-gateway-lambda-integration"
+  region               = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -1125,6 +1160,7 @@ module "api_analyze" {
 # Prayer endpoint
 module "api_prayer" {
   source = "../../modules/api-gateway-lambda-integration"
+  region               = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -1135,9 +1171,24 @@ module "api_prayer" {
   enable_cors          = true
 }
 
+# Fact-checks endpoint
+module "api_fact_checks" {
+  source = "../../modules/api-gateway-lambda-integration"
+  region               = var.aws_region
+
+  api_id               = module.unified_api.api_id
+  root_resource_id     = module.unified_api.root_resource_id
+  path_part            = "fact-checks"
+  http_method          = "ANY"
+  lambda_function_name = module.lambda_fact_check_api.function_name
+  lambda_function_arn  = module.lambda_fact_check_api.function_arn
+  enable_cors          = true
+}
+
 # Notifications endpoint
 module "api_notifications" {
   source = "../../modules/api-gateway-lambda-integration"
+  region               = var.aws_region
 
   api_id               = module.unified_api.api_id
   root_resource_id     = module.unified_api.root_resource_id
@@ -1874,6 +1925,124 @@ module "dynamodb_business_directory" {
   ]
 }
 
+# EmailPreferences
+module "dynamodb_email_preferences" {
+  source = "../../modules/dynamodb"
+
+  table_name     = "EmailPreferences"
+  hash_key       = "user_id"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 5
+  write_capacity = 5
+
+  attributes = [
+    { name = "user_id", type = "S" }
+  ]
+}
+
+# MarketingQueue
+module "dynamodb_marketing_queue" {
+  source = "../../modules/dynamodb"
+
+  table_name     = "MarketingQueue"
+  hash_key       = "queue_id"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 5
+  write_capacity = 5
+
+  attributes = [
+    { name = "queue_id", type = "S" },
+    { name = "sent", type = "S" },
+    { name = "scheduled_send_time", type = "S" },
+    { name = "user_email", type = "S" },
+    { name = "trigger_type", type = "S" }
+  ]
+
+  global_secondary_indexes = [
+    {
+      name            = "sent-scheduled_send_time-index"
+      hash_key        = "sent"
+      range_key       = "scheduled_send_time"
+      projection_type = "ALL"
+    },
+    {
+      name            = "user_email-trigger_type-index"
+      hash_key        = "user_email"
+      range_key       = "trigger_type"
+      projection_type = "ALL"
+    }
+  ]
+}
+
+# NewsArticles
+module "dynamodb_news_articles" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "NewsArticles"
+  hash_key     = "publication_source"
+  range_key    = "publication_date"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "publication_source", type = "S" },
+    { name = "publication_date", type = "S" }
+  ]
+}
+
+# ProductViews
+module "dynamodb_product_views" {
+  source = "../../modules/dynamodb"
+
+  table_name     = "ProductViews"
+  hash_key       = "view_id"
+  range_key      = "timestamp"
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 5
+  write_capacity = 5
+
+  attributes = [
+    { name = "view_id", type = "S" },
+    { name = "timestamp", type = "S" },
+    { name = "product_id", type = "S" },
+    { name = "session_id", type = "S" },
+    { name = "user_id", type = "S" }
+  ]
+
+  global_secondary_indexes = [
+    {
+      name            = "session_id-timestamp-index"
+      hash_key        = "session_id"
+      range_key       = "timestamp"
+      projection_type = "ALL"
+    },
+    {
+      name            = "user_id-timestamp-index"
+      hash_key        = "user_id"
+      range_key       = "timestamp"
+      projection_type = "ALL"
+    },
+    {
+      name            = "product_id-timestamp-index"
+      hash_key        = "product_id"
+      range_key       = "timestamp"
+      projection_type = "ALL"
+    }
+  ]
+}
+
+# Fact-checks
+module "dynamodb_fact_checks" {
+  source = "../../modules/dynamodb"
+
+  table_name   = "fact-checks"
+  hash_key     = "id"
+  billing_mode = "PAY_PER_REQUEST"
+
+  attributes = [
+    { name = "id", type = "S" }
+  ]
+}
+
 # boycott-tracker
 module "dynamodb_boycott_tracker" {
   source = "../../modules/dynamodb"
@@ -1993,6 +2162,8 @@ output "website_urls" {
   }
   description = "Website URLs"
 }
+
+
 
 # ============================================
 # SQS
@@ -2126,7 +2297,7 @@ module "platform_dashboard" {
 
   dashboard_name  = "ChristianConservativePlatform-Monitoring"
   region          = "us-east-1"
-  account_id      = "371751795928"
+  account_id      = data.aws_caller_identity.current.account_id
   api_gateway_id  = module.unified_api.api_id
 
   lambda_functions = [
@@ -2180,6 +2351,30 @@ module "platform_dashboard" {
     "Lambda-VideoList-Errors",
     "Lambda-VideoTag-Errors"
   ]
+
+  sqs_queue_names = [
+    "video-processing-queue",
+    "thumbnail-generation-queue",
+    "email-queue",
+    "email-notification-queue",
+    "analytics-queue",
+    "order-processing-queue",
+    "payment-processing-queue",
+    "inventory-update-queue"
+  ]
+
+  dynamodb_table_names = [
+    "articles",
+    "users",
+    "Orders",
+    "Products",
+    "Cart",
+    "Reviews",
+    "user-email-subscribers",
+    "user-email-events"
+  ]
+
+  cloudfront_distribution_id = module.cloudfront_distribution.distribution_id
 }
 
 output "dashboard_url" {

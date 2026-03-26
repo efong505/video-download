@@ -171,7 +171,7 @@ module "lambda_products_api" {
   handler       = "index.lambda_handler"
   memory_size   = 512
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/testimony-lambda-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/testimony-lambda-role"
 }
 
 module "lambda_orders_api" {
@@ -182,7 +182,7 @@ module "lambda_orders_api" {
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
 }
 
 module "lambda_reviews_api" {
@@ -193,7 +193,7 @@ module "lambda_reviews_api" {
   handler       = "index.lambda_handler"
   memory_size   = 128
   timeout       = 30
-  role_arn      = "arn:aws:iam::371751795928:role/lambda-execution-role"
+  role_arn      = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda-execution-role"
 }
 
 # ============================================

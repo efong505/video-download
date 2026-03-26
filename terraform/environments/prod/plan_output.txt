@@ -1,380 +1,393 @@
-module.cloudfront_oac.aws_cloudfront_origin_access_control.main: Refreshing state... [id=E3B3KMNHQ684US]
-module.log_group_events_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/events_api]
+module.sqs_video_processing.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/video-processing-dlq]
 module.sqs_email_notification.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/email-notification-queue-dlq]
-module.dynamodb_rate_limits.aws_dynamodb_table.this: Refreshing state... [id=rate-limits]
-module.dynamodb_book_subscribers.aws_dynamodb_table.this: Refreshing state... [id=book-subscribers]
-module.dynamodb_articles.aws_dynamodb_table.this: Refreshing state... [id=articles]
-module.lambda_resources_api.aws_lambda_function.this: Refreshing state... [id=resources-api]
-module.lambda_tracking_api.aws_lambda_function.this: Refreshing state... [id=tracking-api]
-module.lambda_products_api.aws_lambda_function.this: Refreshing state... [id=products-api]
-module.dynamodb_mountain_badges.aws_dynamodb_table.this: Refreshing state... [id=mountain-badges]
-module.dynamodb_mountain_pledges.aws_dynamodb_table.this: Refreshing state... [id=mountain-pledges]
-aws_api_gateway_rest_api.shopping_api: Refreshing state... [id=ydq9xzya5d]
-module.s3_videos.aws_s3_bucket.main: Refreshing state... [id=my-video-downloads-bucket]
-module.api_auth.data.aws_caller_identity.current: Reading...
-module.lambda_video_download_router.aws_lambda_function.this: Refreshing state... [id=video-download-router]
-module.api_download.data.aws_caller_identity.current: Reading...
-module.api_auth.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
-module.dynamodb_content_comments.aws_dynamodb_table.this: Refreshing state... [id=content-comments]
-module.api_download.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
-module.sqs_thumbnail_generation.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/thumbnail-generation-dlq]
-module.dynamodb_newsletter_campaigns.aws_dynamodb_table.this: Refreshing state... [id=newsletter_campaigns]
-module.api_videos.data.aws_caller_identity.current: Reading...
-module.log_group_notifications_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/notifications_api]
-module.log_group_articles_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/articles-api]
-module.dynamodb_video_playlists.aws_dynamodb_table.this: Refreshing state... [id=video-playlists]
-module.api_videos.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
-module.log_group_contributors_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/contributors-api]
-module.acm_api_staging.aws_acm_certificate.this: Refreshing state... [id=arn:aws:acm:us-east-1:371751795928:certificate/0fd12083-5a3e-496c-a1e0-c2dfe2398091]
-module.dynamodb_user_flags.aws_dynamodb_table.this: Refreshing state... [id=user-flags]
-module.lambda_notifications_api.aws_lambda_function.this: Refreshing state... [id=notifications_api]
-module.log_group_thumbnail_generator.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/thumbnail-generator]
-module.lambda_boycott_api.aws_lambda_function.this: Refreshing state... [id=boycott-api]
-module.layer_yt_dlp.aws_lambda_layer_version.this: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:layer:yt-dlp-layer-v2:1]
-module.api_paypal.data.aws_caller_identity.current: Reading...
-module.dynamodb_pending_changes.aws_dynamodb_table.this: Refreshing state... [id=pending-changes]
-module.log_group_news_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/news-api]
-module.api_paypal.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
-module.dynamodb_business_directory.aws_dynamodb_table.this: Refreshing state... [id=business-directory]
-module.lambda_auto_cache_monitor.aws_lambda_function.this: Refreshing state... [id=auto-cache-monitor]
-module.lambda_paypal_billing_api.aws_lambda_function.this: Refreshing state... [id=paypal-billing-api]
-module.dynamodb_newsletter_analytics.aws_dynamodb_table.this: Refreshing state... [id=newsletter_analytics]
-module.dynamodb_testimonies.aws_dynamodb_table.this: Refreshing state... [id=testimonies]
-module.lambda_article_meta_tags_edge.aws_lambda_function.this: Refreshing state... [id=article-meta-tags-edge]
-module.dynamodb_book_purchases.aws_dynamodb_table.this: Refreshing state... [id=book_purchases]
-module.sqs_analytics.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/analytics-dlq]
-module.dynamodb_events.aws_dynamodb_table.this: Refreshing state... [id=events]
-module.lambda_ses_event_processor.aws_lambda_function.this: Refreshing state... [id=ses-event-processor]
-module.dynamodb_forum_posts.aws_dynamodb_table.this: Refreshing state... [id=forum-posts]
-module.lambda_digest_generator.aws_lambda_function.this: Refreshing state... [id=digest_generator]
-module.lambda_articles_api.aws_lambda_function.this: Refreshing state... [id=articles-api]
-module.log_group_admin_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/admin-api]
-module.dynamodb_newsletters.aws_dynamodb_table.this: Refreshing state... [id=newsletters]
-module.lambda_reviews_api.aws_lambda_function.this: Refreshing state... [id=reviews-api]
-module.sns_platform_critical_alerts.aws_sns_topic.this: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:platform-critical-alerts]
-module.dynamodb_races.aws_dynamodb_table.this: Refreshing state... [id=races]
-module.lambda_testimony_crud.aws_lambda_function.this: Refreshing state... [id=testimony-crud]
-module.dynamodb_user_email_campaigns.aws_dynamodb_table.this: Refreshing state... [id=user-email-campaigns]
-module.lambda_business_api.aws_lambda_function.this: Refreshing state... [id=business-api]
-module.log_group_video_tag_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/video-tag-api]
-module.api_admin.data.aws_caller_identity.current: Reading...
-module.api_admin.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
-module.dynamodb_video_metadata.aws_dynamodb_table.this: Refreshing state... [id=video-metadata]
-module.dynamodb_feature_flags.aws_dynamodb_table.this: Refreshing state... [id=feature-flags]
-module.lambda_events_api.aws_lambda_function.this: Refreshing state... [id=events_api]
-module.dynamodb_download_jobs.aws_dynamodb_table.this: Refreshing state... [id=download-jobs]
-module.dynamodb_mountain_contributions.aws_dynamodb_table.this: Refreshing state... [id=mountain-contributions]
-module.lambda_execution_role.aws_iam_role.this: Refreshing state... [id=lambda-execution-role]
-module.dynamodb_notifications.aws_dynamodb_table.this: Refreshing state... [id=notifications]
-module.log_group_paypal.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/paypal-billing-api]
-module.log_group_resources_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/resources-api]
-module.platform_dashboard.aws_cloudwatch_dashboard.main: Refreshing state... [id=ChristianConservativePlatform-Monitoring]
-module.sqs_order_processing.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/order-processing-queue-dlq]
-module.lambda_book_delivery_api.aws_lambda_function.this: Refreshing state... [id=book-delivery-api]
-module.lambda_user_email_api.aws_lambda_function.this: Refreshing state... [id=user-email-api]
-module.log_group_s3_thumbnail_trigger.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/s3-thumbnail-trigger]
-module.dynamodb_shopping_reviews.aws_dynamodb_table.this: Refreshing state... [id=Reviews]
-module.lambda_thumbnail_generator.aws_lambda_function.this: Refreshing state... [id=thumbnail-generator]
-module.dynamodb_email_events.aws_dynamodb_table.this: Refreshing state... [id=email-events]
-module.sns_video_download_notifications.aws_sns_topic.this: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:video-download-notifications]
-module.api_notifications.data.aws_caller_identity.current: Reading...
-module.api_notifications.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
-module.api_contributors.data.aws_caller_identity.current: Reading...
-module.lambda_email_subscription_handler.aws_lambda_function.this: Refreshing state... [id=email-subscription-handler]
-module.api_contributors.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
-module.dynamodb_news.aws_dynamodb_table.this: Refreshing state... [id=news-table]
-module.lambda_s3_thumbnail_trigger.aws_lambda_function.this: Refreshing state... [id=s3-thumbnail-trigger]
-module.sqs_email_notifications.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/email-notification-queue-dlq]
-module.dynamodb_comments.aws_dynamodb_table.this: Refreshing state... [id=comments]
-module.lambda_testimony_email_sharing.aws_lambda_function.this: Refreshing state... [id=testimony-email-sharing]
 module.sqs_inventory_update.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/inventory-update-queue-dlq]
-module.dynamodb_video_analytics.aws_dynamodb_table.this: Refreshing state... [id=video-analytics]
-module.lambda_news_scraper.aws_lambda_function.this: Refreshing state... [id=NewsScraperLambda]
-module.dynamodb_state_summaries.aws_dynamodb_table.this: Refreshing state... [id=state-summaries]
-module.api_resources.data.aws_caller_identity.current: Reading...
-module.api_resources.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
 module.unified_api.aws_api_gateway_rest_api.this: Refreshing state... [id=diz6ceeb22]
-module.dynamodb_prayer_requests.aws_dynamodb_table.this: Refreshing state... [id=prayer-requests]
-module.dynamodb_user_email_events.aws_dynamodb_table.this: Refreshing state... [id=user-email-events]
-module.dynamodb_email_subscribers.aws_dynamodb_table.this: Refreshing state... [id=email-subscribers]
-module.api_tags.data.aws_caller_identity.current: Reading...
-module.lambda_video_downloader.aws_lambda_function.this: Refreshing state... [id=video-downloader]
-module.api_tags.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
-module.api_prayer.data.aws_caller_identity.current: Reading...
-module.api_prayer.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
-module.sqs_email.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/email-dlq]
-module.log_group_url_analysis_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/url-analysis-api]
-module.sns_ses_bounces.aws_sns_topic.this: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:ses-bounces]
-module.lambda_admin_api.aws_lambda_function.this: Refreshing state... [id=admin-api]
-module.lambda_newsletter_api.aws_lambda_function.this: Refreshing state... [id=newsletter_api]
-module.lambda_testimony_auth.aws_lambda_function.this: Refreshing state... [id=testimony-auth]
-module.dynamodb_users.aws_dynamodb_table.this: Refreshing state... [id=users]
-module.dynamodb_email_campaign_stats.aws_dynamodb_table.this: Refreshing state... [id=email-campaign-stats]
-module.lambda_email_drip_processor.aws_lambda_function.this: Refreshing state... [id=email-drip-processor]
-module.log_group_prayer_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/prayer_api]
-module.lambda_playlists_api.aws_lambda_function.this: Refreshing state... [id=playlists-api]
-data.aws_route53_zone.main: Reading...
-module.log_group_auth_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/auth-api]
-module.dynamodb_newsletter_templates.aws_dynamodb_table.this: Refreshing state... [id=newsletter_templates]
-module.log_group_video_list_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/video-list-api]
-module.lambda_contributors_api.aws_lambda_function.this: Refreshing state... [id=contributors-api]
-module.lambda_scheduled_publisher.aws_lambda_function.this: Refreshing state... [id=scheduled-publisher]
-module.log_group_comments_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/comments-api]
-data.aws_route53_zone.main: Read complete after 1s [id=Z0541028204EB3LCQMNQD]
-module.dynamodb_shopping_products.aws_dynamodb_table.this: Refreshing state... [id=Products]
-module.dynamodb_election_events.aws_dynamodb_table.this: Refreshing state... [id=election-events]
-module.sqs_payment_processing.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/payment-processing-queue-dlq]
-module.dynamodb_boycott_tracker.aws_dynamodb_table.this: Refreshing state... [id=boycott-tracker]
-module.api_articles.data.aws_caller_identity.current: Reading...
-module.api_articles.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
-module.lambda_paypal_ipn_handler.aws_lambda_function.this: Refreshing state... [id=paypal-ipn-handler]
+module.dynamodb_races.aws_dynamodb_table.this: Refreshing state... [id=races]
+module.dynamodb_contributors.aws_dynamodb_table.this: Refreshing state... [id=contributors]
+module.lambda_boycott_api.aws_lambda_function.this: Refreshing state... [id=boycott-api]
+module.dynamodb_content_comments.aws_dynamodb_table.this: Refreshing state... [id=content-comments]
+module.lambda_news_scraper.aws_lambda_function.this: Refreshing state... [id=NewsScraperLambda]
+module.dynamodb_business_directory.aws_dynamodb_table.this: Refreshing state... [id=business-directory]
+module.layer_requests.aws_lambda_layer_version.this: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:layer:requests-layer:1]
+module.dynamodb_book_subscribers.aws_dynamodb_table.this: Refreshing state... [id=book-subscribers]
+module.s3_videos.aws_s3_bucket.main: Refreshing state... [id=my-video-downloads-bucket]
+module.lambda_video_download_router.aws_lambda_function.this: Refreshing state... [id=video-download-router]
+module.dynamodb_user_flags.aws_dynamodb_table.this: Refreshing state... [id=user-flags]
+module.lambda_products_api.aws_lambda_function.this: Refreshing state... [id=products-api]
 module.api_news.data.aws_caller_identity.current: Reading...
 module.api_news.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
-module.lambda_comments_handler.aws_lambda_function.this: Refreshing state... [id=comments-handler]
-module.lambda_video_list_api.aws_lambda_function.this: Refreshing state... [id=video-list-api]
-module.layer_requests.aws_lambda_layer_version.this: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:layer:requests-layer:1]
-module.dynamodb_shopping_cart.aws_dynamodb_table.this: Refreshing state... [id=Cart]
-module.dynamodb_resources.aws_dynamodb_table.this: Refreshing state... [id=resources-table]
-module.dynamodb_contributors.aws_dynamodb_table.this: Refreshing state... [id=contributors]
-module.dynamodb_testimony_users.aws_dynamodb_table.this: Refreshing state... [id=testimony-users]
-module.lambda_manual_email_sender.aws_lambda_function.this: Refreshing state... [id=manual-email-sender]
-module.dynamodb_user_email_subscribers.aws_dynamodb_table.this: Refreshing state... [id=user-email-subscribers]
-aws_sns_topic.ses_email_events: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:ses-email-events]
-module.dynamodb_user_email_drip_enrollments.aws_dynamodb_table.this: Refreshing state... [id=user-email-drip-enrollments]
-module.log_group_router.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/video-download-router]
-module.lambda_email_sender.aws_lambda_function.this: Refreshing state... [id=email-sender]
-module.lambda_contact_form_api.aws_lambda_function.this: Refreshing state... [id=contact-form-api]
-module.lambda_news_api.aws_lambda_function.this: Refreshing state... [id=news-api]
-module.lambda_forum_api.aws_lambda_function.this: Refreshing state... [id=forum-api]
-module.lambda_orders_api.aws_lambda_function.this: Refreshing state... [id=orders-api]
-module.lambda_testimony_admin.aws_lambda_function.this: Refreshing state... [id=testimony-admin]
+module.dynamodb_mountain_pledges.aws_dynamodb_table.this: Refreshing state... [id=mountain-pledges]
+module.sns_ses_bounces.aws_sns_topic.this: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:ses-bounces]
+module.dynamodb_newsletters.aws_dynamodb_table.this: Refreshing state... [id=newsletters]
+module.sns_video_download_notifications.aws_sns_topic.this: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:video-download-notifications]
+module.lambda_contributors_api.aws_lambda_function.this: Refreshing state... [id=contributors-api]
+module.dynamodb_mountain_badges.aws_dynamodb_table.this: Refreshing state... [id=mountain-badges]
 module.log_group_downloader.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/video-downloader]
-module.dynamodb_email_subscriber_stats.aws_dynamodb_table.this: Refreshing state... [id=email-subscriber-stats]
+module.dynamodb_email_events.aws_dynamodb_table.this: Refreshing state... [id=email-events]
+module.lambda_resources_api.aws_lambda_function.this: Refreshing state... [id=resources-api]
+module.dynamodb_boycott_tracker.aws_dynamodb_table.this: Refreshing state... [id=boycott-tracker]
+module.lambda_auto_cache_monitor.aws_lambda_function.this: Refreshing state... [id=auto-cache-monitor]
+module.dynamodb_marketing_queue.aws_dynamodb_table.this: Refreshing state... [id=MarketingQueue]
 module.lambda_video_tag_api.aws_lambda_function.this: Refreshing state... [id=video-tag-api]
-module.lambda_url_analysis_api.aws_lambda_function.this: Refreshing state... [id=url-analysis-api]
-module.lambda_mountains_api.aws_lambda_function.this: Refreshing state... [id=mountains-api]
-module.dynamodb_candidates.aws_dynamodb_table.this: Refreshing state... [id=candidates]
+module.lambda_email_subscription_handler.aws_lambda_function.this: Refreshing state... [id=email-subscription-handler]
+module.lambda_contact_form_api.aws_lambda_function.this: Refreshing state... [id=contact-form-api]
+module.lambda_fact_check_api.aws_lambda_function.this: Refreshing state... [id=fact-check-api]
+module.api_fact_checks.data.aws_caller_identity.current: Reading...
 module.dynamodb_admin_users.aws_dynamodb_table.this: Refreshing state... [id=admin-users]
-module.sqs_video_processing.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/video-processing-dlq]
-module.lambda_feature_flags_api.aws_lambda_function.this: Refreshing state... [id=feature-flags-api]
-module.api_paypal_ipn.data.aws_caller_identity.current: Reading...
-module.api_paypal_ipn.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
-module.acm_api_prod.aws_acm_certificate.this: Refreshing state... [id=arn:aws:acm:us-east-1:371751795928:certificate/c74c3daa-6944-48f7-af5b-183d7525f4a3]
+module.dynamodb_events.aws_dynamodb_table.this: Refreshing state... [id=events]
+module.api_fact_checks.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
+module.sqs_order_processing.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/order-processing-queue-dlq]
+module.dynamodb_email_subscribers.aws_dynamodb_table.this: Refreshing state... [id=email-subscribers]
+module.dynamodb_pending_changes.aws_dynamodb_table.this: Refreshing state... [id=pending-changes]
+module.dynamodb_product_views.aws_dynamodb_table.this: Refreshing state... [id=ProductViews]
 module.layer_ffmpeg.aws_lambda_layer_version.this: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:layer:ffmpeg-layer:1]
-module.sns_critical_alerts.aws_sns_topic.this: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:platform-critical-alerts]
+aws_api_gateway_rest_api.shopping_api: Refreshing state... [id=ydq9xzya5d]
+module.lambda_testimony_admin.aws_lambda_function.this: Refreshing state... [id=testimony-admin]
+module.api_tags.data.aws_caller_identity.current: Reading...
+module.dynamodb_user_email_drip_enrollments.aws_dynamodb_table.this: Refreshing state... [id=user-email-drip-enrollments]
+module.lambda_events_api.aws_lambda_function.this: Refreshing state... [id=events_api]
+module.api_tags.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
+module.cloudfront_oac.aws_cloudfront_origin_access_control.main: Refreshing state... [id=E3B3KMNHQ684US]
+module.dynamodb_email_subscribers_v2.aws_dynamodb_table.this: Refreshing state... [id=email_subscribers]
+module.dynamodb_notifications.aws_dynamodb_table.this: Refreshing state... [id=notifications]
+module.dynamodb_shopping_orders.aws_dynamodb_table.this: Refreshing state... [id=Orders]
+module.log_group_admin_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/admin-api]
+module.lambda_comments_handler.aws_lambda_function.this: Refreshing state... [id=comments-handler]
+module.dynamodb_comments.aws_dynamodb_table.this: Refreshing state... [id=comments]
+module.sqs_payment_processing.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/payment-processing-queue-dlq]
+module.lambda_manual_email_sender.aws_lambda_function.this: Refreshing state... [id=manual-email-sender]
+module.log_group_thumbnail_generator.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/thumbnail-generator]
+module.api_admin.data.aws_caller_identity.current: Reading...
+module.api_admin.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
+module.api_auth.data.aws_caller_identity.current: Reading...
+module.lambda_user_email_api.aws_lambda_function.this: Refreshing state... [id=user-email-api]
+module.api_auth.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
+module.lambda_articles_api.aws_lambda_function.this: Refreshing state... [id=articles-api]
+module.dynamodb_user_email_campaigns.aws_dynamodb_table.this: Refreshing state... [id=user-email-campaigns]
 module.api_analyze.data.aws_caller_identity.current: Reading...
 module.api_analyze.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
-module.dynamodb_shopping_orders.aws_dynamodb_table.this: Refreshing state... [id=Orders]
-module.api_comments.data.aws_caller_identity.current: Reading...
-module.lambda_prayer_api.aws_lambda_function.this: Refreshing state... [id=prayer_api]
-module.api_comments.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
-module.lambda_testimony_email_ses.aws_lambda_function.this: Refreshing state... [id=testimony-email-ses]
+module.dynamodb_candidates.aws_dynamodb_table.this: Refreshing state... [id=candidates]
+module.dynamodb_testimonies.aws_dynamodb_table.this: Refreshing state... [id=testimonies]
+module.dynamodb_state_summaries.aws_dynamodb_table.this: Refreshing state... [id=state-summaries]
+module.api_contributors.data.aws_caller_identity.current: Reading...
+module.api_contributors.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
+module.dynamodb_fact_checks.aws_dynamodb_table.this: Refreshing state... [id=fact-checks]
+module.log_group_events_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/events_api]
+module.lambda_email_drip_processor.aws_lambda_function.this: Refreshing state... [id=email-drip-processor]
+module.log_group_resources_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/resources-api]
+module.lambda_admin_api.aws_lambda_function.this: Refreshing state... [id=admin-api]
+module.dynamodb_shopping_products.aws_dynamodb_table.this: Refreshing state... [id=Products]
+module.dynamodb_email_subscriber_stats.aws_dynamodb_table.this: Refreshing state... [id=email-subscriber-stats]
+module.dynamodb_forum_posts.aws_dynamodb_table.this: Refreshing state... [id=forum-posts]
+module.lambda_testimony_email_sharing.aws_lambda_function.this: Refreshing state... [id=testimony-email-sharing]
+module.api_resources.data.aws_caller_identity.current: Reading...
+module.api_resources.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
+module.lambda_testimony_auth.aws_lambda_function.this: Refreshing state... [id=testimony-auth]
+module.lambda_news_api.aws_lambda_function.this: Refreshing state... [id=news-api]
+module.lambda_forum_api.aws_lambda_function.this: Refreshing state... [id=forum-api]
+module.lambda_scheduled_publisher.aws_lambda_function.this: Refreshing state... [id=scheduled-publisher]
 module.lambda_auth_api.aws_lambda_function.this: Refreshing state... [id=auth-api]
-module.dynamodb_email_subscribers_v2.aws_dynamodb_table.this: Refreshing state... [id=email_subscribers]
+module.dynamodb_shopping_cart.aws_dynamodb_table.this: Refreshing state... [id=Cart]
+module.dynamodb_book_purchases.aws_dynamodb_table.this: Refreshing state... [id=book_purchases]
+module.lambda_feature_flags_api.aws_lambda_function.this: Refreshing state... [id=feature-flags-api]
+module.dynamodb_shopping_reviews.aws_dynamodb_table.this: Refreshing state... [id=Reviews]
+module.lambda_video_list_api.aws_lambda_function.this: Refreshing state... [id=video-list-api]
+module.dynamodb_testimony_users.aws_dynamodb_table.this: Refreshing state... [id=testimony-users]
+module.dynamodb_download_jobs.aws_dynamodb_table.this: Refreshing state... [id=download-jobs]
+module.sns_critical_alerts.aws_sns_topic.this: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:platform-critical-alerts]
+module.lambda_prayer_api.aws_lambda_function.this: Refreshing state... [id=prayer_api]
+module.lambda_ses_event_processor.aws_lambda_function.this: Refreshing state... [id=ses-event-processor]
+module.acm_api_prod.aws_acm_certificate.this: Refreshing state... [id=arn:aws:acm:us-east-1:371751795928:certificate/c74c3daa-6944-48f7-af5b-183d7525f4a3]
+module.dynamodb_video_playlists.aws_dynamodb_table.this: Refreshing state... [id=video-playlists]
+module.log_group_video_list_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/video-list-api]
+module.dynamodb_users.aws_dynamodb_table.this: Refreshing state... [id=users]
 module.api_events.data.aws_caller_identity.current: Reading...
-module.sqs_email_notification.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/email-notification-queue]
+module.log_group_auth_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/auth-api]
 module.api_events.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
-module.lambda_resources_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:resources-api:live]
-module.sqs_thumbnail_generation.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/thumbnail-generation-queue]
+module.lambda_orders_api.aws_lambda_function.this: Refreshing state... [id=orders-api]
+module.api_paypal.data.aws_caller_identity.current: Reading...
+module.api_paypal.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
+module.sns_platform_critical_alerts.aws_sns_topic.this: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:platform-critical-alerts]
+module.api_download.data.aws_caller_identity.current: Reading...
+module.dynamodb_mountain_contributions.aws_dynamodb_table.this: Refreshing state... [id=mountain-contributions]
+module.api_download.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
+module.lambda_url_analysis_api.aws_lambda_function.this: Refreshing state... [id=url-analysis-api]
+module.lambda_paypal_ipn_handler.aws_lambda_function.this: Refreshing state... [id=paypal-ipn-handler]
+module.dynamodb_newsletter_analytics.aws_dynamodb_table.this: Refreshing state... [id=newsletter_analytics]
+module.api_comments.data.aws_caller_identity.current: Reading...
+module.api_comments.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
+module.dynamodb_feature_flags.aws_dynamodb_table.this: Refreshing state... [id=feature-flags]
+module.lambda_reviews_api.aws_lambda_function.this: Refreshing state... [id=reviews-api]
+module.log_group_prayer_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/prayer_api]
+module.dynamodb_articles.aws_dynamodb_table.this: Refreshing state... [id=articles]
+module.platform_dashboard.aws_cloudwatch_dashboard.main: Refreshing state... [id=ChristianConservativePlatform-Monitoring]
+module.dynamodb_news.aws_dynamodb_table.this: Refreshing state... [id=news-table]
+module.lambda_book_delivery_api.aws_lambda_function.this: Refreshing state... [id=book-delivery-api]
+module.lambda_execution_role.aws_iam_role.this: Refreshing state... [id=lambda-execution-role]
+module.api_notifications.data.aws_caller_identity.current: Reading...
+module.api_notifications.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
+module.lambda_testimony_email_ses.aws_lambda_function.this: Refreshing state... [id=testimony-email-ses]
+module.dynamodb_prayer_requests.aws_dynamodb_table.this: Refreshing state... [id=prayer-requests]
+module.log_group_url_analysis_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/url-analysis-api]
+module.lambda_video_downloader.aws_lambda_function.this: Refreshing state... [id=video-downloader]
+module.lambda_playlists_api.aws_lambda_function.this: Refreshing state... [id=playlists-api]
+module.log_group_articles_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/articles-api]
+module.log_group_paypal.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/paypal-billing-api]
+module.lambda_business_api.aws_lambda_function.this: Refreshing state... [id=business-api]
+module.log_group_video_tag_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/video-tag-api]
+data.aws_route53_zone.main: Reading...
+module.api_videos.data.aws_caller_identity.current: Reading...
+module.api_videos.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
+module.api_paypal_ipn.data.aws_caller_identity.current: Reading...
+module.api_paypal_ipn.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
+module.dynamodb_user_email_events.aws_dynamodb_table.this: Refreshing state... [id=user-email-events]
+module.lambda_mountains_api.aws_lambda_function.this: Refreshing state... [id=mountains-api]
+data.aws_route53_zone.main: Read complete after 1s [id=Z0541028204EB3LCQMNQD]
+module.sqs_email_notifications.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/email-notification-queue-dlq]
+module.lambda_thumbnail_generator.aws_lambda_function.this: Refreshing state... [id=thumbnail-generator]
+module.log_group_comments_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/comments-api]
+module.log_group_contributors_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/contributors-api]
+module.layer_yt_dlp.aws_lambda_layer_version.this: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:layer:yt-dlp-layer-v2:1]
+module.lambda_paypal_billing_api.aws_lambda_function.this: Refreshing state... [id=paypal-billing-api]
+module.lambda_newsletter_api.aws_lambda_function.this: Refreshing state... [id=newsletter_api]
+module.lambda_tracking_api.aws_lambda_function.this: Refreshing state... [id=tracking-api]
+module.dynamodb_email_campaign_stats.aws_dynamodb_table.this: Refreshing state... [id=email-campaign-stats]
+module.sqs_email.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/email-dlq]
+module.dynamodb_resources.aws_dynamodb_table.this: Refreshing state... [id=resources-table]
+module.dynamodb_newsletter_campaigns.aws_dynamodb_table.this: Refreshing state... [id=newsletter_campaigns]
+module.dynamodb_election_events.aws_dynamodb_table.this: Refreshing state... [id=election-events]
+module.lambda_testimony_crud.aws_lambda_function.this: Refreshing state... [id=testimony-crud]
+module.sqs_analytics.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/analytics-dlq]
+module.dynamodb_video_metadata.aws_dynamodb_table.this: Refreshing state... [id=video-metadata]
+module.api_articles.data.aws_caller_identity.current: Reading...
+module.api_articles.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
+module.dynamodb_email_preferences.aws_dynamodb_table.this: Refreshing state... [id=EmailPreferences]
+module.dynamodb_rate_limits.aws_dynamodb_table.this: Refreshing state... [id=rate-limits]
+module.log_group_notifications_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/notifications_api]
+module.dynamodb_newsletter_templates.aws_dynamodb_table.this: Refreshing state... [id=newsletter_templates]
+module.acm_api_staging.aws_acm_certificate.this: Refreshing state... [id=arn:aws:acm:us-east-1:371751795928:certificate/0fd12083-5a3e-496c-a1e0-c2dfe2398091]
+module.dynamodb_user_email_subscribers.aws_dynamodb_table.this: Refreshing state... [id=user-email-subscribers]
+module.dynamodb_video_analytics.aws_dynamodb_table.this: Refreshing state... [id=video-analytics]
+aws_sns_topic.ses_email_events: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:ses-email-events]
+module.lambda_s3_thumbnail_trigger.aws_lambda_function.this: Refreshing state... [id=s3-thumbnail-trigger]
+module.lambda_email_sender.aws_lambda_function.this: Refreshing state... [id=email-sender]
+module.log_group_s3_thumbnail_trigger.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/s3-thumbnail-trigger]
+module.lambda_digest_generator.aws_lambda_function.this: Refreshing state... [id=digest_generator]
+module.log_group_news_api.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/news-api]
+module.dynamodb_news_articles.aws_dynamodb_table.this: Refreshing state... [id=NewsArticles]
+module.api_prayer.data.aws_caller_identity.current: Reading...
+module.api_prayer.data.aws_caller_identity.current: Read complete after 0s [id=371751795928]
+module.lambda_notifications_api.aws_lambda_function.this: Refreshing state... [id=notifications_api]
+module.log_group_router.aws_cloudwatch_log_group.this: Refreshing state... [id=/aws/lambda/video-download-router]
+module.sqs_thumbnail_generation.aws_sqs_queue.dlq: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/thumbnail-generation-dlq]
+module.lambda_article_meta_tags_edge.aws_lambda_function.this: Refreshing state... [id=article-meta-tags-edge]
+module.sqs_video_processing.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/video-processing-queue]
+module.sqs_email_notification.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/email-notification-queue]
+module.sqs_inventory_update.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/inventory-update-queue]
+module.unified_api.aws_api_gateway_deployment.this: Refreshing state... [id=3cpcge]
+module.unified_api.aws_api_gateway_gateway_response.cors: Refreshing state... [id=aggr-diz6ceeb22-DEFAULT_4XX]
 module.lambda_video_download_router.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:video-download-router:live]
-module.lambda_notifications_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:notifications_api:live]
-module.sqs_analytics.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/analytics-queue]
-module.lambda_paypal_billing_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:paypal-billing-api:live]
-module.lambda_articles_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:articles-api:live]
-module.s3_videos.aws_s3_bucket_cors_configuration.main: Refreshing state... [id=my-video-downloads-bucket]
+module.lambda_contributors_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:contributors-api:live]
+module.sns_ses_bounces.aws_sns_topic_subscription.email["hawaiianintucson@gmail.com"]: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:ses-bounces:b4f0e164-433f-4102-b13a-dcde88df4059]
+module.sns_video_download_notifications.aws_sns_topic_subscription.email["hawaiianintucson@gmail.com"]: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:video-download-notifications:ea8613fb-ccb0-409f-ad9a-eb42a5671187]
+module.lambda_resources_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:resources-api:live]
+module.sqs_order_processing.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/order-processing-queue]
+module.lambda_video_tag_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:video-tag-api:live]
 module.s3_videos.aws_s3_bucket_policy.main: Refreshing state... [id=my-video-downloads-bucket]
 module.s3_videos.aws_s3_bucket_versioning.main: Refreshing state... [id=my-video-downloads-bucket]
 module.s3_videos.aws_s3_bucket_server_side_encryption_configuration.main: Refreshing state... [id=my-video-downloads-bucket]
-module.sns_platform_critical_alerts.aws_sns_topic_subscription.email["hawaiianintucson@gmail.com"]: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:platform-critical-alerts:5921fcfe-da2b-4743-ba83-b6371e4f72df]
+module.s3_videos.aws_s3_bucket_cors_configuration.main: Refreshing state... [id=my-video-downloads-bucket]
 module.lambda_events_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:events_api:live]
-module.sqs_order_processing.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/order-processing-queue]
-module.sns_video_download_notifications.aws_sns_topic_subscription.email["hawaiianintucson@gmail.com"]: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:video-download-notifications:ea8613fb-ccb0-409f-ad9a-eb42a5671187]
-module.lambda_thumbnail_generator.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:thumbnail-generator:live]
-module.lambda_s3_thumbnail_trigger.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:s3-thumbnail-trigger:live]
-module.sqs_email_notifications.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/email-notification-queue]
-module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AWSLambda_FullAccess"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/AWSLambda_FullAccess]
-module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AmazonBedrockFullAccess"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/AmazonBedrockFullAccess]
-module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole]
-module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess]
-module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AmazonSNSFullAccess"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/AmazonSNSFullAccess]
-module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole]
-module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AmazonSESFullAccess"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/AmazonSESFullAccess]
-module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/CloudWatchLogsFullAccess]
-module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess]
-module.sqs_inventory_update.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/inventory-update-queue]
-module.unified_api.aws_api_gateway_gateway_response.cors: Refreshing state... [id=aggr-diz6ceeb22-DEFAULT_4XX]
-module.unified_api.aws_api_gateway_deployment.this: Refreshing state... [id=3cpcge]
-module.sqs_email.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/email-queue]
-module.lambda_video_downloader.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:video-downloader:live]
-module.sns_ses_bounces.aws_sns_topic_subscription.email["hawaiianintucson@gmail.com"]: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:ses-bounces:b4f0e164-433f-4102-b13a-dcde88df4059]
-module.lambda_admin_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:admin-api:live]
-module.lambda_contributors_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:contributors-api:live]
 module.sqs_payment_processing.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/payment-processing-queue]
-module.lambda_paypal_ipn_handler.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:paypal-ipn-handler:live]
-module.lambda_video_list_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:video-list-api:live]
+module.lambda_articles_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:articles-api:live]
+module.lambda_admin_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:admin-api:live]
 module.lambda_news_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:news-api:live]
-module.lambda_video_tag_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:video-tag-api:live]
-module.lambda_url_analysis_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:url-analysis-api:live]
-module.sqs_video_processing.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/video-processing-queue]
+module.lambda_auth_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:auth-api:live]
+module.lambda_video_list_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:video-list-api:live]
 module.sns_critical_alerts.aws_sns_topic_subscription.email["hawaiianintucson@gmail.com"]: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:platform-critical-alerts:5921fcfe-da2b-4743-ba83-b6371e4f72df]
 module.lambda_prayer_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:prayer_api:live]
-module.lambda_auth_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:auth-api:live]
+module.sns_platform_critical_alerts.aws_sns_topic_subscription.email["hawaiianintucson@gmail.com"]: Refreshing state... [id=arn:aws:sns:us-east-1:371751795928:platform-critical-alerts:5921fcfe-da2b-4743-ba83-b6371e4f72df]
+module.lambda_url_analysis_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:url-analysis-api:live]
+module.lambda_paypal_ipn_handler.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:paypal-ipn-handler:live]
+module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess]
+module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole]
+module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess]
+module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AWSLambda_FullAccess"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/AWSLambda_FullAccess]
+module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/CloudWatchLogsFullAccess]
+module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AmazonBedrockFullAccess"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/AmazonBedrockFullAccess]
+module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AmazonSESFullAccess"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/AmazonSESFullAccess]
+module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AmazonSNSFullAccess"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/AmazonSNSFullAccess]
+module.lambda_execution_role.aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"]: Refreshing state... [id=lambda-execution-role-arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole]
+module.lambda_video_downloader.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:video-downloader:live]
+module.sqs_email_notifications.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/email-notification-queue]
+module.lambda_thumbnail_generator.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:thumbnail-generator:live]
+module.lambda_paypal_billing_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:paypal-billing-api:live]
+module.sqs_email.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/email-queue]
+module.sqs_analytics.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/analytics-queue]
+module.lambda_s3_thumbnail_trigger.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:s3-thumbnail-trigger:live]
+module.lambda_notifications_api.aws_lambda_alias.this[0]: Refreshing state... [id=arn:aws:lambda:us-east-1:371751795928:function:notifications_api:live]
+module.sqs_thumbnail_generation.aws_sqs_queue.main: Refreshing state... [id=https://sqs.us-east-1.amazonaws.com/371751795928/thumbnail-generation-queue]
 module.unified_api.aws_api_gateway_stage.this: Refreshing state... [id=ags-diz6ceeb22-prod]
 module.acm_api_staging.aws_route53_record.validation["api-staging.christianconservativestoday.com"]: Refreshing state... [id=Z0541028204EB3LCQMNQD__255b0ef3568e3ff71fe971dec591059e.api-staging.christianconservativestoday.com._CNAME]
 module.acm_api_prod.aws_route53_record.validation["api.christianconservativestoday.com"]: Refreshing state... [id=Z0541028204EB3LCQMNQD__ee945cd269debb7603126bd2c2bc2017.api.christianconservativestoday.com._CNAME]
-module.api_articles.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-articles-ANY]
-module.cloudfront_distribution.aws_cloudfront_distribution.main: Refreshing state... [id=E3N00R2D2NE9C5]
-module.api_download.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-download-ANY]
-module.api_notifications.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-notifications-ANY]
-module.api_resources.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-resources-ANY]
-module.api_paypal.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-paypal-ANY]
+module.api_resources.aws_api_gateway_resource.this: Refreshing state... [id=3i6h7m]
+module.api_comments.aws_api_gateway_resource.this: Refreshing state... [id=1cee16]
+module.api_paypal_ipn.aws_api_gateway_resource.this: Refreshing state... [id=z5l11q]
+module.api_fact_checks.aws_api_gateway_resource.this: Refreshing state... [id=2it953]
 module.api_auth.aws_api_gateway_resource.this: Refreshing state... [id=3h9xsm]
-module.api_download.aws_api_gateway_resource.this: Refreshing state... [id=64s0mx]
-module.api_admin.aws_api_gateway_resource.this: Refreshing state... [id=sru3e4]
 module.api_paypal.aws_api_gateway_resource.this: Refreshing state... [id=t99wmp]
-module.api_articles.aws_api_gateway_resource.this: Refreshing state... [id=yd8sin]
+module.api_download.aws_api_gateway_resource.this: Refreshing state... [id=64s0mx]
 module.api_contributors.aws_api_gateway_resource.this: Refreshing state... [id=bs7q8w]
 module.api_news.aws_api_gateway_resource.this: Refreshing state... [id=z1ej10]
-module.api_resources.aws_api_gateway_resource.this: Refreshing state... [id=3i6h7m]
-module.api_paypal_ipn.aws_api_gateway_resource.this: Refreshing state... [id=z5l11q]
+module.api_prayer.aws_api_gateway_resource.this: Refreshing state... [id=21cnwx]
 module.api_analyze.aws_api_gateway_resource.this: Refreshing state... [id=2ikthf]
 module.api_notifications.aws_api_gateway_resource.this: Refreshing state... [id=938rww]
 module.api_videos.aws_api_gateway_resource.this: Refreshing state... [id=uxeie9]
-module.api_prayer.aws_api_gateway_resource.this: Refreshing state... [id=21cnwx]
+module.api_admin.aws_api_gateway_resource.this: Refreshing state... [id=sru3e4]
+module.api_articles.aws_api_gateway_resource.this: Refreshing state... [id=yd8sin]
 module.api_tags.aws_api_gateway_resource.this: Refreshing state... [id=g8ib8t]
-module.api_comments.aws_api_gateway_resource.this: Refreshing state... [id=1cee16]
 aws_api_gateway_stage.staging: Refreshing state... [id=ags-diz6ceeb22-staging]
-module.api_admin.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-admin-ANY]
+module.api_download.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-download-ANY]
 module.api_contributors.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-contributors-ANY]
-module.api_paypal_ipn.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-paypal-ipn-POST]
-module.api_comments.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-comments-ANY]
-module.api_videos.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-videos-ANY]
-module.api_news.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-news-ANY]
+module.api_resources.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-resources-ANY]
 module.api_tags.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-tags-ANY]
-module.api_analyze.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-analyze-ANY]
-module.alarm_paypal_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-PayPal-Errors]
-module.alarm_router_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Router-Errors]
-module.alarm_downloader_duration.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Downloader-Duration]
-module.alarm_auth_concurrent.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Auth-ConcurrentExecutions]
-module.alarm_url_analysis_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-URLAnalysis-Errors]
-module.alarm_events_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Events-Errors]
-module.alarm_prayer_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Prayer-Errors]
-module.alarm_downloader_throttles.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Downloader-Throttles]
-module.alarm_api_gateway_5xx.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=API-Gateway-5XX-Errors]
-module.alarm_articles_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Articles-Errors]
-module.alarm_news_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-News-Errors]
-module.alarm_notifications_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Notifications-Errors]
-module.alarm_auth_duration.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Auth-Duration]
-module.alarm_video_tag_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-VideoTag-Errors]
-module.alarm_comments_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Comments-Errors]
-module.alarm_downloader_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Downloader-Errors]
-module.alarm_auth_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Auth-Errors]
-module.alarm_video_list_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-VideoList-Errors]
-module.alarm_router_duration.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Router-Duration]
-module.alarm_resources_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Resources-Errors]
-module.alarm_router_throttles.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Router-Throttles]
-module.api_prayer.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-prayer-ANY]
-module.alarm_s3_trigger_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-S3Trigger-Errors]
-module.alarm_paypal_duration.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-PayPal-Duration]
-module.alarm_admin_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Admin-Errors]
-module.alarm_contributors_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Contributors-Errors]
-module.alarm_paypal_throttles.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-PayPal-Throttles]
-module.alarm_thumbnail_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Thumbnail-Errors]
+module.cloudfront_distribution.aws_cloudfront_distribution.main: Refreshing state... [id=E3N00R2D2NE9C5]
+module.api_comments.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-comments-ANY]
+module.api_articles.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-articles-ANY]
+module.api_admin.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-admin-ANY]
+module.api_news.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-news-ANY]
 module.api_auth.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-auth-ANY]
+module.api_videos.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-videos-ANY]
+module.alarm_paypal_duration.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-PayPal-Duration]
+module.alarm_downloader_throttles.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Downloader-Throttles]
+module.alarm_resources_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Resources-Errors]
+module.alarm_url_analysis_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-URLAnalysis-Errors]
+module.alarm_auth_duration.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Auth-Duration]
+module.alarm_router_duration.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Router-Duration]
+module.alarm_s3_trigger_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-S3Trigger-Errors]
+module.alarm_auth_concurrent.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Auth-ConcurrentExecutions]
+module.alarm_downloader_duration.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Downloader-Duration]
+module.alarm_api_gateway_5xx.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=API-Gateway-5XX-Errors]
+module.alarm_prayer_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Prayer-Errors]
+module.alarm_video_tag_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-VideoTag-Errors]
+module.alarm_notifications_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Notifications-Errors]
+module.alarm_paypal_throttles.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-PayPal-Throttles]
+module.alarm_video_list_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-VideoList-Errors]
+module.alarm_downloader_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Downloader-Errors]
+module.alarm_articles_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Articles-Errors]
+module.alarm_thumbnail_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Thumbnail-Errors]
+module.alarm_news_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-News-Errors]
+module.alarm_comments_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Comments-Errors]
+module.alarm_router_throttles.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Router-Throttles]
+module.alarm_router_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Router-Errors]
+module.alarm_events_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Events-Errors]
+module.alarm_auth_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Auth-Errors]
+module.alarm_admin_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Admin-Errors]
+module.alarm_paypal_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-PayPal-Errors]
+module.alarm_contributors_errors.aws_cloudwatch_metric_alarm.this: Refreshing state... [id=Lambda-Contributors-Errors]
+module.api_prayer.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-prayer-ANY]
+module.api_analyze.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-analyze-ANY]
+module.api_paypal_ipn.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-paypal-ipn-POST]
+module.api_paypal.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-paypal-ANY]
+module.api_notifications.aws_lambda_permission.this: Refreshing state... [id=AllowAPIGatewayInvoke-notifications-ANY]
+module.api_resources.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-3i6h7m-ANY]
+module.api_resources.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-3i6h7m-OPTIONS]
+module.api_comments.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-1cee16-ANY]
+module.api_comments.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-1cee16-OPTIONS]
+module.api_paypal_ipn.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-z5l11q-POST]
 module.acm_api_staging.aws_acm_certificate_validation.this: Refreshing state... [id=0001-01-01 00:00:00 +0000 UTC]
 module.acm_api_prod.aws_acm_certificate_validation.this: Refreshing state... [id=0001-01-01 00:00:00 +0000 UTC]
 module.api_auth.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-3h9xsm-ANY]
+module.api_paypal.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-t99wmp-ANY]
 module.api_auth.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-3h9xsm-OPTIONS]
+module.api_fact_checks.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-2it953-OPTIONS]
+module.api_paypal.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-t99wmp-OPTIONS]
+module.api_news.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-z1ej10-ANY]
+module.api_news.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-z1ej10-OPTIONS]
+module.api_contributors.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-bs7q8w-ANY]
 module.api_download.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-64s0mx-ANY]
 module.api_download.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-64s0mx-OPTIONS]
+module.api_contributors.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-bs7q8w-OPTIONS]
+module.api_prayer.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-21cnwx-ANY]
+module.api_prayer.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-21cnwx-OPTIONS]
+module.api_notifications.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-938rww-ANY]
+module.api_notifications.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-938rww-OPTIONS]
+module.api_analyze.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-2ikthf-ANY]
+module.api_analyze.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-2ikthf-OPTIONS]
+module.api_videos.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-uxeie9-ANY]
+module.api_videos.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-uxeie9-OPTIONS]
 module.api_admin.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-sru3e4-ANY]
 module.api_admin.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-sru3e4-OPTIONS]
 module.api_articles.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-yd8sin-ANY]
-module.api_articles.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-yd8sin-OPTIONS]
-module.api_paypal.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-t99wmp-ANY]
-module.api_paypal.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-t99wmp-OPTIONS]
-module.api_contributors.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-bs7q8w-ANY]
-module.api_contributors.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-bs7q8w-OPTIONS]
-module.api_news.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-z1ej10-ANY]
-module.api_news.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-z1ej10-OPTIONS]
-module.api_resources.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-3i6h7m-ANY]
-module.api_resources.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-3i6h7m-OPTIONS]
-module.api_paypal_ipn.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-z5l11q-POST]
-module.api_analyze.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-2ikthf-ANY]
-module.api_analyze.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-2ikthf-OPTIONS]
-module.api_notifications.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-938rww-ANY]
-module.api_notifications.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-938rww-OPTIONS]
-module.api_videos.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-uxeie9-ANY]
-module.api_videos.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-uxeie9-OPTIONS]
-module.api_prayer.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-21cnwx-ANY]
-module.api_prayer.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-21cnwx-OPTIONS]
-module.api_tags.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-g8ib8t-ANY]
 module.api_tags.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-g8ib8t-OPTIONS]
-module.api_comments.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-1cee16-ANY]
-module.api_comments.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-1cee16-OPTIONS]
+module.api_tags.aws_api_gateway_method.this: Refreshing state... [id=agm-diz6ceeb22-g8ib8t-ANY]
+module.api_articles.aws_api_gateway_method.options[0]: Refreshing state... [id=agm-diz6ceeb22-yd8sin-OPTIONS]
+module.api_resources.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-3i6h7m-ANY]
+module.api_resources.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-3i6h7m-OPTIONS]
+module.api_resources.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-3i6h7m-OPTIONS-200]
+module.api_comments.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-1cee16-OPTIONS-200]
+module.api_comments.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-1cee16-ANY]
+module.api_comments.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-1cee16-OPTIONS]
+module.api_paypal_ipn.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-z5l11q-POST]
 module.api_auth.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-3h9xsm-ANY]
-module.api_auth.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-3h9xsm-OPTIONS]
-module.api_auth.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-3h9xsm-OPTIONS-200]
-module.api_download.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-64s0mx-ANY]
-module.api_download.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-64s0mx-OPTIONS]
-module.api_download.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-64s0mx-OPTIONS-200]
-module.api_admin.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-sru3e4-ANY]
-module.api_admin.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-sru3e4-OPTIONS]
-module.api_admin.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-sru3e4-OPTIONS-200]
-module.api_articles.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-yd8sin-ANY]
 module.api_paypal.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-t99wmp-ANY]
-module.api_articles.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-yd8sin-OPTIONS]
-module.api_articles.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-yd8sin-OPTIONS-200]
+module.api_auth.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-3h9xsm-OPTIONS-200]
+module.api_auth.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-3h9xsm-OPTIONS]
+module.api_fact_checks.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-2it953-OPTIONS-200]
+module.api_fact_checks.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-2it953-OPTIONS]
 module.api_paypal.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-t99wmp-OPTIONS-200]
 module.api_paypal.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-t99wmp-OPTIONS]
+module.api_news.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-z1ej10-ANY]
+module.api_news.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-z1ej10-OPTIONS-200]
+module.api_news.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-z1ej10-OPTIONS]
 module.api_contributors.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-bs7q8w-ANY]
+module.api_download.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-64s0mx-ANY]
+module.api_download.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-64s0mx-OPTIONS-200]
+module.api_download.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-64s0mx-OPTIONS]
 module.api_contributors.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-bs7q8w-OPTIONS-200]
 module.api_contributors.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-bs7q8w-OPTIONS]
-module.api_news.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-z1ej10-OPTIONS]
-module.api_news.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-z1ej10-OPTIONS-200]
-module.api_resources.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-3i6h7m-ANY]
-module.api_news.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-z1ej10-ANY]
-module.api_analyze.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-2ikthf-ANY]
-module.api_paypal_ipn.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-z5l11q-POST]
-module.api_resources.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-3i6h7m-OPTIONS-200]
-module.api_resources.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-3i6h7m-OPTIONS]
-module.api_analyze.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-2ikthf-OPTIONS]
-module.api_analyze.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-2ikthf-OPTIONS-200]
-module.api_notifications.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-938rww-ANY]
 module.api_prayer.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-21cnwx-ANY]
-module.api_notifications.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-938rww-OPTIONS]
-module.api_notifications.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-938rww-OPTIONS-200]
-module.api_videos.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-uxeie9-ANY]
+module.api_notifications.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-938rww-ANY]
 module.api_prayer.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-21cnwx-OPTIONS]
 module.api_prayer.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-21cnwx-OPTIONS-200]
+module.api_notifications.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-938rww-OPTIONS-200]
+module.api_notifications.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-938rww-OPTIONS]
+module.api_analyze.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-2ikthf-ANY]
+module.api_videos.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-uxeie9-ANY]
+module.api_analyze.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-2ikthf-OPTIONS]
+module.api_analyze.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-2ikthf-OPTIONS-200]
 module.api_videos.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-uxeie9-OPTIONS]
 module.api_videos.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-uxeie9-OPTIONS-200]
-module.api_tags.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-g8ib8t-ANY]
-module.api_comments.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-1cee16-ANY]
-module.api_tags.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-g8ib8t-OPTIONS-200]
+module.api_admin.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-sru3e4-OPTIONS]
+module.api_admin.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-sru3e4-OPTIONS-200]
+module.api_admin.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-sru3e4-ANY]
+module.api_articles.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-yd8sin-ANY]
 module.api_tags.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-g8ib8t-OPTIONS]
-module.api_comments.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-1cee16-OPTIONS]
-module.api_comments.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-1cee16-OPTIONS-200]
-module.api_auth.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-3h9xsm-OPTIONS-200]
-module.api_download.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-64s0mx-OPTIONS-200]
-module.api_admin.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-sru3e4-OPTIONS-200]
-module.api_articles.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-yd8sin-OPTIONS-200]
-module.api_paypal.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-t99wmp-OPTIONS-200]
-module.api_contributors.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-bs7q8w-OPTIONS-200]
-module.api_news.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-z1ej10-OPTIONS-200]
+module.api_tags.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-g8ib8t-OPTIONS-200]
+module.api_tags.aws_api_gateway_integration.this: Refreshing state... [id=agi-diz6ceeb22-g8ib8t-ANY]
+module.api_articles.aws_api_gateway_method_response.options[0]: Refreshing state... [id=agmr-diz6ceeb22-yd8sin-OPTIONS-200]
+module.api_articles.aws_api_gateway_integration.options[0]: Refreshing state... [id=agi-diz6ceeb22-yd8sin-OPTIONS]
 module.api_resources.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-3i6h7m-OPTIONS-200]
-module.api_videos.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-uxeie9-OPTIONS-200]
+module.api_comments.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-1cee16-OPTIONS-200]
+module.api_auth.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-3h9xsm-OPTIONS-200]
+module.api_fact_checks.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-2it953-OPTIONS-200]
+module.api_paypal.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-t99wmp-OPTIONS-200]
+module.api_download.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-64s0mx-OPTIONS-200]
+module.api_contributors.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-bs7q8w-OPTIONS-200]
 module.api_prayer.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-21cnwx-OPTIONS-200]
-module.api_tags.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-g8ib8t-OPTIONS-200]
+module.api_notifications.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-938rww-OPTIONS-200]
 module.api_analyze.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-2ikthf-OPTIONS-200]
+module.api_news.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-z1ej10-OPTIONS-200]
+module.api_videos.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-uxeie9-OPTIONS-200]
+module.api_admin.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-sru3e4-OPTIONS-200]
+module.api_tags.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-g8ib8t-OPTIONS-200]
+module.api_articles.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-yd8sin-OPTIONS-200]
 module.api_domain_staging.aws_api_gateway_domain_name.this: Refreshing state... [id=api-staging.christianconservativestoday.com]
 module.api_domain_prod.aws_api_gateway_domain_name.this: Refreshing state... [id=api.christianconservativestoday.com]
-module.api_comments.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-1cee16-OPTIONS-200]
 module.api_domain_staging.aws_route53_record.this: Refreshing state... [id=Z0541028204EB3LCQMNQD_api-staging.christianconservativestoday.com_A]
 module.api_domain_staging.aws_api_gateway_base_path_mapping.this: Refreshing state... [id=api-staging.christianconservativestoday.com/]
 module.api_domain_prod.aws_api_gateway_base_path_mapping.this: Refreshing state... [id=api.christianconservativestoday.com/]
 module.api_domain_prod.aws_route53_record.this: Refreshing state... [id=Z0541028204EB3LCQMNQD_api.christianconservativestoday.com_A]
-module.api_notifications.aws_api_gateway_integration_response.options[0]: Refreshing state... [id=agir-diz6ceeb22-938rww-OPTIONS-200]
 
 Terraform used the selected providers to generate the following execution
 plan. Resource actions are indicated with the following symbols:
@@ -534,6 +547,64 @@ Terraform will perform the following actions:
       + principal           = "apigateway.amazonaws.com"
       + source_arn          = "arn:aws:execute-api:us-east-1:371751795928:diz6ceeb22/*/*"
       + statement_id        = "AllowAPIGatewayInvoke-events-ANY"
+      + statement_id_prefix = (known after apply)
+    }
+
+  # module.api_fact_checks.aws_api_gateway_integration.this will be created
+  + resource "aws_api_gateway_integration" "this" {
+      + cache_namespace         = (known after apply)
+      + connection_type         = "INTERNET"
+      + http_method             = "ANY"
+      + id                      = (known after apply)
+      + integration_http_method = "POST"
+      + passthrough_behavior    = (known after apply)
+      + resource_id             = "2it953"
+      + rest_api_id             = "diz6ceeb22"
+      + timeout_milliseconds    = 29000
+      + type                    = "AWS_PROXY"
+      + uri                     = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:371751795928:function:fact-check-api/invocations"
+    }
+
+  # module.api_fact_checks.aws_api_gateway_integration_response.options[0] will be updated in-place
+  ~ resource "aws_api_gateway_integration_response" "options" {
+        id                  = "agir-diz6ceeb22-2it953-OPTIONS-200"
+      ~ response_parameters = {
+          ~ "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization'" -> "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+          ~ "method.response.header.Access-Control-Allow-Methods" = "'GET,POST,OPTIONS'" -> "'GET,POST,PUT,DELETE,OPTIONS'"
+            # (1 unchanged element hidden)
+        }
+        # (7 unchanged attributes hidden)
+    }
+
+  # module.api_fact_checks.aws_api_gateway_method.this will be created
+  + resource "aws_api_gateway_method" "this" {
+      + api_key_required = false
+      + authorization    = "NONE"
+      + http_method      = "ANY"
+      + id               = (known after apply)
+      + resource_id      = "2it953"
+      + rest_api_id      = "diz6ceeb22"
+    }
+
+  # module.api_fact_checks.aws_api_gateway_method_response.options[0] will be updated in-place
+  ~ resource "aws_api_gateway_method_response" "options" {
+        id                  = "agmr-diz6ceeb22-2it953-OPTIONS-200"
+      ~ response_parameters = {
+          ~ "method.response.header.Access-Control-Allow-Headers" = false -> true
+          ~ "method.response.header.Access-Control-Allow-Methods" = false -> true
+          ~ "method.response.header.Access-Control-Allow-Origin"  = false -> true
+        }
+        # (5 unchanged attributes hidden)
+    }
+
+  # module.api_fact_checks.aws_lambda_permission.this will be created
+  + resource "aws_lambda_permission" "this" {
+      + action              = "lambda:InvokeFunction"
+      + function_name       = "fact-check-api"
+      + id                  = (known after apply)
+      + principal           = "apigateway.amazonaws.com"
+      + source_arn          = "arn:aws:execute-api:us-east-1:371751795928:diz6ceeb22/*/*"
+      + statement_id        = "AllowAPIGatewayInvoke-fact-checks-ANY"
       + statement_id_prefix = (known after apply)
     }
 
@@ -776,6 +847,29 @@ Terraform will perform the following actions:
         # (2 unchanged blocks hidden)
     }
 
+  # module.dynamodb_email_preferences.aws_dynamodb_table.this will be updated in-place
+  ~ resource "aws_dynamodb_table" "this" {
+        id                          = "EmailPreferences"
+        name                        = "EmailPreferences"
+      ~ tags                        = {
+          + "Name" = "EmailPreferences"
+        }
+      ~ tags_all                    = {
+          + "Environment" = "production"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "EmailPreferences"
+          + "Project"     = "ChristianConservativePlatform"
+        }
+        # (11 unchanged attributes hidden)
+
+      ~ point_in_time_recovery {
+          ~ enabled                 = false -> true
+            # (1 unchanged attribute hidden)
+        }
+
+        # (2 unchanged blocks hidden)
+    }
+
   # module.dynamodb_email_subscriber_stats.aws_dynamodb_table.this will be updated in-place
   ~ resource "aws_dynamodb_table" "this" {
         id                          = "email-subscriber-stats"
@@ -810,6 +904,29 @@ Terraform will perform the following actions:
           + "Environment" = "production"
           + "ManagedBy"   = "Terraform"
           + "Name"        = "email_subscribers"
+          + "Project"     = "ChristianConservativePlatform"
+        }
+        # (11 unchanged attributes hidden)
+
+      ~ point_in_time_recovery {
+          ~ enabled                 = false -> true
+            # (1 unchanged attribute hidden)
+        }
+
+        # (2 unchanged blocks hidden)
+    }
+
+  # module.dynamodb_fact_checks.aws_dynamodb_table.this will be updated in-place
+  ~ resource "aws_dynamodb_table" "this" {
+        id                          = "fact-checks"
+        name                        = "fact-checks"
+      ~ tags                        = {
+          + "Name" = "fact-checks"
+        }
+      ~ tags_all                    = {
+          + "Environment" = "production"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "fact-checks"
           + "Project"     = "ChristianConservativePlatform"
         }
         # (11 unchanged attributes hidden)
@@ -888,6 +1005,66 @@ Terraform will perform the following actions:
         # (3 unchanged blocks hidden)
     }
 
+  # module.dynamodb_marketing_queue.aws_dynamodb_table.this will be updated in-place
+  ~ resource "aws_dynamodb_table" "this" {
+        id                          = "MarketingQueue"
+        name                        = "MarketingQueue"
+      ~ tags                        = {
+          + "Name" = "MarketingQueue"
+        }
+      ~ tags_all                    = {
+          + "Environment" = "production"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "MarketingQueue"
+          + "Project"     = "ChristianConservativePlatform"
+        }
+        # (11 unchanged attributes hidden)
+
+      - global_secondary_index {
+          - hash_key           = "sent" -> null
+          - name               = "sent-scheduled_send_time-index" -> null
+          - non_key_attributes = [] -> null
+          - projection_type    = "ALL" -> null
+          - range_key          = "scheduled_send_time" -> null
+          - read_capacity      = 5 -> null
+          - write_capacity     = 5 -> null
+        }
+      - global_secondary_index {
+          - hash_key           = "user_email" -> null
+          - name               = "user_email-trigger_type-index" -> null
+          - non_key_attributes = [] -> null
+          - projection_type    = "ALL" -> null
+          - range_key          = "trigger_type" -> null
+          - read_capacity      = 5 -> null
+          - write_capacity     = 5 -> null
+        }
+      + global_secondary_index {
+          + hash_key           = "sent"
+          + name               = "sent-scheduled_send_time-index"
+          + non_key_attributes = []
+          + projection_type    = "ALL"
+          + range_key          = "scheduled_send_time"
+          + read_capacity      = (known after apply)
+          + write_capacity     = (known after apply)
+        }
+      + global_secondary_index {
+          + hash_key           = "user_email"
+          + name               = "user_email-trigger_type-index"
+          + non_key_attributes = []
+          + projection_type    = "ALL"
+          + range_key          = "trigger_type"
+          + read_capacity      = (known after apply)
+          + write_capacity     = (known after apply)
+        }
+
+      ~ point_in_time_recovery {
+          ~ enabled                 = false -> true
+            # (1 unchanged attribute hidden)
+        }
+
+        # (6 unchanged blocks hidden)
+    }
+
   # module.dynamodb_mountain_badges.aws_dynamodb_table.this will be updated in-place
   ~ resource "aws_dynamodb_table" "this" {
         id                          = "mountain-badges"
@@ -963,6 +1140,29 @@ Terraform will perform the following actions:
         # (3 unchanged blocks hidden)
     }
 
+  # module.dynamodb_news_articles.aws_dynamodb_table.this will be updated in-place
+  ~ resource "aws_dynamodb_table" "this" {
+        id                          = "NewsArticles"
+        name                        = "NewsArticles"
+      ~ tags                        = {
+          + "Name" = "NewsArticles"
+        }
+      ~ tags_all                    = {
+          + "Environment" = "production"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "NewsArticles"
+          + "Project"     = "ChristianConservativePlatform"
+        }
+        # (12 unchanged attributes hidden)
+
+      ~ point_in_time_recovery {
+          ~ enabled                 = false -> true
+            # (1 unchanged attribute hidden)
+        }
+
+        # (3 unchanged blocks hidden)
+    }
+
   # module.dynamodb_newsletter_analytics.aws_dynamodb_table.this will be updated in-place
   ~ resource "aws_dynamodb_table" "this" {
         id                          = "newsletter_analytics"
@@ -984,6 +1184,84 @@ Terraform will perform the following actions:
         }
 
         # (2 unchanged blocks hidden)
+    }
+
+  # module.dynamodb_product_views.aws_dynamodb_table.this will be updated in-place
+  ~ resource "aws_dynamodb_table" "this" {
+        id                          = "ProductViews"
+        name                        = "ProductViews"
+      ~ tags                        = {
+          + "Name" = "ProductViews"
+        }
+      ~ tags_all                    = {
+          + "Environment" = "production"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "ProductViews"
+          + "Project"     = "ChristianConservativePlatform"
+        }
+        # (12 unchanged attributes hidden)
+
+      - global_secondary_index {
+          - hash_key           = "product_id" -> null
+          - name               = "product_id-timestamp-index" -> null
+          - non_key_attributes = [] -> null
+          - projection_type    = "ALL" -> null
+          - range_key          = "timestamp" -> null
+          - read_capacity      = 5 -> null
+          - write_capacity     = 5 -> null
+        }
+      - global_secondary_index {
+          - hash_key           = "session_id" -> null
+          - name               = "session_id-timestamp-index" -> null
+          - non_key_attributes = [] -> null
+          - projection_type    = "ALL" -> null
+          - range_key          = "timestamp" -> null
+          - read_capacity      = 5 -> null
+          - write_capacity     = 5 -> null
+        }
+      - global_secondary_index {
+          - hash_key           = "user_id" -> null
+          - name               = "user_id-timestamp-index" -> null
+          - non_key_attributes = [] -> null
+          - projection_type    = "ALL" -> null
+          - range_key          = "timestamp" -> null
+          - read_capacity      = 5 -> null
+          - write_capacity     = 5 -> null
+        }
+      + global_secondary_index {
+          + hash_key           = "product_id"
+          + name               = "product_id-timestamp-index"
+          + non_key_attributes = []
+          + projection_type    = "ALL"
+          + range_key          = "timestamp"
+          + read_capacity      = (known after apply)
+          + write_capacity     = (known after apply)
+        }
+      + global_secondary_index {
+          + hash_key           = "session_id"
+          + name               = "session_id-timestamp-index"
+          + non_key_attributes = []
+          + projection_type    = "ALL"
+          + range_key          = "timestamp"
+          + read_capacity      = (known after apply)
+          + write_capacity     = (known after apply)
+        }
+      + global_secondary_index {
+          + hash_key           = "user_id"
+          + name               = "user_id-timestamp-index"
+          + non_key_attributes = []
+          + projection_type    = "ALL"
+          + range_key          = "timestamp"
+          + read_capacity      = (known after apply)
+          + write_capacity     = (known after apply)
+        }
+
+      ~ point_in_time_recovery {
+          ~ enabled                 = false -> true
+            # (1 unchanged attribute hidden)
+        }
+
+        # (6 unchanged blocks hidden)
     }
 
   # module.dynamodb_user_email_campaigns.aws_dynamodb_table.this will be updated in-place
@@ -1299,6 +1577,24 @@ Terraform will perform the following actions:
         # (3 unchanged blocks hidden)
     }
 
+  # module.lambda_fact_check_api.aws_lambda_function.this will be updated in-place
+  ~ resource "aws_lambda_function" "this" {
+        id                             = "fact-check-api"
+      + publish                        = true
+      ~ qualified_arn                  = "arn:aws:lambda:us-east-1:371751795928:function:fact-check-api:$LATEST" -> (known after apply)
+      ~ qualified_invoke_arn           = "arn:aws:apigateway:us-east-1:lambda:path/2015-03-31/functions/arn:aws:lambda:us-east-1:371751795928:function:fact-check-api:$LATEST/invocations" -> (known after apply)
+        tags                           = {}
+      ~ tags_all                       = {
+          + "Environment" = "production"
+          + "ManagedBy"   = "Terraform"
+          + "Project"     = "ChristianConservativePlatform"
+        }
+      ~ version                        = "$LATEST" -> (known after apply)
+        # (23 unchanged attributes hidden)
+
+        # (3 unchanged blocks hidden)
+    }
+
   # module.lambda_feature_flags_api.aws_lambda_function.this will be updated in-place
   ~ resource "aws_lambda_function" "this" {
         id                             = "feature-flags-api"
@@ -1566,7 +1862,7 @@ Terraform will perform the following actions:
       ~ version                        = "$LATEST" -> (known after apply)
         # (23 unchanged attributes hidden)
 
-        # (3 unchanged blocks hidden)
+        # (4 unchanged blocks hidden)
     }
 
   # module.lambda_user_email_api.aws_lambda_function.this will be updated in-place
@@ -1784,9 +2080,10 @@ Terraform will perform the following actions:
         # (14 unchanged attributes hidden)
     }
 
-Plan: 11 to add, 63 to change, 2 to destroy.
+Plan: 14 to add, 71 to change, 2 to destroy.
 
 ─────────────────────────────────────────────────────────────────────────────
 
 Note: You didn't use the -out option to save this plan, so Terraform can't
 guarantee to take exactly these actions if you run "terraform apply" now.
+Releasing state lock. This may take a few moments...
