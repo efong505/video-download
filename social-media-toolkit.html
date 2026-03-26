@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Toolkit - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <style>
+        :root { --tk-primary: #06b6d4; --tk-dark: #0891b2; }
+        .toolkit-hero { background: linear-gradient(135deg, var(--tk-primary) 0%, #7c3aed 100%); color: white; padding: 100px 0 40px; margin-bottom: 30px; }
+        .toolkit-hero h1 { font-size: 2.4rem; font-weight: 700; }
+        .section-title { color: var(--tk-dark); font-weight: 700; margin: 2.5rem 0 1.2rem; padding-bottom: 8px; border-bottom: 3px solid var(--tk-primary); display: inline-block; }
+        .tool-card { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 20px; height: 100%; transition: transform 0.2s; }
+        .tool-card:hover { transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
+        .tool-card h5 { font-weight: 600; margin-bottom: 6px; }
+        .tool-card .badge-free { background: #dcfce7; color: #15803d; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; }
+        .tool-card .badge-paid { background: #fef3c7; color: #d97706; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; }
+        .tool-card p { color: #555; font-size: 0.9rem; }
+        .tool-card a.btn-visit { display: inline-block; padding: 6px 16px; background: var(--tk-primary); color: white; border-radius: 20px; text-decoration: none; font-size: 0.85rem; transition: background 0.2s; }
+        .tool-card a.btn-visit:hover { background: var(--tk-dark); }
+        .hashtag-list { display: flex; flex-wrap: wrap; gap: 8px; }
+        .hashtag { background: #f0f9ff; color: var(--tk-dark); padding: 6px 14px; border-radius: 20px; font-size: 0.9rem; font-weight: 500; cursor: pointer; border: 1px solid #bae6fd; transition: all 0.2s; }
+        .hashtag:hover { background: var(--tk-primary); color: white; }
+        .hashtag.copied { background: #16a34a; color: white; border-color: #16a34a; }
+        .tip-card { background: #f8fafc; border-left: 4px solid var(--tk-primary); padding: 16px 20px; border-radius: 0 8px 8px 0; margin-bottom: 12px; }
+        .tip-card h6 { font-weight: 600; margin-bottom: 4px; }
+        .tip-card p { margin: 0; color: #555; font-size: 0.9rem; }
+        .calendar-table th { background: var(--tk-primary); color: white; font-size: 0.85rem; }
+        .calendar-table td { font-size: 0.85rem; vertical-align: top; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="media-mountain"></div>
+    <script src="navbar.js"></script>
+    <script>fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});</script>
+
+    <div class="toolkit-hero">
+        <div class="container text-center">
+            <h1><i class="fas fa-share-alt me-2"></i>Social Media Toolkit</h1>
+            <p class="lead mb-0">Everything you need to spread truth and share your faith on social media</p>
+        </div>
+    </div>
+
+    <div class="container" style="max-width:1000px;">
+
+        <!-- Hashtags -->
+        <h2 class="section-title"><i class="fas fa-hashtag me-2"></i>Hashtags to Use</h2>
+        <p class="text-muted mb-3">Click any hashtag to copy it. Use 3-5 per post for best reach.</p>
+
+        <h6 class="mt-3 mb-2">Faith & Christianity</h6>
+        <div class="hashtag-list mb-3">
+            <span class="hashtag" onclick="copyTag(this)">#ChristianConservative</span>
+            <span class="hashtag" onclick="copyTag(this)">#FaithOverFear</span>
+            <span class="hashtag" onclick="copyTag(this)">#BibleTruth</span>
+            <span class="hashtag" onclick="copyTag(this)">#JesusIsLord</span>
+            <span class="hashtag" onclick="copyTag(this)">#ChristianValues</span>
+            <span class="hashtag" onclick="copyTag(this)">#StandOnTheWord</span>
+            <span class="hashtag" onclick="copyTag(this)">#GodFirst</span>
+            <span class="hashtag" onclick="copyTag(this)">#PrayForAmerica</span>
+            <span class="hashtag" onclick="copyTag(this)">#ChristianNation</span>
+        </div>
+
+        <h6 class="mb-2">7 Mountains</h6>
+        <div class="hashtag-list mb-3">
+            <span class="hashtag" onclick="copyTag(this)">#7Mountains</span>
+            <span class="hashtag" onclick="copyTag(this)">#ReclaimTheMountains</span>
+            <span class="hashtag" onclick="copyTag(this)">#CulturalInfluence</span>
+            <span class="hashtag" onclick="copyTag(this)">#KingdomCulture</span>
+            <span class="hashtag" onclick="copyTag(this)">#ChristiansInMedia</span>
+            <span class="hashtag" onclick="copyTag(this)">#BiblicalEducation</span>
+            <span class="hashtag" onclick="copyTag(this)">#FaithInGovernment</span>
+            <span class="hashtag" onclick="copyTag(this)">#ChristianBusiness</span>
+        </div>
+
+        <h6 class="mb-2">Political & Cultural</h6>
+        <div class="hashtag-list mb-4">
+            <span class="hashtag" onclick="copyTag(this)">#ParentalRights</span>
+            <span class="hashtag" onclick="copyTag(this)">#ProtectOurKids</span>
+            <span class="hashtag" onclick="copyTag(this)">#ReligiousLiberty</span>
+            <span class="hashtag" onclick="copyTag(this)">#ProLife</span>
+            <span class="hashtag" onclick="copyTag(this)">#FreedomOfSpeech</span>
+            <span class="hashtag" onclick="copyTag(this)">#TruthMatters</span>
+            <span class="hashtag" onclick="copyTag(this)">#ConservativeChristian</span>
+            <span class="hashtag" onclick="copyTag(this)">#AmericaFirst</span>
+        </div>
+
+        <!-- Content Tips -->
+        <h2 class="section-title"><i class="fas fa-lightbulb me-2"></i>Content Tips</h2>
+
+        <div class="tip-card">
+            <h6>📱 Post Consistently</h6>
+            <p>Aim for 3-5 posts per week. Consistency beats volume — a steady presence builds trust and reach.</p>
+        </div>
+        <div class="tip-card">
+            <h6>🎯 Lead with Value, Not Arguments</h6>
+            <p>Share scripture, encouragement, and solutions first. People engage more with hope than outrage.</p>
+        </div>
+        <div class="tip-card">
+            <h6>📸 Use Images & Video</h6>
+            <p>Posts with visuals get 2-3x more engagement. Use Canva or Adobe Express to create quote graphics and short videos.</p>
+        </div>
+        <div class="tip-card">
+            <h6>🔗 Share Platform Content</h6>
+            <p>Share articles and videos from Christian Conservatives Today. Every share extends the reach of truth.</p>
+        </div>
+        <div class="tip-card">
+            <h6>💬 Engage, Don't Just Broadcast</h6>
+            <p>Reply to comments, ask questions, and join conversations. The algorithm rewards engagement.</p>
+        </div>
+        <div class="tip-card">
+            <h6>⏰ Best Times to Post</h6>
+            <p>Facebook/Instagram: 9-11am & 7-9pm. X/Twitter: 8-10am & 12-1pm. Sunday mornings are great for faith content.</p>
+        </div>
+        <div class="tip-card">
+            <h6>🚫 Avoid Shadowban Triggers</h6>
+            <p>Don't use all caps, avoid link-only posts, and don't post the same content across platforms word-for-word. Rephrase for each platform.</p>
+        </div>
+
+        <!-- Weekly Content Calendar -->
+        <h2 class="section-title"><i class="fas fa-calendar-alt me-2"></i>Weekly Content Calendar</h2>
+        <p class="text-muted mb-3">A simple framework to keep your posting consistent and varied.</p>
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered calendar-table">
+                <thead>
+                    <tr><th>Day</th><th>Theme</th><th>Post Idea</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Monday</strong></td><td>Motivation Monday</td><td>Scripture graphic or encouraging quote to start the week</td></tr>
+                    <tr><td><strong>Tuesday</strong></td><td>Truth Tuesday</td><td>Share a fact-check, news article, or expose media bias</td></tr>
+                    <tr><td><strong>Wednesday</strong></td><td>Wisdom Wednesday</td><td>Biblical wisdom on a current cultural issue</td></tr>
+                    <tr><td><strong>Thursday</strong></td><td>Throwback / Testimony</td><td>Share a testimony, answered prayer, or historical Christian moment</td></tr>
+                    <tr><td><strong>Friday</strong></td><td>Faith & Family</td><td>Family values content, parenting tips, or marriage encouragement</td></tr>
+                    <tr><td><strong>Saturday</strong></td><td>Share Saturday</td><td>Share a CCT article, video, or another Christian creator's content</td></tr>
+                    <tr><td><strong>Sunday</strong></td><td>Scripture Sunday</td><td>Verse of the day, worship moment, or church highlight</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Design & Creation Tools -->
+        <h2 class="section-title"><i class="fas fa-paint-brush me-2"></i>Design & Creation Tools</h2>
+        <div class="row g-3 mb-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="tool-card">
+                    <h5>Canva</h5>
+                    <span class="badge-free">Free tier</span>
+                    <p class="mt-2">Create social media graphics, quote cards, stories, and video thumbnails with drag-and-drop templates.</p>
+                    <a href="https://www.canva.com" target="_blank" class="btn-visit">Visit Canva</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="tool-card">
+                    <h5>Adobe Express</h5>
+                    <span class="badge-free">Free tier</span>
+                    <p class="mt-2">Quick graphic design tool from Adobe. Great for social posts, flyers, and short videos.</p>
+                    <a href="https://www.adobe.com/express/" target="_blank" class="btn-visit">Visit Adobe Express</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="tool-card">
+                    <h5>CapCut</h5>
+                    <span class="badge-free">Free</span>
+                    <p class="mt-2">Free video editor for short-form content. Perfect for Reels, TikTok, and YouTube Shorts.</p>
+                    <a href="https://www.capcut.com" target="_blank" class="btn-visit">Visit CapCut</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="tool-card">
+                    <h5>YouVersion Bible App</h5>
+                    <span class="badge-free">Free</span>
+                    <p class="mt-2">Create shareable verse images directly from the app. Beautiful templates for scripture graphics.</p>
+                    <a href="https://www.bible.com" target="_blank" class="btn-visit">Visit YouVersion</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="tool-card">
+                    <h5>Buffer</h5>
+                    <span class="badge-free">Free tier</span>
+                    <p class="mt-2">Schedule posts across multiple platforms. Plan your content calendar and post at optimal times.</p>
+                    <a href="https://buffer.com" target="_blank" class="btn-visit">Visit Buffer</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="tool-card">
+                    <h5>Unsplash</h5>
+                    <span class="badge-free">Free</span>
+                    <p class="mt-2">Free high-quality stock photos. Search for church, nature, family, and faith-related images.</p>
+                    <a href="https://unsplash.com" target="_blank" class="btn-visit">Visit Unsplash</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alternative Platforms -->
+        <h2 class="section-title"><i class="fas fa-globe me-2"></i>Christian-Friendly Platforms</h2>
+        <p class="text-muted mb-3">Platforms where conservative Christian voices aren't censored.</p>
+        <div class="row g-3 mb-4">
+            <div class="col-md-6 col-lg-4">
+                <div class="tool-card">
+                    <h5>Truth Social</h5>
+                    <p class="mt-2">Free speech social platform. Share news, commentary, and faith content without censorship.</p>
+                    <a href="https://truthsocial.com" target="_blank" class="btn-visit">Visit Truth Social</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="tool-card">
+                    <h5>Rumble</h5>
+                    <p class="mt-2">Video platform alternative to YouTube. Upload sermons, commentary, and Christian content freely.</p>
+                    <a href="https://rumble.com" target="_blank" class="btn-visit">Visit Rumble</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="tool-card">
+                    <h5>Gab</h5>
+                    <p class="mt-2">Free speech social network built on Christian values. No censorship of conservative or faith content.</p>
+                    <a href="https://gab.com" target="_blank" class="btn-visit">Visit Gab</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="tool-card">
+                    <h5>Telegram</h5>
+                    <p class="mt-2">Encrypted messaging with channels and groups. Great for building a community around your ministry.</p>
+                    <a href="https://telegram.org" target="_blank" class="btn-visit">Visit Telegram</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="tool-card">
+                    <h5>Substack</h5>
+                    <span class="badge-free">Free tier</span>
+                    <p class="mt-2">Newsletter platform for long-form writing. Build an email audience you own — no algorithm gatekeeping.</p>
+                    <a href="https://substack.com" target="_blank" class="btn-visit">Visit Substack</a>
+                </div>
+            </div>
+            <div class="col-md-6 col-lg-4">
+                <div class="tool-card">
+                    <h5>FaithSocial</h5>
+                    <p class="mt-2">Social network built specifically for Christians. Share faith content in a supportive community.</p>
+                    <a href="https://faithsocial.com" target="_blank" class="btn-visit">Visit FaithSocial</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Share CCT Content -->
+        <h2 class="section-title"><i class="fas fa-share-square me-2"></i>Share Our Content</h2>
+        <p class="mb-3">Help spread truth by sharing content from Christian Conservatives Today on your social media.</p>
+        <div class="row g-3 mb-5">
+            <div class="col-md-4">
+                <div class="tool-card text-center">
+                    <i class="fas fa-newspaper fa-2x mb-2" style="color:var(--tk-primary);"></i>
+                    <h5>Share Articles</h5>
+                    <p>Every article has share buttons for Facebook, X, LinkedIn, Truth Social, and Instagram.</p>
+                    <a href="articles.html" class="btn-visit">Browse Articles</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="tool-card text-center">
+                    <i class="fas fa-video fa-2x mb-2" style="color:var(--tk-primary);"></i>
+                    <h5>Share Videos</h5>
+                    <p>Share Christian conservative video content with your followers and friends.</p>
+                    <a href="videos.html" class="btn-visit">Browse Videos</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="tool-card text-center">
+                    <i class="fas fa-praying-hands fa-2x mb-2" style="color:var(--tk-primary);"></i>
+                    <h5>Share Prayer Requests</h5>
+                    <p>Share prayer needs from the Prayer Wall to rally your community in prayer.</p>
+                    <a href="prayer-wall.html" class="btn-visit">Prayer Wall</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mb-5">
+            <a href="media-mountain.html" class="btn btn-outline-secondary btn-lg"><i class="fas fa-arrow-left me-2"></i>Back to Media Mountain</a>
+        </div>
+    </div>
+
+    <script>
+        function copyTag(el) {
+            navigator.clipboard.writeText(el.textContent).then(() => {
+                el.classList.add('copied');
+                const orig = el.textContent;
+                el.textContent = '✓ Copied!';
+                setTimeout(() => { el.textContent = orig; el.classList.remove('copied'); }, 1200);
+            });
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
