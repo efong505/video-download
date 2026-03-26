@@ -181,6 +181,7 @@
 
     <script src="mountain-content-loader.js"></script>
     <script src="mountains-api.js"></script>
+    <script src="hub-cards-loader.js"></script>
     <script>
         const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
         const GOV_CATEGORIES = ['Christian Politics', 'Election', 'Government', 'Constitutional', 'Patriot', 'Civic'];
@@ -209,6 +210,7 @@
             loadMountainContent('government');
             initMountainHub('government');
             loadGovResources();
+            loadHubCards('government');
         });
     </script>
 

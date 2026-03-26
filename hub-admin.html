@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hub Content Manager - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <script src="assets/js/token-validator.js"></script>
+    <style>
+        .admin-header { background: linear-gradient(135deg, #1e293b 0%, #334155 100%); color: white; padding: 100px 0 20px; margin-bottom: 24px; }
+        .mountain-tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+        .mountain-tabs button { padding: 8px 16px; border: 2px solid #dee2e6; background: white; border-radius: 20px; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+        .mountain-tabs button.active { background: #1e293b; color: white; border-color: #1e293b; }
+        .tab-pills { display: flex; gap: 6px; margin-bottom: 20px; }
+        .tab-pills button { padding: 6px 14px; border: 1px solid #dee2e6; background: white; border-radius: 15px; cursor: pointer; font-size: 0.85rem; }
+        .tab-pills button.active { background: #3b82f6; color: white; border-color: #3b82f6; }
+        .card-item { background: white; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin-bottom: 12px; position: relative; }
+        .card-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .card-item .card-actions { position: absolute; top: 12px; right: 12px; display: flex; gap: 6px; }
+        .card-item .card-actions button { border: none; background: none; cursor: pointer; font-size: 1.1rem; opacity: 0.5; }
+        .card-item .card-actions button:hover { opacity: 1; }
+        .card-item h5 { margin-bottom: 4px; }
+        .card-item p { color: #666; font-size: 0.9rem; margin-bottom: 8px; }
+        .card-item .btn-list { display: flex; flex-wrap: wrap; gap: 6px; }
+        .card-item .btn-tag { background: #e0f2fe; color: #0369a1; padding: 2px 10px; border-radius: 12px; font-size: 0.8rem; }
+        .card-item .btn-tag.external { background: #fef3c7; color: #92400e; }
+        .edit-form { background: #f8fafc; border: 2px solid #3b82f6; border-radius: 10px; padding: 20px; margin-bottom: 16px; }
+        .btn-row { display: flex; gap: 8px; align-items: center; margin-bottom: 6px; }
+        .btn-row input { flex: 1; }
+        .empty-state { text-align: center; padding: 40px; color: #94a3b8; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="hub-admin"></div>
+    <script src="navbar.js"></script>
+    <script>fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});</script>
+
+    <div class="admin-header">
+        <div class="container">
+            <h1><i class="fas fa-mountain"></i> Hub Content Manager</h1>
+            <p>Add, edit, and remove action cards on all 7 Mountain hub pages</p>
+        </div>
+    </div>
+
+    <div class="container" style="max-width:900px;">
+        <div class="mountain-tabs" id="mountain-tabs">
+            <button class="active" data-m="family">👨‍👩‍👧‍👦 Family</button>
+            <button data-m="religion">✝️ Religion</button>
+            <button data-m="education">🎓 Education</button>
+            <button data-m="media">📡 Media</button>
+            <button data-m="art">🎨 Art</button>
+            <button data-m="economics">💼 Economics</button>
+            <button data-m="government">🏛️ Government</button>
+        </div>
+
+        <div class="tab-pills" id="tab-pills">
+            <button class="active" data-t="promote">Promote</button>
+            <button data-t="expose">Expose & Fight</button>
+            <button data-t="involved">Get Involved</button>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 id="section-title">Family — Promote</h4>
+            <button class="btn btn-primary btn-sm" onclick="showAddForm()"><i class="fas fa-plus me-1"></i>Add Card</button>
+        </div>
+
+        <div id="edit-area"></div>
+        <div id="cards-list"><div class="empty-state">Loading...</div></div>
+    </div>
+
+    <script>
+        const API = 'https://lcmogvl3v2.execute-api.us-east-1.amazonaws.com/prod/mountains';
+        let authToken = localStorage.getItem('auth_token');
+        let allCards = [];
+        let currentMountain = 'family';
+        let currentTab = 'promote';
+
+        const mountainNames = {family:'Family',religion:'Religion',education:'Education',media:'Media',art:'Art & Entertainment',economics:'Economics & Business',government:'Government'};
+        const tabNames = {promote:'Promote',expose:'Expose & Fight',involved:'Get Involved'};
+
+        // Auth check
+        window.addEventListener('load', () => {
+            const userData = localStorage.getItem('user_data');
+            if (!authToken || !userData) { window.location.href = 'login.html'; return; }
+            const user = JSON.parse(userData);
+            if (user.role !== 'admin' && user.role !== 'super_user') {
+                document.querySelector('.container').innerHTML = '<div class="alert alert-danger mt-4">Admin access required.</div>';
+                return;
+            }
+            loadCards();
+        });
+
+        // Mountain tab clicks
+        document.getElementById('mountain-tabs').addEventListener('click', e => {
+            if (!e.target.dataset.m) return;
+            document.querySelectorAll('#mountain-tabs button').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentMountain = e.target.dataset.m;
+            renderCards();
+        });
+
+        // Tab pill clicks
+        document.getElementById('tab-pills').addEventListener('click', e => {
+            if (!e.target.dataset.t) return;
+            document.querySelectorAll('#tab-pills button').forEach(b => b.classList.remove('active'));
+            e.target.classList.add('active');
+            currentTab = e.target.dataset.t;
+            renderCards();
+        });
+
+        async function loadCards() {
+            try {
+                const res = await fetch(`${API}?action=list_cards`);
+                const data = await res.json();
+                allCards = data.cards || [];
+                renderCards();
+            } catch (e) {
+                document.getElementById('cards-list').innerHTML = '<div class="alert alert-danger">Failed to load cards</div>';
+            }
+        }
+
+        function renderCards() {
+            document.getElementById('section-title').textContent = `${mountainNames[currentMountain]} — ${tabNames[currentTab]}`;
+            document.getElementById('edit-area').innerHTML = '';
+            const filtered = allCards.filter(c => c.mountain === currentMountain && c.tab === currentTab)
+                .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+
+            if (!filtered.length) {
+                document.getElementById('cards-list').innerHTML = '<div class="empty-state"><i class="fas fa-inbox fa-2x mb-2"></i><p>No cards yet. Click "Add Card" to create one.</p></div>';
+                return;
+            }
+
+            document.getElementById('cards-list').innerHTML = filtered.map((c, i) => `
+                <div class="card-item" data-id="${c.card_id}">
+                    <div class="card-actions">
+                        ${i > 0 ? `<button onclick="moveCard('${c.card_id}', -1)" title="Move up">⬆️</button>` : ''}
+                        ${i < filtered.length - 1 ? `<button onclick="moveCard('${c.card_id}', 1)" title="Move down">⬇️</button>` : ''}
+                        <button onclick="editCard('${c.card_id}')" title="Edit">✏️</button>
+                        <button onclick="deleteCard('${c.card_id}')" title="Delete">🗑️</button>
+                    </div>
+                    <h5>${esc(c.icon)} ${esc(c.title)}</h5>
+                    <p>${esc(c.description)}</p>
+                    <div class="btn-list">
+                        ${(c.buttons || []).map(b => `<span class="btn-tag ${b.external ? 'external' : ''}">${esc(b.label)} → ${esc(b.url)}${b.external ? ' ↗' : ''}</span>`).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showAddForm(prefill) {
+            const c = prefill || { icon: '', title: '', description: '', buttons: [{ label: '', url: '', external: false }], sort_order: 99 };
+            const isEdit = !!prefill;
+            document.getElementById('edit-area').innerHTML = `
+                <div class="edit-form">
+                    <h5>${isEdit ? 'Edit' : 'Add'} Card</h5>
+                    <div class="row g-2 mb-2">
+                        <div class="col-2"><input type="text" id="f-icon" class="form-control" placeholder="Icon emoji" value="${esc(c.icon)}"></div>
+                        <div class="col-8"><input type="text" id="f-title" class="form-control" placeholder="Card title" value="${esc(c.title)}"></div>
+                        <div class="col-2"><input type="number" id="f-sort" class="form-control" placeholder="Order" value="${c.sort_order}"></div>
+                    </div>
+                    <div class="mb-2"><textarea id="f-desc" class="form-control" rows="2" placeholder="Description">${esc(c.description)}</textarea></div>
+                    <label class="form-label fw-bold">Buttons</label>
+                    <div id="f-buttons">
+                        ${(c.buttons || []).map((b, i) => buttonRow(b, i)).join('')}
+                    </div>
+                    <button class="btn btn-outline-secondary btn-sm mt-1 mb-3" onclick="addButtonRow()">+ Add Button</button>
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" onclick="saveCard('${isEdit ? c.card_id : ''}')">${isEdit ? 'Update' : 'Create'} Card</button>
+                        <button class="btn btn-outline-secondary" onclick="document.getElementById('edit-area').innerHTML=''">Cancel</button>
+                    </div>
+                </div>`;
+            document.getElementById('edit-area').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function buttonRow(b, i) {
+            return `<div class="btn-row" data-bi="${i}">
+                <input type="text" class="form-control form-control-sm" placeholder="Label" value="${esc(b.label || '')}">
+                <input type="text" class="form-control form-control-sm" placeholder="URL" value="${esc(b.url || '')}">
+                <div class="form-check"><input type="checkbox" class="form-check-input" ${b.external ? 'checked' : ''}><label class="form-check-label" style="font-size:0.8rem;">External</label></div>
+                <button class="btn btn-outline-danger btn-sm" onclick="this.parentElement.remove()">×</button>
+            </div>`;
+        }
+
+        function addButtonRow() {
+            const container = document.getElementById('f-buttons');
+            const i = container.children.length;
+            container.insertAdjacentHTML('beforeend', buttonRow({ label: '', url: '', external: false }, i));
+        }
+
+        function getFormButtons() {
+            return Array.from(document.querySelectorAll('#f-buttons .btn-row')).map(row => {
+                const inputs = row.querySelectorAll('input');
+                return { label: inputs[0].value.trim(), url: inputs[1].value.trim(), external: inputs[2].checked };
+            }).filter(b => b.label && b.url);
+        }
+
+        async function saveCard(existingId) {
+            const payload = {
+                mountain: currentMountain,
+                tab: currentTab,
+                icon: document.getElementById('f-icon').value.trim(),
+                title: document.getElementById('f-title').value.trim(),
+                description: document.getElementById('f-desc').value.trim(),
+                buttons: getFormButtons(),
+                sort_order: parseInt(document.getElementById('f-sort').value) || 99
+            };
+            if (existingId) payload.card_id = existingId;
+            if (!payload.title) { alert('Title is required'); return; }
+
+            try {
+                const res = await fetch(`${API}?action=save_card`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    document.getElementById('edit-area').innerHTML = '';
+                    await loadCards();
+                } else {
+                    alert(data.error || 'Save failed');
+                }
+            } catch (e) { alert('Error saving card'); }
+        }
+
+        function editCard(cardId) {
+            const c = allCards.find(x => x.card_id === cardId);
+            if (c) showAddForm(c);
+        }
+
+        async function deleteCard(cardId) {
+            const c = allCards.find(x => x.card_id === cardId);
+            if (!confirm(`Delete "${c?.title}"?`)) return;
+            try {
+                await fetch(`${API}?action=delete_card`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({ mountain: currentMountain, card_id: cardId })
+                });
+                await loadCards();
+            } catch (e) { alert('Error deleting card'); }
+        }
+
+        async function moveCard(cardId, direction) {
+            const filtered = allCards.filter(c => c.mountain === currentMountain && c.tab === currentTab)
+                .sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+            const idx = filtered.findIndex(c => c.card_id === cardId);
+            const swapIdx = idx + direction;
+            if (swapIdx < 0 || swapIdx >= filtered.length) return;
+
+            // Swap sort orders
+            const a = filtered[idx], b = filtered[swapIdx];
+            const tmpSort = a.sort_order;
+            a.sort_order = b.sort_order;
+            b.sort_order = tmpSort;
+
+            // Save both
+            await Promise.all([
+                fetch(`${API}?action=save_card`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` }, body: JSON.stringify(a) }),
+                fetch(`${API}?action=save_card`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` }, body: JSON.stringify(b) })
+            ]);
+            await loadCards();
+        }
+
+        function esc(t) {
+            if (!t) return '';
+            const d = document.createElement('div');
+            d.textContent = t;
+            return d.innerHTML;
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

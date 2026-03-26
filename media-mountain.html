@@ -178,6 +178,7 @@
 
     <script src="mountain-content-loader.js"></script>
     <script src="mountains-api.js"></script>
+    <script src="hub-cards-loader.js"></script>
     <script>
         const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
         const MEDIA_CATEGORIES = ['Media', 'News', 'Journalism', 'Podcast', 'Social Media', 'News & Media'];
@@ -206,6 +207,7 @@
             loadMountainContent('media');
             initMountainHub('media');
             loadMediaResources();
+            loadHubCards('media');
         });
     </script>
 

@@ -15,6 +15,7 @@ pledges_table = dynamodb.Table('mountain-pledges')
 badges_table = dynamodb.Table('mountain-badges')
 contributions_table = dynamodb.Table('mountain-contributions')
 users_table = dynamodb.Table('users')
+hub_cards_table = dynamodb.Table('hub-cards')
 
 VALID_MOUNTAINS = ['family', 'religion', 'education', 'media', 'art', 'economics', 'government']
 VALID_BADGE_TYPES = ['pledge', 'contributor', 'warrior', 'champion']
@@ -43,7 +44,6 @@ def extract_user_id(event):
     auth_header = event.get('headers', {}).get('Authorization') or event.get('headers', {}).get('authorization')
     if not auth_header:
         return None
-    
     import jwt
     token = auth_header.replace('Bearer ', '')
     try:
@@ -51,6 +51,69 @@ def extract_user_id(event):
         return payload.get('user_id')
     except:
         return None
+
+def extract_user_role(event):
+    """Extract role from JWT token"""
+    auth_header = event.get('headers', {}).get('Authorization') or event.get('headers', {}).get('authorization')
+    if not auth_header:
+        return 'user'
+    import jwt
+    token = auth_header.replace('Bearer ', '')
+    try:
+        payload = jwt.decode(token, options={"verify_signature": False})
+        return payload.get('role', 'user')
+    except:
+        return 'user'
+
+def list_hub_cards(mountain):
+    """List all cards for a mountain — public, no auth required"""
+    if mountain and not validate_mountain(mountain):
+        return cors_response(400, {'error': 'Invalid mountain'})
+    try:
+        if mountain:
+            resp = hub_cards_table.query(
+                KeyConditionExpression='mountain = :m',
+                ExpressionAttributeValues={':m': mountain.lower()}
+            )
+        else:
+            resp = hub_cards_table.scan()
+        cards = sorted(resp.get('Items', []), key=lambda c: (c.get('tab',''), int(c.get('sort_order', 99))))
+        return cors_response(200, {'cards': cards})
+    except Exception as e:
+        return cors_response(500, {'error': str(e)})
+
+def save_hub_card(user_id, data, role):
+    """Create or update a hub card — admin only"""
+    if role not in ('admin', 'super_user'):
+        return cors_response(403, {'error': 'Admin only'})
+    mountain = data.get('mountain', '').lower()
+    if not validate_mountain(mountain):
+        return cors_response(400, {'error': 'Invalid mountain'})
+    card_id = data.get('card_id') or str(uuid.uuid4())
+    item = {
+        'mountain': mountain,
+        'card_id': card_id,
+        'tab': data.get('tab', 'promote'),
+        'icon': data.get('icon', ''),
+        'title': data.get('title', ''),
+        'description': data.get('description', ''),
+        'buttons': data.get('buttons', []),  # [{label, url, external}]
+        'sort_order': int(data.get('sort_order', 99)),
+        'updated_at': datetime.now().isoformat()
+    }
+    hub_cards_table.put_item(Item=item)
+    return cors_response(200, {'message': 'Card saved', 'card': item})
+
+def delete_hub_card(user_id, data, role):
+    """Delete a hub card — admin only"""
+    if role not in ('admin', 'super_user'):
+        return cors_response(403, {'error': 'Admin only'})
+    mountain = data.get('mountain', '').lower()
+    card_id = data.get('card_id')
+    if not mountain or not card_id:
+        return cors_response(400, {'error': 'mountain and card_id required'})
+    hub_cards_table.delete_item(Key={'mountain': mountain, 'card_id': card_id})
+    return cors_response(200, {'message': 'Card deleted'})
 
 def validate_mountain(mountain):
     """Validate mountain name"""
@@ -287,18 +350,26 @@ def lambda_handler(event, context):
     """Main Lambda handler"""
     if event.get('httpMethod') == 'OPTIONS':
         return cors_response(200, {})
-    
-    user_id = extract_user_id(event)
-    if not user_id:
-        return cors_response(401, {'error': 'Unauthorized - valid token required'})
-    
+
     params = event.get('queryStringParameters') or {}
     action = params.get('action')
-    
+
     try:
         body = json.loads(event.get('body', '{}'))
     except:
         body = {}
+
+    # Public actions — no auth required
+    if action == 'list_cards':
+        mountain = params.get('mountain', '')
+        return list_hub_cards(mountain)
+    if action == 'get_leaderboard':
+        mountain = params.get('mountain', '')
+        return get_leaderboard(mountain)
+
+    user_id = extract_user_id(event)
+    if not user_id:
+        return cors_response(401, {'error': 'Unauthorized - valid token required'})
     
     if action == 'create_pledge':
         return create_pledge(user_id, body)
@@ -313,5 +384,13 @@ def lambda_handler(event, context):
     elif action == 'get_leaderboard':
         mountain = params.get('mountain', '')
         return get_leaderboard(mountain)
+    # Hub card management (admin only)
+    elif action == 'list_cards':
+        mountain = params.get('mountain', '')
+        return list_hub_cards(mountain)
+    elif action == 'save_card':
+        return save_hub_card(user_id, body, extract_user_role(event))
+    elif action == 'delete_card':
+        return delete_hub_card(user_id, body, extract_user_role(event))
     else:
         return cors_response(400, {'error': f'Invalid action: {action}'})
