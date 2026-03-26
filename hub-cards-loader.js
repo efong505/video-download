@@ -28,6 +28,18 @@ async function loadHubCards(mountain) {
             </div>`;
             }).join('\n');
         });
+
+        // Resources tab — render as link list
+        const resCards = cards.filter(c => c.tab === 'resources').sort((a,b) => (a.sort_order||0) - (b.sort_order||0));
+        const resContainer = document.getElementById('dynamic-quick-links');
+        if (resCards.length && resContainer) {
+            resContainer.innerHTML = '<ul class="resource-list">' + resCards.map(c => {
+                const btn = (c.buttons || [])[0];
+                if (!btn) return '';
+                const target = btn.external ? ' target="_blank"' : '';
+                return `<li><a href="${escapeAttr(btn.url)}"${target}><strong>${escapeHtml(c.title)}</strong></a> - ${escapeHtml(c.description)}</li>`;
+            }).join('') + '</ul>';
+        }
     } catch (e) {
         console.warn('Hub cards API unavailable, using hardcoded fallback:', e);
     }
