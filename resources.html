@@ -193,6 +193,40 @@
 
             */
         }
+        .mountain-filter-bar {
+            background: white;
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        .mountain-pill {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border: 1px solid #dee2e6;
+            background: #f8f9fa;
+            color: #495057;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        .mountain-pill:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-1px);
+        }
+        .mountain-pill.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
         .resource-title {
             color: #2c5aa0;
             font-weight: 600;
@@ -295,6 +329,19 @@
     </div>
 
     <div class="container">
+        <!-- 7 Mountains Category Filter -->
+        <div class="mountain-filter-bar" id="mountain-filter">
+            <span style="font-weight:600; margin-right:8px;">⛰️ Filter:</span>
+            <span class="mountain-pill active" data-cat="">All</span>
+            <span class="mountain-pill" data-cat="family">👨‍👩‍👧‍👦 Family</span>
+            <span class="mountain-pill" data-cat="religion">✝️ Religion</span>
+            <span class="mountain-pill" data-cat="education">🎓 Education</span>
+            <span class="mountain-pill" data-cat="media">📺 Media</span>
+            <span class="mountain-pill" data-cat="art">🎭 Art & Entertainment</span>
+            <span class="mountain-pill" data-cat="economics">💰 Economics & Business</span>
+            <span class="mountain-pill" data-cat="government">🏛️ Government</span>
+        </div>
+
         <div id="loading" class="text-center py-5">
             <div class="spinner-border" role="status"></div>
             <p class="mt-3">Loading resources...</p>
@@ -332,20 +379,29 @@
             
             await loadResources();
 
-            // Auto-scroll to category from URL param
+            // Setup mountain filter pills
+            setupMountainFilter();
+
+            // Auto-filter from URL param
             const urlParams = new URLSearchParams(window.location.search);
             const filterCat = urlParams.get('category');
             if (filterCat) {
-                setTimeout(() => {
-                    const headers = document.querySelectorAll('.category-header');
-                    for (const h of headers) {
-                        if (h.textContent.toLowerCase().includes(filterCat.toLowerCase())) {
-                            h.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                            h.style.outline = '3px solid #d4af37';
-                            break;
+                const pill = document.querySelector(`.mountain-pill[data-cat="${filterCat.toLowerCase()}"]`);
+                if (pill) {
+                    pill.click();
+                } else {
+                    // Fallback: scroll to matching category header
+                    setTimeout(() => {
+                        const headers = document.querySelectorAll('.category-header');
+                        for (const h of headers) {
+                            if (h.textContent.toLowerCase().includes(filterCat.toLowerCase())) {
+                                h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                h.style.outline = '3px solid #d4af37';
+                                break;
+                            }
                         }
-                    }
-                }, 500);
+                    }, 500);
+                }
             }
         });
         
@@ -378,6 +434,7 @@
                 console.log('Loaded resources:', resources);
                 
                 if (resources && resources.length > 0) {
+                    allResources = resources;
                     displayResources(resources);
                     document.getElementById('loading').style.display = 'none';
                     document.getElementById('resources-container').style.display = 'block';
@@ -415,10 +472,10 @@
                 'health': '🏥',
                 'technology': '💻',
                 'science': '🔬',
-                'religion': '⛰️',
-                'art': '⛰️',
-                'economics': '⛰️',
-                'government': '⛰️'
+                'religion': '✝️',
+                'art': '🎭',
+                'economics': '💰',
+                'government': '🏛️'
             };
             
             for (const [key, emoji] of Object.entries(emojiMap)) {
@@ -533,6 +590,34 @@
                 scrollWrapper.appendChild(row);
                 scrollWrapper.appendChild(rightBtn);
                 container.appendChild(scrollWrapper);
+            });
+        }
+
+        let allResources = [];
+
+        function setupMountainFilter() {
+            document.querySelectorAll('.mountain-pill').forEach(pill => {
+                pill.addEventListener('click', function() {
+                    document.querySelectorAll('.mountain-pill').forEach(p => p.classList.remove('active'));
+                    this.classList.add('active');
+                    const cat = this.dataset.cat;
+                    if (!cat) {
+                        // Show all
+                        displayResources(allResources);
+                    } else {
+                        // Filter: show categories whose name matches the mountain
+                        const filtered = allResources.filter(r => {
+                            const cats = Array.isArray(r.category) ? r.category : [r.category];
+                            return cats.some(c => c.toLowerCase().includes(cat.toLowerCase()));
+                        });
+                        if (filtered.length > 0) {
+                            displayResources(filtered);
+                        } else {
+                            document.getElementById('resources-container').innerHTML =
+                                '<div class="text-center py-5"><h4>No resources in this category yet</h4><p class="text-muted">Resources will be added soon!</p></div>';
+                        }
+                    }
+                });
             });
         }
 

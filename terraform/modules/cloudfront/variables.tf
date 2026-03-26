@@ -1,3 +1,8 @@
+variable "aws_region" {
+  type = string
+  description = "AWS region for S3 origin"
+}
+
 variable "bucket_name" {
   description = "S3 bucket name for origin"
   type        = string

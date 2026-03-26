@@ -100,6 +100,36 @@
                                 <input class="form-check-input category-checkbox" type="checkbox" value="Apologetics" id="cat-apologetics">
                                 <label class="form-check-label" for="cat-apologetics">Apologetics</label>
                             </div>
+                            <hr class="my-2">
+                            <small class="text-muted fw-bold">⛰️ 7 Mountains</small>
+                            <div class="form-check">
+                                <input class="form-check-input category-checkbox" type="checkbox" value="Family" id="cat-family">
+                                <label class="form-check-label" for="cat-family">👨‍👩‍👧‍👦 Family</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input category-checkbox" type="checkbox" value="Religion" id="cat-religion">
+                                <label class="form-check-label" for="cat-religion">✝️ Religion</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input category-checkbox" type="checkbox" value="Education" id="cat-education">
+                                <label class="form-check-label" for="cat-education">🎓 Education</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input category-checkbox" type="checkbox" value="Media" id="cat-media">
+                                <label class="form-check-label" for="cat-media">📺 Media</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input category-checkbox" type="checkbox" value="Art & Entertainment" id="cat-art">
+                                <label class="form-check-label" for="cat-art">🎭 Art & Entertainment</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input category-checkbox" type="checkbox" value="Economics & Business" id="cat-economics">
+                                <label class="form-check-label" for="cat-economics">💰 Economics & Business</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input category-checkbox" type="checkbox" value="Government" id="cat-government">
+                                <label class="form-check-label" for="cat-government">🏛️ Government</label>
+                            </div>
                         </div>
                         <div class="form-text">Select one or more categories for this resource</div>
                     </div>
@@ -380,6 +410,14 @@
                             <div class="form-check"><input class="form-check-input edit-cat-${resourceId}" type="checkbox" value="News & Media" ${categories.includes('News & Media') ? 'checked' : ''}><label class="form-check-label">News & Media</label></div>
                             <div class="form-check"><input class="form-check-input edit-cat-${resourceId}" type="checkbox" value="Ministry Tools" ${categories.includes('Ministry Tools') ? 'checked' : ''}><label class="form-check-label">Ministry Tools</label></div>
                             <div class="form-check"><input class="form-check-input edit-cat-${resourceId}" type="checkbox" value="Apologetics" ${categories.includes('Apologetics') ? 'checked' : ''}><label class="form-check-label">Apologetics</label></div>
+                            <hr style="margin:4px 0"><small class="text-muted fw-bold">⛰️ 7 Mountains</small>
+                            <div class="form-check"><input class="form-check-input edit-cat-${resourceId}" type="checkbox" value="Family" ${categories.includes('Family') ? 'checked' : ''}><label class="form-check-label">👨‍👩‍👧‍👦 Family</label></div>
+                            <div class="form-check"><input class="form-check-input edit-cat-${resourceId}" type="checkbox" value="Religion" ${categories.includes('Religion') ? 'checked' : ''}><label class="form-check-label">✝️ Religion</label></div>
+                            <div class="form-check"><input class="form-check-input edit-cat-${resourceId}" type="checkbox" value="Education" ${categories.includes('Education') ? 'checked' : ''}><label class="form-check-label">🎓 Education</label></div>
+                            <div class="form-check"><input class="form-check-input edit-cat-${resourceId}" type="checkbox" value="Media" ${categories.includes('Media') ? 'checked' : ''}><label class="form-check-label">📺 Media</label></div>
+                            <div class="form-check"><input class="form-check-input edit-cat-${resourceId}" type="checkbox" value="Art & Entertainment" ${categories.includes('Art & Entertainment') ? 'checked' : ''}><label class="form-check-label">🎭 Art & Entertainment</label></div>
+                            <div class="form-check"><input class="form-check-input edit-cat-${resourceId}" type="checkbox" value="Economics & Business" ${categories.includes('Economics & Business') ? 'checked' : ''}><label class="form-check-label">💰 Economics & Business</label></div>
+                            <div class="form-check"><input class="form-check-input edit-cat-${resourceId}" type="checkbox" value="Government" ${categories.includes('Government') ? 'checked' : ''}><label class="form-check-label">🏛️ Government</label></div>
                         </div>
                     </div>
                     <button class="btn btn-success btn-sm" onclick="saveResource('${resourceId}')">Save</button>

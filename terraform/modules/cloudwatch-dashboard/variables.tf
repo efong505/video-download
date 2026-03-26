@@ -4,9 +4,10 @@ variable "dashboard_name" {
 }
 
 variable "region" {
-  description = "AWS region"
+  description = "AWS region for dashboard metrics"
   type        = string
-  default     = "us-east-1"
+  # No Default must be passed explicitly
+  # default     = "us-east-1"
 }
 
 variable "api_gateway_id" {
@@ -28,4 +29,22 @@ variable "alarm_names" {
   description = "List of CloudWatch alarm names to display"
   type        = list(string)
   default     = []
+}
+
+variable "sqs_queue_names" {
+  description = "List of SQS queue names to monitor"
+  type        = list(string)
+  default     = []
+}
+
+variable "dynamodb_table_names" {
+  description = "List of DynamoDB table names to monitor"
+  type        = list(string)
+  default     = []
+}
+
+variable "cloudfront_distribution_id" {
+  description = "CloudFront distribution ID to monitor"
+  type        = string
+  default     = ""
 }

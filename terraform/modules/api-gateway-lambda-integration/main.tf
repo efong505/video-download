@@ -48,7 +48,8 @@ variable "enable_cors" {
 variable "region" {
   type        = string
   description = "AWS region for Lambda integration"
-  default     = "us-east-1"
+  # No default - must be passed explicitly
+  #default     = "us-east-1"
 }
 
 # Create resource

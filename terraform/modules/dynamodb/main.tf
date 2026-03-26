@@ -86,6 +86,8 @@ resource "aws_dynamodb_table" "this" {
       hash_key        = global_secondary_index.value.hash_key
       range_key       = global_secondary_index.value.range_key
       projection_type = global_secondary_index.value.projection_type
+      read_capacity   = var.billing_mode == "PROVISIONED" ? var.read_capacity : null
+      write_capacity  = var.billing_mode == "PROVISIONED" ? var.write_capacity : null
     }
   }
 

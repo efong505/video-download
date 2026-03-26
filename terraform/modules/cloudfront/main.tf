@@ -8,14 +8,14 @@ resource "aws_cloudfront_distribution" "main" {
 
   origin {
     domain_name              = var.bucket_regional_domain_name
-    origin_id                = "${var.bucket_name}.s3.us-east-1.amazonaws.com-mgidi2pjodn"
+    origin_id                = "${var.bucket_name}.s3.${var.aws_region}.amazonaws.com-mgidi2pjodn"
     origin_access_control_id = var.origin_access_control_id
   }
 
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
-    target_origin_id       = "${var.bucket_name}.s3.us-east-1.amazonaws.com-mgidi2pjodn"
+    target_origin_id       = "${var.bucket_name}.s3.${var.aws_region}.amazonaws.com-mgidi2pjodn"
     viewer_protocol_policy = "redirect-to-https"
     compress               = true
 
