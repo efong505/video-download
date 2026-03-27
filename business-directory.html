@@ -23,6 +23,8 @@
         .biz-card .biz-desc { color: #555; font-size: 0.9rem; margin: 8px 0; }
         .biz-card .biz-links a { color: #2c5aa0; text-decoration: none; margin-right: 12px; font-size: 0.9rem; }
         .biz-card .biz-links a:hover { text-decoration: underline; }
+        .biz-card .admin-actions { margin-top: 12px; padding-top: 12px; border-top: 1px solid #dee2e6; }
+        .biz-card .admin-actions button { font-size: 0.8rem; padding: 4px 10px; margin-right: 6px; }
         .submit-form { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 24px; }
         .empty-state { text-align: center; padding: 60px 20px; color: #6c757d; }
     </style>
@@ -94,7 +96,12 @@
     <script>
         const BIZ_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/businesses';
         let authToken = localStorage.getItem('auth_token');
+        let userData = null;
         let currentCategory = 'all';
+        
+        try {
+            userData = JSON.parse(localStorage.getItem('user_data') || 'null');
+        } catch(e) {}
 
         window.addEventListener('load', async () => {
             // Load categories
@@ -159,9 +166,14 @@
                     return;
                 }
 
-                container.innerHTML = '<div class="row g-3">' + data.businesses.map(b => `
+                container.innerHTML = '<div class="row g-3">' + data.businesses.map(b => {
+                    const isAdmin = userData && (userData.role === 'admin' || userData.role === 'super_user');
+                    const isOwner = userData && b.submitted_by === userData.user_id;
+                    const canEdit = isAdmin || isOwner;
+                    
+                    return `
                     <div class="col-md-6 col-lg-4">
-                        <div class="biz-card">
+                        <div class="biz-card" data-biz-id="${b.business_id}">
                             <h5>${escapeHtml(b.name)}</h5>
                             <span class="biz-category">${escapeHtml(b.category)}</span>
                             ${b.city || b.state ? `<div class="biz-location"><i class="fas fa-map-marker-alt"></i> ${escapeHtml([b.city, b.state].filter(Boolean).join(', '))}</div>` : ''}
@@ -171,9 +183,14 @@
                                 ${b.phone ? `<a href="tel:${b.phone}"><i class="fas fa-phone"></i> ${escapeHtml(b.phone)}</a>` : ''}
                                 ${b.email ? `<a href="mailto:${b.email}"><i class="fas fa-envelope"></i> Email</a>` : ''}
                             </div>
+                            ${canEdit ? `
+                            <div class="admin-actions">
+                                <button class="btn btn-sm btn-outline-primary" onclick="editBusiness('${b.business_id}')"><i class="fas fa-edit"></i> Edit</button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteBusiness('${b.business_id}')"><i class="fas fa-trash"></i> Delete</button>
+                            </div>` : ''}
                         </div>
                     </div>
-                `).join('') + '</div>';
+                `}).join('') + '</div>';
             } catch(e) {
                 container.innerHTML = '<div class="empty-state"><p>Could not load businesses.</p></div>';
             }
@@ -192,25 +209,33 @@
             const category = document.getElementById('biz-category').value;
             if (!name || !category) { alert('Name and category are required'); return; }
 
+            const editId = document.getElementById('submit-section').dataset.editId;
+            const action = editId ? 'update' : 'submit';
+            const payload = {
+                name, category,
+                website: document.getElementById('biz-website').value.trim(),
+                city: document.getElementById('biz-city').value.trim(),
+                state: document.getElementById('biz-state').value.trim(),
+                phone: document.getElementById('biz-phone').value.trim(),
+                email: document.getElementById('biz-email').value.trim(),
+                description: document.getElementById('biz-desc').value.trim()
+            };
+            if (editId) payload.business_id = editId;
+
             try {
-                const res = await fetch(`${BIZ_API}?action=submit`, {
+                const res = await fetch(`${BIZ_API}?action=${action}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
-                    body: JSON.stringify({
-                        name, category,
-                        website: document.getElementById('biz-website').value.trim(),
-                        city: document.getElementById('biz-city').value.trim(),
-                        state: document.getElementById('biz-state').value.trim(),
-                        phone: document.getElementById('biz-phone').value.trim(),
-                        email: document.getElementById('biz-email').value.trim(),
-                        description: document.getElementById('biz-desc').value.trim()
-                    })
+                    body: JSON.stringify(payload)
                 });
                 if (res.ok) {
-                    alert('Business submitted!');
+                    alert(editId ? 'Business updated!' : 'Business submitted!');
                     ['biz-name','biz-website','biz-city','biz-state','biz-phone','biz-email','biz-desc'].forEach(id => document.getElementById(id).value = '');
                     document.getElementById('biz-category').value = '';
+                    delete document.getElementById('submit-section').dataset.editId;
                     document.getElementById('submit-section').style.display = 'none';
+                    document.querySelector('#submit-form-container h5').textContent = 'Submit a Christian Business';
+                    document.querySelector('#submit-form-container button').textContent = 'Submit Business';
                     loadBusinesses();
                 } else {
                     const data = await res.json();
@@ -224,6 +249,51 @@
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
+        }
+
+        async function editBusiness(bizId) {
+            try {
+                const res = await fetch(`${BIZ_API}?action=get&business_id=${bizId}`);
+                const data = await res.json();
+                const b = data.business;
+                
+                document.getElementById('biz-name').value = b.name || '';
+                document.getElementById('biz-category').value = b.category || '';
+                document.getElementById('biz-website').value = b.website || '';
+                document.getElementById('biz-city').value = b.city || '';
+                document.getElementById('biz-state').value = b.state || '';
+                document.getElementById('biz-phone').value = b.phone || '';
+                document.getElementById('biz-email').value = b.email || '';
+                document.getElementById('biz-desc').value = b.description || '';
+                
+                document.getElementById('submit-section').style.display = 'block';
+                document.getElementById('submit-section').dataset.editId = bizId;
+                document.querySelector('#submit-form-container h5').textContent = 'Edit Business';
+                document.querySelector('#submit-form-container button').textContent = 'Update Business';
+                window.scrollTo({top: document.getElementById('submit-section').offsetTop - 100, behavior: 'smooth'});
+            } catch(e) {
+                alert('Could not load business details');
+            }
+        }
+
+        async function deleteBusiness(bizId) {
+            if (!confirm('Delete this business? This cannot be undone.')) return;
+            try {
+                const res = await fetch(`${BIZ_API}?action=delete`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({ business_id: bizId })
+                });
+                if (res.ok) {
+                    alert('Business deleted');
+                    loadBusinesses();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Failed to delete');
+                }
+            } catch(e) {
+                alert('Error deleting business');
+            }
         }
     </script>
 

@@ -126,6 +126,44 @@ def get_business(params):
     except Exception as e:
         return cors_response(500, {'error': str(e)})
 
+def update_business(user_id, role, data):
+    business_id = data.get('business_id')
+    if not business_id:
+        return cors_response(400, {'error': 'business_id required'})
+    try:
+        item = table.get_item(Key={'business_id': business_id}).get('Item')
+        if not item:
+            return cors_response(404, {'error': 'Business not found'})
+        if item['submitted_by'] != user_id and role not in ('admin', 'super_user'):
+            return cors_response(403, {'error': 'Not authorized'})
+        
+        # Update fields
+        update_expr = 'SET '
+        expr_values = {}
+        expr_names = {}
+        updates = []
+        
+        for field in ['name', 'category', 'website', 'description', 'city', 'state', 'phone', 'email']:
+            if field in data:
+                updates.append(f'#{field} = :{field}')
+                expr_values[f':{field}'] = data[field]
+                expr_names[f'#{field}'] = field
+        
+        if not updates:
+            return cors_response(400, {'error': 'No fields to update'})
+        
+        update_expr += ', '.join(updates)
+        
+        table.update_item(
+            Key={'business_id': business_id},
+            UpdateExpression=update_expr,
+            ExpressionAttributeValues=expr_values,
+            ExpressionAttributeNames=expr_names
+        )
+        return cors_response(200, {'message': 'Business updated'})
+    except Exception as e:
+        return cors_response(500, {'error': str(e)})
+
 def delete_business(user_id, role, data):
     business_id = data.get('business_id')
     if not business_id:
@@ -168,6 +206,8 @@ def lambda_handler(event, context):
 
     if action == 'submit':
         return submit_business(user_id, body)
+    elif action == 'update':
+        return update_business(user_id, role, body)
     elif action == 'delete':
         return delete_business(user_id, role, body)
     else:
