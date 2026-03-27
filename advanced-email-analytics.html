@@ -319,7 +319,7 @@
             });
     </script>
     <script>
-        const API_BASE = 'https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe';
+        const API_BASE = 'https://olmcyxwc1a.execute-api.us-east-1.amazonaws.com/prod/user-email';
         
         let performanceChart, funnelChart;
         let campaignMap = {};
@@ -334,9 +334,12 @@
         }
         
         async function loadAllData() {
+            // Load campaigns first to populate campaignMap
+            await loadCampaignStats();
+            
+            // Then load everything else in parallel
             await Promise.all([
                 loadOverviewStats(),
-                loadCampaignStats(),
                 loadSubscriberStats(),
                 loadRecentEvents()
             ]);
@@ -381,7 +384,7 @@
                 
                 const campaigns = data.campaigns || [];
                 campaignMap = {};
-                campaigns.forEach(c => { campaignMap[c.campaign_id] = c.campaign_name || ''; });
+                campaigns.forEach(c => { campaignMap[c.campaign_id] = c.campaign_name || c.title || ''; });
                 allCampaignStats = campaigns;
                 populateCampaignGroupFilter(campaigns);
                 renderCampaignsTable(campaigns);
@@ -487,6 +490,9 @@
                 document.getElementById('events-body').innerHTML = '<tr><td colspan="5" class="text-center">No events</td></tr>';
                 return;
             }
+            
+            // Sort by timestamp descending (newest first)
+            events.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
             
             const html = events.map(e => {
                 const eventBadge = {

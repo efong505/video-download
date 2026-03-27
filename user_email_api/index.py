@@ -408,13 +408,63 @@ def get_analytics_overview(user_id):
         }
     })
 
+def get_recent_events_public(params):
+    """Public endpoint for platform owner analytics"""
+    PLATFORM_OWNER_ID = 'effa3242-cf64-4021-b2b0-c8a5a9dfd6d2'
+    limit = int(params.get('limit', 50))
+    
+    response = events_table.query(
+        KeyConditionExpression='user_id = :uid',
+        ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID},
+        ScanIndexForward=False,
+        Limit=limit
+    )
+    
+    return cors_response(200, {'events': response['Items']})
+
+def get_campaign_analytics_public(params):
+    """Public endpoint for platform owner campaign analytics"""
+    PLATFORM_OWNER_ID = 'effa3242-cf64-4021-b2b0-c8a5a9dfd6d2'
+    
+    campaigns_response = campaigns_table.query(
+        KeyConditionExpression='user_id = :uid',
+        ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID}
+    )
+    
+    campaigns = []
+    for campaign in campaigns_response['Items']:
+        events_response = events_table.query(
+            IndexName='campaign-index',
+            KeyConditionExpression='campaign_id = :cid',
+            ExpressionAttributeValues={':cid': campaign['campaign_id']}
+        )
+        events = events_response['Items']
+        
+        opens = sum(1 for e in events if e.get('event_type') == 'opened')
+        clicks = sum(1 for e in events if e.get('event_type') == 'clicked')
+        sent = sum(1 for e in events if e.get('event_type') == 'sent')
+        
+        campaigns.append({
+            'campaign_id': campaign['campaign_id'],
+            'campaign_name': campaign.get('campaign_name', campaign.get('title', '')),
+            'title': campaign.get('campaign_name', campaign.get('title', '')),
+            'sent': sent,
+            'opens': opens,
+            'clicks': clicks,
+            'open_rate': round((opens / sent * 100), 2) if sent > 0 else 0,
+            'click_rate': round((clicks / sent * 100), 2) if sent > 0 else 0
+        })
+    
+    return cors_response(200, {'campaigns': campaigns})
+
+def get_analytics_overview_public():
+    """Public endpoint for platform owner overview"""
+    PLATFORM_OWNER_ID = 'effa3242-cf64-4021-b2b0-c8a5a9dfd6d2'
+    return get_analytics_overview(PLATFORM_OWNER_ID)
+
 def lambda_handler(event, context):
     if event.get('httpMethod') == 'OPTIONS':
         return cors_response(200, {})
-
-    user_id = extract_user_id(event)
-    if not user_id:
-        return cors_response(401, {'error': 'Unauthorized'})
 
     params = event.get('queryStringParameters') or {}
     action = params.get('action')
@@ -423,7 +473,24 @@ def lambda_handler(event, context):
         body = json.loads(event.get('body', '{}'))
     except:
         body = {}
+    
+    user_id = extract_user_id(event)
 
+    # Public actions (no auth required) for platform owner analytics
+    public_actions = {
+        'get_recent_events': lambda: get_recent_events_public(params),
+        'get_campaign_analytics': lambda: get_campaign_analytics_public(params),
+        'get_analytics_overview': lambda: get_analytics_overview_public(),
+    }
+    
+    # Check if it's a public action first
+    if action in public_actions:
+        return public_actions[action]()
+    
+    # For authenticated actions, require user_id
+    if not user_id:
+        return cors_response(401, {'error': 'Unauthorized'})
+    
     actions = {
         'add_subscriber': lambda: add_subscriber(user_id, body),
         'list_subscribers': lambda: list_subscribers(user_id, params),

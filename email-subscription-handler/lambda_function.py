@@ -1591,7 +1591,8 @@ def get_campaign_analytics():
             
             campaign_analytics.append({
                 'campaign_id': campaign_id,
-                'campaign_name': campaign.get('campaign_name', ''),
+                'campaign_name': campaign.get('campaign_name', campaign.get('title', '')),
+                'title': campaign.get('title', campaign.get('campaign_name', '')),
                 'campaign_group': campaign.get('campaign_group', ''),
                 'sequence_number': int(campaign.get('sequence_number', 0)),
                 'sent_count': sent,
