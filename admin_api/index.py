@@ -231,7 +231,28 @@ def delete_book_subscriber(event):
             'body': json.dumps({'error': 'email required'})
         }
     
+    # Delete from book-subscribers
     book_subscribers_table.delete_item(Key={'email': email})
+    
+    # Also delete from user-email-drip-enrollments (cascade delete)
+    enrollments_table = dynamodb.Table('user-email-drip-enrollments')
+    try:
+        # Scan for enrollments with this email in enrollment_id
+        resp = enrollments_table.scan()
+        deleted_enrollments = 0
+        for item in resp.get('Items', []):
+            enrollment_id = item['enrollment_id']
+            # enrollment_id format: email#campaign or email_campaign
+            enrollment_email = enrollment_id.split('#')[0].split('_')[0]
+            if enrollment_email == email:
+                enrollments_table.delete_item(Key={
+                    'user_id': item['user_id'],
+                    'enrollment_id': enrollment_id
+                })
+                deleted_enrollments += 1
+        print(f'Deleted {deleted_enrollments} enrollments for {email}')
+    except Exception as e:
+        print(f'Error deleting enrollments: {str(e)}')
     
     return {
         'statusCode': 200,

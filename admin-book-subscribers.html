@@ -172,25 +172,34 @@
                 return;
             }
 
-            tbody.innerHTML = subscribers.map(sub => `
+            tbody.innerHTML = subscribers.map(sub => {
+                const emailEsc = sub.email.replace(/\\/g, '\\\\').replace(/'/g, "\\'")
+.replace(/"/g, '&quot;').replace(/\n/g, '\\n').replace(/\r/g, '\\r');
+                const nameEsc = (sub.first_name || '').replace(/\\/g, '\\\\').replace(/'/g, "\\'")
+.replace(/"/g, '&quot;').replace(/\n/g, '\\n').replace(/\r/g, '\\r');
+                const subJson = JSON.stringify(sub).replace(/\\/g, '\\\\').replace(/'/g, "\\'")
+.replace(/"/g, '&quot;');
+                
+                return `
                 <tr>
                     <td>${sub.email}</td>
                     <td>${sub.first_name || '-'}</td>
                     <td>${new Date(sub.subscribed_at).toLocaleDateString()}</td>
                     <td>${sub.source || '-'}</td>
                     <td>
-                        <button class="btn btn-sm btn-outline-success me-1" onclick='resendEmail("${sub.email}", "${sub.first_name || ''}")'>
+                        <button class="btn btn-sm btn-outline-success me-1" onclick="resendEmail('${emailEsc}', '${nameEsc}')">
                             <i class="fas fa-envelope"></i> Resend
                         </button>
-                        <button class="btn btn-sm btn-outline-primary me-1" onclick='editSubscriber(${JSON.stringify(sub)})'>
+                        <button class="btn btn-sm btn-outline-primary me-1" onclick='editSubscriber(${subJson})'>
                             <i class="fas fa-edit"></i> Edit
                         </button>
-                        <button class="btn btn-sm btn-outline-danger" onclick='deleteSubscriber("${sub.email}")'>
+                        <button class="btn btn-sm btn-outline-danger" onclick="deleteSubscriber('${emailEsc}')">
                             <i class="fas fa-trash"></i> Delete
                         </button>
                     </td>
                 </tr>
-            `).join('');
+            `;
+            }).join('');
         }
 
         function exportCSV() {

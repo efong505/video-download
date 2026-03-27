@@ -385,7 +385,23 @@ def handle_click_tracking(event):
         print(f"Click tracking - Path: {path}, Tracking ID: {tracking_id}")
         
         # Decode to get email, campaign, and destination URL
-        email, campaign_id, destination_url = decode_click_tracking_id(tracking_id)
+        try:
+            email, campaign_id, destination_url = decode_click_tracking_id(tracking_id)
+        except Exception as decode_error:
+            print(f"Decode error: {str(decode_error)}")
+            # Try to decode and show what's in the tracking ID
+            try:
+                import base64
+                decoded = base64.urlsafe_b64decode(tracking_id.encode()).decode()
+                print(f"Raw decoded data: {decoded}")
+            except:
+                pass
+            # Redirect to homepage on decode failure
+            return {
+                'statusCode': 302,
+                'headers': {'Location': DOMAIN},
+                'body': ''
+            }
         
         print(f"Click tracked: email={email}, campaign={campaign_id}, url={destination_url}")
         
@@ -417,6 +433,8 @@ def handle_click_tracking(event):
         
     except Exception as e:
         print(f"Click tracking error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         # Redirect to homepage on error
         return {
             'statusCode': 302,
