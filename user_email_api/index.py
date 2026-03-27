@@ -443,14 +443,19 @@ def get_campaign_analytics_public(params):
         opens = sum(1 for e in events if e.get('event_type') == 'opened')
         clicks = sum(1 for e in events if e.get('event_type') == 'clicked')
         sent = sum(1 for e in events if e.get('event_type') == 'sent')
+        bounces = sum(1 for e in events if e.get('event_type') == 'bounced')
+        complaints = sum(1 for e in events if e.get('event_type') == 'complaint')
         
         campaigns.append({
             'campaign_id': campaign['campaign_id'],
             'campaign_name': campaign.get('campaign_name', campaign.get('title', '')),
             'title': campaign.get('campaign_name', campaign.get('title', '')),
-            'sent': sent,
-            'opens': opens,
-            'clicks': clicks,
+            'campaign_group': campaign.get('campaign_group', ''),
+            'sent_count': sent,
+            'open_count': opens,
+            'click_count': clicks,
+            'bounce_count': bounces,
+            'complaint_count': complaints,
             'open_rate': round((opens / sent * 100), 2) if sent > 0 else 0,
             'click_rate': round((clicks / sent * 100), 2) if sent > 0 else 0
         })
@@ -461,6 +466,61 @@ def get_analytics_overview_public():
     """Public endpoint for platform owner overview"""
     PLATFORM_OWNER_ID = 'effa3242-cf64-4021-b2b0-c8a5a9dfd6d2'
     return get_analytics_overview(PLATFORM_OWNER_ID)
+
+def get_subscriber_analytics_public():
+    """Public endpoint for platform owner subscriber analytics"""
+    PLATFORM_OWNER_ID = 'effa3242-cf64-4021-b2b0-c8a5a9dfd6d2'
+    
+    # Get all subscribers
+    subs_response = subscribers_table.query(
+        KeyConditionExpression='user_id = :uid',
+        ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID}
+    )
+    subscribers = subs_response['Items']
+    
+    # Get all events
+    events_response = events_table.query(
+        KeyConditionExpression='user_id = :uid',
+        ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID}
+    )
+    events = events_response['Items']
+    
+    # Aggregate stats per subscriber
+    subscriber_stats = {}
+    for event in events:
+        email = event.get('subscriber_email') or event.get('email')
+        if not email:
+            continue
+            
+        if email not in subscriber_stats:
+            subscriber_stats[email] = {
+                'subscriber_email': email,
+                'sent_count': 0,
+                'open_count': 0,
+                'click_count': 0,
+                'bounce_count': 0,
+                'complaint_count': 0,
+                'last_activity': None
+            }
+        
+        event_type = event.get('event_type')
+        if event_type == 'sent':
+            subscriber_stats[email]['sent_count'] += 1
+        elif event_type == 'opened':
+            subscriber_stats[email]['open_count'] += 1
+        elif event_type == 'clicked':
+            subscriber_stats[email]['click_count'] += 1
+        elif event_type == 'bounced':
+            subscriber_stats[email]['bounce_count'] += 1
+        elif event_type == 'complaint':
+            subscriber_stats[email]['complaint_count'] += 1
+        
+        # Update last activity
+        event_date = event.get('date') or (datetime.fromtimestamp(event.get('timestamp', 0)).isoformat() if event.get('timestamp') else None)
+        if event_date and (not subscriber_stats[email]['last_activity'] or event_date > subscriber_stats[email]['last_activity']):
+            subscriber_stats[email]['last_activity'] = event_date
+    
+    return cors_response(200, {'subscribers': list(subscriber_stats.values())})
 
 def lambda_handler(event, context):
     if event.get('httpMethod') == 'OPTIONS':
@@ -481,6 +541,7 @@ def lambda_handler(event, context):
         'get_recent_events': lambda: get_recent_events_public(params),
         'get_campaign_analytics': lambda: get_campaign_analytics_public(params),
         'get_analytics_overview': lambda: get_analytics_overview_public(),
+        'get_subscriber_analytics': lambda: get_subscriber_analytics_public(),
     }
     
     # Check if it's a public action first

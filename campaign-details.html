@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campaign Details - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; }
+        
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .back-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+        
+        .back-btn:hover { background: #5a6268; color: white; }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .stat-card h3 {
+            color: #666;
+            font-size: 12px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+        
+        .stat-card .number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2c5aa0;
+        }
+        
+        .table-container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #2c5aa0;
+            border-bottom: 2px solid #e9ecef;
+            font-size: 13px;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #e9ecef;
+            font-size: 14px;
+        }
+        
+        tr:hover { background: #f8f9fa; }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .badge.success { background: #d1fae5; color: #065f46; }
+        .badge.warning { background: #fef3c7; color: #92400e; }
+        .badge.danger { background: #fee2e2; color: #991b1b; }
+        .badge.info { background: #dbeafe; color: #1e40af; }
+        .badge.secondary { background: #e5e7eb; color: #374151; }
+        
+        .icon-check { color: #16a34a; font-weight: bold; }
+        .icon-x { color: #dc2626; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="advanced-analytics"></div>
+    
+    <div class="container" style="margin-top: 80px;">
+        <div class="header">
+            <a href="advanced-email-analytics.html" class="back-btn">← Back to Analytics</a>
+            <h1 id="page-title">📊 Loading...</h1>
+            <p id="page-subtitle"></p>
+        </div>
+        
+        <div id="stats-section" class="stats-grid" style="display:none;">
+            <!-- Stats will be populated dynamically -->
+        </div>
+        
+        <div class="table-container">
+            <h2 id="table-title">Details</h2>
+            <table id="details-table">
+                <thead id="table-head">
+                    <!-- Headers will be populated dynamically -->
+                </thead>
+                <tbody id="table-body">
+                    <tr><td colspan="10" class="text-center">Loading...</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        fetch('navbar.html')
+            .then(r => r.text())
+            .then(html => {
+                document.getElementById('navbar-container').innerHTML = html;
+                initNavbar();
+            });
+    </script>
+    <script>
+        const API_BASE = 'https://olmcyxwc1a.execute-api.us-east-1.amazonaws.com/prod/user-email';
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const campaignId = urlParams.get('campaign_id');
+        const subscriberEmail = urlParams.get('email');
+        
+        if (campaignId) {
+            loadCampaignDetails(campaignId);
+        } else if (subscriberEmail) {
+            loadSubscriberDetails(subscriberEmail);
+        } else {
+            document.getElementById('page-title').textContent = 'Error';
+            document.getElementById('page-subtitle').textContent = 'No campaign or subscriber specified';
+            document.getElementById('table-body').innerHTML = '<tr><td class="text-center">Invalid URL parameters</td></tr>';
+        }
+        
+        async function loadCampaignDetails(campaignId) {
+            try {
+                // Get campaign info
+                const campaignsResponse = await fetch(`${API_BASE}?action=get_campaign_analytics`);
+                const campaignsData = await campaignsResponse.json();
+                const campaign = campaignsData.campaigns.find(c => c.campaign_id === campaignId);
+                
+                if (!campaign) {
+                    throw new Error('Campaign not found');
+                }
+                
+                // Get all events for this campaign
+                const eventsResponse = await fetch(`${API_BASE}?action=get_recent_events&limit=1000`);
+                const eventsData = await eventsResponse.json();
+                const campaignEvents = eventsData.events.filter(e => e.campaign_id === campaignId);
+                
+                // Update header
+                document.getElementById('page-title').textContent = `📧 ${campaign.campaign_name || campaign.campaign_id}`;
+                document.getElementById('page-subtitle').textContent = campaign.campaign_group ? `Campaign Group: ${campaign.campaign_group}` : '';
+                
+                // Show stats
+                document.getElementById('stats-section').style.display = 'grid';
+                document.getElementById('stats-section').innerHTML = `
+                    <div class="stat-card">
+                        <h3>Sent</h3>
+                        <div class="number">${campaign.sent_count || 0}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Opens</h3>
+                        <div class="number">${campaign.open_count || 0}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Clicks</h3>
+                        <div class="number">${campaign.click_count || 0}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Bounces</h3>
+                        <div class="number">${campaign.bounce_count || 0}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Open Rate</h3>
+                        <div class="number">${campaign.open_rate || 0}%</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Click Rate</h3>
+                        <div class="number">${campaign.click_rate || 0}%</div>
+                    </div>
+                `;
+                
+                // Group events by subscriber
+                const subscriberMap = {};
+                campaignEvents.forEach(event => {
+                    const email = event.subscriber_email || event.email;
+                    if (!email) return;
+                    
+                    if (!subscriberMap[email]) {
+                        subscriberMap[email] = {
+                            email: email,
+                            sent: false,
+                            delivered: false,
+                            opened: false,
+                            clicked: false,
+                            bounced: false,
+                            complained: false,
+                            clickUrls: []
+                        };
+                    }
+                    
+                    const eventType = event.event_type;
+                    if (eventType === 'sent') subscriberMap[email].sent = true;
+                    if (eventType === 'delivered') subscriberMap[email].delivered = true;
+                    if (eventType === 'opened') subscriberMap[email].opened = true;
+                    if (eventType === 'clicked') {
+                        subscriberMap[email].clicked = true;
+                        try {
+                            const metadata = JSON.parse(event.metadata || '{}');
+                            const url = metadata.url || metadata.link;
+                            if (url && !subscriberMap[email].clickUrls.includes(url)) {
+                                subscriberMap[email].clickUrls.push(url);
+                            }
+                        } catch(e) {}
+                    }
+                    if (eventType === 'bounced') subscriberMap[email].bounced = true;
+                    if (eventType === 'complaint') subscriberMap[email].complained = true;
+                });
+                
+                const subscribers = Object.values(subscriberMap);
+                
+                // Render table
+                document.getElementById('table-title').textContent = `Subscriber Engagement (${subscribers.length} recipients)`;
+                document.getElementById('table-head').innerHTML = `
+                    <tr>
+                        <th>Email</th>
+                        <th>Sent</th>
+                        <th>Delivered</th>
+                        <th>Opened</th>
+                        <th>Clicked</th>
+                        <th>Bounced</th>
+                        <th>Complained</th>
+                        <th>Click Details</th>
+                    </tr>
+                `;
+                
+                if (subscribers.length === 0) {
+                    document.getElementById('table-body').innerHTML = '<tr><td colspan="8" class="text-center">No engagement data yet</td></tr>';
+                    return;
+                }
+                
+                const html = subscribers.map(s => {
+                    const clickDetails = s.clickUrls.length > 0 ? s.clickUrls.map(url => `<div style="font-size:11px;color:#666;margin-top:2px;">${url}</div>`).join('') : '-';
+                    
+                    return `
+                        <tr>
+                            <td><a href="campaign-details.html?email=${encodeURIComponent(s.email)}" style="color:#2c5aa0;text-decoration:none;font-weight:500;">${s.email}</a></td>
+                            <td>${s.sent ? '<span class="icon-check">✓</span>' : '<span class="icon-x">✗</span>'}</td>
+                            <td>${s.delivered ? '<span class="icon-check">✓</span>' : '<span class="icon-x">✗</span>'}</td>
+                            <td>${s.opened ? '<span class="icon-check">✓</span>' : '<span class="icon-x">✗</span>'}</td>
+                            <td>${s.clicked ? '<span class="icon-check">✓</span>' : '<span class="icon-x">✗</span>'}</td>
+                            <td>${s.bounced ? '<span class="badge danger">Yes</span>' : '-'}</td>
+                            <td>${s.complained ? '<span class="badge danger">Yes</span>' : '-'}</td>
+                            <td>${clickDetails}</td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                document.getElementById('table-body').innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading campaign details:', error);
+                document.getElementById('page-title').textContent = 'Error';
+                document.getElementById('page-subtitle').textContent = error.message;
+                document.getElementById('table-body').innerHTML = '<tr><td class="text-center">Error loading campaign details</td></tr>';
+            }
+        }
+        
+        async function loadSubscriberDetails(email) {
+            try {
+                // Get all campaigns
+                const campaignsResponse = await fetch(`${API_BASE}?action=get_campaign_analytics`);
+                const campaignsData = await campaignsResponse.json();
+                const campaignMap = {};
+                campaignsData.campaigns.forEach(c => {
+                    campaignMap[c.campaign_id] = c;
+                });
+                
+                // Get all events for this subscriber
+                const eventsResponse = await fetch(`${API_BASE}?action=get_recent_events&limit=1000`);
+                const eventsData = await eventsResponse.json();
+                const subscriberEvents = eventsData.events.filter(e => 
+                    (e.subscriber_email || e.email) === email
+                );
+                
+                // Update header
+                document.getElementById('page-title').textContent = `👤 ${email}`;
+                document.getElementById('page-subtitle').textContent = 'Subscriber Engagement History';
+                
+                // Calculate stats
+                const totalSent = subscriberEvents.filter(e => e.event_type === 'sent').length;
+                const totalOpened = subscriberEvents.filter(e => e.event_type === 'opened').length;
+                const totalClicked = subscriberEvents.filter(e => e.event_type === 'clicked').length;
+                const totalBounced = subscriberEvents.filter(e => e.event_type === 'bounced').length;
+                
+                // Show stats
+                document.getElementById('stats-section').style.display = 'grid';
+                document.getElementById('stats-section').innerHTML = `
+                    <div class="stat-card">
+                        <h3>Emails Sent</h3>
+                        <div class="number">${totalSent}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Opened</h3>
+                        <div class="number">${totalOpened}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Clicked</h3>
+                        <div class="number">${totalClicked}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Bounced</h3>
+                        <div class="number">${totalBounced}</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Open Rate</h3>
+                        <div class="number">${totalSent > 0 ? ((totalOpened / totalSent) * 100).toFixed(1) : 0}%</div>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Click Rate</h3>
+                        <div class="number">${totalOpened > 0 ? ((totalClicked / totalOpened) * 100).toFixed(1) : 0}%</div>
+                    </div>
+                `;
+                
+                // Group events by campaign
+                const campaignEngagement = {};
+                subscriberEvents.forEach(event => {
+                    const cid = event.campaign_id;
+                    if (!cid) return;
+                    
+                    if (!campaignEngagement[cid]) {
+                        campaignEngagement[cid] = {
+                            campaign_id: cid,
+                            campaign_name: campaignMap[cid]?.campaign_name || cid,
+                            campaign_group: campaignMap[cid]?.campaign_group || '',
+                            sent: false,
+                            delivered: false,
+                            opened: false,
+                            clicked: false,
+                            bounced: false,
+                            complained: false,
+                            lastActivity: null
+                        };
+                    }
+                    
+                    const eventType = event.event_type;
+                    if (eventType === 'sent') campaignEngagement[cid].sent = true;
+                    if (eventType === 'delivered') campaignEngagement[cid].delivered = true;
+                    if (eventType === 'opened') campaignEngagement[cid].opened = true;
+                    if (eventType === 'clicked') campaignEngagement[cid].clicked = true;
+                    if (eventType === 'bounced') campaignEngagement[cid].bounced = true;
+                    if (eventType === 'complaint') campaignEngagement[cid].complained = true;
+                    
+                    const eventDate = event.date || (event.timestamp ? new Date(event.timestamp * 1000).toISOString() : null);
+                    if (eventDate && (!campaignEngagement[cid].lastActivity || eventDate > campaignEngagement[cid].lastActivity)) {
+                        campaignEngagement[cid].lastActivity = eventDate;
+                    }
+                });
+                
+                const campaigns = Object.values(campaignEngagement);
+                
+                // Render table
+                document.getElementById('table-title').textContent = `Campaign History (${campaigns.length} campaigns)`;
+                document.getElementById('table-head').innerHTML = `
+                    <tr>
+                        <th>Campaign</th>
+                        <th>Group</th>
+                        <th>Sent</th>
+                        <th>Delivered</th>
+                        <th>Opened</th>
+                        <th>Clicked</th>
+                        <th>Bounced</th>
+                        <th>Complained</th>
+                        <th>Last Activity</th>
+                    </tr>
+                `;
+                
+                if (campaigns.length === 0) {
+                    document.getElementById('table-body').innerHTML = '<tr><td colspan="9" class="text-center">No campaigns sent yet</td></tr>';
+                    return;
+                }
+                
+                const html = campaigns.map(c => {
+                    const lastActivity = c.lastActivity ? new Date(c.lastActivity).toLocaleString() : '-';
+                    
+                    return `
+                        <tr>
+                            <td><a href="campaign-details.html?campaign_id=${c.campaign_id}" style="color:#2c5aa0;text-decoration:none;font-weight:500;">${c.campaign_name}</a></td>
+                            <td><span class="badge secondary">${c.campaign_group || '-'}</span></td>
+                            <td>${c.sent ? '<span class="icon-check">✓</span>' : '<span class="icon-x">✗</span>'}</td>
+                            <td>${c.delivered ? '<span class="icon-check">✓</span>' : '<span class="icon-x">✗</span>'}</td>
+                            <td>${c.opened ? '<span class="icon-check">✓</span>' : '<span class="icon-x">✗</span>'}</td>
+                            <td>${c.clicked ? '<span class="icon-check">✓</span>' : '<span class="icon-x">✗</span>'}</td>
+                            <td>${c.bounced ? '<span class="badge danger">Yes</span>' : '-'}</td>
+                            <td>${c.complained ? '<span class="badge danger">Yes</span>' : '-'}</td>
+                            <td>${lastActivity}</td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                document.getElementById('table-body').innerHTML = html;
+                
+            } catch (error) {
+                console.error('Error loading subscriber details:', error);
+                document.getElementById('page-title').textContent = 'Error';
+                document.getElementById('page-subtitle').textContent = error.message;
+                document.getElementById('table-body').innerHTML = '<tr><td class="text-center">Error loading subscriber details</td></tr>';
+            }
+        }
+    </script>
+</body>
+</html>

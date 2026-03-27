@@ -439,18 +439,22 @@
                 const sent = c.sent_count || 0;
                 const opens = c.open_count || 0;
                 const clicks = c.click_count || 0;
+                const bounces = c.bounce_count || 0;
+                const complaints = c.complaint_count || 0;
                 const openRate = sent > 0 ? ((opens / sent) * 100).toFixed(1) : 0;
                 const clickRate = opens > 0 ? ((clicks / opens) * 100).toFixed(1) : 0;
                 
+                const detailsUrl = `campaign-details.html?campaign_id=${c.campaign_id}`;
+                
                 return `
                     <tr>
-                        <td><strong>${c.campaign_name || c.campaign_id.substring(0, 8)}</strong>${c.campaign_group ? `<br><small class="text-muted">${c.campaign_group}</small>` : ''}</td>
-                        <td>${sent}</td>
-                        <td>${sent}</td>
-                        <td>${opens}</td>
-                        <td>${clicks}</td>
-                        <td>${c.bounce_count || 0}</td>
-                        <td>${c.complaint_count || 0}</td>
+                        <td><a href="${detailsUrl}" style="color:#2c5aa0;text-decoration:none;"><strong>${c.campaign_name || c.campaign_id.substring(0, 8)}</strong></a>${c.campaign_group ? `<br><small class="text-muted">${c.campaign_group}</small>` : ''}</td>
+                        <td><a href="${detailsUrl}" style="color:#2c5aa0;text-decoration:none;">${sent}</a></td>
+                        <td><a href="${detailsUrl}" style="color:#2c5aa0;text-decoration:none;">${sent}</a></td>
+                        <td><a href="${detailsUrl}" style="color:#2c5aa0;text-decoration:none;">${opens}</a></td>
+                        <td><a href="${detailsUrl}" style="color:#2c5aa0;text-decoration:none;">${clicks}</a></td>
+                        <td><a href="${detailsUrl}" style="color:#2c5aa0;text-decoration:none;">${bounces}</a></td>
+                        <td><a href="${detailsUrl}" style="color:#2c5aa0;text-decoration:none;">${complaints}</a></td>
                         <td><span class="badge ${openRate > 20 ? 'success' : 'warning'}">${openRate}%</span></td>
                         <td><span class="badge ${clickRate > 5 ? 'success' : 'warning'}">${clickRate}%</span></td>
                     </tr>
@@ -467,15 +471,17 @@
             }
             
             const html = subscribers.slice(0, 50).map(s => {
+                const detailsUrl = `campaign-details.html?email=${encodeURIComponent(s.subscriber_email)}`;
+                
                 return `
                     <tr>
-                        <td>${s.subscriber_email}</td>
-                        <td>${s.sent_count || 0}</td>
-                        <td>${s.sent_count || 0}</td>
-                        <td>${s.open_count || 0}</td>
-                        <td>${s.click_count || 0}</td>
-                        <td>${s.bounce_count || 0}</td>
-                        <td>${s.complaint_count || 0}</td>
+                        <td><a href="${detailsUrl}" style="color:#2c5aa0;text-decoration:none;font-weight:500;">${s.subscriber_email}</a></td>
+                        <td><a href="${detailsUrl}" style="color:#2c5aa0;text-decoration:none;">${s.sent_count || 0}</a></td>
+                        <td><a href="${detailsUrl}" style="color:#2c5aa0;text-decoration:none;">${s.sent_count || 0}</a></td>
+                        <td><a href="${detailsUrl}" style="color:#2c5aa0;text-decoration:none;">${s.open_count || 0}</a></td>
+                        <td><a href="${detailsUrl}" style="color:#2c5aa0;text-decoration:none;">${s.click_count || 0}</a></td>
+                        <td><a href="${detailsUrl}" style="color:#2c5aa0;text-decoration:none;">${s.bounce_count || 0}</a></td>
+                        <td><a href="${detailsUrl}" style="color:#2c5aa0;text-decoration:none;">${s.complaint_count || 0}</a></td>
                         <td>${s.last_activity || '-'}</td>
                         <td><span class="badge success">active</span></td>
                     </tr>
