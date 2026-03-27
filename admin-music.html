@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Manager - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <style>
+        .admin-header { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; padding: 100px 0 20px 0; margin-bottom: 30px; }
+        .music-item { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 15px; }
+        .form-section { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 24px; }
+        .tab-buttons { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { padding: 10px 20px; border: none; background: #e9ecef; border-radius: 8px; cursor: pointer; }
+        .tab-btn.active { background: #6b7280; color: white; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="admin-music"></div>
+    <script src="navbar.js"></script>
+    <script>fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});</script>
+
+    <div class="admin-header">
+        <div class="container">
+            <h1><i class="fas fa-music"></i> Music Manager</h1>
+            <p>Manage Christian music, audio files, and YouTube embeds</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Tab Navigation -->
+        <div class="tab-buttons">
+            <button class="tab-btn active" onclick="switchTab('youtube')">YouTube Embeds</button>
+            <button class="tab-btn" onclick="switchTab('audio')">Upload Audio Files</button>
+            <button class="tab-btn" onclick="switchTab('royalty')">Royalty-Free Music</button>
+            <button class="tab-btn" onclick="switchTab('manage')">Manage All Music</button>
+        </div>
+
+        <!-- YouTube Embed Tab -->
+        <div id="youtube" class="tab-content active">
+            <div class="form-section">
+                <h4>Add YouTube Music Video</h4>
+                <div class="row g-2">
+                    <div class="col-md-6"><input type="text" id="yt-title" class="form-control" placeholder="Song title *"></div>
+                    <div class="col-md-6"><input type="text" id="yt-artist" class="form-control" placeholder="Artist name *"></div>
+                    <div class="col-md-6">
+                        <select id="yt-genre" class="form-select">
+                            <option value="">Select genre *</option>
+                            <option value="Worship">Worship</option>
+                            <option value="Contemporary Christian">Contemporary Christian</option>
+                            <option value="Gospel">Gospel</option>
+                            <option value="Hymns">Hymns</option>
+                            <option value="Christian Rock">Christian Rock</option>
+                            <option value="Christian Hip Hop">Christian Hip Hop</option>
+                            <option value="Praise & Worship">Praise & Worship</option>
+                            <option value="Southern Gospel">Southern Gospel</option>
+                            <option value="Christian Country">Christian Country</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6"><input type="url" id="yt-url" class="form-control" placeholder="YouTube URL *"></div>
+                    <div class="col-12"><textarea id="yt-desc" class="form-control" rows="2" placeholder="Description"></textarea></div>
+                    <div class="col-12"><button class="btn btn-primary" onclick="addYouTubeMusic()">Add YouTube Music</button></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Audio Upload Tab -->
+        <div id="audio" class="tab-content">
+            <div class="form-section">
+                <h4>Upload Audio File</h4>
+                <p class="text-muted">Upload MP3, WAV, or OGG files to S3 bucket</p>
+                <div class="row g-2">
+                    <div class="col-md-6"><input type="text" id="audio-title" class="form-control" placeholder="Song title *"></div>
+                    <div class="col-md-6"><input type="text" id="audio-artist" class="form-control" placeholder="Artist name *"></div>
+                    <div class="col-md-6">
+                        <select id="audio-genre" class="form-select">
+                            <option value="">Select genre *</option>
+                            <option value="Worship">Worship</option>
+                            <option value="Contemporary Christian">Contemporary Christian</option>
+                            <option value="Gospel">Gospel</option>
+                            <option value="Hymns">Hymns</option>
+                            <option value="Christian Rock">Christian Rock</option>
+                            <option value="Christian Hip Hop">Christian Hip Hop</option>
+                            <option value="Praise & Worship">Praise & Worship</option>
+                            <option value="Southern Gospel">Southern Gospel</option>
+                            <option value="Christian Country">Christian Country</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6"><input type="file" id="audio-file" class="form-control" accept=".mp3,.wav,.ogg,.m4a"></div>
+                    <div class="col-12"><textarea id="audio-desc" class="form-control" rows="2" placeholder="Description"></textarea></div>
+                    <div class="col-12">
+                        <button class="btn btn-primary" onclick="uploadAudioFile()">Upload Audio File</button>
+                        <div id="upload-progress" style="display:none;" class="mt-2">
+                            <div class="progress">
+                                <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <p id="upload-status" class="mt-2"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Royalty-Free Music Tab -->
+        <div id="royalty" class="tab-content">
+            <div class="form-section">
+                <h4>Add Royalty-Free Music Link</h4>
+                <p class="text-muted">Add links to royalty-free Christian music from approved sources</p>
+                <div class="row g-2">
+                    <div class="col-md-6"><input type="text" id="rf-title" class="form-control" placeholder="Song title *"></div>
+                    <div class="col-md-6"><input type="text" id="rf-artist" class="form-control" placeholder="Artist/Source *"></div>
+                    <div class="col-md-6">
+                        <select id="rf-genre" class="form-select">
+                            <option value="">Select genre *</option>
+                            <option value="Worship">Worship</option>
+                            <option value="Contemporary Christian">Contemporary Christian</option>
+                            <option value="Gospel">Gospel</option>
+                            <option value="Hymns">Hymns</option>
+                            <option value="Instrumental">Instrumental</option>
+                            <option value="Background Music">Background Music</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <select id="rf-source" class="form-select">
+                            <option value="">Select source *</option>
+                            <option value="Free Music Archive">Free Music Archive</option>
+                            <option value="Incompetech">Incompetech (Kevin MacLeod)</option>
+                            <option value="Purple Planet">Purple Planet Music</option>
+                            <option value="ccMixter">ccMixter</option>
+                            <option value="YouTube Audio Library">YouTube Audio Library</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="col-md-12"><input type="url" id="rf-url" class="form-control" placeholder="Direct link to music file or page *"></div>
+                    <div class="col-12"><textarea id="rf-desc" class="form-control" rows="2" placeholder="Description and license info"></textarea></div>
+                    <div class="col-12"><button class="btn btn-primary" onclick="addRoyaltyFreeMusic()">Add Royalty-Free Music</button></div>
+                </div>
+            </div>
+
+            <div class="alert alert-info">
+                <h5>Recommended Royalty-Free Sources:</h5>
+                <ul>
+                    <li><strong>Free Music Archive</strong> - freemusicarchive.org (Christian/Gospel category)</li>
+                    <li><strong>Incompetech</strong> - incompetech.com (Kevin MacLeod's royalty-free music)</li>
+                    <li><strong>Purple Planet Music</strong> - purple-planet.com (Free background music)</li>
+                    <li><strong>ccMixter</strong> - ccmixter.org (Creative Commons licensed)</li>
+                    <li><strong>YouTube Audio Library</strong> - studio.youtube.com/channel/UC/music (Free to use)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Manage All Music Tab -->
+        <div id="manage" class="tab-content">
+            <div id="music-list">
+                <div class="text-center py-4"><div class="spinner-border"></div><p class="mt-2">Loading music...</p></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
+        const BUCKET_URL = 'https://christianconservativestoday.com';
+        let authToken = localStorage.getItem('auth_token');
+        let userData = null;
+
+        try {
+            userData = JSON.parse(localStorage.getItem('user_data') || 'null');
+        } catch(e) {}
+
+        // Check admin access
+        if (!userData || (userData.role !== 'admin' && userData.role !== 'super_user')) {
+            alert('Admin access required');
+            window.location.href = 'index.html';
+        }
+
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            if (tabName === 'manage') loadAllMusic();
+        }
+
+        async function addYouTubeMusic() {
+            const title = document.getElementById('yt-title').value.trim();
+            const artist = document.getElementById('yt-artist').value.trim();
+            const genre = document.getElementById('yt-genre').value;
+            const url = document.getElementById('yt-url').value.trim();
+
+            if (!title || !artist || !genre || !url) {
+                alert('All fields are required');
+                return;
+            }
+
+            if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+                alert('Please enter a valid YouTube URL');
+                return;
+            }
+
+            try {
+                const resourceId = 'music_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                const res = await fetch(`${RESOURCES_API}?action=create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({
+                        id: resourceId,
+                        name: `${title} - ${artist}`,
+                        category: ['Music', 'Art & Entertainment'],
+                        subcategory: genre,
+                        url: url,
+                        description: document.getElementById('yt-desc').value.trim(),
+                        source_type: 'youtube'
+                    })
+                });
+                if (res.ok) {
+                    alert('YouTube music added!');
+                    ['yt-title','yt-artist','yt-url','yt-desc'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('yt-genre').value = '';
+                } else {
+                    const data = await res.json();
+                    alert('Failed to add music: ' + (data.error || 'Unknown error'));
+                }
+            } catch(e) {
+                alert('Error adding music: ' + e.message);
+            }
+        }
+
+        async function uploadAudioFile() {
+            const title = document.getElementById('audio-title').value.trim();
+            const artist = document.getElementById('audio-artist').value.trim();
+            const genre = document.getElementById('audio-genre').value;
+            const fileInput = document.getElementById('audio-file');
+            const file = fileInput.files[0];
+
+            if (!title || !artist || !genre || !file) {
+                alert('All fields are required');
+                return;
+            }
+
+            const progressDiv = document.getElementById('upload-progress');
+            const progressBar = document.getElementById('progress-bar');
+            const statusText = document.getElementById('upload-status');
+
+            progressDiv.style.display = 'block';
+            statusText.textContent = 'Uploading to S3...';
+
+            try {
+                // Generate unique filename
+                const timestamp = Date.now();
+                const sanitizedFilename = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
+                const s3Key = `music/${timestamp}_${sanitizedFilename}`;
+                const resourceId = 'music_' + timestamp + '_' + Math.random().toString(36).substr(2, 9);
+
+                // Upload to S3 (you'll need to implement presigned URL or use AWS SDK)
+                // For now, we'll simulate and store the URL
+                const audioUrl = `${BUCKET_URL}/${s3Key}`;
+
+                progressBar.style.width = '50%';
+                statusText.textContent = 'Creating database entry...';
+
+                const res = await fetch(`${RESOURCES_API}?action=create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({
+                        id: resourceId,
+                        name: `${title} - ${artist}`,
+                        category: ['Music', 'Art & Entertainment'],
+                        subcategory: genre,
+                        url: audioUrl,
+                        description: document.getElementById('audio-desc').value.trim(),
+                        source_type: 'audio_file'
+                    })
+                });
+
+                if (res.ok) {
+                    progressBar.style.width = '100%';
+                    statusText.textContent = 'Upload complete!';
+                    alert('Audio file uploaded! Note: You need to manually upload the file to S3 at: ' + s3Key);
+                    ['audio-title','audio-artist','audio-desc'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('audio-genre').value = '';
+                    fileInput.value = '';
+                    setTimeout(() => { progressDiv.style.display = 'none'; progressBar.style.width = '0%'; }, 3000);
+                } else {
+                    const data = await res.json();
+                    alert('Failed to create database entry: ' + (data.error || 'Unknown error'));
+                }
+            } catch(e) {
+                alert('Error uploading file: ' + e.message);
+                progressDiv.style.display = 'none';
+            }
+        }
+
+        async function addRoyaltyFreeMusic() {
+            const title = document.getElementById('rf-title').value.trim();
+            const artist = document.getElementById('rf-artist').value.trim();
+            const genre = document.getElementById('rf-genre').value;
+            const source = document.getElementById('rf-source').value;
+            const url = document.getElementById('rf-url').value.trim();
+
+            if (!title || !artist || !genre || !source || !url) {
+                alert('All fields are required');
+                return;
+            }
+
+            try {
+                const resourceId = 'music_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                const res = await fetch(`${RESOURCES_API}?action=create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({
+                        id: resourceId,
+                        name: `${title} - ${artist}`,
+                        category: ['Music', 'Art & Entertainment', 'Royalty-Free'],
+                        subcategory: genre,
+                        url: url,
+                        description: `Source: ${source}. ${document.getElementById('rf-desc').value.trim()}`,
+                        source_type: 'royalty_free'
+                    })
+                });
+                if (res.ok) {
+                    alert('Royalty-free music added!');
+                    ['rf-title','rf-artist','rf-url','rf-desc'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('rf-genre').value = '';
+                    document.getElementById('rf-source').value = '';
+                } else {
+                    const data = await res.json();
+                    alert('Failed to add music: ' + (data.error || 'Unknown error'));
+                }
+            } catch(e) {
+                alert('Error adding music: ' + e.message);
+            }
+        }
+
+        async function loadAllMusic() {
+            const container = document.getElementById('music-list');
+            container.innerHTML = '<div class="text-center py-4"><div class="spinner-border"></div></div>';
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const all = await res.json();
+                const music = all.filter(r => {
+                    const cats = Array.isArray(r.category) ? r.category : [r.category];
+                    return cats.some(c => c.toLowerCase().includes('music'));
+                });
+
+                if (!music.length) {
+                    container.innerHTML = '<div class="text-center py-5"><p>No music entries found</p></div>';
+                    return;
+                }
+
+                container.innerHTML = music.map(m => `
+                    <div class="music-item">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h5>${escapeHtml(m.name)}</h5>
+                                <span class="badge bg-secondary">${escapeHtml(m.subcategory || 'N/A')}</span>
+                                ${m.source_type ? `<span class="badge bg-info">${escapeHtml(m.source_type)}</span>` : ''}
+                                ${m.description ? `<p class="mt-2 mb-0 text-muted">${escapeHtml(m.description).substring(0,100)}</p>` : ''}
+                            </div>
+                            <div class="col-md-4 text-end">
+                                ${m.url ? `<a href="${m.url}" target="_blank" class="btn btn-sm btn-outline-primary me-2"><i class="fas fa-external-link-alt"></i></a>` : ''}
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteMusic('${m.resource_id}')"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch(e) {
+                container.innerHTML = '<div class="text-center py-5"><p>Error loading music</p></div>';
+            }
+        }
+
+        async function deleteMusic(resourceId) {
+            if (!confirm('Delete this music entry?')) return;
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=delete`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({ resource_id: resourceId })
+                });
+                if (res.ok) {
+                    alert('Music deleted');
+                    loadAllMusic();
+                } else {
+                    alert('Failed to delete');
+                }
+            } catch(e) {
+                alert('Error deleting music');
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

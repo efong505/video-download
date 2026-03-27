@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Arts Gallery - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <style>
+        .gallery-header { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 100px 0 20px 0; margin-bottom: 30px; }
+        .art-card { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); overflow: hidden; transition: transform 0.2s; height: 100%; }
+        .art-card:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
+        .art-image { width: 100%; height: 250px; object-fit: cover; background: linear-gradient(135deg, #f59e0b, #d97706); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem; }
+        .art-info { padding: 15px; }
+        .medium-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .medium-pill { padding: 6px 14px; border-radius: 20px; border: 2px solid #dee2e6; background: white; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+        .medium-pill:hover { border-color: #f59e0b; }
+        .medium-pill.active { background: #f59e0b; color: white; border-color: #f59e0b; }
+        .submit-form { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 24px; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="visual-arts"></div>
+    <script src="navbar.js"></script>
+    <script>fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});</script>
+
+    <div class="gallery-header">
+        <div class="container">
+            <h1><i class="fas fa-palette"></i> Visual Arts Gallery</h1>
+            <p>Showcase Christian art, photography, and creative works that honor God</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Submit Form Toggle -->
+        <div class="text-center mb-3">
+            <button class="btn btn-primary" onclick="toggleSubmitForm()" id="submit-toggle-btn">+ Submit Artwork</button>
+        </div>
+
+        <!-- Submit Form (hidden by default) -->
+        <div id="submit-section" style="display:none;">
+            <div id="submit-login-prompt" class="text-center mb-3" style="display:none;">
+                <a href="login.html" class="btn btn-outline-primary">Log in to submit artwork</a>
+            </div>
+            <div id="submit-form-container" style="display:none;">
+                <div class="submit-form">
+                    <h5>Submit Artwork</h5>
+                    <div class="row g-2">
+                        <div class="col-md-6"><input type="text" id="art-title" class="form-control" placeholder="Artwork title *"></div>
+                        <div class="col-md-6"><input type="text" id="art-artist" class="form-control" placeholder="Artist name *"></div>
+                        <div class="col-md-6">
+                            <select id="art-medium" class="form-select">
+                                <option value="">Select medium *</option>
+                                <option value="Painting">Painting</option>
+                                <option value="Photography">Photography</option>
+                                <option value="Digital Art">Digital Art</option>
+                                <option value="Sculpture">Sculpture</option>
+                                <option value="Drawing">Drawing</option>
+                                <option value="Mixed Media">Mixed Media</option>
+                                <option value="Illustration">Illustration</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6"><input type="url" id="art-link" class="form-control" placeholder="Link to artwork/portfolio"></div>
+                        <div class="col-md-6"><input type="url" id="art-image" class="form-control" placeholder="Image URL (optional)"></div>
+                        <div class="col-md-6"><input type="text" id="art-year" class="form-control" placeholder="Year created"></div>
+                        <div class="col-12"><textarea id="art-desc" class="form-control" rows="2" placeholder="Description of the artwork"></textarea></div>
+                        <div class="col-12"><button class="btn btn-primary" onclick="submitArt()">Submit Artwork</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Medium Filter Pills -->
+        <div class="medium-pills" id="medium-pills">
+            <button class="medium-pill active" data-medium="all">All</button>
+            <button class="medium-pill" data-medium="Painting">Painting</button>
+            <button class="medium-pill" data-medium="Photography">Photography</button>
+            <button class="medium-pill" data-medium="Digital Art">Digital Art</button>
+            <button class="medium-pill" data-medium="Sculpture">Sculpture</button>
+            <button class="medium-pill" data-medium="Drawing">Drawing</button>
+        </div>
+
+        <!-- Art Gallery Grid -->
+        <div id="art-container" class="row g-4">
+            <div class="col-12 text-center py-4"><div class="spinner-border"></div><p class="mt-2">Loading gallery...</p></div>
+        </div>
+    </div>
+
+    <script>
+        const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
+        let authToken = localStorage.getItem('auth_token');
+        let userData = null;
+        let currentMedium = 'all';
+
+        try {
+            userData = JSON.parse(localStorage.getItem('user_data') || 'null');
+        } catch(e) {}
+
+        window.addEventListener('load', () => {
+            if (authToken && userData) {
+                document.getElementById('submit-form-container').style.display = 'block';
+                document.getElementById('submit-login-prompt').style.display = 'none';
+            } else {
+                document.getElementById('submit-form-container').style.display = 'none';
+                document.getElementById('submit-login-prompt').style.display = 'block';
+            }
+            loadArt();
+        });
+
+        document.getElementById('medium-pills').addEventListener('click', e => {
+            if (!e.target.classList.contains('medium-pill')) return;
+            document.querySelectorAll('.medium-pill').forEach(p => p.classList.remove('active'));
+            e.target.classList.add('active');
+            currentMedium = e.target.dataset.medium;
+            loadArt();
+        });
+
+        async function loadArt() {
+            const container = document.getElementById('art-container');
+            container.innerHTML = '<div class="col-12 text-center py-4"><div class="spinner-border"></div></div>';
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const all = await res.json();
+                let art = all.filter(r => {
+                    const cats = Array.isArray(r.category) ? r.category : [r.category];
+                    return cats.some(c => c.toLowerCase().includes('visual art') || c.toLowerCase().includes('art & entertainment'));
+                });
+
+                if (currentMedium !== 'all') {
+                    art = art.filter(a => a.subcategory && a.subcategory === currentMedium);
+                }
+
+                if (!art.length) {
+                    container.innerHTML = '<div class="col-12 text-center py-5"><i class="fas fa-palette" style="font-size:3rem;color:#ccc;"></i><h4 class="mt-3">No artwork listed yet</h4><p>Be the first to share Christian art!</p></div>';
+                    return;
+                }
+
+                container.innerHTML = art.map(a => `
+                    <div class="col-md-4">
+                        <div class="art-card">
+                            ${a.image_url ? 
+                                `<img src="${a.image_url}" alt="${escapeHtml(a.name)}" class="art-image" onerror="this.outerHTML='<div class=\\'art-image\\'><i class=\\'fas fa-palette\\'></i></div>'">` :
+                                `<div class="art-image"><i class="fas fa-palette"></i></div>`
+                            }
+                            <div class="art-info">
+                                <h5>${escapeHtml(a.name)}</h5>
+                                ${a.subcategory ? `<span class="badge bg-secondary">${escapeHtml(a.subcategory)}</span>` : ''}
+                                ${a.description ? `<p class="mt-2 mb-2" style="font-size:0.9rem;">${escapeHtml(a.description).substring(0,100)}${a.description.length > 100 ? '...' : ''}</p>` : ''}
+                                ${a.url ? `<a href="${a.url}" target="_blank" class="btn btn-sm btn-primary"><i class="fas fa-external-link-alt"></i> View</a>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch(e) {
+                container.innerHTML = '<div class="col-12 text-center py-5"><p>Could not load gallery.</p></div>';
+            }
+        }
+
+        function toggleSubmitForm() {
+            const section = document.getElementById('submit-section');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function submitArt() {
+            const title = document.getElementById('art-title').value.trim();
+            const artist = document.getElementById('art-artist').value.trim();
+            const medium = document.getElementById('art-medium').value;
+            if (!title || !artist || !medium) { alert('Title, artist, and medium are required'); return; }
+
+            const timestamp = Date.now();
+            const randomStr = Math.random().toString(36).substring(2, 11);
+            const resourceId = `art_${timestamp}_${randomStr}`;
+
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({
+                        id: resourceId,
+                        name: `${title} by ${artist}`,
+                        category: ['Visual Art', 'Art & Entertainment'],
+                        subcategory: medium,
+                        url: document.getElementById('art-link').value.trim(),
+                        image_url: document.getElementById('art-image').value.trim(),
+                        description: document.getElementById('art-desc').value.trim() + (document.getElementById('art-year').value.trim() ? ` (${document.getElementById('art-year').value.trim()})` : '')
+                    })
+                });
+                if (res.ok) {
+                    alert('Artwork submitted!');
+                    ['art-title','art-artist','art-link','art-image','art-year','art-desc'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('art-medium').value = '';
+                    document.getElementById('submit-section').style.display = 'none';
+                    loadArt();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Failed to submit');
+                }
+            } catch(e) { alert('Error submitting artwork'); }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

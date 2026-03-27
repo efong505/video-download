@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Christian Literature - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <style>
+        .lit-header { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 100px 0 20px 0; margin-bottom: 30px; }
+        .book-card { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 20px; transition: transform 0.2s; }
+        .book-card:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
+        .genre-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .genre-pill { padding: 6px 14px; border-radius: 20px; border: 2px solid #dee2e6; background: white; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+        .genre-pill:hover { border-color: #f59e0b; }
+        .genre-pill.active { background: #f59e0b; color: white; border-color: #f59e0b; }
+        .submit-form { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 24px; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="christian-literature"></div>
+    <script src="navbar.js"></script>
+    <script>fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});</script>
+
+    <div class="lit-header">
+        <div class="container">
+            <h1><i class="fas fa-book"></i> Christian Literature</h1>
+            <p>Discover books, poetry, and written works from a biblical worldview</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Submit Form Toggle -->
+        <div class="text-center mb-3">
+            <button class="btn btn-primary" onclick="toggleSubmitForm()" id="submit-toggle-btn">+ Submit Literature</button>
+        </div>
+
+        <!-- Submit Form (hidden by default) -->
+        <div id="submit-section" style="display:none;">
+            <div id="submit-login-prompt" class="text-center mb-3" style="display:none;">
+                <a href="login.html" class="btn btn-outline-primary">Log in to submit literature</a>
+            </div>
+            <div id="submit-form-container" style="display:none;">
+                <div class="submit-form">
+                    <h5>Submit Christian Literature</h5>
+                    <div class="row g-2">
+                        <div class="col-md-6"><input type="text" id="lit-title" class="form-control" placeholder="Book/Work title *"></div>
+                        <div class="col-md-6"><input type="text" id="lit-author" class="form-control" placeholder="Author name *"></div>
+                        <div class="col-md-6">
+                            <select id="lit-genre" class="form-select">
+                                <option value="">Select genre *</option>
+                                <option value="Theology">Theology</option>
+                                <option value="Devotional">Devotional</option>
+                                <option value="Biblical Commentary">Biblical Commentary</option>
+                                <option value="Christian Living">Christian Living</option>
+                                <option value="Apologetics">Apologetics</option>
+                                <option value="Biography">Biography</option>
+                                <option value="Fiction">Christian Fiction</option>
+                                <option value="Poetry">Poetry</option>
+                                <option value="Children's">Children's Literature</option>
+                                <option value="History">Church History</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6"><input type="text" id="lit-year" class="form-control" placeholder="Publication year"></div>
+                        <div class="col-md-6"><input type="url" id="lit-link" class="form-control" placeholder="Amazon/Publisher link"></div>
+                        <div class="col-md-6"><input type="text" id="lit-isbn" class="form-control" placeholder="ISBN (optional)"></div>
+                        <div class="col-12"><textarea id="lit-desc" class="form-control" rows="3" placeholder="Brief description or review"></textarea></div>
+                        <div class="col-12"><button class="btn btn-primary" onclick="submitLit()">Submit Literature</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Genre Filter Pills -->
+        <div class="genre-pills" id="genre-pills">
+            <button class="genre-pill active" data-genre="all">All</button>
+            <button class="genre-pill" data-genre="Theology">Theology</button>
+            <button class="genre-pill" data-genre="Devotional">Devotional</button>
+            <button class="genre-pill" data-genre="Biblical Commentary">Biblical Commentary</button>
+            <button class="genre-pill" data-genre="Christian Living">Christian Living</button>
+            <button class="genre-pill" data-genre="Apologetics">Apologetics</button>
+            <button class="genre-pill" data-genre="Fiction">Christian Fiction</button>
+        </div>
+
+        <!-- Literature Listings -->
+        <div id="lit-container">
+            <div class="text-center py-4"><div class="spinner-border"></div><p class="mt-2">Loading literature...</p></div>
+        </div>
+    </div>
+
+    <script>
+        const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
+        let authToken = localStorage.getItem('auth_token');
+        let userData = null;
+        let currentGenre = 'all';
+
+        try {
+            userData = JSON.parse(localStorage.getItem('user_data') || 'null');
+        } catch(e) {}
+
+        window.addEventListener('load', () => {
+            if (authToken && userData) {
+                document.getElementById('submit-form-container').style.display = 'block';
+                document.getElementById('submit-login-prompt').style.display = 'none';
+            } else {
+                document.getElementById('submit-form-container').style.display = 'none';
+                document.getElementById('submit-login-prompt').style.display = 'block';
+            }
+            loadLit();
+        });
+
+        document.getElementById('genre-pills').addEventListener('click', e => {
+            if (!e.target.classList.contains('genre-pill')) return;
+            document.querySelectorAll('.genre-pill').forEach(p => p.classList.remove('active'));
+            e.target.classList.add('active');
+            currentGenre = e.target.dataset.genre;
+            loadLit();
+        });
+
+        async function loadLit() {
+            const container = document.getElementById('lit-container');
+            container.innerHTML = '<div class="text-center py-4"><div class="spinner-border"></div></div>';
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const all = await res.json();
+                let lit = all.filter(r => {
+                    const cats = Array.isArray(r.category) ? r.category : [r.category];
+                    return cats.some(c => c.toLowerCase().includes('literature') || c.toLowerCase().includes('book'));
+                });
+
+                if (currentGenre !== 'all') {
+                    console.log('Filtering by genre:', currentGenre);
+                    lit.forEach(l => console.log('Item:', l.name, 'subcategory:', l.subcategory));
+                    lit = lit.filter(l => l.subcategory && l.subcategory === currentGenre);
+                    console.log('Filtered results:', lit.length);
+                }
+
+                if (!lit.length) {
+                    container.innerHTML = '<div class="text-center py-5"><i class="fas fa-book" style="font-size:3rem;color:#ccc;"></i><h4 class="mt-3">No literature listed yet</h4><p>Be the first to share Christian books and writings!</p></div>';
+                    return;
+                }
+
+                container.innerHTML = lit.map(l => `
+                    <div class="book-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-9">
+                                <h5><i class="fas fa-book text-warning"></i> ${escapeHtml(l.name)}</h5>
+                                ${l.subcategory ? `<span class="badge bg-secondary">${escapeHtml(l.subcategory)}</span>` : ''}
+                                ${l.description ? `<p class="mt-2 mb-0">${escapeHtml(l.description)}</p>` : ''}
+                            </div>
+                            <div class="col-md-3 text-end">
+                                ${l.url ? `<a href="${l.url}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> View</a>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch(e) {
+                container.innerHTML = '<div class="text-center py-5"><p>Could not load literature.</p></div>';
+            }
+        }
+
+        function toggleSubmitForm() {
+            const section = document.getElementById('submit-section');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function submitLit() {
+            const title = document.getElementById('lit-title').value.trim();
+            const author = document.getElementById('lit-author').value.trim();
+            const genre = document.getElementById('lit-genre').value;
+            if (!title || !author || !genre) { alert('Title, author, and genre are required'); return; }
+
+            const year = document.getElementById('lit-year').value.trim();
+            const isbn = document.getElementById('lit-isbn').value.trim();
+            let name = `${title} by ${author}`;
+            if (year) name += ` (${year})`;
+
+            let desc = document.getElementById('lit-desc').value.trim();
+            if (isbn) desc += `\n\nISBN: ${isbn}`;
+
+            const timestamp = Date.now();
+            const randomStr = Math.random().toString(36).substring(2, 11);
+            const resourceId = `literature_${timestamp}_${randomStr}`;
+
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({
+                        id: resourceId,
+                        name: name,
+                        category: ['Literature', 'Books', 'Art & Entertainment'],
+                        subcategory: genre,
+                        url: document.getElementById('lit-link').value.trim(),
+                        description: desc
+                    })
+                });
+                if (res.ok) {
+                    alert('Literature submitted!');
+                    ['lit-title','lit-author','lit-year','lit-link','lit-isbn','lit-desc'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('lit-genre').value = '';
+                    document.getElementById('submit-section').style.display = 'none';
+                    loadLit();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Failed to submit');
+                }
+            } catch(e) { alert('Error submitting literature'); }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

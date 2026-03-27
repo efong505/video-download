@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entertainment Reviews - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <style>
+        .reviews-header { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 100px 0 20px 0; margin-bottom: 30px; }
+        .review-card { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 20px; transition: transform 0.2s; }
+        .review-card:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
+        .rating { color: #ffc107; font-size: 1.2rem; }
+        .type-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .type-pill { padding: 6px 14px; border-radius: 20px; border: 2px solid #dee2e6; background: white; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+        .type-pill:hover { border-color: #f59e0b; }
+        .type-pill.active { background: #f59e0b; color: white; border-color: #f59e0b; }
+        .submit-form { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 24px; }
+        .content-warning { background: #dc3545; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; display: inline-block; margin-left: 8px; }
+        .recommended { background: #28a745; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; display: inline-block; margin-left: 8px; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="entertainment-reviews"></div>
+    <script src="navbar.js"></script>
+    <script>fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});</script>
+
+    <div class="reviews-header">
+        <div class="container">
+            <h1><i class="fas fa-star"></i> Entertainment Reviews</h1>
+            <p>Biblical reviews of movies, TV shows, music, and entertainment content</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Submit Form Toggle -->
+        <div class="text-center mb-3">
+            <button class="btn btn-primary" onclick="toggleSubmitForm()" id="submit-toggle-btn">+ Submit Review</button>
+        </div>
+
+        <!-- Submit Form (hidden by default) -->
+        <div id="submit-section" style="display:none;">
+            <div id="submit-login-prompt" class="text-center mb-3" style="display:none;">
+                <a href="login.html" class="btn btn-outline-primary">Log in to submit a review</a>
+            </div>
+            <div id="submit-form-container" style="display:none;">
+                <div class="submit-form">
+                    <h5>Submit Entertainment Review</h5>
+                    <div class="row g-2">
+                        <div class="col-md-6"><input type="text" id="review-title" class="form-control" placeholder="Movie/Show/Album title *"></div>
+                        <div class="col-md-6">
+                            <select id="review-type" class="form-select">
+                                <option value="">Select type *</option>
+                                <option value="Movie">Movie</option>
+                                <option value="TV Show">TV Show</option>
+                                <option value="Music Album">Music Album</option>
+                                <option value="Book">Book</option>
+                                <option value="Video Game">Video Game</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <select id="review-rating" class="form-select">
+                                <option value="">Biblical rating *</option>
+                                <option value="5">⭐⭐⭐⭐⭐ Highly Recommended</option>
+                                <option value="4">⭐⭐⭐⭐ Recommended</option>
+                                <option value="3">⭐⭐⭐ Acceptable with Caution</option>
+                                <option value="2">⭐⭐ Not Recommended</option>
+                                <option value="1">⭐ Avoid</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <select id="review-warning" class="form-select">
+                                <option value="">Content warning level</option>
+                                <option value="none">None - Family Friendly</option>
+                                <option value="mild">Mild - Minor Issues</option>
+                                <option value="moderate">Moderate - Parental Guidance</option>
+                                <option value="severe">Severe - Adults Only</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6"><input type="url" id="review-link" class="form-control" placeholder="Link to content (optional)"></div>
+                        <div class="col-md-6"><input type="text" id="review-year" class="form-control" placeholder="Release year"></div>
+                        <div class="col-12"><textarea id="review-desc" class="form-control" rows="4" placeholder="Your biblical review - discuss themes, messages, content concerns, and recommendations *"></textarea></div>
+                        <div class="col-12"><button class="btn btn-primary" onclick="submitReview()">Submit Review</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Type Filter Pills -->
+        <div class="type-pills" id="type-pills">
+            <button class="type-pill active" data-type="all">All</button>
+            <button class="type-pill" data-type="Movie">Movies</button>
+            <button class="type-pill" data-type="TV Show">TV Shows</button>
+            <button class="type-pill" data-type="Music Album">Music</button>
+            <button class="type-pill" data-type="Book">Books</button>
+        </div>
+
+        <!-- Reviews Listings -->
+        <div id="reviews-container">
+            <div class="text-center py-4"><div class="spinner-border"></div><p class="mt-2">Loading reviews...</p></div>
+        </div>
+    </div>
+
+    <script>
+        const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
+        let authToken = localStorage.getItem('auth_token');
+        let userData = null;
+        let currentType = 'all';
+
+        try {
+            userData = JSON.parse(localStorage.getItem('user_data') || 'null');
+        } catch(e) {}
+
+        window.addEventListener('load', () => {
+            if (authToken && userData) {
+                document.getElementById('submit-form-container').style.display = 'block';
+                document.getElementById('submit-login-prompt').style.display = 'none';
+            } else {
+                document.getElementById('submit-form-container').style.display = 'none';
+                document.getElementById('submit-login-prompt').style.display = 'block';
+            }
+            loadReviews();
+        });
+
+        document.getElementById('type-pills').addEventListener('click', e => {
+            if (!e.target.classList.contains('type-pill')) return;
+            document.querySelectorAll('.type-pill').forEach(p => p.classList.remove('active'));
+            e.target.classList.add('active');
+            currentType = e.target.dataset.type;
+            loadReviews();
+        });
+
+        async function loadReviews() {
+            const container = document.getElementById('reviews-container');
+            container.innerHTML = '<div class="text-center py-4"><div class="spinner-border"></div></div>';
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const all = await res.json();
+                let reviews = all.filter(r => {
+                    const cats = Array.isArray(r.category) ? r.category : [r.category];
+                    return cats.some(c => c.toLowerCase().includes('review') || c.toLowerCase().includes('entertainment'));
+                });
+
+                if (currentType !== 'all') {
+                    reviews = reviews.filter(r => r.subcategory === currentType);
+                }
+
+                if (!reviews.length) {
+                    container.innerHTML = '<div class="text-center py-5"><i class="fas fa-star" style="font-size:3rem;color:#ccc;"></i><h4 class="mt-3">No reviews yet</h4><p>Be the first to review entertainment from a biblical perspective!</p></div>';
+                    return;
+                }
+
+                container.innerHTML = reviews.map(r => {
+                    const rating = parseInt(r.rating || 0);
+                    const stars = '⭐'.repeat(rating);
+                    const recommended = rating >= 4;
+                    const warning = r.content_warning || 'none';
+                    
+                    return `
+                    <div class="review-card">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h5>
+                                    <i class="fas fa-film text-warning"></i> ${escapeHtml(r.name)}
+                                    ${recommended ? '<span class="recommended">✓ Recommended</span>' : ''}
+                                    ${warning !== 'none' ? `<span class="content-warning">⚠ ${warning.charAt(0).toUpperCase() + warning.slice(1)}</span>` : ''}
+                                </h5>
+                                ${r.subcategory ? `<span class="badge bg-secondary">${escapeHtml(r.subcategory)}</span>` : ''}
+                                <div class="rating mt-2">${stars} ${rating}/5</div>
+                                ${r.description ? `<p class="mt-3">${escapeHtml(r.description)}</p>` : ''}
+                                ${r.url ? `<a href="${r.url}" target="_blank" class="btn btn-sm btn-outline-primary mt-2"><i class="fas fa-external-link-alt"></i> View Content</a>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `}).join('');
+            } catch(e) {
+                container.innerHTML = '<div class="text-center py-5"><p>Could not load reviews.</p></div>';
+            }
+        }
+
+        function toggleSubmitForm() {
+            const section = document.getElementById('submit-section');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function submitReview() {
+            const title = document.getElementById('review-title').value.trim();
+            const type = document.getElementById('review-type').value;
+            const rating = document.getElementById('review-rating').value;
+            const desc = document.getElementById('review-desc').value.trim();
+            
+            if (!title || !type || !rating || !desc) { 
+                alert('Title, type, rating, and review are required'); 
+                return; 
+            }
+
+            const year = document.getElementById('review-year').value.trim();
+            let name = title;
+            if (year) name += ` (${year})`;
+
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({
+                        name: name,
+                        category: ['Entertainment Review', 'Art & Entertainment'],
+                        subcategory: type,
+                        rating: rating,
+                        content_warning: document.getElementById('review-warning').value || 'none',
+                        url: document.getElementById('review-link').value.trim(),
+                        description: desc
+                    })
+                });
+                if (res.ok) {
+                    alert('Review submitted!');
+                    ['review-title','review-link','review-year','review-desc'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('review-type').value = '';
+                    document.getElementById('review-rating').value = '';
+                    document.getElementById('review-warning').value = '';
+                    document.getElementById('submit-section').style.display = 'none';
+                    loadReviews();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Failed to submit');
+                }
+            } catch(e) { alert('Error submitting review'); }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
