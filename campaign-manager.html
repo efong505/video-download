@@ -13,7 +13,7 @@
             min-height: 100vh;
             padding: 20px;
         }
-        .container { max-width: 1200px; margin: 0 auto; }
+        .container { max-width: 100%; margin: 0 auto; padding: 0 20px; }
         .header {
             background: white;
             padding: 30px;
@@ -102,10 +102,10 @@
             font-weight: 600;
         }
         .modal-body textarea { min-height: 300px; font-family: monospace; }
-        .enrollments-table { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .enrollments-table table { margin: 0; }
-        .enrollments-table th { background: #2c5aa0; color: white; font-size: 13px; white-space: nowrap; }
-        .enrollments-table td { font-size: 13px; vertical-align: middle; }
+        .enrollments-table { background: white; border-radius: 10px; overflow-x: auto; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .enrollments-table table { margin: 0; width: 100%; min-width: 1000px; }
+        .enrollments-table th { background: #2c5aa0; color: white; font-size: 13px; white-space: nowrap; padding: 12px; }
+        .enrollments-table td { font-size: 13px; vertical-align: middle; padding: 12px; white-space: nowrap; }
         .status-active { color: #16a34a; font-weight: 600; }
         .status-completed { color: #2c5aa0; font-weight: 600; }
         .status-paused { color: #d97706; font-weight: 600; }
