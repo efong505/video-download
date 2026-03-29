@@ -22,16 +22,15 @@ def lambda_handler(event, context):
         # Get campaign
         campaign = campaigns_table.get_item(Key={'user_id': user_id, 'campaign_id': campaign_id})['Item']
         
-        # Concatenate content and html_content (footer)
-        email_body = campaign.get('content', '')
-        email_footer = campaign.get('html_content', '')
-        email_content = email_body + email_footer
+        # Use html_content if available, otherwise use content
+        # (Don't concatenate - that causes duplication)
+        email_content = campaign.get('html_content') or campaign.get('content', '')
         
         if not email_content:
             print(f"ERROR: No content found for campaign {campaign_id}")
             continue
         
-        print(f"Email content length: {len(email_content)} chars (body: {len(email_body)}, footer: {len(email_footer)})")
+        print(f"Email content length: {len(email_content)} chars")
         
         # Get user info
         user = users_table.get_item(Key={'user_id': user_id})['Item']

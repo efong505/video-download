@@ -94,6 +94,28 @@
             color: #2c5aa0;
             border-bottom: 2px solid #e9ecef;
             font-size: 13px;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+        }
+        
+        th:hover {
+            background: #e9ecef;
+        }
+        
+        th.sortable::after {
+            content: ' ⇅';
+            opacity: 0.3;
+        }
+        
+        th.sort-asc::after {
+            content: ' ▲';
+            opacity: 1;
+        }
+        
+        th.sort-desc::after {
+            content: ' ▼';
+            opacity: 1;
         }
         
         td {
@@ -293,10 +315,10 @@
                 <table id="events-table">
                     <thead>
                         <tr>
-                            <th>Time</th>
-                            <th>Email</th>
-                            <th>Event</th>
-                            <th>Campaign</th>
+                            <th class="sortable" onclick="sortEventsTable('timestamp')">Time</th>
+                            <th class="sortable" onclick="sortEventsTable('email')">Email</th>
+                            <th class="sortable" onclick="sortEventsTable('event')">Event</th>
+                            <th class="sortable" onclick="sortEventsTable('campaign')">Campaign</th>
                             <th>Details</th>
                         </tr>
                     </thead>
@@ -324,6 +346,9 @@
         let performanceChart, funnelChart;
         let campaignMap = {};
         let allCampaignStats = [];
+        let allEvents = [];
+        let currentSortColumn = null;
+        let currentSortDirection = 'desc';
         
         function switchTab(tab) {
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -409,8 +434,8 @@
             try {
                 const response = await fetch(`${API_BASE}?action=get_recent_events&limit=100`);
                 const data = await response.json();
-                const events = data.events || [];
-                renderEventsTable(events);
+                allEvents = data.events || [];
+                renderEventsTable(allEvents);
             } catch (error) {
                 console.error('Error loading events:', error);
                 document.getElementById('events-body').innerHTML = '<tr><td colspan="5" class="text-center">Error loading events</td></tr>';
@@ -491,14 +516,57 @@
             document.getElementById('subscribers-body').innerHTML = html;
         }
         
+        function sortEventsTable(column) {
+            // Toggle sort direction if clicking same column
+            if (currentSortColumn === column) {
+                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                currentSortColumn = column;
+                currentSortDirection = column === 'timestamp' ? 'desc' : 'asc';
+            }
+            
+            // Sort the events
+            const sorted = [...allEvents].sort((a, b) => {
+                let valA, valB;
+                
+                if (column === 'timestamp') {
+                    valA = parseInt(a.timestamp || 0);
+                    valB = parseInt(b.timestamp || 0);
+                } else if (column === 'email') {
+                    valA = (a.subscriber_email || a.email || '').toLowerCase();
+                    valB = (b.subscriber_email || b.email || '').toLowerCase();
+                } else if (column === 'event') {
+                    valA = (a.event_type || '').toLowerCase();
+                    valB = (b.event_type || '').toLowerCase();
+                } else if (column === 'campaign') {
+                    valA = (campaignMap[a.campaign_id] || a.campaign_id || '').toLowerCase();
+                    valB = (campaignMap[b.campaign_id] || b.campaign_id || '').toLowerCase();
+                }
+                
+                if (valA < valB) return currentSortDirection === 'asc' ? -1 : 1;
+                if (valA > valB) return currentSortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+            
+            // Update header styling
+            document.querySelectorAll('#events-table th').forEach(th => {
+                th.classList.remove('sort-asc', 'sort-desc');
+            });
+            
+            const columnIndex = ['timestamp', 'email', 'event', 'campaign'].indexOf(column);
+            if (columnIndex >= 0) {
+                const th = document.querySelectorAll('#events-table th')[columnIndex];
+                th.classList.add(currentSortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+            }
+            
+            renderEventsTable(sorted);
+        }
+        
         function renderEventsTable(events) {
             if (events.length === 0) {
                 document.getElementById('events-body').innerHTML = '<tr><td colspan="5" class="text-center">No events</td></tr>';
                 return;
             }
-            
-            // Sort by timestamp descending (newest first)
-            events.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
             
             const html = events.map(e => {
                 const eventBadge = {
@@ -523,7 +591,7 @@
                     details = metadata.complaint_type || 'Spam report';
                 }
                 
-                const eventDate = e.date ? new Date(e.date).toLocaleString() : (e.timestamp ? new Date(e.timestamp * 1000).toLocaleString() : '-');
+                const eventDate = e.timestamp ? new Date(e.timestamp * 1000).toLocaleString() : '-';
                 
                 return `
                     <tr>

@@ -413,14 +413,30 @@ def get_recent_events_public(params):
     PLATFORM_OWNER_ID = 'effa3242-cf64-4021-b2b0-c8a5a9dfd6d2'
     limit = int(params.get('limit', 50))
     
+    # Get ALL events to sort by timestamp
+    events = []
     response = events_table.query(
         KeyConditionExpression='user_id = :uid',
-        ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID},
-        ScanIndexForward=False,
-        Limit=limit
+        ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID}
     )
+    events.extend(response['Items'])
     
-    return cors_response(200, {'events': response['Items']})
+    # Handle pagination
+    while 'LastEvaluatedKey' in response:
+        response = events_table.query(
+            KeyConditionExpression='user_id = :uid',
+            ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID},
+            ExclusiveStartKey=response['LastEvaluatedKey']
+        )
+        events.extend(response['Items'])
+    
+    # Sort by timestamp descending (newest first)
+    events.sort(key=lambda x: int(x.get('timestamp', 0)), reverse=True)
+    
+    # Take only requested limit
+    events = events[:limit]
+    
+    return cors_response(200, {'events': events})
 
 def get_campaign_analytics_public(params):
     """Public endpoint for platform owner campaign analytics"""

@@ -1,0 +1,117 @@
+Found 7 election-map-transition-sequence campaigns
+
+================================================================================
+CAMPAIGN #1 - Transition #1 - Welcome Back
+================================================================================
+Campaign ID: 3c2802b2-7306-4480-86a5-fb2a4becfd50
+Step: None/7
+Subject: The 7 Mountains that shape our world (and why Christians need to climb them)
+
+HTML Content Length: 4483 characters
+
+--------------------------------------------------------------------------------
+HTML CONTENT:
+--------------------------------------------------------------------------------
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; }
+        .header { background: linear-gradient(135deg, #2c5aa0 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        .content { padding: 30px; background: #ffffff; }
+        .mountain-box { background: #f8f9fa; border-left: 4px solid #d4af37; padding: 15px; margin: 10px 0; }
+        .mountain-box h4 { margin: 0 0 5px 0; color: #2c5aa0; }
+        .highlight { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; }
+        .footer { background: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #666; }
+        .button { display: inline-block; background: #2c5aa0; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>The 7 Mountains 🏔️</h1>
+    </div>
+    
+    <div class="content">
+        <p>Hi {{first_name}},</p>
+        
+        <p>Yesterday I mentioned the "7 Mountains of influence" - and I promised to explain what that means.</p>
+        
+        <p>Here's the idea in a nutshell:</p>
+        
+        <h3>Culture is shaped by 7 key areas of society:</h3>
+        
+        <div class="mountain-box">
+            <h4>1. Family</h4>
+            <p>The foundation of civilization</p>
+        </div>
+        
+        <div class="mountain-box">
+            <h4>2. Religion</h4>
+            <p>Spiritual and moral guidance</p>
+        </div>
+        
+        <div class="mountain-box">
+            <h4>3. Education</h4>
+            <p>What we teach the next generation</p>
+        </div>
+        
+        <div class="mountain-box">
+            <h4>4. Media</h4>
+            <p>Who controls the narrative</p>
+        </div>
+        
+        <div class="mountain-box">
+            <h4>5. Arts & Entertainment</h4>
+            <p>What captures our imagination</p>
+        </div>
+        
+        <div class="mountain-box">
+            <h4>6. Business & Economics</h4>
+            <p>Where resources flow</p>
+        </div>
+        
+        <div class="mountain-box">
+            <h4>7. Government</h4>
+            <p>Laws and public policy</p>
+        </div>
+        
+        <p>For too long, Christians have retreated from these mountains. We've focused on personal piety while secular forces have taken over education, media, entertainment, business, and yes - even government.</p>
+        
+        <div class="highlight">
+            <h3>The result?</h3>
+            <p>A culture that's increasingly hostile to Christian values. Not because we lost the argument, but because <strong>we abandoned the battlefield.</strong></p>
+        </div>
+        
+        <p><strong>The 7 Mountains strategy says:</strong> Christians need to be present, active, and influential in ALL these areas - not just church on Sunday.</p>
+        
+        <h3>On our platform, you'll find:</h3>
+        
+        <ul>
+            <li>Articles about how to live out your faith in business, education, media, etc.</li>
+            <li>Stories of Christians who are making a difference in their "mountain"</li>
+            <li>Practical resources to help you be salt and light wherever God has placed you</li>
+        </ul>
+        
+        <div class="highlight">
+            <p><strong>Full transparency:</strong> We're still building out each mountain hub. Some sections are more developed than others. But the vision is there, and we're making progress every day.</p>
+        </div>
+        
+        <h3>Which mountain are you called to?</h3>
+        
+        <p>Maybe you're a teacher (Education), a business owner (Economics), a parent (Family), or an artist (Arts & Entertainment). Wherever you are, God has placed you there for a reason.</p>
+        
+        <p>In my next email, I'll share something that's reshaping ALL 7 mountains - and why Christians need to pay attention NOW.</p>
+        
+        <p>Blessings,<br>
+        Christian Conservatives Today</p>
+        
+        <p><em>P.S. - Want to explore the 7 Mountains on the platform? <a href="https://christianconservativestoday.com">Visit our homepage</a></em></p>
+    </div>
+    
+    <div class="footer">
+        <p>Christian Conservatives Today<br>
+        <a href="https://christianconservativestoday.com">christianconservativestoday.com</a></p>
+    </div>
+</body>
+</html>

@@ -423,7 +423,7 @@
                     </div>
                     <button class="btn btn-sm btn-secondary mt-2" onclick="toggleContent('${c.campaign_id}')">Show/Hide Content</button>
                     <div id="content-${c.campaign_id}" class="campaign-content" style="display: none;">
-                        ${c.content || 'No content'}
+                        ${c.html_content || c.content || 'No content'}
                     </div>
                 </div>`;
             }).join('');
@@ -449,7 +449,7 @@
                 document.getElementById('sequence-number').value = campaign.sequence_number || 1;
                 document.getElementById('delay-days').value = campaign.delay_days || 0;
                 document.getElementById('email-subject').value = campaign.subject || '';
-                document.getElementById('email-content').value = campaign.content || '';
+                document.getElementById('email-content').value = campaign.html_content || campaign.content || '';
                 document.getElementById('filter-tags').value = (campaign.filter_tags || []).join(', ');
 
                 new bootstrap.Modal(document.getElementById('createModal')).show();
@@ -486,7 +486,7 @@
                     sequence_number: sequenceNumber,
                     delay_days: delayDays,
                     subject: subject,
-                    content: content,
+                    html_content: content,
                     filter_tags: tags
                 };
                 if (campaignId) payload.campaign_id = campaignId;

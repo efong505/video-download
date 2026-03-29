@@ -295,7 +295,7 @@ Total book subscribers: Check DynamoDB for count
             'email': email,
             'status': 'pending',
             'subscribed_at': datetime.now().isoformat(),
-            'source': 'election-map',
+            'source': body.get('source', 'website_subscribe'),  # Default to website_subscribe for general signups
             'total_opens': 0,
             'total_clicks': 0,
             'last_activity': datetime.now().isoformat()
@@ -453,6 +453,13 @@ def handle_confirmation(event):
         if not email:
             return cors_response(400, {'error': 'Email required'})
         
+        # Get subscriber info before updating
+        subscriber_response = subscribers_table.get_item(Key={'email': email})
+        subscriber = subscriber_response.get('Item', {})
+        first_name = subscriber.get('first_name', '')
+        last_name = subscriber.get('last_name', '')
+        source = subscriber.get('source', 'election-map')
+        
         # Update subscriber status to active
         subscribers_table.update_item(
             Key={'email': email},
@@ -464,6 +471,10 @@ def handle_confirmation(event):
             }
         )
         
+        # Bridge to new email marketing system if from website
+        if source in ['website', 'website_subscribe', 'general']:
+            bridge_website_subscriber(email, first_name, last_name, source)
+        
         # Send welcome email
         send_welcome_email(email)
         
@@ -474,6 +485,8 @@ def handle_confirmation(event):
         
     except Exception as e:
         print(f"Confirmation error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return cors_response(500, {'error': 'Confirmation failed'})
 
 def send_confirmation_email(email, first_name=''):
@@ -817,6 +830,89 @@ def bridge_to_email_marketing(email, first_name, last_name, source):
             print(f'Drip enrollment error (non-fatal): {str(drip_error)}')
     except Exception as e:
         print(f'Bridge error (non-fatal): {str(e)}')
+
+def bridge_website_subscriber(email, first_name, last_name, source='website_subscribe'):
+    """Add website subscriber to multi-tenant system and enroll in general newsletter"""
+    try:
+        # Check if already exists
+        existing = mt_subscribers_table.get_item(
+            Key={'user_id': PLATFORM_OWNER_ID, 'subscriber_email': email}
+        )
+        if 'Item' in existing:
+            # Update status to active if was pending
+            mt_subscribers_table.update_item(
+                Key={'user_id': PLATFORM_OWNER_ID, 'subscriber_email': email},
+                UpdateExpression='SET #status = :status',
+                ExpressionAttributeNames={'#status': 'status'},
+                ExpressionAttributeValues={':status': 'active'}
+            )
+            print(f'Bridge: {email} status updated to active')
+        else:
+            # Create new subscriber
+            mt_subscribers_table.put_item(Item={
+                'user_id': PLATFORM_OWNER_ID,
+                'subscriber_email': email,
+                'first_name': first_name or '',
+                'last_name': last_name or '',
+                'phone': '',
+                'status': 'active',
+                'subscribed_at': datetime.now().isoformat(),
+                'source': source,
+                'tags': ['newsletter']
+            })
+            
+            mt_users_table.update_item(
+                Key={'user_id': PLATFORM_OWNER_ID},
+                UpdateExpression='SET email_subscribers_count = email_subscribers_count + :inc',
+                ExpressionAttributeValues={':inc': 1}
+            )
+            print(f'Bridge: {email} added to email marketing system')
+        
+        # Check if general-newsletter-sequence exists
+        campaigns_response = mt_campaigns_table.query(
+            KeyConditionExpression='user_id = :uid',
+            FilterExpression='campaign_group = :cg',
+            ExpressionAttributeValues={
+                ':uid': PLATFORM_OWNER_ID,
+                ':cg': 'general-newsletter-sequence'
+            }
+        )
+        
+        if campaigns_response.get('Items'):
+            # Campaign group exists - enroll them
+            enrollment_id = f"{email}#general-newsletter-sequence"
+            
+            # Check if already enrolled
+            try:
+                existing_enrollment = mt_drip_enrollments_table.get_item(
+                    Key={'user_id': PLATFORM_OWNER_ID, 'enrollment_id': enrollment_id}
+                )
+                if 'Item' in existing_enrollment:
+                    print(f'Bridge: {email} already enrolled in general-newsletter-sequence')
+                    return
+            except:
+                pass
+            
+            # Create enrollment
+            mt_drip_enrollments_table.put_item(Item={
+                'user_id': PLATFORM_OWNER_ID,
+                'enrollment_id': enrollment_id,
+                'subscriber_email': email,
+                'sequence_name': 'general-newsletter-sequence',
+                'campaign_group': 'general-newsletter-sequence',
+                'filter_tags': ['newsletter'],
+                'enrolled_at': datetime.now().isoformat(),
+                'current_sequence_number': 0,
+                'status': 'active'
+            })
+            print(f'Bridge: {email} enrolled in general-newsletter-sequence')
+        else:
+            print(f'Bridge: general-newsletter-sequence not found, skipping enrollment')
+            
+    except Exception as e:
+        print(f'Bridge website subscriber error (non-fatal): {str(e)}')
+        import traceback
+        traceback.print_exc()
 
 def send_book_signup_email_with_pdfs(email, first_name):
     """Send book signup confirmation with 3 PDF attachments from S3"""
@@ -1216,10 +1312,14 @@ def create_campaign(body):
         delay_days = int(body.get('delay_days', 1))
         subject = body.get('subject', '').strip()
         content = body.get('content', '').strip()
+        html_content = body.get('html_content', '').strip()
         filter_tags = body.get('filter_tags', [])
         campaign_group = body.get('campaign_group', '').strip()
         
-        if not campaign_name or not subject or not content:
+        # Use html_content if provided, otherwise content
+        final_content = html_content or content
+        
+        if not campaign_name or not subject or not final_content:
             return cors_response(400, {'error': 'Campaign name, subject, and content required'})
         
         item = {
@@ -1230,7 +1330,7 @@ def create_campaign(body):
             'delay_days': delay_days,
             'delay_hours': 0,
             'subject': subject,
-            'content': content,
+            'html_content': final_content,
             'filter_tags': filter_tags,
             'created_at': datetime.now().isoformat(),
             'updated_at': datetime.now().isoformat()
@@ -1276,6 +1376,10 @@ def update_campaign(body):
         if 'content' in body:
             update_parts.append('content = :cont')
             expr_values[':cont'] = body['content'].strip()
+        
+        if 'html_content' in body:
+            update_parts.append('html_content = :html')
+            expr_values[':html'] = body['html_content'].strip()
         
         if 'filter_tags' in body:
             update_parts.append('filter_tags = :tags')
@@ -1473,15 +1577,43 @@ def trigger_drip_now(body):
             })
         )
 
+        # Calculate next_send_at for the NEXT email (if exists)
+        next_next_seq = int(next_email['sequence_number']) + 1
+        next_next_email = None
+        for c in drip_campaigns:
+            if int(c.get('sequence_number', 0)) == next_next_seq:
+                next_next_email = c
+                break
+        
+        update_expr = 'SET current_sequence_number = :seq, last_sent_at = :ts'
+        expr_values = {
+            ':seq': next_email['sequence_number'],
+            ':ts': int(datetime.now().timestamp())
+        }
+        
+        # If there's another email after this one, calculate next_send_at
+        if next_next_email:
+            delay_days = int(next_next_email.get('delay_days', 1))
+            delay_hours = int(next_next_email.get('delay_hours', 0))
+            delay_seconds = (delay_days * 86400) + (delay_hours * 3600)
+            next_send_timestamp = int(datetime.now().timestamp()) + delay_seconds
+            update_expr += ', next_send_at = :next'
+            expr_values[':next'] = next_send_timestamp
+        else:
+            # No more emails, mark as completed
+            update_expr += ', #status = :status'
+            expr_values[':status'] = 'completed'
+        
         # Update enrollment
-        mt_drip_enrollments_table.update_item(
-            Key={'user_id': PLATFORM_OWNER_ID, 'enrollment_id': enrollment_id},
-            UpdateExpression='SET current_sequence_number = :seq, last_sent_at = :ts',
-            ExpressionAttributeValues={
-                ':seq': next_email['sequence_number'],
-                ':ts': datetime.now().isoformat()
-            }
-        )
+        update_params = {
+            'Key': {'user_id': PLATFORM_OWNER_ID, 'enrollment_id': enrollment_id},
+            'UpdateExpression': update_expr,
+            'ExpressionAttributeValues': expr_values
+        }
+        if '#status' in update_expr:
+            update_params['ExpressionAttributeNames'] = {'#status': 'status'}
+        
+        mt_drip_enrollments_table.update_item(**update_params)
 
         return cors_response(200, {
             'message': f"Email #{next_email['sequence_number']} queued for {subscriber_email}",
@@ -1679,32 +1811,55 @@ def get_subscriber_analytics():
         return cors_response(500, {'error': 'Failed to get subscriber analytics'})
 
 def get_recent_events(limit='100'):
-    """Get recent email events from both tables"""
+    """Get recent email events from both tables, sorted by timestamp"""
     try:
         from decimal import Decimal
         
         limit_int = int(limit)
         
-        # Get from user-email-events (where email_sender logs)
+        # Get ALL events from user-email-events (need all to sort by timestamp)
         mt_events_table = dynamodb.Table('user-email-events')
+        events = []
         response = mt_events_table.query(
             KeyConditionExpression='user_id = :uid',
-            ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID},
-            ScanIndexForward=False,
-            Limit=limit_int
+            ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID}
         )
-        events = response.get('Items', [])
+        events.extend(response.get('Items', []))
+        
+        # Handle pagination to get all events
+        while 'LastEvaluatedKey' in response:
+            response = mt_events_table.query(
+                KeyConditionExpression='user_id = :uid',
+                ExpressionAttributeValues={':uid': PLATFORM_OWNER_ID},
+                ExclusiveStartKey=response['LastEvaluatedKey']
+            )
+            events.extend(response.get('Items', []))
+        
+        print(f"Fetched {len(events)} events from user-email-events")
         
         # Also get from legacy email-events table
-        legacy_response = events_table.scan(Limit=limit_int)
+        legacy_response = events_table.scan()
         legacy_events = legacy_response.get('Items', [])
+        while 'LastEvaluatedKey' in legacy_response:
+            legacy_response = events_table.scan(ExclusiveStartKey=legacy_response['LastEvaluatedKey'])
+            legacy_events.extend(legacy_response.get('Items', []))
+        
+        print(f"Fetched {len(legacy_events)} events from legacy email-events")
+        
         # Normalize legacy events to have subscriber_email field
         for le in legacy_events:
             if 'email' in le and 'subscriber_email' not in le:
                 le['subscriber_email'] = le['email']
         
+        # Combine all events
         all_events = events + legacy_events
-        all_events.sort(key=lambda x: int(x.get('timestamp', 0)), reverse=True)
+        print(f"Total events before sort: {len(all_events)}")
+        
+        # Sort by timestamp descending (newest first)
+        all_events.sort(key=lambda x: int(x.get('timestamp', 0)) if isinstance(x.get('timestamp'), (int, Decimal)) else 0, reverse=True)
+        print(f"Sorted events, taking top {limit_int}")
+        
+        # Take only the requested limit
         all_events = all_events[:limit_int]
         
         # Convert Decimal to int/float
@@ -1719,6 +1874,7 @@ def get_recent_events(limit='100'):
                 return obj
         
         all_events = convert_decimals(all_events)
+        print(f"Returning {len(all_events)} events")
         
         return cors_response(200, {'events': all_events})
     except Exception as e:
