@@ -577,7 +577,7 @@ def send_welcome_email(email):
     pixel_url = f"{API_GATEWAY}/track/open/{tracking_id}"
     
     # Direct links (no click tracking)
-    election_map_link = f"{DOMAIN}/election-map.html"
+    main_site_link = f"{DOMAIN}"
     unsubscribe_link = f"{DOMAIN}/unsubscribe.html?email={email}"
     
     # HTML email body
@@ -607,18 +607,17 @@ def send_welcome_email(email):
             </ul>
             
             <div style="text-align: center; margin: 30px 0;">
-                <a href="{election_map_link}" 
+                <a href="{main_site_link}" 
                    style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
                           color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; 
                           font-weight: bold; font-size: 16px;">
-                    📍 View Interactive Election Map
+                    🏠 Explore Christian Conservatives Today
                 </a>
             </div>
             
             <div style="background: #f8f9fa; padding: 15px; border-radius: 5px; margin: 20px 0;">
                 <p style="margin: 0; font-size: 14px; color: #666;">
-                    <strong>💡 Quick Tip:</strong> Bookmark the election map and check back regularly for updates 
-                    as we add new candidates and races!
+                    <strong>💡 Quick Tip:</strong> Explore our 7 Mountains resources, prayer wall, articles, and more!
                 </p>
             </div>
             
@@ -651,6 +650,7 @@ def send_welcome_email(email):
     - Biblical voting guidance on key issues
     
     View the interactive election map: {DOMAIN}/election-map.html
+    Explore the site: {DOMAIN}
     
     ---
     You're receiving this because you subscribed at christianconservativestoday.com

@@ -116,6 +116,73 @@ def vote_boycott(user_id, data):
     except Exception as e:
         return cors_response(500, {'error': str(e)})
 
+def update_boycott(user_id, role, data):
+    """Admin function to update boycott entry"""
+    if role not in ['admin', 'super_user']:
+        return cors_response(403, {'error': 'Admin access required'})
+    
+    boycott_id = data.get('boycott_id')
+    if not boycott_id:
+        return cors_response(400, {'error': 'boycott_id required'})
+    
+    try:
+        item = table.get_item(Key={'boycott_id': boycott_id}).get('Item')
+        if not item:
+            return cors_response(404, {'error': 'Not found'})
+        
+        update_expr = []
+        expr_values = {}
+        
+        if 'company_name' in data:
+            update_expr.append('company_name = :cn')
+            expr_values[':cn'] = data['company_name']
+        if 'reason' in data:
+            update_expr.append('reason = :r')
+            expr_values[':r'] = data['reason']
+        if 'category' in data:
+            update_expr.append('category = :cat')
+            expr_values[':cat'] = data['category']
+        if 'alternatives' in data:
+            update_expr.append('alternatives = :alt')
+            expr_values[':alt'] = data['alternatives']
+        if 'source_url' in data:
+            update_expr.append('source_url = :url')
+            expr_values[':url'] = data['source_url']
+        if 'status' in data and data['status'] in VALID_STATUSES:
+            update_expr.append('#s = :status')
+            expr_values[':status'] = data['status']
+        
+        if not update_expr:
+            return cors_response(400, {'error': 'No fields to update'})
+        
+        expr_names = {'#s': 'status'} if 'status' in data else None
+        
+        table.update_item(
+            Key={'boycott_id': boycott_id},
+            UpdateExpression='SET ' + ', '.join(update_expr),
+            ExpressionAttributeValues=expr_values,
+            ExpressionAttributeNames=expr_names
+        )
+        
+        return cors_response(200, {'message': 'Boycott updated'})
+    except Exception as e:
+        return cors_response(500, {'error': str(e)})
+
+def delete_boycott(user_id, role, data):
+    """Admin function to delete boycott entry"""
+    if role not in ['admin', 'super_user']:
+        return cors_response(403, {'error': 'Admin access required'})
+    
+    boycott_id = data.get('boycott_id')
+    if not boycott_id:
+        return cors_response(400, {'error': 'boycott_id required'})
+    
+    try:
+        table.delete_item(Key={'boycott_id': boycott_id})
+        return cors_response(200, {'message': 'Boycott deleted'})
+    except Exception as e:
+        return cors_response(500, {'error': str(e)})
+
 def add_alternative(user_id, data):
     boycott_id = data.get('boycott_id')
     alternative = data.get('alternative', '').strip()
@@ -163,5 +230,9 @@ def lambda_handler(event, context):
         return vote_boycott(user_id, body)
     elif action == 'add_alternative':
         return add_alternative(user_id, body)
+    elif action == 'update':
+        return update_boycott(user_id, role, body)
+    elif action == 'delete':
+        return delete_boycott(user_id, role, body)
     else:
         return cors_response(400, {'error': f'Invalid action: {action}'})

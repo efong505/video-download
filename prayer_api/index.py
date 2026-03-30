@@ -6,6 +6,7 @@ from datetime import datetime
 
 dynamodb = boto3.resource('dynamodb')
 prayer_table = dynamodb.Table('prayer-requests')
+prayer_responses_table = dynamodb.Table('prayer-responses')
 lambda_client = boto3.client('lambda')
 
 # Toggle moderation: set to 'true' to require approval, 'false' for auto-approve
@@ -42,6 +43,10 @@ def lambda_handler(event, context):
             return get_config(headers)
         elif action == 'set_config':
             return set_config(event, headers)
+        elif action == 'add_response':
+            return add_prayer_response(event, headers)
+        elif action == 'list_responses':
+            return list_prayer_responses(event, headers)
         else:
             return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'Invalid action'})}
     
@@ -74,20 +79,28 @@ def list_prayers(event, headers):
     response = prayer_table.scan()
     prayers = response.get('Items', [])
     
+    # Filter by category
     if params.get('category'):
         prayers = [p for p in prayers if p.get('category') == params['category']]
+    
+    # Filter by state
     if params.get('state'):
         prayers = [p for p in prayers if p.get('state') == params['state']]
+    
+    # Filter by status
     if params.get('status'):
         prayers = [p for p in prayers if p.get('status') == params['status']]
     
-    privacy = params.get('privacy', 'public')
-    prayers = [p for p in prayers if p.get('privacy') == privacy]
+    # Only filter by privacy if explicitly requested (don't filter by default)
+    if params.get('privacy'):
+        prayers = [p for p in prayers if p.get('privacy') == params['privacy']]
     
+    # Convert prayer_count to int
     for prayer in prayers:
         if 'prayer_count' in prayer:
             prayer['prayer_count'] = int(prayer['prayer_count'])
     
+    # Sort by created_at descending
     prayers.sort(key=lambda x: x.get('created_at', ''), reverse=True)
     
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'prayers': prayers})}
@@ -96,11 +109,36 @@ def increment_prayer_count(event, headers):
     body = json.loads(event['body'])
     request_id = body['request_id']
     
+    # Increment prayer count
     prayer_table.update_item(
         Key={'request_id': request_id},
         UpdateExpression='SET prayer_count = if_not_exists(prayer_count, :zero) + :inc',
         ExpressionAttributeValues={':inc': 1, ':zero': 0}
     )
+    
+    # Send notification to prayer requester
+    try:
+        prayer_response = prayer_table.get_item(Key={'request_id': request_id})
+        prayer = prayer_response.get('Item', {})
+        
+        # Only notify if email exists and is not anonymous
+        if prayer.get('submitted_by') and prayer.get('submitted_by') != 'anonymous@prayer.com':
+            lambda_client.invoke(
+                FunctionName='notifications_api',
+                InvocationType='Event',
+                Payload=json.dumps({
+                    'body': json.dumps({
+                        'action': 'send_notification',
+                        'type': 'prayer_update',
+                        'recipient_email': prayer['submitted_by'],
+                        'subject': 'Someone Prayed for Your Request',
+                        'message': f'Someone just prayed for your request: "{prayer.get("title", "")}"',
+                        'link': 'https://christianconservativestoday.com/prayer-wall.html'
+                    })
+                })
+            )
+    except Exception as e:
+        print(f'Notification error: {e}')
     
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Prayer count incremented'})}
 
@@ -180,3 +218,58 @@ def set_config(event, headers):
     )
     
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Configuration updated', 'require_moderation': require_moderation})}
+
+
+def add_prayer_response(event, headers):
+    """Add an encouraging response/comment to a prayer request"""
+    body = json.loads(event['body'])
+    
+    response_item = {
+        'response_id': str(uuid.uuid4()),
+        'request_id': body['request_id'],
+        'message': body['message'],
+        'author_name': body.get('author_name', 'Anonymous'),
+        'author_email': body.get('author_email', ''),
+        'created_at': datetime.utcnow().isoformat()
+    }
+    
+    prayer_responses_table.put_item(Item=response_item)
+    
+    # Send notification to prayer requester
+    try:
+        prayer_response = prayer_table.get_item(Key={'request_id': body['request_id']})
+        prayer = prayer_response.get('Item', {})
+        
+        if prayer.get('submitted_by') and prayer.get('submitted_by') != 'anonymous@prayer.com':
+            lambda_client.invoke(
+                FunctionName='notifications_api',
+                InvocationType='Event',
+                Payload=json.dumps({
+                    'body': json.dumps({
+                        'action': 'send_notification',
+                        'type': 'prayer_update',
+                        'recipient_email': prayer['submitted_by'],
+                        'subject': 'New Response to Your Prayer Request',
+                        'message': f'{response_item["author_name"]} responded to your prayer request: "{prayer.get("title", "")}"',
+                        'link': 'https://christianconservativestoday.com/prayer-wall.html'
+                    })
+                })
+            )
+    except Exception as e:
+        print(f'Notification error: {e}')
+    
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Response added', 'response_id': response_item['response_id']})}
+
+def list_prayer_responses(event, headers):
+    """List all responses for a specific prayer request"""
+    params = event.get('queryStringParameters', {})
+    request_id = params.get('request_id')
+    
+    if not request_id:
+        return {'statusCode': 400, 'headers': headers, 'body': json.dumps({'error': 'request_id required'})}
+    
+    response = prayer_responses_table.scan()
+    responses = [r for r in response.get('Items', []) if r.get('request_id') == request_id]
+    responses.sort(key=lambda x: x.get('created_at', ''), reverse=False)  # Oldest first
+    
+    return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'responses': responses})}

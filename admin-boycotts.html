@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boycott Admin - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { padding-top: 80px; background: #f8f9fa; }
+        .admin-header { background: linear-gradient(135deg, #dc3545 0%, #991b1b 100%); color: white; padding: 20px 0; margin-bottom: 30px; }
+        .boycott-item { background: white; border-radius: 8px; padding: 20px; margin-bottom: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .boycott-item h5 { margin-bottom: 10px; }
+        .edit-form { background: #f8f9fa; padding: 15px; border-radius: 8px; margin-top: 10px; display: none; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="admin-boycotts"></div>
+    <script src="navbar.js"></script>
+    <script>fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});</script>
+
+    <div class="admin-header">
+        <div class="container">
+            <h1><i class="fas fa-ban"></i> Boycott Tracker Admin</h1>
+            <p>Manage boycott entries - edit, update status, or delete</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <select id="status-filter" class="form-select">
+                    <option value="all">All Statuses</option>
+                    <option value="active" selected>Active</option>
+                    <option value="watching">Watching</option>
+                    <option value="resolved">Resolved</option>
+                </select>
+            </div>
+            <div class="col-md-6 text-end">
+                <span class="badge bg-primary" id="total-count">0 entries</span>
+            </div>
+        </div>
+
+        <div id="boycotts-list">
+            <div class="text-center py-4">
+                <div class="spinner-border"></div>
+                <p class="mt-2">Loading boycotts...</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_URL = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/boycotts';
+        const authToken = localStorage.getItem('auth_token');
+        const userData = JSON.parse(localStorage.getItem('user_data') || '{}');
+
+        if (!authToken || !['admin', 'super_user'].includes(userData.role)) {
+            alert('Admin access required');
+            window.location.href = 'admin.html';
+        }
+
+        document.getElementById('status-filter').addEventListener('change', loadBoycotts);
+
+        window.addEventListener('load', loadBoycotts);
+
+        async function loadBoycotts() {
+            const status = document.getElementById('status-filter').value;
+            const container = document.getElementById('boycotts-list');
+            container.innerHTML = '<div class="text-center py-4"><div class="spinner-border"></div></div>';
+
+            try {
+                const res = await fetch(`${API_URL}?action=list&status=${status}`);
+                const data = await res.json();
+                const boycotts = data.boycotts || [];
+
+                document.getElementById('total-count').textContent = `${boycotts.length} entries`;
+
+                if (boycotts.length === 0) {
+                    container.innerHTML = '<div class="alert alert-info">No boycotts found</div>';
+                    return;
+                }
+
+                container.innerHTML = boycotts.map(b => `
+                    <div class="boycott-item" id="item-${b.boycott_id}">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <h5>${escapeHtml(b.company_name)}</h5>
+                                <span class="badge bg-${b.status === 'active' ? 'danger' : b.status === 'watching' ? 'warning' : 'success'}">${b.status}</span>
+                                <span class="badge bg-secondary">${escapeHtml(b.category)}</span>
+                                <span class="badge bg-info">${b.boycott_votes || 0} votes</span>
+                            </div>
+                            <div>
+                                <button class="btn btn-sm btn-primary" onclick="toggleEdit('${b.boycott_id}')">
+                                    <i class="fas fa-edit"></i> Edit
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="deleteBoycott('${b.boycott_id}')">
+                                    <i class="fas fa-trash"></i> Delete
+                                </button>
+                            </div>
+                        </div>
+                        <p class="mt-2 mb-1"><strong>Reason:</strong> ${escapeHtml(b.reason)}</p>
+                        ${b.alternatives ? `<p class="mb-1"><strong>Alternatives:</strong> ${escapeHtml(b.alternatives)}</p>` : ''}
+                        ${b.source_url ? `<p class="mb-1"><strong>Source:</strong> <a href="${b.source_url}" target="_blank">${b.source_url}</a></p>` : ''}
+                        <small class="text-muted">Reported: ${new Date(b.created_at).toLocaleDateString()}</small>
+
+                        <!-- Edit Form -->
+                        <div class="edit-form" id="edit-${b.boycott_id}">
+                            <h6>Edit Boycott Entry</h6>
+                            <div class="mb-2">
+                                <label class="form-label">Company Name</label>
+                                <input type="text" class="form-control" id="name-${b.boycott_id}" value="${escapeHtml(b.company_name)}">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Category</label>
+                                <select class="form-select" id="category-${b.boycott_id}">
+                                    <option value="ESG/DEI" ${b.category === 'ESG/DEI' ? 'selected' : ''}>ESG/DEI Policies</option>
+                                    <option value="Anti-Christian" ${b.category === 'Anti-Christian' ? 'selected' : ''}>Anti-Christian Actions</option>
+                                    <option value="Anti-Conservative" ${b.category === 'Anti-Conservative' ? 'selected' : ''}>Anti-Conservative Bias</option>
+                                    <option value="Censorship" ${b.category === 'Censorship' ? 'selected' : ''}>Censorship</option>
+                                    <option value="Woke Marketing" ${b.category === 'Woke Marketing' ? 'selected' : ''}>Woke Marketing</option>
+                                    <option value="Other" ${b.category === 'Other' ? 'selected' : ''}>Other</option>
+                                </select>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" id="status-${b.boycott_id}">
+                                    <option value="active" ${b.status === 'active' ? 'selected' : ''}>Active</option>
+                                    <option value="watching" ${b.status === 'watching' ? 'selected' : ''}>Watching</option>
+                                    <option value="resolved" ${b.status === 'resolved' ? 'selected' : ''}>Resolved</option>
+                                </select>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Reason</label>
+                                <textarea class="form-control" id="reason-${b.boycott_id}" rows="3">${escapeHtml(b.reason)}</textarea>
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Alternatives</label>
+                                <input type="text" class="form-control" id="alternatives-${b.boycott_id}" value="${escapeHtml(b.alternatives || '')}">
+                            </div>
+                            <div class="mb-2">
+                                <label class="form-label">Source URL</label>
+                                <input type="url" class="form-control" id="source-${b.boycott_id}" value="${b.source_url || ''}">
+                            </div>
+                            <button class="btn btn-success btn-sm" onclick="saveBoycott('${b.boycott_id}')">
+                                <i class="fas fa-save"></i> Save Changes
+                            </button>
+                            <button class="btn btn-secondary btn-sm" onclick="toggleEdit('${b.boycott_id}')">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (e) {
+                container.innerHTML = '<div class="alert alert-danger">Failed to load boycotts</div>';
+            }
+        }
+
+        function toggleEdit(boycottId) {
+            const form = document.getElementById(`edit-${boycottId}`);
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function saveBoycott(boycottId) {
+            const data = {
+                boycott_id: boycottId,
+                company_name: document.getElementById(`name-${boycottId}`).value,
+                category: document.getElementById(`category-${boycottId}`).value,
+                status: document.getElementById(`status-${boycottId}`).value,
+                reason: document.getElementById(`reason-${boycottId}`).value,
+                alternatives: document.getElementById(`alternatives-${boycottId}`).value,
+                source_url: document.getElementById(`source-${boycottId}`).value
+            };
+
+            try {
+                const res = await fetch(`${API_URL}?action=update`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify(data)
+                });
+
+                if (res.ok) {
+                    alert('✅ Boycott updated successfully!');
+                    loadBoycotts();
+                } else {
+                    const error = await res.json();
+                    alert('❌ Failed to update: ' + (error.error || 'Unknown error'));
+                }
+            } catch (e) {
+                alert('❌ Error updating boycott');
+            }
+        }
+
+        async function deleteBoycott(boycottId) {
+            if (!confirm('Are you sure you want to delete this boycott entry? This cannot be undone.')) {
+                return;
+            }
+
+            try {
+                const res = await fetch(`${API_URL}?action=delete`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({ boycott_id: boycottId })
+                });
+
+                if (res.ok) {
+                    alert('✅ Boycott deleted successfully!');
+                    loadBoycotts();
+                } else {
+                    const error = await res.json();
+                    alert('❌ Failed to delete: ' + (error.error || 'Unknown error'));
+                }
+            } catch (e) {
+                alert('❌ Error deleting boycott');
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>

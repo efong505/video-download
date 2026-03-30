@@ -190,7 +190,10 @@ function loadNotificationCount(email) {
 }
 
 function logout() {
+    // Save current page for redirect after re-login
+    const currentPage = window.location.href;
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_data');
-    window.location.href = 'login.html';
+    localStorage.setItem('redirect_after_login', currentPage);
+    window.location.href = 'login.html?redirect=' + encodeURIComponent(currentPage);
 }

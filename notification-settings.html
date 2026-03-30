@@ -80,7 +80,9 @@
         $(document).ready(function() {
             const userData = localStorage.getItem('user_data');
             if (!userData) {
-                window.location.href = 'login.html';
+                // Save current page for redirect after login
+                localStorage.setItem('redirect_after_login', window.location.href);
+                window.location.href = 'login.html?redirect=' + encodeURIComponent(window.location.href);
                 return;
             }
 
