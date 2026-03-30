@@ -137,7 +137,7 @@
                                     ${b.source_url ? `&middot; <a href="${b.source_url}" target="_blank">Source</a>` : ''}
                                 </div>
                             </div>
-                            <button class="vote-btn ${voted ? 'voted' : ''}" onclick="vote('${b.boycott_id}')">
+                            <button class="vote-btn ${voted ? 'voted' : ''}" onclick="vote('${b.boycott_id}', event)">
                                 <i class="fas fa-fist-raised"></i> ${b.boycott_votes || 0}
                             </button>
                         </div>
@@ -183,16 +183,31 @@
             } catch(e) { alert('Error submitting report'); }
         }
 
-        async function vote(boycottId) {
+        async function vote(boycottId, event) {
+            if (event) event.preventDefault();
             if (!authToken) { alert('Please log in to vote'); return; }
+            
+            const button = event ? event.currentTarget : document.querySelector(`button[onclick*="${boycottId}"]`);
+            const originalContent = button.innerHTML;
+            
             try {
-                await fetch(`${BOYCOTT_API}?action=vote`, {
+                const res = await fetch(`${BOYCOTT_API}?action=vote`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
                     body: JSON.stringify({ boycott_id: boycottId })
                 });
-                loadBoycotts();
-            } catch(e) {}
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    const newVotes = data.votes || 0;
+                    
+                    // Update button without reloading page
+                    button.innerHTML = `<i class="fas fa-fist-raised"></i> ${newVotes}`;
+                    button.classList.toggle('voted');
+                }
+            } catch(e) {
+                console.error('Vote error:', e);
+            }
         }
 
         function escapeHtml(text) {
