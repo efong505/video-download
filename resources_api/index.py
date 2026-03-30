@@ -69,13 +69,21 @@ def create_resource(event, headers):
     elif not isinstance(category, list):
         category = []
     
-    table.put_item(Item={
+    item = {
         'resource_id': resource_id,
         'name': name,
         'category': category,
         'url': url,
         'description': description
-    })
+    }
+    
+    # Add optional fields if present
+    optional_fields = ['subcategory', 'state', 'city', 'county', 'address', 'phone']
+    for field in optional_fields:
+        if field in body and body[field]:
+            item[field] = body[field]
+    
+    table.put_item(Item=item)
     
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Resource created'})}
 
@@ -96,13 +104,21 @@ def update_resource(event, headers):
     elif not isinstance(category, list):
         category = []
     
-    table.put_item(Item={
+    item = {
         'resource_id': resource_id,
         'name': name,
         'category': category,
         'url': url,
         'description': description
-    })
+    }
+    
+    # Add optional fields if present
+    optional_fields = ['subcategory', 'state', 'city', 'county', 'address', 'phone']
+    for field in optional_fields:
+        if field in body and body[field]:
+            item[field] = body[field]
+    
+    table.put_item(Item=item)
     
     return {'statusCode': 200, 'headers': headers, 'body': json.dumps({'message': 'Resource updated'})}
 

@@ -34,6 +34,7 @@
         .submit-form { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 24px; }
         .empty-state { text-align: center; padding: 60px 20px; color: #6c757d; }
         .category-pill { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; background: #e9ecef; color: #495057; margin-left: 6px; }
+        .vote-caption { font-size: 0.75rem; color: #6c757d; font-style: italic; margin-top: 8px; margin-bottom: 4px; }
     </style>
 </head>
 <body>
@@ -184,9 +185,10 @@
                         <div class="fact-claim">"${esc(f.claim)}"</div>
                         ${f.source ? `<div class="fact-meta"><strong>Source:</strong> ${f.source_url ? `<a href="${f.source_url}" target="_blank">${esc(f.source)}</a>` : esc(f.source)}</div>` : ''}
                         ${f.explanation ? `<div class="fact-explanation">${esc(f.explanation)}</div>` : ''}
-                        <div class="d-flex align-items-center gap-2 mt-2">
-                            <button class="vote-btn ${userVote === 'agree' ? 'voted voted-agree' : ''}" onclick="vote('${f.id}','agree')">👍 Agree <span>${f.agree_votes || 0}</span></button>
-                            <button class="vote-btn ${userVote === 'disagree' ? 'voted voted-disagree' : ''}" onclick="vote('${f.id}','disagree')">👎 Disagree <span>${f.disagree_votes || 0}</span></button>
+                        <div class="vote-caption">Do you agree with this fact-check verdict?</div>
+                        <div class="d-flex align-items-center gap-2">
+                            <button class="vote-btn ${userVote === 'agree' ? 'voted voted-agree' : ''}" onclick="vote('${f.id}','agree',event)">👍 Agree <span>${f.agree_votes || 0}</span></button>
+                            <button class="vote-btn ${userVote === 'disagree' ? 'voted voted-disagree' : ''}" onclick="vote('${f.id}','disagree',event)">👎 Disagree <span>${f.disagree_votes || 0}</span></button>
                             ${f.submitted_by === currentUserId ? `<button class="vote-btn ms-auto" onclick="deleteFact('${f.id}')" style="color:#dc3545;"><i class="fas fa-trash"></i></button>` : ''}
                         </div>
                     </div>`;
@@ -252,16 +254,37 @@
             } catch(e) { alert('Error submitting fact-check'); }
         }
 
-        async function vote(factId, voteType) {
+        async function vote(factId, voteType, event) {
             if (!authToken) { alert('Log in to vote'); return; }
+            const btn = event.target.closest('button');
+            const card = btn.closest('.fact-card');
             try {
-                await fetch(`${FC_API}?action=vote`, {
+                const res = await fetch(`${FC_API}?action=vote`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
                     body: JSON.stringify({ fact_id: factId, vote_type: voteType })
                 });
-                loadFacts();
-            } catch(e) {}
+                const data = await res.json();
+                
+                // Update only the vote buttons in this card
+                const agreeBtn = card.querySelector('button[onclick*="agree"]');
+                const disagreeBtn = card.querySelector('button[onclick*="disagree"]');
+                
+                // Determine current user's vote by checking which button was clicked and if it's a toggle-off
+                const wasAlreadyVoted = btn.classList.contains('voted');
+                
+                agreeBtn.classList.remove('voted', 'voted-agree');
+                disagreeBtn.classList.remove('voted', 'voted-disagree');
+                
+                // If not toggling off, highlight the clicked button
+                if (!wasAlreadyVoted) {
+                    if (voteType === 'agree') agreeBtn.classList.add('voted', 'voted-agree');
+                    if (voteType === 'disagree') disagreeBtn.classList.add('voted', 'voted-disagree');
+                }
+                
+                agreeBtn.querySelector('span').textContent = data.agree || 0;
+                disagreeBtn.querySelector('span').textContent = data.disagree || 0;
+            } catch(e) { console.error('Vote error:', e); }
         }
 
         async function deleteFact(factId) {

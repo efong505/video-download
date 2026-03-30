@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marriage Resources - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <style>
+        .marriage-header { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: white; padding: 100px 0 20px 0; margin-bottom: 30px; }
+        .resource-card { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 20px; transition: transform 0.2s; }
+        .resource-card:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
+        .filter-section { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 24px; }
+        .category-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .category-pill { padding: 6px 14px; border-radius: 20px; border: 2px solid #dee2e6; background: white; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+        .category-pill:hover { border-color: #dc2626; }
+        .category-pill.active { background: #dc2626; color: white; border-color: #dc2626; }
+        .submit-form { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 24px; }
+        .location-badge { display: inline-block; padding: 4px 8px; background: #fee2e2; color: #991b1b; border-radius: 4px; font-size: 0.85rem; margin-right: 8px; }
+        .phone-link { color: #dc2626; text-decoration: none; font-weight: 500; }
+        .phone-link:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="marriage-resources"></div>
+    <script src="navbar.js"></script>
+    <script>fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});</script>
+
+    <div class="marriage-header">
+        <div class="container">
+            <h1><i class="fas fa-heart"></i> Marriage Resources</h1>
+            <p>Strengthen your marriage with biblical wisdom and practical tools</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Submit Form Toggle -->
+        <div class="text-center mb-3">
+            <button class="btn btn-primary" onclick="toggleSubmitForm()" id="submit-toggle-btn">+ Submit Resource</button>
+        </div>
+
+        <!-- Submit Form (hidden by default) -->
+        <div id="submit-section" style="display:none;">
+            <div id="submit-login-prompt" class="text-center mb-3" style="display:none;">
+                <a href="login.html" class="btn btn-outline-primary">Log in to submit resources</a>
+            </div>
+            <div id="submit-form-container" style="display:none;">
+                <div class="submit-form">
+                    <h5>Submit Marriage Resource</h5>
+                    <div class="row g-2">
+                        <div class="col-md-6"><input type="text" id="resource-name" class="form-control" placeholder="Resource name *"></div>
+                        <div class="col-md-6">
+                            <select id="resource-type" class="form-select">
+                                <option value="">Select type *</option>
+                                <option value="Marriage Enrichment">Marriage Enrichment</option>
+                                <option value="Marriage Counseling">Marriage Counseling</option>
+                                <option value="Books & Courses">Books & Courses</option>
+                                <option value="Conferences & Events">Conferences & Events</option>
+                                <option value="Online Resources">Online Resources</option>
+                                <option value="Ministry">Ministry</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="resource-state" class="form-select">
+                                <option value="">Select state (optional)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4"><input type="text" id="resource-city" class="form-control" placeholder="City (optional)"></div>
+                        <div class="col-md-4"><input type="text" id="resource-county" class="form-control" placeholder="County (optional)"></div>
+                        <div class="col-md-6"><input type="text" id="resource-address" class="form-control" placeholder="Street address (optional)"></div>
+                        <div class="col-md-6"><input type="tel" id="resource-phone" class="form-control" placeholder="Phone number (optional)"></div>
+                        <div class="col-12"><input type="url" id="resource-url" class="form-control" placeholder="Website URL *"></div>
+                        <div class="col-12"><textarea id="resource-desc" class="form-control" rows="3" placeholder="Brief description"></textarea></div>
+                        <div class="col-12"><button class="btn btn-primary" onclick="submitResource()">Submit Resource</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h5 class="mb-3"><i class="fas fa-filter"></i> Filter Resources</h5>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">State</label>
+                    <select id="state-filter" class="form-select" onchange="applyLocationFilter()">
+                        <option value="">All States</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">City</label>
+                    <input type="text" id="city-filter" class="form-control" placeholder="Enter city name" list="city-suggestions">
+                    <datalist id="city-suggestions"></datalist>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">County</label>
+                    <input type="text" id="county-filter" class="form-control" placeholder="Enter county name">
+                </div>
+            </div>
+            <div class="mt-3">
+                <button class="btn btn-outline-secondary" onclick="clearLocationFilter()">Clear Filters</button>
+            </div>
+        </div>
+
+        <!-- Category Filter Pills -->
+        <div class="category-pills" id="category-pills">
+            <button class="category-pill active" data-category="all">All</button>
+            <button class="category-pill" data-category="Marriage Enrichment">Marriage Enrichment</button>
+            <button class="category-pill" data-category="Marriage Counseling">Marriage Counseling</button>
+            <button class="category-pill" data-category="Books & Courses">Books & Courses</button>
+            <button class="category-pill" data-category="Conferences & Events">Conferences & Events</button>
+            <button class="category-pill" data-category="Online Resources">Online Resources</button>
+        </div>
+
+        <!-- Resource Listings -->
+        <div id="resource-container">
+            <div class="text-center py-4"><div class="spinner-border"></div><p class="mt-2">Loading resources...</p></div>
+        </div>
+    </div>
+
+    <script>
+        const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
+        const US_STATES = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+        
+        let authToken = localStorage.getItem('auth_token');
+        let userData = null;
+        let currentCategory = 'all';
+        let allResources = [];
+        let locationFilter = { state: '', city: '', county: '' };
+
+        try {
+            userData = JSON.parse(localStorage.getItem('user_data') || 'null');
+        } catch(e) {}
+
+        window.addEventListener('load', () => {
+            populateStateDropdowns();
+            if (authToken && userData) {
+                document.getElementById('submit-form-container').style.display = 'block';
+                document.getElementById('submit-login-prompt').style.display = 'none';
+            } else {
+                document.getElementById('submit-form-container').style.display = 'none';
+                document.getElementById('submit-login-prompt').style.display = 'block';
+            }
+            loadResources();
+            
+            // Add input listeners for instant filtering
+            document.getElementById('city-filter').addEventListener('input', applyLocationFilter);
+            document.getElementById('county-filter').addEventListener('input', applyLocationFilter);
+        });
+        
+        function populateStateDropdowns() {
+            const stateFilter = document.getElementById('state-filter');
+            const resourceState = document.getElementById('resource-state');
+            US_STATES.forEach(state => {
+                stateFilter.innerHTML += `<option value="${state}">${state}</option>`;
+                resourceState.innerHTML += `<option value="${state}">${state}</option>`;
+            });
+        }
+        
+        function applyLocationFilter() {
+            locationFilter.state = document.getElementById('state-filter').value;
+            locationFilter.city = document.getElementById('city-filter').value.trim().toLowerCase();
+            locationFilter.county = document.getElementById('county-filter').value.trim().toLowerCase();
+            displayResources();
+        }
+        
+        function clearLocationFilter() {
+            locationFilter = { state: '', city: '', county: '' };
+            document.getElementById('state-filter').value = '';
+            document.getElementById('city-filter').value = '';
+            document.getElementById('county-filter').value = '';
+            displayResources();
+        }
+
+        document.getElementById('category-pills').addEventListener('click', e => {
+            if (!e.target.classList.contains('category-pill')) return;
+            document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+            e.target.classList.add('active');
+            currentCategory = e.target.dataset.category;
+            displayResources();
+        });
+
+        async function loadResources() {
+            const container = document.getElementById('resource-container');
+            container.innerHTML = '<div class="text-center py-4"><div class="spinner-border"></div></div>';
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const all = await res.json();
+                allResources = all.filter(r => {
+                    const cats = Array.isArray(r.category) ? r.category : [r.category];
+                    return cats.some(c => c && typeof c === 'string' && c.toLowerCase().includes('marriage'));
+                });
+                populateCitySuggestions();
+                displayResources();
+            } catch(e) {
+                container.innerHTML = '<div class="text-center py-5"><p>Could not load resources.</p></div>';
+            }
+        }
+        
+        function populateCitySuggestions() {
+            const cities = [...new Set(allResources.map(r => r.city).filter(c => c))];
+            const datalist = document.getElementById('city-suggestions');
+            datalist.innerHTML = cities.sort().map(city => `<option value="${city}">`).join('');
+        }
+        
+        function displayResources() {
+            const container = document.getElementById('resource-container');
+            let resources = [...allResources];
+
+            // Category filter
+            if (currentCategory !== 'all') {
+                resources = resources.filter(r => r.subcategory && r.subcategory === currentCategory);
+            }
+
+            // Location filters
+            if (locationFilter.state) {
+                resources = resources.filter(r => r.state === locationFilter.state);
+            }
+            if (locationFilter.city) {
+                resources = resources.filter(r => r.city && r.city.toLowerCase().includes(locationFilter.city));
+            }
+            if (locationFilter.county) {
+                resources = resources.filter(r => r.county && r.county.toLowerCase().includes(locationFilter.county));
+            }
+
+            if (!resources.length) {
+                container.innerHTML = '<div class="text-center py-5"><i class="fas fa-heart" style="font-size:3rem;color:#ccc;"></i><h4 class="mt-3">No resources found</h4><p>Try adjusting your filters or be the first to add resources for this area!</p></div>';
+                return;
+            }
+
+            container.innerHTML = resources.map(r => {
+                let locationHtml = '';
+                if (r.city || r.state) {
+                    locationHtml = `<div class="mb-2">`;
+                    if (r.city && r.state) locationHtml += `<span class="location-badge"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(r.city)}, ${escapeHtml(r.state)}</span>`;
+                    else if (r.state) locationHtml += `<span class="location-badge"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(r.state)}</span>`;
+                    if (r.county) locationHtml += `<span class="location-badge">${escapeHtml(r.county)} County</span>`;
+                    locationHtml += `</div>`;
+                }
+                let contactHtml = '';
+                if (r.phone) contactHtml += `<p class="mb-2"><i class="fas fa-phone"></i> <a href="tel:${r.phone}" class="phone-link">${escapeHtml(r.phone)}</a></p>`;
+                if (r.address) contactHtml += `<p class="mb-2 text-muted"><i class="fas fa-location-dot"></i> ${escapeHtml(r.address)}</p>`;
+                
+                return `
+                    <div class="resource-card">
+                        <h5><i class="fas fa-heart text-danger"></i> ${escapeHtml(r.name)}</h5>
+                        ${r.subcategory ? `<span class="badge bg-secondary">${escapeHtml(r.subcategory)}</span>` : ''}
+                        ${locationHtml}
+                        ${contactHtml}
+                        ${r.description ? `<p class="mt-2">${escapeHtml(r.description)}</p>` : ''}
+                        <a href="${r.url}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Visit Resource</a>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleSubmitForm() {
+            const section = document.getElementById('submit-section');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function submitResource() {
+            const name = document.getElementById('resource-name').value.trim();
+            const type = document.getElementById('resource-type').value;
+            const state = document.getElementById('resource-state').value;
+            const city = document.getElementById('resource-city').value.trim();
+            const county = document.getElementById('resource-county').value.trim();
+            const address = document.getElementById('resource-address').value.trim();
+            const phone = document.getElementById('resource-phone').value.trim();
+            const url = document.getElementById('resource-url').value.trim();
+            
+            if (!name || !type || !url) { 
+                alert('Name, type, and URL are required'); 
+                return; 
+            }
+
+            try {
+                const resourceId = 'marriage_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                const payload = {
+                    id: resourceId,
+                    name: name,
+                    category: ['Marriage', 'Family'],
+                    subcategory: type,
+                    state: state || undefined,
+                    city: city || undefined,
+                    county: county || undefined,
+                    address: address || undefined,
+                    phone: phone || undefined,
+                    url: url,
+                    description: document.getElementById('resource-desc').value.trim()
+                };
+                
+                const res = await fetch(`${RESOURCES_API}?action=create`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok) {
+                    alert('Resource submitted!');
+                    ['resource-name','resource-city','resource-county','resource-address','resource-phone','resource-url','resource-desc'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('resource-type').value = '';
+                    document.getElementById('resource-state').value = '';
+                    document.getElementById('submit-section').style.display = 'none';
+                    loadResources();
+                } else {
+                    alert('Failed: ' + (data.error || JSON.stringify(data)));
+                }
+            } catch(e) { 
+                alert('Error submitting resource: ' + e.message); 
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
