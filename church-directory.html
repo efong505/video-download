@@ -16,6 +16,8 @@
         .category-pill:hover { border-color: #2563eb; }
         .category-pill.active { background: #2563eb; color: white; border-color: #2563eb; }
         .submit-form { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 24px; }
+        .admin-actions { margin-top: 12px; padding-top: 12px; border-top: 1px solid #dee2e6; }
+        .admin-actions button { font-size: 0.8rem; padding: 4px 10px; margin-right: 6px; }
     </style>
 </head>
 <body>
@@ -132,14 +134,23 @@
                     return;
                 }
 
-                container.innerHTML = churches.map(c => `
+                container.innerHTML = churches.map(c => {
+                    const isAdmin = userData && (userData.role === 'admin' || userData.role === 'super_user');
+                    const isOwner = userData && c.submitted_by === userData.user_id;
+                    const canEdit = isAdmin || isOwner;
+                    return `
                     <div class="resource-card">
                         <h5><i class="fas fa-church text-primary"></i> ${escapeHtml(c.name)}</h5>
                         ${c.subcategory ? `<span class="badge bg-secondary">${escapeHtml(c.subcategory)}</span>` : ''}
                         ${c.description ? `<p class="mt-2">${escapeHtml(c.description)}</p>` : ''}
                         <a href="${c.url}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Visit Website</a>
+                        ${canEdit ? `
+                        <div class="admin-actions">
+                            <button class="btn btn-sm btn-outline-primary" onclick="editChurch('${c.id || c.resource_id}')"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteChurch('${c.id || c.resource_id}')"><i class="fas fa-trash"></i> Delete</button>
+                        </div>` : ''}
                     </div>
-                `).join('');
+                `}).join('');
             } catch(e) {
                 container.innerHTML = '<div class="text-center py-5"><p>Could not load churches.</p></div>';
             }
@@ -162,7 +173,9 @@
             }
 
             try {
-                const resourceId = 'church_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                const editId = document.getElementById('submit-section').dataset.editId;
+                const action = editId ? 'update' : 'create';
+                const resourceId = editId || ('church_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9));
                 const payload = {
                     id: resourceId,
                     name: location ? `${name} (${location})` : name,
@@ -172,7 +185,7 @@
                     description: document.getElementById('church-desc').value.trim()
                 };
                 
-                const res = await fetch(`${RESOURCES_API}?action=create`, {
+                const res = await fetch(`${RESOURCES_API}?action=${action}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
                     body: JSON.stringify(payload)
@@ -181,16 +194,62 @@
                 const data = await res.json();
                 
                 if (res.ok) {
-                    alert('Church submitted!');
+                    alert(editId ? 'Church updated!' : 'Church submitted!');
                     ['church-name','church-location','church-url','church-desc'].forEach(id => document.getElementById(id).value = '');
                     document.getElementById('church-type').value = '';
+                    delete document.getElementById('submit-section').dataset.editId;
                     document.getElementById('submit-section').style.display = 'none';
+                    document.querySelector('#submit-form-container h5').textContent = 'Submit Church';
+                    document.querySelector('#submit-form-container button[onclick="submitChurch()"]').textContent = 'Submit Church';
                     loadChurches();
                 } else {
                     alert('Failed: ' + (data.error || JSON.stringify(data)));
                 }
             } catch(e) { 
                 alert('Error submitting church: ' + e.message); 
+            }
+        }
+
+        async function editChurch(resourceId) {
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const all = await res.json();
+                const church = all.find(r => (r.id || r.resource_id) === resourceId);
+                if (!church) { alert('Church not found'); return; }
+                
+                const nameParts = church.name.match(/^(.+?)\s*\((.+)\)$/);
+                document.getElementById('church-name').value = nameParts ? nameParts[1] : church.name;
+                document.getElementById('church-location').value = nameParts ? nameParts[2] : '';
+                document.getElementById('church-type').value = church.subcategory || '';
+                document.getElementById('church-url').value = church.url || '';
+                document.getElementById('church-desc').value = church.description || '';
+                
+                document.getElementById('submit-section').style.display = 'block';
+                document.getElementById('submit-section').dataset.editId = resourceId;
+                document.querySelector('#submit-form-container h5').textContent = 'Edit Church';
+                document.querySelector('#submit-form-container button[onclick="submitChurch()"]').textContent = 'Update Church';
+                window.scrollTo({top: document.getElementById('submit-section').offsetTop - 100, behavior: 'smooth'});
+            } catch(e) {
+                alert('Could not load church details');
+            }
+        }
+
+        async function deleteChurch(resourceId) {
+            if (!confirm('Delete this church? This cannot be undone.')) return;
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=delete&resource_id=${resourceId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                if (res.ok) {
+                    alert('Church deleted');
+                    loadChurches();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Failed to delete');
+                }
+            } catch(e) {
+                alert('Error deleting church');
             }
         }
 

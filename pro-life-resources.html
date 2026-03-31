@@ -20,6 +20,8 @@
         .location-badge { display: inline-block; padding: 4px 8px; background: #fee2e2; color: #991b1b; border-radius: 4px; font-size: 0.85rem; margin-right: 8px; }
         .phone-link { color: #dc2626; text-decoration: none; font-weight: 500; }
         .phone-link:hover { text-decoration: underline; }
+        .admin-actions { margin-top: 12px; padding-top: 12px; border-top: 1px solid #dee2e6; }
+        .admin-actions button { font-size: 0.8rem; padding: 4px 10px; margin-right: 6px; }
     </style>
 </head>
 <body>
@@ -245,6 +247,10 @@
                 if (r.phone) contactHtml += `<p class="mb-2"><i class="fas fa-phone"></i> <a href="tel:${r.phone}" class="phone-link">${escapeHtml(r.phone)}</a></p>`;
                 if (r.address) contactHtml += `<p class="mb-2 text-muted"><i class="fas fa-location-dot"></i> ${escapeHtml(r.address)}</p>`;
                 
+                const isAdmin = userData && (userData.role === 'admin' || userData.role === 'super_user');
+                const isOwner = userData && r.submitted_by === userData.user_id;
+                const canEdit = isAdmin || isOwner;
+                
                 return `
                     <div class="resource-card">
                         <h5><i class="fas fa-hands-helping text-danger"></i> ${escapeHtml(r.name)}</h5>
@@ -253,6 +259,11 @@
                         ${contactHtml}
                         ${r.description ? `<p class="mt-2">${escapeHtml(r.description)}</p>` : ''}
                         <a href="${r.url}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Visit Website</a>
+                        ${canEdit ? `
+                        <div class="admin-actions">
+                            <button class="btn btn-sm btn-outline-primary" onclick="editResource('${r.id || r.resource_id}')"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteResource('${r.id || r.resource_id}')"><i class="fas fa-trash"></i> Delete</button>
+                        </div>` : ''}
                     </div>
                 `;
             }).join('');
@@ -279,7 +290,9 @@
             }
 
             try {
-                const resourceId = 'prolife_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+                const editId = document.getElementById('submit-section').dataset.editId;
+                const action = editId ? 'update' : 'create';
+                const resourceId = editId || ('prolife_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9));
                 const payload = {
                     id: resourceId,
                     name: name,
@@ -294,7 +307,7 @@
                     description: document.getElementById('resource-desc').value.trim()
                 };
                 
-                const res = await fetch(`${RESOURCES_API}?action=create`, {
+                const res = await fetch(`${RESOURCES_API}?action=${action}`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
                     body: JSON.stringify(payload)
@@ -303,17 +316,66 @@
                 const data = await res.json();
                 
                 if (res.ok) {
-                    alert('Resource submitted!');
+                    alert(editId ? 'Resource updated!' : 'Resource submitted!');
                     ['resource-name','resource-city','resource-county','resource-address','resource-phone','resource-url','resource-desc'].forEach(id => document.getElementById(id).value = '');
                     document.getElementById('resource-type').value = '';
                     document.getElementById('resource-state').value = '';
+                    delete document.getElementById('submit-section').dataset.editId;
                     document.getElementById('submit-section').style.display = 'none';
+                    document.querySelector('#submit-form-container h5').textContent = 'Submit Pro-Life Resource';
+                    document.querySelector('#submit-form-container button[onclick="submitResource()"]').textContent = 'Submit Resource';
                     loadResources();
                 } else {
                     alert('Failed: ' + (data.error || JSON.stringify(data)));
                 }
             } catch(e) { 
                 alert('Error submitting resource: ' + e.message); 
+            }
+        }
+
+        async function editResource(resourceId) {
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const all = await res.json();
+                const resource = all.find(r => (r.id || r.resource_id) === resourceId);
+                if (!resource) { alert('Resource not found'); return; }
+                
+                document.getElementById('resource-name').value = resource.name || '';
+                document.getElementById('resource-type').value = resource.subcategory || '';
+                document.getElementById('resource-state').value = resource.state || '';
+                document.getElementById('resource-city').value = resource.city || '';
+                document.getElementById('resource-county').value = resource.county || '';
+                document.getElementById('resource-address').value = resource.address || '';
+                document.getElementById('resource-phone').value = resource.phone || '';
+                document.getElementById('resource-url').value = resource.url || '';
+                document.getElementById('resource-desc').value = resource.description || '';
+                
+                document.getElementById('submit-section').style.display = 'block';
+                document.getElementById('submit-section').dataset.editId = resourceId;
+                document.querySelector('#submit-form-container h5').textContent = 'Edit Pro-Life Resource';
+                document.querySelector('#submit-form-container button[onclick="submitResource()"]').textContent = 'Update Resource';
+                window.scrollTo({top: document.getElementById('submit-section').offsetTop - 100, behavior: 'smooth'});
+            } catch(e) {
+                alert('Could not load resource details');
+            }
+        }
+
+        async function deleteResource(resourceId) {
+            if (!confirm('Delete this resource? This cannot be undone.')) return;
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=delete&resource_id=${resourceId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                if (res.ok) {
+                    alert('Resource deleted');
+                    loadResources();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Failed to delete');
+                }
+            } catch(e) {
+                alert('Error deleting resource');
             }
         }
 
