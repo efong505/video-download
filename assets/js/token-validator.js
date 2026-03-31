@@ -28,7 +28,8 @@ function checkTokenExpiration() {
 function logout() {
     localStorage.removeItem('auth_token');
     localStorage.removeItem('user_data');
-    window.location.href = 'login.html';
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    window.location.href = `login.html?redirect=${encodeURIComponent(currentPage)}`;
 }
 
 // Run on page load

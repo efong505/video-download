@@ -286,7 +286,13 @@
                             const urlParams = new URLSearchParams(window.location.search);
                             const redirect = urlParams.get('redirect');
                             if (redirect) {
-                                window.location.href = redirect;
+                                // If redirect is a full URL, use it directly
+                                if (redirect.startsWith('http')) {
+                                    window.location.href = redirect;
+                                } else {
+                                    // Otherwise treat it as a relative path
+                                    window.location.href = redirect;
+                                }
                             } else if (data.user.role === 'admin' || data.user.role === 'super_user') {
                                 window.location.href = 'admin.html';
                             } else {
