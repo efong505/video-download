@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Religious Freedom News - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <style>
+        .freedom-header { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; padding: 100px 0 20px 0; margin-bottom: 30px; }
+        .resource-card { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 20px; transition: transform 0.2s; }
+        .resource-card:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
+        .filter-section { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 24px; }
+        .category-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+        .category-pill { padding: 6px 14px; border-radius: 20px; border: 2px solid #dee2e6; background: white; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+        .category-pill:hover { border-color: #2563eb; }
+        .category-pill.active { background: #2563eb; color: white; border-color: #2563eb; }
+        .submit-form { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 24px; }
+        .location-badge { display: inline-block; padding: 4px 8px; background: #dbeafe; color: #1e40af; border-radius: 4px; font-size: 0.85rem; margin-right: 8px; }
+        .admin-actions { margin-top: 12px; padding-top: 12px; border-top: 1px solid #dee2e6; }
+        .admin-actions button { font-size: 0.8rem; padding: 4px 10px; margin-right: 6px; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="religious-freedom-news"></div>
+    <script src="navbar.js"></script>
+    <script>fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});</script>
+
+    <div class="freedom-header">
+        <div class="container">
+            <a href="religion-mountain.html" class="btn btn-outline-light mb-3"><i class="fas fa-arrow-left"></i> Back to Religion Mountain</a>
+            <h1><i class="fas fa-balance-scale"></i> Religious Freedom News</h1>
+            <p>Stay informed on religious liberty cases, legislation, and advocacy</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Submit Form Toggle -->
+        <div class="text-center mb-3">
+            <button class="btn btn-primary" onclick="toggleSubmitForm()" id="submit-toggle-btn">+ Submit News Source</button>
+            <a href="articles.html?category=Religious%20Freedom" class="btn btn-outline-primary"><i class="fas fa-newspaper"></i> Read Articles</a>
+        </div>
+
+        <!-- Submit Form (hidden by default) -->
+        <div id="submit-section" style="display:none;">
+            <div id="submit-login-prompt" class="text-center mb-3" style="display:none;">
+                <a href="login.html" class="btn btn-outline-primary">Log in to submit news sources</a>
+            </div>
+            <div id="submit-form-container" style="display:none;">
+                <div class="submit-form">
+                    <h5>Submit Religious Freedom News Source</h5>
+                    <div class="row g-2">
+                        <div class="col-md-6"><input type="text" id="resource-name" class="form-control" placeholder="News source name *"></div>
+                        <div class="col-md-6">
+                            <select id="resource-type" class="form-select">
+                                <option value="">Select type *</option>
+                                <option value="Legal Advocacy">Legal Advocacy</option>
+                                <option value="News Organization">News Organization</option>
+                                <option value="Research Institute">Research Institute</option>
+                                <option value="Watchdog Group">Watchdog Group</option>
+                                <option value="Government Agency">Government Agency</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="resource-state" class="form-select">
+                                <option value="">Select state (optional)</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4"><input type="text" id="resource-city" class="form-control" placeholder="City (optional)"></div>
+                        <div class="col-md-4"><input type="text" id="resource-focus" class="form-control" placeholder="Focus area (optional)"></div>
+                        <div class="col-12"><input type="url" id="resource-url" class="form-control" placeholder="Website URL *"></div>
+                        <div class="col-12"><textarea id="resource-desc" class="form-control" rows="3" placeholder="Brief description"></textarea></div>
+                        <div class="col-12"><button class="btn btn-primary" onclick="submitResource()">Submit Source</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filter Section -->
+        <div class="filter-section">
+            <h5 class="mb-3"><i class="fas fa-filter"></i> Filter News Sources</h5>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">State</label>
+                    <select id="state-filter" class="form-select" onchange="applyLocationFilter()">
+                        <option value="">All States</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">City</label>
+                    <input type="text" id="city-filter" class="form-control" placeholder="Enter city name" list="city-suggestions">
+                    <datalist id="city-suggestions"></datalist>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Focus Area</label>
+                    <input type="text" id="focus-filter" class="form-control" placeholder="Enter focus area">
+                </div>
+            </div>
+            <div class="mt-3">
+                <button class="btn btn-outline-secondary" onclick="clearLocationFilter()">Clear Filters</button>
+            </div>
+        </div>
+
+        <!-- Category Filter Pills -->
+        <div class="category-pills" id="category-pills">
+            <button class="category-pill active" data-category="all">All</button>
+            <button class="category-pill" data-category="Legal Advocacy">Legal Advocacy</button>
+            <button class="category-pill" data-category="News Organization">News Organizations</button>
+            <button class="category-pill" data-category="Research Institute">Research Institutes</button>
+            <button class="category-pill" data-category="Watchdog Group">Watchdog Groups</button>
+        </div>
+
+        <!-- Resource Listings -->
+        <div id="resource-container">
+            <div class="text-center py-4"><div class="spinner-border"></div><p class="mt-2">Loading news sources...</p></div>
+        </div>
+    </div>
+
+    <script>
+        const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
+        const US_STATES = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan','Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island','South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+        
+        let authToken = localStorage.getItem('auth_token');
+        let userData = null;
+        let currentCategory = 'all';
+        let allResources = [];
+        let locationFilter = { state: '', city: '', focus: '' };
+
+        try {
+            userData = JSON.parse(localStorage.getItem('user_data') || 'null');
+        } catch(e) {}
+
+        window.addEventListener('load', () => {
+            populateStateDropdowns();
+            if (authToken && userData) {
+                document.getElementById('submit-form-container').style.display = 'block';
+                document.getElementById('submit-login-prompt').style.display = 'none';
+            } else {
+                document.getElementById('submit-form-container').style.display = 'none';
+                document.getElementById('submit-login-prompt').style.display = 'block';
+            }
+            loadResources();
+            
+            // Add input listeners for instant filtering
+            document.getElementById('city-filter').addEventListener('input', applyLocationFilter);
+            document.getElementById('focus-filter').addEventListener('input', applyLocationFilter);
+        });
+
+        function populateStateDropdowns() {
+            const stateFilter = document.getElementById('state-filter');
+            const resourceState = document.getElementById('resource-state');
+            US_STATES.forEach(state => {
+                stateFilter.innerHTML += `<option value="${state}">${state}</option>`;
+                resourceState.innerHTML += `<option value="${state}">${state}</option>`;
+            });
+        }
+
+        function applyLocationFilter() {
+            locationFilter.state = document.getElementById('state-filter').value;
+            locationFilter.city = document.getElementById('city-filter').value.trim().toLowerCase();
+            locationFilter.focus = document.getElementById('focus-filter').value.trim().toLowerCase();
+            displayResources();
+        }
+
+        function clearLocationFilter() {
+            locationFilter = { state: '', city: '', focus: '' };
+            document.getElementById('state-filter').value = '';
+            document.getElementById('city-filter').value = '';
+            document.getElementById('focus-filter').value = '';
+            displayResources();
+        }
+
+        document.getElementById('category-pills').addEventListener('click', e => {
+            if (!e.target.classList.contains('category-pill')) return;
+            document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+            e.target.classList.add('active');
+            currentCategory = e.target.dataset.category;
+            displayResources();
+        });
+
+        async function loadResources() {
+            const container = document.getElementById('resource-container');
+            container.innerHTML = '<div class="text-center py-4"><div class="spinner-border"></div></div>';
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const all = await res.json();
+                allResources = all.filter(r => {
+                    const cats = Array.isArray(r.category) ? r.category : [r.category];
+                    return cats.some(c => c && typeof c === 'string' && c.toLowerCase().includes('religious freedom'));
+                });
+                populateCitySuggestions();
+                displayResources();
+            } catch(e) {
+                container.innerHTML = '<div class="text-center py-5"><p>Could not load news sources.</p></div>';
+            }
+        }
+        
+        function populateCitySuggestions() {
+            const cities = [...new Set(allResources.map(r => r.city).filter(c => c))];
+            const datalist = document.getElementById('city-suggestions');
+            datalist.innerHTML = cities.sort().map(city => `<option value="${city}">`).join('');
+        }
+
+        function displayResources() {
+            const container = document.getElementById('resource-container');
+            let resources = [...allResources];
+
+            // Category filter
+            if (currentCategory !== 'all') {
+                resources = resources.filter(r => r.subcategory && r.subcategory === currentCategory);
+            }
+
+            // Location filters
+            if (locationFilter.state) {
+                resources = resources.filter(r => r.state === locationFilter.state);
+            }
+            if (locationFilter.city) {
+                resources = resources.filter(r => r.city && r.city.toLowerCase().includes(locationFilter.city));
+            }
+            if (locationFilter.focus) {
+                resources = resources.filter(r => r.focus && r.focus.toLowerCase().includes(locationFilter.focus));
+            }
+
+            if (!resources.length) {
+                container.innerHTML = '<div class="text-center py-5"><i class="fas fa-balance-scale" style="font-size:3rem;color:#ccc;"></i><h4 class="mt-3">No news sources found</h4><p>Try adjusting your filters or be the first to add sources for this area!</p></div>';
+                return;
+            }
+
+            container.innerHTML = resources.map(r => {
+                let locationHtml = '';
+                if (r.city || r.state) {
+                    locationHtml = `<div class="mb-2">`;
+                    if (r.city && r.state) locationHtml += `<span class="location-badge"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(r.city)}, ${escapeHtml(r.state)}</span>`;
+                    else if (r.state) locationHtml += `<span class="location-badge"><i class="fas fa-map-marker-alt"></i> ${escapeHtml(r.state)}</span>`;
+                    if (r.focus) locationHtml += `<span class="location-badge"><i class="fas fa-bullseye"></i> ${escapeHtml(r.focus)}</span>`;
+                    locationHtml += `</div>`;
+                }
+                
+                const isAdmin = userData && (userData.role === 'admin' || userData.role === 'super_user');
+                const isOwner = userData && r.submitted_by === userData.user_id;
+                const canEdit = isAdmin || isOwner;
+                
+                return `
+                    <div class="resource-card">
+                        <h5><i class="fas fa-balance-scale text-primary"></i> ${escapeHtml(r.name)}</h5>
+                        ${r.subcategory ? `<span class="badge bg-secondary">${escapeHtml(r.subcategory)}</span>` : ''}
+                        ${locationHtml}
+                        ${r.description ? `<p class="mt-2">${escapeHtml(r.description)}</p>` : ''}
+                        <a href="${r.url}" target="_blank" class="btn btn-primary"><i class="fas fa-external-link-alt"></i> Visit Website</a>
+                        ${canEdit ? `
+                        <div class="admin-actions">
+                            <button class="btn btn-sm btn-outline-primary" onclick="editResource('${r.id || r.resource_id}')"><i class="fas fa-edit"></i> Edit</button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="deleteResource('${r.id || r.resource_id}')"><i class="fas fa-trash"></i> Delete</button>
+                        </div>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function toggleSubmitForm() {
+            const section = document.getElementById('submit-section');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function submitResource() {
+            const name = document.getElementById('resource-name').value.trim();
+            const type = document.getElementById('resource-type').value;
+            const state = document.getElementById('resource-state').value;
+            const city = document.getElementById('resource-city').value.trim();
+            const focus = document.getElementById('resource-focus').value.trim();
+            const url = document.getElementById('resource-url').value.trim();
+            
+            if (!name || !type || !url) { 
+                alert('Name, type, and URL are required'); 
+                return; 
+            }
+
+            try {
+                const editId = document.getElementById('submit-section').dataset.editId;
+                const action = editId ? 'update' : 'create';
+                const resourceId = editId || ('freedom_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9));
+                const payload = {
+                    id: resourceId,
+                    name: name,
+                    category: ['Religious Freedom', 'Religion'],
+                    subcategory: type,
+                    state: state || undefined,
+                    city: city || undefined,
+                    focus: focus || undefined,
+                    url: url,
+                    description: document.getElementById('resource-desc').value.trim()
+                };
+                
+                const res = await fetch(`${RESOURCES_API}?action=${action}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify(payload)
+                });
+                
+                const data = await res.json();
+                
+                if (res.ok) {
+                    alert(editId ? 'Source updated!' : 'Source submitted!');
+                    ['resource-name','resource-city','resource-focus','resource-url','resource-desc'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('resource-type').value = '';
+                    document.getElementById('resource-state').value = '';
+                    delete document.getElementById('submit-section').dataset.editId;
+                    document.getElementById('submit-section').style.display = 'none';
+                    document.querySelector('#submit-form-container h5').textContent = 'Submit Religious Freedom News Source';
+                    document.querySelector('#submit-form-container button[onclick="submitResource()"]').textContent = 'Submit Source';
+                    loadResources();
+                } else {
+                    alert('Failed: ' + (data.error || JSON.stringify(data)));
+                }
+            } catch(e) { 
+                alert('Error submitting source: ' + e.message); 
+            }
+        }
+
+        async function editResource(resourceId) {
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const all = await res.json();
+                const resource = all.find(r => (r.id || r.resource_id) === resourceId);
+                if (!resource) { alert('Source not found'); return; }
+                
+                document.getElementById('resource-name').value = resource.name || '';
+                document.getElementById('resource-type').value = resource.subcategory || '';
+                document.getElementById('resource-state').value = resource.state || '';
+                document.getElementById('resource-city').value = resource.city || '';
+                document.getElementById('resource-focus').value = resource.focus || '';
+                document.getElementById('resource-url').value = resource.url || '';
+                document.getElementById('resource-desc').value = resource.description || '';
+                
+                document.getElementById('submit-section').style.display = 'block';
+                document.getElementById('submit-section').dataset.editId = resourceId;
+                document.querySelector('#submit-form-container h5').textContent = 'Edit Religious Freedom News Source';
+                document.querySelector('#submit-form-container button[onclick="submitResource()"]').textContent = 'Update Source';
+                window.scrollTo({top: document.getElementById('submit-section').offsetTop - 100, behavior: 'smooth'});
+            } catch(e) {
+                alert('Could not load source details');
+            }
+        }
+
+        async function deleteResource(resourceId) {
+            if (!confirm('Delete this source? This cannot be undone.')) return;
+            try {
+                const res = await fetch(`${RESOURCES_API}?action=delete&resource_id=${resourceId}`, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+                if (res.ok) {
+                    alert('Source deleted');
+                    loadResources();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Failed to delete');
+                }
+            } catch(e) {
+                alert('Error deleting source');
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
