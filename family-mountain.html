@@ -10,6 +10,9 @@
     <style>:root{--mountain-primary:#dc2626;--mountain-secondary:#991b1b;}</style>
 </head>
 <body>
+    <!-- Authentication Check -->
+    <script src="mountain-hub-auth.js"></script>
+    
     <div id="navbar-container" data-page="family-mountain" data-icon-style="fontawesome"></div>
     <script src="navbar.js"></script>
     <script>fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});</script>
