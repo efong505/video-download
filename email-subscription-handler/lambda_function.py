@@ -1149,7 +1149,7 @@ def check_enrollment_status(email, campaign_group):
         return cors_response(500, {'error': 'Failed to check enrollment'})
 
 def handle_resend_book_email(event):
-    """Resend book signup email with PDFs"""
+    """Resend book signup email with PDFs - checks both survival kit signups and post-purchase enrollments"""
     try:
         body = json.loads(event.get('body', '{}'))
         email = body.get('email', '').strip().lower()
@@ -1158,14 +1158,43 @@ def handle_resend_book_email(event):
         if not email:
             return cors_response(400, {'error': 'Email required'})
         
-        # Verify subscriber exists
-        response = book_subscribers_table.get_item(Key={'email': email})
-        if 'Item' not in response:
-            return cors_response(404, {'error': 'Subscriber not found'})
+        # Check if they're a survival kit subscriber
+        is_subscriber = False
+        try:
+            response = book_subscribers_table.get_item(Key={'email': email})
+            if 'Item' in response:
+                is_subscriber = True
+                if not first_name:
+                    first_name = response['Item'].get('first_name', '')
+        except:
+            pass
         
-        # Get first name from DB if not provided
-        if not first_name:
-            first_name = response['Item'].get('first_name', '')
+        # If not a subscriber, check if they're enrolled in post-purchase
+        if not is_subscriber:
+            enrollment_id = f"{email}#post-purchase-sequence"
+            try:
+                enrollment_response = mt_drip_enrollments_table.get_item(
+                    Key={'user_id': PLATFORM_OWNER_ID, 'enrollment_id': enrollment_id}
+                )
+                if 'Item' in enrollment_response:
+                    enrollment = enrollment_response['Item']
+                    if enrollment.get('status') in ['active', 'completed']:
+                        # They're a book purchaser - get their info from subscribers table
+                        try:
+                            sub_response = mt_subscribers_table.get_item(
+                                Key={'user_id': PLATFORM_OWNER_ID, 'subscriber_email': email}
+                            )
+                            if 'Item' in sub_response:
+                                if not first_name:
+                                    first_name = sub_response['Item'].get('first_name', '')
+                                is_subscriber = True
+                        except:
+                            pass
+            except:
+                pass
+        
+        if not is_subscriber:
+            return cors_response(404, {'error': 'Email not found. Must be either a survival kit subscriber or book purchaser.'})
         
         # Resend email
         send_book_signup_email_with_pdfs(email, first_name)
