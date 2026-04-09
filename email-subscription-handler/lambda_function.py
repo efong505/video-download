@@ -77,6 +77,8 @@ def lambda_handler(event, context):
             return list_campaign_groups()
         elif params.get('action') == 'check_subscriber':
             return check_subscriber_status(params.get('email', ''))
+        elif params.get('action') == 'check_enrollment':
+            return check_enrollment_status(params.get('email', ''), params.get('campaign_group', ''))
         elif params.get('action') == 'resend_book_email':
             return handle_resend_book_email(event)
         elif method == 'POST':
@@ -1117,6 +1119,34 @@ def check_subscriber_status(email):
     except Exception as e:
         print(f"Check subscriber error: {str(e)}")
         return cors_response(500, {'error': 'Failed to check status'})
+
+def check_enrollment_status(email, campaign_group):
+    """Check if email is enrolled in a specific campaign group"""
+    try:
+        if not email:
+            return cors_response(400, {'error': 'Email required'})
+        
+        email = email.strip().lower()
+        
+        if not campaign_group:
+            return cors_response(400, {'error': 'Campaign group required'})
+        
+        # Check if enrollment exists
+        enrollment_id = f"{email}#{campaign_group}"
+        response = mt_drip_enrollments_table.get_item(
+            Key={'user_id': PLATFORM_OWNER_ID, 'enrollment_id': enrollment_id}
+        )
+        
+        if 'Item' in response:
+            enrollment = response['Item']
+            # Consider enrolled if status is active or completed
+            is_enrolled = enrollment.get('status') in ['active', 'completed']
+            return cors_response(200, {'is_enrolled': is_enrolled, 'email': email, 'campaign_group': campaign_group})
+        else:
+            return cors_response(200, {'is_enrolled': False, 'email': email, 'campaign_group': campaign_group})
+    except Exception as e:
+        print(f"Check enrollment error: {str(e)}")
+        return cors_response(500, {'error': 'Failed to check enrollment'})
 
 def handle_resend_book_email(event):
     """Resend book signup email with PDFs"""

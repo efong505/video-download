@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Book Resources - Christian AI Survival Kit</title>
+    <title>Thank You for Your Purchase - The Necessary Evil</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --kit-green: #16a34a;
             --primary-color: #2c5aa0;
+            --gold: #d4af37;
         }
         
         .hero-section {
-            background: linear-gradient(135deg, var(--kit-green) 0%, #15803d 100%);
+            background: linear-gradient(135deg, var(--primary-color) 0%, #1e3a6f 100%);
             color: white;
             padding: 60px 0;
             text-align: center;
@@ -34,12 +34,12 @@
         
         .resource-icon {
             font-size: 3rem;
-            color: var(--kit-green);
+            color: var(--primary-color);
             margin-bottom: 15px;
         }
         
-        .btn-download {
-            background: var(--kit-green);
+        .btn-primary-custom {
+            background: var(--primary-color);
             color: white;
             border: none;
             padding: 12px 30px;
@@ -48,8 +48,8 @@
             transition: all 0.3s ease;
         }
         
-        .btn-download:hover {
-            background: #15803d;
+        .btn-primary-custom:hover {
+            background: #1e3a6f;
             color: white;
             transform: translateY(-2px);
         }
@@ -58,13 +58,27 @@
             max-width: 500px;
             margin: 50px auto;
         }
+
+        .gold-badge {
+            background: linear-gradient(135deg, var(--gold) 0%, #b8941f 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
     <div class="hero-section">
         <div class="container">
-            <h1 class="display-4 fw-bold mb-3"><i class="fas fa-gift me-3"></i>Your Book Resources</h1>
-            <p class="lead">Christian AI Survival Kit - Download Your Free Resources</p>
+            <div class="gold-badge mb-3">
+                <i class="fas fa-crown me-2"></i>Book Purchaser
+            </div>
+            <h1 class="display-4 fw-bold mb-3">Thank You for Your Purchase!</h1>
+            <p class="lead">Access Your Exclusive Book Resources</p>
         </div>
     </div>
 
@@ -72,15 +86,15 @@
     <div id="verification-section" class="verification-section" style="display: none;">
         <div class="card shadow-lg">
             <div class="card-body p-5 text-center">
-                <i class="fas fa-envelope-open-text fa-3x mb-4" style="color: var(--kit-green);"></i>
+                <i class="fas fa-envelope-open-text fa-3x mb-4" style="color: var(--primary-color);"></i>
                 <h3 class="mb-3">Verify Your Email</h3>
-                <p class="text-muted mb-4">Enter your email to access your book resources</p>
+                <p class="text-muted mb-4">Enter the email you used to purchase the book</p>
                 
                 <form id="verify-form">
                     <div class="mb-3">
                         <input type="email" class="form-control form-control-lg" id="verify-email" placeholder="your@email.com" required>
                     </div>
-                    <button type="submit" class="btn btn-download btn-lg w-100">
+                    <button type="submit" class="btn btn-primary-custom btn-lg w-100">
                         <i class="fas fa-unlock me-2"></i>Access My Resources
                     </button>
                 </form>
@@ -96,42 +110,32 @@
             <div class="col-lg-10">
                 <div class="alert alert-success mb-4">
                     <i class="fas fa-check-circle me-2"></i>
-                    <strong>Welcome back!</strong> Your resources are ready to download.
+                    <strong>Welcome back!</strong> Your exclusive resources are ready.
                 </div>
 
                 <div class="row g-4">
-                    <!-- Book Preview -->
+                    <!-- Bonus Resources -->
                     <div class="col-md-6">
                         <div class="resource-card text-center h-100">
-                            <i class="fas fa-book-open resource-icon"></i>
-                            <h4>30-Page Book Preview</h4>
-                            <p class="text-muted">Introduction + the most powerful chapters from The Necessary Evil</p>
-                            <button class="btn btn-download" onclick="requestResend()">
-                                <i class="fas fa-envelope me-2"></i>Email Me the PDFs
+                            <i class="fas fa-gift resource-icon"></i>
+                            <h4>Bonus Resources</h4>
+                            <p class="text-muted">Exclusive guides and materials for book purchasers</p>
+                            <button class="btn btn-primary-custom" onclick="requestBonusEmail()">
+                                <i class="fas fa-envelope me-2"></i>Email Me the Resources
                             </button>
-                            <p class="text-muted small mt-2">We'll send all 4 PDFs to your email</p>
+                            <p class="text-muted small mt-2">We'll send all bonus materials to your email</p>
                         </div>
                     </div>
 
-                    <!-- Online Preview -->
+                    <!-- Online Reading -->
                     <div class="col-md-6">
                         <div class="resource-card text-center h-100">
-                            <i class="fas fa-desktop resource-icon"></i>
-                            <h4>Read Online Preview</h4>
-                            <p class="text-muted">Read the 30-page preview directly in your browser</p>
-                            <a href="the-necessary-evil-book.html#preview" class="btn btn-download">
+                            <i class="fas fa-book-reader resource-icon"></i>
+                            <h4>Read Online</h4>
+                            <p class="text-muted">Access the book preview and additional content online</p>
+                            <a href="the-necessary-evil-book.html#preview" class="btn btn-primary-custom">
                                 <i class="fas fa-eye me-2"></i>Read Now
                             </a>
-                        </div>
-                    </div>
-
-                    <!-- Survival Guide -->
-                    <div class="col-md-6">
-                        <div class="resource-card text-center h-100">
-                            <i class="fas fa-shield-alt resource-icon"></i>
-                            <h4>Christian AI Survival Guide</h4>
-                            <p class="text-muted">7 safeguards for using AI without losing your soul</p>
-                            <p class="small text-muted"><i class="fas fa-info-circle me-1"></i>Included in email</p>
                         </div>
                     </div>
 
@@ -140,19 +144,27 @@
                         <div class="resource-card text-center h-100">
                             <i class="fas fa-users resource-icon"></i>
                             <h4>Church Discussion Guide</h4>
-                            <p class="text-muted">10-session study for small groups</p>
-                            <p class="small text-muted"><i class="fas fa-info-circle me-1"></i>Included in email</p>
+                            <p class="text-muted">10-session study guide for small groups and Bible studies</p>
+                            <p class="small text-muted"><i class="fas fa-check-circle me-1" style="color: var(--primary-color);"></i>Included in bonus email</p>
+                        </div>
+                    </div>
+
+                    <!-- AI Parent Guide -->
+                    <div class="col-md-6">
+                        <div class="resource-card text-center h-100">
+                            <i class="fas fa-child resource-icon"></i>
+                            <h4>AI Parent Guide</h4>
+                            <p class="text-muted">Protect your children in an AI-driven world</p>
+                            <p class="small text-muted"><i class="fas fa-check-circle me-1" style="color: var(--primary-color);"></i>Included in bonus email</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="card mt-5 border-0" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);">
+                <div class="card mt-5 border-0" style="background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);">
                     <div class="card-body p-4 text-center">
-                        <h4 style="color: var(--primary-color);">Ready for the Full Book?</h4>
-                        <p class="mb-3">Get the complete 200+ page guide to mastering AI from a Christian perspective</p>
-                        <a href="the-necessary-evil-book.html#purchase" class="btn btn-lg" style="background: var(--primary-color); color: white;">
-                            <i class="fas fa-shopping-cart me-2"></i>Purchase Full Book
-                        </a>
+                        <h4 style="color: var(--primary-color);"><i class="fas fa-envelope-open-text me-2"></i>Stay Connected</h4>
+                        <p class="mb-3">You'll receive exclusive updates, insights, and resources as a book purchaser through our email series.</p>
+                        <p class="small text-muted mb-0">Check your email regularly for new content and community updates.</p>
                     </div>
                 </div>
             </div>
@@ -168,10 +180,8 @@
         const emailParam = urlParams.get('email');
 
         if (emailParam) {
-            // Verify email from URL parameter
             verifyEmail(emailParam);
         } else {
-            // Show verification form
             document.getElementById('verification-section').style.display = 'block';
         }
 
@@ -186,25 +196,16 @@
             if (resultDiv) resultDiv.innerHTML = '<div class="alert alert-info">Verifying...</div>';
 
             try {
-                // Check if subscriber OR enrolled in post-purchase sequence
-                const [subResponse, enrollResponse] = await Promise.all([
-                    fetch(`https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe?action=check_subscriber&email=${encodeURIComponent(email)}`),
-                    fetch(`https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe?action=check_enrollment&email=${encodeURIComponent(email)}&campaign_group=post-purchase-sequence`)
-                ]);
-                
-                const subData = await subResponse.json();
-                const enrollData = await enrollResponse.json();
+                const response = await fetch(`https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe?action=check_enrollment&email=${encodeURIComponent(email)}&campaign_group=post-purchase-sequence`);
+                const data = await response.json();
 
-                if (subData.is_subscriber || enrollData.is_enrolled) {
+                if (data.is_enrolled) {
                     userEmail = email;
                     document.getElementById('verification-section').style.display = 'none';
                     document.getElementById('resources-section').style.display = 'block';
-                    
-                    // Set localStorage for book page access
-                    localStorage.setItem('book_subscriber', 'true');
                 } else {
                     if (resultDiv) {
-                        resultDiv.innerHTML = '<div class="alert alert-warning">Email not found. <a href="the-necessary-evil-book.html#survival-kit">Sign up for free access</a></div>';
+                        resultDiv.innerHTML = '<div class="alert alert-warning">Email not found in our purchaser list. Please contact support if you believe this is an error.</div>';
                     }
                 }
             } catch (error) {
@@ -215,13 +216,13 @@
             }
         }
 
-        async function requestResend() {
+        async function requestBonusEmail() {
             if (!userEmail) {
                 alert('Please verify your email first');
                 return;
             }
 
-            if (!confirm('Send all 4 PDFs to ' + userEmail + '?')) return;
+            if (!confirm('Send bonus resources to ' + userEmail + '?')) return;
 
             try {
                 const response = await fetch('https://niexv1rw75.execute-api.us-east-1.amazonaws.com/subscribe?action=resend_book_email', {
@@ -233,7 +234,7 @@
                 const data = await response.json();
 
                 if (data.message === 'success') {
-                    alert('✓ Email sent! Check ' + userEmail + ' for your PDFs (including spam folder).');
+                    alert('✓ Email sent! Check ' + userEmail + ' for your bonus resources (including spam folder).');
                 } else {
                     alert('Error: ' + (data.error || 'Unknown error'));
                 }
