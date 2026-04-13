@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fake News Reporter - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <script src="assets/js/token-validator.js"></script>
+    <style>
+        .fake-news-header { background: linear-gradient(135deg, #dc3545 0%, #991b1b 100%); color: white; padding: 100px 0 20px 0; margin-bottom: 30px; }
+        .status-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+        .status-tab { padding: 8px 16px; border-radius: 20px; border: 2px solid #dee2e6; background: white; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+        .status-tab:hover { border-color: #dc3545; }
+        .status-tab.active { background: #dc3545; color: white; border-color: #dc3545; }
+        .fake-news-card { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 16px; border-left: 4px solid #dc3545; }
+        .fake-news-card.debunked { border-left-color: #28a745; }
+        .fake-news-card.investigating { border-left-color: #ffc107; }
+        .fake-news-card h5 { margin-bottom: 4px; }
+        .fake-news-card .news-meta { color: #6c757d; font-size: 0.85rem; margin-bottom: 8px; }
+        .fake-news-card .news-claim { color: #333; margin-bottom: 8px; font-style: italic; background: #fff3cd; padding: 10px; border-radius: 6px; }
+        .fake-news-card .news-truth { background: #d1e7dd; border-radius: 8px; padding: 10px; margin-top: 8px; font-size: 0.9rem; }
+        .vote-btn { background: none; border: 2px solid #dc3545; color: #dc3545; border-radius: 20px; padding: 4px 14px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .vote-btn:hover, .vote-btn.voted { background: #dc3545; color: white; }
+        .report-form { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 24px; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #6c757d; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="fake-news-reporter"></div>
+    <script src="navbar.js"></script>
+    <script>fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});</script>
+
+    <div class="fake-news-header">
+        <div class="container">
+            <h1><i class="fas fa-exclamation-triangle"></i> Fake News Reporter</h1>
+            <p>Report and track false narratives, propaganda, and misinformation from mainstream media</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <div class="status-tabs" id="status-tabs">
+                <button class="status-tab active" data-status="all">All Reports</button>
+                <button class="status-tab" data-status="active">🔴 Active</button>
+                <button class="status-tab" data-status="investigating">🟡 Investigating</button>
+                <button class="status-tab" data-status="debunked">🟢 Debunked</button>
+            </div>
+            <button class="btn btn-danger" onclick="toggleReportForm()">+ Report Fake News</button>
+        </div>
+
+        <!-- Report Form -->
+        <div id="report-section" style="display:none;">
+            <div id="report-login-prompt" class="text-center mb-3" style="display:none;">
+                <a href="login.html" class="btn btn-outline-danger">Log in to report fake news</a>
+            </div>
+            <div id="report-form-container" style="display:none;">
+                <div class="report-form">
+                    <h5>Report Fake News</h5>
+                    <div class="row g-2">
+                        <div class="col-md-6"><input type="text" id="report-outlet" class="form-control" placeholder="Media outlet or source *"></div>
+                        <div class="col-md-6">
+                            <select id="report-category" class="form-select">
+                                <option value="False Claim">False Claim</option>
+                                <option value="Misleading">Misleading Information</option>
+                                <option value="Propaganda">Propaganda</option>
+                                <option value="Omission">Omission of Facts</option>
+                                <option value="Hoax">Hoax</option>
+                                <option value="Satire Misrepresented">Satire Misrepresented as News</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-12"><textarea id="report-claim" class="form-control" rows="2" placeholder="What false claim was made? *"></textarea></div>
+                        <div class="col-12"><textarea id="report-truth" class="form-control" rows="2" placeholder="What is the truth? (optional)"></textarea></div>
+                        <div class="col-md-6"><input type="url" id="report-source" class="form-control" placeholder="Source URL of fake news"></div>
+                        <div class="col-md-6"><input type="url" id="report-evidence" class="form-control" placeholder="Evidence URL (fact-check, proof)"></div>
+                        <div class="col-12"><button class="btn btn-danger" onclick="submitReport()">Submit Report</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Fake News List -->
+        <div id="reports-container">
+            <div class="text-center py-4"><div class="spinner-border"></div><p class="mt-2">Loading reports...</p></div>
+        </div>
+    </div>
+
+    <script>
+        const FAKE_NEWS_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/fake-news';
+        let authToken = localStorage.getItem('auth_token');
+        let currentUser = null;
+        let currentStatus = 'all';
+
+        window.addEventListener('load', () => {
+            const userData = localStorage.getItem('user_data');
+            if (authToken && userData) {
+                currentUser = JSON.parse(userData);
+                document.getElementById('report-form-container').style.display = 'block';
+                document.getElementById('report-login-prompt').style.display = 'none';
+            } else {
+                document.getElementById('report-form-container').style.display = 'none';
+                document.getElementById('report-login-prompt').style.display = 'block';
+            }
+            loadReports();
+        });
+
+        document.getElementById('status-tabs').addEventListener('click', e => {
+            if (!e.target.classList.contains('status-tab')) return;
+            document.querySelectorAll('.status-tab').forEach(t => t.classList.remove('active'));
+            e.target.classList.add('active');
+            currentStatus = e.target.dataset.status;
+            loadReports();
+        });
+
+        async function loadReports() {
+            const container = document.getElementById('reports-container');
+            container.innerHTML = '<div class="text-center py-4"><div class="spinner-border"></div></div>';
+            try {
+                const res = await fetch(`${FAKE_NEWS_API}?action=list&status=${currentStatus}`);
+                const data = await res.json();
+                if (!data.reports || data.reports.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><i class="fas fa-exclamation-triangle" style="font-size:3rem;"></i><h4>No fake news reports yet</h4><p>Be the first to report fake news.</p></div>';
+                    return;
+                }
+                container.innerHTML = data.reports.map(r => {
+                    const voted = currentUser && r.voted_by && r.voted_by.includes(currentUser.user_id);
+                    const statusClass = r.status === 'debunked' ? 'debunked' : r.status === 'investigating' ? 'investigating' : '';
+                    return `<div class="fake-news-card ${statusClass}">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div style="flex:1;">
+                                <h5>${escapeHtml(r.outlet_name)}</h5>
+                                <div class="news-meta">
+                                    <span class="badge bg-danger">${escapeHtml(r.category || 'Fake News')}</span>
+                                    ${r.status === 'debunked' ? '<span class="badge bg-success">Debunked</span>' : r.status === 'investigating' ? '<span class="badge bg-warning">Investigating</span>' : '<span class="badge bg-secondary">Active</span>'}
+                                    &middot; Reported ${new Date(r.created_at).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})}
+                                    ${r.source_url ? `&middot; <a href="${r.source_url}" target="_blank">Source</a>` : ''}
+                                </div>
+                            </div>
+                            <button class="vote-btn ${voted ? 'voted' : ''}" onclick="vote('${r.report_id}', event)">
+                                <i class="fas fa-flag"></i> ${r.votes || 0}
+                            </button>
+                        </div>
+                        <div class="news-claim"><strong>❌ False Claim:</strong> ${escapeHtml(r.claim)}</div>
+                        ${r.truth ? `<div class="news-truth"><strong>✅ The Truth:</strong> ${escapeHtml(r.truth)}</div>` : ''}
+                        ${r.evidence_url ? `<div style="margin-top:8px;font-size:0.9rem;"><strong>📎 Evidence:</strong> <a href="${r.evidence_url}" target="_blank">${r.evidence_url}</a></div>` : ''}
+                    </div>`;
+                }).join('');
+            } catch(e) {
+                container.innerHTML = '<div class="empty-state"><p>Could not load reports.</p></div>';
+            }
+        }
+
+        function toggleReportForm() {
+            const section = document.getElementById('report-section');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function submitReport() {
+            const outlet_name = document.getElementById('report-outlet').value.trim();
+            const claim = document.getElementById('report-claim').value.trim();
+            if (!outlet_name || !claim) { alert('Outlet name and claim are required'); return; }
+
+            try {
+                const res = await fetch(`${FAKE_NEWS_API}?action=report`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({
+                        outlet_name, claim,
+                        category: document.getElementById('report-category').value,
+                        truth: document.getElementById('report-truth').value.trim(),
+                        source_url: document.getElementById('report-source').value.trim(),
+                        evidence_url: document.getElementById('report-evidence').value.trim()
+                    })
+                });
+                if (res.ok) {
+                    alert('Fake news report submitted!');
+                    ['report-outlet','report-claim','report-truth','report-source','report-evidence'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('report-section').style.display = 'none';
+                    loadReports();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Failed to submit');
+                }
+            } catch(e) { alert('Error submitting report'); }
+        }
+
+        async function vote(reportId, event) {
+            if (event) event.preventDefault();
+            if (!authToken) { alert('Please log in to vote'); return; }
+            
+            const button = event ? event.currentTarget : document.querySelector(`button[onclick*="${reportId}"]`);
+            
+            try {
+                const res = await fetch(`${FAKE_NEWS_API}?action=vote`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({ report_id: reportId })
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    button.innerHTML = `<i class="fas fa-flag"></i> ${data.votes || 0}`;
+                    button.classList.toggle('voted');
+                }
+            } catch(e) {
+                console.error('Vote error:', e);
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML.replace(/\n/g, '<br>');
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

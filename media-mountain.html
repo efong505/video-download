@@ -71,12 +71,7 @@
     <div id="expose" class="tab-content">
         <h2>Expose Media Bias &amp; Lies</h2>
         <div class="action-grid">
-            <div class="action-card">
-                <h3>🚨 Report Fake News</h3>
-                <p>Document mainstream media lies, propaganda, and censorship of conservative voices.</p>
-                <a href="user-upload.html?mountain=media" class="action-btn">Upload Video Report</a>
-                <a href="create-article.html?template=mountain_media&mountain=media" class="action-btn" style="margin-top:8px;">Write Report</a>
-            </div>
+
             <div class="action-card">
                 <h3>🔍 Fact-Check Database</h3>
                 <p>Access fact-checks debunking liberal media narratives and false reporting.</p>
@@ -85,8 +80,12 @@
             <div class="action-card">
                 <h3>📊 Media Bias Tracker</h3>
                 <p>Track and expose bias in major news outlets, journalists, and media companies.</p>
-                <a href="forum.html?mountain=media" class="action-btn">Report & Discuss Bias</a>
-                <a href="articles.html?category=media" class="action-btn" style="margin-top:8px;">Read Articles</a>
+                <a href="media-bias-tracker.html" class="action-btn">Report & Track Bias</a>
+            </div>
+            <div class="action-card">
+                <h3>🚨 Fake News Reporter</h3>
+                <p>Report and track false narratives, propaganda, and misinformation from mainstream media.</p>
+                <a href="fake-news-reporter.html" class="action-btn">Report Fake News</a>
             </div>
             <div class="action-card">
                 <h3>🎯 Counter-Narrative Campaigns</h3>
@@ -201,7 +200,7 @@
             loadMountainContent('media');
             initMountainHub('media');
             loadMediaResources();
-            loadHubCards('media');
+            // loadHubCards('media'); // DISABLED - using hardcoded cards with bias/fake news tracker links
         });
     </script>
 

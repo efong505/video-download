@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Stewardship Resources - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <script src="assets/js/token-validator.js"></script>
+    <style>
+        .stewardship-header { background: linear-gradient(135deg, #16a34a 0%, #15803d 100%); color: white; padding: 100px 0 20px 0; margin-bottom: 30px; }
+        .category-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+        .category-pill { padding: 6px 14px; border-radius: 20px; border: 2px solid #dee2e6; background: white; cursor: pointer; font-size: 0.9rem; transition: all 0.2s; }
+        .category-pill:hover { border-color: #16a34a; }
+        .category-pill.active { background: #16a34a; color: white; border-color: #16a34a; }
+        .resource-card { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 20px; height: 100%; transition: transform 0.2s; }
+        .resource-card:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(0,0,0,0.12); }
+        .resource-card h5 { color: #1a2332; margin-bottom: 8px; }
+        .resource-card .resource-category { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 600; background: #dcfce7; color: #15803d; margin-bottom: 8px; }
+        .resource-card .resource-desc { color: #555; font-size: 0.9rem; margin: 8px 0; }
+        .resource-card .resource-link { color: #16a34a; text-decoration: none; font-weight: 600; }
+        .resource-card .resource-link:hover { text-decoration: underline; }
+        .featured-section { background: #f0fdf4; border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+        .featured-section h3 { color: #15803d; margin-bottom: 16px; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #6c757d; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="financial-stewardship"></div>
+    <script src="navbar.js"></script>
+    <script>fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});</script>
+
+    <div class="stewardship-header">
+        <div class="container">
+            <h1><i class="fas fa-hand-holding-usd"></i> Financial Stewardship Resources</h1>
+            <p>Biblical wisdom for managing money, investing, and building wealth God's way</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Featured Resources -->
+        <div class="featured-section">
+            <h3>⭐ Featured Resources</h3>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="resource-card">
+                        <h5>Dave Ramsey</h5>
+                        <span class="resource-category">Debt Freedom</span>
+                        <p class="resource-desc">Biblical financial principles, debt elimination, and wealth building through the 7 Baby Steps.</p>
+                        <a href="https://www.ramseysolutions.com" target="_blank" class="resource-link">Visit Resource <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="resource-card">
+                        <h5>Crown Financial Ministries</h5>
+                        <span class="resource-category">Biblical Finance</span>
+                        <p class="resource-desc">Teaching God's financial principles through courses, counseling, and resources.</p>
+                        <a href="https://www.crown.org" target="_blank" class="resource-link">Visit Resource <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="resource-card">
+                        <h5>Financial Peace University</h5>
+                        <span class="resource-category">Course</span>
+                        <p class="resource-desc">9-lesson course on budgeting, saving, and eliminating debt using biblical principles.</p>
+                        <a href="https://www.ramseysolutions.com/ramseyplus/financial-peace" target="_blank" class="resource-link">Visit Resource <i class="fas fa-external-link-alt"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="category-pills" id="category-pills">
+            <button class="category-pill active" data-category="all">All Resources</button>
+            <button class="category-pill" data-category="budgeting">Budgeting</button>
+            <button class="category-pill" data-category="debt">Debt Freedom</button>
+            <button class="category-pill" data-category="investing">Investing</button>
+            <button class="category-pill" data-category="giving">Giving & Generosity</button>
+            <button class="category-pill" data-category="business">Business</button>
+            <button class="category-pill" data-category="retirement">Retirement</button>
+        </div>
+
+        <!-- Resources Grid -->
+        <div id="resources-container">
+            <div class="text-center py-4"><div class="spinner-border"></div><p class="mt-2">Loading resources...</p></div>
+        </div>
+    </div>
+
+    <script>
+        const RESOURCES_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/resources';
+        let currentCategory = 'all';
+        
+        const BUILT_IN_RESOURCES = [
+            {
+                name: "MoneyWise",
+                category: "Biblical Finance",
+                description: "Daily radio program and resources teaching biblical financial principles and stewardship.",
+                url: "https://www.moneywise.org"
+            },
+            {
+                name: "Compass - finances God's way",
+                category: "Biblical Finance",
+                description: "Biblical financial teaching, small group studies, and one-on-one coaching.",
+                url: "https://compass1.org"
+            },
+            {
+                name: "Good Sense Movement",
+                category: "Church Resources",
+                description: "Church-based financial discipleship programs and stewardship campaigns.",
+                url: "https://www.goodsensemovement.org"
+            },
+            {
+                name: "Christian Credit Counselors",
+                category: "Debt",
+                description: "Non-profit credit counseling and debt management from a Christian perspective.",
+                url: "https://www.christiancreditcounselors.org"
+            },
+            {
+                name: "Kingdom Advisors",
+                category: "Investing",
+                description: "Network of Christian financial advisors committed to biblical financial counsel.",
+                url: "https://www.kingdomadvisors.com"
+            },
+            {
+                name: "Eventide Funds",
+                category: "Investing",
+                description: "Faith-based mutual funds investing in companies aligned with biblical values.",
+                url: "https://www.eventidefunds.com"
+            },
+            {
+                name: "Timothy Plan",
+                category: "Investing",
+                description: "Pro-life, pro-family mutual funds screening out companies opposed to Christian values.",
+                url: "https://www.timothyplan.com"
+            },
+            {
+                name: "National Christian Foundation",
+                category: "Giving",
+                description: "Donor-advised funds and charitable giving strategies for Christians.",
+                url: "https://www.nationalchristian.com"
+            },
+            {
+                name: "Generous Giving",
+                category: "Giving",
+                description: "Inspiring generosity and biblical giving through stories and resources.",
+                url: "https://generousgiving.org"
+            },
+            {
+                name: "YNAB (You Need A Budget)",
+                category: "Budgeting",
+                description: "Budgeting software based on giving every dollar a job - aligns with biblical stewardship.",
+                url: "https://www.ynab.com"
+            },
+            {
+                name: "EveryDollar",
+                category: "Budgeting",
+                description: "Free budgeting app from Dave Ramsey's team using zero-based budgeting.",
+                url: "https://www.everydollar.com"
+            },
+            {
+                name: "Christian Business Network",
+                category: "Business",
+                description: "Connecting Christian business owners for fellowship, accountability, and growth.",
+                url: "https://www.cbnonline.org"
+            }
+        ];
+
+        window.addEventListener('load', () => {
+            loadResources();
+        });
+
+        document.getElementById('category-pills').addEventListener('click', e => {
+            if (!e.target.classList.contains('category-pill')) return;
+            document.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+            e.target.classList.add('active');
+            currentCategory = e.target.dataset.category;
+            loadResources();
+        });
+
+        async function loadResources() {
+            const container = document.getElementById('resources-container');
+            container.innerHTML = '<div class="text-center py-4"><div class="spinner-border"></div></div>';
+            
+            try {
+                // Try to load from API
+                const res = await fetch(`${RESOURCES_API}?action=list`);
+                const apiResources = await res.json();
+                
+                // Combine API resources with built-in resources
+                const allResources = [...BUILT_IN_RESOURCES, ...apiResources.filter(r => {
+                    const cats = Array.isArray(r.category) ? r.category : [r.category];
+                    return cats.some(c => ['Financial', 'Stewardship', 'Money', 'Investing', 'Budgeting'].some(kw => c.toLowerCase().includes(kw.toLowerCase())));
+                })];
+                
+                // Filter by category
+                const filtered = currentCategory === 'all' ? allResources : allResources.filter(r => {
+                    const cat = r.category.toLowerCase();
+                    return cat.includes(currentCategory.toLowerCase());
+                });
+                
+                if (filtered.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><i class="fas fa-hand-holding-usd" style="font-size:3rem;"></i><h4>No resources in this category yet</h4><p>Check back soon for more resources!</p></div>';
+                    return;
+                }
+                
+                container.innerHTML = '<div class="row g-3">' + filtered.map(r => `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card">
+                            <h5>${escapeHtml(r.name)}</h5>
+                            <span class="resource-category">${escapeHtml(r.category)}</span>
+                            <p class="resource-desc">${escapeHtml(r.description || 'No description available')}</p>
+                            <a href="${r.url}" target="_blank" class="resource-link">Visit Resource <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                `).join('') + '</div>';
+            } catch(e) {
+                // Fallback to built-in resources only
+                const filtered = currentCategory === 'all' ? BUILT_IN_RESOURCES : BUILT_IN_RESOURCES.filter(r => {
+                    const cat = r.category.toLowerCase();
+                    return cat.includes(currentCategory.toLowerCase());
+                });
+                
+                container.innerHTML = '<div class="row g-3">' + filtered.map(r => `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="resource-card">
+                            <h5>${escapeHtml(r.name)}</h5>
+                            <span class="resource-category">${escapeHtml(r.category)}</span>
+                            <p class="resource-desc">${escapeHtml(r.description)}</p>
+                            <a href="${r.url}" target="_blank" class="resource-link">Visit Resource <i class="fas fa-external-link-alt"></i></a>
+                        </div>
+                    </div>
+                `).join('') + '</div>';
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

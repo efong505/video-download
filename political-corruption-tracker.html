@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Political Corruption Tracker - Christian Conservatives Today</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/common-styles.css">
+    <script src="assets/js/token-validator.js"></script>
+    <style>
+        .corruption-header { background: linear-gradient(135deg, #343a40 0%, #23272b 100%); color: white; padding: 100px 0 20px 0; margin-bottom: 30px; }
+        .status-tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+        .status-tab { padding: 8px 16px; border-radius: 20px; border: 2px solid #dee2e6; background: white; cursor: pointer; font-weight: 500; transition: all 0.2s; }
+        .status-tab:hover { border-color: #343a40; }
+        .status-tab.active { background: #343a40; color: white; border-color: #343a40; }
+        .corruption-card { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 20px; margin-bottom: 16px; border-left: 4px solid #dc3545; }
+        .corruption-card.investigating { border-left-color: #ffc107; }
+        .corruption-card.resolved { border-left-color: #28a745; }
+        .corruption-card h5 { margin-bottom: 4px; }
+        .corruption-card .corruption-meta { color: #6c757d; font-size: 0.85rem; margin-bottom: 8px; }
+        .corruption-card .corruption-description { color: #333; margin-bottom: 8px; }
+        .corruption-card .corruption-evidence { background: #fff3cd; border-radius: 8px; padding: 10px; margin-top: 8px; font-size: 0.9rem; }
+        .vote-btn { background: none; border: 2px solid #dc3545; color: #dc3545; border-radius: 20px; padding: 4px 14px; cursor: pointer; font-weight: 600; transition: all 0.2s; }
+        .vote-btn:hover, .vote-btn.voted { background: #dc3545; color: white; }
+        .report-form { background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); padding: 24px; margin-bottom: 24px; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #6c757d; }
+    </style>
+</head>
+<body>
+    <div id="navbar-container" data-page="corruption-tracker"></div>
+    <script src="navbar.js"></script>
+    <script>fetch('navbar.html').then(r=>r.text()).then(html=>{document.getElementById('navbar-container').innerHTML=html;initNavbar();});</script>
+
+    <div class="corruption-header">
+        <div class="container">
+            <h1><i class="fas fa-gavel"></i> Political Corruption Tracker</h1>
+            <p>Document and expose political corruption, constitutional violations, and government overreach</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+            <div class="status-tabs" id="status-tabs">
+                <button class="status-tab active" data-status="active">🔴 Active</button>
+                <button class="status-tab" data-status="investigating">🟡 Investigating</button>
+                <button class="status-tab" data-status="resolved">🟢 Resolved</button>
+                <button class="status-tab" data-status="all">All</button>
+            </div>
+            <button class="btn btn-danger" onclick="toggleReportForm()">+ Report Corruption</button>
+        </div>
+
+        <!-- Report Form -->
+        <div id="report-section" style="display:none;">
+            <div id="report-login-prompt" class="text-center mb-3" style="display:none;">
+                <a href="login.html" class="btn btn-outline-danger">Log in to report corruption</a>
+            </div>
+            <div id="report-form-container" style="display:none;">
+                <div class="report-form">
+                    <h5>Report Political Corruption</h5>
+                    <div class="row g-2">
+                        <div class="col-md-6"><input type="text" id="report-official" class="form-control" placeholder="Official/politician name *"></div>
+                        <div class="col-md-6">
+                            <select id="report-category" class="form-select">
+                                <option value="Bribery">Bribery</option>
+                                <option value="Fraud">Fraud</option>
+                                <option value="Abuse of Power">Abuse of Power</option>
+                                <option value="Constitutional Violation">Constitutional Violation</option>
+                                <option value="Conflict of Interest">Conflict of Interest</option>
+                                <option value="Censorship">Censorship</option>
+                                <option value="Election Fraud">Election Fraud</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6"><input type="text" id="report-office" class="form-control" placeholder="Office/position"></div>
+                        <div class="col-md-6"><input type="text" id="report-location" class="form-control" placeholder="State/jurisdiction"></div>
+                        <div class="col-12"><textarea id="report-description" class="form-control" rows="3" placeholder="Describe the corruption or violation *"></textarea></div>
+                        <div class="col-md-6"><input type="url" id="report-evidence" class="form-control" placeholder="Evidence URL (news, documents)"></div>
+                        <div class="col-md-6"><input type="date" id="report-date" class="form-control" placeholder="Date of incident"></div>
+                        <div class="col-12"><button class="btn btn-danger" onclick="submitReport()">Submit Report</button></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports List -->
+        <div id="reports-container">
+            <div class="text-center py-4"><div class="spinner-border"></div><p class="mt-2">Loading reports...</p></div>
+        </div>
+    </div>
+
+    <script>
+        const CORRUPTION_API = 'https://diz6ceeb22.execute-api.us-east-1.amazonaws.com/prod/political-corruption';
+        let authToken = localStorage.getItem('auth_token');
+        let currentUser = null;
+        let currentStatus = 'active';
+
+        window.addEventListener('load', () => {
+            const userData = localStorage.getItem('user_data');
+            if (authToken && userData) {
+                currentUser = JSON.parse(userData);
+                document.getElementById('report-form-container').style.display = 'block';
+                document.getElementById('report-login-prompt').style.display = 'none';
+            } else {
+                document.getElementById('report-form-container').style.display = 'none';
+                document.getElementById('report-login-prompt').style.display = 'block';
+            }
+            loadReports();
+        });
+
+        document.getElementById('status-tabs').addEventListener('click', e => {
+            if (!e.target.classList.contains('status-tab')) return;
+            document.querySelectorAll('.status-tab').forEach(t => t.classList.remove('active'));
+            e.target.classList.add('active');
+            currentStatus = e.target.dataset.status;
+            loadReports();
+        });
+
+        async function loadReports() {
+            const container = document.getElementById('reports-container');
+            container.innerHTML = '<div class="text-center py-4"><div class="spinner-border"></div></div>';
+            try {
+                const res = await fetch(`${CORRUPTION_API}?action=list&status=${currentStatus}`);
+                const data = await res.json();
+                if (!data.reports || data.reports.length === 0) {
+                    container.innerHTML = '<div class="empty-state"><i class="fas fa-gavel" style="font-size:3rem;"></i><h4>No corruption reports yet</h4><p>Be the first to report political corruption.</p></div>';
+                    return;
+                }
+                container.innerHTML = data.reports.map(r => {
+                    const voted = currentUser && r.voted_by && r.voted_by.includes(currentUser.user_id);
+                    const statusClass = r.status === 'resolved' ? 'resolved' : r.status === 'investigating' ? 'investigating' : '';
+                    return `<div class="corruption-card ${statusClass}">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div style="flex:1;">
+                                <h5>${escapeHtml(r.official_name)}</h5>
+                                <div class="corruption-meta">
+                                    <span class="badge bg-danger">${escapeHtml(r.category || 'Corruption')}</span>
+                                    ${r.status === 'resolved' ? '<span class="badge bg-success">Resolved</span>' : r.status === 'investigating' ? '<span class="badge bg-warning">Investigating</span>' : '<span class="badge bg-secondary">Active</span>'}
+                                    ${r.office ? `&middot; ${escapeHtml(r.office)}` : ''}
+                                    ${r.location ? `&middot; ${escapeHtml(r.location)}` : ''}
+                                    &middot; Reported ${new Date(r.created_at).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'})}
+                                    ${r.evidence_url ? `&middot; <a href="${r.evidence_url}" target="_blank">Evidence</a>` : ''}
+                                </div>
+                            </div>
+                            <button class="vote-btn ${voted ? 'voted' : ''}" onclick="vote('${r.report_id}', event)">
+                                <i class="fas fa-flag"></i> ${r.votes || 0}
+                            </button>
+                        </div>
+                        <div class="corruption-description">${escapeHtml(r.description)}</div>
+                        ${r.incident_date ? `<div style="font-size:0.85rem;color:#6c757d;margin-top:4px;"><strong>Date:</strong> ${new Date(r.incident_date).toLocaleDateString('en-US', {month:'long',day:'numeric',year:'numeric'})}</div>` : ''}
+                    </div>`;
+                }).join('');
+            } catch(e) {
+                container.innerHTML = '<div class="empty-state"><p>Could not load reports.</p></div>';
+            }
+        }
+
+        function toggleReportForm() {
+            const section = document.getElementById('report-section');
+            section.style.display = section.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function submitReport() {
+            const official_name = document.getElementById('report-official').value.trim();
+            const description = document.getElementById('report-description').value.trim();
+            if (!official_name || !description) { alert('Official name and description are required'); return; }
+
+            try {
+                const res = await fetch(`${CORRUPTION_API}?action=report`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({
+                        official_name, description,
+                        category: document.getElementById('report-category').value,
+                        office: document.getElementById('report-office').value.trim(),
+                        location: document.getElementById('report-location').value.trim(),
+                        evidence_url: document.getElementById('report-evidence').value.trim(),
+                        incident_date: document.getElementById('report-date').value
+                    })
+                });
+                if (res.ok) {
+                    alert('Corruption report submitted!');
+                    ['report-official','report-description','report-office','report-location','report-evidence','report-date'].forEach(id => document.getElementById(id).value = '');
+                    document.getElementById('report-section').style.display = 'none';
+                    loadReports();
+                } else {
+                    const data = await res.json();
+                    alert(data.error || 'Failed to submit');
+                }
+            } catch(e) { alert('Error submitting report'); }
+        }
+
+        async function vote(reportId, event) {
+            if (event) event.preventDefault();
+            if (!authToken) { alert('Please log in to vote'); return; }
+            
+            const button = event ? event.currentTarget : document.querySelector(`button[onclick*="${reportId}"]`);
+            
+            try {
+                const res = await fetch(`${CORRUPTION_API}?action=vote`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${authToken}` },
+                    body: JSON.stringify({ report_id: reportId })
+                });
+                
+                if (res.ok) {
+                    const data = await res.json();
+                    button.innerHTML = `<i class="fas fa-flag"></i> ${data.votes || 0}`;
+                    button.classList.toggle('voted');
+                }
+            } catch(e) {
+                console.error('Vote error:', e);
+            }
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML.replace(/\n/g, '<br>');
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
