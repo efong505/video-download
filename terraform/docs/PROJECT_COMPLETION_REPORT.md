@@ -325,11 +325,12 @@ Total: **13 reusable modules**
 2. Maintenance Runbook
 3. Project Outline
 
-### Supporting Documentation (2)
+### Supporting Documentation (3)
 1. API Gateway Consolidation
 2. Technical Documentation
+3. Terraform Import Guide — includes migration from DynamoDB state locking to S3-native lockfile mode
 
-**Total**: 14 comprehensive documents
+**Total**: 15 comprehensive documents
 
 ---
 
