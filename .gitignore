@@ -229,3 +229,21 @@ Storage Subscription Service/lambda/*/PyJWT*/
 Storage Subscription Service/lambda/*/*.dist-info/
 Storage Subscription Service/lambda/*/*.egg-info/
 Storage Subscription Service/lambda/*/bin/
+
+# Storage Subscription Service - exclude Python package source files but keep index.py
+Storage Subscription Service/lambda/*/dateutil/
+Storage Subscription Service/lambda/*/jmespath/
+Storage Subscription Service/lambda/*/s3transfer/
+Storage Subscription Service/lambda/*/six.py
+Storage Subscription Service/lambda/*/stripe/
+Storage Subscription Service/lambda/*/typing_extensions.py
+
+# Temporary analysis files
+remaining-files.txt
+untracked-files.txt
+campaign1-html.txt
+scriptmultipart.txt
+test.txt
+
+# Angular blog app (experimental)
+blog-app/
