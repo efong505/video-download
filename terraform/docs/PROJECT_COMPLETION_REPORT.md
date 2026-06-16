@@ -39,10 +39,12 @@
 ### Phase 1: Terraform Foundation (Week 1-2) ✅
 
 **Accomplishments**:
-- Created Terraform backend with S3 + DynamoDB locking
+- Created Terraform backend with S3 remote state and state locking; originally implemented using the older S3 + DynamoDB locking pattern, later reimplemented using S3-native lockfile locking with `use_lockfile = true`
 - Built reusable S3 module
 - Imported my-video-downloads-bucket with all configurations
 - Configured versioning, encryption, CORS, bucket policy
+
+**State Locking Update**: The Terraform backend originally used the older S3 + DynamoDB lock-table pattern. The current production backend has been updated to use S3-native lockfile locking through `use_lockfile = true`, reducing the need for a separate DynamoDB lock table while preserving remote-state locking protection.
 
 **Modules Created**: 1 (S3)  
 **Resources Managed**: 5 (bucket + 4 configurations)  
