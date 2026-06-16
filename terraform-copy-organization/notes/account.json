@@ -1,0 +1,13 @@
+{
+    "Accounts": [
+        {
+            "Id": "628478946937",
+            "Arn": "arn:aws:organizations::371751795928:account/o-pt5ljxe62g/628478946937",
+            "Email": "ed@ekewaka.com",
+            "Name": "ed-ekewaka",
+            "Status": "ACTIVE",
+            "JoinedMethod": "INVITED",
+            "JoinedTimestamp": "2026-01-02T13:59:09.298000-07:00"
+        }
+    ]
+}

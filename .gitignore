@@ -134,3 +134,98 @@ terraform.rc
 B16AI.jpg
 Family.jpg
 video_url_generator/Vl5AI.jpg
+
+# PDFs (books, guides)
+*.pdf
+
+# Backup and Archive Directories
+archive/
+archive_*/
+*_backup_*/
+backup_*/
+Downloader_backup_*/
+
+# Build Artifacts
+*.bin
+census-part*
+
+# Additional Test Files
+test-*.html
+test-*.ps1
+test-*.py
+response*.json
+output.json
+payload.json
+harfile.har
+temp_*.json
+temp_*.txt
+
+# State Backups
+state-backups/
+
+# Screenshots
+Screenshot*.png
+
+# Angular Build
+blog-app/.angular/
+
+# Other Projects
+MiniPracticeProject/
+terraform-full-platform/
+
+# Generated Data
+*.csv
+*_races.json
+*_scan.json
+*_export.json
+
+# Misc
+$null
+HAS
+NO
+ids-for-har.py
+temp_creds.txt
+aws-config.json
+cloudfront-config*.json
+harfile.har
+commit-message.txt
+COMMIT_MESSAGE.txt
+
+# Boto3/Botocore data files
+*.json.gz
+*/botocore/data/**/*
+
+# Storage Subscription Service dependencies
+Storage Subscription Service/lambda/*/botocore/
+Storage Subscription Service/lambda/*/boto3/
+
+# Terraform plan files
+*.tfplan
+
+# Storage Subscription Service Lambda dependencies (all)
+Storage Subscription Service/lambda/admin_api/boto3/
+Storage Subscription Service/lambda/admin_api/botocore/
+Storage Subscription Service/lambda/admin_api/certifi/
+Storage Subscription Service/lambda/admin_api/charset_normalizer/
+Storage Subscription Service/lambda/admin_api/idna/
+Storage Subscription Service/lambda/admin_api/requests/
+Storage Subscription Service/lambda/admin_api/urllib3/
+Storage Subscription Service/lambda/admin_api/jwt/
+Storage Subscription Service/lambda/admin_api/PyJWT*/
+Storage Subscription Service/lambda/admin_api/*.dist-info/
+Storage Subscription Service/lambda/admin_api/*.egg-info/
+Storage Subscription Service/lambda/admin_api/bin/
+
+# Repeat for other Storage Subscription Service lambdas
+Storage Subscription Service/lambda/*/boto3/
+Storage Subscription Service/lambda/*/botocore/
+Storage Subscription Service/lambda/*/certifi/
+Storage Subscription Service/lambda/*/charset_normalizer/
+Storage Subscription Service/lambda/*/idna/
+Storage Subscription Service/lambda/*/requests/
+Storage Subscription Service/lambda/*/urllib3/
+Storage Subscription Service/lambda/*/jwt/
+Storage Subscription Service/lambda/*/PyJWT*/
+Storage Subscription Service/lambda/*/*.dist-info/
+Storage Subscription Service/lambda/*/*.egg-info/
+Storage Subscription Service/lambda/*/bin/

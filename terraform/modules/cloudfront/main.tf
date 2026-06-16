@@ -12,6 +12,25 @@ resource "aws_cloudfront_distribution" "main" {
     origin_access_control_id = var.origin_access_control_id
   }
 
+  # Email tracking API origin (conditional)
+  dynamic "origin" {
+    for_each = var.tracking_api_domain != null ? [1] : []
+    content {
+      domain_name = var.tracking_api_domain
+      origin_id   = "tracking-api-gateway"
+      origin_path = var.tracking_api_stage
+
+      custom_origin_config {
+        http_port                = 80
+        https_port               = 443
+        origin_protocol_policy   = "https-only"
+        origin_ssl_protocols     = ["TLSv1.2"]
+        origin_read_timeout      = 30
+        origin_keepalive_timeout = 5
+      }
+    }
+  }
+
   default_cache_behavior {
     allowed_methods        = ["GET", "HEAD"]
     cached_methods         = ["GET", "HEAD"]
@@ -21,6 +40,44 @@ resource "aws_cloudfront_distribution" "main" {
 
     # Use AWS managed CachingOptimized policy
     cache_policy_id = "658327ea-f89d-4fab-a63d-7e88639e58f6"
+  }
+
+  # Email open tracking behavior
+  dynamic "ordered_cache_behavior" {
+    for_each = var.tracking_api_domain != null ? [1] : []
+    content {
+      path_pattern           = "track/open/*"
+      target_origin_id       = "tracking-api-gateway"
+      allowed_methods        = ["GET", "HEAD"]
+      cached_methods         = ["GET", "HEAD"]
+      compress               = false
+      viewer_protocol_policy = "redirect-to-https"
+
+      # Use AWS managed CachingDisabled policy (tracking needs real-time)
+      cache_policy_id = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
+      
+      # Use AWS managed AllViewer policy (pass all headers/query strings)
+      origin_request_policy_id = "b689b0a8-53d0-40ab-baf2-68738e2966ac"
+    }
+  }
+
+  # Email click tracking behavior
+  dynamic "ordered_cache_behavior" {
+    for_each = var.tracking_api_domain != null ? [1] : []
+    content {
+      path_pattern           = "track/click/*"
+      target_origin_id       = "tracking-api-gateway"
+      allowed_methods        = ["GET", "HEAD"]
+      cached_methods         = ["GET", "HEAD"]
+      compress               = false
+      viewer_protocol_policy = "redirect-to-https"
+
+      # Use AWS managed CachingDisabled policy
+      cache_policy_id = "4135ea2d-6df8-44a3-9df3-4b5a84be39ad"
+      
+      # Use AWS managed AllViewer policy
+      origin_request_policy_id = "b689b0a8-53d0-40ab-baf2-68738e2966ac"
+    }
   }
 
   restrictions {

@@ -1,0 +1,69 @@
+{
+    "Changes": [
+        {
+            "Action": "CREATE",
+            "ResourceRecordSet": {
+                "Name": "_amazonses.mytestimony.click",
+                "Type": "TXT",
+                "TTL": 300,
+                "ResourceRecords": [
+                    {
+                        "Value": "\"L5KY0I6U6RdvUACfwr7OM8gD12voTYSzrED8ytn8bpQ=\""
+                    }
+                ]
+            }
+        },
+        {
+            "Action": "CREATE",
+            "ResourceRecordSet": {
+                "Name": "oqkabttd5v5u7ttobqqd4j7im3a7sl5x._domainkey.mytestimony.click",
+                "Type": "CNAME",
+                "TTL": 300,
+                "ResourceRecords": [
+                    {
+                        "Value": "oqkabttd5v5u7ttobqqd4j7im3a7sl5x.dkim.amazonses.com"
+                    }
+                ]
+            }
+        },
+        {
+            "Action": "CREATE",
+            "ResourceRecordSet": {
+                "Name": "himrgynslctecrt2guzvt4h2qifr6kbm._domainkey.mytestimony.click",
+                "Type": "CNAME",
+                "TTL": 300,
+                "ResourceRecords": [
+                    {
+                        "Value": "himrgynslctecrt2guzvt4h2qifr6kbm.dkim.amazonses.com"
+                    }
+                ]
+            }
+        },
+        {
+            "Action": "CREATE",
+            "ResourceRecordSet": {
+                "Name": "dg7723aw2k5cwonpkpdggagbrl3acm4i._domainkey.mytestimony.click",
+                "Type": "CNAME",
+                "TTL": 300,
+                "ResourceRecords": [
+                    {
+                        "Value": "dg7723aw2k5cwonpkpdggagbrl3acm4i.dkim.amazonses.com"
+                    }
+                ]
+            }
+        },
+        {
+            "Action": "CREATE",
+            "ResourceRecordSet": {
+                "Name": "mytestimony.click",
+                "Type": "TXT",
+                "TTL": 300,
+                "ResourceRecords": [
+                    {
+                        "Value": "\"v=spf1 include:amazonses.com ~all\""
+                    }
+                ]
+            }
+        }
+    ]
+}

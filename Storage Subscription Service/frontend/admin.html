@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - CloudVault</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="admin.html">
+                <i class="bi bi-shield-lock-fill"></i> CloudVault Admin
+            </a>
+            <div class="d-flex align-items-center">
+                <span class="text-white me-3">
+                    <i class="bi bi-person-circle"></i> Admin
+                </span>
+                <button class="btn btn-outline-light btn-sm" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid py-4">
+        <h2 class="mb-4">Admin Dashboard</h2>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card shadow-sm stat-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-people-fill" style="font-size: 2.5rem;"></i>
+                        <h3 class="mt-2" id="totalUsers">0</h3>
+                        <p class="mb-0">Total Users</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm stat-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-file-earmark-fill" style="font-size: 2.5rem;"></i>
+                        <h3 class="mt-2" id="totalFiles">0</h3>
+                        <p class="mb-0">Total Files</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm stat-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-hdd-fill" style="font-size: 2.5rem;"></i>
+                        <h3 class="mt-2" id="totalStorage">0 GB</h3>
+                        <p class="mb-0">Storage Used</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card shadow-sm stat-card">
+                    <div class="card-body text-center">
+                        <i class="bi bi-currency-dollar" style="font-size: 2.5rem;"></i>
+                        <h3 class="mt-2" id="monthlyRevenue">$0</h3>
+                        <p class="mb-0">Monthly Revenue</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tier Distribution -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Subscription Distribution</h5>
+                        <canvas id="tierChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Quick Stats</h5>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Free Tier Users</span>
+                                <span class="badge bg-secondary" id="freeTier">0</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Basic Tier Users</span>
+                                <span class="badge bg-info" id="basicTier">0</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Pro Tier Users</span>
+                                <span class="badge bg-primary" id="proTier">0</span>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between">
+                                <span>Business Tier Users</span>
+                                <span class="badge bg-success" id="businessTier">0</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="card-title mb-0">All Users</h5>
+                    <button class="btn btn-sm btn-primary" onclick="loadUsers()">
+                        <i class="bi bi-arrow-clockwise"></i> Refresh
+                    </button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Tier</th>
+                                <th>Storage Used</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTable">
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    <div class="spinner-border" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="alertContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="config.js"></script>
+    <script src="auth.js"></script>
+    <script>
+        checkAuth();
+        
+        async function loadStatistics() {
+            try {
+                const response = await fetch(`${API_URL}/admin/stats`, {
+                    headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    document.getElementById('totalUsers').textContent = data.totalUsers;
+                    document.getElementById('totalFiles').textContent = data.totalFiles;
+                    document.getElementById('totalStorage').textContent = data.totalStorageUsedGB + ' GB';
+                    document.getElementById('monthlyRevenue').textContent = '$' + data.revenue;
+                    
+                    document.getElementById('freeTier').textContent = data.tierDistribution.free || 0;
+                    document.getElementById('basicTier').textContent = data.tierDistribution.basic || 0;
+                    document.getElementById('proTier').textContent = data.tierDistribution.pro || 0;
+                    document.getElementById('businessTier').textContent = data.tierDistribution.business || 0;
+                    
+                    // Create chart
+                    const ctx = document.getElementById('tierChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Free', 'Basic', 'Pro', 'Business'],
+                            datasets: [{
+                                data: [
+                                    data.tierDistribution.free || 0,
+                                    data.tierDistribution.basic || 0,
+                                    data.tierDistribution.pro || 0,
+                                    data.tierDistribution.business || 0
+                                ],
+                                backgroundColor: ['#6c757d', '#0dcaf0', '#0d6efd', '#198754']
+                            }]
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading statistics:', error);
+            }
+        }
+        
+        async function loadUsers() {
+            try {
+                const response = await fetch(`${API_URL}/admin/users`, {
+                    headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    const usersHtml = data.users.map(user => `
+                        <tr>
+                            <td>${user.name}</td>
+                            <td>${user.email}</td>
+                            <td><span class="badge badge-${user.subscriptionTier}">${user.subscriptionTier}</span></td>
+                            <td>${formatFileSize(user.storageUsed)} / ${formatFileSize(user.storageQuota)}</td>
+                            <td><span class="badge bg-${user.subscriptionStatus === 'active' ? 'success' : 'secondary'}">${user.subscriptionStatus}</span></td>
+                            <td>${formatDate(user.createdAt)}</td>
+                            <td>
+                                <button class="btn btn-sm btn-outline-danger" onclick="deleteUser('${user.email}')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    `).join('');
+                    
+                    document.getElementById('usersTable').innerHTML = usersHtml;
+                }
+            } catch (error) {
+                console.error('Error loading users:', error);
+            }
+        }
+        
+        async function deleteUser(email) {
+            if (!confirm(`Are you sure you want to delete user ${email}?`)) return;
+            
+            try {
+                const response = await fetch(`${API_URL}/admin/users?email=${encodeURIComponent(email)}`, {
+                    method: 'DELETE',
+                    headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+                });
+                
+                if (response.ok) {
+                    showAlert('User deleted successfully', 'success');
+                    loadUsers();
+                    loadStatistics();
+                } else {
+                    showAlert('Delete failed', 'danger');
+                }
+            } catch (error) {
+                showAlert('Delete failed', 'danger');
+            }
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(2) + ' KB';
+            if (bytes < 1073741824) return (bytes / 1048576).toFixed(2) + ' MB';
+            return (bytes / 1073741824).toFixed(2) + ' GB';
+        }
+        
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            const date = new Date(dateString);
+            return date.toLocaleDateString();
+        }
+        
+        function showAlert(message, type) {
+            const alertHtml = `
+                <div class="alert alert-${type} alert-dismissible fade show alert-floating" role="alert">
+                    ${message}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            `;
+            document.getElementById('alertContainer').innerHTML = alertHtml;
+            setTimeout(() => {
+                const alert = document.querySelector('.alert');
+                if (alert) alert.remove();
+            }, 5000);
+        }
+        
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+        
+        loadStatistics();
+        loadUsers();
+    </script>
+</body>
+</html>

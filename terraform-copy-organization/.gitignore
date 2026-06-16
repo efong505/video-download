@@ -1,0 +1,46 @@
+# Terraform
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
+terraform.tfstate.backup
+*.tfstate
+*.tfstate.*
+.terraformrc
+terraform.rc
+
+# Sensitive files
+terraform.tfvars
+*.pem
+*.key
+account-config.txt
+
+# Lambda
+*.zip
+lambda-code/**/node_modules/
+lambda-code/**/__pycache__/
+lambda-code/**/*.pyc
+
+# Test files
+response.json
+deployment-outputs.json
+test-*.json
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+logs/
+
+# Backup files
+*.bak
+*.backup

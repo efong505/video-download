@@ -166,6 +166,10 @@ module "cloudfront_distribution" {
   comment                      = "Christian Conservative Platform CDN"
   default_root_object          = "index.html"
   price_class                  = "PriceClass_100"
+  
+  # Email tracking configuration
+  tracking_api_domain = "olmcyxwc1a.execute-api.us-east-1.amazonaws.com"
+  tracking_api_stage  = "/prod"
 }
 
 # IAM Role for Lambda Functions
@@ -1931,9 +1935,7 @@ module "dynamodb_email_preferences" {
 
   table_name     = "EmailPreferences"
   hash_key       = "user_id"
-  billing_mode   = "PROVISIONED"
-  read_capacity  = 5
-  write_capacity = 5
+  billing_mode   = "PAY_PER_REQUEST"
 
   attributes = [
     { name = "user_id", type = "S" }
@@ -1946,9 +1948,7 @@ module "dynamodb_marketing_queue" {
 
   table_name     = "MarketingQueue"
   hash_key       = "queue_id"
-  billing_mode   = "PROVISIONED"
-  read_capacity  = 5
-  write_capacity = 5
+  billing_mode   = "PAY_PER_REQUEST"
 
   attributes = [
     { name = "queue_id", type = "S" },
@@ -1996,9 +1996,7 @@ module "dynamodb_product_views" {
   table_name     = "ProductViews"
   hash_key       = "view_id"
   range_key      = "timestamp"
-  billing_mode   = "PROVISIONED"
-  read_capacity  = 5
-  write_capacity = 5
+  billing_mode   = "PAY_PER_REQUEST"
 
   attributes = [
     { name = "view_id", type = "S" },
@@ -2049,9 +2047,8 @@ module "dynamodb_boycott_tracker" {
 
   table_name     = "boycott-tracker"
   hash_key       = "boycott_id"
-  billing_mode   = "PROVISIONED"
-  read_capacity  = 5
-  write_capacity = 5
+  billing_mode   = "PAY_PER_REQUEST"
+  
 
   attributes = [
     { name = "boycott_id", type = "S" },
@@ -2232,19 +2229,6 @@ module "sqs_analytics" {
 # ============================================
 # SNS Topics
 # ============================================
-# platform-critical-alerts
-module "sns_platform_critical_alerts" {
-  source = "../../modules/sns-topic"
-
-  topic_name      = "platform-critical-alerts"
-  email_addresses = ["hawaiianintucson@gmail.com"]
-
-  tags = {
-    Environment = "production"
-    Purpose     = "Critical platform alerts"
-  }
-}
-
 # Video download notifications
 module "sns_video_download_notifications" {
   source = "../../modules/sns-topic"

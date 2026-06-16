@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CloudVault - Secure Cloud Storage</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">
+                <i class="bi bi-cloud-arrow-up-fill"></i> CloudVault
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#features">Features</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#pricing">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="login.html">Login</a></li>
+                    <li class="nav-item"><a class="btn btn-light ms-2" href="register.html">Sign Up Free</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section text-white text-center py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 text-lg-start">
+                    <h1 class="display-3 fw-bold mb-4">Secure Cloud Storage Made Simple</h1>
+                    <p class="lead mb-4">Store, share, and access your files from anywhere. Start with 1GB free storage.</p>
+                    <a href="register.html" class="btn btn-light btn-lg me-3">Get Started Free</a>
+                    <a href="#pricing" class="btn btn-outline-light btn-lg">View Plans</a>
+                </div>
+                <div class="col-lg-6">
+                    <img src="https://via.placeholder.com/500x400/0d6efd/ffffff?text=Cloud+Storage" alt="Cloud Storage" class="img-fluid rounded shadow">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Why Choose CloudVault?</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-shield-lock-fill text-primary" style="font-size: 3rem;"></i>
+                            <h4 class="card-title mt-3">Secure & Encrypted</h4>
+                            <p class="card-text">Your files are encrypted with industry-standard security protocols.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-lightning-charge-fill text-primary" style="font-size: 3rem;"></i>
+                            <h4 class="card-title mt-3">Lightning Fast</h4>
+                            <p class="card-text">Upload and download files at blazing speeds with our CDN.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body text-center">
+                            <i class="bi bi-phone-fill text-primary" style="font-size: 3rem;"></i>
+                            <h4 class="card-title mt-3">Access Anywhere</h4>
+                            <p class="card-text">Access your files from any device, anytime, anywhere.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="py-5 bg-light">
+        <div class="container">
+            <h2 class="text-center mb-5">Simple, Transparent Pricing</h2>
+            <div class="row g-4">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-muted">Free</h5>
+                            <h2 class="display-4 my-3">$0</h2>
+                            <p class="text-muted">per month</p>
+                            <hr>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> 1 GB Storage</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Basic Support</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> File Sharing</li>
+                            </ul>
+                            <a href="register.html" class="btn btn-outline-primary w-100 mt-3">Get Started</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-muted">Basic</h5>
+                            <h2 class="display-4 my-3">$5</h2>
+                            <p class="text-muted">per month</p>
+                            <hr>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> 10 GB Storage</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Priority Support</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Advanced Sharing</li>
+                            </ul>
+                            <a href="register.html" class="btn btn-primary w-100 mt-3">Choose Basic</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-primary border-2 shadow-lg">
+                        <div class="card-header bg-primary text-white text-center">
+                            <strong>MOST POPULAR</strong>
+                        </div>
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-muted">Pro</h5>
+                            <h2 class="display-4 my-3">$15</h2>
+                            <p class="text-muted">per month</p>
+                            <hr>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> 100 GB Storage</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> 24/7 Support</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Team Collaboration</li>
+                            </ul>
+                            <a href="register.html" class="btn btn-primary w-100 mt-3">Choose Pro</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card h-100 border-0 shadow">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-muted">Business</h5>
+                            <h2 class="display-4 my-3">$50</h2>
+                            <p class="text-muted">per month</p>
+                            <hr>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> 1 TB Storage</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Dedicated Support</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success"></i> Advanced Security</li>
+                            </ul>
+                            <a href="register.html" class="btn btn-primary w-100 mt-3">Choose Business</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container text-center">
+            <p class="mb-0">&copy; 2024 CloudVault. All rights reserved.</p>
+            <p class="mb-0">
+                <a href="#" class="text-white text-decoration-none me-3">Privacy Policy</a>
+                <a href="#" class="text-white text-decoration-none me-3">Terms of Service</a>
+                <a href="#" class="text-white text-decoration-none">Contact</a>
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

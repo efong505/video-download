@@ -1,0 +1,31 @@
+DNS Records to Add for mytestimony.click SES Setup:
+
+1. Domain Verification:
+Type: TXT
+Name: _amazonses.mytestimony.click
+Value: L5KY0I6U6RdvUACfwr7OM8gD12voTYSzrED8ytn8bpQ=
+
+2. DKIM Records:
+Type: CNAME
+Name: oqkabttd5v5u7ttobqqd4j7im3a7sl5x._domainkey.mytestimony.click
+Value: oqkabttd5v5u7ttobqqd4j7im3a7sl5x.dkim.amazonses.com
+
+Type: CNAME
+Name: himrgynslctecrt2guzvt4h2qifr6kbm._domainkey.mytestimony.click
+Value: himrgynslctecrt2guzvt4h2qifr6kbm.dkim.amazonses.com
+
+Type: CNAME
+Name: dg7723aw2k5cwonpkpdggagbrl3acm4i._domainkey.mytestimony.click
+Value: dg7723aw2k5cwonpkpdggagbrl3acm4i.dkim.amazonses.com
+
+3. SPF Record:
+Type: TXT
+Name: mytestimony.click
+Value: "v=spf1 include:amazonses.com ~all"
+
+4. MX Record (Optional):
+Type: MX
+Name: mytestimony.click
+Value: 10 feedback-smtp.us-east-1.amazonses.com
+
+After adding these DNS records, verification will complete automatically within 72 hours.

@@ -1,0 +1,218 @@
+import boto3
+import sys
+
+sys.stdout.reconfigure(encoding='utf-8')
+
+session = boto3.Session(profile_name='ekewaka', region_name='us-east-1')
+dynamodb = session.resource('dynamodb')
+campaigns_table = dynamodb.Table('user-email-campaigns')
+
+PLATFORM_OWNER_ID = 'effa3242-cf64-4021-b2b0-c8a5a9dfd6d2'
+
+# Campaign IDs from check-campaigns.py output
+campaigns_to_fix = [
+    {
+        'campaign_id': '40aee2fb-951b-4563-9034-a043da9a9e05',
+        'sequence_number': 1,
+        'html_content': '''<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; }
+        .header { background: linear-gradient(135deg, #2c5aa0 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        .content { padding: 30px; background: #ffffff; }
+        .highlight { background: #f0f7ff; border-left: 4px solid #2c5aa0; padding: 15px; margin: 20px 0; }
+        .checklist { list-style: none; padding: 0; }
+        .checklist li { padding: 8px 0; }
+        .checklist li:before { content: "✅ "; }
+        .footer { background: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Welcome Back! 👋</h1>
+    </div>
+    
+    <div class="content">
+        <p>Hi {{first_name}},</p>
+        
+        <p>You might remember signing up for election updates on our Christian Conservative platform a while back.</p>
+        
+        <p>A lot has changed since then - and I wanted to personally reach out to let you know what we've been building.</p>
+        
+        <p>What started as an election tracking tool has evolved into something much bigger: <strong>a comprehensive platform for Christians who want to impact culture and society.</strong></p>
+        
+        <p>We're still passionate about elections and government (that's one of the 7 Mountains of influence we cover), but we've expanded to help you make a difference in:</p>
+        
+        <ul class="checklist">
+            <li>Business & Economics</li>
+            <li>Family & Community</li>
+            <li>Religion & Faith</li>
+            <li>Education</li>
+            <li>Media & Communication</li>
+            <li>Arts & Entertainment</li>
+            <li>Government & Politics</li>
+        </ul>
+        
+        <div class="highlight">
+            <h3>Why the shift?</h3>
+            <p>Because we realized that elections happen every 2-4 years, but <strong>cultural transformation happens every single day</strong>. And as Christians, we're called to be salt and light in EVERY sphere of society - not just the voting booth.</p>
+        </div>
+        
+        <h3>Here's what's new on the platform:</h3>
+        
+        <ul class="checklist">
+            <li>Daily articles on faith, culture, and current events</li>
+            <li>Video content from Christian leaders and thinkers</li>
+            <li>Community forums to connect with like-minded believers</li>
+            <li>Resources to help you live out your faith boldly</li>
+        </ul>
+        
+        <p>We're still building and improving (some features are works in progress), but the vision is clear: <strong>equip Christians to transform culture from the inside out.</strong></p>
+        
+        <p>Over the next couple weeks, I'll share more about what we're building and how you can be part of it.</p>
+        
+        <p>For now, I just wanted to say: <strong>Welcome back. We're glad you're here.</strong></p>
+        
+        <p>In Christ,<br>
+        Christian Conservatives Today</p>
+        
+        <p><em>P.S. - Curious what the "7 Mountains" thing is all about? I'll explain more in my next email. It's a game-changer for how Christians engage culture.</em></p>
+    </div>
+    
+    <div class="footer">
+        <p>Christian Conservatives Today<br>
+        <a href="https://christianconservativestoday.com">christianconservativestoday.com</a></p>
+    </div>
+</body>
+</html>'''
+    },
+    {
+        'campaign_id': '3c2802b2-7306-4480-86a5-fb2a4becfd50',
+        'sequence_number': 2,
+        'html_content': '''<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; }
+        .header { background: linear-gradient(135deg, #2c5aa0 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; }
+        .content { padding: 30px; background: #ffffff; }
+        .mountain-box { background: #f8f9fa; border-left: 4px solid #d4af37; padding: 15px; margin: 10px 0; }
+        .mountain-box h4 { margin: 0 0 5px 0; color: #2c5aa0; }
+        .highlight { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; }
+        .footer { background: #f8f9fa; padding: 20px; text-align: center; font-size: 12px; color: #666; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>The 7 Mountains 🏔️</h1>
+    </div>
+    
+    <div class="content">
+        <p>Hi {{first_name}},</p>
+        
+        <p>Yesterday I mentioned the "7 Mountains of influence" - and I promised to explain what that means.</p>
+        
+        <p>Here's the idea in a nutshell:</p>
+        
+        <h3>Culture is shaped by 7 key areas of society:</h3>
+        
+        <div class="mountain-box">
+            <h4>1. Family</h4>
+            <p>The foundation of civilization</p>
+        </div>
+        
+        <div class="mountain-box">
+            <h4>2. Religion</h4>
+            <p>Spiritual and moral guidance</p>
+        </div>
+        
+        <div class="mountain-box">
+            <h4>3. Education</h4>
+            <p>What we teach the next generation</p>
+        </div>
+        
+        <div class="mountain-box">
+            <h4>4. Media</h4>
+            <p>Who controls the narrative</p>
+        </div>
+        
+        <div class="mountain-box">
+            <h4>5. Arts & Entertainment</h4>
+            <p>What captures our imagination</p>
+        </div>
+        
+        <div class="mountain-box">
+            <h4>6. Business & Economics</h4>
+            <p>Where resources flow</p>
+        </div>
+        
+        <div class="mountain-box">
+            <h4>7. Government</h4>
+            <p>Laws and public policy</p>
+        </div>
+        
+        <p>For too long, Christians have retreated from these mountains. We've focused on personal piety while secular forces have taken over education, media, entertainment, business, and yes - even government.</p>
+        
+        <div class="highlight">
+            <h3>The result?</h3>
+            <p>A culture that's increasingly hostile to Christian values. Not because we lost the argument, but because <strong>we abandoned the battlefield.</strong></p>
+        </div>
+        
+        <p><strong>The 7 Mountains strategy says:</strong> Christians need to be present, active, and influential in ALL these areas - not just church on Sunday.</p>
+        
+        <h3>On our platform, you'll find:</h3>
+        
+        <ul>
+            <li>Articles about how to live out your faith in business, education, media, etc.</li>
+            <li>Stories of Christians who are making a difference in their "mountain"</li>
+            <li>Practical resources to help you be salt and light wherever God has placed you</li>
+        </ul>
+        
+        <div class="highlight">
+            <p><strong>Full transparency:</strong> We're still building out each mountain hub. Some sections are more developed than others. But the vision is there, and we're making progress every day.</p>
+        </div>
+        
+        <h3>Which mountain are you called to?</h3>
+        
+        <p>Maybe you're a teacher (Education), a business owner (Economics), a parent (Family), or an artist (Arts & Entertainment). Wherever you are, God has placed you there for a reason.</p>
+        
+        <p>In my next email, I'll share something that's reshaping ALL 7 mountains - and why Christians need to pay attention NOW.</p>
+        
+        <p>Blessings,<br>
+        Christian Conservatives Today</p>
+        
+        <p><em>P.S. - Want to explore the 7 Mountains on the platform? <a href="https://christianconservativestoday.com">Visit our homepage</a></em></p>
+    </div>
+    
+    <div class="footer">
+        <p>Christian Conservatives Today<br>
+        <a href="https://christianconservativestoday.com">christianconservativestoday.com</a></p>
+    </div>
+</body>
+</html>'''
+    }
+]
+
+print("Fixing transition campaigns with html_content and sequence_number...\n")
+
+for campaign in campaigns_to_fix:
+    try:
+        campaigns_table.update_item(
+            Key={
+                'user_id': PLATFORM_OWNER_ID,
+                'campaign_id': campaign['campaign_id']
+            },
+            UpdateExpression='SET html_content = :html, sequence_number = :seq',
+            ExpressionAttributeValues={
+                ':html': campaign['html_content'],
+                ':seq': campaign['sequence_number']
+            }
+        )
+        print(f"✅ Fixed campaign {campaign['campaign_id']} (seq #{campaign['sequence_number']})")
+    except Exception as e:
+        print(f"❌ Error fixing {campaign['campaign_id']}: {e}")
+
+print("\n✅ Done! Run check-campaigns.py to verify.")

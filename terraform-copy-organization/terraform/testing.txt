@@ -1,0 +1,28 @@
+api_gateway_endpoint = "https://ljoedssqwi.execute-api.us-east-1.amazonaws.com/tutorial"
+api_gateway_id = "ljoedssqwi"
+child_account_id = "628478946937"
+deployment_summary = {
+  "account" = "628478946937"
+  "environment" = "tutorial"
+  "region" = "us-east-1"
+  "resources" = {
+    "api_gateway" = "sample-api-tutorial"
+    "dynamodb_table" = "sample-table-tutorial"
+    "lambda_function" = "sample-function-tutorial"
+    "s3_bucket" = "infra-copy-tutorial-628478946937"
+    "sns_topic" = "tutorial-alerts"
+  }
+}
+dynamodb_table_arn = "arn:aws:dynamodb:us-east-1:628478946937:table/sample-table-tutorial"
+dynamodb_table_name = "sample-table-tutorial"
+lambda_execution_role_arn = "arn:aws:iam::628478946937:role/lambda-execution-role-tutorial"
+lambda_function_arn = "arn:aws:lambda:us-east-1:628478946937:function:sample-function-tutorial"
+lambda_function_name = "sample-function-tutorial"
+log_group_name = "/aws/lambda/sample-function-tutorial"
+production_account_id = "371751795928"
+s3_bucket_arn = "arn:aws:s3:::infra-copy-tutorial-628478946937"
+s3_bucket_name = "infra-copy-tutorial-628478946937"
+sns_topic_arn = "arn:aws:sns:us-east-1:628478946937:tutorial-alerts"
+"https://ljoedssqwi.execute-api.us-east-1.amazonaws.com/tutorial"
+"sample-function-tutorial"
+"infra-copy-tutorial-628478946937"

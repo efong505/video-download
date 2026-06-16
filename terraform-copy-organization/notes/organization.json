@@ -1,0 +1,16 @@
+{
+    "Organization": {
+        "Id": "o-pt5ljxe62g",
+        "Arn": "arn:aws:organizations::371751795928:organization/o-pt5ljxe62g",
+        "FeatureSet": "ALL",
+        "MasterAccountArn": "arn:aws:organizations::371751795928:account/o-pt5ljxe62g/371751795928",
+        "MasterAccountId": "371751795928",
+        "MasterAccountEmail": "hawaiianintucson@gmail.com",
+        "AvailablePolicyTypes": [
+            {
+                "Type": "SERVICE_CONTROL_POLICY",
+                "Status": "ENABLED"
+            }
+        ]
+    }
+}

@@ -32,11 +32,6 @@ resource "aws_api_gateway_rest_api" "this" {
 resource "aws_api_gateway_deployment" "this" {
   rest_api_id = aws_api_gateway_rest_api.this.id
 
-  # Force new deployment on every apply
-  triggers = {
-    redeployment = timestamp()
-  }
-
   lifecycle {
     create_before_destroy = true
   }

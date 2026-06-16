@@ -53,3 +53,15 @@ variable "default_root_object" {
   type        = string
   default     = "index.html"
 }
+
+variable "tracking_api_domain" {
+  description = "Domain name for email tracking API Gateway (e.g., olmcyxwc1a.execute-api.us-east-1.amazonaws.com)"
+  type        = string
+  default     = null
+}
+
+variable "tracking_api_stage" {
+  description = "Stage path for tracking API (e.g., /prod)"
+  type        = string
+  default     = "/prod"
+}

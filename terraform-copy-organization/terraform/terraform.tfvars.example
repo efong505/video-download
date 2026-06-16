@@ -1,0 +1,24 @@
+# Example Terraform Variables
+# Copy this to terraform.tfvars and update with your values
+
+# AWS Configuration
+aws_region             = "us-east-1"
+production_account_id  = "371751795928"
+
+# IMPORTANT: Replace with your actual child account ID
+child_account_id = "REPLACE_WITH_YOUR_CHILD_ACCOUNT_ID"
+
+# Cross-Account Role (update with your child account ID)
+child_account_role_arn = "arn:aws:iam::REPLACE_WITH_YOUR_CHILD_ACCOUNT_ID:role/TerraformCrossAccountRole"
+
+# External ID (matches what you set in Step 1)
+external_id = "terraform-copy-tutorial"
+
+# Resource Names (will be unique per account)
+project_name           = "infra-copy-tutorial"
+environment            = "tutorial"
+s3_bucket_name         = "infra-copy-tutorial-REPLACE_WITH_YOUR_CHILD_ACCOUNT_ID"
+lambda_function_name   = "sample-function-tutorial"
+dynamodb_table_name    = "sample-table-tutorial"
+sns_topic_name         = "tutorial-alerts"
+api_gateway_name       = "sample-api-tutorial"

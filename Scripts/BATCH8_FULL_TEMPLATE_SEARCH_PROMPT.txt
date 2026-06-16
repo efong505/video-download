@@ -1,0 +1,140 @@
+COMPREHENSIVE SEARCH PROMPT FOR BATCH 8 FULL TEMPLATE SUMMARIES
+================================================================
+
+Search for detailed 2025-2026 election information for North Carolina, Georgia, and Virginia to create FULL TEMPLATE voter guides (15,000-25,000 characters each, following Pennsylvania's 33,448 character example).
+
+CRITICAL REQUIREMENTS:
+- ALL races must be covered (not just Senate/Governor)
+- Detailed candidate faith statements (church, denomination, testimony)
+- 200-300 word candidate bios with voting records
+- "Christian Conservative Analysis" section for EACH candidate
+- "What's at Stake" sections (3-4 paragraphs per issue explaining consequences)
+- Comprehensive church mobilization strategy (multiple sections)
+- Extended prayer points with scripture references
+- Detailed resources section
+
+NORTH CAROLINA - ALL RACES TO COVER:
+✅ U.S. Senate (OPEN - Tillis retiring) - 7 candidates
+✅ Governor - 2 candidates  
+✅ Attorney General
+✅ Secretary of State
+✅ NC Supreme Court
+✅ ALL 14 U.S. House districts
+✅ Charlotte Mayor (2025)
+
+GEORGIA - ALL RACES TO COVER:
+✅ U.S. Senate (Ossoff defending) - 4 candidates
+✅ Governor (OPEN - Kemp term-limited) - 6 candidates
+✅ Lieutenant Governor - 2 candidates
+✅ Attorney General - 3 candidates
+✅ Secretary of State
+✅ ALL 14 U.S. House districts
+✅ Atlanta Mayor (2025)
+✅ Atlanta City Council (15 seats)
+✅ Board of Education Districts
+✅ Public Service Commission
+
+VIRGINIA - ALL RACES TO COVER:
+✅ U.S. Senate (Warner defending) - 3 candidates
+✅ Governor (2025) - Sears vs Ayala
+✅ State House (All 80 seats - 2025)
+✅ ALL 11 U.S. House districts
+✅ Lieutenant Governor (2025)
+✅ Attorney General (2025)
+
+FOR EACH CANDIDATE, SEARCH FOR:
+1. FAITH BACKGROUND (300+ words):
+   - Church membership/attendance (specific church name if available)
+   - Denomination/faith tradition
+   - Personal testimony or conversion story
+   - Public statements about faith
+   - Faith-based policy positions
+   - Religious endorsements
+
+2. DETAILED BIO (200-300 words):
+   - Full career history
+   - Previous elected positions
+   - Major accomplishments
+   - Education background
+   - Family information
+   - Community involvement
+
+3. VOTING RECORD (if incumbent):
+   - Pro-life votes and scores (National Right to Life, SBA List)
+   - Religious liberty votes
+   - Education/school choice votes
+   - 2nd Amendment votes and NRA ratings
+   - Border security/immigration votes
+   - Economic freedom votes (Heritage Action, Club for Growth scores)
+   - Family values votes
+
+4. ENDORSEMENTS:
+   - Christian conservative organizations
+   - Pro-life groups
+   - Gun rights organizations
+   - Conservative PACs
+   - Prominent conservative leaders
+   - Pastors/religious leaders
+
+5. STATE-SPECIFIC CONTEXT:
+   - NC: Abortion 12-week limit, school choice expansion, religious liberty battles
+   - GA: Heartbeat law, Kemp's record, 2020/2022 election issues
+   - VA: 2025 elections, Youngkin's influence, parental rights movement
+
+6. CHRISTIAN CONSERVATIVE ANALYSIS:
+   - How does candidate align with biblical values?
+   - Specific pro-life record/position
+   - Religious liberty stance
+   - Parental rights/education freedom
+   - Traditional family values
+   - Overall assessment for Christian voters
+
+7. "WHAT'S AT STAKE" FOR EACH ISSUE (3-4 paragraphs each):
+   - Pro-Life: Specific state laws at risk, judicial appointments, funding
+   - School Choice: Current programs, expansion plans, parental rights
+   - Religious Liberty: Church protections, conscience rights, faith-based orgs
+   - Family Values: Gender ideology, parental authority, marriage
+   - 2nd Amendment: State gun laws, constitutional carry, reciprocity
+   - Election Integrity: Voter ID, ballot harvesting, security measures
+   - Border Security: Sanctuary policies, state enforcement
+   - Economic Freedom: Tax rates, regulations, business climate
+
+8. CHURCH MOBILIZATION (comprehensive):
+   - What pastors CAN do (IRS compliant)
+   - What church members CAN do
+   - Voter registration strategies
+   - Early voting mobilization
+   - Transportation to polls
+   - Candidate forums
+   - Prayer emphasis
+   - Biblical citizenship teaching
+
+9. PRAYER POINTS (extended with scriptures):
+   - Specific prayers for each candidate
+   - Prayers for each major issue
+   - Prayers for church mobilization
+   - Prayers for voter turnout
+   - Prayers for election integrity
+   - Prayers for state revival
+   - Scripture references for each prayer point
+
+10. RESOURCES (detailed):
+    - State-specific Christian conservative organizations
+    - Pro-life groups
+    - School choice advocates
+    - Religious liberty legal groups
+    - Voter guide organizations
+    - Election information websites
+    - Conservative media outlets
+
+SEARCH FOCUS:
+- Prioritize faith statements and Christian conservative analysis
+- Find specific voting records and scores
+- Identify all major candidates for ALL races (not just top 2)
+- State-specific issues and context
+- Recent news and developments
+- Primary election dynamics
+- Competitive race ratings
+
+OUTPUT NEEDED:
+Comprehensive research data to create 15,000-25,000 character voter guides for each state following the FULL TEMPLATE (like Pennsylvania's 33,448 chars), not the short 4,000-13,000 char summaries previously created.
