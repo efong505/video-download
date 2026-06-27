@@ -691,10 +691,10 @@
 
             filtered.forEach(e => {
                 const g = e.campaign_group || e.sequence_name || '';
-                const cur = e.current_sequence_number || 0;
-                const total = groupTotals[g] || '?';
+                const cur = e.current_step || e.current_sequence_number || 0;
+                const total = e.total_steps || groupTotals[g] || '?';
                 const statusClass = e.status === 'active' ? 'status-active' : e.status === 'completed' ? 'status-completed' : 'status-paused';
-                const lastSent = e.last_sent_at ? new Date(e.last_sent_at).toLocaleDateString() : '—';
+                const lastSent = e.last_sent_date ? new Date(e.last_sent_date).toLocaleDateString() : '—';
                 const enrolled = e.enrolled_at ? new Date(e.enrolled_at).toLocaleDateString() : '—';
                 const canSend = e.status === 'active' && cur < total;
 

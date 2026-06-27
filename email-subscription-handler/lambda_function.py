@@ -1081,6 +1081,16 @@ def list_drip_enrollments():
         )
         enrollments = response.get('Items', [])
         
+        # Extract subscriber_email from enrollment_id if not present
+        for e in enrollments:
+            if not e.get('subscriber_email') and e.get('enrollment_id'):
+                # enrollment_id format: "email|uuid" or "email#campaign"
+                eid = e['enrollment_id']
+                if '|' in eid:
+                    e['subscriber_email'] = eid.split('|')[0]
+                elif '#' in eid:
+                    e['subscriber_email'] = eid.split('#')[0]
+        
         # Convert Decimal to int/float for JSON serialization
         def convert_decimals(obj):
             if isinstance(obj, list):
