@@ -1,0 +1,2476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terraform Resources Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0,0,0,0.15);
+        }
+        
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .stat-label {
+            font-size: 1.1em;
+            color: #666;
+            margin-top: 10px;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .resource-group {
+            margin-bottom: 30px;
+            border: 1px solid #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            background: white;
+        }
+        
+        .resource-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            font-size: 1.3em;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .resource-count {
+            background: rgba(255,255,255,0.2);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+        
+        .resource-list {
+            padding: 0;
+            list-style: none;
+        }
+        
+        .resource-item {
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            align-items: center;
+            transition: background 0.2s ease;
+        }
+        
+        .resource-item:last-child {
+            border-bottom: none;
+        }
+        
+        .resource-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .resource-module {
+            background: #fff3cd;
+            color: #856404;
+            padding: 3px 10px;
+            border-radius: 5px;
+            font-size: 0.85em;
+            margin-left: 10px;
+            font-weight: 600;
+        }
+        
+        .resource-name {
+            font-family: 'Courier New', monospace;
+            color: #333;
+            flex-grow: 1;
+        }
+        
+        .footer {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .timestamp {
+            color: #999;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Terraform Resources Report</h1>
+            <p>Infrastructure managed by Terraform</p>
+            <p class="timestamp">Generated: 2026-06-20 19:10:24</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number">385</div>
+                <div class="stat-label">Total Resources</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">36</div>
+                <div class="stat-label">Resource Types</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">prod</div>
+                <div class="stat-label">Environment</div>
+            </div>
+        </div>
+        
+        <div class="content">
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🗄️ DynamoDB Table</span>
+                    <span class="resource-count">55 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_admin_users</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_articles</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_book_purchases</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_book_subscribers</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_boycott_tracker</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_business_directory</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_candidates</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_comments</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_content_comments</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_contributors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_download_jobs</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_election_events</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_email_campaign_stats</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_email_events</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_email_preferences</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_email_subscriber_stats</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_email_subscribers</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_email_subscribers_v2</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_events</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_fact_checks</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_feature_flags</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_forum_posts</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_marketing_queue</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_mountain_badges</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_mountain_contributions</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_mountain_pledges</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_news</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_news_articles</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_newsletter_analytics</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_newsletter_campaigns</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_newsletter_templates</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_newsletters</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_notifications</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_pending_changes</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_prayer_requests</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_product_views</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_races</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_rate_limits</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_resources</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_shopping_cart</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_shopping_orders</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_shopping_products</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_shopping_reviews</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_state_summaries</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_testimonies</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_testimony_users</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_user_email_campaigns</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_user_email_drip_enrollments</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_user_email_events</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_user_email_subscribers</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_user_flags</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_users</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_video_analytics</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_video_metadata</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_dynamodb_table.this</span>
+                        <span class="resource-module">module: dynamodb_video_playlists</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>⚡ Lambda Function</span>
+                    <span class="resource-count">49 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_admin_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_article_meta_tags_edge</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_articles_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_auth_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_auto_cache_monitor</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_book_delivery_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_boycott_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_business_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_comments_handler</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_contact_form_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_contributors_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_digest_generator</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_email_drip_processor</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_email_sender</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_email_subscription_handler</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_events_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_fact_check_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_feature_flags_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_forum_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_manual_email_sender</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_mountains_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_news_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_news_scraper</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_newsletter_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_notifications_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_orders_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_paypal_billing_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_paypal_ipn_handler</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_playlists_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_prayer_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_products_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_resources_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_reviews_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_s3_thumbnail_trigger</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_scheduled_publisher</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_ses_event_processor</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_testimony_admin</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_testimony_auth</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_testimony_crud</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_testimony_email_ses</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_testimony_email_sharing</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_thumbnail_generator</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_tracking_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_url_analysis_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_user_email_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_video_download_router</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_video_downloader</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_video_list_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_function.this</span>
+                        <span class="resource-module">module: lambda_video_tag_api</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🌐 API Integration</span>
+                    <span class="resource-count">33 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_admin</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_admin</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_analyze</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_analyze</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_articles</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_articles</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_auth</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_auth</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_comments</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_comments</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_contributors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_contributors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_download</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_download</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_events</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_events</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_fact_checks</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_fact_checks</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_news</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_news</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_notifications</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_notifications</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_paypal</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_paypal</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_paypal_ipn</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_prayer</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_prayer</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_resources</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_resources</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_tags</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_tags</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.options[0]</span>
+                        <span class="resource-module">module: api_videos</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration.this</span>
+                        <span class="resource-module">module: api_videos</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🌐 API Method</span>
+                    <span class="resource-count">33 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_admin</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_admin</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_analyze</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_analyze</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_articles</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_articles</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_auth</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_auth</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_comments</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_comments</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_contributors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_contributors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_download</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_download</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_events</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_events</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_fact_checks</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_fact_checks</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_news</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_news</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_notifications</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_notifications</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_paypal</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_paypal</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_paypal_ipn</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_prayer</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_prayer</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_resources</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_resources</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_tags</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_tags</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.options[0]</span>
+                        <span class="resource-module">module: api_videos</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method.this</span>
+                        <span class="resource-module">module: api_videos</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>📊 CloudWatch Alarm</span>
+                    <span class="resource-count">27 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_admin_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_api_gateway_5xx</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_articles_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_auth_concurrent</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_auth_duration</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_auth_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_comments_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_contributors_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_downloader_duration</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_downloader_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_downloader_throttles</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_events_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_news_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_notifications_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_paypal_duration</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_paypal_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_paypal_throttles</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_prayer_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_resources_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_router_duration</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_router_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_router_throttles</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_s3_trigger_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_thumbnail_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_url_analysis_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_video_list_errors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_metric_alarm.this</span>
+                        <span class="resource-module">module: alarm_video_tag_errors</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>📄 Data</span>
+                    <span class="resource-count">20 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_region.current</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_route53_zone.main</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_admin</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_analyze</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_articles</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_auth</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_comments</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_contributors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_download</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_events</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_fact_checks</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_news</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_notifications</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_paypal</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_paypal_ipn</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_prayer</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_resources</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_tags</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">data.aws_caller_identity.current</span>
+                        <span class="resource-module">module: api_videos</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>📄 Lambda Alias</span>
+                    <span class="resource-count">18 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_admin_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_articles_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_auth_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_contributors_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_events_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_news_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_notifications_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_paypal_billing_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_paypal_ipn_handler</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_prayer_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_resources_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_s3_thumbnail_trigger</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_thumbnail_generator</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_url_analysis_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_video_download_router</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_video_downloader</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_video_list_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_alias.this[0]</span>
+                        <span class="resource-module">module: lambda_video_tag_api</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>📊 CloudWatch Log Group</span>
+                    <span class="resource-count">18 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_admin_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_articles_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_auth_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_comments_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_contributors_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_downloader</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_events_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_news_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_notifications_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_paypal</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_prayer_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_resources_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_router</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_s3_thumbnail_trigger</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_thumbnail_generator</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_url_analysis_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_video_list_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_log_group.this</span>
+                        <span class="resource-module">module: log_group_video_tag_api</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>📬 SQS Queue</span>
+                    <span class="resource-count">18 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.dlq</span>
+                        <span class="resource-module">module: sqs_analytics</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.main</span>
+                        <span class="resource-module">module: sqs_analytics</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.dlq</span>
+                        <span class="resource-module">module: sqs_email</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.main</span>
+                        <span class="resource-module">module: sqs_email</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.dlq</span>
+                        <span class="resource-module">module: sqs_email_notification</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.main</span>
+                        <span class="resource-module">module: sqs_email_notification</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.dlq</span>
+                        <span class="resource-module">module: sqs_email_notifications</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.main</span>
+                        <span class="resource-module">module: sqs_email_notifications</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.dlq</span>
+                        <span class="resource-module">module: sqs_inventory_update</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.main</span>
+                        <span class="resource-module">module: sqs_inventory_update</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.dlq</span>
+                        <span class="resource-module">module: sqs_order_processing</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.main</span>
+                        <span class="resource-module">module: sqs_order_processing</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.dlq</span>
+                        <span class="resource-module">module: sqs_payment_processing</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.main</span>
+                        <span class="resource-module">module: sqs_payment_processing</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.dlq</span>
+                        <span class="resource-module">module: sqs_thumbnail_generation</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.main</span>
+                        <span class="resource-module">module: sqs_thumbnail_generation</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.dlq</span>
+                        <span class="resource-module">module: sqs_video_processing</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sqs_queue.main</span>
+                        <span class="resource-module">module: sqs_video_processing</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🌐 API Resource</span>
+                    <span class="resource-count">17 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_admin</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_analyze</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_articles</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_auth</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_comments</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_contributors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_download</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_events</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_fact_checks</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_news</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_notifications</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_paypal</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_paypal_ipn</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_prayer</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_resources</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_tags</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_resource.this</span>
+                        <span class="resource-module">module: api_videos</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>✅ Lambda Permission</span>
+                    <span class="resource-count">17 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_admin</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_analyze</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_articles</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_auth</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_comments</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_contributors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_download</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_events</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_fact_checks</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_news</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_notifications</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_paypal</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_paypal_ipn</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_prayer</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_resources</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_tags</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_permission.this</span>
+                        <span class="resource-module">module: api_videos</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🌐 Api Gateway Integration Response</span>
+                    <span class="resource-count">16 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_admin</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_analyze</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_articles</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_auth</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_comments</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_contributors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_download</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_events</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_fact_checks</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_news</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_notifications</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_paypal</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_prayer</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_resources</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_tags</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_integration_response.options[0]</span>
+                        <span class="resource-module">module: api_videos</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🌐 Api Gateway Method Response</span>
+                    <span class="resource-count">16 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_admin</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_analyze</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_articles</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_auth</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_comments</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_contributors</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_download</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_events</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_fact_checks</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_news</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_notifications</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_paypal</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_prayer</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_resources</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_tags</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_method_response.options[0]</span>
+                        <span class="resource-module">module: api_videos</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🔐 IAM Role Policy</span>
+                    <span class="resource-count">9 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AWSLambda_FullAccess"]</span>
+                        <span class="resource-module">module: lambda_execution_role</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AmazonBedrockFullAccess"]</span>
+                        <span class="resource-module">module: lambda_execution_role</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"]</span>
+                        <span class="resource-module">module: lambda_execution_role</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"]</span>
+                        <span class="resource-module">module: lambda_execution_role</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AmazonSESFullAccess"]</span>
+                        <span class="resource-module">module: lambda_execution_role</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/AmazonSNSFullAccess"]</span>
+                        <span class="resource-module">module: lambda_execution_role</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"]</span>
+                        <span class="resource-module">module: lambda_execution_role</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"]</span>
+                        <span class="resource-module">module: lambda_execution_role</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_iam_role_policy_attachment.managed_policies["arn:aws:iam::aws:policy/service-role/AWSLambdaSQSQueueExecutionRole"]</span>
+                        <span class="resource-module">module: lambda_execution_role</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>📢 SNS Topic</span>
+                    <span class="resource-count">4 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sns_topic.ses_email_events</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sns_topic.this</span>
+                        <span class="resource-module">module: sns_critical_alerts</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sns_topic.this</span>
+                        <span class="resource-module">module: sns_ses_bounces</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sns_topic.this</span>
+                        <span class="resource-module">module: sns_video_download_notifications</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>📢 SNS Subscription</span>
+                    <span class="resource-count">4 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sns_topic_subscription.ses_email_events_lambda</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sns_topic_subscription.email["hawaiianintucson@gmail.com"]</span>
+                        <span class="resource-module">module: sns_critical_alerts</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sns_topic_subscription.email["hawaiianintucson@gmail.com"]</span>
+                        <span class="resource-module">module: sns_ses_bounces</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_sns_topic_subscription.email["hawaiianintucson@gmail.com"]</span>
+                        <span class="resource-module">module: sns_video_download_notifications</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🌍 Route53 Record</span>
+                    <span class="resource-count">4 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_route53_record.validation["api.christianconservativestoday.com"]</span>
+                        <span class="resource-module">module: acm_api_prod</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_route53_record.validation["api-staging.christianconservativestoday.com"]</span>
+                        <span class="resource-module">module: acm_api_staging</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_route53_record.this</span>
+                        <span class="resource-module">module: api_domain_prod</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_route53_record.this</span>
+                        <span class="resource-module">module: api_domain_staging</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>📦 Lambda Layer</span>
+                    <span class="resource-count">3 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_layer_version.this</span>
+                        <span class="resource-module">module: layer_ffmpeg</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_layer_version.this</span>
+                        <span class="resource-module">module: layer_requests</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_lambda_layer_version.this</span>
+                        <span class="resource-module">module: layer_yt_dlp</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🌐 API Gateway</span>
+                    <span class="resource-count">2 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_rest_api.shopping_api</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_rest_api.this</span>
+                        <span class="resource-module">module: unified_api</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🌐 Api Gateway Stage</span>
+                    <span class="resource-count">2 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_stage.staging</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_stage.this</span>
+                        <span class="resource-module">module: unified_api</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🔒 ACM Certificate</span>
+                    <span class="resource-count">2 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_acm_certificate.this</span>
+                        <span class="resource-module">module: acm_api_prod</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_acm_certificate.this</span>
+                        <span class="resource-module">module: acm_api_staging</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🔒 Acm Certificate Validation</span>
+                    <span class="resource-count">2 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_acm_certificate_validation.this</span>
+                        <span class="resource-module">module: acm_api_prod</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_acm_certificate_validation.this</span>
+                        <span class="resource-module">module: acm_api_staging</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🌐 Api Gateway Base Path Mapping</span>
+                    <span class="resource-count">2 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_base_path_mapping.this</span>
+                        <span class="resource-module">module: api_domain_prod</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_base_path_mapping.this</span>
+                        <span class="resource-module">module: api_domain_staging</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🌐 Api Gateway Domain Name</span>
+                    <span class="resource-count">2 resources</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_domain_name.this</span>
+                        <span class="resource-module">module: api_domain_prod</span>
+                    </li>
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_domain_name.this</span>
+                        <span class="resource-module">module: api_domain_staging</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>☁️ CloudFront Distribution</span>
+                    <span class="resource-count">1 resource</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudfront_distribution.main</span>
+                        <span class="resource-module">module: cloudfront_distribution</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>☁️ CloudFront OAC</span>
+                    <span class="resource-count">1 resource</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudfront_origin_access_control.main</span>
+                        <span class="resource-module">module: cloudfront_oac</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🔐 IAM Role</span>
+                    <span class="resource-count">1 resource</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_iam_role.this</span>
+                        <span class="resource-module">module: lambda_execution_role</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>📊 Cloudwatch Dashboard</span>
+                    <span class="resource-count">1 resource</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_cloudwatch_dashboard.main</span>
+                        <span class="resource-module">module: platform_dashboard</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🪣 S3 Bucket</span>
+                    <span class="resource-count">1 resource</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_s3_bucket.main</span>
+                        <span class="resource-module">module: s3_videos</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🪣 S3 CORS</span>
+                    <span class="resource-count">1 resource</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_s3_bucket_cors_configuration.main</span>
+                        <span class="resource-module">module: s3_videos</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🪣 S3 Bucket Policy</span>
+                    <span class="resource-count">1 resource</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_s3_bucket_policy.main</span>
+                        <span class="resource-module">module: s3_videos</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🪣 S3 Public Access Block</span>
+                    <span class="resource-count">1 resource</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_s3_bucket_public_access_block.main</span>
+                        <span class="resource-module">module: s3_videos</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🪣 S3 Encryption</span>
+                    <span class="resource-count">1 resource</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_s3_bucket_server_side_encryption_configuration.main</span>
+                        <span class="resource-module">module: s3_videos</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🪣 S3 Versioning</span>
+                    <span class="resource-count">1 resource</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_s3_bucket_versioning.main</span>
+                        <span class="resource-module">module: s3_videos</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🌐 API Deployment</span>
+                    <span class="resource-count">1 resource</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_deployment.this</span>
+                        <span class="resource-module">module: unified_api</span>
+                    </li>
+
+                </ul>
+            </div>
+
+            <div class="resource-group">
+                <div class="resource-header">
+                    <span>🌐 Api Gateway Gateway Response</span>
+                    <span class="resource-count">1 resource</span>
+                </div>
+                <ul class="resource-list">
+
+                    <li class="resource-item">
+                        <span class="resource-name">aws_api_gateway_gateway_response.cors</span>
+                        <span class="resource-module">module: unified_api</span>
+                    </li>
+
+                </ul>
+            </div>
+
+        </div>
+        
+        <div class="footer">
+            <p>Terraform Directory: <strong>c:\Users\Ed\Documents\Programming\AWS\Downloader\terraform\environments\prod</strong></p>
+            <p>Generated by Terraform Resource Report Generator</p>
+        </div>
+    </div>
+</body>
+</html>
