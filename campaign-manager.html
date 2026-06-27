@@ -125,6 +125,15 @@
     </style>
 </head>
 <body>
+    <!-- Auth Check -->
+    <script>
+        // Check if user is authenticated
+        const token = localStorage.getItem('auth_token');
+        if (!token) {
+            window.location.href = 'login.html?redirect=campaign-manager.html';
+        }
+    </script>
+    
     <div id="navbar-container" data-page="campaign-manager"></div>
 
     <div class="container" style="margin-top: 80px;">
@@ -277,6 +286,7 @@
                     <div class="mb-3">
                         <label class="form-label">Campaign Group</label>
                         <select id="enroll-group" class="form-select">
+                            <option value="book2-launch-sequence">book2-launch-sequence</option>
                             <option value="post-purchase-sequence">post-purchase-sequence</option>
                             <option value="pre-purchase-book-sequence">pre-purchase-book-sequence</option>
                         </select>
